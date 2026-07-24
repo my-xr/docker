@@ -1,0 +1,1134 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>工作负载管理实践</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 17 次课 · 题库</div>
+      <h1>工作负载管理实践</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 17 次课</span>
+        <span class="hero-chip"><b>主题</b>工作负载管理实践</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 17 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>17-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>17-选择-001</strong>（★ 知识点：K17-1 三服务规划） CTTS
+三服务 Deployment 部署的推荐顺序是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>前端 → 后端 → MySQL</span></li><li><span class="option-label">B</span><span>后端 →
+MySQL → 前端</span></li><li><span class="option-label">C</span><span>MySQL → 后端 → 前端</span></li><li><span class="option-label">D</span><span>任意顺序都可以</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：部署顺序由依赖关系决定。后端依赖
+MySQL（要先连接数据库），前端依赖后端（Nginx 反向代理）。所以顺序是
+MySQL → 后端 → 前端。若先部署后端，后端启动时连不上 MySQL 会
+CrashLoopBackOff。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-002</strong>（★ 知识点：K17-1 副本数规划） CTTS
+三服务中，MySQL Deployment 推荐的副本数是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>1 副本</span></li><li><span class="option-label">B</span><span>2 副本</span></li><li><span class="option-label">C</span><span>3
+副本</span></li><li><span class="option-label">D</span><span>5 副本</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：MySQL
+是有状态应用，多副本会导致数据写入冲突。本课用 1 副本 Deployment
+简化部署，生产环境用 StatefulSet + PV/PVC。后端 3
+副本（无状态高可用），前端 2 副本（静态资源轻量）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-003</strong>（★ 知识点：K17-1 副本数规划） CTTS 后端
+Deployment 推荐的副本数是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>1 副本</span></li><li><span class="option-label">B</span><span>2 副本</span></li><li><span class="option-label">C</span><span>3 副本</span></li><li><span class="option-label">D</span><span>5 副本</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：后端是核心 API
+服务，无状态应用，3 副本是高可用的最低要求（挂 1 个还有 2 个）。前端 2
+副本，MySQL 1 副本。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-004</strong>（★ 知识点：K17-2 MySQL 环境变量） MySQL
+Deployment 中，必须设置的环境变量是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>MYSQL_USER</span></li><li><span class="option-label">B</span><span>MYSQL_DATABASE</span></li><li><span class="option-label">C</span><span>MYSQL_ROOT_PASSWORD</span></li><li><span class="option-label">D</span><span>MYSQL_PORT</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：MySQL
+官方镜像要求必须设置 MYSQL_ROOT_PASSWORD（或
+MYSQL_ALLOW_EMPTY_PASSWORD=yes 但不推荐），否则容器启动报错退出，Pod
+进入 CrashLoopBackOff。MYSQL_DATABASE、MYSQL_USER 是可选的，MYSQL_PORT
+不是 MySQL 镜像的环境变量。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-005</strong>（★ 知识点：K17-2 MySQL 数据卷） 本课
+MySQL Deployment 用 emptyDir 做数据卷，关于 emptyDir 说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod 删除后数据保留</span></li><li><span class="option-label">B</span><span>Pod 删除后数据丢失</span></li><li><span class="option-label">C</span><span>数据持久化到宿主机磁盘</span></li><li><span class="option-label">D</span><span>需要先创建 PV 才能使用</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：emptyDir 是 Pod
+级别的临时卷，Pod 删除时数据一起丢失。生产环境必须用
+PVC（PersistentVolumeClaim）做持久化，emptyDir
+仅用于实践练习或临时数据。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-006</strong>（★ 知识点：K17-3 imagePullPolicy） 本课
+CTTS 后端 Deployment 的 imagePullPolicy 设为 Never，原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像在
+Docker Hub 上不存在</span></li><li><span class="option-label">B</span><span>镜像是本地构建的，不想从仓库拉取</span></li><li><span class="option-label">C</span><span>节省网络带宽</span></li><li><span class="option-label">D</span><span>提高启动速度</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：ctts-backend:v1
+是本地构建的镜像（在 Minikube Docker daemon 里），Docker Hub
+上不存在。如果用 Always 或 IfNotPresent，K8s 会尝试从 Docker Hub
+拉取，拉不到会报 ImagePullBackOff。设为 Never
+表示只用本地镜像，不从仓库拉取。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-007</strong>（★ 知识点：K17-3 后端连接 MySQL） CTTS
+后端 Deployment 中 DB_HOST 环境变量的推荐值是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>localhost</span></li><li><span class="option-label">B</span><span>127.0.0.1</span></li><li><span class="option-label">C</span><span>mysql.ctts.svc.cluster.local</span></li><li><span class="option-label">D</span><span>MySQL Pod 的 IP 地址</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：后端通过 Service DNS
+名连接 MySQL，格式为
+<code>&lt;service-name&gt;.&lt;namespace&gt;.svc.cluster.local</code>。本课
+mysql Service 在 ctts namespace，所以是 mysql.ctts.svc.cluster.local。用
+Pod IP 不可靠（Pod 重建 IP 变化），localhost/127.0.0.1
+是本机回环，连不到 MySQL Pod。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-008</strong>（★ 知识点：K17-4 前端副本数） CTTS 前端
+Deployment 推荐的副本数是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>1 副本</span></li><li><span class="option-label">B</span><span>2 副本</span></li><li><span class="option-label">C</span><span>3 副本</span></li><li><span class="option-label">D</span><span>5 副本</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：前端是 Nginx
+静态资源服务，资源占用小，2 副本已满足高可用（挂 1 个还有 1 个）。不需要
+3 副本，避免浪费资源。后端 3 副本，MySQL 1 副本。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-009</strong>（★ 知识点：K17-4 前端镜像） CTTS 前端
+Deployment 使用的镜像是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>nginx:1.25</span></li><li><span class="option-label">B</span><span>vue:3</span></li><li><span class="option-label">C</span><span>ctts-frontend:v1</span></li><li><span class="option-label">D</span><span>node:18</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：ctts-frontend:v1 是第
+8 次课构建的镜像，包含 Nginx + Vue3 构建产物（dist）。nginx:1.25
+是基础镜像，vue:3 和 node:18 不是前端运行镜像（node
+是构建阶段用的）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-010</strong>（★ 知识点：K17-5 滚动更新命令） 触发
+Deployment 滚动更新的 kubectl 命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl apply</span></li><li><span class="option-label">B</span><span>kubectl set
+image</span></li><li><span class="option-label">C</span><span>kubectl rollout</span></li><li><span class="option-label">D</span><span>kubectl update</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubectl set image
+deployment/<name> <container>=<new-image> 触发滚动更新。kubectl apply
+是应用 YAML（也可触发更新），kubectl rollout
+是查看/管理更新状态（status/history/undo），kubectl update
+不是有效命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-011</strong>（★ 知识点：K17-5 滚动更新观察）
+查看滚动更新状态的 kubectl 命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl rollout status
+deployment/<name></span></li><li><span class="option-label">B</span><span>kubectl rollout history deployment/<name></span></li><li><span class="option-label">C</span><span>kubectl rollout undo deployment/<name></span></li><li><span class="option-label">D</span><span>kubectl get deployment</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：kubectl rollout
+status deployment/<name> 查看当前滚动更新状态（进行中/完成）。rollout
+history 查看版本历史，rollout undo 回滚，get deployment 查看 Deployment
+概览（不显示更新过程）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-012</strong>（★ 知识点：K17-5 回滚命令） 将
+Deployment 回滚到上一版本的 kubectl 命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl rollout undo
+deployment/<name></span></li><li><span class="option-label">B</span><span>kubectl rollback deployment/<name></span></li><li><span class="option-label">C</span><span>kubectl
+rollout back deployment/<name></span></li><li><span class="option-label">D</span><span>kubectl undo deployment/<name></span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：kubectl rollout undo
+deployment/<name> 回滚到上一版本。用 --to-revision=N
+可回滚到指定版本。kubectl rollback 和 kubectl undo 不是有效命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-013</strong>（★ 知识点：K17-5 回滚指定版本） 将
+Deployment 回滚到指定版本 revision 2 的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl rollout undo
+deployment/<name> --revision=2</span></li><li><span class="option-label">B</span><span>kubectl rollout undo deployment/<name>
+--to-revision=2</span></li><li><span class="option-label">C</span><span>kubectl rollout undo deployment/<name> --target=2</span></li><li><span class="option-label">D</span><span>kubectl rollout undo deployment/<name> --version=2</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubectl rollout undo
+deployment/<name> --to-revision=2 回滚到指定 revision。--to-revision
+是固定参数名，不是 --revision/--target/--version。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-014</strong>（★ 知识点：K17-5 版本历史） 查看
+Deployment 版本历史的 kubectl 命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl history
+deployment/<name></span></li><li><span class="option-label">B</span><span>kubectl rollout history deployment/<name></span></li><li><span class="option-label">C</span><span>kubectl get history deployment/<name></span></li><li><span class="option-label">D</span><span>kubectl describe
+deployment/<name></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubectl rollout
+history deployment/<name> 查看版本历史（REVISION 和
+CHANGE-CAUSE）。kubectl history 不是有效命令。kubectl describe 显示
+Deployment 详情，不显示版本历史。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-015</strong>（★ 知识点：K17-6 CrashLoopBackOff） Pod
+状态显示 CrashLoopBackOff，最可能的排查方法是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>重启 Minikube</span></li><li><span class="option-label">B</span><span>删除
+Deployment 重建</span></li><li><span class="option-label">C</span><span>kubectl logs 查看 Pod 日志</span></li><li><span class="option-label">D</span><span>kubectl scale
+增加副本数</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：CrashLoopBackOff
+表示容器反复崩溃重启，需用 kubectl logs 查看 Pod
+日志定位应用层报错（如连不上数据库、代码 bug、配置错误）。重启 Minikube
+或删除重建不解决根因，增加副本数只是掩盖问题。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-016</strong>（★ 知识点：K17-6 ImagePullBackOff） Pod
+状态显示 ImagePullBackOff，最可能的根因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>应用代码有 bug</span></li><li><span class="option-label">B</span><span>内存不足</span></li><li><span class="option-label">C</span><span>镜像拉取失败（镜像名错或仓库不可达）</span></li><li><span class="option-label">D</span><span>selector 不匹配</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：ImagePullBackOff
+表示镜像拉取失败。常见原因：镜像名拼错、私有仓库未登录、网络问题、本地镜像但
+imagePullPolicy 不是 Never。应用 bug 会导致 CrashLoopBackOff，内存不足会
+OOMKilled，selector 不匹配会导致 Deployment READY 0/N。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-017</strong>（★ 知识点：K17-6 Pending） Pod 状态显示
+Pending，最可能的根因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>应用启动失败</span></li><li><span class="option-label">B</span><span>镜像拉取失败</span></li><li><span class="option-label">C</span><span>节点资源不足，无法调度</span></li><li><span class="option-label">D</span><span>配置错误</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Pending 表示 Pod
+未被调度到任何节点。常见原因：节点 CPU/内存不足（requests
+太大）、节点污点、nodeSelector 不匹配。用 kubectl describe pod 看 Events
+部分的 FailedScheduling 信息。应用启动失败是
+CrashLoopBackOff，镜像拉取失败是 ImagePullBackOff。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-018</strong>（★ 知识点：K17-6 Deployment 0/3）
+Deployment READY 显示 0/3 但 Pod 都在 Running，最可能的根因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>资源不足</span></li><li><span class="option-label">B</span><span>selector.matchLabels 与 template.metadata.labels 不匹配</span></li><li><span class="option-label">C</span><span>镜像拉取失败</span></li><li><span class="option-label">D</span><span>副本数设错</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Deployment READY 0/3
+但 Pod Running，说明 Pod 起来了但 Deployment 不认识它们（selector
+匹配不到）。根因是 selector.matchLabels 与 template.metadata.labels
+不匹配。修正 YAML 让二者匹配即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-019</strong>（★ 知识点：K17-6 排查命令） K8s
+部署问题排查的"四步法"顺序是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>看状态 → 看详情 → 看日志 → 定根因</span></li><li><span class="option-label">B</span><span>看日志 → 看状态 → 看详情 → 定根因</span></li><li><span class="option-label">C</span><span>看详情 → 看日志 → 看状态 → 定根因</span></li><li><span class="option-label">D</span><span>定根因 → 看状态 → 看详情 → 看日志</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：四步法：①
+看状态（kubectl get pods 的 STATUS 列）→ ② 看详情（kubectl describe pod
+的 Events）→ ③ 看日志（kubectl logs）→ ④ 定根因（修复 YAML 重新
+apply）。先从宏观状态入手，再逐步深入。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-020</strong>（★ 知识点：K17-2 MySQL 资源限制） MySQL
+Deployment 的 memory limits 建议至少设为？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>128Mi</span></li><li><span class="option-label">B</span><span>256Mi</span></li><li><span class="option-label">C</span><span>512Mi</span></li><li><span class="option-label">D</span><span>1Gi</span></li></ul></div><blockquote>
+<p><strong>答案：D</strong> <strong>解析</strong>：MySQL 的 InnoDB
+缓冲池需要较大内存，建议 limits 至少 1Gi。128Mi/256Mi 太小会
+OOMKilled。本课实践配置 requests 512Mi / limits 1Gi，生产环境通常
+2Gi~4Gi 起。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-021</strong>（★★ 知识点：K17-3 后端资源限制） CTTS
+后端是 SpringBoot 应用，memory requests 建议至少设为？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>64Mi</span></li><li><span class="option-label">B</span><span>128Mi</span></li><li><span class="option-label">C</span><span>256Mi</span></li><li><span class="option-label">D</span><span>1Gi</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Java 应用 JVM 堆 +
+元空间 + 线程栈至少需要 256Mi。设太小会 OOMKilled（如 64Mi/128Mi 不够
+JVM 启动）。本课配置 requests 256Mi / limits 512Mi，生产环境通常
+512Mi~1Gi 起。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-022</strong>（★★ 知识点：K17-5 滚动更新原理）
+Deployment 滚动更新时，旧 ReplicaSet 的副本数如何变化？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>立即删除</span></li><li><span class="option-label">B</span><span>立即降到 0</span></li><li><span class="option-label">C</span><span>逐步降到 0（保留 RS 对象）</span></li><li><span class="option-label">D</span><span>保持不变</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：滚动更新是渐进式的，旧 RS 副本数逐步降到
+0（不是立即删除或降到 0），新 RS 副本数逐步升到期望值。旧 RS
+对象保留（副本数=0），用于回滚。revisionHistoryLimit
+控制保留版本数（默认 10）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-023</strong>（★★ 知识点：K17-5 服务不中断） 3 副本
+Deployment 滚动更新，maxSurge=25%、maxUnavailable=25%，更新期间最少可用
+Pod 数是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>1</span></li><li><span class="option-label">B</span><span>2</span></li><li><span class="option-label">C</span><span>3</span></li><li><span class="option-label">D</span><span>4</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：maxUnavailable=25%
+表示最多低于期望副本数 25%。3 * 25% = 0.75，向下取整 = 1，即最多少 1
+个，最少保持 3 - 1 = 2 个 Pod 可用。maxSurge=25% 表示最多超出 25%，3 *
+25% = 0.75，向上取整 = 1，最多 4 个 Pod。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-024</strong>（★★ 知识点：K17-5 --record 参数）
+kubectl set image 加 --record 参数的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>加快滚动更新速度</span></li><li><span class="option-label">B</span><span>把变更原因记录到 rollout history</span></li><li><span class="option-label">C</span><span>自动回滚失败更新</span></li><li><span class="option-label">D</span><span>强制立即替换所有
+Pod</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：--record 把执行的
+kubectl 命令记录到 rollout history 的 CHANGE-CAUSE
+列，便于追溯版本变更原因。不影响更新速度、不自动回滚、不改变替换策略。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-025</strong>（★★ 知识点：K17-3 MySQL Service） 本课用
+kubectl expose deployment ctts-mysql --name=mysql 创建
+Service，其作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>对外暴露 MySQL</span></li><li><span class="option-label">B</span><span>为后端提供 MySQL 的稳定 DNS 名</span></li><li><span class="option-label">C</span><span>增加 MySQL 副本数</span></li><li><span class="option-label">D</span><span>给 MySQL 打标签</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubectl expose 创建
+ClusterIP Service，为 MySQL 提供稳定 DNS
+名（mysql.ctts.svc.cluster.local），后端通过此 DNS 名连接 MySQL。Service
+不增加副本数、不打标签、默认 ClusterIP 不对外暴露。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-026</strong>（★★ 知识点：K17-4 前端 Nginx） CTTS 前端
+Nginx 容器中，Vue3 构建产物（dist）的存放路径是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>/app/dist</span></li><li><span class="option-label">B</span><span>/var/www/html</span></li><li><span class="option-label">C</span><span>/usr/share/nginx/html</span></li><li><span class="option-label">D</span><span>/opt/nginx/html</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Nginx
+官方镜像默认静态资源路径是 /usr/share/nginx/html。Vue3 构建产物 dist 在
+Dockerfile 中 COPY 到此目录。/var/www/html 是 Apache
+的默认路径，/app/dist 和 /opt/nginx/html 不是标准路径。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-027</strong>（★★ 知识点：K17-1 标签设计） CTTS
+三服务的标签设计中，区分服务身份的核心标签是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>tier</span></li><li><span class="option-label">B</span><span>version</span></li><li><span class="option-label">C</span><span>app</span></li><li><span class="option-label">D</span><span>env</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：app
+标签唯一标识服务（ctts-mysql / ctts-backend / ctts-frontend），是
+Service 选择 Pod 的依据。tier
+区分层级（database/backend/frontend），version 区分版本（v1/v2），env
+标识环境（dev/prod）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-028</strong>（★★ 知识点：K17-6 OOMKilled） Pod
+状态显示 OOMKilled，最可能的根因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像拉取失败</span></li><li><span class="option-label">B</span><span>容器内存使用超过
+limits.memory</span></li><li><span class="option-label">C</span><span>应用代码 bug</span></li><li><span class="option-label">D</span><span>节点 CPU 不足</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：OOMKilled（Out Of
+Memory Killed）表示容器内存使用超过
+limits.memory，被内核杀掉。解决：增大 limits.memory
+或优化应用内存使用。镜像拉取失败是 ImagePullBackOff，代码 bug 通常
+CrashLoopBackOff，CPU 不足不会直接 OOMKilled。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-029</strong>（★★ 知识点：K17-3 后端启动失败） 后端
+Deployment 的 Pod 一直 CrashLoopBackOff，kubectl logs 显示 "Connection
+refused mysql.ctts.svc.cluster.local:3306"，最可能的根因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>后端镜像构建错误</span></li><li><span class="option-label">B</span><span>MySQL Service 未创建或 MySQL Pod 未 Ready</span></li><li><span class="option-label">C</span><span>后端资源不足</span></li><li><span class="option-label">D</span><span>selector 不匹配</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：日志显示连不上 MySQL
+Service。可能原因：① mysql Service 未创建（kubectl get svc mysql
+检查）；② MySQL Pod 未 Ready（kubectl get pod -l app=ctts-mysql
+检查）；③ 后端比 MySQL 先部署。解决：确保 MySQL Ready 并创建 Service
+后再部署后端。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-030</strong>（★★ 知识点：K17-5 回滚历史） 关于
+kubectl rollout undo 回滚后，原版本是否还在历史中，说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>原版本被删除</span></li><li><span class="option-label">B</span><span>原版本仍在历史中，可再次回滚到该版本</span></li><li><span class="option-label">C</span><span>历史被清空</span></li><li><span class="option-label">D</span><span>只有最新版本保留</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：回滚操作本身也是一次"滚动更新"（创建新
+revision），原版本 RS
+仍在历史中，可以再次回滚到该版本。revisionHistoryLimit=10 默认保留 10 个
+revision。所以回滚不会删除历史版本。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>17-选择-031</strong>（★★ 知识点：K17-1 三服务规划） CTTS
+三服务 Deployment 部署时，关于副本数规划正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>MySQL 1
+副本（有状态，多副本数据冲突）</span></li><li><span class="option-label">B</span><span>后端 3 副本（无状态，高可用最低要求）</span></li><li><span class="option-label">C</span><span>前端 2 副本（静态资源轻量，够用即可）</span></li><li><span class="option-label">D</span><span>所有服务都 3 副本 E. MySQL 3
+副本（高可用）</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong> <strong>解析</strong>：MySQL
+有状态多副本冲突，1 副本简化（生产用 StatefulSet）；后端无状态 3
+副本高可用；前端静态资源轻量 2 副本够用。D 错，不是所有服务都 3
+副本（MySQL 不能多副本）；E 错，MySQL 3 副本数据冲突。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-032</strong>（★★ 知识点：K17-2 MySQL YAML） MySQL
+Deployment YAML 中必须包含的字段有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>MYSQL_ROOT_PASSWORD
+环境变量</span></li><li><span class="option-label">B</span><span>image: mysql:8.0</span></li><li><span class="option-label">C</span><span>containerPort: 3306</span></li><li><span class="option-label">D</span><span>replicas: 3 E.
+env: MYSQL_DATABASE</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong> <strong>解析</strong>：MySQL
+官方镜像必须设置 MYSQL_ROOT_PASSWORD（A），否则启动失败；image 用
+mysql:8.0（B）；端口 3306（C）。D 错，MySQL 1 副本；E 错，MYSQL_DATABASE
+可选（自动创建数据库，不设也能启动）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-033</strong>（★★ 知识点：K17-3 后端环境变量） CTTS
+后端 Deployment 连接 MySQL 需要的环境变量有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>DB_HOST</span></li><li><span class="option-label">B</span><span>DB_PORT</span></li><li><span class="option-label">C</span><span>DB_NAME</span></li><li><span class="option-label">D</span><span>DB_USER E. DB_PASSWORD</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong> <strong>解析</strong>：后端连接
+MySQL 需要完整连接信息：DB_HOST（Service DNS
+名）、DB_PORT（3306）、DB_NAME（数据库名）、DB_USER（用户名）、DB_PASSWORD（密码）。SpringBoot
+通过环境变量覆盖 application.yml 配置。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-034</strong>（★★ 知识点：K17-5 滚动更新命令）
+Deployment 滚动更新相关的 kubectl 命令有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl set image</span></li><li><span class="option-label">B</span><span>kubectl rollout status</span></li><li><span class="option-label">C</span><span>kubectl rollout history</span></li><li><span class="option-label">D</span><span>kubectl rollout
+undo E. kubectl scale</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A
+触发滚动更新，B 查看更新状态，C 查看版本历史，D 回滚。E
+是扩缩容命令（kubectl scale），不属于滚动更新命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-035</strong>（★★ 知识点：K17-6 常见问题） K8s
+部署常见问题包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>CrashLoopBackOff（应用崩溃）</span></li><li><span class="option-label">B</span><span>ImagePullBackOff（镜像拉取失败）</span></li><li><span class="option-label">C</span><span>Pending（资源不足）</span></li><li><span class="option-label">D</span><span>Deployment
+READY 0/3（selector 不匹配） E. OOMKilled（内存不足）</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong> <strong>解析</strong>：五项都是
+K8s 部署常见问题。CrashLoopBackOff（应用崩溃，看
+logs）、ImagePullBackOff（镜像问题）、Pending（资源不足）、Deployment
+0/3（selector 不匹配）、OOMKilled（内存超限）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-036</strong>（★★ 知识点：K17-6 排查命令） K8s
+部署问题排查常用的 kubectl 命令有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl get pods</span></li><li><span class="option-label">B</span><span>kubectl describe pod</span></li><li><span class="option-label">C</span><span>kubectl logs</span></li><li><span class="option-label">D</span><span>kubectl exec E. kubectl
+apply</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A 看状态，B
+看详情（Events），C 看日志，D 进入容器调试。E
+是部署命令，不是排查命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-037</strong>（★★ 知识点：K17-2 emptyDir） 关于
+emptyDir 卷，说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod 创建时生成</span></li><li><span class="option-label">B</span><span>Pod
+删除时数据丢失</span></li><li><span class="option-label">C</span><span>生产环境推荐用于数据库持久化</span></li><li><span class="option-label">D</span><span>同一 Pod
+内多个容器可共享 E. 需要先创建 PV 才能使用</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D</strong> <strong>解析</strong>：emptyDir 在 Pod
+创建时生成（A），Pod 删除时数据丢失（B），同 Pod 多容器可共享（D）。C
+错，生产环境数据库必须用 PVC（持久化）；E 错，emptyDir 不需要
+PV，直接在节点上分配。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-038</strong>（★★ 知识点：K17-5 滚动更新策略参数）
+Deployment 滚动更新的 RollingUpdate 策略参数包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>maxSurge</span></li><li><span class="option-label">B</span><span>maxUnavailable</span></li><li><span class="option-label">C</span><span>revisionHistoryLimit</span></li><li><span class="option-label">D</span><span>minReadySeconds E.
+replicas</span></li></ul></div><blockquote>
+<p><strong>答案：A、B</strong> <strong>解析</strong>：maxSurge 和
+maxUnavailable 是 rollingUpdate
+策略的核心参数，控制滚动更新速率。revisionHistoryLimit 是 Deployment
+级别参数（保留历史版本数），minReadySeconds 是 Deployment
+级别参数（最小就绪秒数），replicas 是副本数，都不属于 rollingUpdate
+策略参数。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-039</strong>（★★ 知识点：K17-1 标签设计） CTTS
+三服务标签设计建议使用的标签有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>app</span></li><li><span class="option-label">B</span><span>tier</span></li><li><span class="option-label">C</span><span>version</span></li><li><span class="option-label">D</span><span>env E. name</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：app
+唯一标识服务，tier 区分层级，version 区分版本（滚动更新时区分
+v1/v2），env 标识环境（dev/prod）。E 错，name 是 metadata.name
+字段，不是标签。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-选择-040</strong>（★★ 知识点：K17-6 问题根因） Pod 出现
+ImagePullBackOff 的可能根因有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像名拼错</span></li><li><span class="option-label">B</span><span>私有仓库未配置
+imagePullSecrets</span></li><li><span class="option-label">C</span><span>本地无镜像但 imagePullPolicy 设为 Never</span></li><li><span class="option-label">D</span><span>应用代码
+bug E. 网络问题，拉取超时</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：A/B/C/E
+都是镜像拉取失败的根因。D 错，应用代码 bug 会导致 CrashLoopBackOff，不是
+ImagePullBackOff。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>17-判断-001</strong>（★ 知识点：K17-1 部署顺序） CTTS 三服务
+Deployment 部署顺序应该是 MySQL → 后端 → 前端。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：部署顺序由依赖关系决定。后端依赖
+MySQL，前端依赖后端。若先部署后端，后端启动时连不上 MySQL 会
+CrashLoopBackOff。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-002</strong>（★ 知识点：K17-1 MySQL 副本数） MySQL
+是有状态应用，生产环境应该用 3 副本 Deployment 保证高可用。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：MySQL
+有状态，多副本数据冲突。生产环境用 StatefulSet + PV/PVC（不是 Deployment
+多副本）。本课用 1 副本 Deployment 简化实践。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-003</strong>（★ 知识点：K17-2 MySQL 环境变量） MySQL
+Deployment 可以不设置 MYSQL_ROOT_PASSWORD，镜像会用空密码启动。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：MySQL
+官方镜像要求必须设置 MYSQL_ROOT_PASSWORD（或
+MYSQL_ALLOW_EMPTY_PASSWORD=yes 但不推荐），否则启动报错，Pod
+CrashLoopBackOff。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-004</strong>（★ 知识点：K17-2 emptyDir） 本课 MySQL
+用 emptyDir 做数据卷，Pod 删除后数据会丢失。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：emptyDir 是
+Pod 级别临时卷，Pod 删除时数据一起丢失。生产环境必须用 PVC 持久化。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-005</strong>（★ 知识点：K17-3 imagePullPolicy） 本课
+ctts-backend:v1 是本地构建的镜像，imagePullPolicy 应设为 Never。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：本地构建的镜像在 Minikube Docker daemon
+里，Docker Hub 上不存在。设为 Never 表示只用本地镜像，不从仓库拉取，避免
+ImagePullBackOff。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-006</strong>（★ 知识点：K17-3 后端连接 MySQL） CTTS
+后端可以用 localhost 作为 DB_HOST 连接 MySQL。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：localhost/127.0.0.1 是本机回环，连不到 MySQL
+Pod（不同 Pod 不同 IP）。应该用 MySQL Service 的 DNS 名
+mysql.ctts.svc.cluster.local。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-007</strong>（★ 知识点：K17-4 前端副本数） CTTS
+前端是静态资源服务，2 副本已满足高可用要求。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：前端 Nginx
+静态资源轻量，2 副本够用（挂 1 个还有 1 个）。不需要 3
+副本，避免浪费资源。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-008</strong>（★ 知识点：K17-5 滚动更新命令） kubectl
+set image 是触发 Deployment 滚动更新的命令。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：kubectl set
+image deployment/<name> <container>=<new-image> 触发滚动更新。kubectl
+rollout status 观察，rollout undo 回滚。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-009</strong>（★ 知识点：K17-5 回滚） kubectl rollout
+undo 只能回滚到上一版本，不能回滚到更早版本。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：kubectl
+rollout undo 默认回滚到上一版本，但用 --to-revision=N
+可以回滚到任意历史版本。先用 kubectl rollout history 查看版本号，再
+--to-revision=N 指定。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-010</strong>（★ 知识点：K17-5 版本历史） Deployment
+滚动更新后，旧 ReplicaSet 会被立即删除。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：旧 ReplicaSet
+保留（副本数=0），用于回滚。revisionHistoryLimit=10 默认保留 10
+个历史版本。立即删除旧 RS 会无法回滚。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-011</strong>（★ 知识点：K17-6 CrashLoopBackOff） Pod
+CrashLoopBackOff 时，应该优先用 kubectl logs 查看应用日志定位根因。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：CrashLoopBackOff 表示应用反复崩溃，kubectl logs
+看应用层报错（如连不上数据库、代码 bug、配置错误）。kubectl describe 看
+K8s 层面事件（Events），两者结合排查。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-012</strong>（★ 知识点：K17-6 ImagePullBackOff） Pod
+ImagePullBackOff 通常是因为镜像名错或镜像仓库不可达。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：ImagePullBackOff
+表示镜像拉取失败。常见原因：镜像名拼错、私有仓库未登录、网络问题、本地镜像但
+imagePullPolicy 不是 Never。用 kubectl describe 看 Events
+部分的拉取错误信息。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-013</strong>（★ 知识点：K17-6 Pending） Pod Pending
+通常是因为节点资源不足，无法调度。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Pending 表示
+Pod 未被调度。常见原因：节点 CPU/内存不足（requests
+太大）、节点污点、nodeSelector 不匹配。用 kubectl describe pod 看 Events
+部分的 FailedScheduling 信息。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-014</strong>（★ 知识点：K17-6 selector 不匹配）
+Deployment READY 0/3 但 Pod 都 Running，可能是 selector.matchLabels 与
+template.metadata.labels 不匹配。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Pod 起来了但
+Deployment selector 匹配不到它们，导致 READY 0/3。修正 YAML 让
+selector.matchLabels 与 template.metadata.labels 匹配即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-015</strong>（★ 知识点：K17-2 MySQL 资源限制） MySQL
+Deployment 的 memory limits 可以设为 128Mi，够用了。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：MySQL InnoDB
+缓冲池需要较大内存，128Mi 太小会 OOMKilled。建议 limits 至少
+1Gi，生产环境 2Gi~4Gi 起。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-016</strong>（★★ 知识点：K17-5 滚动更新不中断） 3
+副本 Deployment 滚动更新，maxUnavailable=25%，更新期间最少 2 个 Pod
+可用，服务不中断。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：maxUnavailable=25% 表示最多低于期望 25%，3 * 25%
+= 0.75，向下取整 = 1，最少保持 3 - 1 = 2 个 Pod 可用。配合 Service
+负载均衡，服务不中断。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-017</strong>（★★ 知识点：K17-3 Service DNS 名）
+mysql.ctts.svc.cluster.local 是 K8s 集群内 MySQL Service 的 DNS
+名格式。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：K8s Service
+DNS 名格式：<service-name>.<namespace>.svc.cluster.local。mysql Service
+在 ctts namespace，所以是 mysql.ctts.svc.cluster.local。集群内任意 Pod
+都能解析此 DNS 名。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-018</strong>（★★ 知识点：K17-4 前端 Nginx） CTTS 前端
+Nginx 可以配置反向代理，将 /api 请求转发到后端 Service。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：前端 Nginx
+配置 location /api { proxy_pass <a
+href="http://ctts-backend.ctts.svc.cluster.local:8080">http://ctts-backend.ctts.svc.cluster.local:8080</a>;
+}，将 /api 请求反向代理到后端 Service。这样浏览器同域访问，避免 CORS
+跨域问题。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-019</strong>（★★ 知识点：K17-5 --record） kubectl set
+image 加 --record 参数会把变更原因记录到 rollout history 的 CHANGE-CAUSE
+列。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：--record
+把执行的 kubectl 命令记录到 history 的 CHANGE-CAUSE
+列，便于追溯版本变更原因。建议每次 set image 都加 --record。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-判断-020</strong>（★★ 知识点：K17-6 OOMKilled） Pod
+OOMKilled 是因为容器内存使用超过 limits.memory 被内核杀掉。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：OOMKilled（Out Of Memory
+Killed）表示容器内存使用超过 limits.memory，被内核 OOM Killer
+杀掉。解决：增大 limits.memory 或优化应用内存使用。kubectl describe pod
+的 Last State Reason 显示 OOMKilled。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>17-填空-001</strong>（★ 知识点：K17-1 部署顺序） CTTS 三服务
+Deployment 的推荐部署顺序是 ________ → 后端 → 前端。</p><blockquote>
+<p><strong>答案：MySQL</strong>
+<strong>解析</strong>：部署顺序由依赖关系决定。后端依赖
+MySQL（需连接数据库），前端依赖后端（Nginx 反向代理）。所以顺序是 MySQL
+→ 后端 → 前端。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-填空-002</strong>（★ 知识点：K17-2 MySQL 环境变量） MySQL
+Deployment 必须设置的环境变量是 ________，用于配置 root 用户密码。</p><blockquote>
+<p><strong>答案：MYSQL_ROOT_PASSWORD</strong>
+<strong>解析</strong>：MySQL 官方镜像要求必须设置
+MYSQL_ROOT_PASSWORD（或 MYSQL_ALLOW_EMPTY_PASSWORD=yes
+但不推荐），否则启动报错，Pod CrashLoopBackOff。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-填空-003</strong>（★ 知识点：K17-3 imagePullPolicy） 本课
+ctts-backend:v1 是本地构建的镜像，Deployment 中 imagePullPolicy 应设为
+________。</p><blockquote>
+<p><strong>答案：Never</strong> <strong>解析</strong>：本地构建的镜像在
+Minikube Docker daemon 里，Docker Hub 上不存在。设为 Never
+表示只用本地镜像，不从仓库拉取，避免 ImagePullBackOff。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-填空-004</strong>（★ 知识点：K17-3 Service DNS 名） CTTS
+后端连接 MySQL 的 DB_HOST 环境变量值应为 ________（ctts namespace 下的
+mysql Service）。</p><blockquote>
+<p><strong>答案：mysql.ctts.svc.cluster.local</strong>
+<strong>解析</strong>：K8s Service DNS
+名格式：<service-name>.<namespace>.svc.cluster.local。mysql Service 在
+ctts namespace，所以是 mysql.ctts.svc.cluster.local。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-填空-005</strong>（★ 知识点：K17-5 滚动更新命令） 触发
+Deployment 滚动更新的 kubectl 命令是 ________。</p><blockquote>
+<p><strong>答案：kubectl set image</strong>
+<strong>解析</strong>：kubectl set image deployment/<name>
+<container>=<new-image> 触发滚动更新。kubectl rollout status
+查看状态，rollout history 查看历史，rollout undo 回滚。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-填空-006</strong>（★ 知识点：K17-5 回滚命令） 将
+Deployment 回滚到指定版本 revision 2 的命令是 kubectl rollout undo
+deployment/<name> ________。</p><blockquote>
+<p><strong>答案：--to-revision=2</strong>
+<strong>解析</strong>：--to-revision=N 指定回滚到 revision
+N。不加此参数默认回滚到上一版本。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-填空-007</strong>（★ 知识点：K17-6 CrashLoopBackOff 排查）
+Pod 状态为 CrashLoopBackOff 时，应优先用 kubectl ________
+命令查看应用日志定位根因。</p><blockquote>
+<p><strong>答案：logs</strong> <strong>解析</strong>：kubectl logs
+<pod-name> 查看应用层日志，定位崩溃根因（如连不上数据库、代码
+bug、配置错误）。kubectl describe pod 看 K8s 层面事件（Events）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-填空-008</strong>（★ 知识点：K17-6 Pending 排查） Pod
+状态为 Pending 时，应用 kubectl ________ pod 查看 Events 部分的
+FailedScheduling 信息。</p><blockquote>
+<p><strong>答案：describe</strong> <strong>解析</strong>：kubectl
+describe pod <name> 显示 Pod 详情，Events 部分会显示 FailedScheduling
+及原因（如 Insufficient cpu/memory、nodeSelector mismatch 等）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-填空-009</strong>（★★ 知识点：K17-5 滚动更新参数）
+Deployment 滚动更新策略 RollingUpdate 的两个核心参数是 maxSurge 和
+________。</p><blockquote>
+<p><strong>答案：maxUnavailable</strong> <strong>解析</strong>：maxSurge
+控制最多超出期望副本数（新 Pod 启动速率），maxUnavailable
+控制最多低于期望副本数（旧 Pod 终止速率）。默认都是 25%。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-填空-010</strong>（★★ 知识点：K17-1 副本数规划） CTTS
+三服务 Deployment 中，MySQL ________ 副本，后端 ________ 副本，前端
+________ 副本。</p><blockquote>
+<p><strong>答案：1；3；2</strong> <strong>解析</strong>：MySQL 有状态 1
+副本简化（生产用 StatefulSet），后端无状态 3
+副本高可用，前端静态资源轻量 2 副本够用。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>17-论述-001</strong>（★★ 知识点：K17-1 三服务规划，10 分）
+请阐述 CTTS 三服务（MySQL + 后端 + 前端）Deployment
+部署的规划方案，包括副本数、资源限制、标签设计、部署顺序，并说明理由。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>副本数规划</strong>（3 分）：
+<ul>
+<li>MySQL：1 副本（1 分）。理由：MySQL
+是有状态应用，多副本数据冲突，本课用 1 副本简化，生产用 StatefulSet（0.5
+分）。</li>
+<li>后端：3 副本（1 分）。理由：无状态应用，3 副本是高可用最低要求（挂 1
+个还有 2 个）（0.5 分）。</li>
+<li>前端：2 副本（0.5 分）。理由：静态资源轻量，2
+副本够用，避免浪费资源（0.5 分）。</li>
+</ul></li>
+<li><strong>资源限制规划</strong>（3 分）：
+<ul>
+<li>MySQL：requests cpu=500m/memory=512Mi，limits
+cpu=1000m/memory=1Gi。理由：InnoDB 缓冲池需较大内存（1 分）。</li>
+<li>后端：requests cpu=250m/memory=256Mi，limits
+cpu=500m/memory=512Mi。理由：Java 应用 JVM 堆至少 256Mi（1 分）。</li>
+<li>前端：requests cpu=100m/memory=128Mi，limits
+cpu=200m/memory=256Mi。理由：Nginx 静态资源轻量（1 分）。</li>
+</ul></li>
+<li><strong>标签设计</strong>（2 分）：
+<ul>
+<li>app 标签唯一标识服务（ctts-mysql/ctts-backend/ctts-frontend）（0.5
+分）</li>
+<li>tier 标签区分层级（database/backend/frontend）（0.5 分）</li>
+<li>version 标签区分版本（v1/v2），便于滚动更新（0.5 分）</li>
+<li>设计原则：app 唯一、tier 分层、version 版本化（0.5 分）</li>
+</ul></li>
+<li><strong>部署顺序</strong>（2 分）：
+<ul>
+<li>顺序：MySQL → 后端 → 前端（1 分）</li>
+<li>理由：后端依赖 MySQL（需连接数据库），前端依赖后端（Nginx
+反向代理）。若先部署后端，后端启动时连不上 MySQL 会 CrashLoopBackOff（1
+分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：四部分各自独立给分；要点完整给满分；只列数字不解释每个扣
+0.5 分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-论述-002</strong>（★★ 知识点：K17-5 滚动更新与回滚，8 分）
+请描述 CTTS 后端 Deployment
+滚动更新（v1→v2）与回滚的完整操作流程，并说明 3 副本 + maxSurge=25% +
+maxUnavailable=25% 如何保证服务不中断。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>滚动更新操作流程</strong>（4 分）：
+<ul>
+<li>构建 v2 镜像：docker build -t ctts-backend:v2 .（0.5 分）</li>
+<li>触发更新：kubectl set image deployment/ctts-backend
+backend=ctts-backend:v2 -n ctts --record（1 分）</li>
+<li>查看状态：kubectl rollout status deployment/ctts-backend -n
+ctts（0.5 分）</li>
+<li>查看历史：kubectl rollout history deployment/ctts-backend -n
+ctts（0.5 分）</li>
+<li>更新过程：Deployment 创建新 RS（v2），逐步替换旧 RS（v1）的 Pod，旧
+RS 副本数降到 0（保留用于回滚）（1.5 分）</li>
+</ul></li>
+<li><strong>回滚操作</strong>（2 分）：
+<ul>
+<li>回滚到上一版：kubectl rollout undo deployment/ctts-backend -n
+ctts（1 分）</li>
+<li>回滚到指定版：kubectl rollout undo deployment/ctts-backend
+--to-revision=N -n ctts（1 分）</li>
+</ul></li>
+<li><strong>服务不中断保证</strong>（2 分）：
+<ul>
+<li>3 副本 + maxSurge=25%：最多超出 25%，3*25%=0.75→向上取整 1，最多 4
+个 Pod（0.5 分）</li>
+<li>maxUnavailable=25%：最多低于 25%，3*25%=0.75→向下取整 1，最少 2 个
+Pod（0.5 分）</li>
+<li>滚动更新期间：先启 1 个新 Pod（4 个），新 Pod 就绪后停 1 个旧 Pod（2
+个可用），循环替换，全程最少 2 个 Pod 可用，配合 Service
+负载均衡，服务不中断（1 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：操作流程和原理分开给分；原理部分需说明
+maxSurge/maxUnavailable 的计算和服务不中断的保证。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-论述-003</strong>（★★ 知识点：K17-6 问题排查，8 分） Pod
+出现 CrashLoopBackOff、ImagePullBackOff、Pending
+三种状态时，请分别说明现象、排查命令、常见根因和解决方案。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>CrashLoopBackOff</strong>（3 分）：
+<ul>
+<li>现象：Pod 反复崩溃重启，RESTARTS 次数递增（0.5 分）</li>
+<li>排查命令：kubectl describe pod（看 Events）+ kubectl
+logs（看应用日志）（1 分）</li>
+<li>常见根因：应用启动失败（连不上数据库、代码 bug、配置错误、内存不足
+OOMKilled）（1 分）</li>
+<li>解决方案：根据日志修复应用/配置/镜像；若是 OOMKilled 增大
+limits.memory；若是依赖问题先部署依赖服务（0.5 分）</li>
+</ul></li>
+<li><strong>ImagePullBackOff</strong>（2.5 分）：
+<ul>
+<li>现象：Pod 一直 ImagePullBackOff，无法启动（0.5 分）</li>
+<li>排查命令：kubectl describe pod（看 Events 的拉取错误）（0.5
+分）</li>
+<li>常见根因：镜像名拼错、私有仓库未配置 imagePullSecrets、本地镜像但
+imagePullPolicy 不是 Never、网络问题（1 分）</li>
+<li>解决方案：修正镜像名；本地镜像设 imagePullPolicy:
+Never；私有仓库配置 imagePullSecrets（0.5 分）</li>
+</ul></li>
+<li><strong>Pending</strong>（2.5 分）：
+<ul>
+<li>现象：Pod 一直 Pending，未被调度到节点（0.5 分）</li>
+<li>排查命令：kubectl describe pod（看 Events 的 FailedScheduling）（0.5
+分）</li>
+<li>常见根因：节点资源不足（requests 太大）、节点污点、nodeSelector
+不匹配（1 分）</li>
+<li>解决方案：减少 requests 或增加节点资源；去除节点污点或加
+toleration；修正 nodeSelector（0.5 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三种状态分别给分；每种状态需包含现象、排查命令、根因、解决方案四要素。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>17-论述-004</strong>（★★ 知识点：K17-2/K17-3 综合应用，8 分）
+某同学部署 CTTS 后端 Deployment 后，Pod 一直 CrashLoopBackOff。kubectl
+logs 显示 "Connection refused
+mysql.ctts.svc.cluster.local:3306"。请分析可能的根因（至少 3
+种），并给出对应的排查命令和解决方案。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>根因 1：MySQL Service 未创建</strong>（2.5 分）：
+<ul>
+<li>排查：kubectl get svc mysql -n ctts（0.5 分）</li>
+<li>若不存在则创建：kubectl expose deployment ctts-mysql --port=3306
+--name=mysql -n ctts（1 分）</li>
+<li>验证：kubectl get svc mysql -n ctts（0.5 分）</li>
+<li>解决：创建 MySQL Service 后，后端 Pod 重建即可恢复（0.5 分）</li>
+</ul></li>
+<li><strong>根因 2：MySQL Pod 未 Ready</strong>（2.5 分）：
+<ul>
+<li>排查：kubectl get pod -l app=ctts-mysql -n ctts（0.5 分）</li>
+<li>若 MySQL Pod 未 Ready（如启动中、CrashLoopBackOff），等待或排查
+MySQL（1 分）</li>
+<li>排查 MySQL：kubectl logs <mysql-pod> -n ctts（0.5 分）</li>
+<li>解决：确保 MySQL Pod Ready 后，后端 Pod 重建（0.5 分）</li>
+</ul></li>
+<li><strong>根因 3：后端比 MySQL 先部署</strong>（2 分）：
+<ul>
+<li>现象：后端启动时 MySQL 还没 Ready，连接失败（0.5 分）</li>
+<li>排查：kubectl get deployments -n ctts 看 AGE，后端比 MySQL
+晚部署吗（0.5 分）</li>
+<li>解决：删除后端 Pod 让其重建（kubectl delete pod -l app=ctts-backend
+-n ctts），等 MySQL Ready 后重建（1 分）</li>
+</ul></li>
+<li><strong>根因 4：DB_HOST 环境变量配置错误</strong>（1 分）：
+<ul>
+<li>排查：kubectl describe pod -l app=ctts-backend -n ctts 看
+Environment（0.5 分）</li>
+<li>解决：修正 DB_HOST 为 mysql.ctts.svc.cluster.local，重新 apply（0.5
+分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：答出 3
+种根因即满分（每种根因含排查和解决）；根因合理即可，不限于上述四种。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>17-阅读-001</strong>（★★ 知识点：K17-2 MySQL Deployment
+YAML，12 分） 阅读以下 MySQL Deployment YAML，补全缺失部分（每空 2
+分，共 12 分）。</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> (a)________</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">tier</span><span class="kw">:</span><span class="at"> database</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> (b)________</span><span class="co">                    # MySQL 1 副本</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">tier</span><span class="kw">:</span><span class="at"> database</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">version</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> (c)________</span><span class="co">                 # MySQL 8.0 官方镜像</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">imagePullPolicy</span><span class="kw">:</span><span class="at"> IfNotPresent</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> (d)________</span><span class="co">       # MySQL 默认端口</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> (e)________</span><span class="co">                # root 密码环境变量</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;ctts123456&quot;</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> MYSQL_DATABASE</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;ctts&quot;</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;500m&quot;</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;512Mi&quot;</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">(f)________</span><span class="kw">:</span><span class="co">                     # 资源上限</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;1000m&quot;</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;1Gi&quot;</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">volumeMounts</span><span class="kw">:</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-data</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /var/lib/mysql</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-data</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">emptyDir</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) Deployment (b) 1 (c) mysql:8.0 (d)
+3306 (e) MYSQL_ROOT_PASSWORD (f) limits</p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) 资源类型是 Deployment（首字母大写）</li>
+<li>(b) MySQL 有状态，1 副本简化</li>
+<li>(c) MySQL 官方镜像 mysql:8.0</li>
+<li>(d) MySQL 默认端口 3306</li>
+<li>(e) root 密码环境变量 MYSQL_ROOT_PASSWORD（必须设置）</li>
+<li>(f) resources 的 limits 字段（资源上限）</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。意思对即可，专有名词拼写错误不扣分（如 MYSQL_ROOT_PASSWORD
+大小写）。</p>
+</blockquote>
+<hr />
+<p><strong>17-阅读-002</strong>（★★ 知识点：K17-3 后端 Deployment
+YAML，12 分） 阅读以下 CTTS 后端 Deployment YAML，补全缺失部分（每空 2
+分，共 12 分）。</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> (a)________</span><span class="co">                    # Deployment 的 API 版本</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Deployment</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> (b)________</span><span class="co">                    # 3 副本高可用</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">revisionHistoryLimit</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">strategy</span><span class="kw">:</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> (c)________</span><span class="co">                      # 滚动更新策略</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">rollingUpdate</span><span class="kw">:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxSurge</span><span class="kw">:</span><span class="at"> 25%</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxUnavailable</span><span class="kw">:</span><span class="at"> 25%</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">tier</span><span class="kw">:</span><span class="at"> backend</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">version</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> backend</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-backend:v1</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">imagePullPolicy</span><span class="kw">:</span><span class="at"> (d)________</span><span class="co">       # 本地镜像策略</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> DB_HOST</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;(e)________&quot;</span><span class="co">             # MySQL Service DNS 名</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> DB_PASSWORD</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;ctts123456&quot;</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;250m&quot;</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;256Mi&quot;</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;500m&quot;</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> (f)________</span><span class="co">            # 内存上限 512Mi</span></span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) apps/v1 (b) 3 (c) RollingUpdate (d)
+Never (e) mysql.ctts.svc.cluster.local (f) "512Mi"</p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) Deployment 的 apiVersion 是 apps/v1（不是 v1）</li>
+<li>(b) 后端无状态，3 副本高可用</li>
+<li>(c) 滚动更新策略 RollingUpdate（默认）</li>
+<li>(d) 本地构建的镜像用 Never，不从仓库拉取</li>
+<li>(e) MySQL Service DNS 名：mysql.ctts.svc.cluster.local</li>
+<li>(f) 内存 limits 512Mi（与 requests 256Mi 成 2 倍关系）</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12 分。意思对即可，apps/v1
+和 RollingUpdate 拼写要准确。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>17-编程-001</strong>（★★ 知识点：K17-4 前端 Deployment
+YAML，15 分） <strong>前端 Deployment YAML 编写</strong>：请为 CTTS
+前端编写一份完整的 Deployment YAML，要求：</p>
+<ol type="1">
+<li>Deployment 名为 ctts-frontend，namespace 为 ctts（2 分）</li>
+<li>2 副本，滚动更新策略
+RollingUpdate，maxSurge=25%，maxUnavailable=25%（3 分）</li>
+<li>镜像 ctts-frontend:v1，imagePullPolicy: Never，容器端口 80（3
+分）</li>
+<li>资源限制：requests cpu=100m/memory=128Mi，limits
+cpu=200m/memory=256Mi（3 分）</li>
+<li>标签：app=ctts-frontend, tier=frontend, version=v1（2 分）</li>
+<li>selector.matchLabels 与 template.metadata.labels 必须匹配（2
+分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+</blockquote>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Deployment</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">tier</span><span class="kw">:</span><span class="at"> frontend</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">revisionHistoryLimit</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">strategy</span><span class="kw">:</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> RollingUpdate</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">rollingUpdate</span><span class="kw">:</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxSurge</span><span class="kw">:</span><span class="at"> 25%</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxUnavailable</span><span class="kw">:</span><span class="at"> 25%</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">tier</span><span class="kw">:</span><span class="at"> frontend</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">version</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> frontend</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-frontend:v1</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">imagePullPolicy</span><span class="kw">:</span><span class="at"> Never</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">name</span><span class="kw">:</span><span class="at"> http</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">protocol</span><span class="kw">:</span><span class="at"> TCP</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;100m&quot;</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;128Mi&quot;</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;200m&quot;</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;256Mi&quot;</span></span></code></pre></div>
+<blockquote>
+<p><strong>评分要点</strong>：</p>
+<ol type="1">
+<li>metadata.name 和 namespace 正确（2 分）</li>
+<li>replicas: 2，strategy.type: RollingUpdate，maxSurge/maxUnavailable
+正确（3 分）</li>
+<li>image: ctts-frontend:v1，imagePullPolicy: Never，containerPort:
+80（3 分）</li>
+<li>resources.requests 和 limits 正确（3 分）</li>
+<li>标签 app/tier/version 完整（2 分）</li>
+<li>selector.matchLabels.app = template.metadata.labels.app =
+ctts-frontend（2 分）</li>
+</ol>
+<p>关键扣分点：apiVersion 写成 v1 扣 1 分；selector 与 template.labels
+不匹配扣 2 分；imagePullPolicy 不是 Never 扣 1 分。</p>
+</blockquote>
+<hr />
+<p><strong>17-编程-002</strong>（★★★ 知识点：K17-5/K17-6 综合，20 分）
+<strong>滚动更新与回滚综合操作题</strong>：某团队已完成 CTTS 后端
+Deployment（3 副本，镜像 v1）部署。现需要将后端从 v1 滚动更新到
+v2，验证后因发现问题需要回滚。请回答：</p>
+<ol type="1">
+<li>写出完整的滚动更新命令（含 --record 参数）（3 分）</li>
+<li>写出查看滚动更新状态的命令，并描述预期输出（4 分）</li>
+<li>写出查看版本历史的命令，并说明如何查看指定 revision 的详情（4
+分）</li>
+<li>写出回滚到上一版本的命令，并描述回滚过程（4 分）</li>
+<li>写出回滚到指定版本（revision 2）的命令（2 分）</li>
+<li>整个过程中如何验证服务不中断？写出至少 2 种验证方法（3 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<p><strong>1. 滚动更新命令</strong>（3 分）：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 先构建 v2 镜像（1 分）</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span> <span class="va">$(</span><span class="ex">minikube</span> docker-env<span class="va">)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:v2 .</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 触发滚动更新（2 分，含 --record）</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> set image deployment/ctts-backend backend=ctts-backend:v2 <span class="at">-n</span> ctts <span class="at">--record</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：deployment.apps/ctts-backend image updated</span></span></code></pre></div>
+<p><strong>2. 查看滚动更新状态</strong>（4 分）：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout status deployment/ctts-backend <span class="at">-n</span> ctts</span></code></pre></div>
+<p>预期输出（2 分）：</p>
+<pre><code>Waiting for deployment &quot;ctts-backend&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;ctts-backend&quot; rollout to finish: 1 out of 3 new replicas are available...
+Waiting for deployment &quot;ctts-backend&quot; rollout to finish: 2 out of 3 new replicas are available...
+deployment &quot;ctts-backend&quot; successfully rolled out</code></pre>
+<p>说明输出含义（2 分）：显示渐进式替换过程，从 1/3 到 2/3 到
+3/3，最后"successfully rolled out"表示完成。</p>
+<p><strong>3. 查看版本历史</strong>（4 分）：</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看所有版本（2 分）</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout history deployment/ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># deployments &quot;ctts-backend&quot;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># REVISION  CHANGE-CAUSE</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 1         kubectl apply -f ctts-backend-deployment.yaml --record=true</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 2         kubectl set image deployment/ctts-backend backend=ctts-backend:v2 -n ctts --record=true</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看指定 revision 详情（2 分）</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout history deployment/ctts-backend <span class="at">-n</span> ctts <span class="at">--revision</span><span class="op">=</span>2</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 显示 revision 2 的 Pod Template（镜像 v2、标签等）</span></span></code></pre></div>
+<p><strong>4. 回滚到上一版本</strong>（4 分）：</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout undo deployment/ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：deployment.apps/ctts-backend rolled back</span></span></code></pre></div>
+<p>回滚过程描述（3 分）：</p>
+<ul>
+<li>回滚操作本质是"反向滚动更新"</li>
+<li>当前 RS（v2）副本数逐步降到 0</li>
+<li>上一 RS（v1）副本数逐步升到 3</li>
+<li>全程最少 2 个 Pod 可用，服务不中断</li>
+<li>回滚后创建新 revision（如 revision 3），原 revision 2
+保留在历史中</li>
+</ul>
+<p><strong>5. 回滚到指定版本</strong>（2 分）：</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout undo deployment/ctts-backend <span class="at">-n</span> ctts <span class="at">--to-revision</span><span class="op">=</span>2</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：deployment.apps/ctts-backend rolled back</span></span></code></pre></div>
+<p><strong>6. 验证服务不中断的方法</strong>（3 分，答出 2
+种即满分）：</p>
+<ul>
+<li><strong>方法 1</strong>：滚动更新期间持续 curl 健康检查接口（1.5
+分）
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 在另一个终端持续请求</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="fu">true</span><span class="kw">;</span> <span class="cf">do</span> <span class="ex">curl</span> <span class="at">-s</span> http://localhost:8080/actuator/health<span class="kw">;</span> <span class="fu">sleep</span> 1<span class="kw">;</span> <span class="cf">done</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 全程返回 {&quot;status&quot;:&quot;UP&quot;} 表示服务不中断</span></span></code></pre></div></li>
+<li><strong>方法 2</strong>：用 kubectl get pods -w 观察 Pod
+状态变化（1.5 分）
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> ctts <span class="at">-l</span> app=ctts-backend <span class="at">-w</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 观察始终有至少 2 个 Running 的 Pod</span></span></code></pre></div></li>
+<li><strong>方法 3</strong>（备选）：检查 Deployment 的 AVAILABLE 列始终
+&gt;= 2
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get deployment ctts-backend <span class="at">-n</span> ctts <span class="at">-w</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># AVAILABLE 列始终 &gt;= 2</span></span></code></pre></div></li>
+</ul>
+<p><strong>评分要点</strong>：各小题独立给分；命令正确即可；预期输出和过程描述需准确；验证方法答出
+2 种即满分。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

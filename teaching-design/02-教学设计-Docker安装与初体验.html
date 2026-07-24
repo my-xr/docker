@@ -1,0 +1,560 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docker安装与初体验</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 02 次课 · 教学设计</div>
+      <h1>Docker安装与初体验</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 02 次课</span>
+        <span class="hero-chip"><b>主题</b>Docker安装与初体验</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+<li><a href="#贯穿项目阶段-1docker-环境准备第一步">贯穿项目阶段 1：Docker 环境准备第一步</a></li>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1课前-5-分钟回顾开场导入">互动 1：课前 5 分钟回顾（开场导入）</a></li>
+<li><a href="#互动-2实操演示学生同步安装-docker核心互动">互动 2：实操演示——学生同步安装 Docker（核心互动）</a></li>
+<li><a href="#互动-3镜像加速器辨析讲解-k2-4-后">互动 3：镜像加速器辨析（讲解 K2-4 后）</a></li>
+<li><a href="#互动-4hello-world-输出解读讲解-k2-5-时">互动 4：hello-world 输出解读（讲解 K2-5 时）</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+<li><a href="#随堂练习5-分钟讲解结束前进行">随堂练习（5 分钟，讲解结束前进行）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 02 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M1 Docker 认知与环境搭建 ｜ 课程：《Docker
+云容器与管理技术》 配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 2 次课（全课程 24 次之二）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>理论课</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M1 Docker 认知与环境搭建</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>Docker 安装与初体验</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>第 1 次课容器化思想、Linux
+基础（命令行/软件包管理/服务管理）、计算机网络基础</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>掌握 Linux（Ubuntu 22.04）环境下 Docker
+安装的前置条件与系统要求。</li>
+<li>掌握通过 apt 官方源安装 Docker 引擎的完整流程（卸载旧版本、配置 apt
+源、安装、验证）。</li>
+<li>掌握 Docker 服务管理命令（systemctl
+start/stop/restart/enable/status）与开机自启配置。</li>
+<li>理解镜像加速器的作用，掌握 <code>/etc/docker/daemon.json</code>
+的完整配置方法。</li>
+<li>理解 <code>docker run hello-world</code> 的执行流程与 pull
+原理。</li>
+<li>掌握 <code>docker version</code> 与 <code>docker info</code>
+关键字段的含义。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能够在 Ubuntu 22.04 上独立完成 Docker 引擎的安装与验证。</li>
+<li>能够配置国内镜像加速器并使其生效。</li>
+<li>能够运行首个容器 hello-world 并解读输出含义。</li>
+<li>能够使用 systemctl 管理 Docker 服务，并查看服务状态。</li>
+<li>能够通过 <code>docker version</code> / <code>docker info</code>
+排查安装问题。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>培养"工程规范"意识——环境标准化是团队协作的基础，统一安装步骤、统一镜像源、统一配置文件是工程化的起点。</li>
+<li>树立"自主可控"意识——国内镜像加速器既是为了速度，也是降低对境外网络依赖的工程实践。</li>
+<li>培养"运维责任"意识——服务管理、开机自启是保障系统稳定运行的基本功。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K2-1</td>
+<td>Linux 环境准备</td>
+<td>Ubuntu 22.04 系统要求；前置条件（apt、网络、权限）；SSH
+连接与远程操作</td>
+</tr>
+<tr>
+<td>K2-2</td>
+<td>Docker 安装</td>
+<td>卸载旧版本；apt 官方源配置（GPG 密钥、仓库地址）；apt 安装
+docker-ce；安装验证</td>
+</tr>
+<tr>
+<td>K2-3</td>
+<td>Docker 服务管理</td>
+<td>systemctl
+start/stop/restart/enable/status；开机自启；服务状态查看</td>
+</tr>
+<tr>
+<td>K2-4</td>
+<td>镜像加速器配置</td>
+<td><code>/etc/docker/daemon.json</code>
+完整内容；阿里云/中科大/网易镜像源；重启生效</td>
+</tr>
+<tr>
+<td>K2-5</td>
+<td>运行首个容器</td>
+<td><code>docker run hello-world</code>；完整输出解读；pull
+原理（本地无则拉取）</td>
+</tr>
+<tr>
+<td>K2-6</td>
+<td>Docker 基本信息查看</td>
+<td><code>docker version</code>
+客户端/服务端字段；<code>docker info</code> 关键字段含义</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3 id="贯穿项目阶段-1docker-环境准备第一步">贯穿项目阶段 1：Docker
+环境准备第一步</h3>
+<p><strong>本次课任务</strong>：</p>
+<ol type="1">
+<li>教师演示：在 Ubuntu 22.04 上从零安装 Docker
+引擎，配置镜像加速器，运行首个容器。</li>
+<li>学生同步操作：在自己的虚拟机/云主机上完成同样的安装流程。</li>
+<li>完成验证：学生执行 <code>docker run hello-world</code>
+看到成功输出，标志 CTTS 项目环境准备第一步完成。</li>
+<li>教师引出：后续 CTTS 三服务（前端/后端/MySQL）都将跑在这套 Docker
+环境上，环境标准化是团队协作的基础。</li>
+</ol>
+<p><strong>项目背景衔接</strong>：</p>
+<ul>
+<li>上次课明确了 CTTS 多服务容器化部署项目的整体目标。</li>
+<li>本次课是项目阶段 1（M1）的实操起点——先有 Docker
+环境，才能后续拉取镜像、构建镜像、编排部署。</li>
+<li>每位同学把 Docker 装好，是后续所有课程实操的前提。</li>
+</ul>
+<blockquote>
+<p>📌 本次课以"装好 Docker + 跑通
+hello-world"为实操目标，命令必须完整可执行。学生若课堂未完成，课后必须补齐，否则无法跟进第
+3 次课。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1课前-5-分钟回顾开场导入">互动 1：课前 5
+分钟回顾（开场导入）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"上次课我们了解了容器化思想，请回忆：Docker
+是什么架构？客户端命令最终由谁执行？今天我们要把 Docker
+装到自己机器上，你觉得安装前需要准备什么？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>自由发言，教师板书关键词</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>提到"C/S 架构""守护进程执行""需要 Linux
+系统""需要联网""需要管理员权限"等关键词</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定学生对 C/S 架构的回忆，引出 K2-1 环境准备；强调"装 Docker
+不是下一步下一步，要按规范流程"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2实操演示学生同步安装-docker核心互动">互动
+2：实操演示——学生同步安装 Docker（核心互动）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>教师投影演示 Docker
+安装全流程，学生同步在自己虚拟机上操作，分阶段验证</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>教师演示一段 → 学生跟做一段 → 验证输出 →
+进入下一段。分四段：①卸载旧版本+配 apt 源 ②apt 安装 ③配置镜像加速器
+④运行 hello-world</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>每段都有明确的预期输出：①apt 源配置成功无报错
+②<code>docker --version</code> 显示版本号 ③<code>docker info</code>
+显示镜像源 ④hello-world 输出 "Hello from Docker!"</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>巡视学生操作，重点检查：apt 源是否配对、GPG
+密钥是否添加、daemon.json 格式是否正确、是否忘记
+restart。对常见报错（权限拒绝、源不对、JSON 格式错）集中讲解</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-3镜像加速器辨析讲解-k2-4-后">互动 3：镜像加速器辨析（讲解
+K2-4 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"为什么从 Docker Hub
+拉镜像很慢甚至超时？镜像加速器是怎么加速的？配置后不重启会生效吗？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>同桌讨论 2 分钟 → 教师提问 2 位同学</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>提到"Docker Hub 在国外""国内镜像源是镜像副本""配置文件要重启 dockerd
+才生效"</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调镜像加速器是"国内镜像站点缓存"，配置后必须
+<code>systemctl restart docker</code>
+才生效；引出"环境标准化"——团队统一用同一组镜像源</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-4hello-world-输出解读讲解-k2-5-时">互动 4：hello-world
+输出解读（讲解 K2-5 时）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>教师投影 hello-world 的完整输出，请学生逐段解释每段输出的含义</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>全班齐答 + 个别提问</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能识别"Unable to find image locally → pull → Pull complete → Hello
+from Docker"的流程</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调 <code>docker run</code> 的 pull
+原理：本地没有镜像就自动去仓库拉取；这次拉取后下次运行 hello-world 不再
+pull（本地已有）。为第 3 次课镜像管理埋伏笔</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>工程规范——环境标准化是协作基础</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td>Docker
+安装有标准流程（卸载旧版→配源→安装→验证）；镜像加速器配置有标准文件（daemon.json）；服务管理有标准命令（systemctl）。这些"标准"让团队每个人的环境一致，是协作的基础</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"如果团队 5 个人各自用不同方式装
+Docker、用不同镜像源、有人开机自启有人不开，部署 CTTS
+时会出什么问题？为什么企业要统一环境？"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>培养工程规范意识——环境标准化不是"多此一举"，而是团队协作与生产稳定的基础；同时国内镜像加速器也体现"自主可控"——降低对境外网络依赖</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入，不空喊口号。通过"为什么企业要统一环境"的真实视角让学生体会工程规范的价值。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3 id="随堂练习5-分钟讲解结束前进行">随堂练习（5
+分钟，讲解结束前进行）</h3>
+<p><strong>判断题（口头快速作答）</strong>：</p>
+<ol type="1">
+<li>安装 Docker 前应该先卸载系统自带的旧版本 docker.io。（✓）</li>
+<li>配置镜像加速器后，需要重启 Docker 服务才能生效。（✓）</li>
+<li><code>docker run hello-world</code>
+第二次运行时仍会从仓库拉取镜像。（✗）</li>
+<li><code>systemctl enable docker</code> 是配置 Docker
+开机自启的命令。（✓）</li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速互动，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>复习</strong>：通读同文件夹
+<code>教学资料.md</code>，重点掌握 Docker 安装全流程、daemon.json
+配置、hello-world 输出解读。</li>
+<li><strong>实操补全</strong>：课堂未完成安装的同学，课后必须在自己的
+Ubuntu 22.04 环境上完成 Docker 安装、镜像加速配置、运行
+hello-world，截图提交。这是后续所有课程实操的前提。</li>
+<li><strong>思考</strong>：用 200 字描述"Docker
+安装的完整步骤"，下次课抽查。</li>
+<li><strong>对比</strong>：查阅资料，对比 Ubuntu（apt）与
+CentOS（yum）安装 Docker
+的命令差异，写一份对照表（选做，为后续多环境部署打基础）。</li>
+<li><strong>排错练习</strong>：若安装过程中遇到报错，记录报错信息与解决办法，下次课分享（培养运维排错意识）。</li>
+<li><strong>拓展阅读</strong>：访问 Docker 官方文档
+docs.docker.com/engine/install/，对比官方安装步骤与课堂步骤（选做）。</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>能在 Linux 上独立安装 Docker 引擎（DevOps/云运维岗位基本要求）</td>
+<td>K2-1、K2-2</td>
+</tr>
+<tr>
+<td>能配置国内镜像加速器解决拉取慢的问题（运维常见任务）</td>
+<td>K2-4</td>
+</tr>
+<tr>
+<td>能使用 systemctl 管理服务、配置开机自启（Linux 运维基本功）</td>
+<td>K2-3</td>
+</tr>
+<tr>
+<td>理解 <code>docker run</code> 的 pull 原理（面试常考"docker run
+执行流程"）</td>
+<td>K2-5</td>
+</tr>
+<tr>
+<td>能用 <code>docker version</code> / <code>docker info</code>
+排查安装问题</td>
+<td>K2-6</td>
+</tr>
+<tr>
+<td>环境标准化意识（工程规范，团队协作基础）</td>
+<td>思政融入</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"Linux 上怎么装 Docker""镜像加速器怎么配""docker run
+一个镜像本地没有会怎样"等，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + Docker 安装综合示例 + 思维导图 + 复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>课前回顾 + 环境准备说明（K2-1）</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~35 min</td>
+<td>知识点 K2-2：Docker 安装（卸载旧版 + apt 源 +
+安装），学生同步操作</td>
+<td>25 min</td>
+</tr>
+<tr>
+<td>35~45 min</td>
+<td>知识点 K2-3：服务管理 + 开机自启，学生验证</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>45~60 min</td>
+<td>知识点 K2-4：镜像加速器配置 + 辨析互动，学生同步配置</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>60~75 min</td>
+<td>知识点 K2-5、K2-6：运行 hello-world + 输出解读 + version/info
+查看</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>75~80 min</td>
+<td>随堂练习</td>
+<td>5 min</td>
+</tr>
+<tr>
+<td>80~90 min</td>
+<td>小结 + 课后任务布置 + 排错分享</td>
+<td>10 min</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

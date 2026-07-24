@@ -1,0 +1,2095 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dockerfile基础指令</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 06 次课 · 教学资料</div>
+      <h1>Dockerfile基础指令</h1>
+      <p>面向学生复习、自学、命令示例与知识图示 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 06 次课</span>
+        <span class="hero-chip"><b>主题</b>Dockerfile基础指令</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一学习导读">一、学习导读</a>
+<ul>
+<li><a href="#11-本节定位">1.1 本节定位</a></li>
+<li><a href="#12-先修基础">1.2 先修基础</a></li>
+<li><a href="#13-学习目标">1.3 学习目标</a></li>
+</ul></li>
+<li><a href="#二知识点详解">二、知识点详解</a>
+<ul>
+<li><a href="#知识点-k6-1dockerfile-概念与作用">知识点 K6-1：Dockerfile 概念与作用</a></li>
+<li><a href="#知识点-k6-2from-指令">知识点 K6-2：FROM 指令</a></li>
+<li><a href="#知识点-k6-3run-指令">知识点 K6-3：RUN 指令</a></li>
+<li><a href="#知识点-k6-4copy-与-add-指令">知识点 K6-4：COPY 与 ADD 指令</a></li>
+<li><a href="#知识点-k6-5workdir-与-user-指令">知识点 K6-5：WORKDIR 与 USER 指令</a></li>
+<li><a href="#知识点-k6-6docker-build-与构建上下文">知识点 K6-6：docker build 与构建上下文</a></li>
+<li><a href="#31-项目背景">3.1 项目背景</a></li>
+<li><a href="#32-完整目录结构">3.2 完整目录结构</a></li>
+<li><a href="#33-dockerignore-文件">3.3 .dockerignore 文件</a></li>
+<li><a href="#34-dockerfile-完整内容">3.4 Dockerfile 完整内容</a></li>
+<li><a href="#35-构建与验证命令">3.5 构建与验证命令</a></li>
+<li><a href="#36-这个-dockerfile-用到了哪些知识点">3.6 这个 Dockerfile 用到了哪些知识点</a></li>
+</ul></li>
+<li><a href="#四拓展阅读选学">四、拓展阅读（选学）</a>
+<ul>
+</ul></li>
+<li><a href="#五本节小结与知识结构图">五、本节小结与知识结构图</a>
+<ul>
+<li><a href="#知识结构图思维导图">知识结构图（思维导图）</a></li>
+<li><a href="#一句话总结">一句话总结</a></li>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 06 次课 <span>｜</span> <strong>文档：</strong>教学资料</p>
+<blockquote>
+<p>学生复习资料 ｜
+配套：<code>教学设计.md</code>（教师教案）、<code>题库.md</code>（78
+题考试题库）
+本资料面向学生课后复习自学，包含定义、原理、问题、完整示例、图示、易错点与小结。</p>
+</blockquote>
+<hr />
+<h2 id="一学习导读">一、学习导读</h2>
+<h3 id="11-本节定位">1.1 本节定位</h3>
+<p>这是《Docker 云容器与管理技术》的<strong>第 6 次课</strong>，进入模块
+3"Dockerfile 与镜像构建"。前 5
+次课你学会了"用现成镜像跑容器"，从这次课开始，你将学会"<strong>自己造镜像</strong>"——这是从"容器使用者"跃迁到"容器构建者"的关键一步。</p>
+<p>学完本节，你应当能回答：</p>
+<ul>
+<li>什么是 Dockerfile？为什么用 Dockerfile 而不是
+<code>docker commit</code>？</li>
+<li>Dockerfile 的基本结构是什么样的？指令大小写有要求吗？</li>
+<li>FROM / RUN / COPY / ADD / WORKDIR / USER
+这六条基础指令分别做什么？</li>
+<li>为什么每条 RUN 都会生成一层？为什么要用 <code>&amp;&amp;</code>
+合并命令？</li>
+<li>COPY 和 ADD 有什么区别？什么时候用哪个？</li>
+<li><code>docker build -t name:tag .</code>
+这条命令每个部分是什么意思？最后的 <code>.</code> 是什么？</li>
+<li>什么是构建上下文？<code>.dockerignore</code> 有什么用？</li>
+<li>如何为 CTTS 后端编写一个最小可用的 Dockerfile？</li>
+</ul>
+<h3 id="12-先修基础">1.2 先修基础</h3>
+<table>
+<thead>
+<tr>
+<th>先修知识</th>
+<th>用到程度</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linux 基础命令</td>
+<td>熟练使用</td>
+<td>RUN 指令会执行 shell 命令（apt/yum/cp/mkdir 等）</td>
+</tr>
+<tr>
+<td>Docker 镜像与容器管理</td>
+<td>熟练使用</td>
+<td>第 3~5 次课内容，会 pull/run/inspect 镜像</td>
+</tr>
+<tr>
+<td>Java 应用打包</td>
+<td>了解</td>
+<td>知道 jar 包是什么，能运行 <code>java -jar app.jar</code></td>
+</tr>
+<tr>
+<td>文本编辑器</td>
+<td>基础</td>
+<td>能用 vim/vscode 编写 Dockerfile</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-学习目标">1.3 学习目标</h3>
+<ul>
+<li>✅ 理解 Dockerfile 的概念与作用，能说明"为什么用 Dockerfile"</li>
+<li>✅ 掌握 FROM 指令与基础镜像选择原则</li>
+<li>✅ 掌握 RUN 指令的分层原理与合并优化技巧</li>
+<li>✅ 掌握 COPY 与 ADD 的区别与选择建议</li>
+<li>✅ 掌握 WORKDIR 与 USER 指令，理解非 root 运行的安全意义</li>
+<li>✅ 掌握 docker build 命令、构建上下文概念、.dockerignore 编写</li>
+<li>✅ 能为 CTTS 后端编写基础 Dockerfile 并构建镜像</li>
+</ul>
+<hr />
+<h2 id="二知识点详解">二、知识点详解</h2>
+<h3 id="知识点-k6-1dockerfile-概念与作用">知识点 K6-1：Dockerfile
+概念与作用</h3>
+<h4 id="定义">定义</h4>
+<p><strong>Dockerfile</strong>
+是一个文本文件，里面包含了一条条指令（instruction），每条指令描述镜像构建的一步。Docker
+按 Dockerfile 中的指令顺序执行，最终生成一个镜像。</p>
+<p>一句话概括：</p>
+<blockquote>
+<p><strong>Dockerfile 是镜像的源代码。</strong></p>
+</blockquote>
+<p>就像源代码描述了程序如何构建，Dockerfile
+描述了镜像如何构建。它把"制作镜像"这件事从手工操作变成了代码化、可版本管理、可审计的工程过程。</p>
+<h4 id="原理">原理</h4>
+<p><strong>为什么用 Dockerfile 而非
+<code>docker commit</code>？</strong></p>
+<p><code>docker commit</code>
+是把一个正在运行的容器"快照"成镜像。看起来很直接，但有三大致命问题：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>docker commit</th>
+<th>Dockerfile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>可复现性</td>
+<td>不可复现——没人知道你在这个容器里做了什么</td>
+<td>完全可复现——任何人照着 Dockerfile 都能 build 出同样的镜像</td>
+</tr>
+<tr>
+<td>版本管理</td>
+<td>没法版本管理——镜像就是一个二进制 blob</td>
+<td>可提交到 Git，每行修改都有 diff</td>
+</tr>
+<tr>
+<td>审计与安全</td>
+<td>没法审计——不知道装了什么、改了什么</td>
+<td>可 Code Review，安全合规可检查</td>
+</tr>
+</tbody>
+</table>
+<p><strong>对比例子</strong>：</p>
+<pre class="text"><code>【docker commit 方式制作 CTTS 后端镜像】
+1. docker run -it openjdk:17 bash
+2. （在容器内）mkdir /app
+3. （在容器内）exit
+4. docker cp ctts-backend.jar &lt;container_id&gt;:/app/app.jar
+5. docker commit &lt;container_id&gt; ctts-backend:v1
+   → 得到一个镜像，但没人知道里面到底有什么
+   → 三个月后别人接手，完全不知道这个镜像是怎么来的
+
+【Dockerfile 方式制作 CTTS 后端镜像】
+# 文件名：Dockerfile
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+COPY ctts-backend.jar /app/app.jar
+CMD [&quot;java&quot;, &quot;-jar&quot;, &quot;/app/app.jar&quot;]
+
+docker build -t ctts-backend:v1 .
+   → 任何人看 Dockerfile 就知道镜像里有什么
+   → 提交到 Git，每次修改都有记录
+   → 同事可以 Code Review</code></pre>
+<p><strong>Dockerfile 的基本结构</strong>：</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 这是注释（以 # 开头）</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 指令通常大写（虽然小写也能跑，但规范是大写）</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre          <span class="co"># 基础镜像（必须，且通常第一行）</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app                          <span class="co"># 设置工作目录</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/app.jar    <span class="co"># 复制本地文件到镜像</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install <span class="at">-y</span> curl   <span class="co"># 执行命令</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser                          <span class="co"># 切换用户</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]  <span class="co"># 容器启动命令</span></span></code></pre></div>
+<p><strong>Dockerfile 语法要点</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>规则</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文件名</td>
+<td>固定为 <code>Dockerfile</code>（无扩展名，首字母大写）</td>
+</tr>
+<tr>
+<td>注释</td>
+<td><code>#</code> 开头</td>
+</tr>
+<tr>
+<td>指令大小写</td>
+<td>规范是大写（如
+<code>FROM</code>、<code>RUN</code>），虽然小写也能执行</td>
+</tr>
+<tr>
+<td>指令顺序</td>
+<td>从上到下顺序执行</td>
+</tr>
+<tr>
+<td>第一条指令</td>
+<td>通常是 <code>FROM</code>（指定基础镜像）</td>
+</tr>
+<tr>
+<td>指令参数</td>
+<td>每条指令后跟参数，参数格式取决于指令</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景">问题 / 场景</h4>
+<p><strong>问：Dockerfile 的文件名必须是 <code>Dockerfile</code>
+吗？</strong></p>
+<ul>
+<li>默认是
+<code>Dockerfile</code>（首字母大写，无扩展名）。如果用别的名字，构建时要加
+<code>-f</code>
+参数：<code>docker build -f MyDockerfile -t myapp:v1 .</code>。但工程上建议用默认名，便于团队协作。</li>
+</ul>
+<p><strong>问：Dockerfile 里能写中文注释吗？</strong></p>
+<ul>
+<li>可以，但建议用英文注释，避免某些构建环境对中文编码处理不一致导致构建失败。注释以
+<code>#</code> 开头。</li>
+</ul>
+<p><strong>问：docker commit 完全不能用吗？</strong></p>
+<ul>
+<li>不是。<code>docker commit</code>
+在"现场调试"场景有用——比如容器出问题了，临时 commit
+一个镜像保留现场。但<strong>生产镜像绝不能用 commit 做</strong>，必须用
+Dockerfile。</li>
+</ul>
+<h4 id="完整示例">完整示例</h4>
+<p><strong>第一个 Dockerfile（hello-world 版本）</strong>：</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 文件名：Dockerfile</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 第一行通常是 FROM（指定基础镜像）</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> alpine:3.18</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 设置工作目录</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 复制一个脚本到镜像</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> hello.sh /app/hello.sh</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 给脚本加执行权限</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">chmod</span> +x /app/hello.sh</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 容器启动时执行</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;/app/hello.sh&quot;</span>]</span></code></pre></div>
+<p><strong>hello.sh 内容</strong>：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Hello from Dockerfile-built image!&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Current directory: </span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Current user: </span><span class="va">$(</span><span class="fu">whoami</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Files in /app:&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-la</span> /app</span></code></pre></div>
+<p><strong>构建与运行</strong>：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 准备目录</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/dockerfile-demo <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ~/dockerfile-demo</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 创建 hello.sh</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> hello.sh <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">#!/bin/sh</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">echo &quot;Hello from Dockerfile-built image!&quot;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">echo &quot;Current directory: $(pwd)&quot;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">echo &quot;Current user: $(whoami)&quot;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">echo &quot;Files in /app:&quot;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="st">ls -la /app</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x hello.sh</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 创建 Dockerfile（内容如上）</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 构建镜像</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> hello-df:v1 .</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 5.2s (8/8) FINISHED                              docker:default</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load build definition from Dockerfile               0.1s</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring dockerfile: 235B                                0.0s</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load .dockerignore                                   0.1s</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring context: 2B                                     0.0s</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load metadata for docker.io/library/alpine:3.18      2.0s</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/3] FROM docker.io/library/alpine:3.18@sha256:eece...         1.5s</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; resolve docker.io/library/alpine:3.18@sha256:eece...         0.0s</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; sha256:eece0ce0c1f4 2.72MB / 3.62MB                          0.5s</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; extracting sha256:eece0ce0c1f4                              0.3s</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load build context                                   0.1s</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring context: 56B                                    0.0s</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/3] WORKDIR /app                                              0.1s</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [3/3] COPY hello.sh /app/hello.sh                               0.1s</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image                                              0.2s</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; exporting layers                                             0.1s</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; writing image sha256:a1b2c3d4e5f6...                         0.0s</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/hello-df:v1                      0.0s</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 运行容器</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> hello-df:v1</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Hello from Dockerfile-built image!</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Current directory: /app</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Current user: root</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Files in /app:</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="co"># total 12</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="co"># drwxr-xr-x    1 root     root          4096 Jul 22 10:00 .</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co"># drwxr-xr-x    1 root     root          4096 Jul 22 10:00 ..</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="co"># -rwxr-xr-x    1 root     root           130 Jul 22 10:00 hello.sh</span></span></code></pre></div>
+<h4 id="图示">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 1：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">Dockerfile 的角色：</span>
+<span class="diagram-line">  开发者                  Docker 引擎                镜像</span>
+<span class="diagram-line">  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐            ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐            ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">  <span class="tree-token">│</span>Dockerfile<span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span>build<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> <span class="tree-token">│</span> 按指令   <span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span>生成<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span>  <span class="tree-token">│</span>  只读    <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span> (源代码)  <span class="tree-token">│</span>            <span class="tree-token">│</span> 逐层构建  <span class="tree-token">│</span>            <span class="tree-token">│</span>  分层镜像 <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘            <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘            <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">       <span class="tree-token">│</span>                                               <span class="tree-token">│</span></span>
+<span class="diagram-line">       <span class="tree-token">│</span> git 提交                                      <span class="tree-token">│</span> docker run</span>
+<span class="diagram-line">       ▼                                               ▼</span>
+<span class="diagram-line">  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐                                    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">  <span class="tree-token">│</span>  代码仓库 <span class="tree-token">│</span>                                    <span class="tree-token">│</span>   容器    <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>  (Git)    <span class="tree-token">│</span>                                    <span class="tree-token">│</span> (运行实例)<span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘                                    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">对比 docker commit：</span>
+<span class="diagram-line">  容器 <span class="tree-token">─</span><span class="tree-token">─</span>commit<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 镜像（黑盒，没人知道里面有什么）</span>
+<span class="diagram-line">  Dockerfile <span class="tree-token">─</span><span class="tree-token">─</span>build<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 镜像（白盒，每层都可追溯）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点">易错点</h4>
+<ol type="1">
+<li>❌ 文件名写成 <code>dockerfile</code>（小写 d）或
+<code>Dockerfile.txt</code>（带扩展名）。✅ 默认文件名就是
+<code>Dockerfile</code>，首字母大写、无扩展名。</li>
+<li>❌ 误以为"能用 docker commit 就别写 Dockerfile"。✅ 生产镜像必须用
+Dockerfile，commit 只用于临时调试。</li>
+<li>❌ Dockerfile 里指令全小写（如
+<code>from</code>、<code>run</code>）。✅
+规范是大写指令（<code>FROM</code>、<code>RUN</code>），便于区分指令和参数。</li>
+<li>❌ 第一条指令不是 FROM。✅ Dockerfile 通常以 FROM 开头（除了
+ARG、解析器指令等少数例外）。</li>
+</ol>
+<h4 id="小结">小结</h4>
+<p>Dockerfile 是描述镜像构建过程的文本文件，是镜像的源代码。相比
+<code>docker commit</code>，Dockerfile
+具有可复现、可版本管理、可审计三大优势，是生产镜像构建的唯一规范方式。Dockerfile
+由一条条指令组成，规范是指令大写、从上到下执行、以 FROM 开头。</p>
+<hr />
+<h3 id="知识点-k6-2from-指令">知识点 K6-2：FROM 指令</h3>
+<h4 id="定义-1">定义</h4>
+<p><strong>FROM</strong> 指令指定基础镜像（base image），是 Dockerfile
+的"地基"。所有后续指令都在这个基础镜像之上叠加。FROM 通常是 Dockerfile
+的第一条指令。</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> &lt;镜像名&gt;:&lt;标签&gt;</span></code></pre></div>
+<h4 id="原理-1">原理</h4>
+<p><strong>为什么要 FROM？</strong></p>
+<p>容器镜像采用分层结构。你的应用镜像不可能"从零开始"——它需要一个底层：要么是操作系统（如
+ubuntu、alpine），要么是某个运行时（如
+openjdk、python），要么是某个服务的官方镜像（如 mysql、nginx）。FROM
+就是告诉 Docker："我这个镜像站在哪个巨人的肩膀上"。</p>
+<div class="visual">
+  <div class="visual-title">图示 2：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">你的应用镜像（FROM 之上的层）</span>
+<span class="diagram-line"><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span></span>
+<span class="diagram-line">基础镜像（FROM 指定的镜像）</span>
+<span class="diagram-line"><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span></span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>FROM 的三种典型用法</strong>：</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 用通用基础镜像（最常见）</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ubuntu:22.04</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> alpine:3.18</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> debian:bookworm-slim</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 用语言运行时镜像（开发应用最常用）</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre     <span class="co"># Java 17 运行时</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.11-slim            <span class="co"># Python 3.11</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> node:20-alpine              <span class="co"># Node.js 20</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 用 scratch（空镜像，极少数场景）</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> scratch</span></code></pre></div>
+<p><strong>官方镜像选择原则</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>原则</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用官方镜像</td>
+<td>Docker Hub 上带 "Official Image" 标记的，经过安全审查</td>
+<td><code>eclipse-temurin:17-jre</code> 而不是随便某个
+<code>xxx/jdk17</code></td>
+</tr>
+<tr>
+<td>固定版本</td>
+<td>不用 <code>:latest</code>，指定明确版本号，保证可复现</td>
+<td><code>alpine:3.18</code> 而不是 <code>alpine:latest</code></td>
+</tr>
+<tr>
+<td>选 slim/alpine 变体</td>
+<td>体积小、攻击面小</td>
+<td><code>python:3.11-slim</code>（~50MB）而不是
+<code>python:3.11</code>（~350MB）</td>
+</tr>
+<tr>
+<td>优先用运行时镜像</td>
+<td>Java 应用用 <code>eclipse-temurin:17-jre</code>，而不是用 ubuntu
+自己装 JDK</td>
+<td>直接用现成的运行时镜像</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关于 <code>scratch</code></strong>：</p>
+<p><code>scratch</code> 是一个特殊的"空镜像"——它什么都不包含。用
+<code>FROM scratch</code> 意味着你的镜像完全从零开始，里面只有你 COPY
+进去的内容。常用于：</p>
+<ul>
+<li>静态编译的 Go 程序（不依赖任何库）</li>
+<li>极致追求镜像体积的场景</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Go 程序的 scratch 镜像示例</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> scratch</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> myapp /myapp</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;/myapp&quot;</span>]</span></code></pre></div>
+<blockquote>
+<p>📌 大多数应用不需要用 scratch。用 scratch
+意味着你必须自己处理所有依赖（glibc、动态库等），门槛较高。</p>
+</blockquote>
+<h4 id="问题--场景-1">问题 / 场景</h4>
+<p><strong>问：为什么不用 <code>:latest</code> 标签？</strong></p>
+<ul>
+<li><code>:latest</code> 是一个会变的指针——今天
+<code>alpine:latest</code> 是 3.18，明天可能是 3.19。如果你的 Dockerfile
+写 <code>FROM alpine:latest</code>，今天 build 和明天 build
+出来的镜像可能不一样，破坏可复现性。生产环境<strong>必须</strong>指定明确版本。</li>
+</ul>
+<p><strong>问：<code>eclipse-temurin</code> 是什么？为什么不用
+<code>openjdk</code>？</strong></p>
+<ul>
+<li><code>openjdk</code> 是 Docker Hub 上的老牌 OpenJDK 镜像，但 Docker
+官方已声明 <code>openjdk</code>
+镜像不再更新（已被弃用）。<code>eclipse-temurin</code> 是 Adoptium
+项目维护的 OpenJDK 镜像，是目前 Java 应用的事实标准。类似的还有
+<code>amazoncorretto</code>、<code>azul/zulu-openjdk</code> 等。</li>
+</ul>
+<p><strong>问：alpine、slim、普通版有什么区别？</strong></p>
+<ul>
+<li><code>alpine</code>：基于 Alpine Linux，体积最小（5MB 左右），但用
+musl libc 而非 glibc，部分软件可能有兼容问题。</li>
+<li><code>slim</code>：基于 Debian，去掉了一些非必要文件，体积适中（50MB
+左右），兼容性好。</li>
+<li>普通版：完整 Debian，体积最大（几百 MB），但最稳。</li>
+<li>选择原则：<strong>优先 slim，其次 alpine，最后普通版</strong>。如果
+alpine 有兼容问题再退回 slim。</li>
+</ul>
+<p><strong>问：FROM 能用多个吗？</strong></p>
+<ul>
+<li>可以，这叫"多阶段构建"，一条 Dockerfile 可以有多个 FROM，每个 FROM
+开启一个构建阶段。这是第 7 次课的内容，本节不展开。</li>
+</ul>
+<h4 id="完整示例-1">完整示例</h4>
+<p><strong>对比不同基础镜像的体积</strong>：</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 准备一个最小 Dockerfile</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/from-test <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ~/from-test</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 测试1：ubuntu 基础镜像</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> Dockerfile.ubuntu <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="st">FROM ubuntu:22.04</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="st">RUN echo &quot;ubuntu base image&quot;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-f</span> Dockerfile.ubuntu <span class="at">-t</span> test-from-ubuntu:v1 .</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 8.5s (6/6) FINISHED</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/1] FROM docker.io/library/ubuntu:22.04@sha256:...</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/1] RUN echo &quot;ubuntu base image&quot;</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/test-from-ubuntu:v1</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 测试2：alpine 基础镜像</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> Dockerfile.alpine <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="st">FROM alpine:3.18</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="st">RUN echo &quot;alpine base image&quot;</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-f</span> Dockerfile.alpine <span class="at">-t</span> test-from-alpine:v1 .</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 3.2s (6/6) FINISHED</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/1] FROM docker.io/library/alpine:3.18@sha256:...</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/1] RUN echo &quot;alpine base image&quot;</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/test-from-alpine:v1</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 对比镜像大小</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images <span class="kw">|</span> <span class="fu">grep</span> test-from</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co"># REPOSITORY           TAG   IMAGE ID       CREATED          SIZE</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="co"># test-from-ubuntu     v1    a1b2c3d4e5f6   10 seconds ago   77.8MB</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="co"># test-from-alpine     v1    b2c3d4e5f6a7   5 seconds ago    7.34MB</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="co"># → alpine 比 ubuntu 小一个数量级</span></span></code></pre></div>
+<p><strong>Java 应用基础镜像选择示例</strong>：</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CTTS 后端 Dockerfile - 选 eclipse-temurin:17-jre</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 为什么？</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   - eclipse-temurin 是官方维护的 OpenJDK 镜像（openjdk 已弃用）</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   - 17 是 LTS 版本，匹配 CTTS 项目用的 Java 17</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   - jre 变体只含运行时不含 JDK，体积更小（运行 jar 用 jre 就够）</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   - 没用 alpine 变体是因为某些 JNI 库在 alpine 上有兼容问题</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/app.jar</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<h4 id="图示-1">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 3：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">基础镜像选择决策树：</span>
+<span class="diagram-line">  应用类型？</span>
+<span class="diagram-line">  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Java 应用 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> eclipse-temurin:&lt;LTS&gt;-jre</span>
+<span class="diagram-line">  <span class="tree-token">│</span>                 (例: eclipse-temurin:17-jre)</span>
+<span class="diagram-line">  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Python 应用 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> python:&lt;ver&gt;-slim</span>
+<span class="diagram-line">  <span class="tree-token">│</span>                   (例: python:3.11-slim)</span>
+<span class="diagram-line">  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Node.js 应用 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> node:&lt;ver&gt;-alpine</span>
+<span class="diagram-line">  <span class="tree-token">│</span>                    (例: node:20-alpine)</span>
+<span class="diagram-line">  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 静态网站 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> nginx:alpine</span>
+<span class="diagram-line">  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Go 静态二进制 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> FROM scratch</span>
+<span class="diagram-line">  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 需要完整 OS <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> ubuntu:22.04 / debian:bookworm-slim</span>
+<span class="diagram-line">镜像分层（FROM 之上叠加）：</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span>  你的应用层（COPY jar）   <span class="tree-token">│</span>  ← 你写的</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line"><span class="tree-token">│</span>  JDK 17 运行时层          <span class="tree-token">│</span>  ← FROM eclipse-temurin:17-jre</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line"><span class="tree-token">│</span>  Ubuntu 底层系统层        <span class="tree-token">│</span>  ← eclipse-temurin 的底层</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-1">易错点</h4>
+<ol type="1">
+<li>❌ 用 <code>FROM ubuntu:latest</code>（不固定版本）。✅ 用
+<code>FROM ubuntu:22.04</code>，固定版本保证可复现。</li>
+<li>❌ Java 应用用 <code>FROM ubuntu</code> 然后自己
+<code>apt install openjdk</code>。✅ 直接用
+<code>FROM eclipse-temurin:17-jre</code>，省事且规范。</li>
+<li>❌ 用 <code>FROM openjdk:17</code>（openjdk 已弃用）。✅ 用
+<code>FROM eclipse-temurin:17-jre</code>。</li>
+<li>❌ 一上来就用 <code>FROM scratch</code>。✅ 99% 的应用不需要
+scratch，用现成基础镜像即可。</li>
+<li>❌ 用不知名第三方镜像作为基础镜像。✅ 优先用 Docker Hub 官方镜像（带
+"Official Image" 标记）。</li>
+</ol>
+<h4 id="小结-1">小结</h4>
+<p>FROM 指定基础镜像，是 Dockerfile
+的地基。选择原则：用官方镜像、固定版本、优先 slim/alpine
+变体、优先用现成运行时镜像而非自己装。Java 应用首选
+<code>eclipse-temurin:17-jre</code>，Python 首选
+<code>python:3.11-slim</code>，静态网站用
+<code>nginx:alpine</code>。绝不用 <code>:latest</code> 标签。</p>
+<hr />
+<h3 id="知识点-k6-3run-指令">知识点 K6-3：RUN 指令</h3>
+<h4 id="定义-2">定义</h4>
+<p><strong>RUN</strong>
+指令在构建镜像时执行命令，通常用于安装软件包、创建目录、修改文件等。每条
+RUN 指令都会在镜像中<strong>生成一个新的层（layer）</strong>。</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># shell 形式（最常用）</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="op">&lt;</span>命令<span class="op">&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># exec 形式（推荐用于需要精确控制时）</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> [<span class="st">&quot;可执行文件&quot;</span>, <span class="st">&quot;参数1&quot;</span>, <span class="st">&quot;参数2&quot;</span>]</span></code></pre></div>
+<h4 id="原理-2">原理</h4>
+<p><strong>每条 RUN 生成一层</strong>：</p>
+<p>Docker 镜像是分层的。Dockerfile 中每条 RUN、COPY、ADD
+指令都会创建一个新的层。每层都是只读的，叠加在上一层之上。</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 反面教材：每条 RUN 一层，共 4 层</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> curl</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> vim</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">rm</span> <span class="at">-rf</span> /var/lib/apt/lists/<span class="pp">*</span></span></code></pre></div>
+<pre><code>生成 4 个层：
+┌──────────────────────────┐
+│ 层4: rm -rf /var/lib/apt │  ← 删除操作也占一层（虽然文件删了，但层在）
+├──────────────────────────┤
+│ 层3: install vim          │
+├──────────────────────────┤
+│ 层2: install curl         │
+├──────────────────────────┤
+│ 层1: apt-get update       │
+└──────────────────────────┘</code></pre>
+<p><strong>层缓存的影响</strong>：</p>
+<p>Docker
+构建时<strong>按指令顺序缓存</strong>。如果某条指令没变，Docker
+会复用上次构建的层（缓存命中，秒过）。一旦某条指令变了，这条及之后的所有指令都会重新执行（缓存失效）。</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 假设这是 Dockerfile</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre          <span class="co"># 第1层 - 缓存</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install <span class="at">-y</span> curl   <span class="co"># 第2层 - 缓存</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app                          <span class="co"># 第3层 - 缓存</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/app.jar    <span class="co"># 第4层 - 这层每次 jar 变了就失效</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]  <span class="co"># 第5层</span></span></code></pre></div>
+<pre><code>你改了 ctts-backend.jar 后重新 build：
+FROM eclipse-temurin:17-jre          → CACHED (缓存命中)
+RUN apt-get update &amp;&amp; apt-get install -y curl   → CACHED (缓存命中)
+WORKDIR /app                          → CACHED (缓存命中)
+COPY ctts-backend.jar /app/app.jar    → 重新执行（jar 变了）
+CMD [&quot;java&quot;, &quot;-jar&quot;, &quot;/app/app.jar&quot;]  → 重新执行</code></pre>
+<blockquote>
+<p>📌 这就是为什么 Dockerfile
+里"不常变的指令放前面，常变的放后面"——让缓存尽量命中，加快构建。</p>
+</blockquote>
+<p><strong>合并 RUN 命令优化</strong>：</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ✅ 推荐：用 &amp;&amp; 合并命令，只生成 1 层</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update <span class="dt">\</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install <span class="at">-y</span> <span class="at">--no-install-recommends</span> <span class="dt">\</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        curl <span class="dt">\</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        vim <span class="dt">\</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        ca-certificates <span class="dt">\</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> <span class="at">-rf</span> /var/lib/apt/lists/<span class="pp">*</span></span></code></pre></div>
+<p><strong>为什么合并？</strong></p>
+<ol type="1">
+<li>减少层数（4 层 → 1 层），镜像更小。</li>
+<li><code>rm -rf /var/lib/apt/lists/*</code>
+在同一层执行，能真正减小体积（不会因为分层而保留中间状态）。</li>
+</ol>
+<p><strong>shell 形式 vs exec 形式</strong>：</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># shell 形式：通过 /bin/sh -c 执行，支持变量替换、管道</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="bu">echo</span> <span class="st">&quot;Hello </span><span class="va">$NAME</span><span class="st">&quot;</span>          <span class="co"># $NAME 会被 shell 解析</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update <span class="kw">|</span> <span class="fu">grep</span> http  <span class="co"># 管道可用</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># exec 形式：直接执行，不经过 shell，不支持变量替换</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> [<span class="st">&quot;echo&quot;</span>, <span class="st">&quot;Hello $NAME&quot;</span>]     <span class="co"># $NAME 不会被解析，原样输出</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> [<span class="st">&quot;/bin/bash&quot;</span>, <span class="st">&quot;-c&quot;</span>, <span class="st">&quot;echo Hello $NAME&quot;</span>]  <span class="co"># 显式调 shell 才能解析</span></span></code></pre></div>
+<p><strong>何时用 exec 形式？</strong></p>
+<ul>
+<li>需要精确控制时（避免 shell 干扰）</li>
+<li>命令中包含特殊字符（<code>$</code>、<code>"</code>）需要原样传递时</li>
+<li>大多数情况用 shell 形式即可</li>
+</ul>
+<h4 id="问题--场景-2">问题 / 场景</h4>
+<p><strong>问：为什么 <code>RUN apt-get update</code> 和
+<code>RUN apt-get install</code> 必须用 <code>&amp;&amp;</code>
+连起来？</strong></p>
+<ul>
+<li>如果分开写：<code>RUN apt-get update</code>
+单独一层，<code>RUN apt-get install -y curl</code>
+单独一层。后者会用前者缓存中的包索引。但缓存可能过期，导致 install
+时找不到包或版本错。用 <code>&amp;&amp;</code> 连起来保证 update 和
+install 在同一层执行，索引一定是最新的。</li>
+</ul>
+<p><strong>问：RUN 和 CMD 有什么区别？</strong></p>
+<ul>
+<li><strong>RUN</strong>：在<strong>构建时</strong>执行，生成镜像层。通常用于装软件、配置环境。</li>
+<li><strong>CMD</strong>：在<strong>容器启动时</strong>执行，不生成层。指定容器默认启动命令。</li>
+<li>简单记忆：RUN 是"做镜像时跑一次"，CMD 是"启动容器时跑"。</li>
+</ul>
+<p><strong>问：RUN 写太多命令会不会让镜像很大？</strong></p>
+<ul>
+<li>会。每条 RUN 一层，层越多镜像越大。所以要用 <code>&amp;&amp;</code>
+合并相关命令，并在同一层清理临时文件（如 <code>apt</code> 的
+<code>lists</code>、<code>wget</code> 下载的压缩包）。</li>
+</ul>
+<h4 id="完整示例-2">完整示例</h4>
+<p><strong>反例 vs 正例对比</strong>：</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ❌ 反例：4 条 RUN，4 层，且 rm 不生效（中间层仍占空间）</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ubuntu:22.04</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> curl</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> vim</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">rm</span> <span class="at">-rf</span> /var/lib/apt/lists/<span class="pp">*</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 构建反例</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/dockerfile-demo</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> run-bad <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> run-bad</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> Dockerfile <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="st">FROM ubuntu:22.04</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="st">RUN apt-get update</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="st">RUN apt-get install -y curl</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="st">RUN apt-get install -y vim</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="st">RUN rm -rf /var/lib/apt/lists/*</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> run-bad:v1 .</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 18.3s (10/10) FINISHED</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/5] FROM docker.io/library/ubuntu:22.04</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/5] RUN apt-get update</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [3/5] RUN apt-get install -y curl</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [4/5] RUN apt-get install -y vim</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [5/5] RUN rm -rf /var/lib/apt/lists/*</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/run-bad:v1</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images run-bad:v1</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="co"># REPOSITORY   TAG   IMAGE ID       CREATED         SIZE</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="co"># run-bad      v1    a1b2c3d4e5f6   5 seconds ago   220MB   ← 体积大</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ✅ 正例：合并成 1 条 RUN，1 层，rm 真正生效</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ubuntu:22.04</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update <span class="dt">\</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install <span class="at">-y</span> <span class="at">--no-install-recommends</span> <span class="dt">\</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>        curl <span class="dt">\</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>        vim <span class="dt">\</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> <span class="at">-rf</span> /var/lib/apt/lists/<span class="pp">*</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/dockerfile-demo</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> run-good <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> run-good</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> Dockerfile <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="st">FROM ubuntu:22.04</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="st">RUN apt-get update \</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="st">    &amp;&amp; apt-get install -y --no-install-recommends \</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="st">        curl \</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="st">        vim \</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="st">    &amp;&amp; rm -rf /var/lib/apt/lists/*</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> run-good:v1 .</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 12.1s (6/6) FINISHED</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/2] FROM docker.io/library/ubuntu:22.04</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/2] RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends curl vim &amp;&amp; rm -rf /var/lib/apt/lists/*</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/run-good:v1</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images <span class="kw">|</span> <span class="fu">grep</span> run-</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="co"># REPOSITORY   TAG   IMAGE ID       CREATED         SIZE</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="co"># run-bad      v1    a1b2c3d4e5f6   2 minutes ago   220MB</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="co"># run-good     v1    b2c3d4e5f6a7   5 seconds ago   165MB   ← 体积小</span></span></code></pre></div>
+<p><strong>查看镜像层数对比</strong>：</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看 run-bad 的层数</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> history run-bad:v1 <span class="at">--no-trunc</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-10</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># IMAGE          CREATED        CREATED BY                                      SIZE</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># a1b2c3d4e5f6   2 minutes ago  /bin/sh -c rm -rf /var/lib/apt/lists/*          0B</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      2 minutes ago  /bin/sh -c apt-get install -y vim               35MB</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      2 minutes ago  /bin/sh -c apt-get install -y curl              20MB</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      2 minutes ago  /bin/sh -c apt-get update                       15MB</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      2 minutes ago  /bin/sh -c #(nop)  CMD [&quot;/bin/bash&quot;]            0B</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co"># → 4 个 RUN 层</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看 run-good 的层数</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> history run-good:v1 <span class="at">--no-trunc</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-10</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co"># IMAGE          CREATED        CREATED BY                                      SIZE</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="co"># b2c3d4e5f6a7   5 seconds ago  /bin/sh -c apt-get update &amp;&amp; apt-get install…   70MB</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      2 minutes ago  /bin/sh -c #(nop)  CMD [&quot;/bin/bash&quot;]            0B</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="co"># → 1 个 RUN 层</span></span></code></pre></div>
+<h4 id="图示-2">图示</h4>
+<pre><code>分层对比：
+
+反例（4 层）：              正例（1 层）：
+┌──────────────────┐       ┌──────────────────────────────┐
+│ rm apt/lists     │ 0B    │ update + install + cleanup   │ 70MB
+├──────────────────┤       └──────────────────────────────┘
+│ install vim      │ 35MB
+├──────────────────┤       体积小，且 rm 真正生效
+│ install curl     │ 20MB
+├──────────────────┤
+│ apt-get update   │ 15MB   ← 这层 15MB 包索引其实在最终镜像里没用
+└──────────────────┘         但因为分层，仍占空间
+体积大
+
+层缓存原理：
+
+构建时 Docker 按指令顺序检查：
+  FROM ...           → 没变 → 用缓存（CACHED）
+  RUN apt install    → 没变 → 用缓存（CACHED）
+  COPY app.jar       → jar 变了 → 重新构建
+  CMD ...            → 重新构建（因为上一层失效）
+
+设计原则：不常变的放前面，常变的放后面</code></pre>
+<h4 id="易错点-2">易错点</h4>
+<ol type="1">
+<li>❌ 多条 RUN 分开写装软件。✅ 用 <code>&amp;&amp;</code>
+合并，减少层数。</li>
+<li>❌ <code>RUN apt-get update</code> 单独写一层。✅ 必须和
+<code>install</code> 用 <code>&amp;&amp;</code>
+连起来，避免缓存导致包索引过期。</li>
+<li>❌ 装完软件不清理包索引。✅ 在同一层
+<code>rm -rf /var/lib/apt/lists/*</code>（Debian/Ubuntu）或
+<code>apk del</code> +
+<code>rm -rf /var/cache/apk/*</code>（Alpine）。</li>
+<li>❌ RUN 写 <code>RUN cd /app &amp;&amp; do_something</code>。✅ 用
+WORKDIR 切换目录，而不是 <code>cd</code>。</li>
+<li>❌ 用 RUN 启动服务（如 <code>RUN service nginx start</code>）。✅
+RUN 是构建时执行，启动服务用 CMD/ENTRYPOINT（容器启动时）。</li>
+</ol>
+<h4 id="小结-2">小结</h4>
+<p>RUN 指令在构建时执行命令，每条 RUN 生成一层。工程规范是：用
+<code>&amp;&amp;</code>
+合并相关命令减少层数，在同一层内清理临时文件，把不常变的 RUN
+放前面利用层缓存。RUN 是"做镜像时跑一次"，区别于 CMD
+的"启动容器时跑"。</p>
+<hr />
+<h3 id="知识点-k6-4copy-与-add-指令">知识点 K6-4：COPY 与 ADD 指令</h3>
+<h4 id="定义-3">定义</h4>
+<p><strong>COPY</strong> 和 <strong>ADD</strong>
+都是把文件从构建上下文（通常是 Dockerfile
+所在目录）复制到镜像中。功能相似但有差异。</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> &lt;源路径&gt; &lt;目标路径&gt;</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ADD</span> &lt;源路径&gt; &lt;目标路径&gt;</span></code></pre></div>
+<h4 id="原理-3">原理</h4>
+<p><strong>COPY 指令</strong>：</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 复制单个文件</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/app.jar</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 复制整个目录</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> target/ /app/target/</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 使用 WORKDIR 后的简写</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar .          <span class="co"># . 表示当前工作目录 /app</span></span></code></pre></div>
+<p>COPY 的特点：</p>
+<ul>
+<li>只做一件事：<strong>把本地文件复制到镜像</strong>。</li>
+<li>行为可预测，没有"惊喜"。</li>
+<li><strong>官方推荐优先使用 COPY</strong>。</li>
+</ul>
+<p><strong>ADD 指令</strong>：</p>
+<p>ADD 在 COPY 基础上多了两个功能：</p>
+<table>
+<thead>
+<tr>
+<th>额外功能</th>
+<th>示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自动解压 tar 包</td>
+<td><code>ADD rootfs.tar.gz /</code></td>
+<td>复制后自动解压 tar.gz/tar/tar.bz2 等</td>
+</tr>
+<tr>
+<td>支持 URL</td>
+<td><code>ADD http://example.com/file.txt /app/</code></td>
+<td>从 URL 下载文件到镜像</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD 额外功能1：自动解压 tar</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ADD</span> jdk-17_linux-x64.tar.gz /opt/</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD 额外功能2：从 URL 下载</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ADD</span> https://example.com/app.jar /app/app.jar</span></code></pre></div>
+<p><strong>COPY vs ADD 选择建议</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>用什么</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>复制本地文件到镜像</td>
+<td><strong>COPY</strong></td>
+<td>行为明确，可读性好</td>
+</tr>
+<tr>
+<td>复制并解压 tar 包</td>
+<td><strong>ADD</strong> 或 COPY + RUN tar</td>
+<td>ADD 解压方便，但有人偏好显式 RUN tar 更清晰</td>
+</tr>
+<tr>
+<td>从 URL 下载文件</td>
+<td><strong>RUN wget/curl + COPY</strong></td>
+<td>ADD 的 URL 下载不可控（不能设 headers、不能校验），用 RUN wget
+更好</td>
+</tr>
+</tbody>
+</table>
+<p><strong>官方建议</strong>：</p>
+<blockquote>
+<p>Docker 官方文档明确建议："Although ADD and COPY are functionally
+similar, generally speaking, COPY is preferred."（虽然 ADD 和 COPY
+功能相似，但通常推荐 COPY。）</p>
+</blockquote>
+<p>为什么？因为 ADD 的"自动解压"和"URL 下载"功能容易让人意外：</p>
+<ul>
+<li>你以为 <code>ADD file.tar.gz /app/</code> 是把 tar.gz
+复制过去，结果是解压成了一堆文件。</li>
+<li>你以为 <code>ADD http://...</code> 跟 COPY
+一样，结果它去网络下载了。</li>
+</ul>
+<p>行为不可预测是工程大忌。所以：<strong>默认用 COPY，需要解压 tar
+时再用 ADD</strong>。</p>
+<h4 id="问题--场景-3">问题 / 场景</h4>
+<p><strong>问：COPY 的源路径是相对的还是绝对的？</strong></p>
+<ul>
+<li>相对于<strong>构建上下文</strong>（build context，通常是 Dockerfile
+所在目录）。不能写构建上下文之外的路径。</li>
+</ul>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 假设构建上下文是 ~/ctts/backend/</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/         <span class="co"># ✅ 相对于 ~/ctts/backend/</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ../frontend/dist /app/         <span class="co"># ❌ 不能超出构建上下文</span></span></code></pre></div>
+<p><strong>问：COPY 的目标路径是相对的还是绝对的？</strong></p>
+<ul>
+<li>如果用了 WORKDIR，相对路径会基于 WORKDIR；没用 WORKDIR 则基于
+<code>/</code>。建议用绝对路径或先设 WORKDIR。</li>
+</ul>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar .             <span class="co"># . = /app（因为 WORKDIR）</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/         <span class="co"># 等价写法（绝对路径）</span></span></code></pre></div>
+<p><strong>问：COPY
+一个目录时，是复制目录本身还是目录内容？</strong></p>
+<ul>
+<li>看目标路径结尾有没有 <code>/</code>：
+<ul>
+<li><code>COPY mydir /app</code> → 把 mydir 复制成 /app（如果 /app
+不存在则 /app 就是 mydir 的内容；如果 /app 存在则 /app/mydir）</li>
+<li><code>COPY mydir/ /app/</code> → 把 mydir
+的<strong>内容</strong>复制到 /app 下</li>
+</ul></li>
+<li>工程上建议<strong>目标路径以 <code>/</code>
+结尾</strong>，行为更可预测。</li>
+</ul>
+<p><strong>问：能不能用 COPY 把宿主机的任意文件复制到镜像？</strong></p>
+<ul>
+<li>不能。COPY 只能从<strong>构建上下文</strong>复制。构建上下文是
+<code>docker build</code> 命令最后的路径参数（通常是
+<code>.</code>）。这是安全设计——防止 Dockerfile
+读取宿主机敏感文件。</li>
+</ul>
+<h4 id="完整示例-3">完整示例</h4>
+<p><strong>示例1：COPY 基本用法</strong></p>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 准备目录</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>mkdir -p ~/copy-test &amp;&amp; cd ~/copy-test</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>echo <span class="st">&quot;hello from config&quot;</span> &gt; config.txt</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>echo <span class="st">&quot;main app&quot;</span> &gt; app.sh</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>chmod +x app.sh</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>cat &gt; Dockerfile &lt;&lt;<span class="st">&#39;EOF&#39;</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> alpine:3.18</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> app.sh /app/app.sh</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> config.txt /app/config.txt</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">chmod</span> +x /app/app.sh</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;/app/app.sh&quot;</span>]</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>EOF</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>docker build -t copy-demo:v1 .</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 5.2s (10/10) FINISHED</span></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/5] FROM docker.io/library/alpine:3.18</span></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/5] WORKDIR /app</span></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [3/5] COPY app.sh /app/app.sh</span></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [4/5] COPY config.txt /app/config.txt</span></span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [5/5] RUN chmod +x /app/app.sh</span></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image</span></span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/copy-demo:v1</span></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>docker run --rm copy-demo:v1 cat /app/config.txt</span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：hello from config</span></span></code></pre></div>
+<p><strong>示例2：ADD 自动解压 tar</strong></p>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/copy-test</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 准备一个 tar.gz 文件</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> mydata</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;file1 content&quot;</span> <span class="op">&gt;</span> mydata/file1.txt</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;file2 content&quot;</span> <span class="op">&gt;</span> mydata/file2.txt</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> czf mydata.tar.gz mydata/</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> Dockerfile.add <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="st">FROM alpine:3.18</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="st">WORKDIR /app</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="st"># ADD 会自动解压 tar.gz</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="st">ADD mydata.tar.gz /app/</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="st">CMD [&quot;ls&quot;, &quot;-la&quot;, &quot;/app/mydata&quot;]</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-f</span> Dockerfile.add <span class="at">-t</span> add-demo:v1 .</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 4.1s (8/8) FINISHED</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/3] FROM docker.io/library/alpine:3.18</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/3] WORKDIR /app</span></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [3/3] ADD mydata.tar.gz /app/</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image</span></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/add-demo:v1</span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> add-demo:v1</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a><span class="co"># total 16</span></span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a><span class="co"># drwxr-xr-x    2 root     root          4096 Jul 22 10:00 .</span></span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a><span class="co"># drwxr-xr-x    1 root     root          4096 Jul 22 10:00 ..</span></span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a><span class="co"># -rw-r--r--    1 root     root            14 Jul 22 10:00 file1.txt</span></span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a><span class="co"># -rw-r--r--    1 root     root            14 Jul 22 10:00 file2.txt</span></span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a><span class="co"># → tar.gz 被自动解压成 mydata/ 目录</span></span></code></pre></div>
+<p><strong>示例3：COPY 复制目录的两种写法对比</strong></p>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 写法A：源路径不以 / 结尾，目标路径以 / 结尾</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> mydir /app/</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 行为：把 mydir 的内容复制到 /app/ 下</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 写法B：源路径以 / 结尾，目标路径以 / 结尾</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> mydir/ /app/</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 行为：同上，把 mydir 的内容复制到 /app/ 下（更明确）</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 写法C：目标路径不以 / 结尾</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> mydir /app</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 行为：如果 /app 不存在，把 mydir 复制成 /app；</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="co">#       如果 /app 存在，把 mydir 复制到 /app/mydir</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="co"># → 行为不确定，工程上避免</span></span></code></pre></div>
+<p><strong>CTTS 后端 Dockerfile 中的 COPY 用法</strong>：</p>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 把构建产物 jar 复制到镜像 /app 目录下</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/app.jar</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 把配置文件目录复制到镜像</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> config/ /app/config/</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<h4 id="图示-3">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 4：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">COPY vs ADD 功能对比：</span>
+<span class="diagram-line">COPY：                          ADD：</span>
+<span class="diagram-line">  本地文件 <span class="tree-token">─</span><span class="tree-token">─</span>复制<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 镜像         本地文件 <span class="tree-token">─</span><span class="tree-token">─</span>复制<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 镜像</span>
+<span class="diagram-line">                                  tar 包  <span class="tree-token">─</span><span class="tree-token">─</span>解压<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 镜像</span>
+<span class="diagram-line">                                  URL     <span class="tree-token">─</span><span class="tree-token">─</span>下载<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 镜像</span>
+<span class="diagram-line">选择决策：</span>
+<span class="diagram-line">  要复制文件到镜像？</span>
+<span class="diagram-line">  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 是 <span class="arrow-token">→</span> 是 tar 包需要解压？</span>
+<span class="diagram-line">  <span class="tree-token">│</span>       <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>       <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 是 <span class="arrow-token">→</span> 用 ADD</span>
+<span class="diagram-line">  <span class="tree-token">│</span>       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 否 <span class="arrow-token">→</span> 用 COPY（推荐）</span>
+<span class="diagram-line">  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 要从 URL 下载？</span>
+<span class="diagram-line">          <span class="tree-token">│</span></span>
+<span class="diagram-line">          <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 用 RUN wget + COPY（不推荐 ADD URL）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-3">易错点</h4>
+<ol type="1">
+<li>❌ 误以为 COPY 和 ADD 完全一样，随便用。✅ ADD 有"自动解压"和"URL
+下载"额外功能，行为不如 COPY 可预测，默认用 COPY。</li>
+<li>❌ 用 <code>ADD</code> 复制本地普通文件（非 tar）。✅ 用
+COPY，行为更明确。</li>
+<li>❌ 用 <code>ADD http://...</code> 从 URL 下载。✅ 用
+<code>RUN wget</code> + COPY，可校验、可控制。</li>
+<li>❌ COPY 源路径写超出构建上下文的路径（如
+<code>COPY ../xxx</code>）。✅ COPY 源路径必须在构建上下文内。</li>
+<li>❌ COPY 目标路径不以 <code>/</code> 结尾，导致行为不确定。✅
+目标路径以 <code>/</code> 结尾，行为可预测。</li>
+</ol>
+<h4 id="小结-3">小结</h4>
+<p>COPY 和 ADD 都用于把文件复制到镜像。COPY 行为明确，是默认选择；ADD
+额外支持解压 tar 和 URL 下载，但行为不可预测，仅在需要解压 tar
+时使用。工程规范："<strong>默认 COPY，需要解压 tar 才用
+ADD</strong>"。COPY 源路径必须在构建上下文内，目标路径建议以
+<code>/</code> 结尾。</p>
+<hr />
+<h3 id="知识点-k6-5workdir-与-user-指令">知识点 K6-5：WORKDIR 与 USER
+指令</h3>
+<h4 id="定义-4">定义</h4>
+<ul>
+<li><strong>WORKDIR</strong>：设置工作目录，后续指令（RUN、CMD、ENTRYPOINT、COPY、ADD）的相对路径都基于此目录。</li>
+<li><strong>USER</strong>：切换运行用户，后续指令以该用户身份执行，容器也以该用户启动。</li>
+</ul>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span></code></pre></div>
+<h4 id="原理-4">原理</h4>
+<p><strong>WORKDIR 的工作机制</strong>：</p>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 没有 WORKDIR 时，所有相对路径基于 /</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> app.jar app.jar          <span class="co"># 实际是 /app.jar</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 用 WORKDIR 后</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> app.jar app.jar          <span class="co"># 实际是 /app/app.jar</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="bu">pwd</span>                       <span class="co"># 输出 /app</span></span></code></pre></div>
+<p><strong>WORKDIR 可以多次设置</strong>：</p>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /a</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> b</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> c</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="bu">pwd</span>                       <span class="co"># 输出 /a/b/c（WORKDIR 支持相对路径，叠加）</span></span></code></pre></div>
+<p><strong>WORKDIR 会自动创建目录</strong>：</p>
+<p>如果 WORKDIR 指定的目录不存在，Docker 会自动创建（包括父目录）。</p>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /a/b/c/d              <span class="co"># /a、/a/b、/a/b/c、/a/b/c/d 都会自动创建</span></span></code></pre></div>
+<p><strong>USER 的工作机制</strong>：</p>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 默认情况下，容器以 root 用户运行（不安全！）</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> alpine:3.18</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">whoami</span>                    <span class="co"># 输出 root</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 容器启动时也是 root</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 用 USER 切换用户</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> alpine:3.18</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">adduser</span> <span class="at">-D</span> appuser        <span class="co"># 创建用户</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">whoami</span>                    <span class="co"># 输出 appuser</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 容器启动时也是 appuser</span></span></code></pre></div>
+<p><strong>为什么需要非 root 运行？</strong></p>
+<p>容器内的 root 虽然被 namespace
+隔离，但仍然是"特权用户"。如果应用有漏洞被攻击，攻击者拿到容器内的
+root，可能通过内核漏洞逃逸到宿主机
+root。<strong>最小权限原则</strong>要求：应用能用普通用户跑就用普通用户跑。</p>
+<div class="visual">
+  <div class="visual-title">图示 5：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">以 root 运行容器（危险）：</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span>  容器内 root              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  ↓ 应用漏洞              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  攻击者拿到 root          <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  ↓ 内核逃逸              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  宿主机 root              <span class="tree-token">│</span>  ← 灾难！</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">以非 root 运行容器（安全）：</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span>  容器内 appuser           <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  ↓ 应用漏洞              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  攻击者只拿到 appuser     <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  ↓ 权限有限              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  影响范围受限              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>USER 的注意事项</strong>：</p>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># USER 可以是用户名或 UID</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser                  <span class="co"># 用户名</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> 1000                     <span class="co"># UID</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> 1000:1000                <span class="co"># UID:GID</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="co"># USER 切换后，后续指令都以该用户执行</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">mkdir</span> /app/logs           <span class="co"># 如果 appuser 对 / 没写权限会失败！</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a><span class="co"># → 通常先在 root 阶段创建好目录并 chown，再 USER 切换</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 正确做法</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> alpine:3.18</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">adduser</span> <span class="at">-D</span> <span class="at">-h</span> /app appuser <span class="dt">\</span></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">mkdir</span> <span class="at">-p</span> /app/logs <span class="dt">\</span></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">chown</span> <span class="at">-R</span> appuser:appuser /app</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> app.jar .</span></code></pre></div>
+<h4 id="问题--场景-4">问题 / 场景</h4>
+<p><strong>问：为什么不直接用 <code>RUN cd /app</code>
+切换目录？</strong></p>
+<ul>
+<li><code>RUN cd /app</code> 只在那一条 RUN 执行时生效，下一条 RUN
+又回到 <code>/</code>。因为每条 RUN 是独立的 shell。用 WORKDIR
+设置后，所有后续指令都基于该目录。</li>
+</ul>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ❌ 反例：cd 不生效</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="bu">cd</span> /app</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="bu">pwd</span>                       <span class="co"># 输出 /，不是 /app！</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ✅ 正例：WORKDIR 持续生效</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="bu">pwd</span>                       <span class="co"># 输出 /app</span></span></code></pre></div>
+<p><strong>问：USER 切换后还能切回 root 吗？</strong></p>
+<ul>
+<li>能。<code>USER root</code> 可以切回。但工程上不建议在 Dockerfile
+中频繁切换用户。</li>
+</ul>
+<p><strong>问：基础镜像里没有我要的用户怎么办？</strong></p>
+<ul>
+<li>在 RUN 里创建。Debian/Ubuntu 用 <code>useradd</code>，Alpine 用
+<code>adduser</code>。</li>
+</ul>
+<div class="sourceCode" id="cb45"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alpine</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">adduser</span> <span class="at">-D</span> <span class="at">-h</span> /app appuser</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Debian/Ubuntu</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">useradd</span> <span class="at">-m</span> <span class="at">-d</span> /app appuser</span></code></pre></div>
+<p><strong>问：用别人的镜像，USER 已经被设为非 root，我要 COPY
+文件到只有 root 能写的目录怎么办？</strong></p>
+<ul>
+<li>临时切回 root 做完操作再切回去：</li>
+</ul>
+<div class="sourceCode" id="cb46"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> someimage:latest</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> root</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> secret.key /app/secret.key</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">chown</span> appuser:appuser /app/secret.key</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span></code></pre></div>
+<h4 id="完整示例-4">完整示例</h4>
+<p><strong>示例1：WORKDIR 的基本用法</strong></p>
+<div class="sourceCode" id="cb47"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> alpine:3.18</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> hello.txt .</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="bu">pwd</span> <span class="kw">&amp;&amp;</span> <span class="fu">ls</span> <span class="at">-la</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;cat&quot;</span>, <span class="st">&quot;/app/hello.txt&quot;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/workdir-test <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ~/workdir-test</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Hello from WORKDIR demo&quot;</span> <span class="op">&gt;</span> hello.txt</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> Dockerfile <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="st">FROM alpine:3.18</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="st">WORKDIR /app</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="st">COPY hello.txt .</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="st">RUN pwd &amp;&amp; ls -la</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="st">CMD [&quot;cat&quot;, &quot;/app/hello.txt&quot;]</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> workdir-demo:v1 .</span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 4.5s (9/9) FINISHED</span></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/4] FROM docker.io/library/alpine:3.18</span></span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/4] WORKDIR /app</span></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [3/4] COPY hello.txt .</span></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [4/4] RUN pwd &amp;&amp; ls -la</span></span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image</span></span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/workdir-demo:v1</span></span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> workdir-demo:v1</span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：Hello from WORKDIR demo</span></span></code></pre></div>
+<p><strong>示例2：非 root 用户的完整 Dockerfile</strong></p>
+<div class="sourceCode" id="cb49"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 创建非 root 用户和目录</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">useradd</span> <span class="at">-m</span> <span class="at">-d</span> /app <span class="at">-u</span> 1000 appuser</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 设置工作目录</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 以 root 身份复制文件并设置权限</span></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/app.jar</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">chown</span> <span class="at">-R</span> appuser:appuser /app</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 切换到非 root 用户</span></span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 容器启动命令</span></span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/user-test <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ~/user-test</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 模拟一个 jar 文件</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;fake jar content&quot;</span> <span class="op">&gt;</span> ctts-backend.jar</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> Dockerfile <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="st">FROM eclipse-temurin:17-jre</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="st">RUN useradd -m -d /app -u 1000 appuser</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="st">WORKDIR /app</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="st">COPY ctts-backend.jar /app/app.jar</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="st">RUN chown -R appuser:appuser /app</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="st">USER appuser</span></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a><span class="st">CMD [&quot;sh&quot;, &quot;-c&quot;, &quot;whoami &amp;&amp; pwd &amp;&amp; ls -la /app&quot;]</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> user-demo:v1 .</span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 12.5s (10/10) FINISHED</span></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/6] FROM docker.io/library/eclipse-temurin:17-jre</span></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/6] RUN useradd -m -d /app -u 1000 appuser</span></span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [3/6] WORKDIR /app</span></span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [4/6] COPY ctts-backend.jar /app/app.jar</span></span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [5/6] RUN chown -R appuser:appuser /app</span></span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [6/6] USER appuser</span></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image</span></span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/user-demo:v1</span></span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> user-demo:v1</span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a><span class="co"># appuser</span></span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a><span class="co"># /app</span></span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a><span class="co"># total 8</span></span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a><span class="co"># drwxr-xr-x 2 appuser appuser 4096 Jul 22 10:00 .</span></span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a><span class="co"># drwxr-xr-x 1 root    root    4096 Jul 22 10:00 ..</span></span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a><span class="co"># -rw-r--r-- 1 appuser appuser   18 Jul 22 10:00 app.jar</span></span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a><span class="co"># → 注意：whoami 输出 appuser（非 root）</span></span></code></pre></div>
+<h4 id="图示-4">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 6：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">WORKDIR 持续生效 vs RUN cd 一次性：</span>
+<span class="diagram-line">WORKDIR（推荐）：              RUN cd（不推荐）：</span>
+<span class="diagram-line">WORKDIR /app                  RUN cd /app &amp;&amp; do_something</span>
+<span class="diagram-line">RUN pwd      # /app          RUN pwd                   # /</span>
+<span class="diagram-line">RUN ls       # 列出 /app     RUN ls                    # 列出 /</span>
+<span class="diagram-line">COPY x .     # 复制到 /app/x RUN cd /app &amp;&amp; cp /x .    # 复杂</span>
+<span class="diagram-line">CMD [&quot;./x&quot;]  # 在 /app 找 x</span>
+<span class="diagram-line">USER 切换流程：</span>
+<span class="diagram-line">  FROM ...（root）</span>
+<span class="diagram-line">  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> RUN 创建用户 + 创建目录 + chown  ← root 阶段（有权限）</span>
+<span class="diagram-line">  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> USER appuser                    ← 切换</span>
+<span class="diagram-line">  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> COPY / CMD（以 appuser 执行）   ← 非 root 阶段</span>
+<span class="diagram-line">  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 容器启动时也是 appuser           ← 安全！</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-4">易错点</h4>
+<ol type="1">
+<li>❌ 用 <code>RUN cd /app</code> 切换目录。✅ 用
+<code>WORKDIR /app</code>，持续生效。</li>
+<li>❌ 没设 WORKDIR，COPY 用绝对路径硬编码 <code>/app/xxx</code>。✅ 先
+WORKDIR /app，COPY 用相对路径 <code>.</code>。</li>
+<li>❌ 容器以 root 运行（默认）。✅ 创建非 root 用户，用 USER
+切换，遵循最小权限原则。</li>
+<li>❌ 切换 USER 后才创建目录或 chown，导致权限不足失败。✅ 在 root
+阶段创建目录并 chown，再切换 USER。</li>
+<li>❌ USER 写 <code>USER appuser</code> 但没创建该用户。✅ 先
+<code>RUN useradd</code>/<code>adduser</code> 创建用户，再
+<code>USER</code> 切换。</li>
+</ol>
+<h4 id="小结-4">小结</h4>
+<p>WORKDIR 设置工作目录，后续指令的相对路径都基于此，比
+<code>RUN cd</code> 更可靠。USER
+切换运行用户，遵循最小权限原则，生产镜像应用非 root
+用户运行。典型模式：root 阶段创建用户+目录+chown → USER 切换 → COPY/CMD
+以非 root 执行。</p>
+<hr />
+<h3 id="知识点-k6-6docker-build-与构建上下文">知识点 K6-6：docker build
+与构建上下文</h3>
+<h4 id="定义-5">定义</h4>
+<p><strong>docker build</strong> 命令根据 Dockerfile
+构建镜像。<strong>构建上下文（build context）</strong> 是构建时发送给
+Docker 守护进程的文件集合，通常是 Dockerfile 所在目录的所有文件。</p>
+<div class="sourceCode" id="cb52"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> <span class="op">&lt;</span>镜像名<span class="op">&gt;</span>:<span class="op">&lt;</span>标签<span class="op">&gt;</span> <span class="op">&lt;</span>构建上下文路径<span class="op">&gt;</span></span></code></pre></div>
+<h4 id="原理-5">原理</h4>
+<p><strong>docker build 命令详解</strong>：</p>
+<div class="sourceCode" id="cb53"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:v0.6 .</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="co">#             │                   │</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="co">#             │                   └── 构建上下文路径（. = 当前目录）</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="co">#             └── 镜像名:标签</span></span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-t name:tag</code></td>
+<td>给构建的镜像命名并打标签，可重复使用 <code>-t</code> 打多个标签</td>
+</tr>
+<tr>
+<td><code>.</code>（最后一个参数）</td>
+<td>构建上下文路径，<code>.</code> 表示当前目录</td>
+</tr>
+<tr>
+<td><code>-f Dockerfile.xxx</code></td>
+<td>指定 Dockerfile 路径（默认是上下文下的
+<code>Dockerfile</code>）</td>
+</tr>
+<tr>
+<td><code>--no-cache</code></td>
+<td>不使用层缓存，强制全部重新构建</td>
+</tr>
+<tr>
+<td><code>--build-arg KEY=VALUE</code></td>
+<td>传递构建参数（配合 ARG 指令使用）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>构建上下文是什么？</strong></p>
+<p>当执行 <code>docker build</code> 时，Docker
+客户端会把<strong>构建上下文路径下的所有文件</strong>打包发送给 Docker
+守护进程。这个"打包发送"的过程就是"发送构建上下文"。</p>
+<div class="visual">
+  <div class="visual-title">图示 7：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">客户端                      守护进程</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐   1.发送上下文    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span> docker   <span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> <span class="tree-token">│</span> dockerd  <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> CLI      <span class="tree-token">│</span>                 <span class="tree-token">│</span>          <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘   2.发送Dockerfile <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">                  <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span>        <span class="tree-token">│</span></span>
+<span class="diagram-line">                                     <span class="tree-token">│</span> 3.按 Dockerfile 构建</span>
+<span class="diagram-line">                                     <span class="tree-token">│</span>   COPY/RUN/...</span>
+<span class="diagram-line">                                     ▼</span>
+<span class="diagram-line">                                 ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">                                 <span class="tree-token">│</span>  镜像     <span class="tree-token">│</span></span>
+<span class="diagram-line">                                 <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>关键点</strong>：构建上下文 = <code>docker build</code>
+最后那个路径下的<strong>所有文件</strong>。不管 Dockerfile 里有没有 COPY
+它们，都会被发送。</p>
+<p><strong>.dockerignore 的作用</strong>：</p>
+<p><code>.dockerignore</code>
+是构建上下文路径下的一个文件，里面列出<strong>不要发送给守护进程的文件模式</strong>。作用：</p>
+<ol type="1">
+<li><strong>减小构建上下文</strong>：跳过大文件、无关文件，加快构建。</li>
+<li><strong>避免泄漏</strong>：防止敏感文件（如
+<code>.git</code>、<code> secrets</code>、本地配置）进入镜像或被守护进程接收。</li>
+<li><strong>避免缓存失效</strong>：防止无关文件改动触发 COPY
+层缓存失效。</li>
+</ol>
+<p><strong>.dockerignore 完整示例</strong>：</p>
+<pre class="gitignore"><code># === 版本控制 ===
+.git
+.gitignore
+
+# === 构建产物（如果 Dockerfile 里会重新构建） ===
+target/
+build/
+dist/
+*.class
+
+# === 依赖目录（如果镜像内会重新装） ===
+node_modules/
+
+# === 日志文件 ===
+*.log
+logs/
+
+# === IDE 配置 ===
+.idea/
+.vscode/
+*.swp
+
+# === 环境变量文件（含敏感信息） ===
+.env
+.env.local
+
+# === Docker 自身文件 ===
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# === 文档 ===
+*.md
+docs/
+
+# === 操作系统生成文件 ===
+.DS_Store
+Thumbs.db
+
+# === 临时文件 ===
+tmp/
+*.tmp</code></pre>
+<p><strong>docker build 的执行流程</strong>：</p>
+<pre class="text"><code>1. 读取 Dockerfile
+2. 发送构建上下文给守护进程（看到 &quot;sending build context to Docker daemon  XXMB&quot;）
+3. 按 Dockerfile 指令顺序执行：
+   a. FROM：拉取/复用基础镜像
+   b. 对每条指令（RUN/COPY/ADD 等）：
+      - 检查是否有缓存（上一条指令没变 + 这条指令本身没变）
+      - 缓存命中 → 复用上一次的层（CACHED）
+      - 缓存未命中 → 执行指令，生成新层
+4. 输出最终镜像 ID 和标签</code></pre>
+<h4 id="问题--场景-5">问题 / 场景</h4>
+<p><strong>问：为什么 <code>docker build</code>
+要把整个上下文都发送给守护进程？为什么不只发送 Dockerfile 里 COPY
+的文件？</strong></p>
+<ul>
+<li>Docker 守护进程不知道 Dockerfile 里 COPY
+了哪些文件（解析在客户端做的话也复杂），最简单的策略就是"全发"。所以需要
+<code>.dockerignore</code> 来排除大文件和敏感文件。</li>
+</ul>
+<p><strong>问：构建上下文能不能是当前目录之外的路径？</strong></p>
+<ul>
+<li>能。<code>docker build -t xxx /path/to/context</code>。但通常约定上下文就是
+Dockerfile 所在目录。</li>
+</ul>
+<p><strong>问：如果构建上下文里有 2GB
+的日志文件，会怎么样？</strong></p>
+<ul>
+<li>每次 <code>docker build</code> 都会把这 2GB
+发送给守护进程，构建极慢。用 <code>.dockerignore</code> 排除
+<code>*.log</code> 即可。</li>
+</ul>
+<p><strong>问：构建失败后，下次构建会从头开始吗？</strong></p>
+<ul>
+<li>不会。Docker
+会复用之前成功的层（缓存）。从第一个失败的指令重新开始执行。这就是层缓存的价值。</li>
+</ul>
+<p><strong>问：怎么强制完全重新构建？</strong></p>
+<ul>
+<li>加 <code>--no-cache</code>
+参数：<code>docker build --no-cache -t xxx .</code></li>
+</ul>
+<h4 id="完整示例-5">完整示例</h4>
+<p><strong>示例1：观察构建上下文的发送</strong></p>
+<div class="sourceCode" id="cb57"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/build-context-test <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ~/build-context-test</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 故意创建一个大文件</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dd</span> if=/dev/zero of=bigfile.bin bs=1M count=100</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a><span class="co"># -rw-r--r-- 1 user user 100M Jul 22 10:00 bigfile.bin</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> Dockerfile <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a><span class="st">FROM alpine:3.18</span></span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a><span class="st">RUN echo &quot;small image&quot;</span></span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctx-test-bad:v1 .</span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 5.2s (5/5) FINISHED</span></span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load build definition from Dockerfile               0.1s</span></span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring dockerfile: 60B                                 0.0s</span></span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load .dockerignore                                   0.1s</span></span>
+<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring context: 2B                                     0.0s</span></span>
+<span id="cb57-20"><a href="#cb57-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load metadata for docker.io/library/alpine:3.18      2.0s</span></span>
+<span id="cb57-21"><a href="#cb57-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load build context                                   0.5s    ← 这里</span></span>
+<span id="cb57-22"><a href="#cb57-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring context: 104.86MB                               0.5s    ← 100MB 被发送！</span></span>
+<span id="cb57-23"><a href="#cb57-23" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/1] FROM docker.io/library/alpine:3.18@sha256:...</span></span>
+<span id="cb57-24"><a href="#cb57-24" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/1] RUN echo &quot;small image&quot;</span></span>
+<span id="cb57-25"><a href="#cb57-25" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image</span></span>
+<span id="cb57-26"><a href="#cb57-26" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/ctx-test-bad:v1</span></span>
+<span id="cb57-27"><a href="#cb57-27" aria-hidden="true" tabindex="-1"></a><span class="co"># → 100MB 大文件被发送了，浪费时间和带宽</span></span></code></pre></div>
+<p><strong>示例2：用 .dockerignore 优化</strong></p>
+<div class="sourceCode" id="cb58"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/build-context-test</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 创建 .dockerignore</span></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> .dockerignore <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="st">*.bin</span></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a><span class="st">*.log</span></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctx-test-good:v1 .</span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 2.1s (5/5) FINISHED</span></span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load build definition from Dockerfile               0.1s</span></span>
+<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring dockerfile: 60B                                 0.0s</span></span>
+<span id="cb58-14"><a href="#cb58-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load .dockerignore                                   0.1s</span></span>
+<span id="cb58-15"><a href="#cb58-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring context: 35B                                    0.0s</span></span>
+<span id="cb58-16"><a href="#cb58-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load metadata for docker.io/library/alpine:3.18      1.5s</span></span>
+<span id="cb58-17"><a href="#cb58-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load build context                                   0.0s    ← 这里</span></span>
+<span id="cb58-18"><a href="#cb58-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring context: 30B                                    0.0s    ← 只发了 30B！</span></span>
+<span id="cb58-19"><a href="#cb58-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/1] FROM docker.io/library/alpine:3.18@sha256:...</span></span>
+<span id="cb58-20"><a href="#cb58-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/1] RUN echo &quot;small image&quot;</span></span>
+<span id="cb58-21"><a href="#cb58-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image</span></span>
+<span id="cb58-22"><a href="#cb58-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/ctx-test-good:v1</span></span>
+<span id="cb58-23"><a href="#cb58-23" aria-hidden="true" tabindex="-1"></a><span class="co"># → 100MB 大文件被 .dockerignore 排除，只发送了 30B</span></span></code></pre></div>
+<p><strong>示例3：完整 CTTS 后端 Dockerfile 构建</strong></p>
+<div class="sourceCode" id="cb59"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 假设 CTTS 后端项目目录结构</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/ctts/backend <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ~/ctts/backend</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 准备一个模拟 jar（实际是 maven 打包产物）</span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;fake ctts-backend jar&quot;</span> <span class="op">&gt;</span> ctts-backend.jar</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 准备一些不该进镜像的文件</span></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;debug log&quot;</span> <span class="op">&gt;</span> debug.log</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> .git</span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;git data&quot;</span> <span class="op">&gt;</span> .git/config</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 创建 .dockerignore</span></span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> .dockerignore <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a><span class="st">.git/</span></span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a><span class="st">*.log</span></span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a><span class="st">*.md</span></span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a><span class="st">Dockerfile*</span></span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 创建 Dockerfile</span></span>
+<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> Dockerfile <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a><span class="st">FROM eclipse-temurin:17-jre</span></span>
+<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a><span class="st">WORKDIR /app</span></span>
+<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a><span class="st">COPY ctts-backend.jar /app/app.jar</span></span>
+<span id="cb59-25"><a href="#cb59-25" aria-hidden="true" tabindex="-1"></a><span class="st">CMD [&quot;java&quot;, &quot;-jar&quot;, &quot;/app/app.jar&quot;]</span></span>
+<span id="cb59-26"><a href="#cb59-26" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb59-27"><a href="#cb59-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-28"><a href="#cb59-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 构建镜像</span></span>
+<span id="cb59-29"><a href="#cb59-29" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:v0.6 .</span>
+<span id="cb59-30"><a href="#cb59-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb59-31"><a href="#cb59-31" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 15.3s (9/9) FINISHED</span></span>
+<span id="cb59-32"><a href="#cb59-32" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load build definition from Dockerfile               0.1s</span></span>
+<span id="cb59-33"><a href="#cb59-33" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring dockerfile: 132B                                0.0s</span></span>
+<span id="cb59-34"><a href="#cb59-34" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load .dockerignore                                   0.1s</span></span>
+<span id="cb59-35"><a href="#cb59-35" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring context: 56B                                    0.0s</span></span>
+<span id="cb59-36"><a href="#cb59-36" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load metadata for docker.io/library/eclipse-temurin:17-jre   2.5s</span></span>
+<span id="cb59-37"><a href="#cb59-37" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/3] FROM docker.io/library/eclipse-temurin:17-jre@sha256:...  3.2s</span></span>
+<span id="cb59-38"><a href="#cb59-38" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; resolve docker.io/library/eclipse-temurin:17-jre@sha256:...   0.0s</span></span>
+<span id="cb59-39"><a href="#cb59-39" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; sha256:9c1f4a1 29.5MB / 29.5MB                               1.2s</span></span>
+<span id="cb59-40"><a href="#cb59-40" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; extracting sha256:9c1f4a1                                    1.0s</span></span>
+<span id="cb59-41"><a href="#cb59-41" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load build context                                   0.1s</span></span>
+<span id="cb59-42"><a href="#cb59-42" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring context: 24B                                    0.0s   ← 只有 jar 被发送</span></span>
+<span id="cb59-43"><a href="#cb59-43" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/3] WORKDIR /app                                              0.1s</span></span>
+<span id="cb59-44"><a href="#cb59-44" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [3/3] COPY ctts-backend.jar /app/app.jar                        0.1s</span></span>
+<span id="cb59-45"><a href="#cb59-45" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image                                              0.3s</span></span>
+<span id="cb59-46"><a href="#cb59-46" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; exporting layers                                             0.2s</span></span>
+<span id="cb59-47"><a href="#cb59-47" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; writing image sha256:a1b2c3d4e5f6...                         0.0s</span></span>
+<span id="cb59-48"><a href="#cb59-48" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/ctts-backend:v0.6                0.0s</span></span>
+<span id="cb59-49"><a href="#cb59-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-50"><a href="#cb59-50" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证镜像</span></span>
+<span id="cb59-51"><a href="#cb59-51" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images ctts-backend</span>
+<span id="cb59-52"><a href="#cb59-52" aria-hidden="true" tabindex="-1"></a><span class="co"># REPOSITORY      TAG   IMAGE ID       CREATED         SIZE</span></span>
+<span id="cb59-53"><a href="#cb59-53" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend    v0.6  a1b2c3d4e5f6   10 seconds ago  273MB</span></span>
+<span id="cb59-54"><a href="#cb59-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-55"><a href="#cb59-55" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证镜像内容（用 java -version 看 JDK 版本）</span></span>
+<span id="cb59-56"><a href="#cb59-56" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> ctts-backend:v0.6 java <span class="at">-version</span></span>
+<span id="cb59-57"><a href="#cb59-57" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb59-58"><a href="#cb59-58" aria-hidden="true" tabindex="-1"></a><span class="co"># openjdk version &quot;17.0.x&quot; 2023-xx-xx</span></span>
+<span id="cb59-59"><a href="#cb59-59" aria-hidden="true" tabindex="-1"></a><span class="co"># OpenJDK Runtime Environment Temurin-17.0.x (build 17.0.x+x)</span></span>
+<span id="cb59-60"><a href="#cb59-60" aria-hidden="true" tabindex="-1"></a><span class="co"># OpenJDK 64-Bit Server VM Temurin-17.0.x (build 17.0.x+x, mixed mode, sharing)</span></span>
+<span id="cb59-61"><a href="#cb59-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-62"><a href="#cb59-62" aria-hidden="true" tabindex="-1"></a><span class="co"># 给镜像打一个额外标签（演示 docker tag）</span></span>
+<span id="cb59-63"><a href="#cb59-63" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag ctts-backend:v0.6 ctts-backend:latest</span>
+<span id="cb59-64"><a href="#cb59-64" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images ctts-backend</span>
+<span id="cb59-65"><a href="#cb59-65" aria-hidden="true" tabindex="-1"></a><span class="co"># REPOSITORY      TAG      IMAGE ID       CREATED         SIZE</span></span>
+<span id="cb59-66"><a href="#cb59-66" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend    latest   a1b2c3d4e5f6   2 minutes ago   273MB</span></span>
+<span id="cb59-67"><a href="#cb59-67" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend    v0.6     a1b2c3d4e5f6   2 minutes ago   273MB</span></span>
+<span id="cb59-68"><a href="#cb59-68" aria-hidden="true" tabindex="-1"></a><span class="co"># → 两个标签指向同一个镜像 ID</span></span></code></pre></div>
+<p><strong>示例4：层缓存复用演示</strong></p>
+<div class="sourceCode" id="cb60"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/ctts/backend</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 第一次构建（拉取基础镜像 + 构建）</span></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:v0.6 .</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出如上，每层都执行</span></span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 不改任何东西，再次构建</span></span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:v0.6 .</span>
+<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 1.2s (9/9) FINISHED</span></span>
+<span id="cb60-11"><a href="#cb60-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load build definition from Dockerfile               0.1s</span></span>
+<span id="cb60-12"><a href="#cb60-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring dockerfile: 132B                                0.0s</span></span>
+<span id="cb60-13"><a href="#cb60-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load .dockerignore                                   0.1s</span></span>
+<span id="cb60-14"><a href="#cb60-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring context: 56B                                    0.0s</span></span>
+<span id="cb60-15"><a href="#cb60-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load metadata for docker.io/library/eclipse-temurin:17-jre   1.0s</span></span>
+<span id="cb60-16"><a href="#cb60-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/3] FROM docker.io/library/eclipse-temurin:17-jre@sha256:...           0.0s</span></span>
+<span id="cb60-17"><a href="#cb60-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/3] WORKDIR /app                                              0.0s    ← CACHED</span></span>
+<span id="cb60-18"><a href="#cb60-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [3/3] COPY ctts-backend.jar /app/app.jar                        0.0s    ← CACHED</span></span>
+<span id="cb60-19"><a href="#cb60-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image                                              0.0s</span></span>
+<span id="cb60-20"><a href="#cb60-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; writing image sha256:a1b2c3d4e5f6...                         0.0s</span></span>
+<span id="cb60-21"><a href="#cb60-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/ctts-backend:v0.6                0.0s</span></span>
+<span id="cb60-22"><a href="#cb60-22" aria-hidden="true" tabindex="-1"></a><span class="co"># → 全部命中缓存，1.2 秒完成</span></span>
+<span id="cb60-23"><a href="#cb60-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-24"><a href="#cb60-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 修改 jar 文件后构建</span></span>
+<span id="cb60-25"><a href="#cb60-25" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;new jar content&quot;</span> <span class="op">&gt;</span> ctts-backend.jar</span>
+<span id="cb60-26"><a href="#cb60-26" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:v0.7 .</span>
+<span id="cb60-27"><a href="#cb60-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb60-28"><a href="#cb60-28" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 2.5s (9/9) FINISHED</span></span>
+<span id="cb60-29"><a href="#cb60-29" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load build definition from Dockerfile               0.1s</span></span>
+<span id="cb60-30"><a href="#cb60-30" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load .dockerignore                                   0.1s</span></span>
+<span id="cb60-31"><a href="#cb60-31" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load metadata for docker.io/library/eclipse-temurin:17-jre   1.0s</span></span>
+<span id="cb60-32"><a href="#cb60-32" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/3] FROM docker.io/library/eclipse-temurin:17-jre@sha256:...           0.0s   ← CACHED</span></span>
+<span id="cb60-33"><a href="#cb60-33" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/3] WORKDIR /app                                              0.0s    ← CACHED</span></span>
+<span id="cb60-34"><a href="#cb60-34" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [3/3] COPY ctts-backend.jar /app/app.jar                        0.5s    ← 重新构建（jar 变了）</span></span>
+<span id="cb60-35"><a href="#cb60-35" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image                                              0.2s</span></span>
+<span id="cb60-36"><a href="#cb60-36" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/ctts-backend:v0.7                0.0s</span></span>
+<span id="cb60-37"><a href="#cb60-37" aria-hidden="true" tabindex="-1"></a><span class="co"># → 只有 COPY 这层重新执行，前面的层都命中缓存</span></span></code></pre></div>
+<h4 id="图示-5">图示</h4>
+<pre><code>docker build 的完整流程：
+
+  客户端                      守护进程                    镜像
+  ┌──────────┐               ┌──────────┐               ┌──────┐
+  │ 读取     │ ─1.上下文──▶ │ 接收上下文│               │      │
+  │ 上下文   │               │          │               │      │
+  │ + Docker-│ ─2.Dockerfile▶│ 解析指令 │               │      │
+  │ file     │               │          │               │      │
+  └──────────┘               │ 3.按指令 │ ─4.逐层生成──▶ │ 镜像 │
+                             │   执行   │               │      │
+                             │   FROM   │               │      │
+                             │   RUN    │               │      │
+                             │   COPY   │               │      │
+                             │   ...    │               │      │
+                             └──────────┘               └──────┘
+
+.dockerignore 的作用：
+
+  当前目录所有文件               .dockerignore           实际发送给守护进程
+  ┌─────────────┐               ┌──────────┐            ┌──────────────┐
+  │ Dockerfile  │               │ *.log    │            │ Dockerfile   │
+  │ .git/       │  ──过滤──▶    │ .git/    │  ──发送──▶ │ ctts-        │
+  │ *.log       │               │ target/  │            │  backend.jar │
+  │ target/     │               │ *.md     │            └──────────────┘
+  │ ctts-       │               └──────────┘
+  │ backend.jar │                                          减小 + 安全
+  │ README.md   │
+  └─────────────┘</code></pre>
+<h4 id="易错点-5">易错点</h4>
+<ol type="1">
+<li>❌ 以为 <code>docker build</code> 最后的 <code>.</code>
+是"Dockerfile 的位置"。✅ <code>.</code> 是构建上下文路径，Dockerfile
+默认在该路径下找。</li>
+<li>❌ 在一个含大量无关文件（如 .git、日志、target）的目录执行
+<code>docker build</code>，导致上下文巨大。✅ 用
+<code>.dockerignore</code> 排除。</li>
+<li>❌ 不写 <code>.dockerignore</code>，导致
+<code>.git</code>、<code>.env</code> 等敏感文件进入构建上下文。✅ 必须写
+<code>.dockerignore</code>，至少排除
+<code>.git/</code>、<code>.env</code>、<code>*.log</code>、<code>target/</code>、<code>node_modules/</code>。</li>
+<li>❌ 频繁用 <code>--no-cache</code> 构建，浪费时间。✅
+默认利用层缓存，只在需要强制重建时用 <code>--no-cache</code>。</li>
+<li>❌ COPY 源文件路径写在构建上下文之外。✅ COPY
+源必须在构建上下文内。</li>
+</ol>
+<h4 id="小结-5">小结</h4>
+<p><code>docker build -t name:tag .</code> 根据 Dockerfile
+构建镜像，最后的 <code>.</code>
+是构建上下文路径。构建时整个上下文会发送给守护进程，所以要用
+<code>.dockerignore</code> 排除大文件和敏感文件。Docker
+按指令顺序执行，每条指令检查缓存命中，未命中则重新构建并使后续指令缓存失效。把不常变的指令放前面、常变的放后面，可最大化缓存利用。</p>
+<hr />
+<h2
+id="三综合示例ctts-后端基础-dockerfile贯穿项目阶段-3">三、综合示例：CTTS
+后端基础 Dockerfile（贯穿项目阶段 3）</h2>
+<p>把本课所有知识点串起来，为 CTTS 后端编写一个完整的基础
+Dockerfile（进阶版本在第 7 次课讲多阶段构建时优化）。</p>
+<h3 id="31-项目背景">3.1 项目背景</h3>
+<p>CTTS 后端是 SpringBoot 应用，打成一个可执行 jar 包
+<code>ctts-backend.jar</code>，需要：</p>
+<ul>
+<li>JDK 17 运行时</li>
+<li>一个非 root 用户运行（安全最佳实践）</li>
+<li>一个工作目录 /app</li>
+<li>启动命令：<code>java -jar /app/app.jar</code></li>
+</ul>
+<h3 id="32-完整目录结构">3.2 完整目录结构</h3>
+<div class="visual">
+  <div class="visual-title">图示 8：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">ctts/backend/</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Dockerfile                 ← 镜像构建脚本</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> .dockerignore              ← 构建上下文过滤</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ctts-backend.jar           ← SpringBoot 打包产物（实际由 mvn package 生成）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> config/                    ← 配置文件目录</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> application.yml</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> README.md                  ← 项目说明（不进镜像）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h3 id="33-dockerignore-文件">3.3 .dockerignore 文件</h3>
+<pre class="gitignore"><code># 版本控制
+.git/
+.gitignore
+
+# 构建产物（已用 mvn package 打好 jar，不需要再传源码和 target）
+target/
+build/
+
+# 日志
+*.log
+logs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# 环境
+.env
+.env.local
+
+# Docker 自身
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# 文档
+*.md
+docs/
+
+# OS 文件
+.DS_Store
+Thumbs.db
+
+# 临时文件
+tmp/
+*.tmp</code></pre>
+<h3 id="34-dockerfile-完整内容">3.4 Dockerfile 完整内容</h3>
+<div class="sourceCode" id="cb64"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CTTS 后端基础镜像 Dockerfile</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 课程：Docker 云容器与管理技术 - 第 6 次课</span></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 版本：v0.6（基础版，进阶版在第 7 次课讲多阶段构建）</span></span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a><span class="co"># === K6-2 FROM：选择官方 OpenJDK 17 运行时镜像 ===</span></span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 为什么用 eclipse-temurin:</span></span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   1. openjdk 官方镜像已弃用，eclipse-temurin 是事实标准</span></span>
+<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   2. 17 是 LTS 版本，匹配 CTTS 项目</span></span>
+<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   3. jre 变体只含运行时，体积比 jdk 小（约 270MB vs 350MB）</span></span>
+<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 为什么固定版本 17-jre 而不是 17-jre:latest:</span></span>
+<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   保证构建可复现</span></span>
+<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre</span>
+<span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a><span class="co"># === K6-3 RUN：创建非 root 用户 ===</span></span>
+<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 创建 appuser 用户和 /app 目录，并设置权限</span></span>
+<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 用 &amp;&amp; 合并命令，只生成 1 层</span></span>
+<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">useradd</span> <span class="at">-m</span> <span class="at">-d</span> /app <span class="at">-u</span> 1000 <span class="at">-s</span> /usr/sbin/nologin appuser <span class="dt">\</span></span>
+<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">mkdir</span> <span class="at">-p</span> /app/config <span class="dt">\</span></span>
+<span id="cb64-19"><a href="#cb64-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">chown</span> <span class="at">-R</span> appuser:appuser /app</span>
+<span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a><span class="co"># === K6-5 WORKDIR：设置工作目录 ===</span></span>
+<span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb64-23"><a href="#cb64-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-24"><a href="#cb64-24" aria-hidden="true" tabindex="-1"></a><span class="co"># === K6-4 COPY：复制 jar 和配置文件 ===</span></span>
+<span id="cb64-25"><a href="#cb64-25" aria-hidden="true" tabindex="-1"></a><span class="co"># COPY（不用 ADD，因为没有 tar 解压需求）</span></span>
+<span id="cb64-26"><a href="#cb64-26" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/app.jar</span>
+<span id="cb64-27"><a href="#cb64-27" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> config/ /app/config/</span>
+<span id="cb64-28"><a href="#cb64-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-29"><a href="#cb64-29" aria-hidden="true" tabindex="-1"></a><span class="co"># === K6-5 USER：切换到非 root 用户 ===</span></span>
+<span id="cb64-30"><a href="#cb64-30" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span>
+<span id="cb64-31"><a href="#cb64-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-32"><a href="#cb64-32" aria-hidden="true" tabindex="-1"></a><span class="co"># === 容器启动命令（第 7 次课详讲 CMD/ENTRYPOINT）===</span></span>
+<span id="cb64-33"><a href="#cb64-33" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<h3 id="35-构建与验证命令">3.5 构建与验证命令</h3>
+<div class="sourceCode" id="cb65"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 进入项目目录</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/ctts/backend</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 查看目录内容（确认 jar 和 Dockerfile 就位）</span></span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-la</span></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a><span class="co"># -rw-r--r-- 1 user user  300 Jul 22 10:00 .dockerignore</span></span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a><span class="co"># -rw-r--r-- 1 user user  600 Jul 22 10:00 Dockerfile</span></span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a><span class="co"># drwxr-xr-x 2 user user 4096 Jul 22 10:00 config/</span></span>
+<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a><span class="co"># -rw-r--r-- 1 user user  45M Jul 22 10:00 ctts-backend.jar</span></span>
+<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-11"><a href="#cb65-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 构建镜像</span></span>
+<span id="cb65-12"><a href="#cb65-12" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:v0.6 .</span>
+<span id="cb65-13"><a href="#cb65-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-14"><a href="#cb65-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb65-15"><a href="#cb65-15" aria-hidden="true" tabindex="-1"></a><span class="co"># [+] Building 18.5s (10/10) FINISHED                              docker:default</span></span>
+<span id="cb65-16"><a href="#cb65-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load build definition from Dockerfile               0.1s</span></span>
+<span id="cb65-17"><a href="#cb65-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring dockerfile: 600B                                0.0s</span></span>
+<span id="cb65-18"><a href="#cb65-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load .dockerignore                                   0.1s</span></span>
+<span id="cb65-19"><a href="#cb65-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring context: 300B                                   0.0s</span></span>
+<span id="cb65-20"><a href="#cb65-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load metadata for docker.io/library/eclipse-temurin:17-jre   2.5s</span></span>
+<span id="cb65-21"><a href="#cb65-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [1/5] FROM docker.io/library/eclipse-temurin:17-jre@sha256:...           3.5s</span></span>
+<span id="cb65-22"><a href="#cb65-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; resolve docker.io/library/eclipse-temurin:17-jre@sha256:...           0.0s</span></span>
+<span id="cb65-23"><a href="#cb65-23" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; sha256:9c1f4a1 29.5MB / 29.5MB                               1.5s</span></span>
+<span id="cb65-24"><a href="#cb65-24" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; sha256:a2b3c4d5 100MB / 100MB                                2.0s</span></span>
+<span id="cb65-25"><a href="#cb65-25" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; extracting sha256:9c1f4a1                                    0.8s</span></span>
+<span id="cb65-26"><a href="#cb65-26" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; extracting sha256:a2b3c4d5                                   1.2s</span></span>
+<span id="cb65-27"><a href="#cb65-27" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [internal] load build context                                   0.5s</span></span>
+<span id="cb65-28"><a href="#cb65-28" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; transferring context: 45.00MB                                0.5s   ← 45MB jar 被发送</span></span>
+<span id="cb65-29"><a href="#cb65-29" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [2/5] RUN useradd -m -d /app -u 1000 -s /usr/sbin/nologin...   1.2s</span></span>
+<span id="cb65-30"><a href="#cb65-30" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [3/5] WORKDIR /app                                              0.1s</span></span>
+<span id="cb65-31"><a href="#cb65-31" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [4/5] COPY ctts-backend.jar /app/app.jar                        0.3s</span></span>
+<span id="cb65-32"><a href="#cb65-32" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; [5/5] COPY config/ /app/config/                                 0.1s</span></span>
+<span id="cb65-33"><a href="#cb65-33" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; exporting to image                                              0.5s</span></span>
+<span id="cb65-34"><a href="#cb65-34" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; exporting layers                                             0.4s</span></span>
+<span id="cb65-35"><a href="#cb65-35" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; writing image sha256:a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6...     0.0s</span></span>
+<span id="cb65-36"><a href="#cb65-36" aria-hidden="true" tabindex="-1"></a><span class="co">#  =&gt; =&gt; naming to docker.io/library/ctts-backend:v0.6                0.0s</span></span>
+<span id="cb65-37"><a href="#cb65-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-38"><a href="#cb65-38" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 查看镜像</span></span>
+<span id="cb65-39"><a href="#cb65-39" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images ctts-backend</span>
+<span id="cb65-40"><a href="#cb65-40" aria-hidden="true" tabindex="-1"></a><span class="co"># REPOSITORY      TAG   IMAGE ID       CREATED         SIZE</span></span>
+<span id="cb65-41"><a href="#cb65-41" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend    v0.6  a1b2c3d4e5f6   10 seconds ago  318MB</span></span>
+<span id="cb65-42"><a href="#cb65-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-43"><a href="#cb65-43" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 查看镜像分层历史</span></span>
+<span id="cb65-44"><a href="#cb65-44" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> history ctts-backend:v0.6</span>
+<span id="cb65-45"><a href="#cb65-45" aria-hidden="true" tabindex="-1"></a><span class="co"># IMAGE          CREATED        CREATED BY                                      SIZE</span></span>
+<span id="cb65-46"><a href="#cb65-46" aria-hidden="true" tabindex="-1"></a><span class="co"># a1b2c3d4e5f6   10 seconds ago CMD [&quot;java&quot; &quot;-jar&quot; &quot;/app/app.jar&quot;]               0B</span></span>
+<span id="cb65-47"><a href="#cb65-47" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      10 seconds ago USER appuser                                     0B</span></span>
+<span id="cb65-48"><a href="#cb65-48" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      10 seconds ago COPY config/ /app/config/ # buildkit             1.2kB</span></span>
+<span id="cb65-49"><a href="#cb65-49" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      10 seconds ago COPY ctts-backend.jar /app/app.jar # buildkit    45MB</span></span>
+<span id="cb65-50"><a href="#cb65-50" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      10 seconds ago WORKDIR /app                                      0B</span></span>
+<span id="cb65-51"><a href="#cb65-51" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      10 seconds ago RUN useradd -m -d /app -u 1000...                 4kB</span></span>
+<span id="cb65-52"><a href="#cb65-52" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      2 weeks ago    /bin/sh -c #(nop)  CMD [&quot;jshell&quot;]                0B</span></span>
+<span id="cb65-53"><a href="#cb65-53" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      2 weeks ago    /bin/sh -c #(nop)  ENTRYPOINT [&quot;/__docker...&quot;]   0B</span></span>
+<span id="cb65-54"><a href="#cb65-54" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      2 weeks ago    /bin/sh -c #(nop)  ENV JAVA_HOME=/opt/jav...     0B</span></span>
+<span id="cb65-55"><a href="#cb65-55" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;missing&gt;      2 weeks ago    /bin/sh -c set -eux; ...                         270MB</span></span>
+<span id="cb65-56"><a href="#cb65-56" aria-hidden="true" tabindex="-1"></a><span class="co"># → 可以看到从下到上每一层</span></span>
+<span id="cb65-57"><a href="#cb65-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-58"><a href="#cb65-58" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 运行验证（不连数据库，只验证 Java 能起来）</span></span>
+<span id="cb65-59"><a href="#cb65-59" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> ctts-backend:v0.6 java <span class="at">-version</span></span>
+<span id="cb65-60"><a href="#cb65-60" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb65-61"><a href="#cb65-61" aria-hidden="true" tabindex="-1"></a><span class="co"># openjdk version &quot;17.0.x&quot; 2023-xx-xx</span></span>
+<span id="cb65-62"><a href="#cb65-62" aria-hidden="true" tabindex="-1"></a><span class="co"># OpenJDK Runtime Environment Temurin-17.0.x (build 17.0.x+x)</span></span>
+<span id="cb65-63"><a href="#cb65-63" aria-hidden="true" tabindex="-1"></a><span class="co"># OpenJDK 64-Bit Server VM Temurin-17.0.x (build 17.0.x+x, mixed mode, sharing)</span></span>
+<span id="cb65-64"><a href="#cb65-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-65"><a href="#cb65-65" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. 验证运行用户是 appuser（非 root）</span></span>
+<span id="cb65-66"><a href="#cb65-66" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> ctts-backend:v0.6 whoami</span>
+<span id="cb65-67"><a href="#cb65-67" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：appuser</span></span>
+<span id="cb65-68"><a href="#cb65-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-69"><a href="#cb65-69" aria-hidden="true" tabindex="-1"></a><span class="co"># 8. 验证工作目录和文件</span></span>
+<span id="cb65-70"><a href="#cb65-70" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> ctts-backend:v0.6 sh <span class="at">-c</span> <span class="st">&quot;pwd &amp;&amp; ls -la /app&quot;</span></span>
+<span id="cb65-71"><a href="#cb65-71" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb65-72"><a href="#cb65-72" aria-hidden="true" tabindex="-1"></a><span class="co"># /app</span></span>
+<span id="cb65-73"><a href="#cb65-73" aria-hidden="true" tabindex="-1"></a><span class="co"># total 45M</span></span>
+<span id="cb65-74"><a href="#cb65-74" aria-hidden="true" tabindex="-1"></a><span class="co"># drwxr-xr-x 3 appuser appuser 4.0K Jul 22 10:00 .</span></span>
+<span id="cb65-75"><a href="#cb65-75" aria-hidden="true" tabindex="-1"></a><span class="co"># drwxr-xr-x 1 root    root    4.0K Jul 22 10:00 ..</span></span>
+<span id="cb65-76"><a href="#cb65-76" aria-hidden="true" tabindex="-1"></a><span class="co"># -rw-r--r-- 1 appuser appuser  45M Jul 22 10:00 app.jar</span></span>
+<span id="cb65-77"><a href="#cb65-77" aria-hidden="true" tabindex="-1"></a><span class="co"># drwxr-xr-x 2 appuser appuser 4.0K Jul 22 10:00 config</span></span></code></pre></div>
+<h3 id="36-这个-dockerfile-用到了哪些知识点">3.6 这个 Dockerfile
+用到了哪些知识点</h3>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>知识点</th>
+<th>体现的工程规范</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FROM eclipse-temurin:17-jre</code></td>
+<td>K6-2</td>
+<td>官方镜像 + 固定版本 + 用 JRE 而非 JDK</td>
+</tr>
+<tr>
+<td><code>RUN useradd ... &amp;&amp; mkdir ... &amp;&amp; chown ...</code></td>
+<td>K6-3</td>
+<td>合并 RUN 减少层数 + 一次创建用户和目录</td>
+</tr>
+<tr>
+<td><code>WORKDIR /app</code></td>
+<td>K6-5</td>
+<td>显式设置工作目录，后续 COPY 用绝对路径</td>
+</tr>
+<tr>
+<td><code>COPY ctts-backend.jar</code></td>
+<td>K6-4</td>
+<td>用 COPY 而非 ADD（行为明确）</td>
+</tr>
+<tr>
+<td><code>USER appuser</code></td>
+<td>K6-5</td>
+<td>非 root 运行（安全最佳实践）</td>
+</tr>
+<tr>
+<td><code>.dockerignore</code></td>
+<td>K6-6</td>
+<td>排除 .git、target、日志等，减小上下文</td>
+</tr>
+<tr>
+<td><code>docker build -t ctts-backend:v0.6 .</code></td>
+<td>K6-6</td>
+<td>标签固定版本号，<code>.</code> 为构建上下文</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>这个综合示例体现了本课所有知识点，是第 8 次课实践的基础。第 7
+次课会用多阶段构建优化这个 Dockerfile（让镜像从 318MB 降到 180MB
+左右）。</p>
+</blockquote>
+<hr />
+<h2 id="四拓展阅读选学">四、拓展阅读（选学）</h2>
+<ol type="1">
+<li><strong>BuildKit</strong>：Docker 18.09+
+引入的新构建引擎，比传统构建更快、支持并行构建、支持
+<code>--mount=type=cache</code> 等高级特性。现在默认开启。深入了解可读
+Docker 官方文档 "BuildKit" 章节。</li>
+<li><strong>OCI 镜像规范</strong>：Open Container Initiative
+定义的镜像格式标准，Docker 镜像遵循此标准。了解 OCI
+有助于理解镜像分层、manifest、config 等结构。</li>
+<li><strong>distroless 镜像</strong>：Google
+维护的极简镜像，只含应用运行时（如 Java JRE）和最少系统库，不含
+shell、包管理器等。比 alpine
+更小更安全，但调试困难。适合极致优化场景。</li>
+<li><strong>镜像扫描</strong>：用 Trivy、Grype、Snyk
+等工具扫描镜像中的漏洞（CVE）。生产镜像应定期扫描。</li>
+<li><strong>Dockerfile 最佳实践</strong>：Docker 官方文档 "Best
+practices for writing Dockerfiles"
+一节，涵盖指令顺序、缓存利用、安全性等。</li>
+</ol>
+<hr />
+<h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
+<h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
+<pre><code>Dockerfile 基础指令
+├── K6-1 Dockerfile 概念与作用
+│   ├── 定义：描述镜像构建过程的文本文件
+│   ├── 价值：可复现、可版本管理、可审计
+│   ├── vs docker commit：commit 黑盒，Dockerfile 白盒
+│   └── 基本结构：指令大写、从上到下、FROM 开头
+├── K6-2 FROM 指令
+│   ├── 作用：指定基础镜像
+│   ├── 选择原则：官方、固定版本、slim/alpine、运行时镜像
+│   ├── Java 首选：eclipse-temurin:17-jre
+│   ├── scratch：空镜像，特殊场景
+│   └── 禁忌：不用 :latest
+├── K6-3 RUN 指令
+│   ├── 作用：构建时执行命令
+│   ├── 分层：每条 RUN 一层
+│   ├── 优化：用 &amp;&amp; 合并命令
+│   ├── 缓存：按指令顺序缓存，前面的层变了后面全部失效
+│   ├── shell vs exec 形式
+│   └── 规范：apt update &amp;&amp; install &amp;&amp; rm 连在一起
+├── K6-4 COPY 与 ADD
+│   ├── COPY：只复制本地文件，行为明确（推荐）
+│   ├── ADD 额外功能：解压 tar、URL 下载
+│   ├── 选择建议：默认 COPY，需要解压 tar 才用 ADD
+│   └── 注意：源路径必须在构建上下文内
+├── K6-5 WORKDIR 与 USER
+│   ├── WORKDIR：设置工作目录，持续生效（vs RUN cd 一次性）
+│   ├── USER：切换运行用户
+│   ├── 安全最佳实践：非 root 运行
+│   └── 典型模式：root 创建用户+目录+chown → USER 切换
+└── K6-6 docker build 与构建上下文
+    ├── docker build -t name:tag .
+    ├── 构建上下文：发送给守护进程的所有文件
+    ├── .dockerignore：排除大文件和敏感文件
+    ├── 层缓存：不常变的放前面，常变的放后面
+    └── 常用参数：-t、-f、--no-cache、--build-arg</code></pre>
+<h3 id="一句话总结">一句话总结</h3>
+<blockquote>
+<p><strong>Dockerfile 是镜像的源代码</strong>——用 FROM 选基础镜像、RUN
+执行命令（合并减层）、COPY 复制文件、WORKDIR 设工作目录、USER 切非 root
+用户，最后 <code>docker build -t name:tag .</code>
+构建出可复现、可版本管理、可审计的镜像。</p>
+</blockquote>
+<hr />
+<h2
+id="六复习思考题开放式非题库题">六、复习思考题（开放式，非题库题）</h2>
+<ol type="1">
+<li>用自己的话说明"为什么用 Dockerfile 而不是 docker commit"。至少给出 3
+个理由。</li>
+<li>解释"每条 RUN
+生成一层"这个设计的好处和坏处。如何利用层缓存优化构建？</li>
+<li>COPY 和 ADD 有什么区别？为什么官方推荐 COPY？</li>
+<li>写出 <code>.dockerignore</code> 至少 5
+条规则，并说明每条的作用。</li>
+<li>为什么生产镜像应该用非 root 用户运行？写出一个"创建非 root
+用户并切换"的 Dockerfile 片段。</li>
+<li>解释 <code>docker build -t ctts-backend:v0.6 .</code>
+命令中每个部分（<code>-t</code>、<code>ctts-backend:v0.6</code>、<code>.</code>）的含义。最后的
+<code>.</code> 改成 <code>/tmp</code> 会发生什么？</li>
+<li>假设你的 CTTS 后端 Dockerfile 构建时间从 10 秒变成了 60
+秒，你会从哪些方面排查？（提示：层缓存失效、构建上下文变大、网络拉镜像变慢）</li>
+<li>第 7 次课将学多阶段构建，预习思考：你的 Dockerfile 如果想从 318MB
+降到 180MB，能想到什么办法？（提示：构建时用 JDK 编译，运行时只放 JRE +
+jar）</li>
+</ol>
+<blockquote>
+<p>这些思考题不要求标准答案，旨在引导你建立对 Dockerfile
+工程化的整体认知。第 7 次课将进入 CMD/ENTRYPOINT 和多阶段构建。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,508 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>K8s网络进阶</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 20 次课 · 教学设计</div>
+      <h1>K8s网络进阶</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 20 次课</span>
+        <span class="hero-chip"><b>主题</b>K8s网络进阶</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一教学目标">一、教学目标</a>
+<ul>
+<li><a href="#11-知识目标">1.1 知识目标</a></li>
+<li><a href="#12-能力目标">1.2 能力目标</a></li>
+<li><a href="#13-素质目标课程思政">1.3 素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#二教学重点与难点">二、教学重点与难点</a>
+<ul>
+</ul></li>
+<li><a href="#三学情分析">三、学情分析</a>
+<ul>
+</ul></li>
+<li><a href="#四教学方法">四、教学方法</a>
+<ul>
+</ul></li>
+<li><a href="#五教学准备">五、教学准备</a>
+<ul>
+</ul></li>
+<li><a href="#七课程思政融入设计">七、课程思政融入设计</a>
+<ul>
+</ul></li>
+<li><a href="#八教学评价设计">八、教学评价设计</a>
+<ul>
+<li><a href="#81-过程性评价60">8.1 过程性评价（60%）</a></li>
+<li><a href="#82-终结性评价40">8.2 终结性评价（40%）</a></li>
+<li><a href="#83-评价量规项目实操">8.3 评价量规（项目实操）</a></li>
+</ul></li>
+<li><a href="#九课后作业与延伸学习">九、课后作业与延伸学习</a>
+<ul>
+<li><a href="#91-必做作业">9.1 必做作业</a></li>
+<li><a href="#92-选做作业">9.2 选做作业</a></li>
+<li><a href="#93-预习任务">9.3 预习任务</a></li>
+</ul></li>
+<li><a href="#十教学反思课后填写">十、教学反思（课后填写）</a>
+<ul>
+</ul></li>
+<li><a href="#附板书设计">附：板书设计</a>
+<ul>
+</ul></li>
+<li><a href="#附面试快问快答题目池15题">附：面试快问快答题目池（15题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 20 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>课程名称：Docker云容器与管理技术 模块归属：M7 Kubernetes进阶
+课次：第20次课（理论课，2学时，90分钟）
+授课对象：高校计算机/软件工程相关专业本科学生
+课程性质：专业选修/必修课</p>
+</blockquote>
+<hr />
+<h2 id="一教学目标">一、教学目标</h2>
+<h3 id="11-知识目标">1.1 知识目标</h3>
+<ul>
+<li><strong>K20-1</strong>：理解K8s网络模型三大原则——每个Pod有独立IP、Pod间无NAT直接通信、节点与Pod间无NAT通信；掌握CNI插件概念及主流实现（Calico、Flannel）。</li>
+<li><strong>K20-2</strong>：掌握CoreDNS在集群中的角色与解析机制，熟记域名格式
+<code>service.namespace.svc.cluster.local</code> 及
+<code>dnsPolicy</code> 四种取值。</li>
+<li><strong>K20-3</strong>：理解NetworkPolicy默认允许策略、入站(ingress)/出站(egress)规则及
+<code>podSelector</code>、<code>namespaceSelector</code>
+联合选择逻辑。</li>
+<li><strong>K20-4</strong>：掌握 <code>kubectl exec</code> 结合
+<code>nslookup</code>、<code>dig</code>、<code>ping</code>、<code>curl</code>
+的网络调试四件套。</li>
+<li><strong>K20-5</strong>：了解生产网络选型考量（Overlay vs
+Underlay、网络策略支持、性能），初步认识Service Mesh（Istio）。</li>
+</ul>
+<h3 id="12-能力目标">1.2 能力目标</h3>
+<ul>
+<li>能够在CTTS项目中配置服务间DNS解析，实现通过Service名称访问。</li>
+<li>能够编写并应用NetworkPolicy
+YAML实现命名空间隔离与服务访问控制。</li>
+<li>能够独立完成Pod内网络连通性诊断，定位DNS、网络策略、Service配置类问题。</li>
+</ul>
+<h3 id="13-素质目标课程思政">1.3 素质目标（课程思政）</h3>
+<ul>
+<li><strong>网络安全意识</strong>：理解"默认开放、显式禁止"到"默认禁止、显式开放"的安全范式转变，树立"网络隔离是安全基础"的理念。</li>
+<li><strong>工程严谨性</strong>：通过YAML严格的字段规范，培养精准、规范、可验证的工程素养。</li>
+<li><strong>系统观</strong>：从单机网络到集群网络的视角跃迁，建立云原生时代的系统思维。</li>
+</ul>
+<hr />
+<h2 id="二教学重点与难点">二、教学重点与难点</h2>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>内容</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>重点</strong></td>
+<td>K8s网络模型三原则</td>
+<td>是后续所有网络理解的基础</td>
+</tr>
+<tr>
+<td><strong>重点</strong></td>
+<td>CoreDNS域名格式与解析流程</td>
+<td>项目任务核心依赖</td>
+</tr>
+<tr>
+<td><strong>重点</strong></td>
+<td>NetworkPolicy入站/出站规则编写</td>
+<td>思政落点与工程实践</td>
+</tr>
+<tr>
+<td><strong>难点</strong></td>
+<td><code>podSelector</code> 与 <code>namespaceSelector</code>
+联合选择逻辑</td>
+<td>学生易混淆"且"与"或"</td>
+</tr>
+<tr>
+<td><strong>难点</strong></td>
+<td>NetworkPolicy默认行为（默认允许）与隔离语义</td>
+<td>与防火墙直觉相反</td>
+</tr>
+<tr>
+<td><strong>难点</strong></td>
+<td>dnsPolicy不同取值对解析行为的影响</td>
+<td>需要理解<code>ClusterFirst</code>、<code>Default</code>、<code>None</code>差异</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="三学情分析">三、学情分析</h2>
+<ul>
+<li><strong>已具备</strong>：第18次课已掌握K8s架构、Pod/Service/Deployment基础；第19次课已掌握Service类型与ClusterIP。</li>
+<li><strong>共性薄弱</strong>：DNS递归解析原理不清晰；YAML字段语义不熟悉，常出现"复制粘贴不深究"现象。</li>
+<li><strong>学习动机</strong>：CTTS项目即将进入服务间调用阶段，本课内容直接服务项目落地，学习驱动力强。</li>
+<li><strong>思政切入点</strong>：近年"零信任网络"概念热度高，可顺势引入"最小权限+网络隔离"思想。</li>
+</ul>
+<hr />
+<h2 id="四教学方法">四、教学方法</h2>
+<ul>
+<li><strong>讲授法</strong>：用于K8s网络模型三原则、CoreDNS解析流程等概念性内容。</li>
+<li><strong>演示法</strong>：现场演示
+<code>nslookup</code>、<code>kubectl exec</code>
+调试命令，强调"看得见才学得会"。</li>
+<li><strong>对比法</strong>：Flannel vs Calico、iptables vs
+eBPF、传统防火墙 vs NetworkPolicy 多组对比。</li>
+<li><strong>任务驱动</strong>：以CTTS项目"订单服务调用用户服务"为贯穿任务。</li>
+<li><strong>快问快答</strong>：面试题环节强化高频考点记忆。</li>
+</ul>
+<hr />
+<h2 id="五教学准备">五、教学准备</h2>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>软件</td>
+<td>Docker Desktop（开启K8s）或Minikube v1.30+，kubectl v1.28+</td>
+</tr>
+<tr>
+<td>镜像</td>
+<td><code>busybox:1.36</code>、<code>registry.k8s.io/e2e-test-images/agnhost:2.39</code></td>
+</tr>
+<tr>
+<td>YAML</td>
+<td><code>ctts-namespace.yaml</code>、<code>ctts-user-service.yaml</code>、<code>ctts-order-service.yaml</code>、<code>ctts-networkpolicy.yaml</code></td>
+</tr>
+<tr>
+<td>工具</td>
+<td><code>nslookup</code>、<code>dig</code>、<code>curl</code>、<code>ping</code>（均内置在示例Pod内）</td>
+</tr>
+<tr>
+<td>课件</td>
+<td>PPT含网络模型动画图、CoreDNS解析时序图、NetworkPolicy流量示意图</td>
+</tr>
+<tr>
+<td>题库</td>
+<td>面试快问快答卡片15张</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2
+id="六教学过程与时间分配90分钟">六、教学过程与时间分配（90分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>环节</th>
+<th>教学内容与活动</th>
+<th>教师活动</th>
+<th>学生活动</th>
+<th>设计意图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0-5 min</td>
+<td><strong>0. 课前签到与导入</strong></td>
+<td>回顾上次课Service
+ClusterIP，提问："订单服务如何找到用户服务？是IP还是名字？"
+引出本课主题</td>
+<td>提问+板书</td>
+<td>思考+回答</td>
+<td>任务衔接、激发需求</td>
+</tr>
+<tr>
+<td>5-20 min</td>
+<td><strong>1. K8s网络模型（K20-1）</strong></td>
+<td>(1) 三原则讲解：Pod独立IP、Pod间无NAT、节点与Pod无NAT；(2)
+CNI概念：Calico vs Flannel对比；(3) 绘制网络模型图</td>
+<td>讲授+板书绘图</td>
+<td>记笔记+画图</td>
+<td>夯实基础</td>
+</tr>
+<tr>
+<td>20-30 min</td>
+<td><strong>2. CoreDNS域名解析（K20-2）</strong></td>
+<td>(1) 域名格式 <code>service.namespace.svc.cluster.local</code>
+拆解；(2) 解析流程时序图；(3) <code>dnsPolicy</code> 四种取值对比；(4)
+演示 <code>nslookup kubernetes.default</code></td>
+<td>讲授+演示</td>
+<td>跟练+记录输出</td>
+<td>突破难点</td>
+</tr>
+<tr>
+<td>30-40 min</td>
+<td><strong>3. 项目任务上半段：CTTS服务间DNS解析</strong></td>
+<td>演示创建 user-service 与 order-service，在 order Pod 内
+<code>curl http://user-service.ctts.svc.cluster.local:8080/health</code>
+验证</td>
+<td>演示+讲解</td>
+<td>跟做+截图提交</td>
+<td>任务落地</td>
+</tr>
+<tr>
+<td>40-45 min</td>
+<td><strong>课间休息</strong></td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>缓解疲劳</td>
+</tr>
+<tr>
+<td>45-60 min</td>
+<td><strong>4. NetworkPolicy网络策略（K20-3）</strong></td>
+<td>(1) 默认允许策略与"零信任"对比；(2) ingress/egress规则结构；(3)
+<code>podSelector</code> 与 <code>namespaceSelector</code> 联合语义；(4)
+完整YAML逐字段精讲</td>
+<td>讲授+板书</td>
+<td>记笔记+提问</td>
+<td>突破难点+思政落点</td>
+</tr>
+<tr>
+<td>60-70 min</td>
+<td><strong>5. 项目任务下半段：CTTS NetworkPolicy</strong></td>
+<td>应用策略：仅允许 order 命名空间访问 user
+命名空间，演示"违规访问被拒" vs "合规访问通过"</td>
+<td>演示+讲解</td>
+<td>跟做+对比输出</td>
+<td>强化"隔离即安全"</td>
+</tr>
+<tr>
+<td>70-78 min</td>
+<td><strong>6. 网络调试与生产考量（K20-4、K20-5）</strong></td>
+<td>(1) 调试四件套
+<code>nslookup</code>/<code>dig</code>/<code>ping</code>/<code>curl</code>；(2)
+生产网络选型对比表；(3) Service Mesh(Istio)简介</td>
+<td>讲授+演示</td>
+<td>记笔记</td>
+<td>拓展视野</td>
+</tr>
+<tr>
+<td>78-86 min</td>
+<td><strong>7. 面试题快问快答互动</strong></td>
+<td>15道面试题轮流抽答，重点：DNS解析流程、NetworkPolicy默认行为、CNI选型</td>
+<td>主持+点评</td>
+<td>抢答+互评</td>
+<td>强化记忆+面试准备</td>
+</tr>
+<tr>
+<td>86-90 min</td>
+<td><strong>8. 课堂小结与作业布置</strong></td>
+<td>(1) 思政升华：网络隔离是安全基础；(2) 思维导图回顾；(3)
+作业：完成题库中★★★题目，预读Istio资料</td>
+<td>总结+布置</td>
+<td>记录作业</td>
+<td>闭环+延伸</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="七课程思政融入设计">七、课程思政融入设计</h2>
+<table>
+<thead>
+<tr>
+<th>思政元素</th>
+<th>融入点</th>
+<th>落地方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>网络安全意识</strong></td>
+<td>NetworkPolicy"默认允许→默认禁止"</td>
+<td>强调从"事后补救"到"主动防御"的安全理念转变</td>
+</tr>
+<tr>
+<td><strong>国家总体安全观</strong></td>
+<td>生产网络考量</td>
+<td>结合《网络安全法》《数据安全法》强调企业级网络隔离的合规义务</td>
+</tr>
+<tr>
+<td><strong>工匠精神</strong></td>
+<td>YAML字段精确编写</td>
+<td>通过"<code>namespaceSelector</code>
+写错一个字母策略失效"案例培养严谨作风</td>
+</tr>
+<tr>
+<td><strong>系统思维</strong></td>
+<td>K8s网络模型</td>
+<td>从"单机网络"到"集群网络"到"服务网格"的认知跃迁</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="八教学评价设计">八、教学评价设计</h2>
+<h3 id="81-过程性评价60">8.1 过程性评价（60%）</h3>
+<ul>
+<li>课堂互动（20%）：含快问快答抢答、提问回答</li>
+<li>项目实操（25%）：CTTS DNS解析与NetworkPolicy YAML提交</li>
+<li>课堂笔记（15%）：网络模型图与解析时序图完整性</li>
+</ul>
+<h3 id="82-终结性评价40">8.2 终结性评价（40%）</h3>
+<ul>
+<li>题库作业（25%）：本次课78题题库中★★★题目必做</li>
+<li>思政小论文（15%）：500字短文"从NetworkPolicy看零信任网络安全"</li>
+</ul>
+<h3 id="83-评价量规项目实操">8.3 评价量规（项目实操）</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>优秀(90-100)</th>
+<th>良好(75-89)</th>
+<th>合格(60-74)</th>
+<th>不合格(&lt;60)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DNS解析配置</td>
+<td>域名格式正确并验证通过</td>
+<td>域名格式正确但未验证</td>
+<td>域名格式有小错</td>
+<td>无法访问</td>
+</tr>
+<tr>
+<td>NetworkPolicy YAML</td>
+<td>字段完整且隔离生效</td>
+<td>字段完整但策略宽松</td>
+<td>字段缺失但能apply</td>
+<td>无法apply</td>
+</tr>
+<tr>
+<td>调试能力</td>
+<td>主动用四件套排查</td>
+<td>能用1-2个工具</td>
+<td>仅靠猜</td>
+<td>无调试意识</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="九课后作业与延伸学习">九、课后作业与延伸学习</h2>
+<h3 id="91-必做作业">9.1 必做作业</h3>
+<ol type="1">
+<li>完成题库中所有★★★题目（约15题）。</li>
+<li>在本地集群复现CTTS NetworkPolicy实验，截图提交。</li>
+<li>撰写500字思政短文《从NetworkPolicy看零信任网络安全》。</li>
+</ol>
+<h3 id="92-选做作业">9.2 选做作业</h3>
+<ol type="1">
+<li>安装Calico与Flannel双环境，对比延迟性能。</li>
+<li>阅读Istio官方文档"Traffic Management"章节，绘制知识图谱。</li>
+</ol>
+<h3 id="93-预习任务">9.3 预习任务</h3>
+<ul>
+<li>预读K8s存储卷（Volume、PV、PVC）相关资料，为下次课做准备。</li>
+</ul>
+<hr />
+<h2 id="十教学反思课后填写">十、教学反思（课后填写）</h2>
+<table>
+<thead>
+<tr>
+<th>反思维度</th>
+<th>课堂记录</th>
+<th>改进措施</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>目标达成度</td>
+<td>（课后填写）</td>
+<td>—</td>
+</tr>
+<tr>
+<td>学生参与度</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>难点突破情况</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>思政融入效果</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>时间分配合理性</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>改进方向</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附板书设计">附：板书设计</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│ 第20次课 K8s网络进阶                                          │
+├─────────────────────────────────────────────────────────────┤
+│ 一、网络模型三原则        二、CoreDNS域名                     │
+│   1. Pod独立IP             service.namespace.svc.cluster.local│
+│   2. Pod↔Pod 无NAT        dnsPolicy: ClusterFirst            │
+│   3. Node↔Pod 无NAT                                         │
+│                                                             │
+│ 三、NetworkPolicy        四、调试四件套                       │
+│   ingress / egress        nslookup / dig / ping / curl       │
+│   podSelector + namespaceSelector                           │
+│   默认允许 → 显式禁止（零信任）                                │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+<hr />
+<h2 id="附面试快问快答题目池15题">附：面试快问快答题目池（15题）</h2>
+<ol type="1">
+<li>K8s中Pod之间通信需要NAT吗？为什么？</li>
+<li>CoreDNS默认部署在哪个命名空间？</li>
+<li>写出访问default命名空间下nginx Service的完整域名。</li>
+<li><code>dnsPolicy: Default</code> 与 <code>ClusterFirst</code>
+有何区别？</li>
+<li>NetworkPolicy默认是允许还是拒绝？</li>
+<li>没有CNI插件支持，NetworkPolicy能生效吗？举例支持的插件。</li>
+<li><code>namespaceSelector: {}</code> 表示什么？</li>
+<li>如何让一个Pod只允许同一命名空间其他Pod访问？</li>
+<li>Flannel与Calico的核心差异？</li>
+<li>Service Mesh解决什么问题？Istio的核心组件？</li>
+<li>eBPF相比iptables的优势？</li>
+<li>Pod内 <code>nslookup</code> 失败应排查哪些环节？</li>
+<li>Headless Service的DNS返回什么？</li>
+<li>跨命名空间访问Service的域名怎么写？</li>
+<li>生产环境为什么推荐开启NetworkPolicy默认拒绝？</li>
+</ol>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

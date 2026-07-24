@@ -1,0 +1,868 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docker认知与容器化思想</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 01 次课 · 题库</div>
+      <h1>Docker认知与容器化思想</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 01 次课</span>
+        <span class="hero-chip"><b>主题</b>Docker认知与容器化思想</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 01 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>01-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>01-选择-001</strong>（★ 知识点：K1-1 容器化动机）
+"在我电脑上能跑，到服务器上就报错"这一现象的根本原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>服务器性能太差</span></li><li><span class="option-label">B</span><span>开发与运行环境不一致</span></li><li><span class="option-label">C</span><span>代码写得不够规范</span></li><li><span class="option-label">D</span><span>网络带宽不足</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：这是软件交付的经典痛点"Works on my
+machine"，根源是开发环境与运行环境不一致（JDK
+版本、依赖库版本、系统配置等）。容器化正是为解决此问题而生。A、C、D
+都不是"在我电脑上能跑"到"服务器报错"的根本原因。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-002</strong>（★ 知识点：K1-2 Docker 定义） 关于
+Docker，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Docker 是一种虚拟机技术</span></li><li><span class="option-label">B</span><span>Docker
+是一个开源的容器化平台</span></li><li><span class="option-label">C</span><span>Docker 只能在 Windows 上运行</span></li><li><span class="option-label">D</span><span>Docker
+只能运行 Web 应用</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Docker
+是开源的容器化平台，让应用及其依赖打包成容器镜像并一致运行。A 错，Docker
+不是虚拟机；C 错，Docker 基于 Linux 内核特性，主要在 Linux 上运行；D
+错，任何 Linux 应用都能容器化。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-003</strong>（★ 知识点：K1-3 容器vs虚拟机）
+关于容器与虚拟机的区别，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器和虚拟机都需要为每个实例运行完整的客户机操作系统</span></li><li><span class="option-label">B</span><span>容器共享宿主机内核，虚拟机每个实例有独立的客户机操作系统</span></li><li><span class="option-label">C</span><span>容器的隔离强度高于虚拟机</span></li><li><span class="option-label">D</span><span>虚拟机的启动速度比容器快</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：容器共享宿主机内核（进程级隔离），虚拟机每个实例运行完整
+Guest OS（硬件级隔离）。A 错，容器不需要 Guest OS；C
+错，虚拟机的硬件级隔离更强；D
+错，容器秒级启动，虚拟机分钟级启动，容器更快。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-004</strong>（★ 知识点：K1-4 Docker 架构） Docker
+采用的架构模式是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>单体架构</span></li><li><span class="option-label">B</span><span>P2P 对等架构</span></li><li><span class="option-label">C</span><span>C/S（客户端/服务器）架构</span></li><li><span class="option-label">D</span><span>微服务架构</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Docker 是 C/S
+架构：docker CLI（客户端）通过 REST API 与
+dockerd（守护进程/服务器）通信，由守护进程管理镜像和容器。A、B、D
+都不正确。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-005</strong>（★ 知识点：K1-5 核心概念） 下列关于
+Docker 镜像的描述，正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像是可读写的运行实例</span></li><li><span class="option-label">B</span><span>镜像是只读的模板</span></li><li><span class="option-label">C</span><span>镜像就是容器</span></li><li><span class="option-label">D</span><span>镜像删除后容器一定不存在</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：镜像是只读的模板，包含应用及依赖。A
+错，可读写的是容器；C 错，镜像是模板、容器是运行实例，二者不同；D
+错，删除镜像前需先删除基于它的容器，但"镜像删除后容器一定不存在"逻辑反了，应先有容器才能用镜像，删除镜像要求先删容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-006</strong>（★ 知识点：K1-5 核心概念） Docker
+中，"镜像运行起来的实例"指的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像</span></li><li><span class="option-label">B</span><span>容器</span></li><li><span class="option-label">C</span><span>仓库</span></li><li><span class="option-label">D</span><span>守护进程</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：容器是镜像运行起来的实例，可读写。镜像是只读模板；仓库用于存放镜像；守护进程是管理服务。容器才是"运行实例"。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-007</strong>（★ 知识点：K1-5 核心概念） 存放和分发
+Docker 镜像的服务称为？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>守护进程</span></li><li><span class="option-label">B</span><span>仓库（Registry）</span></li><li><span class="option-label">C</span><span>客户端</span></li><li><span class="option-label">D</span><span>运行时</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：仓库（Registry）是存放和分发镜像的地方，如 Docker
+Hub。守护进程是管理服务；客户端是命令行工具；运行时是执行容器的组件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-008</strong>（★ 知识点：K1-3 容器vs虚拟机）
+下列关于容器启动速度的描述，正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器启动需要数分钟，与虚拟机相当</span></li><li><span class="option-label">B</span><span>容器秒级启动，因为只启动进程而非整个操作系统</span></li><li><span class="option-label">C</span><span>容器启动比虚拟机慢</span></li><li><span class="option-label">D</span><span>容器启动需要先安装客户机操作系统</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：容器共享宿主内核，启动时只启动应用进程，所以秒级启动。虚拟机要启动整个
+Guest OS，需分钟级。A、C、D 都错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-009</strong>（★ 知识点：K1-2 Docker 思想） Docker
+的核心思想可以概括为？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>一次编写，处处编译</span></li><li><span class="option-label">B</span><span>一次构建，到处运行（Build once, run anywhere）</span></li><li><span class="option-label">C</span><span>一个容器只跑一个操作系统</span></li><li><span class="option-label">D</span><span>所有应用都必须微服务化</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Docker
+核心思想是"把应用和依赖打包成镜像，一次构建到处运行"。A 是 Java
+的口号变体；C 错，容器不跑操作系统；D 错，容器化不要求微服务化。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-010</strong>（★ 知识点：K1-4 Docker 架构）
+用户在终端敲 <code>docker run</code> 命令后，命令首先发送给？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器</span></li><li><span class="option-label">B</span><span>镜像仓库</span></li><li><span class="option-label">C</span><span>Docker 守护进程（通过 REST API）</span></li><li><span class="option-label">D</span><span>操作系统内核</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：docker CLI
+是客户端，命令通过 REST API 发送给 dockerd
+守护进程，由守护进程执行。A、B、D 都不是命令的直接接收方。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-011</strong>（★ 知识点：K1-1 容器化动机）
+下列哪一项不是容器化技术带来的价值？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>环境一致性</span></li><li><span class="option-label">B</span><span>标准化交付</span></li><li><span class="option-label">C</span><span>完全取代虚拟机</span></li><li><span class="option-label">D</span><span>弹性扩容基础</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：容器与虚拟机是互补关系，不会完全取代虚拟机，强隔离和异构
+OS 场景仍需虚拟机。A、B、D 都是容器化的真实价值。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-012</strong>（★★ 知识点：K1-3 容器vs虚拟机）
+关于容器与虚拟机的隔离机制，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器使用 Hypervisor
+实现硬件级隔离</span></li><li><span class="option-label">B</span><span>虚拟机使用 namespaces 和 cgroups 实现进程级隔离</span></li><li><span class="option-label">C</span><span>容器使用 Linux 内核的 namespaces 和 cgroups 实现进程级隔离</span></li><li><span class="option-label">D</span><span>容器和虚拟机使用相同的隔离机制</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：容器基于 Linux 内核的
+namespaces（隔离）和 cgroups（资源限制）实现进程级隔离。虚拟机用
+Hypervisor 虚拟硬件实现硬件级隔离。A、B、D 均错误。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-013</strong>（★ 知识点：K1-4 Docker 架构） Docker
+守护进程（dockerd）的主要职责是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>接收用户敲的命令</span></li><li><span class="option-label">B</span><span>管理镜像、容器、网络、存储</span></li><li><span class="option-label">C</span><span>存放镜像供分发</span></li><li><span class="option-label">D</span><span>提供 Web 界面</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：dockerd
+是后台常驻进程，负责构建/运行/分发镜像和容器，管理网络和存储。A 是
+docker CLI 的职责；C 是仓库的职责；D 不是 dockerd 的职责。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-014</strong>（★ 知识点：K1-5 核心概念） 关于 Docker
+镜像的标签（tag），下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>标签是镜像的唯一标识，不可重复</span></li><li><span class="option-label">B</span><span><code>mysql:8.0</code> 中的 8.0 是标签，表示版本</span></li><li><span class="option-label">C</span><span>不写标签时默认使用 <code>:stable</code></span></li><li><span class="option-label">D</span><span>一个镜像只能有一个标签</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：标签用于标识镜像版本，<code>mysql:8.0</code> 中
+8.0 是标签。不写标签默认 <code>:latest</code>（不是
+stable）。一个镜像可以打多个标签。A
+错，不同镜像可以打相同标签（会覆盖）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-015</strong>（★★ 知识点：K1-5 核心概念） 关于
+<code>:latest</code> 标签，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>:latest</code>
+一定指向最新最稳定的版本</span></li><li><span class="option-label">B</span><span>生产环境推荐使用 <code>:latest</code> 标签</span></li><li><span class="option-label">C</span><span><code>:latest</code>
+只是默认标签名，可能指向任意版本，生产环境应指定明确版本</span></li><li><span class="option-label">D</span><span>不写标签时镜像会报错</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：<code>:latest</code>
+只是默认标签名，不保证最新最稳定，可能指向任意版本，生产环境应指定明确版本号（如
+<code>mysql:8.0.35</code>）以保证可复现。A、B 错误；D 错，不写标签默认
+latest 不会报错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-016</strong>（★ 知识点：K1-6 云原生）
+关于云原生（Cloud Native），下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>云原生就是把应用部署到云服务器上</span></li><li><span class="option-label">B</span><span>云原生是一套构建和运行应用的方法论，以容器、微服务、声明式 API
+为核心技术</span></li><li><span class="option-label">C</span><span>云原生必须使用某个特定厂商的云</span></li><li><span class="option-label">D</span><span>云原生等同于容器化</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：云原生是一套方法论，核心技术包括容器、微服务、不可变基础设施、声明式
+API。A 错，上云≠云原生；C 错，云原生不绑定厂商；D
+错，容器化只是云原生的基础之一。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-017</strong>（★ 知识点：K1-6 Docker与K8s关系） 关于
+Docker 与 Kubernetes 的关系，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>二者是竞争关系，选其一即可</span></li><li><span class="option-label">B</span><span>Docker 负责把应用容器化，Kubernetes
+负责编排管理集群中的容器</span></li><li><span class="option-label">C</span><span>Kubernetes 可以完全取代 Docker</span></li><li><span class="option-label">D</span><span>Docker 是
+Kubernetes 的底层内核</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Docker
+负责容器化（装箱），K8s 负责集群编排（调度），二者是上下游关系。A
+错，不是竞争；C 错，K8s 建立在容器之上；D 错，Docker 不是内核。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-018</strong>（★ 知识点：K1-4 Docker 架构） Docker
+客户端与守护进程之间通信的方式是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>共享内存</span></li><li><span class="option-label">B</span><span>REST API（通过 Unix
+socket 或网络端口）</span></li><li><span class="option-label">C</span><span>消息队列</span></li><li><span class="option-label">D</span><span>文件锁</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：docker CLI 通过 REST
+API 与 dockerd 通信，默认走 Unix
+socket（/var/run/docker.sock），也可配置走 TCP
+网络端口实现远程管理。A、C、D 都不是。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-019</strong>（★ 知识点：K1-3 容器vs虚拟机）
+下列场景中，最适合使用虚拟机而非容器的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>个人电脑跑多个不同版本的
+MySQL</span></li><li><span class="option-label">B</span><span>微服务快速弹性扩容</span></li><li><span class="option-label">C</span><span>在 Linux 上运行 Windows 应用程序</span></li><li><span class="option-label">D</span><span>教学实验环境秒级启动</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：容器共享宿主内核，不能在 Linux 上跑 Windows
+容器，跨 OS 需虚拟机。A、B、D 都适合用容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-020</strong>（★★ 知识点：K1-3 容器vs虚拟机）
+下列关于容器与虚拟机资源占用的对比，正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>虚拟机实例通常 MB
+级，容器实例通常 GB 级</span></li><li><span class="option-label">B</span><span>容器实例通常 MB 级，虚拟机实例通常 GB 级</span></li><li><span class="option-label">C</span><span>二者资源占用相当</span></li><li><span class="option-label">D</span><span>容器比虚拟机占用更多内存</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：容器没有 Guest
+OS，实例通常 MB 级；虚拟机有完整 Guest OS，通常 GB
+级。所以一台机器能跑成百上千个容器，但通常只能跑几十个虚拟机。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-021</strong>（★ 知识点：K1-2 Docker 历史） Docker
+技术最初是基于下列哪项 Linux 内核特性实现的？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>文件系统与网络协议栈</span></li><li><span class="option-label">B</span><span>namespaces 和 cgroups</span></li><li><span class="option-label">C</span><span>用户权限与进程调度</span></li><li><span class="option-label">D</span><span>内存管理与设备驱动</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Docker 容器隔离基于
+Linux 的 namespaces（隔离视图：PID/NET/MNT 等）和
+cgroups（资源限制：CPU/内存等）。其他选项不是容器隔离的底层机制。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-022</strong>（★★ 知识点：K1-4 运行时层次） 在 Docker
+的运行时层次中，真正创建并运行容器进程的低级运行时是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>dockerd</span></li><li><span class="option-label">B</span><span>containerd</span></li><li><span class="option-label">C</span><span>runC</span></li><li><span class="option-label">D</span><span>docker CLI</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：层次为 docker CLI →
+dockerd → containerd → runC。runC 是低级运行时，遵循 OCI
+标准，真正创建和运行容器进程。dockerd 是守护进程，containerd
+是高级运行时管理生命周期。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-023</strong>（★ 知识点：K1-5 镜像仓库） Docker Hub
+是什么？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Docker 的官方公共镜像仓库</span></li><li><span class="option-label">B</span><span>Docker 的客户端工具</span></li><li><span class="option-label">C</span><span>Docker
+的守护进程</span></li><li><span class="option-label">D</span><span>Docker 的配置文件</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：Docker
+Hub（hub.docker.com）是 Docker
+官方公共镜像仓库，存放大量官方镜像（mysql、nginx、openjdk
+等）。其他选项都不对。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-024</strong>（★ 知识点：K1-5 容器特性）
+关于容器，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>一个镜像只能运行一个容器实例</span></li><li><span class="option-label">B</span><span>一个镜像可以同时运行多个容器实例，互不干扰</span></li><li><span class="option-label">C</span><span>容器停止后所有数据永久丢失</span></li><li><span class="option-label">D</span><span>容器必须一直运行不能停止</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：一个镜像可以同时启动多个容器实例，每个容器有自己的可写层，互不干扰。C
+错，容器停止后可写层仍在，可再次启动；除非删除容器，数据不会丢。D
+错，容器可随时启停。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-025</strong>（★ 知识点：K1-1 传统部署痛点）
+传统软件交付方式（交付代码+部署文档）的主要问题是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>代码不能运行</span></li><li><span class="option-label">B</span><span>环境由目标机器提供，易不一致，文档易过时</span></li><li><span class="option-label">C</span><span>必须用 Java 语言</span></li><li><span class="option-label">D</span><span>不能部署到云上</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：传统交付把环境配置交给目标机器，依赖人工按文档配置，易不一致、文档易过时。容器化把环境打包进镜像解决此问题。A、C、D
+都不是传统交付的问题。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-026</strong>（★★ 知识点：K1-4 C/S架构优势） Docker
+采用 C/S 架构的好处不包括？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>客户端和守护进程可以分离，支持远程管理</span></li><li><span class="option-label">B</span><span>一个守护进程可被多个客户端操作</span></li><li><span class="option-label">C</span><span>客户端无需运行在宿主机上即可管理远端
+Docker</span></li><li><span class="option-label">D</span><span>客户端直接操作容器，速度更快</span></li></ul></div><blockquote>
+<p><strong>答案：D</strong>
+<strong>解析</strong>：客户端不直接操作容器，是通过 REST API
+请求守护进程执行，不存在"直接操作更快"。A、B、C 都是 C/S
+架构的真实好处（可远程、多客户端、客户端解耦）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-027</strong>（★ 知识点：K1-6 CNCF） CNCF 的全称是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Cloud Native Computing Foundation（云原生计算基金会）</span></li><li><span class="option-label">B</span><span>Container
+Network Control Framework</span></li><li><span class="option-label">C</span><span>Cloud Native Container Federation</span></li><li><span class="option-label">D</span><span>Common
+Network Container Format</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：CNCF = Cloud Native
+Computing Foundation，是 Linux 基金会下的子基金会，托管
+Kubernetes、containerd、Prometheus 等云原生核心项目。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-028</strong>（★ 知识点：K1-5 镜像特性） 关于 Docker
+镜像的分层结构，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像是一个整体的不可分割的文件</span></li><li><span class="option-label">B</span><span>镜像由多层（Layer）组成，每层可共享和缓存</span></li><li><span class="option-label">C</span><span>镜像的每一层都是可写的</span></li><li><span class="option-label">D</span><span>镜像分层会增大存储占用</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：镜像是分层的只读结构，每条 Dockerfile
+指令生成一层，多层可共享和缓存，节省存储和传输。A 错，是分层的；C
+错，镜像层只读，容器才有可写层；D 错，分层是为了节省存储。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-029</strong>（★★ 知识点：K1-2 容器与Docker关系）
+关于"容器"和"Docker"的关系，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器和 Docker
+是同一个概念</span></li><li><span class="option-label">B</span><span>容器是一种技术概念，Docker 是实现容器技术的一个工具/平台</span></li><li><span class="option-label">C</span><span>Docker 是技术概念，容器是工具</span></li><li><span class="option-label">D</span><span>只有 Docker 能实现容器技术</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：容器是技术概念（隔离的运行环境），Docker
+是实现该概念的工具之一。类比：容器是"汽车"概念，Docker
+是某款"汽车品牌"。还有 Podman、containerd 等其他容器工具。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-030</strong>（★★ 知识点：K1-6 课程项目）
+本课程的贯穿项目是"多服务容器化部署项目"，其中需要容器化的三个服务是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>前端（Vue3）+ 后端（SpringBoot）+ MySQL</span></li><li><span class="option-label">B</span><span>前端（Vue3）+
+后端（SpringBoot）+ Redis</span></li><li><span class="option-label">C</span><span>前端（React）+ 后端（Node.js）+ MySQL</span></li><li><span class="option-label">D</span><span>前端（Vue3）+ 后端（Django）+ MongoDB</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：贯穿项目将 JavaWeb
+课程的 CTTS 后端（SpringBoot）+ Vue3 课程的 CTTS-Frontend + MySQL
+三服务容器化，与已学课程联动。B、C、D 的技术栈不符。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>01-选择-031</strong>（★★ 知识点：K1-1 容器化价值）
+容器化技术带来的价值包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>环境一致性</span></li><li><span class="option-label">B</span><span>标准化交付</span></li><li><span class="option-label">C</span><span>完全取代数据库</span></li><li><span class="option-label">D</span><span>弹性扩容基础 E. 快速启动</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong>
+<strong>解析</strong>：容器化带来环境一致性、标准化交付、弹性扩容基础、快速启动。C
+错，容器化不会取代数据库，反而数据库也可以容器化。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-032</strong>（★★ 知识点：K1-3 容器vs虚拟机）
+与虚拟机相比，容器的特点包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>共享宿主机内核</span></li><li><span class="option-label">B</span><span>秒级启动</span></li><li><span class="option-label">C</span><span>每个实例运行完整客户机操作系统</span></li><li><span class="option-label">D</span><span>资源占用小（MB 级） E. 进程级隔离</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong>
+<strong>解析</strong>：容器共享内核（A）、秒级启动（B）、资源占用小（D）、进程级隔离（E）。C
+是虚拟机的特点，不是容器的。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-033</strong>（★★ 知识点：K1-4 Docker 架构） Docker
+引擎的组成部分包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Docker 客户端（docker CLI）</span></li><li><span class="option-label">B</span><span>Docker
+守护进程（dockerd）</span></li><li><span class="option-label">C</span><span>REST API</span></li><li><span class="option-label">D</span><span>Hypervisor 虚拟化层 E.
+镜像仓库（Registry）</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong> <strong>解析</strong>：Docker 引擎由
+docker CLI（客户端）、dockerd（守护进程）、REST API 三部分组成。D
+错，Docker 不使用 Hypervisor；E
+是镜像分发服务，不属于引擎本身（虽然引擎会与之交互）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-034</strong>（★★ 知识点：K1-5 核心概念） 下列关于
+Docker 三大核心概念的关系，正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像是只读模板</span></li><li><span class="option-label">B</span><span>容器是镜像运行起来的实例</span></li><li><span class="option-label">C</span><span>一个镜像可以运行多个容器实例</span></li><li><span class="option-label">D</span><span>删除容器后镜像也会被删除 E. 仓库用于存放和分发镜像</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong>
+<strong>解析</strong>：镜像是只读模板（A），容器是镜像运行实例（B），一个镜像可跑多个容器（C），仓库用于分发镜像（E）。D
+错，删除容器不影响镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-035</strong>（★★ 知识点：K1-3 适用场景）
+下列场景中，适合使用容器化技术的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>微服务快速弹性扩容</span></li><li><span class="option-label">B</span><span>个人电脑跑多个不同版本的 MySQL</span></li><li><span class="option-label">C</span><span>跨操作系统运行 Windows 应用（在 Linux
+上）</span></li><li><span class="option-label">D</span><span>教学实验环境秒级启动 E. CI/CD 流水线中的标准化构建环境</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong> <strong>解析</strong>：A、B、D、E
+都适合容器化。C 不适合，容器共享内核不能跨 OS，跨 OS 需虚拟机。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-036</strong>（★★ 知识点：K1-6 云原生技术）
+下列属于云原生核心技术或方法论的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器</span></li><li><span class="option-label">B</span><span>微服务</span></li><li><span class="option-label">C</span><span>不可变基础设施</span></li><li><span class="option-label">D</span><span>声明式 API E. 单体架构</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：云原生核心技术包括容器、微服务、不可变基础设施、声明式
+API。E 错，单体架构是云原生的对立面（云原生倾向微服务化）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-037</strong>（★★ 知识点：K1-4 运行时）
+下列属于容器运行时的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>containerd</span></li><li><span class="option-label">B</span><span>runC</span></li><li><span class="option-label">C</span><span>Hypervisor（如
+VMware ESXi）</span></li><li><span class="option-label">D</span><span>CRI-O E. Docker Engine</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong>
+<strong>解析</strong>：containerd、runC、CRI-O、Docker Engine
+都是容器运行时或包含运行时。C 错，Hypervisor
+是虚拟机技术，不是容器运行时。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-038</strong>（★★ 知识点：K1-1 传统部署痛点）
+传统软件交付（交付代码+部署文档）存在的问题有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>环境不一致导致行为不一致</span></li><li><span class="option-label">B</span><span>部署文档易过时</span></li><li><span class="option-label">C</span><span>人为配置易出错</span></li><li><span class="option-label">D</span><span>环境本身没有被打包 E. 不能跨平台运行任何应用</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：传统交付存在环境不一致（A）、文档过时（B）、人为出错（C）、环境未打包（D）等问题。E
+不是传统交付的问题，跨平台能力与应用本身有关。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-039</strong>（★★ 知识点：K1-5 镜像分层） Docker
+镜像分层结构的好处包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>层可共享，多个镜像共用同一基础层</span></li><li><span class="option-label">B</span><span>构建时可利用层缓存，加速构建</span></li><li><span class="option-label">C</span><span>增量传输，推送/拉取只传变化的层</span></li><li><span class="option-label">D</span><span>让镜像变得不可读 E. 每层独立可复用</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong>
+<strong>解析</strong>：分层带来共享（A）、缓存加速（B）、增量传输（C）、层复用（E）。D
+错，分层不会让镜像不可读，镜像本就是只读的。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-选择-040</strong>（★★ 知识点：K1-6 课程项目）
+本课程贯穿项目"多服务容器化部署项目"的八阶段构建包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>安装
+Docker，运行首个容器</span></li><li><span class="option-label">B</span><span>编写 Dockerfile 构建前后端镜像</span></li><li><span class="option-label">C</span><span>Compose
+编排三服务</span></li><li><span class="option-label">D</span><span>搭建 K8s 集群 E. 配置 Service 与 Ingress 对外访问</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：八阶段包括：①安装Docker运行容器 ②拉取镜像运行容器
+③Dockerfile构建镜像 ④Compose编排 ⑤搭建K8s ⑥部署Pod/Deployment
+⑦Service/Ingress ⑧ConfigMap/Secret/存储综合部署。A、B、C、D、E
+都在其中。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>01-判断-001</strong>（★ 知识点：K1-3 容器vs虚拟机）
+容器和虚拟机一样，都需要为每个实例运行一个完整的客户机操作系统。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：容器共享宿主机内核，不需要 Guest
+OS；虚拟机才需要每个实例运行完整客户机操作系统。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-002</strong>（★ 知识点：K1-4 Docker 架构） Docker
+采用 C/S 架构，客户端命令通过 REST API 与守护进程通信。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：docker CLI
+是客户端，通过 REST API 与 dockerd
+守护进程通信，由守护进程管理镜像和容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-003</strong>（★ 知识点：K1-5 核心概念）
+镜像是只读的，容器是镜像运行起来的可写实例。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：镜像是只读模板，容器在镜像之上加一层可写层，是镜像的运行实例。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-004</strong>（★ 知识点：K1-3 容器vs虚拟机）
+容器化技术可以完全取代虚拟机，所有场景都应该使用容器。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：容器与虚拟机是互补关系。强隔离、异构 OS
+等场景仍需虚拟机，容器不能完全取代虚拟机。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-005</strong>（★ 知识点：K1-1 容器化动机）
+"在我电脑上能跑，到服务器上就报错"的根本原因是开发环境与运行环境不一致。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：这是软件交付的经典痛点，根源是环境不一致（JDK
+版本、依赖库等），容器化正是为解决此问题而生。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-006</strong>（★ 知识点：K1-5 核心概念）
+一个镜像只能运行一个容器实例。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：一个镜像可以同时运行多个容器实例，每个容器有独立可写层，互不干扰。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-007</strong>（★ 知识点：K1-2 Docker 定义） Docker
+是一种虚拟机技术，通过 Hypervisor 虚拟硬件。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Docker
+是容器化平台，基于 namespaces 和 cgroups 实现进程级隔离，不使用
+Hypervisor 虚拟硬件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-008</strong>（★ 知识点：K1-5 镜像标签）
+不写镜像标签时默认使用 <code>:latest</code> 标签。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：docker
+命令中不指定 tag 时默认 <code>:latest</code>。但生产环境不建议用
+latest，应指定明确版本号。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-009</strong>（★★ 知识点：K1-5 镜像标签）
+<code>:latest</code> 标签一定指向最新且最稳定的镜像版本。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>:latest</code>
+只是默认标签名，可能指向任意版本，不保证最新最稳定。生产环境应指定明确版本号。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-010</strong>（★ 知识点：K1-6 云原生）
+云原生就是指把应用部署到云服务器上。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：上云（用云服务器）≠
+云原生。云原生是一套构建和运行应用的方法论，以容器、微服务、声明式 API
+为核心技术，让应用天生适合云环境。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-011</strong>（★ 知识点：K1-6 Docker与K8s关系） Docker
+和 Kubernetes 是竞争关系，企业只能二选一。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：二者是上下游关系，Docker 负责容器化（装箱），K8s
+负责集群编排（调度），通常一起使用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-012</strong>（★ 知识点：K1-4 Docker 架构） dockerd
+守护进程是 Docker 的核心管理服务，负责构建、运行和分发镜像与容器。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：dockerd
+是后台常驻进程，是 Docker
+的核心管理服务，负责镜像/容器/网络/存储的管理。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-013</strong>（★★ 知识点：K1-3 隔离强度）
+容器的隔离强度高于虚拟机，因为容器是进程级隔离。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：进程级隔离弱于虚拟机的硬件级隔离。虚拟机隔离更强，容器隔离更轻量。所以强安全场景仍需虚拟机。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-014</strong>（★ 知识点：K1-5 镜像仓库） Docker Hub 是
+Docker 官方的公共镜像仓库。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Docker
+Hub（hub.docker.com）是 Docker 官方公共仓库，存放 mysql、nginx、openjdk
+等大量官方镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-015</strong>（★ 知识点：K1-2 Docker 定义） Docker
+只能运行 Web 应用，不能运行数据库等其他类型应用。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：任何 Linux
+应用都能容器化，包括数据库（MySQL）、消息队列（RabbitMQ）、命令行工具等，不限于
+Web 应用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-016</strong>（★★ 知识点：K1-4 运行时） runC
+是低级容器运行时，遵循 OCI 标准，真正创建并运行容器进程。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：运行时层次为
+dockerd → containerd → runC，runC 是低级运行时，遵循 OCI
+标准，真正创建运行容器进程。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-017</strong>（★ 知识点：K1-5 容器特性）
+删除容器后，对应的镜像也会被自动删除。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：容器只是镜像的运行实例，删除容器不影响镜像。镜像仍可再次启动新容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-018</strong>（★★ 知识点：K1-3 容器跨OS） 在 Linux
+宿主机上可以直接运行 Windows 容器，因为容器是跨平台的。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：容器共享宿主内核，不能在 Linux 上跑 Windows
+容器（需 Windows 宿主）。跨 OS 场景需用虚拟机。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-019</strong>（★ 知识点：K1-6 CNCF）
+CNCF（云原生计算基金会）是 Linux 基金会下的子基金会，托管 Kubernetes
+等云原生项目。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：CNCF 是 Linux
+基金会下属基金会，托管 Kubernetes、containerd、Prometheus
+等云原生核心项目。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-判断-020</strong>（★ 知识点：K1-2 Docker 思想） Docker
+的核心思想是"把应用和它的运行环境一起打包，一次构建到处运行"。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：这正是 Docker
+的核心思想——把应用+依赖打包成镜像，做到 Build once, run anywhere。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>01-填空-001</strong>（★ 知识点：K1-4 架构） Docker 采用
+________ 架构，由客户端、REST API 和守护进程三部分组成。</p><blockquote>
+<p><strong>答案：C/S（或 客户端/服务器）</strong>
+<strong>解析</strong>：Docker 是 C/S（Client/Server）架构，docker CLI
+是客户端，dockerd 是服务器端守护进程，通过 REST API 通信。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-填空-002</strong>（★ 知识点：K1-5 核心概念） Docker
+的三大核心概念是镜像、________ 和仓库。</p><blockquote>
+<p><strong>答案：容器</strong>
+<strong>解析</strong>：三大核心概念：镜像（Image，只读模板）、容器（Container，运行实例）、仓库（Registry，镜像分发）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-填空-003</strong>（★ 知识点：K1-4 守护进程） Docker
+的守护进程名称是 ________，它负责管理镜像、容器、网络和存储。</p><blockquote>
+<p><strong>答案：dockerd</strong> <strong>解析</strong>：dockerd 是
+Docker 守护进程（daemon），后台常驻，是 Docker 的核心管理服务。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-填空-004</strong>（★ 知识点：K1-3 隔离机制） 容器隔离基于
+Linux 内核的 ________ 和 cgroups 两项特性。</p><blockquote>
+<p><strong>答案：namespaces（或 命名空间）</strong>
+<strong>解析</strong>：namespaces 实现视图隔离（PID/NET/MNT
+等），cgroups 实现资源限制（CPU/内存等），共同构成容器隔离基础。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-填空-005</strong>（★ 知识点：K1-5 镜像标签）
+<code>mysql:8.0</code> 中的 <code>8.0</code> 称为镜像的
+________，用于标识版本。</p><blockquote>
+<p><strong>答案：标签（tag）</strong> <strong>解析</strong>：镜像通过
+<code>镜像名:标签</code> 标识，标签（tag）表示版本，如
+<code>mysql:8.0</code>。不写标签默认 <code>:latest</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-填空-006</strong>（★ 知识点：K1-5 镜像仓库） Docker
+官方的公共镜像仓库称为 ________。</p><blockquote>
+<p><strong>答案：Docker Hub</strong> <strong>解析</strong>：Docker
+Hub（hub.docker.com）是 Docker 官方公共镜像仓库，存放大量官方镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-填空-007</strong>（★★ 知识点：K1-4 运行时） Docker
+运行时层次中，低级运行时 ________ 遵循 OCI
+标准，真正创建并运行容器进程。</p><blockquote>
+<p><strong>答案：runC</strong> <strong>解析</strong>：层次为 dockerd →
+containerd → runC，runC 是低级运行时，遵循 OCI
+标准，真正创建运行容器进程。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-填空-008</strong>（★ 知识点：K1-6 云原生） ________ 是
+Linux 基金会下的子基金会，托管 Kubernetes 等云原生核心项目。</p><blockquote>
+<p><strong>答案：CNCF（或 云原生计算基金会 / Cloud Native Computing
+Foundation）</strong> <strong>解析</strong>：CNCF（Cloud Native
+Computing Foundation）是 Linux 基金会下属基金会，是云原生生态的
+governing body。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-填空-009</strong>（★ 知识点：K1-2 Docker 思想） Docker
+的核心思想可以概括为"一次构建，________"。</p><blockquote>
+<p><strong>答案：到处运行（或 run anywhere）</strong>
+<strong>解析</strong>：Build once, run anywhere（一次构建，到处运行）是
+Docker 的核心思想，即镜像打包后在任何环境一致运行。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-填空-010</strong>（★★ 知识点：K1-5 镜像分层） Docker
+镜像采用 ________ 结构，每条 Dockerfile 指令生成一层，可共享和缓存。</p><blockquote>
+<p><strong>答案：分层（或 Layer / 分层存储）</strong>
+<strong>解析</strong>：镜像是分层的只读结构，每条 Dockerfile
+指令生成一层，多层可共享、缓存、增量传输，节省存储和传输。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>01-论述-001</strong>（★★ 知识点：K1-3 容器vs虚拟机，10 分）
+请从隔离机制、启动速度、资源占用、隔离强度、适用场景五个方面，对比容器与虚拟机的区别。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>隔离机制</strong>（2 分）：虚拟机通过 Hypervisor
+虚拟硬件，实现硬件级隔离；容器通过 Linux 内核的 namespaces（视图隔离）和
+cgroups（资源限制）实现进程级隔离。</li>
+<li><strong>启动速度</strong>（2
+分）：虚拟机要启动整个客户机操作系统，分钟级启动；容器只启动应用进程（共享内核），秒级启动。</li>
+<li><strong>资源占用</strong>（2 分）：虚拟机每个实例包含完整 Guest
+OS，通常 GB 级；容器无 Guest OS，通常 MB
+级；单机可跑几十个虚拟机或成百上千个容器。</li>
+<li><strong>隔离强度</strong>（2
+分）：虚拟机硬件级隔离，隔离更强、更安全；容器进程级隔离，共享内核，隔离强度较弱。</li>
+<li><strong>适用场景</strong>（2 分）：虚拟机适合强隔离、异构
+OS、公有云多租户场景；容器适合应用交付、微服务、弹性扩容、CI/CD；生产中二者常并存（虚拟机做基础设施，容器做应用）。</li>
+</ol>
+<p><strong>评分要点</strong>：每个方面 2
+分，要点完整给满分；只列项不解释每个给 1 分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-论述-002</strong>（★★ 知识点：K1-4 Docker 架构，8 分）
+请描述 Docker 的 C/S 架构，说明客户端、守护进程、REST API
+各自的职责，并描述一次 <code>docker run</code>
+命令在架构中的完整流转过程。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>三大组件及职责</strong>（4 分）：
+<ul>
+<li>Docker 客户端（docker CLI）：用户交互入口，接收用户命令（2 分）</li>
+<li>Docker
+守护进程（dockerd）：核心管理服务，管理镜像/容器/网络/存储（1.5
+分）</li>
+<li>REST API：客户端与守护进程的通信接口，通过 Unix socket
+或网络端口（0.5 分）</li>
+</ul></li>
+<li><strong><code>docker run</code> 流转过程</strong>（4 分）：
+<ul>
+<li>用户在终端敲 <code>docker run</code> 命令（0.5 分）</li>
+<li>docker CLI 把命令通过 REST API 发送给 dockerd（1 分）</li>
+<li>dockerd 检查本地是否有对应镜像，没有则从仓库 pull（1 分）</li>
+<li>dockerd 调用 containerd，containerd 调用 runC 创建并运行容器进程（1
+分）</li>
+<li>dockerd 返回容器 ID 给客户端，客户端打印输出（0.5 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：组件职责和流转过程分开给分；流转过程顺序正确即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-论述-003</strong>（★★ 知识点：K1-1/K1-2 容器化动机，8 分）
+请阐述"在我电脑上能跑"这一问题的根源，并说明容器化技术是如何解决该问题的。传统解决方式有哪些？它们各自的不足是什么？</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>问题根源</strong>（2 分）：开发环境与运行环境不一致——JDK
+版本、依赖库版本、系统配置、MySQL
+版本等差异导致代码在不同环境行为不一致。</li>
+<li><strong>容器化如何解决</strong>（3 分）：容器化把"应用 + 运行时 +
+依赖库 + 配置 +
+环境变量"打包成一个镜像，镜像在哪儿运行环境都一致，实现"一次构建、到处运行"，从根源消除环境不一致。</li>
+<li><strong>传统方式及不足</strong>（3 分）：
+<ul>
+<li>写部署文档（运维手动配）：文档易过时、人为出错（1 分）</li>
+<li>虚拟机镜像分发：镜像太大（GB 级）、启动慢、资源浪费（1 分）</li>
+<li>配置管理工具（Ansible）：仍是"在目标机上装环境"，环境本身未打包（1
+分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分各自独立给分；要点齐全即可满分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>01-论述-004</strong>（★★ 知识点：K1-6 课程项目，8 分）
+请简述本课程贯穿项目"多服务容器化部署项目"的项目架构、课程八阶段构建，以及
+Docker 与 Kubernetes 在该项目中分别承担什么职责。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>项目架构</strong>（2 分）：三个服务——前端（Vue3）+
+后端（SpringBoot）+ MySQL，容器化为三个镜像，通过 Docker Compose
+编排，最终部署到 K8s 集群。</li>
+<li><strong>八阶段构建</strong>（4 分，每两个阶段 1 分）：
+<ul>
+<li>阶段1：安装Docker运行首个容器；阶段2：拉取镜像运行容器</li>
+<li>阶段3：Dockerfile构建前后端镜像；阶段4：Compose编排三服务</li>
+<li>阶段5：搭建K8s集群；阶段6：部署Pod与Deployment</li>
+<li>阶段7：配置Service与Ingress；阶段8：ConfigMap/Secret/存储综合部署</li>
+</ul></li>
+<li><strong>Docker 与 K8s 职责</strong>（2
+分）：Docker（前12次课）负责把 CTTS
+三服务容器化（装箱+Compose编排）；Kubernetes（后12次课）负责在集群上编排部署、高可用、弹性扩缩容（调度）。Docker
+是基础，K8s 是上层编排。</li>
+</ol>
+<p><strong>评分要点</strong>：架构、阶段、职责三部分分别给分；阶段不必逐条列出，意思对即可。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>01-阅读-001</strong>（★★ 知识点：K1-4 架构流转，12 分）
+阅读以下"docker run 命令流转"的描述，补全缺失部分（每空 2 分，共 12
+分）。</p>
+<pre class="text"><code>用户在终端执行：docker run -d -p 8080:8080 ctts-backend:v1
+
+流转过程：
+1. (a)________ 把 &quot;run ctts-backend:v1&quot; 命令通过 (b)________ 发送给 (c)________。
+2. (c)________ 收到命令后：
+   a. 检查本地有没有 (d)________ 镜像
+   b. 没有则从 (e)________ 拉取
+   c. 有则基于镜像创建容器
+3. (c)________ 调用 (f)________（高级运行时），后者再调用 runC 真正创建并运行容器进程。
+4. 容器跑起来，返回容器 ID 给客户端。</code></pre>
+<blockquote>
+<p><strong>参考答案</strong>： (a) docker CLI（或 docker 客户端） (b)
+REST API (c) dockerd（或 Docker 守护进程） (d) ctts-backend:v1 (e)
+仓库（或 Registry / Docker Hub） (f) containerd</p>
+<p><strong>解析</strong>：docker CLI 是客户端，通过 REST API 与 dockerd
+通信；dockerd 检查镜像、必要时从仓库拉取，再调用
+containerd（高级运行时）→ runC（低级运行时）创建容器。</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。意思对即可，专有名词拼写错误不扣分（如 containerd 写成
+containerD）。</p>
+</blockquote>
+<hr />
+<p><strong>01-阅读-002</strong>（★★ 知识点：K1-5 镜像/容器/仓库关系，12
+分） 阅读以下镜像、容器、仓库操作流程，补全缺失部分（每空 2 分，共 12
+分）。</p>
+<pre class="text"><code>操作流程：
+1. docker pull mysql:8.0
+   从 (a)________ 拉取 mysql 的 (b)________ 版本到本地，生成一个 (c)________（只读/可写？）。
+2. docker images
+   查看本地所有 (d)________。
+3. docker run -d --name mydb mysql:8.0
+   用 mysql:8.0 这个 (e)________ 启动一个名为 mydb 的 (f)________（只读/可写？）。
+4. docker stop mydb / docker rm mydb
+   停止并删除容器，但 mysql:8.0 这个 (e)________ 仍在，可再次启动新容器。</code></pre>
+<blockquote>
+<p><strong>参考答案</strong>： (a) 仓库（或 Registry / Docker Hub） (b)
+8.0（或 标签/tag 为 8.0） (c) 镜像（只读） (d) 镜像 (e) 镜像 (f)
+容器（可写）</p>
+<p><strong>解析</strong>：pull 从仓库拉取镜像到本地（只读）；images
+查看本地镜像；run 用镜像启动容器（可写实例）；删容器不影响镜像。</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。(c)、(f)需同时答出"镜像/容器"和"只读/可写"才给满分，只答一个给 1
+分。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>01-编程-001</strong>（★★ 知识点：K1-6 项目方案设计，15 分）
+<strong>容器化部署方案设计</strong>：请为 CTTS
+多服务容器化部署项目设计一份初步方案，要求包含：</p>
+<ol type="1">
+<li>三个服务分别容器化时需要打包什么内容（6 分）</li>
+<li>每个服务对应的基础镜像选型建议（3 分）</li>
+<li>三个服务的部署顺序与依赖关系（3 分）</li>
+<li>部署后如何验证每个服务是否正常（3 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<p><strong>1. 三个服务容器化内容（6 分，每服务2分）</strong>：</p>
+<ul>
+<li><strong>前端（Vue3）</strong>：打包 Vue3 的构建产物（dist
+静态文件）+ Web 服务器（Nginx）来托管静态资源。</li>
+<li><strong>后端（SpringBoot）</strong>：打包编译后的 jar 包 + JRE（Java
+运行时）。</li>
+<li><strong>MySQL</strong>：使用官方 MySQL
+镜像，需配置数据卷做数据持久化（不把数据打包进镜像）。</li>
+</ul>
+<p><strong>2. 基础镜像选型（3 分，每个1分）</strong>：</p>
+<ul>
+<li>前端：<code>nginx:alpine</code>（轻量 Web
+服务器，托管静态文件）</li>
+<li>后端：<code>openjdk:17-slim</code> 或
+<code>eclipse-temurin:17-jre</code>（含 JRE17 的精简镜像）</li>
+<li>MySQL：<code>mysql:8.0</code>（官方镜像，版本明确）</li>
+</ul>
+<p><strong>3. 部署顺序与依赖（3 分）</strong>：</p>
+<ul>
+<li>先启动 MySQL（数据库就绪后才能连）</li>
+<li>再启动后端（依赖 MySQL，需等 MySQL 健康）</li>
+<li>最后启动前端（依赖后端 API）</li>
+<li>可用 Compose 的 depends_on 或健康检查控制顺序</li>
+</ul>
+<p><strong>4. 验证方式（3 分，每个1分）</strong>：</p>
+<ul>
+<li>MySQL：用客户端连接，执行 <code>SELECT 1</code> 验证</li>
+<li>后端：访问健康检查接口（如
+<code>curl http://localhost:8080/actuator/health</code> 或访问一个
+API）</li>
+<li>前端：浏览器访问首页，能看到页面且接口能调通</li>
+</ul>
+<p><strong>评分要点</strong>：每部分独立给分；方案合理即可，不要求与答案完全一致；技术选型合理替代（如后端用
+<code>amazoncorretto:17</code>）同样给分。</p>
+</blockquote>
+<hr />
+<p><strong>01-编程-002</strong>（★★★ 知识点：K1-4/K1-5 综合应用，20 分）
+<strong>Docker 架构与命令流程综合题</strong>：某团队要将一个 Java Web
+应用容器化部署，团队成员小王在终端执行了以下命令序列。请回答问题：</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令1</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull openjdk:17</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令2</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令3</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:v1 .</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令4</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">-p</span> 8080:8080 <span class="at">--name</span> ctts-api ctts-backend:v1</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令5</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps</span></code></pre></div>
+<p><strong>问题</strong>：</p>
+<ol type="1">
+<li>说明命令1~5每条命令的作用，并指出每条命令在 Docker C/S
+架构中是客户端发请求还是守护进程执行（10分）</li>
+<li>命令3中的 <code>.</code> 表示什么？为什么需要它？（3分）</li>
+<li>命令4中
+<code>-d</code>、<code>-p 8080:8080</code>、<code>--name ctts-api</code>
+三个参数分别是什么含义？（3分）</li>
+<li>如果命令4执行后 <code>docker ps</code> 没看到 ctts-api
+容器，可能的原因有哪些？（写出至少2种）（4分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<p><strong>1. 各命令作用与架构归属（10分，每条2分）</strong>：</p>
+<ul>
+<li>命令1 <code>docker pull openjdk:17</code>：从仓库拉取 openjdk:17
+镜像到本地。客户端发请求，守护进程执行（执行实际的拉取）。</li>
+<li>命令2
+<code>docker images</code>：列出本地所有镜像。客户端发请求，守护进程查询并返回。</li>
+<li>命令3 <code>docker build -t ctts-backend:v1 .</code>：根据当前目录的
+Dockerfile 构建镜像并打标签
+ctts-backend:v1。客户端发请求，守护进程执行构建。</li>
+<li>命令4
+<code>docker run -d -p 8080:8080 --name ctts-api ctts-backend:v1</code>：用
+ctts-backend:v1 镜像启动一个名为 ctts-api
+的容器，后台运行，端口映射8080。客户端发请求，守护进程创建并运行容器。</li>
+<li>命令5
+<code>docker ps</code>：列出正在运行的容器。客户端发请求，守护进程查询返回。
+（每条命令：作用1分 + 架构归属1分）</li>
+</ul>
+<p><strong>2. 命令3中的 <code>.</code>（3分）</strong>： <code>.</code>
+表示构建上下文（build context）为当前目录。Docker
+构建时会把这个目录下的所有文件发送给守护进程，Dockerfile 中的 COPY/ADD
+指令会从这个上下文里复制文件到镜像中。所以需要 <code>.</code> 是为了让
+Dockerfile 能找到要打包进镜像的应用文件（如 jar 包）。</p>
+<p><strong>3. 命令4参数含义（3分，每个1分）</strong>：</p>
+<ul>
+<li><code>-d</code>：后台运行容器（detached 模式）</li>
+<li><code>-p 8080:8080</code>：端口映射，宿主机8080端口映射到容器8080端口</li>
+<li><code>--name ctts-api</code>：给容器命名为 ctts-api</li>
+</ul>
+<p><strong>4. <code>docker ps</code>
+看不到容器的可能原因（4分，每种2分，答出2种即满分）</strong>：</p>
+<ul>
+<li>容器启动后立即崩溃退出了（如应用启动报错）。可用
+<code>docker ps -a</code>（含已停止的）和
+<code>docker logs ctts-api</code> 查看日志。</li>
+<li>镜像构建有问题，容器内应用无法启动（如 jar 包路径错误、JDK
+版本不符）。</li>
+<li>端口 8080 被宿主机其他进程占用，导致容器启动失败。</li>
+<li>容器启动正常但很快退出（如前台进程没阻塞，容器生命周期结束）。</li>
+</ul>
+<p><strong>评分要点</strong>：各小题独立给分；原因部分答出任意2种合理原因即给满分；专有名词理解正确即可。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

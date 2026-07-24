@@ -1,0 +1,605 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>镜像管理</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 03 次课 · 教学设计</div>
+      <h1>镜像管理</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 03 次课</span>
+        <span class="hero-chip"><b>主题</b>镜像管理</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+<li><a href="#贯穿项目阶段-2-任务ctts-三服务镜像准备">贯穿项目阶段 2 任务：CTTS 三服务镜像准备</a></li>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1课前-5-分钟讨论开场导入">互动 1：课前 5 分钟讨论（开场导入）</a></li>
+<li><a href="#互动-2镜像分层结构探究讲解-k3-3-后">互动 2：镜像分层结构探究（讲解 K3-3 后）</a></li>
+<li><a href="#互动-3代码阅读docker-inspect-分析镜像分层核心互动">互动 3：代码阅读——docker inspect 分析镜像分层（核心互动）</a></li>
+<li><a href="#互动-4latest-陷阱辨析讲解-k3-5-后">互动 4：latest 陷阱辨析（讲解 K3-5 后）</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+<li><a href="#随堂练习5-分钟讲解结束前进行">随堂练习（5 分钟，讲解结束前进行）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 03 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M2 镜像与容器管理 ｜ 课程：《Docker 云容器与管理技术》
+配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 3 次课（全课程 24 次之第 3）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>理论课</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M2 镜像与容器管理</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>镜像管理（镜像概念、拉取查看、分层结构、详情查看、标签管理、删除清理）</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>第 1 次课容器化思想、第 2 次课 Docker 安装与初体验、Linux
+基础命令</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>理解 Docker 镜像的概念、组成与不可变（immutable）特性。</li>
+<li>掌握 <code>docker pull</code> 完整用法，能从 Docker Hub
+拉取指定版本镜像。</li>
+<li>掌握 <code>docker images</code> / <code>docker image ls</code>
+列出镜像并理解 REPOSITORY / TAG / IMAGE ID / CREATED / SIZE
+字段含义。</li>
+<li>理解镜像分层结构（Layer + UnionFS
+联合文件系统），理解分层原理、层共享与层缓存。</li>
+<li>掌握 <code>docker history</code> 查看镜像构建层；掌握
+<code>docker image inspect</code> 查看镜像详情并解读关键字段。</li>
+<li>掌握 <code>docker tag</code> 重命名镜像、理解标签含义与
+<code>:latest</code> 陷阱。</li>
+<li>掌握 <code>docker rmi</code> /
+<code>docker image rm</code>、<code>-f</code>
+强制删除、<code>docker image prune</code> 与
+<code>docker image prune -a</code> 清理策略。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能够独立完成 CTTS 项目所需镜像（MySQL / Nginx /
+OpenJDK）的拉取与查看。</li>
+<li>能够用 <code>docker history</code> 与
+<code>docker image inspect</code>
+分析一个镜像的分层结构与配置信息。</li>
+<li>能够合理使用 <code>docker tag</code> 为镜像打标签，规避
+<code>:latest</code> 陷阱。</li>
+<li>能够安全地删除镜像并使用 <code>docker image prune</code>
+清理无用镜像，做好磁盘资源管理。</li>
+<li>能够用"分层 + 共享 + 缓存"原理解释为什么 <code>docker pull</code>
+第二次很快、为什么镜像实际占用磁盘远小于 SIZE 字段之和。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>培养"资源管理"意识——及时清理无用镜像，避免磁盘浪费，是云原生运维的基本素养。</li>
+<li>培养"工程规范"意识——镜像标签规范（不用
+<code>:latest</code>、明确版本号）是团队协作的基础。</li>
+<li>建立"底层思维"——从镜像分层结构理解 Docker
+的存储与传输机制，建立对技术底层的认知。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K3-1</td>
+<td>镜像概念与组成</td>
+<td>镜像定义；镜像包含什么（代码+运行时+依赖+配置+元数据）；不可变特性</td>
+</tr>
+<tr>
+<td>K3-2</td>
+<td>镜像拉取与查看</td>
+<td><code>docker pull</code> 完整用法；<code>docker images</code> /
+<code>docker image ls</code>；REPOSITORY / TAG / IMAGE ID / CREATED /
+SIZE 五字段含义</td>
+</tr>
+<tr>
+<td>K3-3</td>
+<td>镜像分层结构</td>
+<td>Layer；UnionFS
+联合文件系统；分层原理；为什么分层；层共享与层缓存；<code>docker history</code>
+查看层</td>
+</tr>
+<tr>
+<td>K3-4</td>
+<td>镜像详情查看</td>
+<td><code>docker image inspect</code> 完整输出解读；Id / RepoTags /
+Created / Config / GraphDriver / RootFS 关键字段</td>
+</tr>
+<tr>
+<td>K3-5</td>
+<td>镜像标签管理</td>
+<td><code>docker tag</code> 重命名；标签含义；<code>:latest</code>
+陷阱与生产规范</td>
+</tr>
+<tr>
+<td>K3-6</td>
+<td>镜像删除与清理</td>
+<td><code>docker rmi</code> /
+<code>docker image rm</code>；<code>-f</code>
+强制删除；<code>docker image prune</code>
+清理悬空镜像；<code>docker image prune -a</code> 清理全部未使用镜像</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3 id="贯穿项目阶段-2-任务ctts-三服务镜像准备">贯穿项目阶段 2
+任务：CTTS 三服务镜像准备</h3>
+<p><strong>本次课任务</strong>：</p>
+<ol type="1">
+<li>教师演示从 Docker Hub 拉取 CTTS 项目所需镜像：
+<ul>
+<li><code>mysql:8.0</code>（数据库服务）</li>
+<li><code>nginx:1.25</code>（前端静态资源服务）</li>
+<li><code>openjdk:17-slim</code>（后端 Java 运行时）</li>
+</ul></li>
+<li>学生跟随操作，完成三个镜像的拉取，并用 <code>docker images</code>
+查看本地镜像列表。</li>
+<li>用 <code>docker history mysql:8.0</code> 与
+<code>docker image inspect mysql:8.0</code> 分析 MySQL
+镜像的分层结构与配置。</li>
+<li>用 <code>docker tag</code> 为镜像打项目专用标签（如
+<code>mysql:8.0</code> →
+<code>ctts-mysql:8.0</code>），理解标签管理在生产环境的意义。</li>
+<li>课后练习清理本地无用镜像（<code>docker image prune</code>），培养资源管理意识。</li>
+</ol>
+<p><strong>项目背景关联</strong>（详见 <code>教学资料.md</code>
+综合示例）：</p>
+<ul>
+<li>CTTS 三服务架构：前端 Vue3（Nginx 托管）+ 后端 SpringBoot（OpenJDK
+运行）+ MySQL 数据库。</li>
+<li>本阶段先准备"基础镜像"——后续第 6~8 次课会基于这些基础镜像用
+Dockerfile 构建出 CTTS 自己的应用镜像。</li>
+<li>第 4 次课将进入"容器管理"，用本次拉取的镜像启动容器实例。</li>
+</ul>
+<blockquote>
+<p>📌
+本节课核心是把"镜像"这个静态概念彻底搞清楚——它是什么、怎么来、怎么管、怎么删。所有命令都围绕"镜像"展开，不涉及启动容器（容器是第
+4 次课内容）。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1课前-5-分钟讨论开场导入">互动 1：课前 5
+分钟讨论（开场导入）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"上节课我们安装好了 Docker 并跑了
+hello-world。请回忆：<code>docker run hello-world</code>
+时，如果本地没有 hello-world 镜像，Docker
+会做什么？这说明镜像和容器是什么关系？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>自由发言，教师板书关键词</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>提到"会自动从仓库下载"、"镜像先下来才能跑容器"、"镜像是模板、容器是实例"等关键词</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定学生回忆，引出本节课主题——"上节是体验，本节正式学镜像管理"。强调"镜像是
+Docker 一切操作的基础，没有镜像就没有容器"，引出 K3-1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2镜像分层结构探究讲解-k3-3-后">互动
+2：镜像分层结构探究（讲解 K3-3 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"假如你拉了 mysql:8.0 和 mysql:5.7 两个镜像，它们 SIZE 都显示
+500MB+，是不是磁盘占用就是 1000MB+？为什么？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>全班举手投票"是 / 不是"，少数派陈述理由</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>部分学生认为"是"（直接相加），部分认为"不是"（共享底层）。讲不清原因</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>引出"层共享"概念——两个 MySQL 镜像共享 Debian
+基础层、共享部分依赖层，实际占用远小于 SIZE
+之和。这正是分层结构的核心价值，引出 <code>docker history</code>
+命令验证</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-3代码阅读docker-inspect-分析镜像分层核心互动">互动
+3：代码阅读——docker inspect 分析镜像分层（核心互动）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>教师投影 <code>docker image inspect mysql:8.0</code> 的完整 JSON
+输出，分组让学生找出并解读以下字段：(1) 镜像 ID 在哪？(2)
+镜像有几层？(3) 镜像创建时间？(4) 容器启动时默认执行什么命令？(5)
+暴露了哪些端口？(6) 环境变量有哪些？</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>小组讨论 5 分钟 → 每组派代表指认一个字段并解读 →
+教师投影标准解读</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>大多能找到
+<code>Id</code>、<code>Created</code>、<code>Config.Cmd</code>、<code>Config.ExposedPorts</code>、<code>Config.Env</code>；<code>RootFS.Layers</code>
+数层数时可能漏数；<code>GraphDriver</code> 字段可能看不懂</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>逐字段解读（详见 <code>教学资料.md</code> K3-4），强调 inspect
+是排查镜像问题的"X 光机"；引出"阅读官方镜像的 Dockerfile 与 inspect
+是学习容器化的最佳途径"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-4latest-陷阱辨析讲解-k3-5-后">互动 4：latest 陷阱辨析（讲解
+K3-5 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"小王在 Dockerfile 里写
+<code>FROM mysql:latest</code>，今天构建的镜像和一个月后构建的镜像，是同一个镜像吗？生产环境这样做有什么风险？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>同桌讨论 2 分钟 → 自由发言</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>部分学生能意识到"latest
+会变，所以两次构建可能基于不同版本"；部分学生认为"latest
+就是最新的，肯定一样"</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调 <code>:latest</code>
+只是默认标签名，会随仓库更新而漂移，导致"今天能跑、明天就报错"的不可复现问题。生产环境必须指定明确版本号（如
+<code>mysql:8.0.35</code>），这是工程规范</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>资源管理——及时清理无用镜像</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td><code>docker image prune</code>
+清理悬空镜像；<code>docker image prune -a</code>
+清理全部未使用镜像；定期清理是云原生运维的基本素养。一台磁盘被无用镜像占满的服务器，会导致新镜像拉不下来、容器无法启动，进而引发生产事故</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"你有没有过'手机相册几千张照片不舍得删、最后存储满'的经历？服务器也一样——长期不清的悬空镜像、旧版本镜像会占满磁盘。如何养成定期清理的运维习惯？"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>培养"资源管理"意识，理解运维责任——良好的资源管理是系统稳定的保障；引申到生活中的"断舍离"与工程中的"零冗余"思维</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入，不空喊口号。通过"磁盘满了 →
+服务挂了"的真实运维场景让学生体会"清理"不是小事。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3 id="随堂练习5-分钟讲解结束前进行">随堂练习（5
+分钟，讲解结束前进行）</h3>
+<p><strong>判断题（口头快速作答）</strong>：</p>
+<ol type="1">
+<li><code>docker pull mysql</code> 不写标签时，会拉取
+<code>mysql:latest</code> 镜像。（✓）</li>
+<li>一个镜像可以打多个标签，如 <code>mysql:8.0</code> 和
+<code>mysql:latest</code> 可以指向同一个镜像。（✓）</li>
+<li><code>docker rmi</code>
+删除镜像时，如果镜像有对应容器存在（即使已停止），必须加 <code>-f</code>
+才能强制删除。（✓）</li>
+<li><code>docker image prune</code>
+不带参数会清理所有未使用的镜像。（✗，只清理悬空镜像，加 <code>-a</code>
+才清理所有未使用）</li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速互动，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>阅读</strong>：通读同文件夹
+<code>教学资料.md</code>，重点理解镜像分层结构、<code>docker image inspect</code>
+字段解读、latest 陷阱。</li>
+<li><strong>实操</strong>：在自己的 Docker 环境完成以下操作并截图提交：
+<ul>
+<li>拉取
+<code>mysql:8.0</code>、<code>nginx:1.25</code>、<code>openjdk:17-slim</code>
+三个镜像</li>
+<li>用 <code>docker images</code> 查看本地镜像列表</li>
+<li>用 <code>docker history mysql:8.0</code> 查看 MySQL
+镜像的构建层</li>
+<li>用 <code>docker image inspect nginx:1.25</code>
+查看镜像详情，找出镜像 ID、层数、暴露端口</li>
+<li>用 <code>docker tag nginx:1.25 ctts-nginx:v1</code>
+给镜像打项目标签</li>
+</ul></li>
+<li><strong>思考</strong>：用 200
+字描述"为什么镜像要分层？分层带来了哪些好处？"，下次课抽查。</li>
+<li><strong>项目准备</strong>：CTTS
+三服务的镜像已准备就绪，思考下节课（第 4
+次课容器管理）如何用这些镜像启动容器实例，特别是 MySQL
+容器需要哪些环境变量（提示：MYSQL_ROOT_PASSWORD）。</li>
+<li><strong>拓展实验（选做）</strong>：用
+<code>docker image prune -a</code>
+清理本地所有未使用镜像，观察磁盘释放情况（注意先确认没有正在使用的容器依赖这些镜像）。</li>
+<li><strong>拓展阅读</strong>：访问 Docker Hub（hub.docker.com）查看
+<code>mysql</code>、<code>nginx</code>、<code>openjdk</code>
+官方镜像页面，阅读其 Supported tags 与 Dockerfile（选做）。</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker 镜像管理命令（pull/images/inspect/tag/rmi/prune）</td>
+<td>K3-2、K3-4、K3-5、K3-6</td>
+</tr>
+<tr>
+<td>镜像分层结构与 UnionFS 原理（面试高频）</td>
+<td>K3-3</td>
+</tr>
+<tr>
+<td>镜像删除与磁盘清理（运维岗位实操）</td>
+<td>K3-6</td>
+</tr>
+<tr>
+<td><code>:latest</code> 陷阱与生产规范（DevOps 岗位常见）</td>
+<td>K3-5</td>
+</tr>
+<tr>
+<td><code>docker image inspect</code> 字段解读（排障能力）</td>
+<td>K3-4</td>
+</tr>
+<tr>
+<td>镜像大小优化与层缓存（高级岗位）</td>
+<td>K3-3</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"说一下 Docker 镜像的分层结构""为什么镜像分层""docker rmi 和
+docker image prune 的区别""为什么不能用 latest
+标签"等，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + CTTS 镜像准备综合示例 + 思维导图 + 复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>课前 5 分钟讨论 + 回顾上节课 + 课程介绍</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~25 min</td>
+<td>知识点 K3-1、K3-2：镜像概念与组成 + 镜像拉取与查看 + 演示拉取
+MySQL/Nginx/OpenJDK</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>25~50 min</td>
+<td>知识点 K3-3：镜像分层结构（UnionFS、层共享、层缓存、docker
+history）+ 分层辨析互动</td>
+<td>25 min</td>
+</tr>
+<tr>
+<td>50~65 min</td>
+<td>知识点 K3-4：docker image inspect 字段解读 +
+代码阅读互动（核心互动）</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>65~75 min</td>
+<td>知识点 K3-5：镜像标签管理 + latest 陷阱辨析互动</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>75~85 min</td>
+<td>知识点 K3-6：镜像删除与清理 + 资源管理思政融入</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>85~90 min</td>
+<td>随堂练习 + 小结 + 课后任务布置</td>
+<td>5 min</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

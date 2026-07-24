@@ -1,0 +1,1922 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>容器管理</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 04 次课 · 教学资料</div>
+      <h1>容器管理</h1>
+      <p>面向学生复习、自学、命令示例与知识图示 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 04 次课</span>
+        <span class="hero-chip"><b>主题</b>容器管理</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一学习导读">一、学习导读</a>
+<ul>
+<li><a href="#11-本节定位">1.1 本节定位</a></li>
+<li><a href="#12-先修基础">1.2 先修基础</a></li>
+<li><a href="#13-学习目标">1.3 学习目标</a></li>
+</ul></li>
+<li><a href="#二知识点详解">二、知识点详解</a>
+<ul>
+<li><a href="#知识点-k4-1容器生命周期概述">知识点 K4-1：容器生命周期概述</a></li>
+<li><a href="#知识点-k4-2docker-run-核心参数">知识点 K4-2：docker run 核心参数</a></li>
+<li><a href="#知识点-k4-3容器查看与管理">知识点 K4-3：容器查看与管理</a></li>
+<li><a href="#知识点-k4-4容器日志与进入">知识点 K4-4：容器日志与进入</a></li>
+<li><a href="#知识点-k4-5容器详情与端口映射原理">知识点 K4-5：容器详情与端口映射原理</a></li>
+<li><a href="#知识点-k4-6运行-mysql-容器实践">知识点 K4-6：运行 MySQL 容器实践</a></li>
+</ul></li>
+<li><a href="#三综合示例ctts-项目-mysql-容器化完整流程">三、综合示例：CTTS 项目 MySQL 容器化完整流程</a>
+<ul>
+</ul></li>
+<li><a href="#四拓展阅读选学">四、拓展阅读（选学）</a>
+<ul>
+</ul></li>
+<li><a href="#五本节小结与知识结构图">五、本节小结与知识结构图</a>
+<ul>
+<li><a href="#知识结构图思维导图">知识结构图（思维导图）</a></li>
+<li><a href="#一句话总结">一句话总结</a></li>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 04 次课 <span>｜</span> <strong>文档：</strong>教学资料</p>
+<blockquote>
+<p>学生复习资料 ｜
+配套：<code>教学设计.md</code>（教师教案）、<code>题库.md</code>（78
+题考试题库）
+本资料面向学生课后复习自学，包含定义、原理、问题、完整示例、图示、易错点与小结。</p>
+</blockquote>
+<hr />
+<h2 id="一学习导读">一、学习导读</h2>
+<h3 id="11-本节定位">1.1 本节定位</h3>
+<p>这是《Docker 云容器与管理技术》的<strong>第 4 次课</strong>，属于 M2
+模块"镜像与容器管理"的第 2
+次理论课，重点是<strong>掌握容器全生命周期管理命令</strong>，并通过运行
+MySQL 容器完成 CTTS 项目数据库容器化。</p>
+<p>学完本节，你应当能回答：</p>
+<ul>
+<li>容器有哪些状态？状态之间如何流转？</li>
+<li><code>docker run</code>
+的常用参数（<code>-d</code>、<code>--name</code>、<code>-p</code>、<code>-e</code>、<code>-v</code>、<code>--rm</code>）分别是什么含义？</li>
+<li>如何查看运行中和已停止的容器？如何监控容器资源？</li>
+<li>如何查看容器日志？如何进入容器调试？exec 和 attach 有什么区别？</li>
+<li>端口映射 <code>-p hostPort:containerPort</code> 的原理是什么？</li>
+<li>如何运行 MySQL 容器并通过客户端连接？</li>
+</ul>
+<h3 id="12-先修基础">1.2 先修基础</h3>
+<table>
+<thead>
+<tr>
+<th>先修知识</th>
+<th>用到程度</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 1 次课：Docker 认知</td>
+<td>必备</td>
+<td>理解镜像/容器/仓库概念、C/S 架构</td>
+</tr>
+<tr>
+<td>第 2 次课：Docker 安装</td>
+<td>必备</td>
+<td>Docker 已安装并正常运行</td>
+</tr>
+<tr>
+<td>第 3 次课：镜像管理</td>
+<td>必备</td>
+<td>已拉取 <code>mysql:8.0</code>、<code>nginx</code> 等镜像</td>
+</tr>
+<tr>
+<td>Linux 命令行基础</td>
+<td>必备</td>
+<td>熟悉
+<code>ps</code>、<code>kill</code>、<code>tail</code>、<code>Ctrl+c</code>
+等基本操作</td>
+</tr>
+<tr>
+<td>MySQL 基础</td>
+<td>有则更好</td>
+<td>知道 MySQL 默认端口 3306、root 用户、密码概念</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-学习目标">1.3 学习目标</h3>
+<ul>
+<li>✅ 理解容器生命周期与状态流转</li>
+<li>✅ 掌握 docker run 核心参数</li>
+<li>✅ 掌握容器查看与管理命令（ps/stats/top）</li>
+<li>✅ 掌握容器日志查看与进入命令（logs/exec/attach）</li>
+<li>✅ 理解端口映射原理与 docker inspect</li>
+<li>✅ 能运行 MySQL 容器并连接验证</li>
+</ul>
+<hr />
+<h2 id="二知识点详解">二、知识点详解</h2>
+<h3 id="知识点-k4-1容器生命周期概述">知识点 K4-1：容器生命周期概述</h3>
+<h4 id="定义">定义</h4>
+<p><strong>容器生命周期（Container Lifecycle）</strong>
+指容器从创建到删除的完整过程，包含若干状态：created（已创建）、running（运行中）、paused（已暂停）、exited（已退出）、dead（死亡）。</p>
+<p>容器生命周期的核心命令：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>状态变化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker create</code></td>
+<td>创建容器但不启动</td>
+<td>→ created</td>
+</tr>
+<tr>
+<td><code>docker run</code></td>
+<td>创建并启动容器</td>
+<td>→ running</td>
+</tr>
+<tr>
+<td><code>docker start</code></td>
+<td>启动已停止的容器</td>
+<td>exited → running</td>
+</tr>
+<tr>
+<td><code>docker stop</code></td>
+<td>优雅停止容器（发 SIGTERM，超时后 SIGKILL）</td>
+<td>running → exited</td>
+</tr>
+<tr>
+<td><code>docker restart</code></td>
+<td>重启容器（先 stop 再 start）</td>
+<td>running → exited → running</td>
+</tr>
+<tr>
+<td><code>docker pause</code></td>
+<td>暂停容器（冻结进程，不释放内存）</td>
+<td>running → paused</td>
+</tr>
+<tr>
+<td><code>docker unpause</code></td>
+<td>恢复暂停的容器</td>
+<td>paused → running</td>
+</tr>
+<tr>
+<td><code>docker kill</code></td>
+<td>强制终止容器（直接发 SIGKILL）</td>
+<td>running → exited</td>
+</tr>
+<tr>
+<td><code>docker rm</code></td>
+<td>删除容器（必须先停止）</td>
+<td>exited → 删除</td>
+</tr>
+</tbody>
+</table>
+<h4 id="原理">原理</h4>
+<p><strong>容器状态流转图</strong>：</p>
+<pre><code>                    docker create
+                         │
+                         ▼
+                    ┌─────────┐
+       docker start │ created │  (创建后未启动)
+        ┌──────────▶│         │
+        │           └─────────┘
+        │                │ docker run (create+start)
+        │                ▼
+        │           ┌─────────┐
+        │           │ running │  (运行中)
+        │  ┌───────▶│         │◀───────┐
+        │  │        └─────────┘        │
+        │  │ docker     │    ▲         │ docker unpause
+        │  │ start      │    │ docker  │
+        │  │            │    │ pause   │
+        │  │     ┌──────▼────┴───┐     │
+        │  │     │    paused      │─────┘
+        │  │     │  (进程冻结)    │
+        │  │     └────────────────┘
+        │  │
+        │  │ docker stop / kill (主进程退出)
+        │  │
+        │  ▼
+        │ ┌─────────┐
+        └─│ exited  │  (已退出但容器仍在)
+          │         │
+          └─────────┘
+                │ docker rm
+                ▼
+             [容器删除]
+
+注：docker restart = docker stop + docker start</code></pre>
+<p><strong>关键状态说明</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>含义</th>
+<th>是否占用内存</th>
+<th>是否能再次启动</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>created</td>
+<td>已创建未启动</td>
+<td>否</td>
+<td>是（docker start）</td>
+</tr>
+<tr>
+<td>running</td>
+<td>运行中</td>
+<td>是</td>
+<td>—</td>
+</tr>
+<tr>
+<td>paused</td>
+<td>进程被冻结</td>
+<td>是（内存保留）</td>
+<td>是（docker unpause）</td>
+</tr>
+<tr>
+<td>exited</td>
+<td>已停止（主进程退出）</td>
+<td>否</td>
+<td>是（docker start）</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>异常状态（极少出现）</td>
+<td>否</td>
+<td>通常需 rm 后重建</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景">问题 / 场景</h4>
+<p><strong>问：docker stop 和 docker kill 有什么区别？</strong></p>
+<ul>
+<li><code>docker stop</code> 先发 SIGTERM
+信号，让主进程优雅退出（如保存数据、关闭连接），10 秒后仍未退出才发
+SIGKILL 强制终止。<strong>生产中推荐用 stop</strong>。</li>
+<li><code>docker kill</code> 直接发
+SIGKILL，立即强制终止，主进程没有机会做清理工作。<strong>可能导致数据丢失</strong>，仅在
+stop 无效时使用。</li>
+</ul>
+<p><strong>问：docker pause 和 docker stop 有什么区别？</strong></p>
+<ul>
+<li><code>pause</code> 冻结进程（cgroups
+freezer），内存保留，恢复后继续运行，适合临时挂起；<code>stop</code>
+完全停止进程，内存释放，恢复时相当于重新启动。pause 比 stop
+更快恢复。</li>
+</ul>
+<p><strong>问：容器 exited 后还能再启动吗？</strong></p>
+<ul>
+<li>能。<code>docker start 容器名</code> 即可重新启动。exited
+只是主进程退出了，容器的文件系统、配置等仍在。除非
+<code>docker rm</code> 删除容器，否则可以反复启停。</li>
+</ul>
+<p><strong>问：能不能直接 rm 一个运行中的容器？</strong></p>
+<ul>
+<li>不能。会报错
+<code>Error: cannot remove a running container</code>。需要先
+<code>docker stop</code> 再 <code>docker rm</code>，或加 <code>-f</code>
+参数强制删除（<code>docker rm -f</code>，等价于 kill +
+rm，生产慎用）。</li>
+</ul>
+<h4 id="完整示例">完整示例</h4>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 创建一个容器（不启动）</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> create <span class="at">--name</span> mynginx nginx</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：a1b2c3d4e5f6...（容器 ID）</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 查看所有容器（包括未启动的）</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="at">-a</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># CONTAINER ID   IMAGE   STATUS        NAMES</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># a1b2c3d4e5f6   nginx   Created       mynginx</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 启动容器</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> start mynginx</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># mynginx</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 查看运行中的容器</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># CONTAINER ID   IMAGE   STATUS         NAMES</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># a1b2c3d4e5f6   nginx   Up 5 seconds   mynginx</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 停止容器（优雅停止）</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> stop mynginx</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># mynginx</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 再次启动</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> start mynginx</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. 重启</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> restart mynginx</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># 8. 删除容器（先停止）</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> stop mynginx</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rm mynginx</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># mynginx</span></span></code></pre></div>
+<h4 id="图示">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 1：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">容器生命周期核心命令：</span>
+<span class="diagram-line">   create  <span class="arrow-token">→</span>  start  <span class="arrow-token">→</span>  running</span>
+<span class="diagram-line">                              <span class="tree-token">│</span></span>
+<span class="diagram-line">                              <span class="tree-token">│</span> stop</span>
+<span class="diagram-line">                              ▼</span>
+<span class="diagram-line">                            exited</span>
+<span class="diagram-line">                              <span class="tree-token">│</span></span>
+<span class="diagram-line">                              <span class="tree-token">│</span> rm</span>
+<span class="diagram-line">                              ▼</span>
+<span class="diagram-line">                           [删除]</span>
+<span class="diagram-line">   run = create + start   (一步到位)</span>
+<span class="diagram-line">   restart = stop + start (重启)</span>
+<span class="diagram-line">   rm -f = kill + rm      (强制删除)</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点">易错点</h4>
+<ol type="1">
+<li>❌ 误认为"容器 exited 就是删除了"。✅ exited
+只是停止，容器仍存在（<code>docker ps -a</code> 可见），需
+<code>docker rm</code> 才真正删除。</li>
+<li>❌ 误认为"docker kill 和 docker stop 等价"。✅ stop 优雅退出，kill
+强制终止，可能丢数据。</li>
+<li>❌ 误认为"运行中的容器可以直接 rm"。✅ 不能，必须先 stop 或加
+<code>-f</code> 强制。</li>
+<li>❌ 误认为"docker run 和 docker start 相同"。✅ run 是
+create+start（新容器），start 是启动已存在的停止容器。</li>
+<li>❌ 误认为"pause 后内存会释放"。✅ pause 冻结进程但保留内存，stop
+才释放内存。</li>
+</ol>
+<h4 id="小结">小结</h4>
+<p>容器生命周期包括创建、运行、暂停、停止、删除等状态，每一步都有对应命令。重点掌握：<code>docker run</code>（创建并启动）、<code>docker stop</code>（优雅停止）、<code>docker start</code>（重启已停止的）、<code>docker rm</code>（删除）。理解
+stop 与 kill、pause 与 stop 的区别是运维必备知识。</p>
+<hr />
+<h3 id="知识点-k4-2docker-run-核心参数">知识点 K4-2：docker run
+核心参数</h3>
+<h4 id="定义-1">定义</h4>
+<p><code>docker run</code> 是 Docker
+最核心的命令之一，用于<strong>基于镜像创建并启动一个新容器</strong>。其完整语法：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="pp">[</span><span class="ss">OPTIONS</span><span class="pp">]</span> IMAGE <span class="pp">[</span><span class="ss">COMMAND</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">ARG...</span><span class="pp">]</span></span></code></pre></div>
+<p>常用参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>全称</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-d</code></td>
+<td><code>--detach</code></td>
+<td>后台运行容器</td>
+<td><code>docker run -d nginx</code></td>
+</tr>
+<tr>
+<td><code>--name</code></td>
+<td>—</td>
+<td>给容器命名</td>
+<td><code>docker run --name myweb nginx</code></td>
+</tr>
+<tr>
+<td><code>-p</code></td>
+<td><code>--publish</code></td>
+<td>端口映射 hostPort:containerPort</td>
+<td><code>docker run -p 8080:80 nginx</code></td>
+</tr>
+<tr>
+<td><code>-P</code></td>
+<td><code>--publish-all</code></td>
+<td>随机映射所有暴露端口</td>
+<td><code>docker run -P nginx</code></td>
+</tr>
+<tr>
+<td><code>-e</code></td>
+<td><code>--env</code></td>
+<td>设置环境变量</td>
+<td><code>docker run -e MYSQL_ROOT_PASSWORD=123456 mysql</code></td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td><code>--volume</code></td>
+<td>挂载数据卷或绑定挂载</td>
+<td><code>docker run -v /data:/var/lib/mysql mysql</code></td>
+</tr>
+<tr>
+<td><code>--rm</code></td>
+<td>—</td>
+<td>容器退出后自动删除</td>
+<td><code>docker run --rm alpine echo hi</code></td>
+</tr>
+<tr>
+<td><code>-it</code></td>
+<td><code>-i</code> + <code>-t</code></td>
+<td>交互式终端（常用于进入容器）</td>
+<td><code>docker run -it alpine sh</code></td>
+</tr>
+<tr>
+<td><code>--restart</code></td>
+<td>—</td>
+<td>重启策略</td>
+<td><code>docker run --restart=always nginx</code></td>
+</tr>
+<tr>
+<td><code>-w</code></td>
+<td><code>--workdir</code></td>
+<td>设置工作目录</td>
+<td><code>docker run -w /app nginx</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="原理-1">原理</h4>
+<p><strong>docker run 的执行过程</strong>（K1-4
+中讲过的架构，这里细化）：</p>
+<pre><code>docker run nginx
+    │
+    ▼
+1. docker CLI 把命令通过 REST API 发给 dockerd
+2. dockerd 检查本地是否有 nginx 镜像
+   ├── 有 → 直接用
+   └── 无 → docker pull 自动拉取
+3. dockerd 在镜像之上创建一个可写层（容器层）
+4. dockerd 准备命名空间、cgroups 等隔离环境
+5. dockerd 调用 containerd → runC 真正启动容器进程
+6. 容器主进程启动（如 nginx 的 master process）
+7. 返回容器 ID 给客户端</code></pre>
+<p><strong>前台运行 vs 后台运行（-d）</strong>：</p>
+<div class="visual">
+  <div class="visual-title">图示 2：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">前台运行（不加 -d）：</span>
+<span class="diagram-line">   docker run nginx</span>
+<span class="diagram-line">   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">   <span class="tree-token">│</span> 终端被 nginx 日志占据       <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> Ctrl+c <span class="arrow-token">→</span> 发 SIGINT 给主进程 <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span>         <span class="arrow-token">→</span> 容器退出         <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">后台运行（加 -d）：</span>
+<span class="diagram-line">   docker run -d nginx</span>
+<span class="diagram-line">   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">   <span class="tree-token">│</span> 命令立即返回容器 ID         <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> 终端可继续执行其他命令       <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> 容器在后台持续运行           <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>端口映射（-p）原理</strong>：</p>
+<pre><code>docker run -p 8080:80 nginx
+
+宿主机                  Docker 进程               容器
+┌──────────┐         ┌──────────────┐         ┌──────────┐
+│ 客户端    │         │ docker-proxy │         │ nginx    │
+│ 浏览器    │ ──────▶ │ 监听 0.0.0.0:│ ──────▶ │ 监听 :80 │
+│ 访问      │ :8080   │ 8080         │ 转发     │          │
+│ localhost │         │              │         │          │
+│ :8080     │         └──────────────┘         └──────────┘
+└──────────┘
+
+含义：宿主机的 8080 端口 → 容器的 80 端口
+访问 http://宿主机IP:8080 即可访问容器内的 nginx</code></pre>
+<p><strong>-p 的四种写法</strong>：</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 指定 hostPort:containerPort（最常用）</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 8080:80 nginx</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 宿主机 8080 → 容器 80</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 指定 IP:hostPort:containerPort</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 127.0.0.1:8080:80 nginx</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 只允许本机访问</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 指定 hostPort:containerPort/protocol</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 8080:80/tcp nginx</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 显式指定 TCP（默认）</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 只指定 containerPort，hostPort 随机分配</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 80 nginx</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 宿主机随机选一个高位端口（如 32768）映射到容器 80</span></span></code></pre></div>
+<p><strong>-e 环境变量原理</strong>：</p>
+<pre><code>docker run -e MYSQL_ROOT_PASSWORD=123456 mysql:8.0
+
+容器内：
+   主进程（mysqld）
+   └── 可以通过环境变量读取：
+       MYSQL_ROOT_PASSWORD=123456
+
+很多官方镜像（mysql、postgres、redis）都通过 -e 接收初始化配置：
+   -e MYSQL_ROOT_PASSWORD=...    MySQL root 密码
+   -e MYSQL_DATABASE=...         自动创建的数据库
+   -e MYSQL_USER=...             自动创建的用户
+   -e POSTGRES_PASSWORD=...      PostgreSQL 密码
+   -e REDIS_PASSWORD=...         Redis 密码</code></pre>
+<h4 id="问题--场景-1">问题 / 场景</h4>
+<p><strong>问：为什么 -p
+是"宿主端口:容器端口"而不是反过来？</strong></p>
+<ul>
+<li>Docker
+的约定是"宿主:容器"（host:container），所有映射类参数（<code>-p</code>、<code>-v</code>）都是这个方向。记忆口诀："<strong>外:内</strong>"——外部（宿主机）的端口映射到内部（容器）的端口。</li>
+</ul>
+<p><strong>问：-d 后台运行后，怎么查看容器的输出日志？</strong></p>
+<ul>
+<li>用 <code>docker logs 容器名</code> 查看（详见
+K4-4）。后台运行的容器，stdout/stderr 会被 Docker 接管并存储，可通过
+logs 命令查看。</li>
+</ul>
+<p><strong>问：--rm 什么时候用？</strong></p>
+<ul>
+<li>适合"一次性任务"容器，如运行测试、执行脚本、临时调试。容器退出后自动删除，避免堆积无用容器。例如：<code>docker run --rm alpine echo hello</code>，输出
+hello 后容器自动删除。</li>
+</ul>
+<p><strong>问：-it 和 -d 可以一起用吗？</strong></p>
+<ul>
+<li>一般不一起用。<code>-it</code> 是交互式前台，<code>-d</code>
+是后台，语义冲突。进入容器调试用 <code>docker exec -it</code>（详见
+K4-4）。</li>
+</ul>
+<h4 id="完整示例-1">完整示例</h4>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例 1：运行 hello-world（一次性）</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run hello-world</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Hello from Docker!</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># This message shows that your installation appears to be working correctly.</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ...</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例 2：后台运行 nginx 并命名</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> myweb nginx</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出容器 ID：a1b2c3d4e5f6...</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例 3：端口映射运行 nginx</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> myweb <span class="at">-p</span> 8080:80 nginx</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 访问 http://localhost:8080 可以看到 nginx 默认页面</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：a1b2c3d4e5f6...</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例 4：环境变量运行 MySQL</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> mydb <span class="dt">\</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 3306:3306 <span class="dt">\</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_ROOT_PASSWORD=123456 <span class="dt">\</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  mysql:8.0</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：b2c3d4e5f6a1...</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例 5：数据卷 + 环境变量运行 MySQL（生产推荐）</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> mydb <span class="dt">\</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 3306:3306 <span class="dt">\</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_ROOT_PASSWORD=123456 <span class="dt">\</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> /data/mysql:/var/lib/mysql <span class="dt">\</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  mysql:8.0</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="co"># /data/mysql 是宿主机目录，/var/lib/mysql 是容器内 MySQL 数据目录</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例 6：--rm 一次性容器</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> alpine echo <span class="st">&quot;Hello Docker&quot;</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：Hello Docker</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="co"># 容器退出后自动删除（docker ps -a 看不到）</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例 7：-it 交互式进入 alpine</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> alpine sh</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a><span class="co"># 进入 alpine 容器的 sh 终端</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="co"># / # ls</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a><span class="co"># bin    etc    lib    mnt    proc   run    srv    tmp    var</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a><span class="co"># dev    home   media  opt    root   sbin   sys    usr</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="co"># / # exit  ← 退出后容器自动停止</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例 8：覆盖默认命令</span></span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> alpine echo <span class="st">&quot;Hello&quot;</span></span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a><span class="co"># 不进入 sh，直接执行 echo 后退出</span></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例 9：重启策略</span></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> myweb <span class="at">--restart</span><span class="op">=</span>always nginx</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a><span class="co"># 容器退出或宿主机重启后自动重启容器</span></span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a><span class="co"># 重启策略：no（默认）/ on-failure / always / unless-stopped</span></span></code></pre></div>
+<h4 id="图示-1">图示</h4>
+<pre><code>docker run 参数全景：
+
+docker run  -d  --name web  -p 8080:80  -e KEY=val  -v /h:/c  --rm  nginx
+            │       │           │           │          │       │      │
+            │       │           │           │          │       │      └─ 镜像名
+            │       │           │           │          │       └─ 退出自动删
+            │       │           │           │          └─ 数据卷挂载
+            │       │           │           └─ 环境变量
+            │       │           └─ 端口映射（宿主:容器）
+            │       └─ 容器命名
+            └─ 后台运行
+
+参数方向记忆：所有映射都是&quot;外:内&quot;（host:container）
+   -p 8080:80    → 宿主 8080 → 容器 80
+   -v /h:/c      → 宿主 /h   → 容器 /c</code></pre>
+<h4 id="易错点-1">易错点</h4>
+<ol type="1">
+<li>❌ 误认为 <code>-p 8080:80</code> 是"容器 8080 → 宿主 80"。✅
+是"宿主 8080 → 容器 80"，方向是 host:container。</li>
+<li>❌ 误认为 <code>-d</code> 后容器日志会显示在终端。✅ <code>-d</code>
+后终端只返回容器 ID，日志要用 <code>docker logs</code> 查看。</li>
+<li>❌ 忘记 <code>--name</code>，导致容器名随机生成（如
+<code>nostalgic_einstein</code>）。✅ 生产中应规范命名（如
+<code>ctts-mysql</code>），便于管理。</li>
+<li>❌ 误认为 <code>-e</code> 设置的环境变量在容器外可见。✅
+环境变量只在容器内可见，宿主机看不到。</li>
+<li>❌ 误认为 <code>--rm</code> 会清理所有数据。✅ <code>--rm</code>
+只删容器本身，挂载的数据卷不会被删。</li>
+<li>❌ 多次执行同一条带 <code>--name</code> 的 <code>docker run</code>
+报"容器名冲突"。✅ 同名容器只能有一个，需先 <code>docker rm</code>
+旧的。</li>
+</ol>
+<h4 id="小结-1">小结</h4>
+<p><code>docker run</code>
+是创建并启动容器的核心命令，常用参数：<code>-d</code>（后台）、<code>--name</code>（命名）、<code>-p</code>（端口映射
+host:container）、<code>-e</code>（环境变量）、<code>-v</code>（数据卷）、<code>--rm</code>（退出自动清理）、<code>-it</code>（交互式）。所有映射类参数方向都是"外:内"。生产中推荐组合使用：<code>docker run -d --name &lt;name&gt; -p &lt;host&gt;:&lt;container&gt; -e &lt;KEY&gt;=&lt;VAL&gt; -v &lt;host&gt;:&lt;container&gt; &lt;image&gt;</code>。</p>
+<hr />
+<h3 id="知识点-k4-3容器查看与管理">知识点 K4-3：容器查看与管理</h3>
+<h4 id="定义-2">定义</h4>
+<p>容器查看与管理命令用于监控和操作已存在的容器：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker ps</code></td>
+<td>列出运行中的容器</td>
+</tr>
+<tr>
+<td><code>docker ps -a</code></td>
+<td>列出所有容器（包括已停止）</td>
+</tr>
+<tr>
+<td><code>docker stats</code></td>
+<td>实时显示容器资源占用（CPU/内存/网络/IO）</td>
+</tr>
+<tr>
+<td><code>docker top &lt;容器&gt;</code></td>
+<td>查看容器内的进程列表</td>
+</tr>
+</tbody>
+</table>
+<h4 id="原理-2">原理</h4>
+<p><strong>docker ps 输出字段</strong>：</p>
+<pre><code>$ docker ps
+CONTAINER ID   IMAGE   COMMAND                  CREATED        STATUS        PORTS                  NAMES
+a1b2c3d4e5f6   nginx   &quot;/docker-entrypoint.…&quot;   5 minutes ago  Up 5 minutes  0.0.0.0:8080-&gt;80/tcp   myweb
+
+字段说明：
+- CONTAINER ID：容器唯一 ID（前 12 位）
+- IMAGE：所用镜像
+- COMMAND：容器主进程启动命令
+- CREATED：创建时间
+- STATUS：状态（Up X minutes 表示运行中；Exited X minutes ago 表示已停止）
+- PORTS：端口映射
+- NAMES：容器名（未指定则随机生成）</code></pre>
+<p><strong>docker ps 常用选项</strong>：</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps              <span class="co"># 运行中的容器</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="at">-a</span>           <span class="co"># 所有容器（含已停止）</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="at">-q</span>           <span class="co"># 只显示容器 ID（脚本用）</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="at">-n</span> 5         <span class="co"># 显示最近 5 个容器</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="at">--filter</span> <span class="st">&quot;name=web&quot;</span>     <span class="co"># 按名字过滤</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="at">--filter</span> <span class="st">&quot;status=exited&quot;</span> <span class="co"># 按状态过滤</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="at">--format</span> <span class="st">&quot;table {{.Names}}\t{{.Status}}&quot;</span>  <span class="co"># 自定义格式</span></span></code></pre></div>
+<p><strong>docker stats 资源监控</strong>：</p>
+<pre><code>$ docker stats
+CONTAINER ID   NAME    CPU %   MEM USAGE / LIMIT   MEM %   NET I/O         BLOCK I/O
+a1b2c3d4e5f6   myweb   0.50%   20MiB / 1.95GiB     1.00%   5kB / 3kB       8kB / 0B
+b2c3d4e5f6a1   mydb    2.30%   350MiB / 1.95GiB    17.50%  1.2kB / 850B    45MB / 12MB
+
+按 Ctrl+C 退出实时监控</code></pre>
+<p><strong>docker top 查看进程</strong>：</p>
+<pre><code>$ docker top myweb
+UID    PID    PPID   C   STIME   TTY   TIME       CMD
+root   1234   5678   0   10:00   ?     00:00:00   nginx: master process nginx:/g...
+nginx  1290   1234   0   10:00   ?     00:00:00   nginx: worker process
+
+说明：
+- UID：进程用户
+- PID：宿主机视角的进程 ID
+- PPID：父进程 ID
+- CMD：进程启动命令
+- 一个 nginx 容器内有 master + worker 两个进程</code></pre>
+<h4 id="问题--场景-2">问题 / 场景</h4>
+<p><strong>问：docker ps 和 docker ps -a 的区别？</strong></p>
+<ul>
+<li><code>docker ps</code> 只显示<strong>运行中</strong>的容器（status
+为 Up）；<code>docker ps -a</code>
+显示<strong>所有</strong>容器，包括已停止的（Exited）。排查问题时常用
+<code>-a</code> 看历史容器。</li>
+</ul>
+<p><strong>问：容器 ID 和容器名有什么区别？</strong></p>
+<ul>
+<li>每个 Docker 会自动给容器分配一个 64 位十六进制 ID（如
+<code>a1b2c3...</code>），并用 <code>docker ps</code> 显示前 12
+位。容器名是用户可读的（如 <code>myweb</code>），用 <code>--name</code>
+指定或自动生成。两者都能唯一标识容器，命令中可互换使用。</li>
+</ul>
+<p><strong>问：docker stats 显示的内存限制是什么？</strong></p>
+<ul>
+<li>默认是宿主机总内存。可通过 <code>docker run -m 512m</code>
+给容器设置内存限制。生产中建议每个容器都设置内存限制，防止一个容器吃光宿主机内存。</li>
+</ul>
+<p><strong>问：docker top 显示的 PID
+是容器内的还是宿主机的？</strong></p>
+<ul>
+<li>是<strong>宿主机视角</strong>的
+PID。因为容器本质是宿主机的进程，只是在 namespace
+中隔离。这就是"容器是进程级隔离"的体现。</li>
+</ul>
+<h4 id="完整示例-2">完整示例</h4>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 启动几个容器用于演示</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> web1 <span class="at">-p</span> 8081:80 nginx</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> web2 <span class="at">-p</span> 8082:80 nginx</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> db1 <span class="at">-e</span> MYSQL_ROOT_PASSWORD=123456 mysql:8.0</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 查看运行中的容器</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># CONTAINER ID   IMAGE      STATUS         PORTS                  NAMES</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># c3d4e5f6a1b2   mysql:8.0  Up 10 seconds  3306/tcp               db1</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># b2c3d4e5f6a1   nginx      Up 20 seconds  0.0.0.0:8082-&gt;80/tcp   web2</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># a1b2c3d4e5f6   nginx      Up 30 seconds  0.0.0.0:8081-&gt;80/tcp   web1</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 停止 web1</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> stop web1</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 再看运行中的（web1 不见了）</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co"># CONTAINER ID   IMAGE      STATUS         PORTS                  NAMES</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co"># c3d4e5f6a1b2   mysql:8.0  Up 30 seconds  3306/tcp               db1</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="co"># b2c3d4e5f6a1   nginx      Up 40 seconds  0.0.0.0:8082-&gt;80/tcp   web2</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 看所有容器（包括停止的）</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="at">-a</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="co"># CONTAINER ID   IMAGE      STATUS                      PORTS                  NAMES</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="co"># c3d4e5f6a1b2   mysql:8.0  Up 30 seconds               3306/tcp               db1</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="co"># b2c3d4e5f6a1   nginx      Up 40 seconds               0.0.0.0:8082-&gt;80/tcp   web2</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="co"># a1b2c3d4e5f6   nginx      Exited 2 minutes ago                               web1</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 实时资源监控</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> stats</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="co"># 按 Ctrl+C 退出</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. 单个容器监控（非交互）</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> stats <span class="at">--no-stream</span> web2</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="co"># CONTAINER ID   NAME   CPU %   MEM USAGE / LIMIT   MEM %   NET I/O   BLOCK I/O</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="co"># b2c3d4e5f6a1   web2   0.00%   20MiB / 1.95GiB     1.00%   5kB/3kB   8kB/0B</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="co"># 8. 查看 web2 内的进程</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> top web2</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="co"># UID    PID    PPID   C   STIME   TTY   TIME     CMD</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a><span class="co"># root   1234   567    0   10:00   ?     00:00:00  nginx: master process nginx</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="co"># nginx  1290   1234   0   10:00   ?     00:00:00  nginx: worker process</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a><span class="co"># 9. 只显示容器 ID（脚本常用）</span></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="at">-q</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a><span class="co"># c3d4e5f6a1b2</span></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a><span class="co"># b2c3d4e5f6a1</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="co"># 10. 停止所有运行中的容器</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> stop <span class="va">$(</span><span class="ex">docker</span> ps <span class="at">-q</span><span class="va">)</span></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a><span class="co"># 11. 删除所有已停止的容器</span></span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> container prune</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a><span class="co"># 或：docker rm $(docker ps -aq)</span></span></code></pre></div>
+<h4 id="图示-2">图示</h4>
+<pre><code>docker ps / stats / top 三层视图：
+
+  docker ps        ──→ 容器列表（宏观）
+  ┌─────────────────────────────┐
+  │ 容器名  状态   端口   镜像    │
+  └─────────────────────────────┘
+            │
+            ▼
+  docker stats     ──→ 资源占用（监控）
+  ┌─────────────────────────────┐
+  │ CPU%  内存  网络  IO         │
+  └─────────────────────────────┘
+            │
+            ▼
+  docker top       ──→ 进程列表（微观）
+  ┌─────────────────────────────┐
+  │ 容器内 PID/PPID/CMD          │
+  └─────────────────────────────┘</code></pre>
+<h4 id="易错点-2">易错点</h4>
+<ol type="1">
+<li>❌ 用 <code>docker ps</code> 找不到已停止的容器，以为"被删除了"。✅
+已停止的容器要用 <code>docker ps -a</code> 查看。</li>
+<li>❌ 误认为 <code>docker stats</code> 显示的是宿主机资源。✅
+显示的是<strong>每个容器</strong>的资源占用。</li>
+<li>❌ 忘记 <code>docker stats</code>
+是实时刷新的，不退出会一直占用终端。✅ 按 Ctrl+C 退出。</li>
+<li>❌ 误认为 <code>docker top</code> 显示的是容器内 PID。✅
+显示的是宿主机视角的 PID（容器本质是宿主进程）。</li>
+</ol>
+<h4 id="小结-2">小结</h4>
+<p>容器查看与管理三剑客：<code>docker ps</code>（列表）、<code>docker stats</code>（资源监控）、<code>docker top</code>（进程查看）。<code>docker ps -a</code>
+查看所有容器包括已停止的；<code>docker stats</code> 实时监控
+CPU/内存；<code>docker top</code>
+查看容器内进程。这三个命令是日常运维的核心工具。</p>
+<hr />
+<h3 id="知识点-k4-4容器日志与进入">知识点 K4-4：容器日志与进入</h3>
+<h4 id="定义-3">定义</h4>
+<p><strong>容器日志查看</strong>和<strong>进入容器</strong>是日常排障的两大核心能力：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker logs &lt;容器&gt;</code></td>
+<td>查看容器主进程的 stdout/stderr 输出</td>
+</tr>
+<tr>
+<td><code>docker logs -f &lt;容器&gt;</code></td>
+<td>实时跟踪日志（类似 <code>tail -f</code>）</td>
+</tr>
+<tr>
+<td><code>docker logs --tail N &lt;容器&gt;</code></td>
+<td>只看最后 N 行</td>
+</tr>
+<tr>
+<td><code>docker exec -it &lt;容器&gt; &lt;命令&gt;</code></td>
+<td>在运行中的容器内执行新命令（开新进程）</td>
+</tr>
+<tr>
+<td><code>docker attach &lt;容器&gt;</code></td>
+<td>附着到容器主进程（共享 stdin/stdout）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="原理-3">原理</h4>
+<p><strong>docker logs 原理</strong>：</p>
+<div class="visual">
+  <div class="visual-title">图示 3：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">容器主进程（如 nginx）</span>
+<span class="diagram-line">   <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> stdout <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> Docker 日志驱动 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> 存储</span>
+<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> stderr <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> Docker 日志驱动 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> 存储</span>
+<span class="diagram-line">docker logs &lt;容器&gt; 把存储的日志输出到终端</span>
+<span class="diagram-line">日志驱动（默认 json-file）：</span>
+<span class="diagram-line">   /var/lib/docker/containers/&lt;容器ID&gt;/&lt;容器ID&gt;-json.log</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>docker exec 原理</strong>：</p>
+<div class="visual">
+  <div class="visual-title">图示 4：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">容器（运行中）</span>
+<span class="diagram-line">   主进程：nginx master</span>
+<span class="diagram-line">   <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> docker exec -it myweb bash</span>
+<span class="diagram-line">       <span class="tree-token">│</span></span>
+<span class="diagram-line">       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 在容器命名空间内新开一个 bash 进程</span>
+<span class="diagram-line">           （不影响主进程，独立终端）</span>
+<span class="diagram-line">特点：</span>
+<span class="diagram-line">   - 进入容器后是一个新的 shell</span>
+<span class="diagram-line">   - exit 退出后容器继续运行</span>
+<span class="diagram-line">   - 可同时开多个 exec 会话</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>docker attach 原理</strong>：</p>
+<div class="visual">
+  <div class="visual-title">图示 5：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">容器（运行中）</span>
+<span class="diagram-line">   主进程：nginx master</span>
+<span class="diagram-line">   <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> docker attach myweb</span>
+<span class="diagram-line">       <span class="tree-token">│</span></span>
+<span class="diagram-line">       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 把当前终端的 stdin/stdout 直接连接到主进程</span>
+<span class="diagram-line">           （共享主进程的输入输出）</span>
+<span class="diagram-line">特点：</span>
+<span class="diagram-line">   - 不开新进程，连接到主进程</span>
+<span class="diagram-line">   - Ctrl+c 会发信号给主进程（可能导致容器停止！）</span>
+<span class="diagram-line">   - 想脱离但不停止容器：Ctrl+p, Ctrl+q（ detach keys）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>exec vs attach 对比</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>docker exec -it</th>
+<th>docker attach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是否开新进程</td>
+<td>是（独立 shell）</td>
+<td>否（连接主进程）</td>
+</tr>
+<tr>
+<td>exit 后容器</td>
+<td>继续运行</td>
+<td>可能停止（exit 发信号给主进程）</td>
+</tr>
+<tr>
+<td>Ctrl+c 后</td>
+<td>仅退出 exec 会话</td>
+<td>容器可能停止</td>
+</tr>
+<tr>
+<td>多会话</td>
+<td>支持多个 exec</td>
+<td>多个 attach 共享同一终端</td>
+</tr>
+<tr>
+<td>典型用途</td>
+<td>调试、执行命令</td>
+<td>查看主进程交互输出</td>
+</tr>
+<tr>
+<td>推荐度</td>
+<td>⭐⭐⭐ 推荐</td>
+<td>⭐ 谨慎使用</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景-3">问题 / 场景</h4>
+<p><strong>问：为什么生产中几乎都用 exec 不用 attach？</strong></p>
+<ul>
+<li>attach 直接连接主进程，Ctrl+c 或 exit 会导致容器停止，风险大；exec
+开新进程，退出不影响容器。生产排障几乎都用
+<code>docker exec -it &lt;容器&gt; bash</code>。</li>
+</ul>
+<p><strong>问：docker logs 看不到日志怎么办？</strong></p>
+<ul>
+<li>检查：① 容器是否在运行（<code>docker ps</code>）；②
+应用是否把日志输出到 stdout/stderr（如果只写文件，logs
+看不到，需进入容器看文件）；③ 日志驱动是否是 json-file（默认是）。</li>
+</ul>
+<p><strong>问：进入容器后想退出但不停止容器，怎么做？</strong></p>
+<ul>
+<li>如果是 exec 进入的，直接 <code>exit</code>
+即可，容器继续运行。如果是 attach 进入的，按 <code>Ctrl+p</code> 然后
+<code>Ctrl+q</code>（detach keys）脱离，容器继续运行。</li>
+</ul>
+<p><strong>问：如何查看容器某个时间段的日志？</strong></p>
+<ul>
+<li><code>docker logs --since 30m &lt;容器&gt;</code>（最近 30
+分钟）；<code>docker logs --since 2026-07-22T10:00:00 &lt;容器&gt;</code>（指定时间起）；<code>docker logs --until 2026-07-22T11:00:00 &lt;容器&gt;</code>（指定时间止）。</li>
+</ul>
+<h4 id="完整示例-3">完整示例</h4>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 启动一个 nginx 容器</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> myweb <span class="at">-p</span> 8080:80 nginx</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 查看所有日志</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> logs myweb</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># ...</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2026/07/22 10:00:00 [notice] 1#1: start worker processes</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 实时跟踪日志（保持终端）</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> logs <span class="at">-f</span> myweb</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 此时会持续输出新日志，访问 http://localhost:8080 后会看到访问日志</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 192.168.1.5 - - [22/Jul/2026:10:01:00 +0000] &quot;GET / HTTP/1.1&quot; 200 ...</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 按 Ctrl+C 退出跟踪（容器继续运行）</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 只看最后 10 行</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> logs <span class="at">--tail</span> 10 myweb</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 查看带时间戳的日志</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> logs <span class="at">-t</span> myweb</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 2026-07-22T10:00:00.123456789Z /docker-entrypoint.sh: ...</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 进入容器执行命令（一次性）</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec myweb ls /etc/nginx</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a><span class="co"># conf.d</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a><span class="co"># fastcgi_params</span></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a><span class="co"># mime.types</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a><span class="co"># modules</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a><span class="co"># nginx.conf</span></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a><span class="co"># scgi_params</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a><span class="co"># uwsgi_params</span></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. 进入容器开交互式 shell（最常用）</span></span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> myweb bash</span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a><span class="co"># 进入容器内的 bash 终端</span></span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a><span class="co"># root@a1b2c3d4e5f6:/# ls</span></span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a><span class="co"># bin   dev  home  media  opt   root  sbin  sys  usr</span></span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a><span class="co"># boot  etc  lib   mnt    proc  run   srv   tmp  var</span></span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a><span class="co"># root@a1b2c3d4e5f6:/# cat /etc/nginx/nginx.conf | head -5</span></span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a><span class="co"># user  nginx;</span></span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a><span class="co"># worker_processes  auto;</span></span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a><span class="co"># ...</span></span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a><span class="co"># root@a1b2c3d4e5f6:/# exit</span></span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a><span class="co"># exit</span></span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a><span class="co"># 退出后容器继续运行</span></span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a><span class="co"># 8. 没有 bash 时用 sh（如 alpine 镜像）</span></span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> myalpine alpine sleep 3600</span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> myalpine sh</span>
+<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a><span class="co"># / #</span></span>
+<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a><span class="co"># 9. 在容器内执行命令不需要交互</span></span>
+<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec myweb nginx <span class="at">-v</span></span>
+<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a><span class="co"># nginx version: nginx/1.25.3</span></span>
+<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a><span class="co"># 10. attach 演示（谨慎使用！）</span></span>
+<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> attach myweb</span>
+<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a><span class="co"># 此时连接到 nginx 主进程的 stdout</span></span>
+<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a><span class="co"># 访问页面会看到日志输出</span></span>
+<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a><span class="co"># 按 Ctrl+p, Ctrl+q 脱离（容器继续运行）</span></span>
+<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a><span class="co"># 按 Ctrl+c 会停止容器（生产中不要这么做！）</span></span>
+<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a><span class="co"># 11. 进入 MySQL 容器执行 SQL</span></span>
+<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> mydb <span class="dt">\</span></span>
+<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_ROOT_PASSWORD=123456 <span class="dt">\</span></span>
+<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a>  mysql:8.0</span>
+<span id="cb21-69"><a href="#cb21-69" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> mydb mysql <span class="at">-uroot</span> <span class="at">-p123456</span> <span class="at">-e</span> <span class="st">&quot;SELECT VERSION();&quot;</span></span>
+<span id="cb21-70"><a href="#cb21-70" aria-hidden="true" tabindex="-1"></a><span class="co"># mysql: [Warning] Using a password on the command line interface can be insecure.</span></span>
+<span id="cb21-71"><a href="#cb21-71" aria-hidden="true" tabindex="-1"></a><span class="co"># +-----------+</span></span>
+<span id="cb21-72"><a href="#cb21-72" aria-hidden="true" tabindex="-1"></a><span class="co"># | VERSION() |</span></span>
+<span id="cb21-73"><a href="#cb21-73" aria-hidden="true" tabindex="-1"></a><span class="co"># +-----------+</span></span>
+<span id="cb21-74"><a href="#cb21-74" aria-hidden="true" tabindex="-1"></a><span class="co"># | 8.0.35    |</span></span>
+<span id="cb21-75"><a href="#cb21-75" aria-hidden="true" tabindex="-1"></a><span class="co"># +-----------+</span></span></code></pre></div>
+<h4 id="图示-3">图示</h4>
+<pre><code>docker logs 工作流：
+
+  容器主进程 (nginx)
+       │
+       │ stdout/stderr
+       ▼
+  Docker 日志驱动 (json-file)
+       │
+       │ docker logs
+       ▼
+  终端输出
+
+  -f 选项：实时跟踪（类似 tail -f）
+  --tail N：只看最后 N 行
+
+
+docker exec vs attach：
+
+  docker exec -it web bash         docker attach web
+  ┌───────────────────────┐        ┌───────────────────────┐
+  │ 容器内新开 bash 进程    │        │ 连接到主进程 stdin     │
+  │ ┌─────────────────┐   │        │ ┌─────────────────┐   │
+  │ │ nginx (主进程)   │   │        │ │ nginx (主进程)   │   │
+  │ │ bash  (新进程)   │   │        │ │   ↑              │   │
+  │ └─────────────────┘   │        │ │ 你附着在这里      │   │
+  │ exit → 仅退出 bash    │        │ └─────────────────┘   │
+  │ 容器继续运行 ✓        │        │ Ctrl+c → 停止容器 ✗   │
+  └───────────────────────┘        └───────────────────────┘</code></pre>
+<h4 id="易错点-3">易错点</h4>
+<ol type="1">
+<li>❌ 误认为 <code>docker attach</code> 和 <code>docker exec -it</code>
+等价。✅ attach 连接主进程（危险，Ctrl+c 会停容器），exec
+开新进程（安全）。</li>
+<li>❌ 用 <code>docker logs</code> 看不到日志，以为容器没运行。✅ 先
+<code>docker ps</code> 看状态，logs 看不到可能因为应用日志没输出到
+stdout。</li>
+<li>❌ 在 alpine 容器中 <code>docker exec -it alpine bash</code> 报错
+<code>bash: not found</code>。✅ alpine 没有 bash，用
+<code>sh</code>：<code>docker exec -it alpine sh</code>。</li>
+<li>❌ 进入容器后 <code>exit</code>，发现容器停止了。✅ 如果是 exec
+进入的不会停止；如果是 attach 进入的，exit 会发 SIGTERM
+给主进程导致容器停止。</li>
+<li>❌ <code>docker logs -f</code> 忘记退出，占用终端。✅ 按 Ctrl+C
+退出跟踪，容器不受影响。</li>
+</ol>
+<h4 id="小结-3">小结</h4>
+<p>容器日志与进入是排障核心：<code>docker logs -f</code>
+实时跟踪日志，<code>docker logs --tail N</code>
+看最后几行；<code>docker exec -it &lt;容器&gt; bash</code>（或
+sh）进入容器调试（推荐），<code>docker attach</code>
+附着主进程（谨慎使用，Ctrl+c 会停容器）。生产中几乎都用 exec，attach
+仅在需要查看主进程交互输出时使用。</p>
+<hr />
+<h3 id="知识点-k4-5容器详情与端口映射原理">知识点
+K4-5：容器详情与端口映射原理</h3>
+<h4 id="定义-4">定义</h4>
+<p><strong>docker inspect</strong>
+用于查看容器或镜像的完整元数据（配置、网络、挂载、状态等详细信息）。</p>
+<p><strong>端口映射</strong> 是 Docker
+将宿主机端口转发到容器端口的机制，让外部可以访问容器内的服务。</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect <span class="op">&lt;</span>容器名或ID<span class="op">&gt;</span>         <span class="co"># 查看完整详情</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect <span class="at">-f</span> <span class="st">&#39;{{.State.Status}}&#39;</span> <span class="op">&lt;</span>容器<span class="op">&gt;</span>  <span class="co"># 用模板提取特定字段</span></span></code></pre></div>
+<h4 id="原理-4">原理</h4>
+<p><strong>docker inspect 输出结构</strong>（JSON 格式）：</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Id&quot;</span><span class="fu">:</span> <span class="st">&quot;a1b2c3d4e5f6...&quot;</span><span class="fu">,</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Created&quot;</span><span class="fu">:</span> <span class="st">&quot;2026-07-22T10:00:00.123456789Z&quot;</span><span class="fu">,</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Path&quot;</span><span class="fu">:</span> <span class="st">&quot;nginx&quot;</span><span class="fu">,</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Args&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;-g&quot;</span><span class="ot">,</span> <span class="st">&quot;daemon off;&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;State&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Status&quot;</span><span class="fu">:</span> <span class="st">&quot;running&quot;</span><span class="fu">,</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Running&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Paused&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Restarting&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;OOMKilled&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Dead&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Pid&quot;</span><span class="fu">:</span> <span class="dv">1234</span><span class="fu">,</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;ExitCode&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Error&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span><span class="fu">,</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;StartedAt&quot;</span><span class="fu">:</span> <span class="st">&quot;2026-07-22T10:00:00Z&quot;</span><span class="fu">,</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;FinishedAt&quot;</span><span class="fu">:</span> <span class="st">&quot;0001-01-01T00:00:00Z&quot;</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Image&quot;</span><span class="fu">:</span> <span class="st">&quot;sha256:...&quot;</span><span class="fu">,</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;/myweb&quot;</span><span class="fu">,</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;HostConfig&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;PortBindings&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;80/tcp&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span><span class="dt">&quot;HostIp&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span><span class="fu">,</span> <span class="dt">&quot;HostPort&quot;</span><span class="fu">:</span> <span class="st">&quot;8080&quot;</span><span class="fu">}</span><span class="ot">]</span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>      <span class="fu">},</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Binds&quot;</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;RestartPolicy&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;no&quot;</span><span class="fu">,</span> <span class="dt">&quot;MaximumRetryCount&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">}</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;NetworkSettings&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;IPAddress&quot;</span><span class="fu">:</span> <span class="st">&quot;172.17.0.2&quot;</span><span class="fu">,</span></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Ports&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;80/tcp&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span><span class="dt">&quot;HostIp&quot;</span><span class="fu">:</span> <span class="st">&quot;0.0.0.0&quot;</span><span class="fu">,</span> <span class="dt">&quot;HostPort&quot;</span><span class="fu">:</span> <span class="st">&quot;8080&quot;</span><span class="fu">}</span><span class="ot">]</span></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Config&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Image&quot;</span><span class="fu">:</span> <span class="st">&quot;nginx&quot;</span><span class="fu">,</span></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Env&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;PATH=...&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Cmd&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;nginx&quot;</span><span class="ot">,</span> <span class="st">&quot;-g&quot;</span><span class="ot">,</span> <span class="st">&quot;daemon off;&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;ExposedPorts&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;80/tcp&quot;</span><span class="fu">:</span> <span class="fu">{}}</span></span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><strong>端口映射 -p 原理详解</strong>：</p>
+<pre><code>docker run -d --name web -p 8080:80 nginx
+
+宿主机网络栈                  Docker 网络（bridge）         容器网络栈
+┌──────────────┐           ┌──────────────────┐         ┌──────────┐
+│ 客户端访问    │           │ docker0 (网桥)    │         │ eth0     │
+│ :8080        │           │ 172.17.0.1        │         │ 172.17.0.2│
+│              │           │                  │         │          │
+│  ┌────────┐  │           │ ┌──────────────┐ │         │ ┌──────┐ │
+│  │浏览器   │  │           │ │docker-proxy  │ │         │ │nginx │ │
+│  │        │──┼──────────▶│ │监听 :8080    │─┼────────▶│ │监听:80│ │
+│  └────────┘  │           │ │              │ │         │ └──────┘ │
+│              │           │ │iptables NAT  │ │         │          │
+│              │           │ │规则          │ │         │          │
+└──────────────┘           │ └──────────────┘ │         └──────────┘
+                           └──────────────────┘
+
+工作流程：
+1. docker-proxy 监听宿主机 0.0.0.0:8080
+2. 客户端访问 宿主机IP:8080
+3. docker-proxy 或 iptables NAT 规则将流量转发到容器 172.17.0.2:80
+4. 容器内 nginx 监听 80，收到请求并响应
+
+关键：宿主机端口（8080）对外，容器端口（80）对内</code></pre>
+<p><strong>-P（大写）随机端口映射原理</strong>：</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> web <span class="at">-P</span> nginx</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Docker 自动将镜像中 EXPOSE 的端口（nginx 镜像 EXPOSE 80）</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 映射到宿主机的随机高位端口（49000-49900 范围）</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># CONTAINER ID  IMAGE  STATUS   PORTS                     NAMES</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co"># a1b2c3d4e5f6  nginx  Up       0.0.0.0:49153-&gt;80/tcp     web</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 宿主机 49153 → 容器 80</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看随机分配的端口</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> port web</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 80/tcp -&gt; 0.0.0.0:49153</span></span></code></pre></div>
+<h4 id="问题--场景-4">问题 / 场景</h4>
+<p><strong>问：为什么 docker inspect 输出是数组？</strong></p>
+<ul>
+<li>因为 inspect
+可以传多个参数（多个容器/镜像），输出对应数组。即使只查一个，也是数组的第一个元素。</li>
+</ul>
+<p><strong>问：端口映射为什么需要 docker-proxy？</strong></p>
+<ul>
+<li>docker-proxy 是用户态进程，监听宿主机端口并转发到容器。这是为了在
+iptables 规则未生效时也能工作。实际生产中主要靠 iptables NAT
+规则转发（性能更好），docker-proxy 是兜底方案。</li>
+</ul>
+<p><strong>问：-p 8080:8080 和 -p 8080:80 有什么区别？</strong></p>
+<ul>
+<li>前者宿主 8080 → 容器 8080（端口号相同）；后者宿主 8080 → 容器
+80（端口号不同）。端口号可以相同也可以不同，看应用监听什么端口。如 nginx
+默认监听 80，mysql 默认监听 3306。</li>
+</ul>
+<p><strong>问：宿主机 80 端口被占用，怎么映射？</strong></p>
+<ul>
+<li>换一个宿主机端口，如 <code>-p 8080:80</code>。如果宿主机 8080
+也被占用，就再换一个（如
+8888）。容器端口不变（必须与应用监听端口一致）。</li>
+</ul>
+<p><strong>问：-P 随机端口有什么用？</strong></p>
+<ul>
+<li>用于快速测试、不关心具体端口映射的场景。生产中通常用 <code>-p</code>
+指定明确端口，便于客户端访问。</li>
+</ul>
+<h4 id="完整示例-4">完整示例</h4>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 启动一个带端口映射的容器</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> myweb <span class="at">-p</span> 8080:80 nginx</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 查看完整详情</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect myweb</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出 JSON 格式的完整信息（很长，见上方示例）</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 用 -f 提取特定字段（Go 模板语法）</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect <span class="at">-f</span> <span class="st">&#39;{{.State.Status}}&#39;</span> myweb</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># running</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect <span class="at">-f</span> <span class="st">&#39;{{.Name}}&#39;</span> myweb</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="co"># /myweb</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect <span class="at">-f</span> <span class="st">&#39;{{.NetworkSettings.IPAddress}}&#39;</span> myweb</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 172.17.0.2</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect <span class="at">-f</span> <span class="st">&#39;{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}&#39;</span> myweb</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 172.17.0.2（兼容多网络场景）</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect <span class="at">-f</span> <span class="st">&#39;{{.State.Pid}}&#39;</span> myweb</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 1234（宿主机视角的 PID）</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 查看端口映射</span></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> port myweb</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 80/tcp -&gt; 0.0.0.0:8080</span></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 80/tcp -&gt; :::8080</span></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> port myweb 80</span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 0.0.0.0:8080</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a><span class="co"># :::8080</span></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. -P 随机端口映射</span></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> randomweb <span class="at">-P</span> nginx</span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> port randomweb</span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a><span class="co"># 80/tcp -&gt; 0.0.0.0:49155</span></span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a><span class="co"># 80/tcp -&gt; :::49155</span></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 端口冲突演示（先启动一个占用 8080 的，再启动一个也想用 8080 的）</span></span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> web1 <span class="at">-p</span> 8080:80 nginx</span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> web2 <span class="at">-p</span> 8080:80 nginx</span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a><span class="co"># docker: Error response from daemon: driver failed programming external connectivity</span></span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a><span class="co"># on endpoint web2: Bind for 0.0.0.0:8080 failed: port is already allocated.</span></span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a><span class="co"># 解决：换一个端口，如 -p 8081:80</span></span>
+<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. 查看容器 IP（进入容器视角）</span></span>
+<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec myweb hostname <span class="at">-i</span></span>
+<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a><span class="co"># 172.17.0.2</span></span>
+<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a><span class="co"># 8. 查看 iptables NAT 规则（了解原理）</span></span>
+<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> iptables <span class="at">-t</span> nat <span class="at">-L</span> <span class="at">-n</span> <span class="kw">|</span> <span class="fu">grep</span> 8080</span>
+<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a><span class="co"># DNAT  tcp  --  0.0.0.0/0  0.0.0.0/0  tcp dpt:8080 to:172.17.0.2:80</span></span>
+<span id="cb27-53"><a href="#cb27-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-54"><a href="#cb27-54" aria-hidden="true" tabindex="-1"></a><span class="co"># 9. 一个容器映射多个端口</span></span>
+<span id="cb27-55"><a href="#cb27-55" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> bigapp <span class="at">-p</span> 8080:80 <span class="at">-p</span> 8443:443 nginx</span>
+<span id="cb27-56"><a href="#cb27-56" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> port bigapp</span>
+<span id="cb27-57"><a href="#cb27-57" aria-hidden="true" tabindex="-1"></a><span class="co"># 80/tcp -&gt; 0.0.0.0:8080</span></span>
+<span id="cb27-58"><a href="#cb27-58" aria-hidden="true" tabindex="-1"></a><span class="co"># 443/tcp -&gt; 0.0.0.0:8443</span></span></code></pre></div>
+<h4 id="图示-4">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 6：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">端口映射三种场景：</span>
+<span class="diagram-line">场景 1：-p 8080:80（指定端口）</span>
+<span class="diagram-line">   客户端 <span class="arrow-token">→</span> 宿主机:8080 <span class="arrow-token">→</span> 容器:80</span>
+<span class="diagram-line">   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">   <span class="tree-token">│</span> 宿主机    <span class="tree-token">│</span>  8080   <span class="tree-token">│</span> 容器      <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> docker-  <span class="tree-token">│</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span> nginx:80 <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> proxy    <span class="tree-token">│</span>         <span class="tree-token">│</span>          <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘         <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">场景 2：-P（随机端口）</span>
+<span class="diagram-line">   客户端 <span class="arrow-token">→</span> 宿主机:49153（随机） <span class="arrow-token">→</span> 容器:80</span>
+<span class="diagram-line">   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">   <span class="tree-token">│</span> 宿主机    <span class="tree-token">│</span>  49153  <span class="tree-token">│</span> 容器      <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> docker-  <span class="tree-token">│</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span> nginx:80 <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> proxy    <span class="tree-token">│</span>         <span class="tree-token">│</span>          <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘         <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">场景 3：-p 127.0.0.1:8080:80（仅本机访问）</span>
+<span class="diagram-line">   本机 <span class="arrow-token">→</span> 127.0.0.1:8080 <span class="arrow-token">→</span> 容器:80</span>
+<span class="diagram-line">   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">   <span class="tree-token">│</span> 宿主机    <span class="tree-token">│</span>  8080   <span class="tree-token">│</span> 容器      <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> docker-  <span class="tree-token">│</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span> nginx:80 <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> proxy    <span class="tree-token">│</span>  仅lo   <span class="tree-token">│</span>          <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> 127.0.0.1<span class="tree-token">│</span>         <span class="tree-token">│</span>          <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘         <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">docker inspect 核心字段：</span>
+<span class="diagram-line">  Id              <span class="tree-token">─</span> 容器完整 ID</span>
+<span class="diagram-line">  State.Status    <span class="tree-token">─</span> 容器状态（running/exited/...）</span>
+<span class="diagram-line">  State.Pid       <span class="tree-token">─</span> 容器主进程在宿主机的 PID</span>
+<span class="diagram-line">  NetworkSettings.IPAddress <span class="tree-token">─</span> 容器 IP</span>
+<span class="diagram-line">  HostConfig.PortBindings   <span class="tree-token">─</span> 端口映射配置</span>
+<span class="diagram-line">  Config.Env     <span class="tree-token">─</span> 环境变量</span>
+<span class="diagram-line">  Config.Cmd     <span class="tree-token">─</span> 启动命令</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-4">易错点</h4>
+<ol type="1">
+<li>❌ 把端口映射方向记反。✅
+<code>-p hostPort:containerPort</code>，方向是宿主→容器（外→内）。</li>
+<li>❌ 端口冲突时不知所措。✅ 报错
+<code>port is already allocated</code>
+表示宿主机端口被占，换一个端口即可。</li>
+<li>❌ 用 <code>-P</code> 后不知道访问哪个端口。✅ 用
+<code>docker port &lt;容器&gt;</code> 或 <code>docker ps</code>
+查看随机分配的端口。</li>
+<li>❌ <code>docker inspect</code> 输出太长看不懂。✅ 用
+<code>-f '{{.字段}}'</code> 提取需要的字段，常用
+<code>.State.Status</code>、<code>.NetworkSettings.IPAddress</code>。</li>
+<li>❌ 误认为 <code>-p 127.0.0.1:8080:80</code> 外部能访问。✅ 绑定到
+127.0.0.1 表示仅本机能访问，外部访问不了。</li>
+</ol>
+<h4 id="小结-4">小结</h4>
+<p><code>docker inspect</code> 查看容器完整元数据（JSON 格式），用
+<code>-f</code> 模板提取特定字段。端口映射
+<code>-p hostPort:containerPort</code>
+让外部通过宿主机端口访问容器服务，方向是"外:内"；<code>-P</code>
+大写随机分配宿主机端口。端口冲突时换宿主机端口。<code>docker port</code>
+命令查看容器的端口映射。</p>
+<hr />
+<h3 id="知识点-k4-6运行-mysql-容器实践">知识点 K4-6：运行 MySQL
+容器实践</h3>
+<h4 id="定义-5">定义</h4>
+<p>本知识点将前 5 个知识点综合应用到 CTTS 项目场景——<strong>运行 MySQL
+容器作为 CTTS 项目的数据库</strong>。</p>
+<p>完整命令：</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> ctts-mysql <span class="dt">\</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 3306:3306 <span class="dt">\</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_ROOT_PASSWORD=123456 <span class="dt">\</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_DATABASE=ctts <span class="dt">\</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_USER=ctts <span class="dt">\</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_PASSWORD=ctts123 <span class="dt">\</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> /data/ctts/mysql:/var/lib/mysql <span class="dt">\</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">--restart</span><span class="op">=</span>unless-stopped <span class="dt">\</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  mysql:8.0</span></code></pre></div>
+<h4 id="原理-5">原理</h4>
+<p><strong>MySQL 官方镜像的环境变量</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>环境变量</th>
+<th>作用</th>
+<th>必填</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MYSQL_ROOT_PASSWORD</code></td>
+<td>root 用户密码</td>
+<td><strong>必填</strong>（不填会启动失败）</td>
+</tr>
+<tr>
+<td><code>MYSQL_DATABASE</code></td>
+<td>启动时自动创建的数据库</td>
+<td>可选</td>
+</tr>
+<tr>
+<td><code>MYSQL_USER</code></td>
+<td>自动创建的普通用户</td>
+<td>可选</td>
+</tr>
+<tr>
+<td><code>MYSQL_PASSWORD</code></td>
+<td>普通用户密码</td>
+<td>与 MYSQL_USER 配套</td>
+</tr>
+<tr>
+<td><code>MYSQL_ALLOW_EMPTY_PASSWORD</code></td>
+<td>允许空密码（不安全，仅测试用）</td>
+<td>可选</td>
+</tr>
+<tr>
+<td><code>MYSQL_RANDOM_ROOT_PASSWORD</code></td>
+<td>随机生成 root 密码</td>
+<td>可选</td>
+</tr>
+</tbody>
+</table>
+<p><strong>为什么挂载数据卷 -v</strong>：</p>
+<div class="visual">
+  <div class="visual-title">图示 7：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">如果不挂载数据卷：</span>
+<span class="diagram-line">   容器删除 <span class="arrow-token">→</span> /var/lib/mysql 数据丢失 <span class="arrow-token">→</span> 数据库没了！</span>
+<span class="diagram-line">挂载数据卷 -v /data/ctts/mysql:/var/lib/mysql：</span>
+<span class="diagram-line">   宿主机 /data/ctts/mysql ←<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> 容器 /var/lib/mysql</span>
+<span class="diagram-line">   容器删除 <span class="arrow-token">→</span> 数据仍在宿主机 <span class="arrow-token">→</span> 重新启动容器数据恢复</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>--restart=unless-stopped 的意义</strong>：</p>
+<ul>
+<li>容器意外退出（如崩溃）或宿主机重启后，Docker 自动重启该容器。</li>
+<li>除非用户手动 <code>docker stop</code>，否则会一直尝试重启。</li>
+<li>生产数据库容器必加此参数。</li>
+</ul>
+<p><strong>MySQL 容器启动流程</strong>：</p>
+<div class="visual">
+  <div class="visual-title">图示 8：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">1. Docker 拉取/使用 mysql:8.0 镜像</span>
+<span class="diagram-line">2. 创建容器，挂载 /data/ctts/mysql <span class="arrow-token">→</span> /var/lib/mysql</span>
+<span class="diagram-line">3. 启动容器主进程：mysqld</span>
+<span class="diagram-line">4. MySQL 首次启动：</span>
+<span class="diagram-line">   a. 初始化数据目录（如果为空）</span>
+<span class="diagram-line">   b. 创建 root 用户，密码来自 MYSQL_ROOT_PASSWORD</span>
+<span class="diagram-line">   c. 创建 MYSQL_DATABASE 数据库（如 ctts）</span>
+<span class="diagram-line">   d. 创建 MYSQL_USER 用户并授权访问该数据库</span>
+<span class="diagram-line">5. MySQL 监听 3306 端口，等待连接</span>
+<span class="diagram-line">6. docker-proxy 监听宿主机 3306，转发到容器 3306</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="问题--场景-5">问题 / 场景</h4>
+<p><strong>问：为什么 MYSQL_ROOT_PASSWORD 是必填的？</strong></p>
+<ul>
+<li>MySQL 官方镜像的入口脚本要求必须设置 root
+密码，否则启动失败（出于安全考虑）。如果测试场景想用空密码，需显式设置
+<code>MYSQL_ALLOW_EMPTY_PASSWORD=yes</code>。</li>
+</ul>
+<p><strong>问：第一次启动很慢，正常吗？</strong></p>
+<ul>
+<li>正常。MySQL
+首次启动要初始化数据目录、创建系统表、创建用户和数据库，通常 10~30
+秒。用 <code>docker logs -f ctts-mysql</code> 看到
+<code>ready for connections</code> 就表示就绪。</li>
+</ul>
+<p><strong>问：如何验证 MySQL 容器正常工作？</strong></p>
+<ul>
+<li>三种方式：
+<ol type="1">
+<li><code>docker exec -it ctts-mysql mysql -uroot -p123456 -e "SELECT 1;"</code>（容器内执行）</li>
+<li>宿主机装了 mysql
+客户端：<code>mysql -h 127.0.0.1 -P 3306 -uroot -p123456</code></li>
+<li>用 Navicat / DBeaver 等图形工具连接 <code>宿主机IP:3306</code></li>
+</ol></li>
+</ul>
+<p><strong>问：数据卷目录 /data/ctts/mysql 需要提前创建吗？</strong></p>
+<ul>
+<li>不需要。Docker 会自动创建。但要注意目录权限，如果 SELinux
+开启可能需要 <code>:Z</code>
+选项（<code>-v /data/ctts/mysql:/var/lib/mysql:Z</code>）。</li>
+</ul>
+<p><strong>问：第二次启动容器时数据还在吗？</strong></p>
+<ul>
+<li>在。因为挂载了数据卷，MySQL 数据写到了宿主机
+<code>/data/ctts/mysql</code>。即使 <code>docker rm</code>
+删了容器，只要数据卷在，重新 <code>docker run</code>
+挂载同一目录，数据就恢复。</li>
+</ul>
+<h4 id="完整示例-5">完整示例</h4>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># CTTS 项目 MySQL 容器化部署完整流程</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 1：确保 mysql:8.0 镜像已拉取（第 3 次课完成）</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images <span class="kw">|</span> <span class="fu">grep</span> mysql</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co"># mysql   8.0   d1...   2 weeks ago   521MB</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 如果没有，先拉取</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull mysql:8.0</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 2：运行 MySQL 容器（CTTS 项目数据库）</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> ctts-mysql <span class="dt">\</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 3306:3306 <span class="dt">\</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_ROOT_PASSWORD=123456 <span class="dt">\</span></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_DATABASE=ctts <span class="dt">\</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_USER=ctts <span class="dt">\</span></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_PASSWORD=ctts123 <span class="dt">\</span></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> /data/ctts/mysql:/var/lib/mysql <span class="dt">\</span></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">--restart</span><span class="op">=</span>unless-stopped <span class="dt">\</span></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>  mysql:8.0</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出容器 ID：c3d4e5f6a1b2...</span></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 3：查看容器状态</span></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="kw">|</span> <span class="fu">grep</span> ctts-mysql</span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a><span class="co"># c3d4e5f6a1b2   mysql:8.0   Up 10 seconds   0.0.0.0:3306-&gt;3306/tcp   ctts-mysql</span></span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 4：查看启动日志（等待 ready for connections）</span></span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> logs <span class="at">-f</span> ctts-mysql</span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a><span class="co"># 2026-07-22T10:00:00.000000Z 0 [System] [MY-013169] [Server] ... mysql:8.0.35</span></span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a><span class="co"># 2026-07-22T10:00:01.000000Z 0 [Warning] [MY-010091] [Server] Can&#39;t create test file /var/lib/mysql/mysqld_tmp_file_case_insensitive_test</span></span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a><span class="co"># ...</span></span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a><span class="co"># 2026-07-22T10:00:20.000000Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: &#39;8.0.35&#39;  socket: &#39;/var/lib/mysql/mysql.sock&#39;  port: 3306  MySQL Community Server - GPL.</span></span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a><span class="co"># 看到 &quot;ready for connections&quot; 表示启动成功，按 Ctrl+C 退出日志跟踪</span></span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 5：验证连接（容器内执行 SQL）</span></span>
+<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> ctts-mysql mysql <span class="at">-uroot</span> <span class="at">-p123456</span> <span class="at">-e</span> <span class="st">&quot;SELECT VERSION();&quot;</span></span>
+<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a><span class="co"># mysql: [Warning] Using a password on the command line interface can be insecure.</span></span>
+<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a><span class="co"># +-----------+</span></span>
+<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a><span class="co"># | VERSION() |</span></span>
+<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a><span class="co"># +-----------+</span></span>
+<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a><span class="co"># | 8.0.35    |</span></span>
+<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a><span class="co"># +-----------+</span></span>
+<span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 6：查看创建的数据库</span></span>
+<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> ctts-mysql mysql <span class="at">-uroot</span> <span class="at">-p123456</span> <span class="at">-e</span> <span class="st">&quot;SHOW DATABASES;&quot;</span></span>
+<span id="cb32-48"><a href="#cb32-48" aria-hidden="true" tabindex="-1"></a><span class="co"># +--------------------+</span></span>
+<span id="cb32-49"><a href="#cb32-49" aria-hidden="true" tabindex="-1"></a><span class="co"># | Database           |</span></span>
+<span id="cb32-50"><a href="#cb32-50" aria-hidden="true" tabindex="-1"></a><span class="co"># +--------------------+</span></span>
+<span id="cb32-51"><a href="#cb32-51" aria-hidden="true" tabindex="-1"></a><span class="co"># | ctts               |  ← 自动创建的数据库</span></span>
+<span id="cb32-52"><a href="#cb32-52" aria-hidden="true" tabindex="-1"></a><span class="co"># | information_schema |</span></span>
+<span id="cb32-53"><a href="#cb32-53" aria-hidden="true" tabindex="-1"></a><span class="co"># | mysql              |</span></span>
+<span id="cb32-54"><a href="#cb32-54" aria-hidden="true" tabindex="-1"></a><span class="co"># | performance_schema |</span></span>
+<span id="cb32-55"><a href="#cb32-55" aria-hidden="true" tabindex="-1"></a><span class="co"># | sys                |</span></span>
+<span id="cb32-56"><a href="#cb32-56" aria-hidden="true" tabindex="-1"></a><span class="co"># +--------------------+</span></span>
+<span id="cb32-57"><a href="#cb32-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-58"><a href="#cb32-58" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 7：使用 ctts 用户连接（验证普通用户）</span></span>
+<span id="cb32-59"><a href="#cb32-59" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> ctts-mysql mysql <span class="at">-uctts</span> <span class="at">-pctts123</span> <span class="at">-e</span> <span class="st">&quot;USE ctts; SELECT CURRENT_USER();&quot;</span></span>
+<span id="cb32-60"><a href="#cb32-60" aria-hidden="true" tabindex="-1"></a><span class="co"># +---------------------+</span></span>
+<span id="cb32-61"><a href="#cb32-61" aria-hidden="true" tabindex="-1"></a><span class="co"># | CURRENT_USER()      |</span></span>
+<span id="cb32-62"><a href="#cb32-62" aria-hidden="true" tabindex="-1"></a><span class="co"># +---------------------+</span></span>
+<span id="cb32-63"><a href="#cb32-63" aria-hidden="true" tabindex="-1"></a><span class="co"># | ctts@%              |</span></span>
+<span id="cb32-64"><a href="#cb32-64" aria-hidden="true" tabindex="-1"></a><span class="co"># +---------------------+</span></span>
+<span id="cb32-65"><a href="#cb32-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-66"><a href="#cb32-66" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 8：宿主机连接测试（如果宿主机装了 mysql 客户端）</span></span>
+<span id="cb32-67"><a href="#cb32-67" aria-hidden="true" tabindex="-1"></a><span class="ex">mysql</span> <span class="at">-h</span> 127.0.0.1 <span class="at">-P</span> 3306 <span class="at">-uroot</span> <span class="at">-p123456</span> <span class="at">-e</span> <span class="st">&quot;SELECT 1;&quot;</span></span>
+<span id="cb32-68"><a href="#cb32-68" aria-hidden="true" tabindex="-1"></a><span class="co"># 或者用 Navicat / DBeaver 连接：</span></span>
+<span id="cb32-69"><a href="#cb32-69" aria-hidden="true" tabindex="-1"></a><span class="co">#   主机：宿主机IP（如 192.168.1.100 或 127.0.0.1）</span></span>
+<span id="cb32-70"><a href="#cb32-70" aria-hidden="true" tabindex="-1"></a><span class="co">#   端口：3306</span></span>
+<span id="cb32-71"><a href="#cb32-71" aria-hidden="true" tabindex="-1"></a><span class="co">#   用户名：root</span></span>
+<span id="cb32-72"><a href="#cb32-72" aria-hidden="true" tabindex="-1"></a><span class="co">#   密码：123456</span></span>
+<span id="cb32-73"><a href="#cb32-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-74"><a href="#cb32-74" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 9：查看容器详情</span></span>
+<span id="cb32-75"><a href="#cb32-75" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect ctts-mysql <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-A</span> 5 <span class="st">&quot;PortBindings&quot;</span></span>
+<span id="cb32-76"><a href="#cb32-76" aria-hidden="true" tabindex="-1"></a><span class="co"># &quot;PortBindings&quot;: {</span></span>
+<span id="cb32-77"><a href="#cb32-77" aria-hidden="true" tabindex="-1"></a><span class="co">#     &quot;3306/tcp&quot;: [</span></span>
+<span id="cb32-78"><a href="#cb32-78" aria-hidden="true" tabindex="-1"></a><span class="co">#         {</span></span>
+<span id="cb32-79"><a href="#cb32-79" aria-hidden="true" tabindex="-1"></a><span class="co">#             &quot;HostIp&quot;: &quot;&quot;,</span></span>
+<span id="cb32-80"><a href="#cb32-80" aria-hidden="true" tabindex="-1"></a><span class="co">#             &quot;HostPort&quot;: &quot;3306&quot;</span></span>
+<span id="cb32-81"><a href="#cb32-81" aria-hidden="true" tabindex="-1"></a><span class="co">#         }</span></span>
+<span id="cb32-82"><a href="#cb32-82" aria-hidden="true" tabindex="-1"></a><span class="co">#     ]</span></span>
+<span id="cb32-83"><a href="#cb32-83" aria-hidden="true" tabindex="-1"></a><span class="co"># },</span></span>
+<span id="cb32-84"><a href="#cb32-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-85"><a href="#cb32-85" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 10：查看资源占用</span></span>
+<span id="cb32-86"><a href="#cb32-86" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> stats <span class="at">--no-stream</span> ctts-mysql</span>
+<span id="cb32-87"><a href="#cb32-87" aria-hidden="true" tabindex="-1"></a><span class="co"># CONTAINER ID   NAME         CPU %   MEM USAGE / LIMIT   MEM %   NET I/O       BLOCK I/O</span></span>
+<span id="cb32-88"><a href="#cb32-88" aria-hidden="true" tabindex="-1"></a><span class="co"># c3d4e5f6a1b2   ctts-mysql   2.50%   350MiB / 1.95GiB    17.50% 1.2kB/850B    45MB/12MB</span></span>
+<span id="cb32-89"><a href="#cb32-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-90"><a href="#cb32-90" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 11：进入容器查看进程</span></span>
+<span id="cb32-91"><a href="#cb32-91" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> top ctts-mysql</span>
+<span id="cb32-92"><a href="#cb32-92" aria-hidden="true" tabindex="-1"></a><span class="co"># UID    PID    PPID   C   STIME   TTY   TIME     CMD</span></span>
+<span id="cb32-93"><a href="#cb32-93" aria-hidden="true" tabindex="-1"></a><span class="co"># mysql  1234   567    0   10:00   ?     00:00:01  mysqld</span></span>
+<span id="cb32-94"><a href="#cb32-94" aria-hidden="true" tabindex="-1"></a><span class="co">#（一个 MySQL 容器就一个主进程 mysqld）</span></span>
+<span id="cb32-95"><a href="#cb32-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-96"><a href="#cb32-96" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 12：进入容器文件系统查看</span></span>
+<span id="cb32-97"><a href="#cb32-97" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> ctts-mysql bash</span>
+<span id="cb32-98"><a href="#cb32-98" aria-hidden="true" tabindex="-1"></a><span class="co"># root@c3d4e5f6a1b2:/# ls /var/lib/mysql/</span></span>
+<span id="cb32-99"><a href="#cb32-99" aria-hidden="true" tabindex="-1"></a><span class="co"># auto.cnf  binlog.000001  ca-key.pem  ca.pem  client-cert.pem  ...</span></span>
+<span id="cb32-100"><a href="#cb32-100" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts/  ← 我们创建的数据库目录</span></span>
+<span id="cb32-101"><a href="#cb32-101" aria-hidden="true" tabindex="-1"></a><span class="co"># mysql/  ← 系统数据库</span></span>
+<span id="cb32-102"><a href="#cb32-102" aria-hidden="true" tabindex="-1"></a><span class="co"># ...</span></span>
+<span id="cb32-103"><a href="#cb32-103" aria-hidden="true" tabindex="-1"></a><span class="co"># root@c3d4e5f6a1b2:/# exit</span></span>
+<span id="cb32-104"><a href="#cb32-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-105"><a href="#cb32-105" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 13：停止 / 启动 / 重启容器（数据不丢失）</span></span>
+<span id="cb32-106"><a href="#cb32-106" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> stop ctts-mysql</span>
+<span id="cb32-107"><a href="#cb32-107" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> start ctts-mysql</span>
+<span id="cb32-108"><a href="#cb32-108" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> restart ctts-mysql</span>
+<span id="cb32-109"><a href="#cb32-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-110"><a href="#cb32-110" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 14：删除容器（数据卷保留，数据不丢）</span></span>
+<span id="cb32-111"><a href="#cb32-111" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> stop ctts-mysql</span>
+<span id="cb32-112"><a href="#cb32-112" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rm ctts-mysql</span>
+<span id="cb32-113"><a href="#cb32-113" aria-hidden="true" tabindex="-1"></a><span class="co"># 容器删除了，但 /data/ctts/mysql 数据还在</span></span>
+<span id="cb32-114"><a href="#cb32-114" aria-hidden="true" tabindex="-1"></a><span class="co"># 重新运行 docker run 挂载同一目录，数据完全恢复</span></span>
+<span id="cb32-115"><a href="#cb32-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-116"><a href="#cb32-116" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 15：清理数据（如需完全删除）</span></span>
+<span id="cb32-117"><a href="#cb32-117" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> stop ctts-mysql <span class="kw">&amp;&amp;</span> <span class="ex">docker</span> rm ctts-mysql</span>
+<span id="cb32-118"><a href="#cb32-118" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> rm <span class="at">-rf</span> /data/ctts/mysql</span>
+<span id="cb32-119"><a href="#cb32-119" aria-hidden="true" tabindex="-1"></a><span class="co"># ⚠️ 生产环境慎用！数据将永久丢失！</span></span></code></pre></div>
+<h4 id="图示-5">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 9：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">CTTS MySQL 容器化部署架构：</span>
+<span class="diagram-line">           宿主机</span>
+<span class="diagram-line">  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">  <span class="tree-token">│</span>                                         <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>  客户端（Navicat/DBeaver/应用）           <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>       <span class="tree-token">│</span>                                 <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>       <span class="tree-token">│</span> 连接 127.0.0.1:3306             <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>       ▼                                 <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span> docker-proxy <span class="tree-token">│</span>    <span class="tree-token">│</span>  容器         <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span> 监听 :3306   <span class="tree-token">│</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span>  ctts-mysql  <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘    <span class="tree-token">│</span>              <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>                      <span class="tree-token">│</span>  mysqld      <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>                      <span class="tree-token">│</span>  监听 :3306  <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>                      <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>                             <span class="tree-token">│</span>           <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>                             <span class="tree-token">│</span> /var/lib/mysql</span>
+<span class="diagram-line">  <span class="tree-token">│</span>                             ▼           <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span> 数据卷（宿主机目录）              <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span> /data/ctts/mysql                 <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ctts/         (业务库)       <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> mysql/        (系统库)       <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> ...           (其他文件)     <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">│</span>                                         <span class="tree-token">│</span></span>
+<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">参数解读：</span>
+<span class="diagram-line">docker run -d \</span>
+<span class="diagram-line">  --name ctts-mysql \                ← 容器名（规范命名）</span>
+<span class="diagram-line">  -p 3306:3306 \                     ← 端口映射（宿主:容器）</span>
+<span class="diagram-line">  -e MYSQL_ROOT_PASSWORD=123456 \    ← root 密码（必填）</span>
+<span class="diagram-line">  -e MYSQL_DATABASE=ctts \           ← 自动创建数据库</span>
+<span class="diagram-line">  -e MYSQL_USER=ctts \               ← 自动创建用户</span>
+<span class="diagram-line">  -e MYSQL_PASSWORD=ctts123 \        ← 用户密码</span>
+<span class="diagram-line">  -v /data/ctts/mysql:/var/lib/mysql \ ← 数据卷持久化</span>
+<span class="diagram-line">  --restart=unless-stopped \         ← 自动重启</span>
+<span class="diagram-line">  mysql:8.0                          ← 镜像（明确版本）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-5">易错点</h4>
+<ol type="1">
+<li>❌ 忘记设置 <code>MYSQL_ROOT_PASSWORD</code>，容器启动失败。✅
+这是必填环境变量，否则启动报错。</li>
+<li>❌ 密码用弱口令（如 <code>123456</code>）并暴露在公网。✅
+生产中用强密码，且只绑定内网 IP（<code>-p 127.0.0.1:3306:3306</code> 或
+<code>-p 内网IP:3306:3306</code>）。</li>
+<li>❌ 不挂载数据卷，删除容器后数据全丢。✅ 必须 <code>-v</code>
+挂载数据卷做持久化。</li>
+<li>❌ 用 <code>:latest</code> 标签，版本不可控。✅ 用明确版本
+<code>mysql:8.0</code> 或 <code>mysql:8.0.35</code>。</li>
+<li>❌ 不加 <code>--restart</code>，宿主机重启后容器不启动。✅
+生产容器加 <code>--restart=unless-stopped</code>。</li>
+<li>❌ 第一次启动后立即连接，报"Can't connect"。✅ MySQL 首次启动需
+10~30 秒初始化，用 <code>docker logs -f</code> 看到
+<code>ready for connections</code> 再连接。</li>
+</ol>
+<h4 id="小结-5">小结</h4>
+<p>运行 MySQL 容器是 CTTS
+项目数据库容器化的关键步骤。核心命令：<code>docker run -d --name ctts-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=&lt;密码&gt; -e MYSQL_DATABASE=&lt;库名&gt; -v &lt;宿主目录&gt;:/var/lib/mysql --restart=unless-stopped mysql:8.0</code>。关键点：必填
+root 密码、挂载数据卷做持久化、设置自动重启策略、用明确版本号。启动后用
+<code>docker logs</code> 确认 <code>ready for connections</code>
+再连接验证。</p>
+<hr />
+<h2 id="三综合示例ctts-项目-mysql-容器化完整流程">三、综合示例：CTTS
+项目 MySQL 容器化完整流程</h2>
+<p>把本节所有知识点串起来，演示 CTTS
+项目数据库容器化的完整操作流程：</p>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================================</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  CTTS 项目 MySQL 容器化部署完整脚本</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  场景：为 CTTS 后端提供数据库服务</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  依赖：第 3 次课已拉取 mysql:8.0 镜像</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================================</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 1：检查环境</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;=== 1. 检查 Docker ===&quot;</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> version <span class="at">--format</span> <span class="st">&#39;{{.Server.Version}}&#39;</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出示例：24.0.7</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;=== 2. 检查 mysql 镜像 ===&quot;</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images mysql:8.0</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="co"># REPOSITORY   TAG   IMAGE ID       CREATED        SIZE</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="co"># mysql        8.0   d1...          2 weeks ago    521MB</span></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 2：清理同名旧容器（如存在）</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;=== 3. 清理旧容器 ===&quot;</span></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rm <span class="at">-f</span> ctts-mysql <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">||</span> <span class="fu">true</span></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 3：运行 MySQL 容器（核心命令）</span></span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;=== 4. 启动 MySQL 容器 ===&quot;</span></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> ctts-mysql <span class="dt">\</span></span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 3306:3306 <span class="dt">\</span></span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_ROOT_PASSWORD=123456 <span class="dt">\</span></span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_DATABASE=ctts <span class="dt">\</span></span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_USER=ctts <span class="dt">\</span></span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_PASSWORD=ctts123 <span class="dt">\</span></span>
+<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> /data/ctts/mysql:/var/lib/mysql <span class="dt">\</span></span>
+<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">--restart</span><span class="op">=</span>unless-stopped <span class="dt">\</span></span>
+<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a>  mysql:8.0</span>
+<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出容器 ID</span></span>
+<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-35"><a href="#cb34-35" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 4：等待 MySQL 就绪</span></span>
+<span id="cb34-36"><a href="#cb34-36" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;=== 5. 等待 MySQL 启动 ===&quot;</span></span>
+<span id="cb34-37"><a href="#cb34-37" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> 1 30<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb34-38"><a href="#cb34-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="ex">docker</span> logs ctts-mysql <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-q</span> <span class="st">&quot;ready for connections&quot;</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb34-39"><a href="#cb34-39" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;MySQL is ready!&quot;</span></span>
+<span id="cb34-40"><a href="#cb34-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span>
+<span id="cb34-41"><a href="#cb34-41" aria-hidden="true" tabindex="-1"></a>  <span class="cf">fi</span></span>
+<span id="cb34-42"><a href="#cb34-42" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">&quot;Waiting... (</span><span class="va">$i</span><span class="st">/30)&quot;</span></span>
+<span id="cb34-43"><a href="#cb34-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sleep</span> 2</span>
+<span id="cb34-44"><a href="#cb34-44" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb34-45"><a href="#cb34-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-46"><a href="#cb34-46" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 5：验证容器状态</span></span>
+<span id="cb34-47"><a href="#cb34-47" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;=== 6. 容器状态 ===&quot;</span></span>
+<span id="cb34-48"><a href="#cb34-48" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="at">--filter</span> <span class="st">&quot;name=ctts-mysql&quot;</span> <span class="at">--format</span> <span class="st">&quot;table {{.Names}}\t{{.Status}}\t{{.Ports}}&quot;</span></span>
+<span id="cb34-49"><a href="#cb34-49" aria-hidden="true" tabindex="-1"></a><span class="co"># NAMES          STATUS         PORTS</span></span>
+<span id="cb34-50"><a href="#cb34-50" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-mysql     Up 30 seconds  0.0.0.0:3306-&gt;3306/tcp</span></span>
+<span id="cb34-51"><a href="#cb34-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-52"><a href="#cb34-52" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 6：验证 MySQL 连接</span></span>
+<span id="cb34-53"><a href="#cb34-53" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;=== 7. 验证 MySQL 连接 ===&quot;</span></span>
+<span id="cb34-54"><a href="#cb34-54" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec ctts-mysql mysql <span class="at">-uroot</span> <span class="at">-p123456</span> <span class="at">-e</span> <span class="st">&quot;SELECT VERSION(); SHOW DATABASES;&quot;</span></span>
+<span id="cb34-55"><a href="#cb34-55" aria-hidden="true" tabindex="-1"></a><span class="co"># +-----------+</span></span>
+<span id="cb34-56"><a href="#cb34-56" aria-hidden="true" tabindex="-1"></a><span class="co"># | VERSION() |</span></span>
+<span id="cb34-57"><a href="#cb34-57" aria-hidden="true" tabindex="-1"></a><span class="co"># +-----------+</span></span>
+<span id="cb34-58"><a href="#cb34-58" aria-hidden="true" tabindex="-1"></a><span class="co"># | 8.0.35    |</span></span>
+<span id="cb34-59"><a href="#cb34-59" aria-hidden="true" tabindex="-1"></a><span class="co"># +-----------+</span></span>
+<span id="cb34-60"><a href="#cb34-60" aria-hidden="true" tabindex="-1"></a><span class="co"># +--------------------+</span></span>
+<span id="cb34-61"><a href="#cb34-61" aria-hidden="true" tabindex="-1"></a><span class="co"># | Database           |</span></span>
+<span id="cb34-62"><a href="#cb34-62" aria-hidden="true" tabindex="-1"></a><span class="co"># +--------------------+</span></span>
+<span id="cb34-63"><a href="#cb34-63" aria-hidden="true" tabindex="-1"></a><span class="co"># | ctts               |</span></span>
+<span id="cb34-64"><a href="#cb34-64" aria-hidden="true" tabindex="-1"></a><span class="co"># | information_schema |</span></span>
+<span id="cb34-65"><a href="#cb34-65" aria-hidden="true" tabindex="-1"></a><span class="co"># | mysql              |</span></span>
+<span id="cb34-66"><a href="#cb34-66" aria-hidden="true" tabindex="-1"></a><span class="co"># | performance_schema |</span></span>
+<span id="cb34-67"><a href="#cb34-67" aria-hidden="true" tabindex="-1"></a><span class="co"># | sys                |</span></span>
+<span id="cb34-68"><a href="#cb34-68" aria-hidden="true" tabindex="-1"></a><span class="co"># +--------------------+</span></span>
+<span id="cb34-69"><a href="#cb34-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-70"><a href="#cb34-70" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 7：创建测试表验证</span></span>
+<span id="cb34-71"><a href="#cb34-71" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;=== 8. 创建测试表 ===&quot;</span></span>
+<span id="cb34-72"><a href="#cb34-72" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec ctts-mysql mysql <span class="at">-uctts</span> <span class="at">-pctts123</span> ctts <span class="at">-e</span> <span class="st">&quot;</span></span>
+<span id="cb34-73"><a href="#cb34-73" aria-hidden="true" tabindex="-1"></a><span class="st">  CREATE TABLE IF NOT EXISTS test_table (</span></span>
+<span id="cb34-74"><a href="#cb34-74" aria-hidden="true" tabindex="-1"></a><span class="st">    id INT AUTO_INCREMENT PRIMARY KEY,</span></span>
+<span id="cb34-75"><a href="#cb34-75" aria-hidden="true" tabindex="-1"></a><span class="st">    name VARCHAR(50) NOT NULL,</span></span>
+<span id="cb34-76"><a href="#cb34-76" aria-hidden="true" tabindex="-1"></a><span class="st">    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span></span>
+<span id="cb34-77"><a href="#cb34-77" aria-hidden="true" tabindex="-1"></a><span class="st">  );</span></span>
+<span id="cb34-78"><a href="#cb34-78" aria-hidden="true" tabindex="-1"></a><span class="st">  INSERT INTO test_table (name) VALUES (&#39;CTTS测试&#39;);</span></span>
+<span id="cb34-79"><a href="#cb34-79" aria-hidden="true" tabindex="-1"></a><span class="st">  SELECT * FROM test_table;</span></span>
+<span id="cb34-80"><a href="#cb34-80" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb34-81"><a href="#cb34-81" aria-hidden="true" tabindex="-1"></a><span class="co"># +----+-----------+---------------------+</span></span>
+<span id="cb34-82"><a href="#cb34-82" aria-hidden="true" tabindex="-1"></a><span class="co"># | id | name      | created_at          |</span></span>
+<span id="cb34-83"><a href="#cb34-83" aria-hidden="true" tabindex="-1"></a><span class="co"># +----+-----------+---------------------+</span></span>
+<span id="cb34-84"><a href="#cb34-84" aria-hidden="true" tabindex="-1"></a><span class="co"># |  1 | CTTS测试  | 2026-07-22 10:05:00 |</span></span>
+<span id="cb34-85"><a href="#cb34-85" aria-hidden="true" tabindex="-1"></a><span class="co"># +----+-----------+---------------------+</span></span>
+<span id="cb34-86"><a href="#cb34-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-87"><a href="#cb34-87" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 8：查看资源占用</span></span>
+<span id="cb34-88"><a href="#cb34-88" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;=== 9. 资源占用 ===&quot;</span></span>
+<span id="cb34-89"><a href="#cb34-89" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> stats <span class="at">--no-stream</span> ctts-mysql</span>
+<span id="cb34-90"><a href="#cb34-90" aria-hidden="true" tabindex="-1"></a><span class="co"># CONTAINER ID   NAME         CPU %   MEM USAGE / LIMIT   MEM %</span></span>
+<span id="cb34-91"><a href="#cb34-91" aria-hidden="true" tabindex="-1"></a><span class="co"># c3d4e5f6a1b2   ctts-mysql   0.50%   350MiB / 1.95GiB    17.50%</span></span>
+<span id="cb34-92"><a href="#cb34-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-93"><a href="#cb34-93" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤 9：查看容器详情</span></span>
+<span id="cb34-94"><a href="#cb34-94" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;=== 10. 容器详情 ===&quot;</span></span>
+<span id="cb34-95"><a href="#cb34-95" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect ctts-mysql <span class="at">-f</span> <span class="st">&#39;</span></span>
+<span id="cb34-96"><a href="#cb34-96" aria-hidden="true" tabindex="-1"></a><span class="st">  Name: {{.Name}}</span></span>
+<span id="cb34-97"><a href="#cb34-97" aria-hidden="true" tabindex="-1"></a><span class="st">  Status: {{.State.Status}}</span></span>
+<span id="cb34-98"><a href="#cb34-98" aria-hidden="true" tabindex="-1"></a><span class="st">  IP: {{.NetworkSettings.IPAddress}}</span></span>
+<span id="cb34-99"><a href="#cb34-99" aria-hidden="true" tabindex="-1"></a><span class="st">  PID: {{.State.Pid}}</span></span>
+<span id="cb34-100"><a href="#cb34-100" aria-hidden="true" tabindex="-1"></a><span class="st">  RestartPolicy: {{.HostConfig.RestartPolicy.Name}}</span></span>
+<span id="cb34-101"><a href="#cb34-101" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span>
+<span id="cb34-102"><a href="#cb34-102" aria-hidden="true" tabindex="-1"></a><span class="co"># Name: /ctts-mysql</span></span>
+<span id="cb34-103"><a href="#cb34-103" aria-hidden="true" tabindex="-1"></a><span class="co"># Status: running</span></span>
+<span id="cb34-104"><a href="#cb34-104" aria-hidden="true" tabindex="-1"></a><span class="co"># IP: 172.17.0.2</span></span>
+<span id="cb34-105"><a href="#cb34-105" aria-hidden="true" tabindex="-1"></a><span class="co"># PID: 1234</span></span>
+<span id="cb34-106"><a href="#cb34-106" aria-hidden="true" tabindex="-1"></a><span class="co"># RestartPolicy: unless-stopped</span></span>
+<span id="cb34-107"><a href="#cb34-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-108"><a href="#cb34-108" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;=== 完成 ===&quot;</span></span>
+<span id="cb34-109"><a href="#cb34-109" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;MySQL 容器已就绪，可通过以下方式连接：&quot;</span></span>
+<span id="cb34-110"><a href="#cb34-110" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;  命令行：mysql -h 127.0.0.1 -P 3306 -uroot -p123456&quot;</span></span>
+<span id="cb34-111"><a href="#cb34-111" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;  图形工具：Navicat / DBeaver，主机 127.0.0.1，端口 3306&quot;</span></span>
+<span id="cb34-112"><a href="#cb34-112" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;  容器内：docker exec -it ctts-mysql mysql -uroot -p123456&quot;</span></span></code></pre></div>
+<blockquote>
+<p>这个综合示例串联了 K4-1 到 K4-6
+所有知识点：容器生命周期管理（K4-1）、docker run
+各参数（K4-2）、容器查看（K4-3）、日志查看与进入（K4-4）、inspect
+详情（K4-5）、MySQL 容器化（K4-6）。</p>
+</blockquote>
+<hr />
+<h2 id="四拓展阅读选学">四、拓展阅读（选学）</h2>
+<ol type="1">
+<li><strong>Docker 日志驱动</strong>：默认
+<code>json-file</code>，还支持
+<code>syslog</code>、<code>journald</code>、<code>fluentd</code>、<code>gelf</code>
+等。生产中常配合 ELK/EFK
+收集日志。配置：<code>/etc/docker/daemon.json</code> 中
+<code>"log-driver": "json-file", "log-opts": {"max-size": "10m", "max-file": "3"}</code>。</li>
+<li><strong>docker run 的 --restart
+策略</strong>：<code>no</code>（默认，不重启）、<code>on-failure</code>（非
+0 退出码重启，可加最大重试次数
+<code>on-failure:5</code>）、<code>always</code>（总是重启，包括 daemon
+重启）、<code>unless-stopped</code>（除非手动
+stop，否则总是重启，推荐）。</li>
+<li><strong>容器资源限制</strong>：<code>docker run -m 512m --cpus 1.5</code>
+限制内存 512MB、CPU 1.5 核。生产中每个容器都应设置资源限制。</li>
+<li><strong>docker exec 原理</strong>：通过 <code>setns()</code>
+系统调用进入已有容器的命名空间，然后 <code>fork()</code>
+一个新进程。所以 exec 能进入运行中的容器而不影响主进程。</li>
+<li><strong>端口暴露与端口映射的区别</strong>：<code>EXPOSE</code> 是
+Dockerfile 中的声明（文档性质），<code>-p</code> 是
+<code>docker run</code> 时的实际映射（真正生效）。<code>EXPOSE 80</code>
+只是说"这个镜像暴露 80 端口"，要让外部访问还需 <code>-p</code>。</li>
+</ol>
+<hr />
+<h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
+<h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
+<pre><code>容器管理
+├── 容器生命周期（K4-1）
+│   ├── 状态：created/running/paused/exited/dead
+│   ├── 命令：create/run/start/stop/restart/pause/unpause/kill/rm
+│   ├── stop vs kill：优雅停止 vs 强制终止
+│   └── pause vs stop：冻结保留内存 vs 完全停止
+├── docker run 核心参数（K4-2）
+│   ├── -d：后台运行
+│   ├── --name：命名
+│   ├── -p hostPort:containerPort：端口映射
+│   ├── -P：随机端口映射
+│   ├── -e KEY=VAL：环境变量
+│   ├── -v hostPath:containerPath：数据卷
+│   ├── --rm：退出自动清理
+│   ├── -it：交互式终端
+│   └── --restart：重启策略
+├── 容器查看与管理（K4-3）
+│   ├── docker ps：运行中容器
+│   ├── docker ps -a：所有容器
+│   ├── docker stats：资源监控
+│   └── docker top：进程查看
+├── 容器日志与进入（K4-4）
+│   ├── docker logs -f：实时日志
+│   ├── docker logs --tail N：最后 N 行
+│   ├── docker exec -it：开新进程进入（推荐）
+│   ├── docker attach：附着主进程（谨慎）
+│   └── exec vs attach：新进程 vs 共享主进程
+├── 容器详情与端口映射（K4-5）
+│   ├── docker inspect：JSON 详情
+│   ├── docker inspect -f：模板提取字段
+│   ├── docker port：查看端口映射
+│   └── 端口映射原理：docker-proxy + iptables NAT
+└── MySQL 容器实践（K4-6）
+    ├── MYSQL_ROOT_PASSWORD：必填
+    ├── MYSQL_DATABASE/USER/PASSWORD：初始化
+    ├── -v 数据卷持久化
+    ├── --restart=unless-stopped：自动重启
+    └── 验证：docker exec mysql -e &quot;SELECT 1&quot;</code></pre>
+<h3 id="一句话总结">一句话总结</h3>
+<blockquote>
+<p>本节学习了容器的<strong>全生命周期管理</strong>：用
+<code>docker run</code>
+的各种参数（<code>-d</code>/<code>--name</code>/<code>-p</code>/<code>-e</code>/<code>-v</code>/<code>--rm</code>）启动容器，用
+<code>docker ps</code>/<code>stats</code>/<code>top</code> 监控，用
+<code>docker logs</code>/<code>exec</code> 排障，用
+<code>docker inspect</code> 查看详情，并完成了 CTTS 项目 MySQL
+数据库的容器化部署。</p>
+</blockquote>
+<hr />
+<h2
+id="六复习思考题开放式非题库题">六、复习思考题（开放式，非题库题）</h2>
+<ol type="1">
+<li>描述容器从创建到删除的完整生命周期，画出状态流转图。</li>
+<li>解释 <code>docker stop</code> 和 <code>docker kill</code>
+的区别，为什么生产中推荐用 stop？</li>
+<li><code>docker run -d --name web -p 8080:80 -e ENV=prod -v /data:/app nginx</code>
+这条命令中每个参数的含义是什么？</li>
+<li>为什么生产中用 <code>docker exec -it</code> 进入容器而不用
+<code>docker attach</code>？attach 在什么场景下还有用？</li>
+<li>端口映射 <code>-p 8080:80</code>
+的方向是什么？为什么是这个方向？如何只允许本机访问？</li>
+<li>运行 MySQL 容器时，为什么要挂载数据卷
+<code>-v /data/mysql:/var/lib/mysql</code>？如果不挂载会有什么后果？</li>
+<li>思考：在 CTTS 项目中，MySQL 容器化后，后端 Spring Boot
+应用如何连接这个数据库？（提示：通过 <code>宿主机IP:3306</code>
+或容器网络，为第 9 次课网络做铺垫）</li>
+<li>思考：<code>docker rm -f ctts-mysql</code>
+后数据还在吗？为什么？（提示：取决于是否挂载数据卷）</li>
+</ol>
+<blockquote>
+<p>这些思考题帮助你建立对容器管理的整体认知，下次综合实践课会动手完成更多操作。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

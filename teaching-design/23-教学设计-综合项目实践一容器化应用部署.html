@@ -1,0 +1,627 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>综合项目实践一容器化应用部署</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 23 次课 · 教学设计</div>
+      <h1>综合项目实践一容器化应用部署</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 23 次课</span>
+        <span class="hero-chip"><b>主题</b>综合项目实践一容器化应用部署</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一教学目标">一、教学目标</a>
+<ul>
+<li><a href="#1-知识目标">1. 知识目标</a></li>
+<li><a href="#2-能力目标">2. 能力目标</a></li>
+<li><a href="#3-素质目标课程思政">3. 素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#二教学重点与难点">二、教学重点与难点</a>
+<ul>
+<li><a href="#教学重点">教学重点</a></li>
+<li><a href="#教学难点">教学难点</a></li>
+</ul></li>
+<li><a href="#三学情分析">三、学情分析</a>
+<ul>
+</ul></li>
+<li><a href="#四教学方法与策略">四、教学方法与策略</a>
+<ul>
+</ul></li>
+<li><a href="#五教学环境与资源">五、教学环境与资源</a>
+<ul>
+<li><a href="#硬件环境">硬件环境</a></li>
+<li><a href="#软件环境">软件环境</a></li>
+<li><a href="#教学资源">教学资源</a></li>
+<li><a href="#课前准备清单教师">课前准备清单（教师）</a></li>
+</ul></li>
+<li><a href="#七实践任务书">七、实践任务书</a>
+<ul>
+<li><a href="#任务总览">任务总览</a></li>
+<li><a href="#子任务与验收标准">子任务与验收标准</a></li>
+<li><a href="#提交物">提交物</a></li>
+</ul></li>
+<li><a href="#八课堂互动设计">八、课堂互动设计</a>
+<ul>
+<li><a href="#互动三链路图绘制总结环节">互动三：链路图绘制（总结环节）</a></li>
+</ul></li>
+<li><a href="#九课程思政融入设计">九、课程思政融入设计</a>
+<ul>
+</ul></li>
+<li><a href="#十教学评价设计">十、教学评价设计</a>
+<ul>
+<li><a href="#过程性评价70">过程性评价（70%）</a></li>
+<li><a href="#结果性评价30">结果性评价（30%）</a></li>
+<li><a href="#评价量规实践报告">评价量规（实践报告）</a></li>
+</ul></li>
+<li><a href="#十一课后作业与拓展">十一、课后作业与拓展</a>
+<ul>
+<li><a href="#必做作业">必做作业</a></li>
+<li><a href="#选做拓展">选做拓展</a></li>
+<li><a href="#预习任务">预习任务</a></li>
+</ul></li>
+<li><a href="#十二教学反思课后填写">十二、教学反思（课后填写）</a>
+<ul>
+<li><a href="#实施情况">实施情况</a></li>
+<li><a href="#改进方向">改进方向</a></li>
+<li><a href="#学生反馈">学生反馈</a></li>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 23 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>课程名称：Docker云容器与管理技术 模块归属：M8 综合项目实践模块
+课时：2学时（90分钟） 课型：实践课（任务驱动型）
+贯穿项目：CTTS（云原生交通违章管理系统）</p>
+</blockquote>
+<hr />
+<h2 id="一教学目标">一、教学目标</h2>
+<h3 id="1-知识目标">1. 知识目标</h3>
+<ul>
+<li><strong>K1</strong>：系统梳理
+Pod、Deployment、Service、Ingress、ConfigMap、Secret、PV、PVC 等 K8s
+核心资源对象在真实项目中的协作关系与编排顺序。</li>
+<li><strong>K2</strong>：掌握多服务（前端 + 后端 + 数据库）应用在 K8s
+集群中的部署架构、服务发现机制与数据流走向。</li>
+<li><strong>K3</strong>：理解 K8s
+声明式编排思想在复杂业务场景中的应用，明确"配置即基础设施"的云原生理念。</li>
+</ul>
+<h3 id="2-能力目标">2. 能力目标</h3>
+<ul>
+<li><strong>A1</strong>：能够独立编写 CTTS 项目的全部 K8s 资源清单 YAML
+文件（MySQL、Backend、Frontend、Ingress 共 12+ 个资源对象）。</li>
+<li><strong>A2</strong>：能够使用 kubectl 命令在 Minikube
+集群中完成部署、扩缩容、服务暴露与全链路验证。</li>
+<li><strong>A3</strong>：能够运用
+<code>kubectl describe</code>、<code>kubectl logs</code>、<code>kubectl get events</code>
+等命令进行 Pod Pending、CrashLoopBackOff、ImagePullBackOff
+等典型故障的定位与排查。</li>
+<li><strong>A4</strong>：能够通过 Ingress 实现基于域名的路由分发，并通过
+curl 与浏览器完成端到端联调验证。</li>
+</ul>
+<h3 id="3-素质目标课程思政">3. 素质目标（课程思政）</h3>
+<ul>
+<li><strong>S1（系统思维）</strong>：从单容器到多服务集群的完整链路认知，培养学生"全局视角、分层解耦"的工程系统思维。</li>
+<li><strong>S2（工匠精神）</strong>：在 YAML
+编写与调试中培养严谨细致、精益求精的工程师素养，体会"配置即代码"的工程规范。</li>
+<li><strong>S3（协作意识）</strong>：理解 DevOps
+文化中开发与运维协同的核心理念，形成"一次定义、处处运行"的标准化交付意识。</li>
+<li><strong>S4（自主攻坚）</strong>：通过真实故障排查场景锻炼学生独立分析问题、查阅文档、复用经验的自学能力与抗压能力。</li>
+</ul>
+<hr />
+<h2 id="二教学重点与难点">二、教学重点与难点</h2>
+<h3 id="教学重点">教学重点</h3>
+<ol type="1">
+<li>CTTS 三服务（MySQL/Backend/Frontend）K8s
+资源清单的完整编写规范与字段语义。</li>
+<li>ConfigMap 与 Secret
+在数据库配置、应用配置、镜像敏感信息注入中的实际用法。</li>
+<li>PV/PVC 与 MySQL Stateful 数据持久化的绑定流程。</li>
+<li>Ingress 域名路由规则与前后端联调验证方法。</li>
+</ol>
+<h3 id="教学难点">教学难点</h3>
+<ol type="1">
+<li><strong>服务间依赖顺序</strong>：MySQL → Backend → Frontend
+的启动次序与就绪探测配合。</li>
+<li><strong>配置注入闭环</strong>：ConfigMap/Secret 如何通过环境变量与
+Volume 挂载两种方式进入容器，并与 SpringBoot 应用配置衔接。</li>
+<li><strong>Ingress 与 Minikube addon</strong>：minikube ingress addon
+的启用、Ingress Controller 工作机制与本地 hosts 解析。</li>
+<li><strong>故障链路定位</strong>：从 Pod
+状态异常到根因（资源不足/配置错误/镜像拉取失败/探针失败）的快速定位方法论。</li>
+</ol>
+<hr />
+<h2 id="三学情分析">三、学情分析</h2>
+<ul>
+<li><strong>前置基础</strong>：学生已系统学习 M1-M7 模块，掌握 Docker
+镜像构建、K8s
+核心资源对象（Pod/Deployment/Service/Ingress/ConfigMap/Secret/PV/PVC）的单点用法，具备基本的
+YAML 阅读与 kubectl 操作能力。</li>
+<li><strong>薄弱环节</strong>：缺少多资源对象综合编排的实战经验，对"配置注入链路""服务依赖""故障排查链路"缺乏整体认知；YAML
+字段易拼写错误、缩进不规范。</li>
+<li><strong>学习偏好</strong>：实践课学生参与度高，偏好"边做边学"；但对失败场景的容忍度低，需教师及时给出排查路径而非直接给答案。</li>
+<li><strong>差异化需求</strong>：约 20% 学生 YAML 编写速度较快，可挑战
+Ingress TLS、滚动升级等进阶任务；约 30%
+学生需逐步引导，重点保证基础部署成功。</li>
+</ul>
+<hr />
+<h2 id="四教学方法与策略">四、教学方法与策略</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>应用环节</th>
+<th>设计意图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务驱动法</td>
+<td>全课主线</td>
+<td>以"CTTS 部署到 K8s"为真实任务，6 个子任务递进</td>
+</tr>
+<tr>
+<td>演示-模仿法</td>
+<td>YAML 编写</td>
+<td>教师演示 MySQL 全套，学生模仿编写 Backend/Frontend</td>
+</tr>
+<tr>
+<td>分层指导法</td>
+<td>实践过程</td>
+<td>基础任务全员必做，进阶任务选做</td>
+</tr>
+<tr>
+<td>故障注入法</td>
+<td>故障排查环节</td>
+<td>教师预设典型错误，学生定位修复</td>
+</tr>
+<tr>
+<td>复盘研讨法</td>
+<td>课堂互动</td>
+<td>部署问题汇总，引导学生提炼经验</td>
+</tr>
+<tr>
+<td>思政融入法</td>
+<td>课程思政点</td>
+<td>从"容器到集群"的链路认知升华</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="五教学环境与资源">五、教学环境与资源</h2>
+<h3 id="硬件环境">硬件环境</h3>
+<ul>
+<li>学生机：Windows 11 / 16GB RAM / 100GB 可用磁盘（已预装 Docker
+Desktop、Minikube、kubectl、VS Code、Git）。</li>
+<li>教师机 + 投影设备，可现场演示集群操作。</li>
+</ul>
+<h3 id="软件环境">软件环境</h3>
+<ul>
+<li>Minikube v1.32+（driver=docker，cpus=4，memory=8g，disk=40g）。</li>
+<li>K8s v1.28+。</li>
+<li>kubectl v1.28+。</li>
+<li>VS Code + YAML 插件 + Kubernetes 插件。</li>
+<li>浏览器（Chrome/Edge）+ Postman（可选）。</li>
+</ul>
+<h3 id="教学资源">教学资源</h3>
+<ul>
+<li>CTTS 项目源码仓库（含 frontend/、backend/、db/init.sql）。</li>
+<li>第23次课教学资料.md（全套 YAML 清单 + 部署步骤 + 排查指南）。</li>
+<li>第23次课题库.md（78题练习题）。</li>
+<li>Minikube ingress addon 已启用镜像（课堂前预拉取）。</li>
+</ul>
+<h3 id="课前准备清单教师">课前准备清单（教师）</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />检查 Minikube
+集群状态（<code>minikube status</code>），必要时
+<code>minikube delete &amp;&amp; minikube start</code>。</label></li>
+<li><label><input type="checkbox" />启用 ingress
+addon：<code>minikube addons enable ingress</code>。</label></li>
+<li><label><input type="checkbox" />预拉取 MySQL 8.0、OpenJDK 17、Nginx
+镜像至本地。</label></li>
+<li><label><input type="checkbox" />准备 CTTS
+三服务镜像（backend:ctts-v1、frontend:ctts-v1）。</label></li>
+<li><label><input type="checkbox" />分发教学资料.md
+至学生机。</label></li>
+</ul>
+<hr />
+<h2
+id="六教学过程设计90分钟时间分配">六、教学过程设计（90分钟时间分配）</h2>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>环节</th>
+<th>教师活动</th>
+<th>学生活动</th>
+<th>资源/产出</th>
+<th>思政融入</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00-05</td>
+<td><strong>导入与任务发布</strong></td>
+<td>回顾前 22 次课知识点图谱；发布 CTTS 部署任务书；明确 6
+个子任务与验收标准</td>
+<td>听讲、记录任务清单；明确目标</td>
+<td>任务书、知识点图谱</td>
+<td>S1 系统思维：从单点到链路</td>
+</tr>
+<tr>
+<td>05-15</td>
+<td><strong>演示一：MySQL 全套部署</strong></td>
+<td>演示 MySQL Deployment+Service+PV+PVC+ConfigMap+Secret
+的编写与部署；强调配置注入闭环</td>
+<td>跟随教师编写 mysql.yaml；执行 <code>kubectl apply -f</code>；观察
+Pod 启动</td>
+<td>mysql.yaml（6 个资源对象）</td>
+<td>S2 工匠精神：YAML 严谨</td>
+</tr>
+<tr>
+<td>15-30</td>
+<td><strong>实践一：学生独立部署 MySQL</strong></td>
+<td>巡视指导；预设 1-2 个典型错误（PVC 绑定失败、Secret
+编码错误）让学生排查</td>
+<td>完成 MySQL 部署；<code>kubectl get pods -w</code> 观察；执行
+<code>kubectl exec</code> 验证数据库连通</td>
+<td>MySQL Pod Running + 数据库初始化成功</td>
+<td>S4 自主攻坚：故障定位</td>
+</tr>
+<tr>
+<td>30-45</td>
+<td><strong>实践二：Backend 部署</strong></td>
+<td>提示 Backend 与 MySQL 的依赖关系；强调就绪探针配置；巡视指导</td>
+<td>编写
+backend.yaml（Deployment+Service+ConfigMap+Secret）；通过环境变量注入数据库连接；部署并验证</td>
+<td>Backend Pod Running + <code>/actuator/health</code> 返回 UP</td>
+<td>S3 协作意识：服务依赖</td>
+</tr>
+<tr>
+<td>45-55</td>
+<td><strong>实践三：Frontend 部署</strong></td>
+<td>简要演示 Nginx 反向代理配置；强调前端镜像构建要点</td>
+<td>编写 frontend.yaml（Deployment+Service）；配置 Nginx 反向代理到
+backend-service；部署并验证</td>
+<td>Frontend Pod Running + 静态资源可访问</td>
+<td>—</td>
+</tr>
+<tr>
+<td>55-65</td>
+<td><strong>实践四：Ingress 配置</strong></td>
+<td>演示 Ingress 规则编写；讲解 minikube ingress addon 与 hosts
+解析</td>
+<td>编写 ingress.yaml；配置 hosts
+文件（frontend.ctts.local、api.ctts.local）；浏览器访问验证</td>
+<td>Ingress 路由生效 + 浏览器访问到前端页面</td>
+<td>S1 链路闭环</td>
+</tr>
+<tr>
+<td>65-75</td>
+<td><strong>故障排查实战</strong></td>
+<td>注入故障（Pod
+Pending、CrashLoopBackOff、ImagePullBackOff）；引导学生用
+<code>describe/logs/events</code> 定位</td>
+<td>用排查命令定位根因；填写故障排查表；修复并重新部署</td>
+<td>故障排查表（≥3 个案例）</td>
+<td>S4 自主攻坚</td>
+</tr>
+<tr>
+<td>75-85</td>
+<td><strong>项目复盘与互动</strong></td>
+<td>主持"部署问题汇总"研讨；引导学生提炼 5 条以上经验；点评典型问题</td>
+<td>分享自己遇到的 1-2 个问题与解决方案；参与讨论</td>
+<td>问题汇总清单（共享文档）</td>
+<td>S3 协作：经验沉淀</td>
+</tr>
+<tr>
+<td>85-90</td>
+<td><strong>总结与思政升华</strong></td>
+<td>总结"从容器到集群"的完整链路；布置课后任务（扩缩容、TLS、滚动升级）</td>
+<td>听讲、记录课后任务；完成课堂反馈</td>
+<td>课后任务书</td>
+<td>S1-S4 综合升华</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="七实践任务书">七、实践任务书</h2>
+<h3 id="任务总览">任务总览</h3>
+<p>将 CTTS 项目（前端 Vue3 + Nginx、后端 SpringBoot、数据库
+MySQL）完整部署到 Minikube K8s 集群，并通过 Ingress
+域名路由实现外部访问。</p>
+<h3 id="子任务与验收标准">子任务与验收标准</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>子任务</th>
+<th>验收标准</th>
+<th>分值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1</td>
+<td>MySQL 部署</td>
+<td>Pod Running；PVC 已绑定；<code>kubectl exec</code> 进入容器能查询到
+ctts 数据库与初始表</td>
+<td>20</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>Backend 部署</td>
+<td>Pod Running；<code>/actuator/health</code> 返回
+<code>{"status":"UP"}</code>；日志显示"数据库连接成功"</td>
+<td>25</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>Frontend 部署</td>
+<td>Pod Running；<code>curl &lt;frontend-svc&gt;</code> 返回 index.html
+内容；静态资源 200</td>
+<td>20</td>
+</tr>
+<tr>
+<td>T4</td>
+<td>Ingress 配置</td>
+<td><code>curl -H "Host: frontend.ctts.local" $(minikube ip)</code>
+返回前端页面；<code>curl -H "Host: api.ctts.local" $(minikube ip)/api/xxx</code>
+返回后端接口数据</td>
+<td>20</td>
+</tr>
+<tr>
+<td>T5</td>
+<td>故障排查</td>
+<td>完成 ≥3 个典型故障的定位与修复，填写排查表</td>
+<td>10</td>
+</tr>
+<tr>
+<td>T6（选做）</td>
+<td>进阶挑战</td>
+<td>Ingress TLS 配置成功；或实现 Backend 滚动升级；或实现 Pod
+水平扩缩容</td>
+<td>加 10 分</td>
+</tr>
+</tbody>
+</table>
+<h3 id="提交物">提交物</h3>
+<ol type="1">
+<li>全套 YAML
+文件（mysql.yaml、backend.yaml、frontend.yaml、ingress.yaml、namespace.yaml）。</li>
+<li>部署验证截图（<code>kubectl get all</code>、curl
+测试、浏览器访问）。</li>
+<li>故障排查表（≥3 个案例）。</li>
+<li>简要实践报告（500字以内，含遇到的问题与解决思路）。</li>
+</ol>
+<hr />
+<h2 id="八课堂互动设计">八、课堂互动设计</h2>
+<h3
+id="互动一知识点快闪回顾导入环节3分钟">互动一：知识点快闪回顾（导入环节，3分钟）</h3>
+<p>教师抛出 6
+个关键词（Pod、Deployment、Service、ConfigMap、Secret、PV/PVC），学生轮流用一句话说出"它在
+CTTS 项目中扮演什么角色"。
+<strong>目的</strong>：激活前置知识，建立"对象-场景"映射。</p>
+<h3
+id="互动二故障排查研讨75-85分钟">互动二：故障排查研讨（75-85分钟）</h3>
+<p>采用"问题漂流"模式：</p>
+<ol type="1">
+<li>每位学生在便签上写下自己遇到的 1 个部署问题与解决思路。</li>
+<li>便签在小组内漂流，其他成员补充或验证。</li>
+<li>每组推选 1 个典型问题全班分享。</li>
+<li>教师点评并归入"常见问题排查表"。</li>
+</ol>
+<p><strong>目的</strong>：把个体试错转化为集体经验沉淀。</p>
+<h3 id="互动三链路图绘制总结环节">互动三：链路图绘制（总结环节）</h3>
+<p>请 1-2 名学生上台在白板绘制 CTTS 在 K8s 中的完整请求链路图（用户 →
+Ingress → Service → Pod → 数据库），其他学生补充修正。
+<strong>目的</strong>：检验"从容器到集群"链路认知的达成度。</p>
+<hr />
+<h2 id="九课程思政融入设计">九、课程思政融入设计</h2>
+<table>
+<thead>
+<tr>
+<th>融入点</th>
+<th>思政元素</th>
+<th>融入方式</th>
+<th>预期效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务发布环节</td>
+<td>系统思维（S1）</td>
+<td>强调"从容器到集群"是认知升级，从单点优化到系统统筹</td>
+<td>学生建立云原生全局观</td>
+</tr>
+<tr>
+<td>YAML 编写环节</td>
+<td>工匠精神（S2）</td>
+<td>演示 YAML 缩进、字段语义的严谨性；引用"配置即代码"理念</td>
+<td>学生养成代码规范意识</td>
+</tr>
+<tr>
+<td>Backend 与 MySQL 依赖配置</td>
+<td>协作意识（S3）</td>
+<td>类比团队协作：服务间通过契约（Service DNS）解耦，呼应 DevOps
+文化</td>
+<td>学生理解标准化交付价值</td>
+</tr>
+<tr>
+<td>故障排查环节</td>
+<td>自主攻坚（S4）</td>
+<td>强调"不直接给答案，给排查路径"；引用一线 SRE 工程师案例</td>
+<td>学生形成独立解决问题的信心</td>
+</tr>
+<tr>
+<td>复盘环节</td>
+<td>综合升华</td>
+<td>提炼"完整链路"方法论；呼应国家云原生产业战略与人才需求</td>
+<td>学生建立专业使命感</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="十教学评价设计">十、教学评价设计</h2>
+<h3 id="过程性评价70">过程性评价（70%）</h3>
+<table>
+<thead>
+<tr>
+<th>评价维度</th>
+<th>评价方式</th>
+<th>权重</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务完成度（T1-T5 验收）</td>
+<td>教师现场验收 + 截图提交</td>
+<td>40%</td>
+</tr>
+<tr>
+<td>实践过程参与度</td>
+<td>巡视观察 + 互动发言</td>
+<td>15%</td>
+</tr>
+<tr>
+<td>故障排查表质量</td>
+<td>文档评分（案例数、定位准确性）</td>
+<td>15%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="结果性评价30">结果性评价（30%）</h3>
+<table>
+<thead>
+<tr>
+<th>评价维度</th>
+<th>评价方式</th>
+<th>权重</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>课后题库练习（≥40题）</td>
+<td>在线答题正确率</td>
+<td>15%</td>
+</tr>
+<tr>
+<td>实践报告质量</td>
+<td>文档评分（问题分析、解决思路、反思深度）</td>
+<td>10%</td>
+</tr>
+<tr>
+<td>进阶任务（T6）</td>
+<td>选做加分项</td>
+<td>5%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="评价量规实践报告">评价量规（实践报告）</h3>
+<table>
+<thead>
+<tr>
+<th>等级</th>
+<th>标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>优秀（90+）</td>
+<td>全部任务验收通过；故障排查 ≥5 案例；报告有深度反思与改进建议</td>
+</tr>
+<tr>
+<td>良好（80-89）</td>
+<td>T1-T5 全部通过；故障排查 ≥3 案例；报告结构完整</td>
+</tr>
+<tr>
+<td>合格（60-79）</td>
+<td>T1-T4 通过；故障排查 ≥2 案例；报告基本完整</td>
+</tr>
+<tr>
+<td>不合格（&lt;60）</td>
+<td>T1-T4 未全部通过；或排查案例 &lt;2；或报告缺失</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="十一课后作业与拓展">十一、课后作业与拓展</h2>
+<h3 id="必做作业">必做作业</h3>
+<ol type="1">
+<li>完成第23次课题库.md 中 ≥40 道题目，正确率 ≥80%。</li>
+<li>提交实践报告（500字以内）+ 全套 YAML + 验证截图。</li>
+</ol>
+<h3 id="选做拓展">选做拓展</h3>
+<ol type="1">
+<li><strong>Ingress TLS</strong>：为 frontend.ctts.local 与
+api.ctts.local 配置 HTTPS（自签名证书）。</li>
+<li><strong>滚动升级</strong>：修改 Backend 镜像版本，观察 K8s
+滚动升级过程，验证零停机。</li>
+<li><strong>水平扩缩容</strong>：将 Backend 扩展到 3 个副本，通过
+<code>kubectl get pods -w</code> 观察负载分发。</li>
+<li><strong>HPA 自动扩缩容</strong>：部署 metrics-server，配置 HPA 基于
+CPU 自动扩缩容。</li>
+</ol>
+<h3 id="预习任务">预习任务</h3>
+<ul>
+<li>预习第24次课：Helm 包管理基础（Chart
+结构、模板渲染、Repository）。</li>
+<li>思考：将 CTTS 全套 YAML 用 Helm Chart 重构后，能带来哪些收益？</li>
+</ul>
+<hr />
+<h2 id="十二教学反思课后填写">十二、教学反思（课后填写）</h2>
+<h3 id="实施情况">实施情况</h3>
+<ul class="task-list">
+<li><label><input
+type="checkbox" />时间分配是否合理？哪些环节超时/提前？</label></li>
+<li><label><input type="checkbox" />学生任务完成率（T1-T5
+分别多少）？</label></li>
+<li><label><input type="checkbox" />典型故障案例收集（≥5
+个，用于下次迭代）？</label></li>
+</ul>
+<h3 id="改进方向">改进方向</h3>
+<ul>
+<li>YAML 模板是否需要进一步脚手架化（提供 stub 让学生填空）？</li>
+<li>故障注入环节是否覆盖了核心场景？是否需要增加
+NetworkPolicy、ResourceLimit 场景？</li>
+<li>思政融入是否自然？是否需要更多一线工程案例？</li>
+</ul>
+<h3 id="学生反馈">学生反馈</h3>
+<ul>
+<li>课堂反馈问卷结果（1-5 分）：任务难度 ___ / 实践收获 ___ / 资料完整度
+___ / 思政融入 ___。</li>
+<li>学生建议摘要：__________________________。</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>设计说明</strong>：本设计以"真实项目 + 任务驱动 + 故障注入 +
+复盘研讨"为核心特色，强调学生动手实践与问题解决能力培养，思政元素自然融入工程实践场景，避免说教化。90分钟时间分配紧凑但留有弹性，教师可根据学生进度灵活调整演示与实践比例（建议
+3:7）。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

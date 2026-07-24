@@ -1,0 +1,1973 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>镜像管理</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 03 次课 · 教学资料</div>
+      <h1>镜像管理</h1>
+      <p>面向学生复习、自学、命令示例与知识图示 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 03 次课</span>
+        <span class="hero-chip"><b>主题</b>镜像管理</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一学习导读">一、学习导读</a>
+<ul>
+<li><a href="#11-本节定位">1.1 本节定位</a></li>
+<li><a href="#12-先修基础">1.2 先修基础</a></li>
+<li><a href="#13-学习目标">1.3 学习目标</a></li>
+</ul></li>
+<li><a href="#二知识点详解">二、知识点详解</a>
+<ul>
+<li><a href="#知识点-k3-1镜像概念与组成">知识点 K3-1：镜像概念与组成</a></li>
+<li><a href="#知识点-k3-2镜像拉取与查看">知识点 K3-2：镜像拉取与查看</a></li>
+<li><a href="#知识点-k3-3镜像分层结构">知识点 K3-3：镜像分层结构</a></li>
+<li><a href="#知识点-k3-4镜像详情查看">知识点 K3-4：镜像详情查看</a></li>
+<li><a href="#知识点-k3-5镜像标签管理">知识点 K3-5：镜像标签管理</a></li>
+<li><a href="#知识点-k3-6镜像删除与清理">知识点 K3-6：镜像删除与清理</a></li>
+</ul></li>
+<li><a href="#三综合示例ctts-三服务镜像准备完整流程">三、综合示例：CTTS 三服务镜像准备完整流程</a>
+<ul>
+</ul></li>
+<li><a href="#四拓展阅读选学">四、拓展阅读（选学）</a>
+<ul>
+</ul></li>
+<li><a href="#五本节小结与知识结构图">五、本节小结与知识结构图</a>
+<ul>
+<li><a href="#知识结构图思维导图">知识结构图（思维导图）</a></li>
+<li><a href="#一句话总结">一句话总结</a></li>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 03 次课 <span>｜</span> <strong>文档：</strong>教学资料</p>
+<blockquote>
+<p>学生复习资料 ｜
+配套：<code>教学设计.md</code>（教师教案）、<code>题库.md</code>（78
+题考试题库）
+本资料面向学生课后复习自学，包含定义、原理、问题、完整示例、图示、易错点与小结。</p>
+</blockquote>
+<hr />
+<h2 id="一学习导读">一、学习导读</h2>
+<h3 id="11-本节定位">1.1 本节定位</h3>
+<p>这是《Docker 云容器与管理技术》的<strong>第 3 次课</strong>，进入 M2
+模块"镜像与容器管理"的第一节课，重点是<strong>彻底搞清楚"镜像"这个核心概念</strong>——它是什么、怎么来、怎么管、怎么删。</p>
+<p>第 1 次课建立容器化认知，第 2 次课安装好 Docker
+环境，本节课正式进入"镜像管理"操作。所有 Docker
+操作都从镜像开始（没有镜像就没有容器），所以本节是后续 Dockerfile
+构建（M3）、Compose 编排（M4）的基础。</p>
+<p>学完本节，你应当能回答：</p>
+<ul>
+<li>什么是 Docker 镜像？它包含什么？为什么不可变？</li>
+<li>怎么拉取镜像（<code>docker pull</code>）？怎么查看本地镜像（<code>docker images</code>）？各字段什么含义？</li>
+<li>镜像为什么是分层的？分层带来了哪些好处？怎么看镜像的层（<code>docker history</code>）？</li>
+<li>怎么查看镜像详情（<code>docker image inspect</code>）？关键字段都是什么意思？</li>
+<li>怎么给镜像打标签（<code>docker tag</code>）？为什么生产环境不能用
+<code>:latest</code>？</li>
+<li>怎么删除镜像（<code>docker rmi</code>）？怎么清理无用镜像（<code>docker image prune</code>）？</li>
+</ul>
+<h3 id="12-先修基础">1.2 先修基础</h3>
+<table>
+<thead>
+<tr>
+<th>先修知识</th>
+<th>用到程度</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 1 次课内容</td>
+<td>必须</td>
+<td>理解镜像、容器、仓库三大概念的关系</td>
+</tr>
+<tr>
+<td>第 2 次课内容</td>
+<td>必须</td>
+<td>已安装 Docker，能运行 <code>docker</code>
+命令，配置过镜像加速器</td>
+</tr>
+<tr>
+<td>Linux 命令行基础</td>
+<td>基础认知</td>
+<td>知道 <code>ls</code>、<code>cd</code>、<code>cat</code>、管道、JSON
+概念</td>
+</tr>
+<tr>
+<td>文件系统基础</td>
+<td>有则更好</td>
+<td>了解文件、目录、inode 概念，有助于理解 UnionFS</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-学习目标">1.3 学习目标</h3>
+<ul>
+<li>✅ 理解镜像的概念、组成与不可变特性</li>
+<li>✅ 掌握 <code>docker pull</code> / <code>docker images</code> /
+<code>docker image ls</code> 命令</li>
+<li>✅ 理解镜像分层结构（Layer + UnionFS）与层共享、层缓存</li>
+<li>✅ 掌握 <code>docker history</code> 查看镜像构建层</li>
+<li>✅ 掌握 <code>docker image inspect</code>
+查看镜像详情并解读关键字段</li>
+<li>✅ 掌握 <code>docker tag</code> 重命名镜像与 <code>:latest</code>
+陷阱</li>
+<li>✅ 掌握 <code>docker rmi</code> / <code>docker image rm</code> /
+<code>docker image prune</code> 删除与清理</li>
+<li>✅ 完成 CTTS 项目所需镜像（MySQL / Nginx / OpenJDK）的拉取准备</li>
+</ul>
+<hr />
+<h2 id="二知识点详解">二、知识点详解</h2>
+<h3 id="知识点-k3-1镜像概念与组成">知识点 K3-1：镜像概念与组成</h3>
+<h4 id="定义">定义</h4>
+<p><strong>Docker 镜像（Image）</strong>
+是一个<strong>只读的、分层的</strong>容器运行模板，包含了应用运行所需的全部内容——代码、运行时、系统库、依赖、配置文件、环境变量、元数据等。通过镜像可以启动一个或多个容器实例。</p>
+<p>一句话理解：</p>
+<blockquote>
+<p><strong>镜像是容器的"图纸"，容器是按图纸造出来的"产品"。一份图纸可以造出多个产品。</strong></p>
+</blockquote>
+<h4 id="原理">原理</h4>
+<p><strong>镜像包含什么</strong>（以 <code>mysql:8.0</code>
+镜像为例）：</p>
+<div class="visual">
+  <div class="visual-title">图示 1：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span>  mysql:8.0 镜像                      <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line"><span class="tree-token">│</span>  应用层                              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> MySQL Server 程序（mysqld）     <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 初始化脚本（entrypoint.sh）     <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 默认配置文件（my.cnf）          <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line"><span class="tree-token">│</span>  运行时与依赖层                      <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> MySQL 运行依赖库               <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> shell 工具（bash）              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line"><span class="tree-token">│</span>  基础系统层                          <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> Debian 11（最小化）             <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line"><span class="tree-token">│</span>  元数据（Metadata）                  <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 默认启动命令（CMD）             <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 暴露端口（EXPOSE 3306）         <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 环境变量（ENV MYSQL_MAJOR=8.0） <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 工作目录（WORKDIR）             <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>镜像的不可变（Immutable）特性</strong>：</p>
+<ul>
+<li>镜像一旦构建完成，其内容就<strong>不可修改</strong>。</li>
+<li>如果要"改"镜像，只能基于它构建一个<strong>新镜像</strong>（新 tag
+或新 ID）。</li>
+<li>这就是为什么 Dockerfile
+中每条指令生成一层、每层只读——只读保证不可变。</li>
+<li>不可变带来的好处：<strong>可复现、可回滚、可信任</strong>——同一个镜像
+ID 在任何机器上运行的结果完全一致。</li>
+</ul>
+<p><strong>镜像 vs 容器</strong>（重要对比）：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>镜像（Image）</th>
+<th>容器（Container）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>状态</td>
+<td>静态、只读</td>
+<td>动态、可写</td>
+</tr>
+<tr>
+<td>性质</td>
+<td>模板</td>
+<td>运行实例</td>
+</tr>
+<tr>
+<td>存储</td>
+<td>分层只读层</td>
+<td>在镜像层上加一层可写层</td>
+</tr>
+<tr>
+<td>关系</td>
+<td>一份镜像</td>
+<td>可启动多个容器实例</td>
+</tr>
+<tr>
+<td>生命周期</td>
+<td>长期存在（除非主动删除）</td>
+<td>临时运行（停止/删除后可写层消失）</td>
+</tr>
+<tr>
+<td>类比</td>
+<td>面向对象的"类"</td>
+<td>面向对象的"对象"</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景">问题 / 场景</h4>
+<p><strong>问：镜像和容器到底什么关系？</strong></p>
+<ul>
+<li>镜像是只读模板，容器是镜像运行起来的实例。一个镜像可以同时启动多个容器，每个容器在镜像之上加一层可写层，互不干扰。就像"类"和"对象"——一个类可以
+new 出多个对象。</li>
+</ul>
+<p><strong>问：为什么镜像要做成只读不可变的？</strong></p>
+<ul>
+<li>保证可复现性：同一个镜像（同一个 IMAGE
+ID）在任何机器上运行结果一致，这是"环境一致性"的根基。</li>
+<li>保证可信任：镜像构建后内容不变，可以安全分发和审计。</li>
+<li>支持回滚：版本出问题时切回旧镜像即可，因为旧镜像内容没变。</li>
+</ul>
+<p><strong>问：镜像 ID（IMAGE ID）和镜像名:标签
+是什么关系？</strong></p>
+<ul>
+<li>镜像 ID 是镜像的<strong>唯一标识</strong>（SHA256
+摘要的前若干位），全局唯一，不可重复。</li>
+<li><code>镜像名:标签</code>（如
+<code>mysql:8.0</code>）是人类可读的<strong>别名</strong>，可以重复（一个
+ID 可以打多个 tag）。</li>
+<li>类比：ID 是身份证号（唯一），<code>名:tag</code>
+是姓名+绰号（可重复、可改）。</li>
+</ul>
+<p><strong>问：镜像可以"修改"吗？</strong></p>
+<ul>
+<li>不能直接修改。要改只能基于原镜像用 Dockerfile 构建新镜像，或用
+<code>docker commit</code> 把容器的修改提交成新镜像（不推荐，第 6
+次课详讲）。</li>
+</ul>
+<h4 id="完整示例">完整示例</h4>
+<p>查看本地已有哪些镜像（先看现象，命令在 K3-2 详讲）：</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span></code></pre></div>
+<p>预期输出（假设本地已有几个镜像）：</p>
+<pre><code>REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+mysql         8.0       d1dc36f8e78f   2 weeks ago    521MB
+nginx         latest    605c77e624dd   3 weeks ago    142MB
+hello-world   latest    feb5d9fea6a5   6 months ago   13.3kB</code></pre>
+<p>各字段含义：</p>
+<ul>
+<li><code>REPOSITORY</code>：镜像仓库名（如 mysql、nginx）</li>
+<li><code>TAG</code>：镜像标签（如 8.0、latest）</li>
+<li><code>IMAGE ID</code>：镜像唯一 ID（SHA256 前 12 位）</li>
+<li><code>CREATED</code>：镜像创建时间（不是拉取时间）</li>
+<li><code>SIZE</code>：镜像"逻辑大小"（注意：不是实际磁盘占用，因为层可共享）</li>
+</ul>
+<blockquote>
+<p>📌 REPOSITORY:TAG 是人类可读的别名，IMAGE ID
+才是镜像的"身份证号"。</p>
+</blockquote>
+<h4 id="图示">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 2：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">镜像与容器的关系：</span>
+<span class="diagram-line">   镜像（只读模板）              容器（运行实例）</span>
+<span class="diagram-line">  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐            ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">  <span class="tree-token">│</span>  Layer 3 应用 <span class="tree-token">│</span>            <span class="tree-token">│</span>  可写层       <span class="tree-token">│</span> ← 容器自己的修改写这里</span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤            <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line">  <span class="tree-token">│</span>  Layer 2 依赖 <span class="tree-token">│</span>   run      <span class="tree-token">│</span>  Layer 3 应用 <span class="tree-token">│</span> ← 来自镜像（只读）</span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤ <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line">  <span class="tree-token">│</span>  Layer 1 基础 <span class="tree-token">│</span>            <span class="tree-token">│</span>  Layer 2 依赖 <span class="tree-token">│</span> ← 来自镜像（只读）</span>
+<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘            <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line">                              <span class="tree-token">│</span>  Layer 1 基础 <span class="tree-token">│</span> ← 来自镜像（只读）</span>
+<span class="diagram-line">                              <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">   一份镜像                     可启动多个容器</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点">易错点</h4>
+<ol type="1">
+<li>❌ 误认为"镜像可以像文件一样直接编辑"。✅
+镜像只读不可变，要改只能构建新镜像。</li>
+<li>❌ 误认为"删除容器会删除镜像"。✅
+容器只是镜像的实例，删容器不影响镜像；反之删镜像要先删基于它的容器。</li>
+<li>❌ 误认为"IMAGE ID 就是镜像名"。✅ IMAGE ID 是 SHA256
+摘要前缀，全局唯一；镜像名:标签是别名，可重复可改。</li>
+<li>❌ 误认为"SIZE 字段就是镜像实际占用磁盘"。✅ SIZE
+是逻辑大小（所有层大小之和），实际占用可能因层共享而更小（K3-3
+详讲）。</li>
+</ol>
+<h4 id="小结">小结</h4>
+<p>镜像是只读、分层、不可变的容器运行模板，包含应用运行所需的全部内容。一个镜像可以启动多个容器实例。镜像通过
+<code>镜像名:标签</code> 标识，也有唯一的 IMAGE
+ID。不可变特性保证了镜像的可复现、可回滚、可信任。</p>
+<hr />
+<h3 id="知识点-k3-2镜像拉取与查看">知识点 K3-2：镜像拉取与查看</h3>
+<h4 id="定义-1">定义</h4>
+<ul>
+<li><strong><code>docker pull</code></strong>：从镜像仓库（默认 Docker
+Hub）拉取镜像到本地。</li>
+<li><strong><code>docker images</code></strong> /
+<strong><code>docker image ls</code></strong>：列出本地所有镜像。</li>
+<li>两条命令是镜像操作中最常用的入门命令。</li>
+</ul>
+<h4 id="原理-1">原理</h4>
+<p><strong><code>docker pull</code> 完整用法</strong>：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull <span class="pp">[</span><span class="ss">选项</span><span class="pp">]</span> 镜像名[:标签<span class="kw">|</span><span class="ex">@摘要]</span></span></code></pre></div>
+<p>常用形式：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker pull mysql</code></td>
+<td>拉取 mysql:latest（不写标签默认 latest）</td>
+</tr>
+<tr>
+<td><code>docker pull mysql:8.0</code></td>
+<td>拉取 mysql 镜像的 8.0 版本</td>
+</tr>
+<tr>
+<td><code>docker pull mysql:8.0.35</code></td>
+<td>拉取更精确的版本（推荐生产使用）</td>
+</tr>
+<tr>
+<td><code>docker pull nginx:alpine</code></td>
+<td>拉取基于 alpine 的 nginx 变体</td>
+</tr>
+<tr>
+<td><code>docker pull openjdk:17-slim</code></td>
+<td>拉取 openjdk 17 的精简版</td>
+</tr>
+<tr>
+<td><code>docker pull registry.example.com/myimg:v1</code></td>
+<td>从私有仓库拉取</td>
+</tr>
+<tr>
+<td><code>docker pull mysql@sha256:abc123...</code></td>
+<td>通过摘要拉取（最精确）</td>
+</tr>
+<tr>
+<td><code>docker pull --platform linux/amd64 mysql:8.0</code></td>
+<td>指定平台（跨架构时）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>拉取流程</strong>：</p>
+<ol type="1">
+<li>客户端把 pull 请求通过 REST API 发给 dockerd。</li>
+<li>dockerd 联系镜像仓库（默认 Docker Hub），查询镜像 manifest。</li>
+<li>逐层下载镜像的每一层（Layer），层有 SHA256 摘要校验。</li>
+<li>本地已有的层不会重复下载（<strong>层缓存</strong>）。</li>
+<li>下载完成后，组合成本地镜像。</li>
+</ol>
+<p><strong><code>docker images</code> / <code>docker image ls</code>
+完整用法</strong>：</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images <span class="pp">[</span><span class="ss">选项</span><span class="pp">]</span> [镜像名<span class="pp">[</span><span class="ss">:标签</span><span class="pp">]</span>]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image ls <span class="pp">[</span><span class="ss">选项</span><span class="pp">]</span> [镜像名<span class="pp">[</span><span class="ss">:标签</span><span class="pp">]</span>]</span></code></pre></div>
+<p>常用形式：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker images</code></td>
+<td>列出所有本地镜像</td>
+</tr>
+<tr>
+<td><code>docker image ls</code></td>
+<td>同上（新语法，等价）</td>
+</tr>
+<tr>
+<td><code>docker images mysql</code></td>
+<td>列出仓库名为 mysql 的镜像</td>
+</tr>
+<tr>
+<td><code>docker images mysql:8.0</code></td>
+<td>列出 mysql:8.0（如有）</td>
+</tr>
+<tr>
+<td><code>docker images -a</code></td>
+<td>列出所有镜像（含中间层，一般不用）</td>
+</tr>
+<tr>
+<td><code>docker images -q</code></td>
+<td>只输出镜像 ID（常用于脚本批量删除）</td>
+</tr>
+<tr>
+<td><code>docker images --digests</code></td>
+<td>显示镜像摘要（SHA256）</td>
+</tr>
+<tr>
+<td><code>docker images --format "{{.Repository}}:{{.Tag}} {{.Size}}"</code></td>
+<td>自定义输出格式</td>
+</tr>
+<tr>
+<td><code>docker images --filter "dangling=true"</code></td>
+<td>只显示悬空镜像（K3-6 详讲）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>输出字段详解</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>REPOSITORY</code></td>
+<td>镜像仓库名</td>
+<td><code>mysql</code>、<code>nginx</code>、<code>library/mysql</code>（官方镜像带
+library/ 前缀，可省略）</td>
+</tr>
+<tr>
+<td><code>TAG</code></td>
+<td>镜像标签</td>
+<td><code>8.0</code>、<code>latest</code>、<code>alpine</code></td>
+</tr>
+<tr>
+<td><code>IMAGE ID</code></td>
+<td>镜像唯一 ID（SHA256 前 12 位）</td>
+<td><code>d1dc36f8e78f</code></td>
+</tr>
+<tr>
+<td><code>CREATED</code></td>
+<td>镜像<strong>构建时间</strong>（不是你拉取的时间）</td>
+<td><code>2 weeks ago</code></td>
+</tr>
+<tr>
+<td><code>SIZE</code></td>
+<td>镜像逻辑大小（所有层大小之和）</td>
+<td><code>521MB</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景-1">问题 / 场景</h4>
+<p><strong>问：<code>docker pull mysql</code>
+不写标签拉的是什么版本？</strong></p>
+<ul>
+<li>拉的是 <code>mysql:latest</code>。但 <code>:latest</code>
+不一定是最新最稳定版，可能指向任意版本。<strong>生产环境必须指定明确版本号</strong>（如
+<code>mysql:8.0.35</code>），避免不可复现问题（K3-5 详讲）。</li>
+</ul>
+<p><strong>问：为什么第二次拉同一个镜像很快？</strong></p>
+<ul>
+<li>因为分层 + 层缓存。Docker 会校验每一层的 SHA256
+摘要，本地已有的层不会重复下载，只下载缺失的层或更新的层。比如
+<code>mysql:8.0</code> 和 <code>mysql:8.0.35</code>
+共享很多层，第二次拉取只下载差异层。</li>
+</ul>
+<p><strong>问：CREATED 时间为什么不是我拉取的时间？</strong></p>
+<ul>
+<li>CREATED 是镜像<strong>构建者构建这个镜像的时间</strong>（即
+Dockerfile 构建完成时间），不是你本地拉取的时间。所以你会看到
+<code>2 weeks ago</code>、<code>6 months ago</code> 这种时间。</li>
+</ul>
+<p><strong>问：<code>docker images</code> 和
+<code>docker image ls</code> 有什么区别？</strong></p>
+<ul>
+<li>完全等价。<code>docker images</code>
+是老语法，<code>docker image ls</code> 是 Docker 1.13+
+引入的新语法（更规范）。两者输出完全相同，用哪个都行。</li>
+</ul>
+<p><strong>问：怎么只列出镜像 ID？</strong></p>
+<ul>
+<li><code>docker images -q</code>，常用于批量删除场景：<code>docker rmi $(docker images -q)</code>（慎用！）。</li>
+</ul>
+<h4 id="完整示例-1">完整示例</h4>
+<p><strong>示例 1：拉取 CTTS 项目所需的三个镜像</strong>：</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 拉取 MySQL 8.0（数据库服务）</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull mysql:8.0</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>8.0: Pulling from library/mysql
+72a69066d2fe: Pull complete
+93619dbc5b36: Pull complete
+99da31dd3474: Pull complete
+626033c43d70: Pull complete
+40d9b91c01b9: Pull complete
+35133f4d2dd1: Pull complete
+0e4ba316c3df: Pull complete
+a2ab8c0a4f0c: Pull complete
+7e0798a0b5bd: Pull complete
+ced4ba3cb1f6: Pull complete
+4f06e67656a0: Pull complete
+c4b8e55c9c2f: Pull complete
+Digest: sha256:ab4dfe625cca5a3bbbce1a1f47d09c8d4d81e3f4d1cd3f6a0f7c2c2198c19e88
+Status: Downloaded newer image for mysql:8.0
+docker.io/library/mysql:8.0</code></pre>
+<blockquote>
+<p>📌 输出中每一行 <code>xxx: Pull complete</code>
+就是下载完了一层。MySQL 镜像有 13 层。</p>
+</blockquote>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 拉取 Nginx 1.25（前端静态资源服务）</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull nginx:1.25</span></code></pre></div>
+<p>预期输出（简）：</p>
+<pre><code>1.25: Pulling from library/nginx
+a2abf6c4d29e: Pull complete
+f3409a831bf0: Pull complete
+9919a6cbae9c: Pull complete
+fc1ce6dba660: Pull complete
+1f1c3cc3f8ee: Pull complete
+8f20883de1c7: Pull complete
+39e51c3c8300: Pull complete
+Digest: sha256:...（一长串）
+Status: Downloaded newer image for nginx:1.25
+docker.io/library/nginx:1.25</code></pre>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 拉取 OpenJDK 17 slim（后端 Java 运行时）</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull openjdk:17-slim</span></code></pre></div>
+<p>预期输出（简）：</p>
+<pre><code>17-slim: Pulling from library/openjdk
+1fe172e4850f: Pull complete
+Digest: sha256:...
+Status: Downloaded newer image for openjdk:17-slim
+docker.io/library/openjdk:17-slim</code></pre>
+<p><strong>示例 2：查看本地镜像</strong>：</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>REPOSITORY    TAG        IMAGE ID       CREATED        SIZE
+mysql         8.0        d1dc36f8e78f   2 weeks ago    521MB
+nginx         1.25       605c77e624dd   3 weeks ago    142MB
+openjdk       17-slim    a3562aa0b991   2 months ago   271MB
+hello-world   latest     feb5d9fea6a5   6 months ago   13.3kB</code></pre>
+<p><strong>示例 3：自定义输出格式（脚本常用）</strong>：</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images <span class="at">--format</span> <span class="st">&quot;table {{.Repository}}\t{{.Tag}}\t{{.Size}}&quot;</span></span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>REPOSITORY    TAG        SIZE
+mysql         8.0        521MB
+nginx         1.25       142MB
+openjdk       17-slim    271MB
+hello-world   latest     13.3kB</code></pre>
+<p><strong>示例 4：只列出 mysql 相关镜像</strong>：</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images mysql</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+mysql        8.0       d1dc36f8e78f   2 weeks ago    521MB</code></pre>
+<p><strong>示例 5：显示镜像摘要（digest）</strong>：</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images <span class="at">--digests</span> mysql</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>REPOSITORY   TAG       DIGEST                                                                    IMAGE ID       CREATED        SIZE
+mysql        8.0       sha256:ab4dfe625cca5a3bbbce1a1f47d09c8d4d81e3f4d1cd3f6a0f7c2c2198c19e88   d1dc36f8e78f   2 weeks ago    521MB</code></pre>
+<blockquote>
+<p>摘要是镜像内容的 SHA256 哈希，比 IMAGE ID 更精确（IMAGE ID 是摘要前
+12
+位）。用摘要拉取（<code>docker pull mysql@sha256:...</code>）能保证拉到的是"完全一样"的镜像，用于生产环境严格版本控制。</p>
+</blockquote>
+<h4 id="图示-1">图示</h4>
+<pre><code>docker pull 流程：
+
+  Docker Hub                       本地                          客户端
+  ┌──────────┐                  ┌──────────┐                   ┌──────┐
+  │ mysql:8.0│  ①manifest      │  本地    │  ②逐层校验        │ 用户 │
+  │ (13层)   │ ◀─────────────  │  已有层? │ ◀───────────────  │  敲  │
+  │          │                  │          │                   │ pull │
+  │  Layer1  │  ③下载缺失层    │  Layer1  │  ④组合成镜像      │      │
+  │  Layer2  │ ─────────────▶  │  Layer2  │ ────────────────▶ │      │
+  │  Layer3  │                  │  Layer3  │                   └──────┘
+  │  ...     │                  │  ...     │
+  │  Layer13 │                  │  Layer13 │
+  └──────────┘                  └──────────┘
+
+  已有的层不重复下载（层缓存），所以第二次拉很快</code></pre>
+<h4 id="易错点-1">易错点</h4>
+<ol type="1">
+<li>❌ 误认为"<code>docker pull mysql</code> 拉的是最新稳定版"。✅
+拉的是 <code>:latest</code>
+标签，可能指向任意版本，不保证最新最稳定。生产环境必须指定明确版本号。</li>
+<li>❌ 误认为"CREATED 是镜像拉取到本地的时间"。✅ CREATED
+是镜像构建者构建镜像的时间，不是你拉取的时间。</li>
+<li>❌ 误认为"SIZE 是镜像实际占用磁盘"。✅ SIZE
+是逻辑大小（所有层之和），实际占用因层共享可能更小（K3-3 详讲）。</li>
+<li>❌ 误认为"<code>docker images</code> 和 <code>docker image ls</code>
+是不同命令"。✅ 两者完全等价，新语法推荐用
+<code>docker image ls</code>。</li>
+<li>❌ 误认为"<code>docker pull</code> 一定会重新下载所有层"。✅ Docker
+会校验层摘要，本地已有的层不重复下载（层缓存）。</li>
+</ol>
+<h4 id="小结-1">小结</h4>
+<p><code>docker pull 镜像名:标签</code>
+从仓库拉取镜像到本地，不写标签默认
+<code>:latest</code>。<code>docker images</code> /
+<code>docker image ls</code>
+列出本地镜像，五字段含义：REPOSITORY（仓库名）、TAG（标签）、IMAGE
+ID（唯一
+ID）、CREATED（构建时间）、SIZE（逻辑大小）。生产环境务必指定明确版本号，避免
+<code>:latest</code> 陷阱。</p>
+<hr />
+<h3 id="知识点-k3-3镜像分层结构">知识点 K3-3：镜像分层结构</h3>
+<h4 id="定义-2">定义</h4>
+<p><strong>Docker 镜像采用分层结构（Layered
+Architecture）</strong>：一个镜像由多个**只读层（Layer）<strong>叠加而成，每条
+Dockerfile
+指令生成一层。多层通过</strong>联合文件系统（UnionFS）**叠加呈现为一个统一的文件系统视图。</p>
+<ul>
+<li><strong>层（Layer）</strong>：镜像的一个增量修改集合，每层有 SHA256
+摘要，可共享、可缓存。</li>
+<li><strong>联合文件系统（UnionFS）</strong>：把多个只读层"叠加"成一个统一视图的文件系统技术，Docker
+默认使用 <strong>OverlayFS</strong>（overlay2 驱动）。</li>
+</ul>
+<h4 id="原理-2">原理</h4>
+<p><strong>为什么镜像要分层？</strong></p>
+<p>考虑两个镜像 <code>mysql:8.0</code> 和 <code>mysql:5.7</code>：</p>
+<ul>
+<li>如果不分层：每个镜像是完整的 500MB 文件，两个镜像占 1000MB
+磁盘。</li>
+<li>如果分层：两个镜像共享 Debian 基础层（约
+80MB）、共享部分依赖层，实际占用可能只有 600MB。</li>
+</ul>
+<p><strong>分层带来的核心价值</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>价值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>层共享</strong></td>
+<td>多个镜像共用同一基础层，节省磁盘和传输</td>
+</tr>
+<tr>
+<td><strong>层缓存</strong></td>
+<td>构建时未变化的层用缓存，加速构建；拉取时已有的层不重复下载</td>
+</tr>
+<tr>
+<td><strong>增量传输</strong></td>
+<td>push/pull 只传输差异层，大幅减少网络流量</td>
+</tr>
+<tr>
+<td><strong>可复用</strong></td>
+<td>一个基础镜像（如 openjdk:17）可被多个应用镜像复用</td>
+</tr>
+</tbody>
+</table>
+<p><strong>分层原理（UnionFS / OverlayFS）</strong>：</p>
+<div class="visual">
+  <div class="visual-title">图示 3：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">镜像层（只读, lowerdir）        容器可写层（upperdir）</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐       ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span>  Layer 3: 应用代码    <span class="tree-token">│</span>       <span class="tree-token">│</span>  容器运行时修改       <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤       <span class="tree-token">│</span>  （新建/修改/删除）   <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  Layer 2: 依赖库      <span class="tree-token">│</span>       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤                  <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  Layer 1: 基础系统    <span class="tree-token">│</span>                  <span class="tree-token">│</span> OverlayFS 叠加</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘                  ▼</span>
+<span class="diagram-line">                                  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">                                  <span class="tree-token">│</span>  统一视图（merged）   <span class="tree-token">│</span></span>
+<span class="diagram-line">                                  <span class="tree-token">│</span>  /usr /etc /var ...   <span class="tree-token">│</span></span>
+<span class="diagram-line">                                  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">                                  容器看到的&quot;完整文件系统&quot;</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>OverlayFS 三个核心概念</strong>（了解）：</p>
+<ul>
+<li><code>lowerdir</code>：只读的镜像层（可多层叠加）</li>
+<li><code>upperdir</code>：容器的可写层（运行时修改写这里）</li>
+<li><code>merged</code>：叠加后的统一视图（容器看到的）</li>
+</ul>
+<p><strong>修改文件时的"写时复制"（Copy-on-Write, CoW）</strong>：</p>
+<ul>
+<li>容器读取文件：从上往下找，找到第一个就返回。</li>
+<li>容器修改文件：先把文件从下层<strong>复制到可写层</strong>，再修改（这就是"写时复制"）。</li>
+<li>容器删除文件：在可写层创建一个 whiteout
+文件，"遮盖"下层的同名文件。</li>
+<li>这样保证了下层只读层的不可变性。</li>
+</ul>
+<p><strong>为什么分层能共享？</strong></p>
+<div class="visual">
+  <div class="visual-title">图示 4：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">镜像 mysql:8.0:                镜像 mysql:5.7:</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span> Layer C: MySQL 8 程序  <span class="tree-token">│</span>    <span class="tree-token">│</span> Layer D: MySQL 5 程序  <span class="tree-token">│</span> ← 不同（MySQL 版本不同）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line"><span class="tree-token">│</span> Layer B: MySQL 通用库  <span class="tree-token">│</span>    <span class="tree-token">│</span> Layer B: MySQL 通用库  <span class="tree-token">│</span> ← 共享！同一个 SHA256</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line"><span class="tree-token">│</span> Layer A: Debian 11     <span class="tree-token">│</span>    <span class="tree-token">│</span> Layer A: Debian 11     <span class="tree-token">│</span> ← 共享！同一个 SHA256</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">层通过 SHA256 摘要标识，相同内容的层（相同摘要）只存一份。</span>
+<span class="diagram-line">所以两个 MySQL 镜像实际磁盘占用 ≈ 600MB，不是 1000MB。</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="问题--场景-2">问题 / 场景</h4>
+<p><strong>问：怎么查看一个镜像有几层？每层做了什么？</strong></p>
+<ul>
+<li>用 <code>docker history 镜像名:标签</code>，详见下方完整示例。</li>
+</ul>
+<p><strong>问：分层会不会影响性能？</strong></p>
+<ul>
+<li>几乎不会。OverlayFS
+是内核级实现，性能接近原生文件系统。读文件时最多查多层，但内核有缓存；写文件时第一次复制（CoW），后续直接写可写层。</li>
+</ul>
+<p><strong>问：为什么 Dockerfile 中指令顺序很重要？</strong></p>
+<ul>
+<li>因为层缓存。如果某层变化（如 COPY
+了新代码），后续所有层都会重新构建。所以要把"变化频率低的"放前面（如安装依赖），"变化频率高的"放后面（如
+COPY 代码）。第 6~7 次课详讲。</li>
+</ul>
+<p><strong>问：所有层都可以共享吗？</strong></p>
+<ul>
+<li>不是。只有 SHA256
+摘要完全相同的层才能共享。如果两个镜像用了不同的基础系统（如 Debian vs
+Alpine），基础层不能共享。</li>
+</ul>
+<h4 id="完整示例-2">完整示例</h4>
+<p><strong>示例 1：查看 MySQL 镜像的分层结构</strong></p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> history mysql:8.0</span></code></pre></div>
+<p>预期输出（简化版，实际可能更多层）：</p>
+<pre><code>IMAGE          CREATED       CREATED BY                                      SIZE      COMMENT
+d1dc36f8e78f   2 weeks ago   /entrypoint.sh mysqld                          0B        expose 3306/tcp
+&lt;missing&gt;      2 weeks ago   /bin/sh -c #(nop)  EXPOSE 3306/tcp 33060/tcp   0B
+&lt;missing&gt;      2 weeks ago   /bin/sh -c #(nop)  ENTRYPOINT [&quot;docker-entry…   0B
+&lt;missing&gt;      2 weeks ago   /bin/sh -c ln -s /usr/local/mysql/bin/my sql…   34B
+&lt;missing&gt;      2 weeks ago   /bin/sh -c #(nop)  ENV MYSQL_VERSION=8.0.35…    0B
+&lt;missing&gt;      2 weeks ago   /bin/sh -c set -eux;  ...                       168MB
+&lt;missing&gt;      2 weeks ago   /bin/sh -c apt-get update ...                   52MB
+&lt;missing&gt;      2 weeks ago   /bin/sh -c #(nop)  CMD [&quot;bash&quot;]                 0B
+&lt;missing&gt;      2 weeks ago   /bin/sh -c #(nop) ADD file:... in /             124MB</code></pre>
+<p><strong>字段解读</strong>：</p>
+<ul>
+<li><code>IMAGE</code>：层所在镜像 ID（<code>&lt;missing&gt;</code>
+表示这一层来自基础镜像，不在最外层镜像 ID 中显示）</li>
+<li><code>CREATED</code>：层创建时间</li>
+<li><code>CREATED BY</code>：生成这一层的命令（Dockerfile 指令）</li>
+<li><code>SIZE</code>：这一层增加的大小（0B 表示只是元数据指令，如
+ENV/EXPOSE/CMD）</li>
+<li><code>COMMENT</code>：注释</li>
+</ul>
+<blockquote>
+<p>📌 <code>docker history</code>
+是从上往下看，<strong>最上面是最新层（外层），最下面是最底层（基础系统）</strong>。<code>&lt;missing&gt;</code>
+不代表缺失，只是表示该层不在最外层镜像 ID 的"快照"中。</p>
+</blockquote>
+<p><strong>示例 2：以不截断方式查看 history</strong></p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> history <span class="at">--no-trunc</span> mysql:8.0</span></code></pre></div>
+<p>输出会显示完整的 CREATED BY 命令（不截断长命令），适合分析
+Dockerfile。</p>
+<p><strong>示例 3：以安静模式只看层信息</strong></p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> history <span class="at">-q</span> mysql:8.0</span></code></pre></div>
+<p>预期输出（只列出每层的 ID）：</p>
+<pre><code>d1dc36f8e78f
+&lt;missing&gt;
+&lt;missing&gt;
+...</code></pre>
+<p><strong>示例 4：验证两个镜像共享层</strong></p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 拉取两个 MySQL 版本</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull mysql:8.0</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull mysql:5.7</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看实际磁盘占用</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> system df</span></code></pre></div>
+<p>预期输出（示例）：</p>
+<pre><code>TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          4         0         723.5MB   723.5MB (100%)
+Containers      0         0         0B        0B
+Local Volumes   0         0         0B        0B
+Build Cache     0         0         0B        0B</code></pre>
+<blockquote>
+<p>注意：<code>SIZE</code> 列是 723.5MB，但两个 mysql 镜像
+<code>docker images</code> 显示 SIZE 之和可能是 521 + 448 =
+969MB。<strong>实际占用 723.5MB &lt; 逻辑和
+969MB</strong>，这就是层共享的效果。</p>
+</blockquote>
+<p><strong>示例 5：查看镜像的层数（通过 inspect）</strong></p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect mysql:8.0 <span class="at">--format</span> <span class="st">&#39;{{.RootFS.Layers}}&#39;</span></span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>[sha256:72a69066d2fe9a4d6e8214d4b53b5d2c4c3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8 sha256:93619dbc5b36e8c9d0e1f2g3h4i5j6k7l8m9n0o1p2q3r4s5t6u7v8w9x0y1z2 sha256:...]</code></pre>
+<blockquote>
+<p>输出是一个 SHA256 摘要数组，每个摘要对应一层。MySQL 8.0 镜像通常有 13
+层左右。</p>
+</blockquote>
+<h4 id="图示-2">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 5：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">镜像分层结构示意（以 mysql:8.0 为例）：</span>
+<span class="diagram-line">  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">  <span class="tree-token">│</span>  Layer N (最上层): CMD [&quot;mysqld&quot;]              <span class="tree-token">│</span>  0B   ← 元数据指令</span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line">  <span class="tree-token">│</span>  Layer N-1: EXPOSE 3306                       <span class="tree-token">│</span>  0B   ← 元数据指令</span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line">  <span class="tree-token">│</span>  Layer N-2: ENTRYPOINT [&quot;docker-entrypoint.sh&quot;]<span class="tree-token">│</span> 0B   ← 元数据指令</span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line">  <span class="tree-token">│</span>  Layer 5: 下载 MySQL 程序                     <span class="tree-token">│</span> 168MB ← 真正占空间的层</span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line">  <span class="tree-token">│</span>  Layer 4: apt-get install 依赖                <span class="tree-token">│</span> 52MB  ← 真正占空间的层</span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line">  <span class="tree-token">│</span>  Layer 3: ENV MYSQL_VERSION=8.0.35            <span class="tree-token">│</span> 0B    ← 元数据指令</span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line">  <span class="tree-token">│</span>  Layer 2: WORKDIR /                           <span class="tree-token">│</span> 0B    ← 元数据指令</span>
+<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line">  <span class="tree-token">│</span>  Layer 1 (最底层): ADD debian:11 rootfs       <span class="tree-token">│</span> 124MB ← 基础系统层</span>
+<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">  每层通过 SHA256 摘要标识，相同摘要的层在多个镜像间共享</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-2">易错点</h4>
+<ol type="1">
+<li>❌ 误认为"镜像是一个整体大文件"。✅ 镜像由多个只读层叠加而成，通过
+UnionFS 呈现统一视图。</li>
+<li>❌ 误认为"两个镜像 SIZE 字段之和就是实际磁盘占用"。✅
+实际占用因层共享而更小，用 <code>docker system df</code>
+查看真实占用。</li>
+<li>❌ 误认为"<code>docker history</code> 中
+<code>&lt;missing&gt;</code> 表示层丢失"。✅
+<code>&lt;missing&gt;</code> 只表示该层来自基础镜像，不在最外层镜像 ID
+中显示，并非真的缺失。</li>
+<li>❌ 误认为"分层会让性能变差很多"。✅ OverlayFS
+是内核级实现，性能接近原生文件系统，且有写时复制（CoW）优化。</li>
+<li>❌ 误认为"所有层都可以共享"。✅ 只有 SHA256
+摘要完全相同的层才能共享；不同基础系统（Debian vs
+Alpine）的层不能共享。</li>
+</ol>
+<h4 id="小结-2">小结</h4>
+<p>镜像采用分层结构，每条 Dockerfile 指令生成一层，多层通过
+UnionFS（OverlayFS）叠加。分层带来三大价值：<strong>层共享</strong>（多个镜像共用基础层，省磁盘）、<strong>层缓存</strong>（构建/拉取时已有层不重复）、<strong>增量传输</strong>（push/pull
+只传差异层）。<code>docker history</code>
+查看镜像的构建层，<code>docker image inspect</code> 中的
+<code>RootFS.Layers</code> 查看层摘要列表。</p>
+<hr />
+<h3 id="知识点-k3-4镜像详情查看">知识点 K3-4：镜像详情查看</h3>
+<h4 id="定义-3">定义</h4>
+<p><strong><code>docker image inspect</code></strong>
+命令查看镜像的完整元数据信息，输出是一个 JSON
+数组，包含镜像的所有底层信息——ID、创建时间、配置、层级、驱动等。它是排查镜像问题的"X
+光机"。</p>
+<h4 id="原理-3">原理</h4>
+<p><strong>完整用法</strong>：</p>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="pp">[</span><span class="ss">选项</span><span class="pp">]</span> 镜像名[:标签<span class="kw">|</span><span class="ex">@摘要]</span></span></code></pre></div>
+<p>常用形式：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker image inspect mysql:8.0</code></td>
+<td>查看 mysql:8.0 的完整详情（JSON 输出）</td>
+</tr>
+<tr>
+<td><code>docker image inspect mysql</code></td>
+<td>查看 mysql:latest 的详情</td>
+</tr>
+<tr>
+<td><code>docker inspect mysql:8.0</code></td>
+<td>也能用（旧语法，对镜像/容器都有效）</td>
+</tr>
+<tr>
+<td><code>docker image inspect -f '{{.Id}}' mysql:8.0</code></td>
+<td>用 Go 模板提取字段</td>
+</tr>
+<tr>
+<td><code>docker image inspect --format '{{json .}}' mysql:8.0</code></td>
+<td>整体 JSON 输出</td>
+</tr>
+</tbody>
+</table>
+<p><strong>完整 JSON 输出结构</strong>（关键字段）：</p>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Id&quot;</span><span class="fu">:</span> <span class="st">&quot;sha256:d1dc36f8e78f...&quot;</span><span class="fu">,</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;RepoTags&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;mysql:8.0&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;RepoDigests&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;mysql@sha256:ab4dfe625...&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Parent&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span><span class="fu">,</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Comment&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span><span class="fu">,</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Created&quot;</span><span class="fu">:</span> <span class="st">&quot;2024-01-15T08:30:00.123456789Z&quot;</span><span class="fu">,</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;DockerVersion&quot;</span><span class="fu">:</span> <span class="st">&quot;20.10.21&quot;</span><span class="fu">,</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Author&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span><span class="fu">,</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Config&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Hostname&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span><span class="fu">,</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Domainname&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span><span class="fu">,</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;User&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span><span class="fu">,</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;AttachStdin&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;AttachStdout&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;AttachStderr&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;ExposedPorts&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;3306/tcp&quot;</span><span class="fu">:</span> <span class="fu">{},</span> <span class="dt">&quot;33060/tcp&quot;</span><span class="fu">:</span> <span class="fu">{}},</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Tty&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;OpenStdin&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;StdinOnce&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Env&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;</span><span class="ot">,</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;GOSU_VERSION=1.14&quot;</span><span class="ot">,</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;MYSQL_MAJOR=8.0&quot;</span><span class="ot">,</span></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;MYSQL_VERSION=8.0.35-1.el8&quot;</span><span class="ot">,</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;MYSQL_SHELL_VERSION=8.0.35-1.el8&quot;</span></span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Cmd&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;mysqld&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Image&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span><span class="fu">,</span></span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Volumes&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;/var/lib/mysql&quot;</span><span class="fu">:</span> <span class="fu">{}},</span></span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;WorkingDir&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span><span class="fu">,</span></span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Entrypoint&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;docker-entrypoint.sh&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;OnBuild&quot;</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Labels&quot;</span><span class="fu">:</span> <span class="kw">null</span></span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Architecture&quot;</span><span class="fu">:</span> <span class="st">&quot;amd64&quot;</span><span class="fu">,</span></span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Os&quot;</span><span class="fu">:</span> <span class="st">&quot;linux&quot;</span><span class="fu">,</span></span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Size&quot;</span><span class="fu">:</span> <span class="dv">521234567</span><span class="fu">,</span></span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;VirtualSize&quot;</span><span class="fu">:</span> <span class="dv">521234567</span><span class="fu">,</span></span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;GraphDriver&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Data&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;LowerDir&quot;</span><span class="fu">:</span> <span class="st">&quot;/var/lib/docker/overlay2/.../diff:/var/lib/docker/overlay2/.../diff&quot;</span><span class="fu">,</span></span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;MergedDir&quot;</span><span class="fu">:</span> <span class="st">&quot;/var/lib/docker/overlay2/.../merged&quot;</span><span class="fu">,</span></span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;UpperDir&quot;</span><span class="fu">:</span> <span class="st">&quot;/var/lib/docker/overlay2/.../diff&quot;</span><span class="fu">,</span></span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;WorkDir&quot;</span><span class="fu">:</span> <span class="st">&quot;/var/lib/docker/overlay2/.../work&quot;</span></span>
+<span id="cb35-47"><a href="#cb35-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">},</span></span>
+<span id="cb35-48"><a href="#cb35-48" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;overlay2&quot;</span></span>
+<span id="cb35-49"><a href="#cb35-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb35-50"><a href="#cb35-50" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;RootFS&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb35-51"><a href="#cb35-51" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Type&quot;</span><span class="fu">:</span> <span class="st">&quot;layers&quot;</span><span class="fu">,</span></span>
+<span id="cb35-52"><a href="#cb35-52" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;Layers&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb35-53"><a href="#cb35-53" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;sha256:72a69066d2fe9a4d6e8214d4b53b5d2c4c3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8&quot;</span><span class="ot">,</span></span>
+<span id="cb35-54"><a href="#cb35-54" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;sha256:93619dbc5b36e8c9d0e1f2g3h4i5j6k7l8m9n0o1p2q3r4s5t6u7v8w9x0y1z2&quot;</span><span class="ot">,</span></span>
+<span id="cb35-55"><a href="#cb35-55" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;...&quot;</span></span>
+<span id="cb35-56"><a href="#cb35-56" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb35-57"><a href="#cb35-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb35-58"><a href="#cb35-58" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Metadata&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb35-59"><a href="#cb35-59" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;LastTagTime&quot;</span><span class="fu">:</span> <span class="st">&quot;0001-01-01T00:00:00Z&quot;</span></span>
+<span id="cb35-60"><a href="#cb35-60" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb35-61"><a href="#cb35-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb35-62"><a href="#cb35-62" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><strong>关键字段逐条解读</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>字段路径</th>
+<th>含义</th>
+<th>实用价值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Id</code></td>
+<td>镜像完整 SHA256 摘要</td>
+<td>比 IMAGE ID（前 12 位）更完整</td>
+</tr>
+<tr>
+<td><code>RepoTags</code></td>
+<td>镜像的所有标签</td>
+<td>一个镜像可有多个标签</td>
+</tr>
+<tr>
+<td><code>RepoDigests</code></td>
+<td>镜像的仓库摘要</td>
+<td>用于精确拉取（pull@digest）</td>
+</tr>
+<tr>
+<td><code>Created</code></td>
+<td>镜像构建时间（ISO 8601）</td>
+<td>排查镜像版本</td>
+</tr>
+<tr>
+<td><code>Config.Cmd</code></td>
+<td>容器启动默认命令</td>
+<td>知道容器启动跑什么</td>
+</tr>
+<tr>
+<td><code>Config.Entrypoint</code></td>
+<td>容器入口点</td>
+<td>CMD 的"前置"命令</td>
+</tr>
+<tr>
+<td><code>Config.ExposedPorts</code></td>
+<td>镜像声明暴露的端口</td>
+<td>不等于实际映射，需 <code>-p</code></td>
+</tr>
+<tr>
+<td><code>Config.Env</code></td>
+<td>默认环境变量</td>
+<td>排查环境变量问题</td>
+</tr>
+<tr>
+<td><code>Config.WorkingDir</code></td>
+<td>默认工作目录</td>
+<td>容器内执行命令的默认路径</td>
+</tr>
+<tr>
+<td><code>Config.Volumes</code></td>
+<td>声明的匿名卷路径</td>
+<td>数据持久化提示</td>
+</tr>
+<tr>
+<td><code>Config.User</code></td>
+<td>容器运行用户</td>
+<td>安全排查（是否 root）</td>
+</tr>
+<tr>
+<td><code>Architecture</code> / <code>Os</code></td>
+<td>镜像架构 / 系统</td>
+<td>跨架构拉取时关键</td>
+</tr>
+<tr>
+<td><code>Size</code></td>
+<td>镜像逻辑大小（字节）</td>
+<td>同 <code>docker images</code> 的 SIZE</td>
+</tr>
+<tr>
+<td><code>GraphDriver.Data</code></td>
+<td>存储驱动数据（路径）</td>
+<td>排查存储问题</td>
+</tr>
+<tr>
+<td><code>GraphDriver.Name</code></td>
+<td>存储驱动名（overlay2）</td>
+<td>确认使用 OverlayFS</td>
+</tr>
+<tr>
+<td><code>RootFS.Layers</code></td>
+<td>所有层的 SHA256 摘要</td>
+<td>数层数、验证层共享</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景-3">问题 / 场景</h4>
+<p><strong>问：怎么快速知道一个镜像启动时跑什么命令？</strong></p>
+<ul>
+<li>用
+<code>docker image inspect -f '{{.Config.Cmd}}' mysql:8.0</code>，输出
+<code>["mysqld"]</code>，说明 MySQL 容器启动时默认跑
+<code>mysqld</code>。</li>
+</ul>
+<p><strong>问：怎么知道一个镜像声明暴露了哪些端口？</strong></p>
+<ul>
+<li>用
+<code>docker image inspect -f '{{json .Config.ExposedPorts}}' mysql:8.0</code>，输出
+<code>{"3306/tcp":{},"33060/tcp":{}}</code>。</li>
+<li>注意：<strong>EXPOSE
+只是声明，不等于实际端口映射</strong>。要外部访问仍需
+<code>docker run -p 3306:3306</code>。</li>
+</ul>
+<p><strong>问：怎么知道一个镜像有几层？</strong></p>
+<ul>
+<li>用
+<code>docker image inspect -f '{{len .RootFS.Layers}}' mysql:8.0</code>，直接输出层数。</li>
+</ul>
+<p><strong>问：<code>docker inspect</code> 和
+<code>docker image inspect</code> 有什么区别？</strong></p>
+<ul>
+<li><code>docker inspect</code>
+是旧语法，对镜像和容器都有效（会自动判断）。<code>docker image inspect</code>
+是新语法，只查镜像，更规范。建议用新语法。</li>
+</ul>
+<p><strong>问：怎么查看镜像的环境变量？</strong></p>
+<ul>
+<li>用
+<code>docker image inspect -f '{{range .Config.Env}}{{println .}}{{end}}' mysql:8.0</code>，逐行输出环境变量。</li>
+</ul>
+<h4 id="完整示例-3">完整示例</h4>
+<p><strong>示例 1：查看 mysql:8.0 的完整详情</strong></p>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect mysql:8.0</span></code></pre></div>
+<p>输出是一个 JSON 数组（如上文原理部分所示），用 <code>jq</code>
+等工具可格式化查看：</p>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect mysql:8.0 <span class="kw">|</span> <span class="ex">jq</span> .</span></code></pre></div>
+<p><strong>示例 2：用 Go 模板提取关键字段</strong></p>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 提取镜像完整 ID</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{.Id}}&#39;</span> mysql:8.0</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>sha256:d1dc36f8e78f3e5bf7a8e6f4c5b6a7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4</code></pre>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 提取所有标签</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{.RepoTags}}&#39;</span> mysql:8.0</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>[mysql:8.0]</code></pre>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 提取默认启动命令</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{.Config.Cmd}}&#39;</span> mysql:8.0</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>[mysqld]</code></pre>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 提取入口点</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{.Config.Entrypoint}}&#39;</span> mysql:8.0</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>[docker-entrypoint.sh]</code></pre>
+<div class="sourceCode" id="cb46"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 提取暴露端口</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{json .Config.ExposedPorts}}&#39;</span> mysql:8.0</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>{&quot;3306/tcp&quot;:{},&quot;33060/tcp&quot;:{}}</code></pre>
+<div class="sourceCode" id="cb48"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 提取环境变量</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{range .Config.Env}}{{println .}}{{end}}&#39;</span> mysql:8.0</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+GOSU_VERSION=1.14
+MYSQL_MAJOR=8.0
+MYSQL_VERSION=8.0.35-1.el8
+MYSQL_SHELL_VERSION=8.0.35-1.el8</code></pre>
+<div class="sourceCode" id="cb50"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 提取层数</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{len .RootFS.Layers}}&#39;</span> mysql:8.0</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>13</code></pre>
+<div class="sourceCode" id="cb52"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 提取所有层摘要</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{.RootFS.Layers}}&#39;</span> mysql:8.0</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>[sha256:72a69066d2fe9a4d6e8214d4b53b5d2c4c3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8 sha256:93619dbc5b36e8c9d0e1f2g3h4i5j6k7l8m9n0o1p2q3r4s5t6u7v8w9x0y1z2 ...（共13个）]</code></pre>
+<div class="sourceCode" id="cb54"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 提取存储驱动信息</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{.GraphDriver.Name}}&#39;</span> mysql:8.0</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>overlay2</code></pre>
+<p><strong>示例 3：排查 MySQL 容器为什么连不上</strong></p>
+<div class="sourceCode" id="cb56"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看 MySQL 镜像声明暴露的端口（确认是 3306）</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{json .Config.ExposedPorts}}&#39;</span> mysql:8.0</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：{&quot;3306/tcp&quot;:{},&quot;33060/tcp&quot;:{}}</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看 MySQL 镜像的默认环境变量（看看有没有密码相关提示）</span></span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{range .Config.Env}}{{println .}}{{end}}&#39;</span> mysql:8.0</span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出包含 MYSQL_MAJOR、MYSQL_VERSION 等</span></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 结论：暴露端口是 3306，启动时需 -p 3306:3306 映射；</span></span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 密码需通过 -e MYSQL_ROOT_PASSWORD=xxx 设置（环境变量未内置密码）</span></span></code></pre></div>
+<h4 id="图示-3">图示</h4>
+<pre><code>docker image inspect 输出结构（关键字段）：
+
+┌─ Id: sha256:d1dc36f8e78f...（完整 SHA256）─┐
+│                                              │
+├─ RepoTags: [mysql:8.0]（所有标签）          │
+├─ RepoDigests: [mysql@sha256:ab4dfe...]      │
+├─ Created: 2024-01-15T08:30:00Z（构建时间）  │
+│                                              │
+├─ Config（容器配置）                          │
+│  ├─ Cmd: [mysqld]（默认启动命令）           │
+│  ├─ Entrypoint: [docker-entrypoint.sh]      │
+│  ├─ ExposedPorts: {3306/tcp, 33060/tcp}     │
+│  ├─ Env: [PATH=..., MYSQL_MAJOR=8.0, ...]   │
+│  ├─ WorkingDir: &quot;&quot;（默认工作目录）          │
+│  ├─ Volumes: {/var/lib/mysql}（匿名卷）     │
+│  └─ User: &quot;&quot;（默认 root）                   │
+│                                              │
+├─ Architecture: amd64 / Os: linux            │
+├─ Size: 521234567（字节）                    │
+│                                              │
+├─ GraphDriver（存储驱动）                     │
+│  ├─ Name: overlay2                           │
+│  └─ Data: {LowerDir, UpperDir, MergedDir}   │
+│                                              │
+└─ RootFS（文件系统）                          │
+   ├─ Type: layers                             │
+   └─ Layers: [sha256:xxx, sha256:yyy, ...]   │
+       （每层一个 SHA256 摘要）                │</code></pre>
+<h4 id="易错点-3">易错点</h4>
+<ol type="1">
+<li>❌ 误认为"<code>Config.ExposedPorts</code> 就是实际映射的端口"。✅
+EXPOSE 只是声明，要外部访问仍需 <code>docker run -p</code>
+端口映射。</li>
+<li>❌ 误认为"<code>Cmd</code> 和 <code>Entrypoint</code> 是一回事"。✅
+Entrypoint 是入口点（不易被覆盖），Cmd 是默认参数（易被覆盖）。第 7
+次课详讲。</li>
+<li>❌ 误认为"<code>docker inspect</code> 只能查镜像"。✅
+<code>docker inspect</code>
+是通用命令，对镜像和容器都能用（自动判断）；<code>docker image inspect</code>
+是只查镜像的新语法。</li>
+<li>❌ 误认为"<code>Config.User</code> 为空表示非 root"。✅ 空字符串等于
+root，容器默认以 root 运行，生产环境建议用 <code>USER</code> 指令切换非
+root 用户。</li>
+<li>❌ 误认为"<code>Id</code> 和 <code>IMAGE ID</code> 是不同的东西"。✅
+<code>Id</code> 是完整 SHA256，<code>IMAGE ID</code> 是 <code>Id</code>
+的前 12 位，本质是同一个东西的不同显示。</li>
+</ol>
+<h4 id="小结-3">小结</h4>
+<p><code>docker image inspect 镜像名:标签</code>
+查看镜像完整元数据（JSON 输出）。关键字段：<code>Id</code>（完整
+SHA256）、<code>RepoTags</code>（标签）、<code>Config.Cmd/Entrypoint</code>（启动命令）、<code>Config.ExposedPorts</code>（暴露端口）、<code>Config.Env</code>（环境变量）、<code>RootFS.Layers</code>（层摘要）、<code>GraphDriver.Name</code>（存储驱动）。配合
+Go
+模板（<code>-f '{{.字段}}'</code>）可精准提取字段，是排查镜像问题的核心工具。</p>
+<hr />
+<h3 id="知识点-k3-5镜像标签管理">知识点 K3-5：镜像标签管理</h3>
+<h4 id="定义-4">定义</h4>
+<p><strong><code>docker tag</code></strong>
+命令用于给已有镜像打一个新的标签（重命名），不创建新镜像，只是给同一个镜像
+ID 加一个别名。</p>
+<h4 id="原理-4">原理</h4>
+<p><strong>完整用法</strong>：</p>
+<div class="sourceCode" id="cb58"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag 源镜像<span class="pp">[</span><span class="ss">:标签</span><span class="pp">]</span> 目标镜像<span class="pp">[</span><span class="ss">:标签</span><span class="pp">]</span></span></code></pre></div>
+<p><strong>标签（Tag）的本质</strong>：</p>
+<ul>
+<li>标签是镜像的"别名"，格式 <code>仓库名:标签</code>。</li>
+<li>一个镜像 ID 可以有<strong>多个标签</strong>（一对多关系）。</li>
+<li><code>docker tag</code> 不创建新镜像，只是给同一个 ID 加别名。</li>
+<li>删除某个标签（<code>docker rmi 镜像:标签</code>）只是删别名，只要还有其他标签指向这个
+ID，镜像本身不会被删。</li>
+</ul>
+<p><strong><code>:latest</code> 陷阱</strong>：</p>
+<pre class="text"><code>:latest 的真相：
+1. :latest 只是一个普通的标签名，没有任何&quot;最新&quot;语义
+2. docker pull / docker run 不写标签时默认用 :latest
+3. 镜像构建者可以随时把 :latest 指向任何版本（可能从 8.0 变成 8.1）
+4. 所以&quot;今天构建的 :latest&quot;和&quot;一个月后构建的 :latest&quot;可能是完全不同的镜像
+
+生产环境风险：
+  FROM mysql:latest   ← 今天可能是 8.0.35，下个月可能是 8.1.0
+  → 行为不一致 → 不可复现 → 上线事故
+
+正确做法：
+  FROM mysql:8.0.35   ← 永远是同一个版本，可复现</code></pre>
+<p><strong>标签命名规范</strong>（生产环境推荐）：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐命名</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>版本号</td>
+<td><code>镜像:主版本.次版本.修订</code></td>
+<td><code>mysql:8.0.35</code></td>
+</tr>
+<tr>
+<td>应用镜像</td>
+<td><code>镜像:版本-构建号</code></td>
+<td><code>ctts-backend:1.0.0-20240115</code></td>
+</tr>
+<tr>
+<td>私有仓库</td>
+<td><code>仓库地址/团队/应用:版本</code></td>
+<td><code>harbor.company.com/dev/ctts-api:v1</code></td>
+</tr>
+<tr>
+<td>Git 提交</td>
+<td><code>镜像:git短哈希</code></td>
+<td><code>ctts-api:a1b2c3d</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景-4">问题 / 场景</h4>
+<p><strong>问：为什么生产环境不能用 <code>:latest</code>？</strong></p>
+<ul>
+<li>三个核心风险：
+<ol type="1">
+<li><strong>不可复现</strong>：今天和一个月后构建的镜像可能基于不同版本，行为不一致。</li>
+<li><strong>不可追溯</strong>：出问题时不知道用的是哪个具体版本，无法回滚。</li>
+<li><strong>不可审计</strong>：合规审计要求明确版本号，<code>:latest</code>
+不满足。</li>
+</ol></li>
+<li>正确做法：用明确版本号（<code>mysql:8.0.35</code>）或 Git
+提交哈希（<code>ctts-api:a1b2c3d</code>）。</li>
+</ul>
+<p><strong>问：一个镜像可以有多个标签吗？</strong></p>
+<ul>
+<li>可以。比如 <code>mysql:8.0</code> 和 <code>mysql:8.0.35</code>
+可能指向同一个镜像 ID。<code>docker tag</code> 就是给镜像加别名。</li>
+</ul>
+<p><strong>问：删除某个标签会删除镜像吗？</strong></p>
+<ul>
+<li>不一定。如果该镜像还有其他标签，删一个标签只是删别名，镜像本身仍在。只有删除镜像的"最后一个标签"时，镜像才会被真正删除。</li>
+</ul>
+<p><strong>问：<code>docker tag</code> 会创建新镜像层吗？</strong></p>
+<ul>
+<li>不会。<code>docker tag</code> 只是元数据操作，给同一个镜像 ID
+加一个别名，不创建新层，不占额外磁盘。</li>
+</ul>
+<h4 id="完整示例-4">完整示例</h4>
+<p><strong>示例 1：给 MySQL 镜像打项目专用标签</strong></p>
+<div class="sourceCode" id="cb60"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看当前镜像</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images mysql</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+mysql        8.0       d1dc36f8e78f   2 weeks ago    521MB</code></pre>
+<div class="sourceCode" id="cb62"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 给 mysql:8.0 打一个项目专用标签 ctts-mysql:v1</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag mysql:8.0 ctts-mysql:v1</span></code></pre></div>
+<p>（无输出表示成功）</p>
+<div class="sourceCode" id="cb63"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 再次查看，发现同一个 IMAGE ID 多了一个标签</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+ctts-mysql    v1        d1dc36f8e78f   2 weeks ago    521MB
+mysql         8.0       d1dc36f8e78f   2 weeks ago    521MB</code></pre>
+<blockquote>
+<p>注意：<code>ctts-mysql:v1</code> 和 <code>mysql:8.0</code> 的 IMAGE
+ID
+完全相同（<code>d1dc36f8e78f</code>），说明是同一个镜像，只是两个别名。</p>
+</blockquote>
+<p><strong>示例 2：给同一个镜像打多个标签</strong></p>
+<div class="sourceCode" id="cb65"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 给 mysql:8.0 同时打 8.0.35 和 latest 标签</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag mysql:8.0 mysql:8.0.35</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag mysql:8.0 mysql:latest</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images mysql</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+mysql        8.0       d1dc36f8e78f   2 weeks ago    521MB
+mysql        8.0.35    d1dc36f8e78f   2 weeks ago    521MB
+mysql        latest    d1dc36f8e78f   2 weeks ago    521MB</code></pre>
+<blockquote>
+<p>三个标签指向同一个 IMAGE ID（<code>d1dc36f8e78f</code>）。</p>
+</blockquote>
+<p><strong>示例 3：为 CTTS 项目准备镜像（完整流程）</strong></p>
+<div class="sourceCode" id="cb67"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 拉取基础镜像</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull mysql:8.0</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull nginx:1.25</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull openjdk:17-slim</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 打上 CTTS 项目专用标签（便于团队识别）</span></span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag mysql:8.0 ctts-mysql:8.0</span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag nginx:1.25 ctts-nginx:1.25</span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag openjdk:17-slim ctts-backend-jdk:17</span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 查看项目镜像</span></span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images <span class="kw">|</span> <span class="fu">grep</span> ctts-</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>ctts-mysql        8.0       d1dc36f8e78f   2 weeks ago    521MB
+ctts-nginx        1.25      605c77e624dd   3 weeks ago    142MB
+ctts-backend-jdk  17        a3562aa0b991   2 months ago   271MB</code></pre>
+<p><strong>示例 4：删除标签但不删镜像</strong></p>
+<div class="sourceCode" id="cb69"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 删除 ctts-mysql:v1 标签（但 mysql:8.0 还在，所以镜像本身不删）</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rmi ctts-mysql:v1</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>Untagged: ctts-mysql:v1</code></pre>
+<blockquote>
+<p>注意输出是 <code>Untagged</code>（取消标签）而不是
+<code>Deleted</code>（删除层），因为还有 <code>mysql:8.0</code>
+标签指向这个镜像。</p>
+</blockquote>
+<div class="sourceCode" id="cb71"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证 mysql:8.0 镜像仍在</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images mysql</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+mysql        8.0       d1dc36f8e78f   2 weeks ago    521MB</code></pre>
+<h4 id="图示-4">图示</h4>
+<pre><code>docker tag 是给镜像加别名（不创建新镜像）：
+
+   打标签前                     打标签后
+┌──────────────┐            ┌──────────────┐
+│  镜像         │            │  镜像         │
+│  ID: d1dc... │            │  ID: d1dc... │
+│              │            │              │
+│  标签:        │  docker    │  标签:        │
+│  mysql:8.0   │  tag       │  mysql:8.0   │
+│              │ ────────▶  │  ctts-mysql:v1│
+│              │            │  mysql:8.0.35│
+└──────────────┘            └──────────────┘
+                              一个 ID 多个标签
+
+docker rmi 删标签 vs 删镜像：
+- 删一个标签（其他标签还在）：Untagged（仅删别名）
+- 删最后一个标签：Untagged + Deleted（删层）</code></pre>
+<h4 id="易错点-4">易错点</h4>
+<ol type="1">
+<li>❌ 误认为"<code>docker tag</code> 创建了新镜像"。✅
+只创建别名，IMAGE ID 不变，不占额外磁盘。</li>
+<li>❌ 误认为"<code>:latest</code> 一定是最新的最稳定的"。✅
+<code>:latest</code>
+只是默认标签名，可能指向任意版本，生产环境禁用。</li>
+<li>❌ 误认为"删一个标签就会删镜像"。✅
+删标签只是删别名，只要还有其他标签指向该 ID，镜像本身不会被删。</li>
+<li>❌ 误认为"标签必须用版本号"。✅ 标签可以是任意字符串（如
+<code>alpine</code>、<code>slim</code>、<code>v1</code>、<code>a1b2c3d</code>），但生产环境推荐用明确版本号。</li>
+<li>❌ 误认为"<code>docker tag</code> 需要写完整的仓库地址"。✅
+简短名（<code>mysql:8.0</code>）和完整名（<code>docker.io/library/mysql:8.0</code>）等价。</li>
+</ol>
+<h4 id="小结-4">小结</h4>
+<p><code>docker tag 源:tag 目标:tag</code>
+给已有镜像打新标签（别名），不创建新镜像。一个镜像 ID
+可有多个标签。<code>:latest</code>
+只是默认标签名，不保证最新最稳定，生产环境必须用明确版本号。删除标签（<code>docker rmi 镜像:标签</code>）只删别名，删最后一个标签才会真正删镜像。</p>
+<hr />
+<h3 id="知识点-k3-6镜像删除与清理">知识点 K3-6：镜像删除与清理</h3>
+<h4 id="定义-5">定义</h4>
+<ul>
+<li><strong><code>docker rmi</code></strong> /
+<strong><code>docker image rm</code></strong>：删除本地镜像（按标签或
+ID）。</li>
+<li><strong><code>docker image prune</code></strong>：清理悬空镜像（dangling
+images）。</li>
+<li><strong><code>docker image prune -a</code></strong>：清理所有未被容器使用的镜像。</li>
+</ul>
+<h4 id="原理-5">原理</h4>
+<p><strong><code>docker rmi</code> / <code>docker image rm</code>
+完整用法</strong>：</p>
+<div class="sourceCode" id="cb74"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rmi <span class="pp">[</span><span class="ss">选项</span><span class="pp">]</span> 镜像[:标签<span class="kw">|</span><span class="ex">ID]</span> <span class="pp">[</span><span class="ss">镜像...</span><span class="pp">]</span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image rm <span class="pp">[</span><span class="ss">选项</span><span class="pp">]</span> 镜像[:标签<span class="kw">|</span><span class="ex">ID]</span> <span class="pp">[</span><span class="ss">镜像...</span><span class="pp">]</span></span></code></pre></div>
+<p>常用形式：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker rmi mysql:8.0</code></td>
+<td>删除 mysql:8.0 标签</td>
+</tr>
+<tr>
+<td><code>docker rmi d1dc36f8e78f</code></td>
+<td>按 ID 删除镜像</td>
+</tr>
+<tr>
+<td><code>docker rmi mysql:8.0 nginx:1.25</code></td>
+<td>一次删多个</td>
+</tr>
+<tr>
+<td><code>docker rmi -f mysql:8.0</code></td>
+<td>强制删除（即使有容器依赖）</td>
+</tr>
+<tr>
+<td><code>docker image rm mysql:8.0</code></td>
+<td>新语法，等价于 <code>docker rmi</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>删除规则</strong>：</p>
+<ol type="1">
+<li><strong>如果镜像有对应容器存在（无论运行还是停止）</strong>：默认拒绝删除，提示先删容器。</li>
+<li><strong>强制删除
+<code>-f</code></strong>：先删除所有依赖此镜像的容器，再删镜像。<strong>慎用</strong>，可能误删运行中的容器。</li>
+<li><strong>如果镜像有多个标签</strong>：删一个标签只是
+<code>Untagged</code>，镜像本身仍在；删最后一个标签才会
+<code>Deleted</code> 各层。</li>
+</ol>
+<p><strong><code>docker image prune</code> 清理悬空镜像</strong>：</p>
+<div class="sourceCode" id="cb75"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image prune <span class="pp">[</span><span class="ss">选项</span><span class="pp">]</span></span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker image prune</code></td>
+<td>清理悬空镜像（dangling，无标签的中间层）</td>
+</tr>
+<tr>
+<td><code>docker image prune -a</code></td>
+<td>清理所有未被任何容器使用的镜像（含已打标签的）</td>
+</tr>
+<tr>
+<td><code>docker image prune -f</code></td>
+<td>跳过确认提示，直接清理</td>
+</tr>
+<tr>
+<td><code>docker image prune -a --filter "until=24h"</code></td>
+<td>清理 24 小时前创建的未使用镜像</td>
+</tr>
+<tr>
+<td><code>docker image prune -a --filter "label=deprecated"</code></td>
+<td>按标签过滤清理</td>
+</tr>
+</tbody>
+</table>
+<p><strong>什么是悬空镜像（dangling image）？</strong></p>
+<pre><code>悬空镜像 = 有层但无标签的镜像（REPOSITORY 显示 &lt;none&gt;，TAG 显示 &lt;none&gt;）
+
+产生场景：
+  1. 用相同标签重新构建镜像：旧镜像失去标签，变成 &lt;none&gt;:&lt;none&gt;
+  2. 多阶段构建产生的中间层镜像
+  3. 删除标签后剩下的无标签层
+
+示例：
+  docker build -t ctts-api:v1 .    # 构建镜像 ctts-api:v1
+  # ... 修改代码 ...
+  docker build -t ctts-api:v1 .    # 用相同标签再构建
+  # 旧的 ctts-api:v1 镜像失去标签，变成 &lt;none&gt;:&lt;none&gt;，占磁盘但不被使用</code></pre>
+<p><strong><code>docker image prune</code> vs
+<code>docker image prune -a</code></strong>：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>清理范围</th>
+<th>风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker image prune</code></td>
+<td>只清理悬空镜像（<code>&lt;none&gt;:&lt;none&gt;</code>）</td>
+<td>低，悬空镜像肯定无用</td>
+</tr>
+<tr>
+<td><code>docker image prune -a</code></td>
+<td>清理所有未被容器使用的镜像</td>
+<td>中，可能删掉你"打算用但还没用"的镜像</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景-5">问题 / 场景</h4>
+<p><strong>问：删镜像时报"image is being used by stopped container
+xxx"怎么办？</strong></p>
+<ul>
+<li>有容器（即使已停止）依赖此镜像。两种处理：
+<ol type="1">
+<li>先 <code>docker rm 容器ID/名</code> 删除依赖的容器，再
+<code>docker rmi 镜像</code>。</li>
+<li>用 <code>docker rmi -f 镜像</code>
+强制删除（会先删容器再删镜像，慎用）。</li>
+</ol></li>
+</ul>
+<p><strong>问：<code>docker rmi 镜像:标签</code> 和
+<code>docker rmi 镜像ID</code> 有区别吗？</strong></p>
+<ul>
+<li>删除逻辑略有不同：
+<ul>
+<li><code>docker rmi 镜像:标签</code>：如果该镜像有多个标签，只删这个标签（Untagged），不删层。</li>
+<li><code>docker rmi 镜像ID</code>：直接按 ID 删，会删除该 ID
+的所有标签和层。</li>
+</ul></li>
+<li>生产环境删镜像优先用 ID，确保彻底删除。</li>
+</ul>
+<p><strong>问：<code>docker image prune -a</code>
+会不会删掉正在运行容器使用的镜像？</strong></p>
+<ul>
+<li>不会。<code>-a</code>
+只删"未被任何容器使用的镜像"，正在运行容器使用的镜像不会被删。</li>
+</ul>
+<p><strong>问：删完镜像后磁盘没立刻释放？</strong></p>
+<ul>
+<li>Docker 有时会有延迟。可以：
+<ol type="1">
+<li><code>docker system prune</code>
+全面清理（含镜像、容器、网络、构建缓存）。</li>
+<li>重启 Docker 服务：<code>sudo systemctl restart docker</code>。</li>
+<li>极端情况下，Docker 的存储驱动可能需要手动清理残留。</li>
+</ol></li>
+</ul>
+<p><strong>问：怎么批量删除所有本地镜像？</strong></p>
+<ul>
+<li><code>docker rmi $(docker images -q)</code> ——
+删除所有镜像（如有容器依赖会报错）。</li>
+<li><code>docker rmi -f $(docker images -q)</code> ——
+强制删除所有镜像（<strong>极其危险，慎用</strong>）。</li>
+</ul>
+<h4 id="完整示例-5">完整示例</h4>
+<p><strong>示例 1：删除单个镜像</strong></p>
+<div class="sourceCode" id="cb77"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看本地镜像</span></span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+mysql         8.0       d1dc36f8e78f   2 weeks ago    521MB
+nginx         1.25      605c77e624dd   3 weeks ago    142MB
+hello-world   latest    feb5d9fea6a5   6 months ago   13.3kB</code></pre>
+<div class="sourceCode" id="cb79"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 删除 hello-world 镜像</span></span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rmi hello-world:latest</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>Untagged: hello-world:latest
+Untagged: hello-world@sha256:...
+Deleted: sha256:feb5d9fea6a5e9606aa995e879d862b748...
+Deleted: sha256:dc22b8ba8e3a4f8e5a4c3b2a1d0e9f8c7b6a5d4e3f2g1h0i9j8k7l6m5n4o3p2</code></pre>
+<blockquote>
+<p>输出 <code>Untagged</code> 是取消标签，<code>Deleted</code>
+是删除层。每删一层输出一行 <code>Deleted</code>。</p>
+</blockquote>
+<p><strong>示例 2：删除被容器依赖的镜像（先删容器）</strong></p>
+<div class="sourceCode" id="cb81"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 假设有一个容器 mydb 基于 mysql:8.0</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="at">-a</span></span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>CONTAINER ID   IMAGE       STATUS          NAMES
+a1b2c3d4e5f6   mysql:8.0   Exited 2 min    mydb</code></pre>
+<div class="sourceCode" id="cb83"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 直接删除镜像会报错</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rmi mysql:8.0</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>Error response from daemon: conflict: unable to delete d1dc36f8e78f (cannot be forced) - image is being used by running container a1b2c3d4e5f6</code></pre>
+<div class="sourceCode" id="cb85"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 正确做法：先删容器，再删镜像</span></span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rm mydb</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rmi mysql:8.0</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>mydb
+Untagged: mysql:8.0
+Untagged: mysql@sha256:...
+Deleted: sha256:...（多层）</code></pre>
+<p><strong>示例 3：强制删除 <code>-f</code></strong></p>
+<div class="sourceCode" id="cb87"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 强制删除（即使有容器依赖，会先删容器）</span></span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rmi <span class="at">-f</span> mysql:8.0</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>Untagged: mysql:8.0
+Untagged: mysql@sha256:...
+Deleted: sha256:...（多层）</code></pre>
+<blockquote>
+<p>⚠️ <code>-f</code>
+会先删除所有依赖此镜像的容器，可能误删运行中的容器，生产环境慎用。</p>
+</blockquote>
+<p><strong>示例 4：清理悬空镜像</strong></p>
+<div class="sourceCode" id="cb89"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 制造一个悬空镜像（用相同标签重新构建）</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-api:v1 .</span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 修改代码后再次构建</span></span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-api:v1 .</span>
+<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-6"><a href="#cb89-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看悬空镜像</span></span>
+<span id="cb89-7"><a href="#cb89-7" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images <span class="at">-f</span> <span class="st">&quot;dangling=true&quot;</span></span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+&lt;none&gt;       &lt;none&gt;    a1b2c3d4e5f6   5 minutes ago  380MB</code></pre>
+<div class="sourceCode" id="cb91"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 清理悬空镜像</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image prune</span></code></pre></div>
+<p>预期输出（交互式确认）：</p>
+<pre><code>WARNING! This will remove all dangling images.
+Are you sure you want to continue? [y/N] y
+Deleted Images:
+deleted: sha256:a1b2c3d4e5f6...
+Total reclaimed space: 380MB</code></pre>
+<p><strong>示例 5：清理所有未使用镜像</strong></p>
+<div class="sourceCode" id="cb93"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 清理所有未被容器使用的镜像（含已打标签的）</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image prune <span class="at">-a</span></span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>WARNING! This will remove all images without at least one container associated to them.
+Are you sure you want to continue? [y/N] y
+Deleted Images:
+untagged: mysql:8.0
+untagged: mysql@sha256:...
+deleted: sha256:...
+untagged: nginx:1.25
+untagged: nginx@sha256:...
+deleted: sha256:...
+Total reclaimed space: 663MB</code></pre>
+<p><strong>示例 6：查看 Docker 整体磁盘占用</strong></p>
+<div class="sourceCode" id="cb95"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> system df</span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>TYPE            TOTAL     ACTIVE    SIZE        RECLAIMABLE
+Images          4         1         723.5MB     663MB (91%)
+Containers      1         0         0B          0B
+Local Volumes   0         0         0B          0B
+Build Cache     0         0         0B          0B</code></pre>
+<p>字段含义：</p>
+<ul>
+<li><code>TOTAL</code>：总数</li>
+<li><code>ACTIVE</code>：正在使用的数量</li>
+<li><code>SIZE</code>：总大小</li>
+<li><code>RECLAIMABLE</code>：可回收大小（百分比）</li>
+</ul>
+<p><strong>示例 7：一键清理所有无用资源（慎用）</strong></p>
+<div class="sourceCode" id="cb97"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> system prune <span class="at">-a</span></span></code></pre></div>
+<p>预期输出：</p>
+<pre><code>WARNING! This will remove:
+  - all stopped containers
+  - all networks not used by at least one container
+  - all images without at least one container associated to them
+  - all build cache
+
+Are you sure you want to continue? [y/N] y
+Deleted Containers:
+...
+Deleted Networks:
+...
+Deleted Images:
+...
+Total reclaimed space: 1.2GB</code></pre>
+<blockquote>
+<p>⚠️ <code>docker system prune -a</code>
+是核弹级清理，会删除所有未使用的容器、网络、镜像、构建缓存。仅在确定要彻底清理时使用。</p>
+</blockquote>
+<h4 id="图示-5">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 6：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">镜像删除决策树：</span>
+<span class="diagram-line">   docker rmi 镜像</span>
+<span class="diagram-line">        <span class="tree-token">│</span></span>
+<span class="diagram-line">        ▼</span>
+<span class="diagram-line">   有容器依赖？</span>
+<span class="diagram-line">   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">   <span class="tree-token">│</span> 是      <span class="tree-token">│</span> 否</span>
+<span class="diagram-line">   ▼         ▼</span>
+<span class="diagram-line"> 报错        有多个标签？</span>
+<span class="diagram-line">   <span class="tree-token">│</span>         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">   <span class="tree-token">│</span>         <span class="tree-token">│</span> 是      <span class="tree-token">│</span> 否</span>
+<span class="diagram-line">   <span class="tree-token">│</span>         ▼         ▼</span>
+<span class="diagram-line">   <span class="tree-token">│</span>      Untagged   Untagged</span>
+<span class="diagram-line">   <span class="tree-token">│</span>      (只删一个   + Deleted</span>
+<span class="diagram-line">   <span class="tree-token">│</span>       标签)     (删所有层)</span>
+<span class="diagram-line">   ▼</span>
+<span class="diagram-line"> 两种选择：</span>
+<span class="diagram-line"> ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"> <span class="tree-token">│</span> 1. 先删容器     <span class="tree-token">│</span></span>
+<span class="diagram-line"> <span class="tree-token">│</span>    docker rm   <span class="tree-token">│</span></span>
+<span class="diagram-line"> <span class="tree-token">│</span>    再 rmi      <span class="tree-token">│</span></span>
+<span class="diagram-line"> <span class="tree-token">│</span>                <span class="tree-token">│</span></span>
+<span class="diagram-line"> <span class="tree-token">│</span> 2. 强制删除    <span class="tree-token">│</span></span>
+<span class="diagram-line"> <span class="tree-token">│</span>    docker rmi  <span class="tree-token">│</span></span>
+<span class="diagram-line"> <span class="tree-token">│</span>    -f          <span class="tree-token">│</span></span>
+<span class="diagram-line"> <span class="tree-token">│</span>    (慎用!)     <span class="tree-token">│</span></span>
+<span class="diagram-line"> <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-5">易错点</h4>
+<ol type="1">
+<li>❌ 误认为"<code>docker rmi 镜像:标签</code> 会删掉镜像"。✅
+如果镜像有多个标签，只删该标签（Untagged），镜像本身仍在。</li>
+<li>❌ 误认为"<code>docker image prune</code> 会删所有未使用镜像"。✅
+默认只删悬空镜像（<code>&lt;none&gt;:&lt;none&gt;</code>），加
+<code>-a</code> 才删所有未使用镜像。</li>
+<li>❌ 误认为"<code>docker rmi -f</code> 是安全的"。✅ <code>-f</code>
+会先删依赖容器，可能误删运行中的容器，生产环境慎用。</li>
+<li>❌ 误认为"删完镜像磁盘立刻释放"。✅ Docker 有时会有延迟，必要时用
+<code>docker system prune</code> 或重启 Docker 服务。</li>
+<li>❌ 误认为"删容器等于删镜像"。✅
+容器只是镜像的实例，删容器不影响镜像；删镜像要先删依赖的容器。</li>
+</ol>
+<h4 id="小结-5">小结</h4>
+<p><code>docker rmi</code> / <code>docker image rm</code>
+删除本地镜像：有容器依赖时默认拒绝删除（先删容器或用 <code>-f</code>
+强删，慎用）；多标签镜像删一个标签只
+<code>Untagged</code>，删最后一个标签才删层。<code>docker image prune</code>
+清理悬空镜像（<code>&lt;none&gt;:&lt;none&gt;</code>），<code>docker image prune -a</code>
+清理所有未使用镜像。<code>docker system df</code>
+查看磁盘占用，<code>docker system prune</code>
+全面清理。运维好习惯：定期清理无用镜像，避免磁盘占满。</p>
+<hr />
+<h2 id="三综合示例ctts-三服务镜像准备完整流程">三、综合示例：CTTS
+三服务镜像准备完整流程</h2>
+<p>把本节所有知识点串起来，演示为 CTTS
+项目准备三个服务镜像的完整流程：</p>
+<div class="sourceCode" id="cb100"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================================</span></span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="co"># CTTS 三服务镜像准备完整流程</span></span>
+<span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 项目：多服务容器化部署项目</span></span>
+<span id="cb100-4"><a href="#cb100-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 三个服务：前端（Nginx）+ 后端（OpenJDK）+ 数据库（MySQL）</span></span>
+<span id="cb100-5"><a href="#cb100-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================================</span></span>
+<span id="cb100-6"><a href="#cb100-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-7"><a href="#cb100-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 查看当前本地镜像（K3-2）</span></span>
+<span id="cb100-8"><a href="#cb100-8" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span>
+<span id="cb100-9"><a href="#cb100-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期：可能只有 hello-world:latest（第 2 次课跑过）</span></span>
+<span id="cb100-10"><a href="#cb100-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-11"><a href="#cb100-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 拉取 CTTS 三服务所需的基础镜像（K3-2）</span></span>
+<span id="cb100-12"><a href="#cb100-12" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull mysql:8.0          <span class="co"># 数据库服务</span></span>
+<span id="cb100-13"><a href="#cb100-13" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull nginx:1.25         <span class="co"># 前端静态资源服务</span></span>
+<span id="cb100-14"><a href="#cb100-14" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull openjdk:17-slim    <span class="co"># 后端 Java 运行时</span></span>
+<span id="cb100-15"><a href="#cb100-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-16"><a href="#cb100-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 验证拉取结果（K3-2）</span></span>
+<span id="cb100-17"><a href="#cb100-17" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span>
+<span id="cb100-18"><a href="#cb100-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期：</span></span>
+<span id="cb100-19"><a href="#cb100-19" aria-hidden="true" tabindex="-1"></a><span class="co"># REPOSITORY   TAG        IMAGE ID       CREATED        SIZE</span></span>
+<span id="cb100-20"><a href="#cb100-20" aria-hidden="true" tabindex="-1"></a><span class="co"># mysql        8.0        d1dc36f8e78f   2 weeks ago    521MB</span></span>
+<span id="cb100-21"><a href="#cb100-21" aria-hidden="true" tabindex="-1"></a><span class="co"># nginx        1.25       605c77e624dd   3 weeks ago    142MB</span></span>
+<span id="cb100-22"><a href="#cb100-22" aria-hidden="true" tabindex="-1"></a><span class="co"># openjdk      17-slim    a3562aa0b991   2 months ago   271MB</span></span>
+<span id="cb100-23"><a href="#cb100-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-24"><a href="#cb100-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 分析 MySQL 镜像的分层结构（K3-3）</span></span>
+<span id="cb100-25"><a href="#cb100-25" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> history mysql:8.0</span>
+<span id="cb100-26"><a href="#cb100-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出展示 MySQL 镜像由 13 层组成，每层是一条 Dockerfile 指令的结果</span></span>
+<span id="cb100-27"><a href="#cb100-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-28"><a href="#cb100-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 查看 MySQL 镜像的层数（K3-4）</span></span>
+<span id="cb100-29"><a href="#cb100-29" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{len .RootFS.Layers}}&#39;</span> mysql:8.0</span>
+<span id="cb100-30"><a href="#cb100-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：13</span></span>
+<span id="cb100-31"><a href="#cb100-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-32"><a href="#cb100-32" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 查看 MySQL 镜像的启动命令（K3-4）</span></span>
+<span id="cb100-33"><a href="#cb100-33" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{.Config.Cmd}}&#39;</span> mysql:8.0</span>
+<span id="cb100-34"><a href="#cb100-34" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：[mysqld]</span></span>
+<span id="cb100-35"><a href="#cb100-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-36"><a href="#cb100-36" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. 查看 MySQL 镜像暴露的端口（K3-4）</span></span>
+<span id="cb100-37"><a href="#cb100-37" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{json .Config.ExposedPorts}}&#39;</span> mysql:8.0</span>
+<span id="cb100-38"><a href="#cb100-38" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：{&quot;3306/tcp&quot;:{},&quot;33060/tcp&quot;:{}}</span></span>
+<span id="cb100-39"><a href="#cb100-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-40"><a href="#cb100-40" aria-hidden="true" tabindex="-1"></a><span class="co"># 8. 查看 MySQL 镜像的环境变量（K3-4）</span></span>
+<span id="cb100-41"><a href="#cb100-41" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{range .Config.Env}}{{println .}}{{end}}&#39;</span> mysql:8.0</span>
+<span id="cb100-42"><a href="#cb100-42" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：PATH=..., MYSQL_MAJOR=8.0, MYSQL_VERSION=8.0.35-1.el8 等</span></span>
+<span id="cb100-43"><a href="#cb100-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-44"><a href="#cb100-44" aria-hidden="true" tabindex="-1"></a><span class="co"># 9. 查看 Nginx 镜像的启动命令与暴露端口（K3-4）</span></span>
+<span id="cb100-45"><a href="#cb100-45" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{.Config.Cmd}}&#39;</span> nginx:1.25</span>
+<span id="cb100-46"><a href="#cb100-46" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：[nginx -g daemon off;]</span></span>
+<span id="cb100-47"><a href="#cb100-47" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{json .Config.ExposedPorts}}&#39;</span> nginx:1.25</span>
+<span id="cb100-48"><a href="#cb100-48" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：{&quot;80/tcp&quot;:{}}</span></span>
+<span id="cb100-49"><a href="#cb100-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-50"><a href="#cb100-50" aria-hidden="true" tabindex="-1"></a><span class="co"># 10. 为 CTTS 项目打专用标签（K3-5）</span></span>
+<span id="cb100-51"><a href="#cb100-51" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag mysql:8.0 ctts-mysql:8.0</span>
+<span id="cb100-52"><a href="#cb100-52" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag nginx:1.25 ctts-nginx:1.25</span>
+<span id="cb100-53"><a href="#cb100-53" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag openjdk:17-slim ctts-backend-jdk:17</span>
+<span id="cb100-54"><a href="#cb100-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-55"><a href="#cb100-55" aria-hidden="true" tabindex="-1"></a><span class="co"># 11. 验证标签（K3-5）</span></span>
+<span id="cb100-56"><a href="#cb100-56" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images <span class="kw">|</span> <span class="fu">grep</span> ctts-</span>
+<span id="cb100-57"><a href="#cb100-57" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期：</span></span>
+<span id="cb100-58"><a href="#cb100-58" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-mysql        8.0       d1dc36f8e78f   ...</span></span>
+<span id="cb100-59"><a href="#cb100-59" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-nginx        1.25      605c77e624dd   ...</span></span>
+<span id="cb100-60"><a href="#cb100-60" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend-jdk  17        a3562aa0b991   ...</span></span>
+<span id="cb100-61"><a href="#cb100-61" aria-hidden="true" tabindex="-1"></a><span class="co"># 注意：与原镜像 IMAGE ID 完全相同（因为是别名，不创建新镜像）</span></span>
+<span id="cb100-62"><a href="#cb100-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-63"><a href="#cb100-63" aria-hidden="true" tabindex="-1"></a><span class="co"># 12. 查看磁盘占用（K3-3 验证层共享）</span></span>
+<span id="cb100-64"><a href="#cb100-64" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> system df</span>
+<span id="cb100-65"><a href="#cb100-65" aria-hidden="true" tabindex="-1"></a><span class="co"># 注意：实际占用通常小于 docker images 显示 SIZE 之和（因为层共享）</span></span>
+<span id="cb100-66"><a href="#cb100-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-67"><a href="#cb100-67" aria-hidden="true" tabindex="-1"></a><span class="co"># 13. 课后清理（K3-6，注意保留 CTTS 用的镜像）</span></span>
+<span id="cb100-68"><a href="#cb100-68" aria-hidden="true" tabindex="-1"></a><span class="co"># 假设实验后不再需要 hello-world 镜像</span></span>
+<span id="cb100-69"><a href="#cb100-69" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rmi hello-world:latest</span>
+<span id="cb100-70"><a href="#cb100-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-71"><a href="#cb100-71" aria-hidden="true" tabindex="-1"></a><span class="co"># 14. 清理悬空镜像（如果有）</span></span>
+<span id="cb100-72"><a href="#cb100-72" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image prune <span class="at">-f</span></span>
+<span id="cb100-73"><a href="#cb100-73" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：Total reclaimed space: xxxMB（如有悬空镜像则清理）</span></span></code></pre></div>
+<blockquote>
+<p>📌 这个完整流程体现了镜像管理的全生命周期：<strong>拉取 → 查看 →
+分析（分层/详情）→ 打标签 → 清理</strong>。下一节课（第 4
+次课容器管理）将用这些镜像启动容器实例。</p>
+</blockquote>
+<hr />
+<h2 id="四拓展阅读选学">四、拓展阅读（选学）</h2>
+<ol type="1">
+<li><strong>OverlayFS 文件系统</strong>：Docker
+默认使用的联合文件系统，是 Linux 内核 3.18+ 的特性。深入了解可读
+OverlayFS 官方文档，理解 lowerdir/upperdir/merged 的工作原理。</li>
+<li><strong>OCI 镜像规范</strong>：Open Container Initiative
+定义了镜像格式标准（OCI Image Spec），Docker 镜像格式与之兼容。了解 OCI
+有助于理解镜像的 manifest/config/layer 结构。</li>
+<li><strong>镜像摘要（Digest）</strong>：<code>docker pull mysql@sha256:...</code>
+通过完整 SHA256
+摘要拉取镜像，比标签更精确（标签会漂移，摘要永远不变）。生产环境推荐用摘要固定镜像版本。</li>
+<li><strong>多架构镜像（manifest
+list）</strong>：<code>docker pull mysql:8.0</code> 在 amd64 和 arm64
+机器上拉到的是不同架构的镜像，背后是 manifest list
+技术。<code>docker manifest inspect mysql:8.0</code> 可查看。</li>
+<li><strong>镜像签名与安全</strong>：Docker Content Trust（基于
+Notary）可以对镜像签名，确保镜像来源可信。生产环境建议启用，防止拉取被篡改的镜像。</li>
+</ol>
+<hr />
+<h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
+<h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
+<div class="visual">
+  <div class="visual-title">图示 7：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">镜像管理</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 镜像概念与组成（K3-1）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 定义：只读、分层、不可变的容器运行模板</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 组成：代码+运行时+依赖+配置+元数据</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 不可变特性：可复现、可回滚、可信任</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 镜像 vs 容器：模板 vs 实例</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 镜像拉取与查看（K3-2）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> docker pull 镜像:标签（默认 latest）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> docker images / docker image ls</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 五字段：REPOSITORY/TAG/IMAGE ID/CREATED/SIZE</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 层缓存：第二次拉取很快</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 镜像分层结构（K3-3）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Layer：每条 Dockerfile 指令一层</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> UnionFS（OverlayFS）：多层叠加统一视图</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 价值：层共享+层缓存+增量传输</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> docker history 查看构建层</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 写时复制（CoW）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 镜像详情查看（K3-4）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> docker image inspect（JSON 输出）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 关键字段：Id/RepoTags/Config.Cmd/ExposedPorts/Env/RootFS.Layers</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Go 模板提取字段：-f &#39;{{.字段}}&#39;</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> GraphDriver.Name = overlay2</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 镜像标签管理（K3-5）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> docker tag 源:tag 目标:tag（加别名）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 一个镜像 ID 可有多个标签</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> :latest 陷阱：不保证最新最稳定</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 生产规范：用明确版本号</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 镜像删除与清理（K3-6）</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> docker rmi / docker image rm</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> -f 强制删除（慎用）</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> docker image prune（清理悬空镜像）</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> docker image prune -a（清理所有未使用）</span>
+<span class="diagram-line">    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> docker system df / prune（整体磁盘管理）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h3 id="一句话总结">一句话总结</h3>
+<blockquote>
+<p><strong>镜像是只读、分层、不可变的容器模板</strong>。本节学会了用
+<code>docker pull</code> 拉取、<code>docker images</code>
+查看、<code>docker history</code>/<code>inspect</code>
+分析、<code>docker tag</code>
+打标签、<code>docker rmi</code>/<code>prune</code> 删除清理——这是后续
+Dockerfile 构建（M3）和容器管理（第 4 次课）的基础。</p>
+</blockquote>
+<hr />
+<h2
+id="六复习思考题开放式非题库题">六、复习思考题（开放式，非题库题）</h2>
+<ol type="1">
+<li>用自己的话描述"什么是 Docker 镜像"，并说明镜像和容器的关系。</li>
+<li>为什么说"镜像是不可变的"？不可变带来了哪些好处？</li>
+<li>镜像为什么采用分层结构？分层带来了哪些价值？</li>
+<li><code>docker images</code> 显示的 SIZE
+字段是镜像实际占用磁盘吗？为什么两个镜像 SIZE
+之和大于实际磁盘占用？</li>
+<li>用 <code>docker image inspect</code> 查看 <code>mysql:8.0</code>
+镜像，找出：(a) 默认启动命令 (b) 暴露端口 (c) 环境变量 (d)
+镜像层数。</li>
+<li>为什么生产环境不能用 <code>:latest</code> 标签？请举一个
+<code>:latest</code> 导致问题的具体场景。</li>
+<li><code>docker rmi</code> 删除镜像时，什么情况下只
+<code>Untagged</code> 不
+<code>Deleted</code>？什么情况下才会真正删除层？</li>
+<li><code>docker image prune</code> 和
+<code>docker image prune -a</code> 有什么区别？分别适合什么场景？</li>
+<li>在 CTTS
+项目中，你为三个服务（MySQL/Nginx/OpenJDK）分别拉取了哪些镜像？为什么选择这些版本？</li>
+<li>思考：如果你是运维工程师，如何制定团队的镜像管理规范（标签命名、版本控制、清理策略）？（为后续
+Dockerfile 与生产部署做铺垫）</li>
+</ol>
+<blockquote>
+<p>这些思考题不要求标准答案，旨在引导你建立对镜像管理的完整认知。下次课将进入"容器管理"，用本节拉取的镜像启动容器实例。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

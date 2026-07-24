@@ -1,0 +1,1102 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>K8s集群搭建</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 14 次课 · 题库</div>
+      <h1>K8s集群搭建</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 14 次课</span>
+        <span class="hero-chip"><b>主题</b>K8s集群搭建</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 14 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>14-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>14-选择-001</strong>（★ 知识点：K14-1 方案选型） 下列 K8s
+集群搭建方案中，适合本地学习与开发测试的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubeadm</span></li><li><span class="option-label">B</span><span>Minikube</span></li><li><span class="option-label">C</span><span>云托管 K8s（如阿里云 ACK）</span></li><li><span class="option-label">D</span><span>手动二进制部署</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Minikube 是 K8s
+官方维护的单机学习集群工具，适合本地学习与开发测试。kubeadm
+适合生产自建多节点集群；云托管 K8s
+适合公有云生产；手动二进制部署门槛极高，不推荐。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-002</strong>（★ 知识点：K14-1 方案选型）
+生产环境自建机房搭建 K8s 集群，推荐使用的工具是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Minikube</span></li><li><span class="option-label">B</span><span>Kind</span></li><li><span class="option-label">C</span><span>kubeadm</span></li><li><span class="option-label">D</span><span>Docker Compose</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：kubeadm 是 K8s
+官方推荐的生产级多节点集群搭建工具，适合自建机房。Minikube
+单机学习用；Kind 是 CI 测试用；Docker Compose 不是 K8s
+集群搭建工具。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-003</strong>（★ 知识点：K14-2 Minikube 前提） 使用
+docker 驱动启动 Minikube 时，必须先安装的前提条件是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>VirtualBox</span></li><li><span class="option-label">B</span><span>Docker</span></li><li><span class="option-label">C</span><span>VMware</span></li><li><span class="option-label">D</span><span>Hyper-V</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Minikube 推荐 docker
+驱动，必须先安装 Docker。VirtualBox、VMware、Hyper-V
+是其他可选驱动对应的前提，docker 驱动不需要它们。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-004</strong>（★ 知识点：K14-2 Minikube 启动）
+国内网络环境下启动 Minikube 避免卡在拉镜像的参数是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>--driver=docker</span></li><li><span class="option-label">B</span><span>--cpus=4</span></li><li><span class="option-label">C</span><span>--image-mirror-country=cn</span></li><li><span class="option-label">D</span><span>--kubernetes-version=v1.28.0</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>--image-mirror-country=cn</code> 让
+Minikube 使用国内镜像源，避免拉 <code>registry.k8s.io</code>
+镜像超时。其他参数与镜像加速无关。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-005</strong>（★ 知识点：K14-2 Minikube 命令） 启动
+Minikube 集群的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>minikube run</span></li><li><span class="option-label">B</span><span>minikube start</span></li><li><span class="option-label">C</span><span>minikube
+init</span></li><li><span class="option-label">D</span><span>minikube up</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>minikube start</code> 启动集群。Minikube
+没有 run/init/up 命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-006</strong>（★ 知识点：K14-2 Minikube 命令） 查看
+Minikube 集群状态的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>minikube info</span></li><li><span class="option-label">B</span><span>minikube status</span></li><li><span class="option-label">C</span><span>minikube show</span></li><li><span class="option-label">D</span><span>minikube ps</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>minikube status</code> 查看
+host/kubelet/apiserver 运行状态。其他命令不存在。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-007</strong>（★ 知识点：K14-2 Minikube 命令） 打开
+Minikube Web 可视化界面的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>minikube ui</span></li><li><span class="option-label">B</span><span>minikube web</span></li><li><span class="option-label">C</span><span>minikube dashboard</span></li><li><span class="option-label">D</span><span>minikube gui</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>minikube dashboard</code> 启动 K8s
+Dashboard Web 界面并自动打开浏览器。其他命令不存在。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-008</strong>（★ 知识点：K14-2 Minikube 特点） 关于
+Minikube 集群的特点，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>适合生产环境部署</span></li><li><span class="option-label">B</span><span>支持多节点高可用</span></li><li><span class="option-label">C</span><span>单机集群，Master 和 Node 在同一容器/虚拟机内</span></li><li><span class="option-label">D</span><span>必须部署在公有云上</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Minikube
+是单机学习集群，Master 和 Node
+都在同一个容器/虚拟机内，无高可用、无多节点，不能用于生产。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-009</strong>（★ 知识点：K14-3 kubectl 作用） kubectl
+的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>K8s 的容器运行时</span></li><li><span class="option-label">B</span><span>K8s 的命令行客户端，通过 API Server
+管理集群</span></li><li><span class="option-label">C</span><span>K8s 的网络插件</span></li><li><span class="option-label">D</span><span>K8s 的存储驱动</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubectl 是 K8s
+的命令行客户端，通过 kubeconfig 连接 API Server
+管理集群资源。它不是运行时、网络插件或存储驱动。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-010</strong>（★ 知识点：K14-3 kubeconfig 位置）
+kubectl 默认读取的 kubeconfig 文件路径是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>/etc/kubernetes/config</span></li><li><span class="option-label">B</span><span>~/.kube/config</span></li><li><span class="option-label">C</span><span>/var/lib/kubelet/config</span></li><li><span class="option-label">D</span><span>~/.minikube/config</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubectl 默认读取
+<code>~/.kube/config</code> 文件获取集群连接信息。Minikube
+启动时会自动生成该文件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-011</strong>（★ 知识点：K14-3 kubeconfig 要素）
+kubeconfig 文件中的三要素是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>cluster、node、pod</span></li><li><span class="option-label">B</span><span>cluster、user、context</span></li><li><span class="option-label">C</span><span>server、port、token</span></li><li><span class="option-label">D</span><span>apiVersion、kind、metadata</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubeconfig
+三要素：cluster（集群 API Server 地址 + CA
+证书）、user（认证身份）、context（绑定 cluster + user +
+namespace）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-012</strong>（★ 知识点：K14-3 kubeconfig 作用）
+kubeconfig 文件中 current-context 字段的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>指定当前使用的
+namespace</span></li><li><span class="option-label">B</span><span>指定当前使用的集群 API Server 地址</span></li><li><span class="option-label">C</span><span>指定当前使用的
+context（绑定集群+用户+namespace）</span></li><li><span class="option-label">D</span><span>指定当前用户的认证 token</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：current-context
+指定当前使用哪个 context，context 内部绑定了 cluster、user、namespace
+三者。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-013</strong>（★ 知识点：K14-3 kubectl 命令） 查看 K8s
+集群所有节点的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl get servers</span></li><li><span class="option-label">B</span><span>kubectl get nodes</span></li><li><span class="option-label">C</span><span>kubectl list nodes</span></li><li><span class="option-label">D</span><span>kubectl show nodes</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>kubectl get nodes</code> 查看集群节点。K8s
+没有 list/show servers 这种命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-014</strong>（★ 知识点：K14-3 kubectl 命令） 查看 K8s
+集群控制平面运行地址的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl get master</span></li><li><span class="option-label">B</span><span>kubectl
+cluster-info</span></li><li><span class="option-label">C</span><span>kubectl describe cluster</span></li><li><span class="option-label">D</span><span>kubectl info</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>kubectl cluster-info</code> 显示控制平面和
+CoreDNS 的运行地址。其他命令不存在。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-015</strong>（★ 知识点：K14-3 kubectl 连接） Minikube
+启动后 kubectl 能直接连接集群的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl 自动发现集群</span></li><li><span class="option-label">B</span><span>Minikube 启动时自动把连接信息写入 ~/.kube/config</span></li><li><span class="option-label">C</span><span>kubectl 内置了
+Minikube 配置</span></li><li><span class="option-label">D</span><span>二者通过共享内存通信</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Minikube
+启动时自动生成 kubeconfig 写入 <code>~/.kube/config</code>，kubectl
+读取该文件即可连接集群。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-016</strong>（★ 知识点：K14-4 kubeadm 前置） 使用
+kubeadm 搭建 K8s 集群时，必须关闭的系统功能是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>防火墙</span></li><li><span class="option-label">B</span><span>swap 分区</span></li><li><span class="option-label">C</span><span>SSH 服务</span></li><li><span class="option-label">D</span><span>cron 定时任务</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：K8s 设计上禁止
+swap，kubelet 启动时若发现 swap 开启会拒绝启动，必须
+<code>swapoff -a</code> 并注释
+<code>/etc/fstab</code>。防火墙学习时可关，但不是必须；SSH 和 cron
+不影响。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-017</strong>（★ 知识点：K14-4 kubeadm 流程） kubeadm
+初始化 master 控制平面的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubeadm create master</span></li><li><span class="option-label">B</span><span>kubeadm
+init</span></li><li><span class="option-label">C</span><span>kubeadm start</span></li><li><span class="option-label">D</span><span>kubeadm bootstrap</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>kubeadm init</code> 在 master
+节点上初始化控制平面，拉起 etcd/API Server/scheduler/controller-manager
+并生成 worker 加入命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-018</strong>（★ 知识点：K14-4 kubeadm 流程） worker
+节点加入 K8s 集群使用的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubeadm add</span></li><li><span class="option-label">B</span><span>kubeadm join</span></li><li><span class="option-label">C</span><span>kubeadm connect</span></li><li><span class="option-label">D</span><span>kubeadm register</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>kubeadm join &lt;master-ip&gt;:6443 --token ... --discovery-token-ca-cert-hash ...</code>
+让 worker 节点加入集群。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-019</strong>（★ 知识点：K14-4 kubeadm join 执行位置）
+<code>kubeadm join</code> 命令应该在哪个节点上执行？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>master 节点</span></li><li><span class="option-label">B</span><span>任意 worker 节点</span></li><li><span class="option-label">C</span><span>master 和所有 worker 同时执行</span></li><li><span class="option-label">D</span><span>仅在 etcd 节点</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>kubeadm join</code> 在每台 worker
+节点上执行，让该 worker 向 master 注册。在 master 上执行是错误的。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-020</strong>（★ 知识点：K14-4 kubeadm init 产出）
+<code>kubeadm init</code> 执行成功后，会输出的关键信息是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>集群登录密码</span></li><li><span class="option-label">B</span><span>worker 节点加入命令（kubeadm join + token）</span></li><li><span class="option-label">C</span><span>master 的
+SSH 密钥</span></li><li><span class="option-label">D</span><span>etcd 的访问密钥</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>kubeadm init</code> 成功后输出
+<code>kubeadm join ... --token ... --discovery-token-ca-cert-hash ...</code>
+命令，用于 worker 加入集群，必须妥善保存。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-021</strong>（★ 知识点：K14-4 CNI 网络插件） kubeadm
+init 完成后，节点状态仍为 NotReady 的常见原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>没装 CNI 网络插件</span></li><li><span class="option-label">B</span><span>kubectl 版本不对</span></li><li><span class="option-label">C</span><span>kubeconfig 没配置</span></li><li><span class="option-label">D</span><span>swap 没关</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：kubeadm init
+后必须安装 CNI 网络插件（如
+Calico、Flannel），否则节点间网络不通，kubelet 上报 NotReady。装完 CNI
+后节点才会变 Ready。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-022</strong>（★ 知识点：K14-4 kubeconfig 配置）
+kubeadm init 后，配置 kubectl 需要拷贝的文件是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>/etc/kubernetes/kubelet.conf</span></li><li><span class="option-label">B</span><span>/etc/kubernetes/admin.conf</span></li><li><span class="option-label">C</span><span>/var/lib/kubelet/config.yaml</span></li><li><span class="option-label">D</span><span>/etc/cni/net.d/calico.conf</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：把
+<code>/etc/kubernetes/admin.conf</code> 拷贝到
+<code>~/.kube/config</code> 并 chown 给当前用户，kubectl
+即可连接集群。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-023</strong>（★ 知识点：K14-5 kubectl 命令） 查看所有
+namespace 下的 Pod 的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl get pods --all</span></li><li><span class="option-label">B</span><span>kubectl get
+pods -A</span></li><li><span class="option-label">C</span><span>kubectl get pods --every</span></li><li><span class="option-label">D</span><span>kubectl get pods -n all</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>-A</code> 是
+<code>--all-namespaces</code> 的简写，查看所有 namespace 下的 Pod。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-024</strong>（★ 知识点：K14-5 kubectl 命令）
+查看某节点详细信息的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl get node <name> -v</span></li><li><span class="option-label">B</span><span>kubectl
+describe node <name></span></li><li><span class="option-label">C</span><span>kubectl info node <name></span></li><li><span class="option-label">D</span><span>kubectl inspect node
+<name></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>kubectl describe node &lt;name&gt;</code>
+输出节点的详细信息（Conditions、Capacity、Allocatable、System Info、Pod
+列表、Events 等）。get 是概要列表，describe 是详情。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-025</strong>（★ 知识点：K14-5 节点状态）
+<code>kubectl get nodes</code> 输出中 STATUS 列为 Ready 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>节点已就绪，可以接受调度 Pod</span></li><li><span class="option-label">B</span><span>节点正在重启</span></li><li><span class="option-label">C</span><span>节点已删除</span></li><li><span class="option-label">D</span><span>节点处于维护模式</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：Ready
+表示节点健康，kubelet 正常上报，可以接受 Pod 调度。NotReady
+表示节点异常或不满足调度条件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-026</strong>（★ 知识点：K14-5 Pod 状态）
+<code>kubectl get pods</code> 输出中 READY 列 <code>1/1</code> 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>该 Pod 有 1 个容器，1 个就绪</span></li><li><span class="option-label">B</span><span>该 Pod 有 1 个副本，1 个运行</span></li><li><span class="option-label">C</span><span>该 Pod
+启动了 1 次</span></li><li><span class="option-label">D</span><span>该 Pod 使用 1 核 CPU</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：READY 列格式为
+<code>&lt;就绪容器数&gt;/&lt;总容器数&gt;</code>，<code>1/1</code> 表示
+Pod 内 1 个容器全部就绪。<code>2/2</code> 表示 2
+个容器都就绪，<code>0/1</code> 表示 1 个容器中 0 个就绪。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-027</strong>（★ 知识点：K14-5 命令区别）
+<code>kubectl get</code> 与 <code>kubectl describe</code> 的区别是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>get 查看列表概要，describe 查看单个详情</span></li><li><span class="option-label">B</span><span>get 只读，describe 可写</span></li><li><span class="option-label">C</span><span>get 查看实时状态，describe 查看历史</span></li><li><span class="option-label">D</span><span>二者完全相同</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：get
+输出资源列表概要（一行一个），describe 输出单个资源的详细信息（含
+Events、配置、状态）。排查问题用 describe。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-028</strong>（★★ 知识点：K14-5 排查） 节点状态为
+NotReady 时，排查的第一步通常是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>重启该节点</span></li><li><span class="option-label">B</span><span>重装 K8s</span></li><li><span class="option-label">C</span><span>kubectl
+describe node <name> 查看 Conditions</span></li><li><span class="option-label">D</span><span>删除该节点重新加入</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：先
+<code>kubectl describe node &lt;name&gt;</code> 看 Conditions
+部分找异常原因（如
+KubeletNotReady），再针对性排查。直接重启/重装/删除都是不查明原因的暴力操作。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-029</strong>（★ 知识点：K14-6 namespace） 创建名为
+ctts 的 namespace 的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl create ns ctts</span></li><li><span class="option-label">B</span><span>kubectl new
+namespace ctts</span></li><li><span class="option-label">C</span><span>kubectl add namespace ctts</span></li><li><span class="option-label">D</span><span>kubectl make ns ctts</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>kubectl create namespace ctts</code>（或简写
+<code>kubectl create ns ctts</code>）创建
+namespace。其他命令不存在。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-030</strong>（★ 知识点：K14-6 镜像准备） 在 Minikube
+学习环境中，让自构建镜像直接被 Pod 使用的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>eval $(minikube
+docker-env)</span></li><li><span class="option-label">B</span><span>eval $(minikube kubectl-env)</span></li><li><span class="option-label">C</span><span>minikube build</span></li><li><span class="option-label">D</span><span>minikube image load</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>eval $(minikube docker-env)</code> 将当前
+shell 的 docker 命令指向 Minikube 节点上的 Docker daemon，之后 docker
+build 出的镜像直接在 Minikube 上，Pod 可直接使用（YAML 需加
+<code>imagePullPolicy: Never</code>）。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>14-选择-031</strong>（★★ 知识点：K14-1 方案对比） 下列属于
+K8s 集群搭建方案的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Minikube</span></li><li><span class="option-label">B</span><span>kubeadm</span></li><li><span class="option-label">C</span><span>Kind</span></li><li><span class="option-label">D</span><span>Docker
+Compose E. 云托管 K8s（如阿里云 ACK）</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong>
+<strong>解析</strong>：Minikube、kubeadm、Kind、云托管 K8s 都是 K8s
+集群搭建方案。Docker Compose 是 Docker 的多容器编排工具，不是 K8s
+集群搭建方案。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-032</strong>（★★ 知识点：K14-2 Minikube 命令）
+下列属于 Minikube 常用命令的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>minikube start</span></li><li><span class="option-label">B</span><span>minikube
+stop</span></li><li><span class="option-label">C</span><span>minikube status</span></li><li><span class="option-label">D</span><span>minikube dashboard E. minikube delete</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong> <strong>解析</strong>：start
+启动、stop 停止、status 查状态、dashboard 开可视化、delete
+删除集群，都是 Minikube 常用命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-033</strong>（★★ 知识点：K14-3 kubeconfig 要素）
+kubeconfig 文件包含的要素有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>clusters（集群列表）</span></li><li><span class="option-label">B</span><span>users（用户认证信息）</span></li><li><span class="option-label">C</span><span>contexts（上下文）</span></li><li><span class="option-label">D</span><span>current-context（当前上下文） E. namespaces（namespace 列表）</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：kubeconfig
+含 clusters、users、contexts、current-context 四部分。namespace
+不是独立要素，而是包含在 context 内（context 指定默认 namespace）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-034</strong>（★★ 知识点：K14-4 kubeadm 前置） 使用
+kubeadm 搭建 K8s 集群前，需要在所有节点上做的前置条件配置有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>关闭 swap 分区</span></li><li><span class="option-label">B</span><span>关闭防火墙（或开放 K8s 端口）</span></li><li><span class="option-label">C</span><span>关闭 SELinux</span></li><li><span class="option-label">D</span><span>安装容器运行时（如 containerd） E. 安装 kubeadm、kubelet、kubectl</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：所有节点都要做：关 swap（kubelet
+要求）、关防火墙/SELinux（避免端口拦截）、装容器运行时、装
+kubeadm/kubelet/kubectl。五项缺一不可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-035</strong>（★★ 知识点：K14-4 kubeadm 流程） 关于
+kubeadm 多节点集群搭建流程，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubeadm init
+在 master 节点执行</span></li><li><span class="option-label">B</span><span>kubeadm join 在 worker 节点执行</span></li><li><span class="option-label">C</span><span>kubeadm init
+会生成 kubeadm join 命令</span></li><li><span class="option-label">D</span><span>kubeadm init 后必须安装 CNI 网络插件节点才会
+Ready E. worker 节点加入需要 master 提供的 token</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong> <strong>解析</strong>：init 在
+master、join 在 worker、init 生成 join 命令、init 后需装 CNI、join 需要
+token，五项全部正确。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-036</strong>（★★ 知识点：K14-5 kubectl 验证） 搭建完
+K8s 集群后，验证集群是否正常的命令有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl get nodes</span></li><li><span class="option-label">B</span><span>kubectl cluster-info</span></li><li><span class="option-label">C</span><span>kubectl get pods -A</span></li><li><span class="option-label">D</span><span>kubectl describe node E.
+kubectl get svc -A</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：集群验证"五看"：get nodes（节点
+Ready）、cluster-info（控制平面运行）、get pods -A（系统 Pod
+Running）、describe node（详情）、get svc -A（kubernetes/kube-dns
+存在），全部用于验证集群。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-037</strong>（★★ 知识点：K14-5 节点异常） 节点状态为
+NotReady 的可能原因有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>没装 CNI 网络插件</span></li><li><span class="option-label">B</span><span>kubelet
+服务未启动</span></li><li><span class="option-label">C</span><span>swap 没关</span></li><li><span class="option-label">D</span><span>容器运行时崩溃 E. 节点资源耗尽</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：五项都会导致节点 NotReady：没装 CNI、kubelet
+没起、swap 开着、容器运行时崩溃、资源耗尽都会让 kubelet 上报
+NotReady。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-038</strong>（★★ 知识点：K14-6 CTTS 集群准备） 为
+CTTS 三服务准备 K8s 集群环境，需要做的工作有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>启动资源充足的
+Minikube（如 4 核 6G）</span></li><li><span class="option-label">B</span><span>创建独立的 ctts namespace</span></li><li><span class="option-label">C</span><span>准备三个服务的镜像（MySQL、前端、后端）</span></li><li><span class="option-label">D</span><span>启用 ingress addon（第 19
+次课用） E. 启用 metrics-server addon（资源监控）</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong> <strong>解析</strong>：CTTS
+集群准备五项工作全部需要：资源充足、独立 namespace、镜像准备、ingress
+addon、metrics-server addon。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-039</strong>（★★ 知识点：K14-3 kubectl config）
+下列属于 kubectl config 子命令的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl config view</span></li><li><span class="option-label">B</span><span>kubectl config current-context</span></li><li><span class="option-label">C</span><span>kubectl config get-contexts</span></li><li><span class="option-label">D</span><span>kubectl
+config use-context E. kubectl config set-context</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong> <strong>解析</strong>：kubectl
+config
+五个子命令：view（查看配置）、current-context（查看当前上下文）、get-contexts（列出上下文）、use-context（切换上下文）、set-context（设置上下文），全部正确。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-选择-040</strong>（★★ 知识点：K14-6 镜像准备） 在 Minikube
+学习环境中准备 CTTS 三服务镜像的方式有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>用 eval $(minikube
+docker-env) 切到 Minikube Docker 后构建</span></li><li><span class="option-label">B</span><span>推送到 Docker Hub
+后集群从仓库拉取</span></li><li><span class="option-label">C</span><span>推送到阿里云 ACR 后集群从仓库拉取</span></li><li><span class="option-label">D</span><span>推送到企业自建
+Harbor 仓库 E. 直接从 K8s 集群内部 build 镜像（不通过 Docker）</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：四种方式都可行：Minikube Docker daemon
+直接构建（学习用）、Docker Hub/ACR/Harbor 推送后拉取（生产做法）。K8s
+集群本身不提供镜像构建能力，E 错误。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>14-判断-001</strong>（★ 知识点：K14-1 Minikube 适用）
+Minikube 适合生产环境部署，可以承载真实业务流量。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Minikube
+是单机学习集群，无高可用、无多节点，仅适合学习开发测试，不能用于生产。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-002</strong>（★ 知识点：K14-1 kubeadm 定位） kubeadm
+是 K8s
+官方推荐的多节点集群搭建工具，至今仍是生产环境自建集群的主流方式。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：kubeadm
+是官方推荐生产级搭建工具，至今主流，云托管 K8s 底层很多也基于 kubeadm
+或类似工具。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-003</strong>（★ 知识点：K14-2 Minikube 前提） 使用
+docker 驱动启动 Minikube 时，必须先安装 Docker。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：docker
+驱动依赖 Docker 引擎，必须先装 Docker。其他驱动（virtualbox
+等）则需对应虚拟化软件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-004</strong>（★ 知识点：K14-2 镜像加速）
+国内网络环境下启动 Minikube 必须加
+<code>--image-mirror-country=cn</code> 参数，否则可能卡在拉镜像。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：国内拉
+<code>registry.k8s.io</code> 镜像很慢或超时，加
+<code>--image-mirror-country=cn</code> 使用国内镜像源。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-005</strong>（★ 知识点：K14-2 stop vs delete）
+<code>minikube stop</code> 会删除集群及其所有配置数据。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：stop
+只停止集群运行，配置和数据保留，下次 <code>minikube start</code>
+即可恢复。<code>minikube delete</code> 才是删除集群。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-006</strong>（★ 知识点：K14-3 kubectl 必要性）
+只要安装了 kubectl，就能连接并管理任意 K8s 集群。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：kubectl
+是客户端，还需要正确的 kubeconfig 文件（含 API Server
+地址和认证信息）才能连接集群。仅有 kubectl 没有 kubeconfig
+无法连接。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-007</strong>（★ 知识点：K14-3 kubeconfig 自动生成）
+Minikube 启动时会自动生成 kubeconfig 文件写入 ~/.kube/config。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Minikube
+启动时自动把集群连接信息写入 <code>~/.kube/config</code>，kubectl
+即可直接连接。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-008</strong>（★ 知识点：K14-3 kubectl 部署位置）
+kubectl 必须安装在 K8s 集群的节点上才能管理集群。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：kubectl
+是客户端，可装在任何能访问 API Server 的机器上（笔记本、跳板机），通过
+kubeconfig 远程连接集群。这是 C/S 架构的优势。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-009</strong>（★ 知识点：K14-4 swap 要求） 使用
+kubeadm 搭建 K8s 集群时，必须先关闭所有节点的 swap 分区。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：K8s
+设计上禁止 swap，kubelet 启动时若发现 swap 开启会拒绝启动，必须
+<code>swapoff -a</code> 并注释 <code>/etc/fstab</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-010</strong>（★ 知识点：K14-4 join 执行位置）
+<code>kubeadm join</code> 命令需要在 master 节点上执行，让 master 加入
+worker。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>kubeadm join</code> 在 worker
+节点上执行，让 worker 加入 master。在 master 上执行是错误的。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-011</strong>（★ 知识点：K14-4 CNI 必要性） kubeadm
+init 完成后，节点状态会立即变 Ready，无需额外操作。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：kubeadm init
+后节点状态为 NotReady，因为还没装 CNI 网络插件。必须
+<code>kubectl apply -f calico.yaml</code> 安装 CNI 后节点才会变
+Ready。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-012</strong>（★ 知识点：K14-4 token 有效期） kubeadm
+init 生成的 join token 默认永久有效。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：kubeadm join
+token 默认 24 小时有效。过期后可在 master 上用
+<code>kubeadm token create --print-join-command</code> 重新生成。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-013</strong>（★ 知识点：K14-5 get vs describe）
+<code>kubectl get nodes</code>
+输出节点列表概要，<code>kubectl describe node &lt;name&gt;</code>
+输出节点详细信息。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：get
+输出列表概要（一行一个），describe
+输出单个资源详情（Conditions、Capacity、Events 等）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-014</strong>（★ 知识点：K14-5 -A 参数）
+<code>kubectl get pods</code> 默认查看所有 namespace 下的 Pod。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>kubectl get pods</code> 默认只查看 default
+namespace 下的 Pod。加 <code>-A</code>（--all-namespaces）才查看所有
+namespace。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-015</strong>（★ 知识点：K14-5 READY 含义）
+<code>kubectl get pods</code> 输出中 READY 列 <code>0/1</code> 表示该
+Pod 内 1 个容器，0 个就绪。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：READY 列格式
+<code>&lt;就绪容器数&gt;/&lt;总容器数&gt;</code>，<code>0/1</code> 表示
+1 个容器中 0 个就绪，可能是正在启动或异常。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-016</strong>（★ 知识点：K14-5 dashboard） Minikube
+dashboard 是 K8s 集群的必备组件，生产环境必须安装。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：dashboard 是
+Minikube 的 addon，学习可视化用。生产环境通常不装 dashboard（用 kubectl
+命令行更专业、更安全）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-017</strong>（★ 知识点：K14-6 namespace 隔离） CTTS
+项目应该把所有资源部署到 default namespace，避免创建多个 namespace
+增加复杂度。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：建议创建独立
+namespace（如 ctts）做资源隔离，便于管理、清理、权限控制。default
+namespace 通常留给系统默认资源。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-018</strong>（★ 知识点：K14-6 Minikube 资源）
+Minikube 默认 2 核 2G 足够跑下 CTTS 三服务（前端+后端+MySQL）。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：CTTS
+三服务加系统组件约需 3.5 核 4G，Minikube 默认 2 核 2G 不够，启动时需指定
+<code>--cpus=4 --memory=6g</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-019</strong>（★★ 知识点：K14-4 kubeadm 高可用）
+生产环境推荐使用 3 个 master 节点做高可用，单 master
+挂了另外两个接管。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：生产环境用 3
+个 master 节点 + 堆叠或外部 etcd 做高可用，单 master
+挂了另外两个接管，避免单点故障。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-判断-020</strong>（★ 知识点：K14-6 镜像拉取策略） 在
+Minikube 中用 <code>eval $(minikube docker-env)</code> 构建的镜像，Pod
+YAML 应设置
+<code>imagePullPolicy: Never</code>，否则会去仓库拉取导致失败。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Minikube
+Docker daemon 构建的镜像只在节点本地，默认 imagePullPolicy 是 Always
+会去仓库拉取（找不到）。设置 Never 让 K8s 只用本地镜像。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>14-填空-001</strong>（★ 知识点：K14-1 方案选型）
+本地学习与开发测试推荐的 K8s 集群搭建方案是
+________，生产环境自建机房推荐使用 ________。</p><blockquote>
+<p><strong>答案：Minikube；kubeadm</strong>
+<strong>解析</strong>：Minikube 单机学习用，kubeadm
+多节点生产用。本课程主用 Minikube 实操，kubeadm 讲解流程。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-填空-002</strong>（★ 知识点：K14-2 Minikube 启动）
+国内网络环境下启动 Minikube 应加参数 ________
+以使用国内镜像源避免拉镜像超时。</p><blockquote>
+<p><strong>答案：--image-mirror-country=cn</strong>
+<strong>解析</strong>：该参数让 Minikube 使用国内镜像仓库（如阿里云
+google_containers）拉取 K8s 组件镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-填空-003</strong>（★ 知识点：K14-3 kubeconfig 路径）
+kubectl 默认读取的 kubeconfig 文件路径是 ________。</p><blockquote>
+<p><strong>答案：~/.kube/config</strong> <strong>解析</strong>：kubectl
+启动时读取 <code>~/.kube/config</code> 获取集群连接信息。Minikube
+启动时自动生成该文件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-填空-004</strong>（★ 知识点：K14-3 kubeconfig 要素）
+kubeconfig 文件的三要素是 cluster、________ 和 context。</p><blockquote>
+<p><strong>答案：user</strong>
+<strong>解析</strong>：三要素：cluster（集群 API Server 地址 +
+CA）、user（认证身份）、context（绑定 cluster + user + namespace）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-填空-005</strong>（★ 知识点：K14-4 kubeadm 前置） 使用
+kubeadm 搭建 K8s 集群时，必须关闭的系统功能是 ________（kubelet
+启动时会检查并拒绝启动）。</p><blockquote>
+<p><strong>答案：swap（交换分区）</strong> <strong>解析</strong>：K8s
+设计禁止 swap，kubelet 启动时若发现 swap 开启会拒绝启动。必须
+<code>swapoff -a</code> 并注释 <code>/etc/fstab</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-填空-006</strong>（★ 知识点：K14-4 kubeadm 命令） kubeadm
+在 master 节点初始化控制平面的命令是 ________，在 worker
+节点加入集群的命令是 ________。</p><blockquote>
+<p><strong>答案：kubeadm init；kubeadm join</strong>
+<strong>解析</strong>：<code>kubeadm init</code> 在 master
+初始化控制平面并生成 join 命令；<code>kubeadm join</code> 在 worker
+上执行加入集群。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-填空-007</strong>（★ 知识点：K14-4 CNI 网络插件） kubeadm
+init 后节点状态为 NotReady，必须安装 ________ 网络插件（如
+Calico/Flannel）后节点才会变 Ready。</p><blockquote>
+<p><strong>答案：CNI（或 容器网络接口）</strong>
+<strong>解析</strong>：CNI（Container Network Interface）为 Pod
+提供网络通信。没装 CNI 节点间网络不通，kubelet 上报 NotReady。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-填空-008</strong>（★ 知识点：K14-5 查看所有 Pod） 查看所有
+namespace 下的 Pod 的命令是 <code>kubectl get pods</code> 加参数
+________。</p><blockquote>
+<p><strong>答案：-A（或 --all-namespaces）</strong>
+<strong>解析</strong>：<code>-A</code> 是 <code>--all-namespaces</code>
+的简写，查看所有 namespace 下的 Pod。不加默认只看 default
+namespace。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-填空-009</strong>（★ 知识点：K14-5 查看节点详情）
+查看某节点详细信息（含 Conditions、Capacity、Events）的命令是
+<code>kubectl ________ node &lt;name&gt;</code>。</p><blockquote>
+<p><strong>答案：describe</strong>
+<strong>解析</strong>：<code>kubectl describe node &lt;name&gt;</code>
+输出节点的详细信息。get 是概要列表，describe 是详情。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-填空-010</strong>（★ 知识点：K14-6 namespace 创建）
+创建名为 ctts 的 namespace 的命令是
+<code>kubectl ________ namespace ctts</code>。</p><blockquote>
+<p><strong>答案：create</strong>
+<strong>解析</strong>：<code>kubectl create namespace ctts</code>（或简写
+<code>kubectl create ns ctts</code>）创建 namespace。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>14-论述-001</strong>（★★ 知识点：K14-1 方案对比，10 分）
+请对比 Minikube、kubeadm、Kind、云托管 K8s
+四种集群搭建方案，从定位、节点数、控制平面管理、适用场景、是否适合生产五个方面分析，并给出选型建议。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>Minikube</strong>（2 分）：
+<ul>
+<li>定位：单机学习集群</li>
+<li>节点数：1（单机）</li>
+<li>控制平面：自动管理</li>
+<li>适用场景：本地学习、开发测试、教学演示</li>
+<li>是否适合生产：否</li>
+</ul></li>
+<li><strong>kubeadm</strong>（2 分）：
+<ul>
+<li>定位：多节点生产集群搭建工具</li>
+<li>节点数：多（1 master + N worker）</li>
+<li>控制平面：手动搭建，用户自管</li>
+<li>适用场景：生产环境、自建机房、需要多节点高可用</li>
+<li>是否适合生产：是</li>
+</ul></li>
+<li><strong>Kind</strong>（2 分）：
+<ul>
+<li>定位：容器化集群（用 Docker 容器模拟节点）</li>
+<li>节点数：多（容器模拟）</li>
+<li>控制平面：自动管理</li>
+<li>适用场景：CI 流水线、临时测试集群</li>
+<li>是否适合生产：否</li>
+</ul></li>
+<li><strong>云托管 K8s</strong>（2 分）：
+<ul>
+<li>定位：公有云托管集群</li>
+<li>节点数：多（云上）</li>
+<li>控制平面：云厂商托管，用户只管 Node</li>
+<li>适用场景：公有云生产、免运维控制平面</li>
+<li>是否适合生产：是</li>
+</ul></li>
+<li><strong>选型建议</strong>（2 分）：
+<ul>
+<li>学习/开发：Minikube（首选）或 Kind（CI 用）</li>
+<li>生产/自建：kubeadm</li>
+<li>公有云生产：云托管 K8s（华为 CCE / 阿里 ACK / 腾讯 TKE）</li>
+<li>CI 流水线：Kind</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：每个方案 2 分（5 个方面答出 4
+个即给满分）；选型建议 2
+分。要点齐全即可，不要求与答案文字完全一致。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-论述-002</strong>（★★ 知识点：K14-4 kubeadm 流程，10 分）
+请详细描述使用 kubeadm 搭建 1 master + 2 worker K8s
+集群的完整流程，标出每个步骤在哪台机器上执行，并说明每步的作用。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>阶段 1：所有节点做前置条件</strong>（在
+master、worker1、worker2 三台机器上都执行）（3 分）：
+<ul>
+<li>关闭 swap：<code>swapoff -a</code> + 注释
+<code>/etc/fstab</code>（kubelet 要求）</li>
+<li>关闭防火墙：<code>ufw disable</code>（避免端口拦截）</li>
+<li>关闭 SELinux：<code>setenforce 0</code>（减少坑）</li>
+<li>设置主机名 + 配置 <code>/etc/hosts</code> 解析（节点间通信）</li>
+<li>加载内核模块：overlay、br_netfilter</li>
+<li>设置内核参数：bridge-nf-call-iptables=1、ip_forward=1</li>
+<li>安装 containerd（容器运行时）</li>
+<li>安装 kubeadm、kubelet、kubectl</li>
+</ul></li>
+<li><strong>阶段 2：在 master 上初始化控制平面</strong>（2 分）：
+<ul>
+<li>执行
+<code>kubeadm init --image-repository=... --kubernetes-version=... --pod-network-cidr=10.244.0.0/16</code></li>
+<li>作用：拉取控制平面镜像、启动 etcd/API
+Server/scheduler/controller-manager、生成 kubeconfig 和 join 命令</li>
+</ul></li>
+<li><strong>阶段 3：在 master 上配置 kubectl</strong>（1 分）：
+<ul>
+<li><code>mkdir -p ~/.kube &amp;&amp; sudo cp /etc/kubernetes/admin.conf ~/.kube/config &amp;&amp; sudo chown $(id -u):$(id -g) ~/.kube/config</code></li>
+<li>作用：让 kubectl 能连接本集群</li>
+</ul></li>
+<li><strong>阶段 4：在 master 上安装 CNI 网络插件</strong>（1 分）：
+<ul>
+<li><code>kubectl apply -f calico.yaml</code></li>
+<li>作用：让 Pod 网络互通，节点变 Ready</li>
+</ul></li>
+<li><strong>阶段 5：在 worker1、worker2 上执行 join</strong>（2 分）：
+<ul>
+<li>用阶段 2 输出的
+<code>kubeadm join &lt;master-ip&gt;:6443 --token ... --discovery-token-ca-cert-hash ...</code></li>
+<li>作用：worker 向 master 注册，kubelet 启动并接受调度</li>
+</ul></li>
+<li><strong>阶段 6：在 master 上验证集群</strong>（1 分）：
+<ul>
+<li><code>kubectl get nodes</code> 三台都 Ready</li>
+<li><code>kubectl get pods -A</code> 系统 Pod 全 Running</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：六个阶段按分值给分；每阶段需答出"在哪执行"+"做什么"+"作用"三点才给满分；只列命令不说明作用扣一半。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-论述-003</strong>（★★ 知识点：K14-3 kubeconfig 与 K14-5
+排查，8 分） 请说明 kubeconfig 文件的三要素及其作用，并描述 kubectl 通过
+kubeconfig 连接 API Server 的完整流程。若某节点
+NotReady，描述排查步骤。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>kubeconfig 三要素</strong>（3 分）：
+<ul>
+<li>cluster：集群信息（API Server 地址 + CA 证书）（1 分）</li>
+<li>user：用户认证信息（客户端证书/token）（1 分）</li>
+<li>context：上下文，绑定 cluster + user + 默认 namespace（1 分）</li>
+<li>补充：current-context 指定当前使用哪个 context</li>
+</ul></li>
+<li><strong>kubectl 连接 API Server 流程</strong>（3 分）：
+<ul>
+<li>用户敲 kubectl 命令（0.5 分）</li>
+<li>kubectl 读取 <code>~/.kube/config</code>（kubeconfig）（0.5
+分）</li>
+<li>根据 current-context 找到对应的 cluster（API Server 地址）和
+user（认证）（1 分）</li>
+<li>用 CA 证书验证 API Server 身份，用 user 证书认证自己（0.5 分）</li>
+<li>通过 HTTPS 发送请求到 API Server，API Server 读写 etcd 返回结果（0.5
+分）</li>
+</ul></li>
+<li><strong>节点 NotReady 排查步骤</strong>（2 分）：
+<ul>
+<li>第一步：<code>kubectl describe node &lt;name&gt;</code> 看
+Conditions 部分，找异常原因（如 KubeletNotReady）（0.5 分）</li>
+<li>第二步：<code>kubectl get pods -n kube-system -o wide | grep &lt;name&gt;</code>
+看该节点系统 Pod 是否正常（0.5 分）</li>
+<li>第三步：SSH 到该节点 <code>systemctl status kubelet</code> 看
+kubelet 是否运行（0.5 分）</li>
+<li>第四步：<code>journalctl -u kubelet -n 100</code> 看 kubelet
+日志找根因（0.5 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分独立给分；流程顺序正确即可；排查步骤答出
+4 步即满分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>14-论述-004</strong>（★★ 知识点：K14-6 CTTS 集群准备，8 分）
+请为 CTTS 三服务（前端 2 副本 + 后端 3 副本 + MySQL 1 副本）的 K8s
+部署设计集群环境准备方案，包含：①集群资源规划 ②namespace 与 addon 准备
+③三个服务的镜像准备方式 ④后续课程衔接计划。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>集群资源规划</strong>（2 分）：
+<ul>
+<li>估算：前端 2×(0.25 核+256Mi) + 后端 3×(0.5 核+512Mi) + MySQL 1×(0.5
+核+1Gi) + 系统 ≈ 3.5 核 4G（1 分）</li>
+<li>启动 Minikube
+指定资源：<code>minikube start --cpus=4 --memory=6g --image-mirror-country=cn</code>（1
+分）</li>
+</ul></li>
+<li><strong>namespace 与 addon</strong>（2 分）：
+<ul>
+<li>创建独立
+namespace：<code>kubectl create namespace ctts</code>（资源隔离）（1
+分）</li>
+<li>启用 addons：dashboard（可视化）、metrics-server（HPA
+用）、ingress（第 19 次课用）（1 分）</li>
+</ul></li>
+<li><strong>镜像准备</strong>（2 分）：
+<ul>
+<li>MySQL：直接 <code>docker pull mysql:8.0</code> 官方镜像（0.5
+分）</li>
+<li>前后端：用 <code>eval $(minikube docker-env)</code> 切到 Minikube
+Docker 后构建（学习用，免推仓库）（1 分）</li>
+<li>推送方式（备选）：推到 Docker Hub/ACR/Harbor
+后集群拉取（生产做法）（0.5 分）</li>
+</ul></li>
+<li><strong>后续课程衔接</strong>（2 分）：
+<ul>
+<li>第 15 次：编写 Pod YAML 部署 CTTS 后端（0.5 分）</li>
+<li>第 16 次：Deployment 管理 Pod 副本（0.5 分）</li>
+<li>第 18~19 次：Service + Ingress 对外访问（0.5 分）</li>
+<li>第 21~22 次：ConfigMap/Secret + PV/PVC 配置存储（0.5 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：四部分独立给分；方案合理即可，不要求与答案完全一致；资源估算合理替代（如
+3 核 5G）同样给分。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>14-阅读-001</strong>（★★ 知识点：K14-2/K14-3 Minikube 启动与
+kubectl 配置，12 分） 阅读以下 Minikube 启动与 kubectl
+配置流程，补全缺失部分（每空 2 分，共 12 分）。</p>
+<pre class="text"><code># 步骤 1：启动 Minikube 集群（国内镜像加速）
+minikube start --image-mirror-country=cn --driver=(a)________
+
+# 预期输出末尾：
+# 🏄  Done! kubectl is now configured to use &quot;minikube&quot; cluster
+
+# 步骤 2：验证 Minikube 状态
+minikube (b)________
+# 预期输出：
+# host: Running
+# kubelet: Running
+# apiserver: Running
+# kubeconfig: Configured
+
+# 步骤 3：查看 kubeconfig 文件位置
+ls -la (c)________/
+# 预期输出：
+# -rw------- 1 user user 2856 ... config    ← kubeconfig 文件
+
+# 步骤 4：验证 kubectl 连接集群
+kubectl (d)________
+# 预期输出：
+# Kubernetes control plane is running at https://192.168.49.2:8443
+
+# 步骤 5：查看集群节点
+kubectl (e)________
+# 预期输出：
+# NAME       STATUS   ROLES           AGE   VERSION
+# minikube   Ready    control-plane   2m    v1.28.0
+
+# 步骤 6：查看当前 context
+kubectl config (f)________
+# 预期输出：
+# minikube</code></pre>
+<blockquote>
+<p><strong>参考答案</strong>： (a) docker (b) status (c) ~/.kube（或
+$HOME/.kube） (d) cluster-info (e) get nodes (f) current-context</p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) docker 驱动是 Minikube 推荐驱动（前提是已装 Docker）</li>
+<li>(b) <code>minikube status</code> 查看 host/kubelet/apiserver
+运行状态</li>
+<li>(c) kubeconfig 默认位于 <code>~/.kube/config</code></li>
+<li>(d) <code>kubectl cluster-info</code> 查看控制平面地址</li>
+<li>(e) <code>kubectl get nodes</code> 查看节点</li>
+<li>(f) <code>kubectl config current-context</code> 查看当前
+context</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。意思对即可，专有名词拼写错误不扣分（如 cluster-info 写成
+clusterinfo）。</p>
+</blockquote>
+<hr />
+<p><strong>14-阅读-002</strong>（★★ 知识点：K14-4 kubeadm 多节点搭建，12
+分） 阅读以下 kubeadm 多节点集群搭建流程，补全缺失部分（每空 2 分，共 12
+分）。</p>
+<pre class="text"><code># 阶段 1：所有节点做前置条件
+# 关闭 swap
+sudo (a)________ -a
+sudo sed -i &#39;/swap/d&#39; /etc/fstab
+
+# 关闭防火墙
+sudo ufw disable
+
+# 安装容器运行时（containerd）
+sudo apt-get install -y containerd
+
+# 安装 kubeadm、kubelet、kubectl
+sudo apt-get install -y kubelet kubeadm kubectl
+
+# 阶段 2：在 master 上初始化控制平面
+sudo kubeadm (b)________ \
+  --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers \
+  --kubernetes-version=v1.28.4 \
+  --pod-network-cidr=10.244.0.0/16
+
+# 阶段 3：在 master 上配置 kubectl
+mkdir -p $HOME/.kube
+sudo cp -i (c)________ $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+# 阶段 4：在 master 上安装 CNI 网络插件
+kubectl (d)________ -f https://docs.projectcalico.org/manifests/calico.yaml
+
+# 阶段 5：在 worker 上加入集群
+sudo kubeadm (e)________ 192.168.1.10:6443 \
+  --token abcdef.0123456789abcdef \
+  --discovery-token-ca-cert-hash sha256:1234...
+
+# 阶段 6：在 master 上验证
+kubectl (f)________
+# 预期输出：
+# NAME          STATUS   ROLES           AGE   VERSION
+# k8s-master    Ready    control-plane   10m   v1.28.4
+# k8s-worker1   Ready    &lt;none&gt;          3m    v1.28.4
+# k8s-worker2   Ready    &lt;none&gt;          2m    v1.28.4</code></pre>
+<blockquote>
+<p><strong>参考答案</strong>： (a) swapoff (b) init (c)
+/etc/kubernetes/admin.conf (d) apply (e) join (f) get nodes</p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) <code>swapoff -a</code> 关闭 swap（kubelet 要求）</li>
+<li>(b) <code>kubeadm init</code> 初始化 master 控制平面</li>
+<li>(c) 拷贝 <code>/etc/kubernetes/admin.conf</code> 到
+<code>~/.kube/config</code></li>
+<li>(d) <code>kubectl apply -f</code> 安装 Calico CNI</li>
+<li>(e) <code>kubeadm join</code> 让 worker 加入集群</li>
+<li>(f) <code>kubectl get nodes</code> 查看所有节点状态</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。意思对即可，命令拼写需准确（Linux 命令需严格区分大小写）。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>14-编程-001</strong>（★★ 知识点：K14-6 CTTS 集群准备，15 分）
+<strong>CTTS 集群环境准备脚本设计</strong>：请为 CTTS 三服务 K8s
+部署设计一份集群环境准备 Shell 脚本，要求包含：</p>
+<ol type="1">
+<li>启动 4 核 6G 的 Minikube 集群（含国内镜像加速）（3 分）</li>
+<li>创建 ctts namespace（2 分）</li>
+<li>切换到 Minikube Docker daemon 并构建前后端镜像（4 分）</li>
+<li>拉取 MySQL 官方镜像（2 分）</li>
+<li>启用 ingress、metrics-server、dashboard 三个 addons（3 分）</li>
+<li>输出集群就绪汇总信息（1 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># CTTS K8s 集群环境准备脚本</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 作者：第 14 次课作业</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 用法：bash prepare-ctts-cluster.sh</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;===== 步骤 1：启动 Minikube 集群（4 核 6G，国内镜像加速）=====&quot;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ex">minikube</span> start <span class="dt">\</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">--cpus</span><span class="op">=</span>4 <span class="dt">\</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">--memory</span><span class="op">=</span>6g <span class="dt">\</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">--driver</span><span class="op">=</span>docker <span class="dt">\</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">--image-mirror-country</span><span class="op">=</span>cn</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get nodes</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;===== 步骤 2：创建 ctts namespace =====&quot;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> create namespace ctts <span class="at">--dry-run</span><span class="op">=</span>client <span class="at">-o</span> yaml <span class="kw">|</span> <span class="ex">kubectl</span> apply <span class="at">-f</span> <span class="at">-</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get namespaces</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;===== 步骤 3：切换到 Minikube Docker daemon 并构建镜像 =====&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span> <span class="va">$(</span><span class="ex">minikube</span> docker-env<span class="va">)</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 构建后端镜像（假设 Dockerfile 在 ~/ctts/backend/）</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/ctts/backend</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:v1 .</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 构建前端镜像（假设 Dockerfile 在 ~/ctts/frontend/）</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/ctts/frontend</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-frontend:v1 .</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证镜像</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images <span class="kw">|</span> <span class="fu">grep</span> ctts</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;===== 步骤 4：拉取 MySQL 官方镜像 =====&quot;</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull mysql:8.0</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images <span class="kw">|</span> <span class="fu">grep</span> mysql</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;===== 步骤 5：启用 addons =====&quot;</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="ex">minikube</span> addons enable dashboard</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="ex">minikube</span> addons enable metrics-server</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="ex">minikube</span> addons enable ingress</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="ex">minikube</span> addons list <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-E</span> <span class="st">&quot;dashboard|metrics-server|ingress&quot;</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;===== 步骤 6：集群就绪汇总 =====&quot;</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;===============================================&quot;</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;  CTTS K8s 集群环境准备完成&quot;</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;===============================================&quot;</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;集群节点：&quot;</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get nodes</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Namespace：ctts 已创建&quot;</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;镜像：ctts-backend:v1 / ctts-frontend:v1 / mysql:8.0 已就绪&quot;</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Addons：dashboard / metrics-server / ingress 已启用&quot;</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;状态：✅ 可进入第 15 次课 Pod 部署&quot;</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;===============================================&quot;</span></span></code></pre></div>
+<p><strong>评分要点</strong>：</p>
+<ul>
+<li>步骤 1（3
+分）：启动命令正确（cpus/memory/driver/image-mirror-country 全）</li>
+<li>步骤 2（2 分）：创建 namespace 命令正确</li>
+<li>步骤 3（4 分）：eval 切换 + 两次 docker build + 验证</li>
+<li>步骤 4（2 分）：docker pull mysql:8.0</li>
+<li>步骤 5（3 分）：三个 addons enable 命令</li>
+<li>步骤 6（1 分）：输出汇总信息</li>
+<li>脚本结构合理、可执行、有注释额外加分；缺少 <code>set -e</code>
+或注释不扣分。</li>
+</ul>
+</blockquote>
+<hr />
+<p><strong>14-编程-002</strong>（★★★ 知识点：K14-3/K14-5 kubectl
+命令综合，20 分） <strong>kubectl 命令综合应用</strong>：某同学搭建完
+K8s 集群后，需要完成以下运维任务。请写出对应的 kubectl 命令（每小题 4
+分，共 20 分）。</p>
+<pre class="text"><code>背景：Minikube 集群已搭建完成，集群中有一个 namespace &quot;ctts&quot;。</code></pre>
+<ol type="1">
+<li><strong>任务 1</strong>：查看集群所有节点的详细信息（含
+IP、OS、容器运行时），写出完整命令。</li>
+<li><strong>任务 2</strong>：查看 ctts namespace 下所有 Pod
+的列表（含节点、IP），写出完整命令。</li>
+<li><strong>任务 3</strong>：查看名为 ctts-backend 的 Pod
+的详细事件日志（用于排查启动失败问题），写出完整命令。</li>
+<li><strong>任务 4</strong>：列出当前 kubeconfig 中所有
+context，并切换到名为 minikube 的 context，写出两条命令。</li>
+<li><strong>任务 5</strong>：某节点 minikube 状态为
+NotReady，写出排查该问题的三条命令（查看节点 Conditions、查看该节点系统
+Pod、SSH 后查看 kubelet 服务状态）。</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分，每小题 4 分）：</p>
+<p><strong>任务 1</strong>（4 分）：</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get nodes <span class="at">-o</span> wide</span></code></pre></div>
+<p><strong>解析</strong>：<code>-o wide</code> 输出含
+IP、OS、容器运行时等详细信息。仅 <code>kubectl get nodes</code> 给 2
+分。</p>
+<p><strong>任务 2</strong>（4 分）：</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> ctts <span class="at">-o</span> wide</span></code></pre></div>
+<p><strong>解析</strong>：<code>-n ctts</code> 指定
+namespace，<code>-o wide</code> 含节点和 IP。漏 <code>-n ctts</code> 给
+2 分；漏 <code>-o wide</code> 给 3 分。</p>
+<p><strong>任务 3</strong>（4 分）：</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pod ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 或查看日志：</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs ctts-backend <span class="at">-n</span> ctts</span></code></pre></div>
+<p><strong>解析</strong>：describe 查看详情含 Events；logs
+查看容器日志。两个命令任一给满分；需指定 <code>-n ctts</code>，否则扣 1
+分。</p>
+<p><strong>任务 4</strong>（4 分，每条 2 分）：</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 列出所有 context</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> config get-contexts</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 切换到 minikube context</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> config use-context minikube</span></code></pre></div>
+<p><strong>解析</strong>：两条命令各 2 分。<code>get-contexts</code>
+写成 <code>view</code> 给 1 分；<code>use-context</code> 拼错扣 1
+分。</p>
+<p><strong>任务 5</strong>（4 分，每条 1 分，答出 3
+条即满分；多答不加分）：</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 查看节点 Conditions</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe node minikube</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 或精准过滤：</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe node minikube <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-A</span> 10 Conditions</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 查看该节点上的系统 Pod</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-A</span> <span class="at">-o</span> wide <span class="kw">|</span> <span class="fu">grep</span> minikube</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 或：</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> kube-system <span class="at">-o</span> wide <span class="kw">|</span> <span class="fu">grep</span> minikube</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. SSH 到节点查看 kubelet 服务状态</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="ex">minikube</span> ssh</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> status kubelet</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 或查看日志：</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-u</span> kubelet <span class="at">-n</span> 100 <span class="at">--no-pager</span></span></code></pre></div>
+<p><strong>解析</strong>：三条排查命令各 1 分，答出 3
+条即满分。describe、get pods、systemctl/journalctl
+三个维度都答出给满分；只答一两个维度按条给分。</p>
+<p><strong>评分要点</strong>：每小题独立给分；命令可执行、参数正确即给分；拼写错误酌情扣
+1 分；多写合理命令不扣分。任务 5 答出 3
+条排查命令即满分，不需要答全所有可选命令。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

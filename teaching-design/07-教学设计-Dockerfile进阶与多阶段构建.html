@@ -1,0 +1,576 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dockerfile进阶与多阶段构建</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 07 次课 · 教学设计</div>
+      <h1>Dockerfile进阶与多阶段构建</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 07 次课</span>
+        <span class="hero-chip"><b>主题</b>Dockerfile进阶与多阶段构建</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1课前-5-分钟回顾导入">互动 1：课前 5 分钟回顾导入</a></li>
+<li><a href="#互动-2面试题导入cmd-和-entrypoint-的区别核心互动">互动 2：面试题导入——&quot;CMD 和 ENTRYPOINT 的区别&quot;（核心互动）</a></li>
+<li><a href="#互动-3多阶段构建体积对比演示">互动 3：多阶段构建体积对比演示</a></li>
+<li><a href="#互动-4dockerignore-找错">互动 4：.dockerignore 找错</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+<li><a href="#随堂练习5-分钟讲解结束前进行">随堂练习（5 分钟，讲解结束前进行）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 07 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M3 Dockerfile 与镜像构建 ｜ 课程：《Docker
+云容器与管理技术》 配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 7 次课（全课程 24 次之七）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>理论课</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M3 Dockerfile 与镜像构建</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>Dockerfile 进阶指令；CMD 与 ENTRYPOINT；多阶段构建；镜像优化</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>第 6 次课 Dockerfile
+基础指令（FROM/RUN/COPY/ADD/WORKDIR）、Java/Maven 项目结构、Linux
+命令行</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>掌握 <code>ENV</code> 与 <code>ARG</code>
+指令的作用、用法及其区别（环境变量持久化 vs 构建时参数）。</li>
+<li>理解 <code>EXPOSE</code> 与 <code>VOLUME</code>
+声明性指令的作用，明确"声明"与"实际映射"的差异。</li>
+<li>掌握 <code>CMD</code> 指令的语义与两种形式（shell 形式 / exec
+形式），理解 CMD 可被 <code>docker run</code> 参数覆盖。</li>
+<li>掌握 <code>ENTRYPOINT</code> 指令的语义，理解 ENTRYPOINT 与 CMD
+的组合模式及"不被覆盖"特性。</li>
+<li>掌握多阶段构建（<code>FROM ... AS</code>、<code>COPY --from=</code>）的写法与价值。</li>
+<li>掌握镜像优化策略：层缓存顺序、合并
+RUN、精简基础镜像（alpine/slim）、<code>.dockerignore</code>
+完整配置。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能够准确区分 ENV 与 ARG 的使用场景，编写可参数化的 Dockerfile。</li>
+<li>能够在 Dockerfile 中合理使用 CMD/ENTRYPOINT 组合实现"固定入口 +
+可变参数"的镜像。</li>
+<li>能够编写 Java/Maven 多阶段构建 Dockerfile，把镜像从几百 MB
+优化到一百多 MB。</li>
+<li>能够编写 <code>.dockerignore</code> 文件并优化 Dockerfile
+指令顺序以提升构建缓存命中率。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>培养"性能优化"意识——小镜像更安全、传输更快、攻击面更小。</li>
+<li>建立"工程精益"思维——每一行 Dockerfile 都要经得起推敲。</li>
+<li>强化"成本意识"——镜像体积直接影响带宽、存储和启动速度，是工程责任的体现。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K7-1</td>
+<td>ENV 与 ARG 指令</td>
+<td>ENV 设置环境变量并持久化到运行时；ARG 仅在构建阶段生效；ENV vs ARG
+区别与协作</td>
+</tr>
+<tr>
+<td>K7-2</td>
+<td>EXPOSE 与 VOLUME 指令</td>
+<td>EXPOSE 声明端口（文档化，不真正映射）；VOLUME
+声明数据卷（声明性指令的作用与运行时挂载）</td>
+</tr>
+<tr>
+<td>K7-3</td>
+<td>CMD 指令</td>
+<td>容器启动默认命令；shell 形式 vs exec 形式；CMD 被
+<code>docker run</code> 参数覆盖</td>
+</tr>
+<tr>
+<td>K7-4</td>
+<td>ENTRYPOINT 指令</td>
+<td>入口点；与 CMD 配合使用；entrypoint+cmd 组合模式；ENTRYPOINT
+不被覆盖</td>
+</tr>
+<tr>
+<td>K7-5</td>
+<td>多阶段构建</td>
+<td><code>FROM ... AS</code>
+多阶段；<code>COPY --from=阶段名</code>；减小镜像体积；Java/Maven
+多阶段构建示例</td>
+</tr>
+<tr>
+<td>K7-6</td>
+<td>镜像优化与 .dockerignore</td>
+<td>层缓存优化顺序；合并 RUN
+减少层数；选择精简基础镜像（alpine/slim）；.dockerignore 完整配置</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3
+id="贯穿项目任务用多阶段构建优化-ctts-后端镜像">贯穿项目任务：用多阶段构建优化
+CTTS 后端镜像</h3>
+<p><strong>本次课任务</strong>：</p>
+<ol type="1">
+<li>教师演示"未优化的 CTTS 后端 Dockerfile"（单阶段，基于
+<code>maven:3.8</code> 镜像直接打包运行），构建后镜像体积约
+<strong>680MB</strong>。</li>
+<li>教师带领学生分析镜像过大的根因：把
+Maven、JDK、源码都打进了运行镜像，而运行时只需要 JRE + jar。</li>
+<li>教师演示"多阶段构建优化版"：第一阶段用
+<code>maven:3.8-openjdk-17</code> 编译打包；第二阶段只
+<code>COPY --from=builder</code> 拿到 jar，基于
+<code>eclipse-temurin:17-jre-alpine</code> 运行，镜像体积优化到
+<strong>约 180MB</strong>。</li>
+<li>学生分组讨论：还有哪些优化手段能进一步减小体积？（提示：alpine
+基础镜像、合并 RUN、.dockerignore）。</li>
+<li>教师引出 K7-6 镜像优化的完整方法论。</li>
+</ol>
+<p><strong>项目背景概述</strong>（详见 <code>教学资料.md</code>
+综合示例）：</p>
+<ul>
+<li>项目名称：CTTS 多服务容器化部署项目</li>
+<li>本次课聚焦：后端 SpringBoot 服务的镜像优化</li>
+<li>优化目标：镜像体积从 ~680MB 优化到 ~180MB（减少
+70%+），提升构建、推送、启动速度</li>
+</ul>
+<blockquote>
+<p>📌 本节课是理论课，命令以教师演示 + 学生跟读为主，实操在第 8
+次课（Dockerfile 构建实践）进行。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1课前-5-分钟回顾导入">互动 1：课前 5 分钟回顾导入</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"上节课我们学了 Dockerfile
+的基础指令（FROM/RUN/COPY/ADD/WORKDIR），写出了一个能跑的 CTTS
+后端镜像。但运维同学反馈：镜像 680MB，每次 push/pull
+都很慢，启动也慢。问题出在哪？怎么优化？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>自由发言，教师板书关键词</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>提到"基础镜像太大""Maven 也打进去了""源码没删""层数太多""没用
+alpine"等关键词</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定合理认知，引出本节课的主线：<strong>进阶指令 → CMD/ENTRYPOINT →
+多阶段构建 →
+镜像优化</strong>，正是为了解决"镜像太大、不够灵活、不够规范"的问题</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2面试题导入cmd-和-entrypoint-的区别核心互动">互动
+2：面试题导入——"CMD 和 ENTRYPOINT 的区别"（核心互动）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"这是 Docker 面试的高频题：CMD 和 ENTRYPOINT
+的区别？请从形式、是否被覆盖、组合使用三个角度回答。"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>1. 教师先抛问题，给学生 1 分钟思考；2. 抽 2~3 位学生口述答案；3.
+教师不立刻评判，先把答案写在黑板上；4. 讲完 K7-3、K7-4
+后回看黑板答案，全班一起验证对错。</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>学生可能回答："CMD 是默认命令""ENTRYPOINT 是入口点""ENTRYPOINT
+不会被覆盖""两个可以一起用"——但多数对"shell 形式 vs exec
+形式""组合模式的参数传递"理解不到位</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调三个关键差异：①CMD 可被 <code>docker run</code>
+后参数覆盖，ENTRYPOINT 不会；②都各有 shell 形式和 exec
+形式，<strong>exec 形式才能正确接收信号</strong>；③ENTRYPOINT + CMD
+组合模式：ENTRYPOINT 固定可执行程序，CMD
+给默认参数，参数可被覆盖，是生产镜像的推荐写法。这道题答不全很正常，是后面两个知识点的引子。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-3多阶段构建体积对比演示">互动
+3：多阶段构建体积对比演示</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>教师演示构建两个版本的 CTTS 后端镜像（单阶段 vs 多阶段），学生观察
+<code>docker images</code> 输出的 SIZE 列差异</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>教师投影命令 + 输出，学生跟读并记录两个镜像体积</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>单阶段约 680MB，多阶段约 180MB，体积减少约 73%</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调多阶段构建的本质：<strong>运行镜像只保留"运行所需"，把"构建所需"留在构建阶段丢弃</strong>。这是云原生镜像优化的核心手段，也是企业
+CI/CD 的标配写法。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-4dockerignore-找错">互动 4：.dockerignore 找错</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>给出一份"漏写 .dockerignore"的 Dockerfile
+构建场景：构建上下文目录包含 .git（50MB）、target（80MB
+旧编译产物）、node_modules（200MB 前端依赖）、IDE
+配置文件。问：构建会发生什么？怎么修复？</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>小组讨论 3 分钟 → 每组派代表发言 1 分钟</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>1) 构建上下文会非常大，docker build 第一步"Sending build context to
+Docker daemon"会传输几百 MB；2) 构建慢、缓存失效；3) 应该写
+.dockerignore 排除 .git/target/node_modules/IDE 配置</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>引出 K7-6 的 .dockerignore 完整配置；强调 .dockerignore
+是镜像优化的"第一道防线"，但常被新手忽略。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>性能优化——小镜像更安全、更高效</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td>镜像体积直接影响：①拉取/推送带宽成本；②存储成本；③容器启动速度；④攻击面（包含的工具越少，漏洞越少）。多阶段构建
++ alpine/slim 基础镜像 + .dockerignore 是镜像优化的"三板斧"。</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"假设我们公司有 1000 个微服务镜像，每个镜像多
+100MB，一年下来会增加多少存储和带宽成本？如果每个镜像都包含完整的
+Maven、Git、调试工具，又会带来哪些安全隐患？"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>树立"性能与安全并重"的工程意识，理解"精益"——每一行 Dockerfile
+都关乎资源与安全，是工程师的责任与担当。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入，不空喊口号。通过"1000 个微服务镜像 ×
+100MB"的真实算账，让学生体会"小镜像 = 省钱 + 安全"。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3 id="随堂练习5-分钟讲解结束前进行">随堂练习（5
+分钟，讲解结束前进行）</h3>
+<p><strong>判断题（口头快速作答）</strong>：</p>
+<ol type="1">
+<li><code>ENV</code>
+设置的环境变量在容器运行时仍然可用，<code>ARG</code>
+设置的变量在容器运行时不可用。（✓）</li>
+<li><code>EXPOSE 8080</code> 指令会自动把容器的 8080
+端口映射到宿主机。（✗）</li>
+<li><code>CMD ["java","-jar","app.jar"]</code> 是 exec 形式，能正确接收
+SIGTERM 信号。（✓）</li>
+<li>多阶段构建中，前序阶段的镜像层不会进入最终镜像。（✓）</li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速互动，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>阅读</strong>：通读同文件夹
+<code>教学资料.md</code>，重点理解 ENV vs ARG、CMD vs ENTRYPOINT
+对比表、多阶段构建示例、镜像优化三板斧。</li>
+<li><strong>背诵</strong>：CMD 与 ENTRYPOINT
+对比表（形式、是否被覆盖、组合模式），下次课抽查。</li>
+<li><strong>编写</strong>：为 CTTS 后端编写一份多阶段构建
+Dockerfile（Maven 编译 → JRE 运行），并写一份 <code>.dockerignore</code>
+文件。下次实践课带过来。</li>
+<li><strong>思考</strong>：为什么
+<code>CMD ["java","-jar","app.jar"]</code> 比
+<code>CMD java -jar app.jar</code> 更推荐？（提示：信号传递、PID 1
+问题）。</li>
+<li><strong>拓展阅读（选做）</strong>：访问 Docker 官方文档，阅读"Best
+practices for writing Dockerfiles"，整理 3
+条最佳实践带到下次课分享。</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CMD 与 ENTRYPOINT 的区别（Docker 面试高频题）</td>
+<td>K7-3、K7-4</td>
+</tr>
+<tr>
+<td>多阶段构建原理与写法（云运维岗位必备）</td>
+<td>K7-5</td>
+</tr>
+<tr>
+<td>镜像优化策略（DevOps 岗位核心能力）</td>
+<td>K7-6</td>
+</tr>
+<tr>
+<td>.dockerignore 配置（工程规范）</td>
+<td>K7-6</td>
+</tr>
+<tr>
+<td>ENV 与 ARG 的区别（构建参数化能力）</td>
+<td>K7-1</td>
+</tr>
+<tr>
+<td>编写可参数化、可复用的 Dockerfile（中高级岗位）</td>
+<td>K7-1、K7-5</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"说一下 CMD 和 ENTRYPOINT 的区别""怎么优化 Docker
+镜像体积""写过多阶段构建的 Dockerfile 吗"，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + CTTS 多阶段构建综合示例 + 思维导图 +
+复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>课前 5 分钟回顾导入 + 上节课作业抽查</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~25 min</td>
+<td>知识点 K7-1、K7-2：ENV/ARG/EXPOSE/VOLUME 进阶指令</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>25~50 min</td>
+<td>知识点 K7-3、K7-4 + 互动 2：CMD 与 ENTRYPOINT（含对比表 +
+组合模式）</td>
+<td>25 min</td>
+</tr>
+<tr>
+<td>50~70 min</td>
+<td>知识点 K7-5 + 互动 3：多阶段构建（Java/Maven 示例 +
+体积对比演示）</td>
+<td>20 min</td>
+</tr>
+<tr>
+<td>70~82 min</td>
+<td>知识点 K7-6 + 互动 4：镜像优化与 .dockerignore</td>
+<td>12 min</td>
+</tr>
+<tr>
+<td>82~87 min</td>
+<td>随堂练习（4 道判断题）</td>
+<td>5 min</td>
+</tr>
+<tr>
+<td>87~90 min</td>
+<td>小结 + 课后任务布置</td>
+<td>3 min</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1030 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deployment与ReplicaSet</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 16 次课 · 题库</div>
+      <h1>Deployment与ReplicaSet</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 16 次课</span>
+        <span class="hero-chip"><b>主题</b>Deployment与ReplicaSet</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 16 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>16-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>16-选择-001</strong>（★ 知识点：K16-1 Deployment 作用） 关于
+Deployment，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Deployment 是 K8s
+中能够创建和部署的最小单元，类似于 Pod</span></li><li><span class="option-label">B</span><span>Deployment 是 K8s
+中管理无状态应用的工作负载控制器</span></li><li><span class="option-label">C</span><span>Deployment 只能管理一个 Pod 副本</span></li><li><span class="option-label">D</span><span>Deployment 不能滚动更新</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Deployment 是 K8s
+中管理无状态应用的工作负载控制器，通过 ReplicaSet 管理
+Pod，提供自愈、扩缩容、滚动更新、回滚能力。A 错，Deployment
+不是最小单元，Pod 才是；C 错，Deployment 可管理多副本；D 错，Deployment
+默认支持滚动更新。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-002</strong>（★ 知识点：K16-1 裸 Pod 痛点） 裸 Pod
+在生产环境不推荐使用的主要原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>裸 Pod 启动速度太慢</span></li><li><span class="option-label">B</span><span>裸 Pod
+不能指定 namespace</span></li><li><span class="option-label">C</span><span>裸 Pod 无自愈、不能扩缩容、不能滚动更新</span></li><li><span class="option-label">D</span><span>裸 Pod
+不支持容器</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：裸 Pod
+是临时性的，无自愈能力（节点宕机 Pod
+消失无人重建）、不能扩缩容、不能滚动更新与回滚。生产环境要求"挂了自动补、按需扩缩容、不停机更新可回滚"，这些都靠
+Deployment 实现。A、B、D 都不是裸 Pod 的痛点。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-003</strong>（★ 知识点：K16-2 三层关系）
+Deployment、ReplicaSet、Pod 三者的层级关系是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod 管理
+ReplicaSet，ReplicaSet 管理 Deployment</span></li><li><span class="option-label">B</span><span>ReplicaSet 管理
+Deployment，Deployment 管理 Pod</span></li><li><span class="option-label">C</span><span>Deployment 管理
+ReplicaSet，ReplicaSet 管理 Pod</span></li><li><span class="option-label">D</span><span>三者是平级关系，互不管理</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：层级关系是 Deployment
+→ ReplicaSet → Pod。Deployment 管理
+ReplicaSet（可管理多个版本用于滚动更新/回滚），ReplicaSet 管理
+Pod（维持副本数），Pod 是实际运行的实例。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-004</strong>（★ 知识点：K16-3 apiVersion） Deployment
+资源的 apiVersion 是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>v1</span></li><li><span class="option-label">B</span><span>apps/v1</span></li><li><span class="option-label">C</span><span>extensions/v1beta1</span></li><li><span class="option-label">D</span><span>batch/v1</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Deployment 属于 apps
+API 组，版本是 apps/v1（稳定版）。A 错，v1 是 Pod/Service/ConfigMap
+等核心资源的 apiVersion；C 错，extensions/v1beta1 是旧版本已废弃；D
+错，batch/v1 是 Job/CronJob 的 apiVersion。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-005</strong>（★ 知识点：K16-3 YAML 结构） Deployment
+YAML 中 spec 的三要素是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>apiVersion、kind、metadata</span></li><li><span class="option-label">B</span><span>replicas、selector、template</span></li><li><span class="option-label">C</span><span>containers、volumes、restartPolicy</span></li><li><span class="option-label">D</span><span>name、namespace、labels</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Deployment 的 spec
+三要素：replicas（期望副本数）、selector（标签选择器）、template（Pod
+模板）。A 是 YAML 的顶层四要素中的三个；C 是 Pod spec 的字段；D 是
+metadata 的字段。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-006</strong>（★ 知识点：K16-3 selector 匹配） 关于
+Deployment 的 selector 和 template.labels 的关系，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>selector.matchLabels 必须与 template.metadata.labels 完全相同</span></li><li><span class="option-label">B</span><span>selector.matchLabels 必须是 template.metadata.labels 的子集</span></li><li><span class="option-label">C</span><span>template.metadata.labels 必须是 selector.matchLabels 的子集</span></li><li><span class="option-label">D</span><span>二者可以完全不匹配</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：selector.matchLabels
+必须是 template.metadata.labels 的子集，即 template.labels 要包含
+selector.matchLabels 的所有键值对。template 可以有额外标签，但 selector
+里的标签必须在 template 里都有。不匹配会导致 Deployment 找不到自己创建的
+Pod。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-007</strong>（★ 知识点：K16-4 滚动更新命令） 触发
+Deployment 滚动更新的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl scale deployment xxx
+--replicas=5</span></li><li><span class="option-label">B</span><span>kubectl rollout status deployment xxx</span></li><li><span class="option-label">C</span><span>kubectl set
+image deployment xxx container=image:v2</span></li><li><span class="option-label">D</span><span>kubectl rollout undo
+deployment xxx</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：kubectl set image
+用于更新容器镜像，触发滚动更新。A 是扩缩容；B 是查看滚动更新状态；D
+是回滚。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-008</strong>（★ 知识点：K16-4 回滚命令） 将
+Deployment 回滚到上一版本的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl rollout history
+deployment xxx</span></li><li><span class="option-label">B</span><span>kubectl rollout status deployment xxx</span></li><li><span class="option-label">C</span><span>kubectl
+rollout undo deployment xxx</span></li><li><span class="option-label">D</span><span>kubectl rollout restart deployment
+xxx</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：kubectl rollout undo
+回滚到上一版本（可用 --to-revision=N 回滚到指定版本）。A 是查看历史；B
+是查看状态；D 是重启（强制重新创建 Pod）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-009</strong>（★ 知识点：K16-5 扩缩容命令） 将
+Deployment 副本数调整为 5 的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl scale deployment xxx
+--replicas=5</span></li><li><span class="option-label">B</span><span>kubectl set replicas deployment xxx 5</span></li><li><span class="option-label">C</span><span>kubectl resize
+deployment xxx 5</span></li><li><span class="option-label">D</span><span>kubectl expand deployment xxx --to=5</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：kubectl scale
+deployment xxx --replicas=5 是扩缩容的标准命令。其他选项都不是有效的
+kubectl 命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-010</strong>（★ 知识点：K16-2 ReplicaSet 作用）
+ReplicaSet 的核心职责是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>管理多个 Deployment 版本</span></li><li><span class="option-label">B</span><span>维持指定数量的
+Pod 副本运行</span></li><li><span class="option-label">C</span><span>提供 Service 服务发现</span></li><li><span class="option-label">D</span><span>管理集群存储</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：ReplicaSet
+是副本控制器，核心职责是维持指定数量的 Pod
+副本运行——少了就创建，多了就删除。A 是 Deployment 的职责；C 是 Service
+的职责；D 是 PV/PVC 的职责。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-011</strong>（★ 知识点：K16-4 滚动更新原理）
+Deployment 滚动更新时，旧版本的 ReplicaSet 会怎样？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>立即删除</span></li><li><span class="option-label">B</span><span>副本数降到 0 但保留 RS 对象</span></li><li><span class="option-label">C</span><span>副本数保持不变</span></li><li><span class="option-label">D</span><span>自动转换为
+StatefulSet</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：滚动更新时，旧
+ReplicaSet 的副本数逐步降到 0，但 RS 对象保留（用于回滚）。Deployment
+默认保留 10 个历史版本（revisionHistoryLimit: 10）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-012</strong>（★ 知识点：K16-1 声明式） 关于
+Deployment 的声明式管理，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>用户告诉
+K8s"做什么动作"，如 scale 到 5</span></li><li><span class="option-label">B</span><span>用户描述"期望状态"，K8s 维持这个状态</span></li><li><span class="option-label">C</span><span>声明式不可版本化</span></li><li><span class="option-label">D</span><span>声明式比命令式更慢</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：声明式是用户描述"期望状态"（如 replicas: 3），K8s
+维持这个状态。声明式可版本化（YAML 提交 Git）、可复现、自愈。A
+是命令式；C、D 错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-013</strong>（★★ 知识点：K16-4 maxSurge）
+RollingUpdate 策略中，maxSurge 参数的含义是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>滚动更新时最多低于期望副本数的值</span></li><li><span class="option-label">B</span><span>滚动更新时最多超出期望副本数的值</span></li><li><span class="option-label">C</span><span>滚动更新的最大重试次数</span></li><li><span class="option-label">D</span><span>滚动更新的最大超时时间</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：maxSurge
+是滚动更新时最多超出期望副本数的值（向上浮动），控制新 Pod
+启动速率。maxUnavailable 才是最多低于期望副本数的值（向下浮动）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-014</strong>（★★ 知识点：K16-4 maxUnavailable）
+RollingUpdate 策略中，maxUnavailable 参数的含义是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>滚动更新时最多超出期望副本数的值</span></li><li><span class="option-label">B</span><span>滚动更新时最多低于期望副本数的值</span></li><li><span class="option-label">C</span><span>不可用 Pod 的最大总数</span></li><li><span class="option-label">D</span><span>滚动更新失败的最大次数</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：maxUnavailable
+是滚动更新时最多低于期望副本数的值（向下浮动），控制旧 Pod
+终止速率。maxSurge 才是最多超出期望副本数的值。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-015</strong>（★★ 知识点：K16-4 参数计算） 某
+Deployment
+replicas=3，maxSurge=25%，maxUnavailable=25%，滚动更新时最多同时存在几个
+Pod？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>3</span></li><li><span class="option-label">B</span><span>4</span></li><li><span class="option-label">C</span><span>5</span></li><li><span class="option-label">D</span><span>6</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：maxSurge=25%
+表示最多超出期望 25%，3 + 3×25% = 3.75，向上取整 = 4。所以最多同时 4 个
+Pod（3 期望 + 1 超出）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-016</strong>（★★ 知识点：K16-4 参数计算） 某
+Deployment
+replicas=3，maxSurge=25%，maxUnavailable=25%，滚动更新时最少有几个 Pod
+可用？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>1</span></li><li><span class="option-label">B</span><span>2</span></li><li><span class="option-label">C</span><span>3</span></li><li><span class="option-label">D</span><span>0</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：maxUnavailable=25%
+表示最多低于期望 25%，3 - 3×25% = 2.25，向下取整 = 2。所以最少保持 2 个
+Pod 可用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-017</strong>（★ 知识点：K16-4 历史版本） 查看
+Deployment 版本历史的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl history deployment xxx</span></li><li><span class="option-label">B</span><span>kubectl rollout history deployment xxx</span></li><li><span class="option-label">C</span><span>kubectl get history deployment
+xxx</span></li><li><span class="option-label">D</span><span>kubectl describe deployment xxx --history</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubectl rollout
+history deployment xxx 查看版本历史。可以用 --revision=N
+查看指定版本详情。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-018</strong>（★ 知识点：K16-4 指定版本回滚） 将
+Deployment 回滚到指定版本（如 revision 2）的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl rollout
+undo deployment xxx --revision=2</span></li><li><span class="option-label">B</span><span>kubectl rollout undo deployment xxx
+--to-revision=2</span></li><li><span class="option-label">C</span><span>kubectl rollout undo deployment xxx --version=2</span></li><li><span class="option-label">D</span><span>kubectl rollout undo deployment xxx -r 2</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubectl rollout undo
+deployment xxx --to-revision=2 回滚到指定版本。参数是
+--to-revision，不是 --revision 或 --version。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-019</strong>（★ 知识点：K16-5 标签命令） 给 Pod
+打标签的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl label pod xxx key=value</span></li><li><span class="option-label">B</span><span>kubectl tag pod
+xxx key=value</span></li><li><span class="option-label">C</span><span>kubectl set label pod xxx key=value</span></li><li><span class="option-label">D</span><span>kubectl mark pod
+xxx key=value</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：kubectl label pod xxx
+key=value 给 Pod 打标签。修改已有标签需加 --overwrite，删除标签是
+key-（键后加 -）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-020</strong>（★ 知识点：K16-5 标签筛选） 按标签筛选
+Pod 的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl get pods --filter app=backend</span></li><li><span class="option-label">B</span><span>kubectl get
+pods -l app=backend</span></li><li><span class="option-label">C</span><span>kubectl get pods --label app=backend</span></li><li><span class="option-label">D</span><span>kubectl
+get pods --selector app=backend</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubectl get pods -l
+app=backend 按标签筛选（-l 是 --selector
+的简写）。其他选项语法错误。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-021</strong>（★ 知识点：K16-3 replicas 字段） 关于
+Deployment 的 replicas 字段，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>replicas 必须是正整数</span></li><li><span class="option-label">B</span><span>replicas 可以是小数，如 1.5</span></li><li><span class="option-label">C</span><span>replicas 默认值是 0</span></li><li><span class="option-label">D</span><span>replicas
+最大值是 100</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：replicas
+必须是正整数（1、3、5 等），不能是小数或负数。默认值是 1（不是
+0）；没有固定最大值（受集群资源限制）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-022</strong>（★ 知识点：K16-2 自愈机制） 手动删除
+Deployment 管理的一个 Pod，会发生什么？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod 被删除，不会重建</span></li><li><span class="option-label">B</span><span>Pod
+被删除，ReplicaSet 立即创建新 Pod 补齐</span></li><li><span class="option-label">C</span><span>Pod 删除失败</span></li><li><span class="option-label">D</span><span>整个
+Deployment 被删除</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：ReplicaSet 持续监控
+Pod 数量，发现 Pod 少于期望值就立即创建新 Pod 补齐。这就是 Deployment
+的自愈能力。要真正删除 Pod 必须删除 Deployment。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-023</strong>（★★ 知识点：K16-3 更新策略） Deployment
+默认的更新策略是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Recreate</span></li><li><span class="option-label">B</span><span>RollingUpdate</span></li><li><span class="option-label">C</span><span>BlueGreen</span></li><li><span class="option-label">D</span><span>Canary</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Deployment 默认策略是
+RollingUpdate（滚动更新）。Recreate
+是先删旧再建新（服务会中断）。BlueGreen 和 Canary 不是 K8s
+原生策略（需要额外工具如 Argo Rollouts）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-024</strong>（★ 知识点：K16-4 查看状态） 查看
+Deployment 滚动更新状态的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl status deployment xxx</span></li><li><span class="option-label">B</span><span>kubectl rollout status deployment xxx</span></li><li><span class="option-label">C</span><span>kubectl get status deployment
+xxx</span></li><li><span class="option-label">D</span><span>kubectl describe rollout deployment xxx</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubectl rollout
+status deployment xxx
+查看滚动更新状态，会持续输出进度直到完成或失败。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-025</strong>（★ 知识点：K16-5 修改标签） 修改 Pod
+已有标签的值，需要加哪个参数？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>--force</span></li><li><span class="option-label">B</span><span>--update</span></li><li><span class="option-label">C</span><span>--overwrite</span></li><li><span class="option-label">D</span><span>--replace</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：修改已有标签必须加
+--overwrite，否则 kubectl 会报错提示标签已存在。如 kubectl label pod xxx
+env=prod --overwrite。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-026</strong>（★ 知识点：K16-5 删除标签） 删除 Pod
+上的某个标签，正确的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl label pod xxx key=</span></li><li><span class="option-label">B</span><span>kubectl
+label pod xxx key-</span></li><li><span class="option-label">C</span><span>kubectl label pod xxx --delete key</span></li><li><span class="option-label">D</span><span>kubectl
+label pod xxx --remove key</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：删除标签是在键后加
+-，如 kubectl label pod xxx env- 删除 env 标签。注意不是
+key=（这是设空值）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-027</strong>（★★ 知识点：K16-4 错误配置） 某
+Deployment 配置 maxSurge=0 且 maxUnavailable=0，滚动更新时会怎样？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>正常滚动更新</span></li><li><span class="option-label">B</span><span>无法滚动更新（卡死）</span></li><li><span class="option-label">C</span><span>立即完成更新</span></li><li><span class="option-label">D</span><span>删除所有 Pod</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：maxSurge=0
+表示不能多出 Pod（不能先启新），maxUnavailable=0 表示不能少于
+Pod（不能先停旧），二者矛盾，K8s
+无法执行任何操作，滚动更新卡死。这是错误配置，禁止使用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-028</strong>（★ 知识点：K16-3 历史版本数） Deployment
+默认保留多少个历史版本（revisionHistoryLimit）？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>0</span></li><li><span class="option-label">B</span><span>1</span></li><li><span class="option-label">C</span><span>10</span></li><li><span class="option-label">D</span><span>100</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：revisionHistoryLimit
+默认 10，表示保留 10 个历史 ReplicaSet 版本用于回滚。设为 0
+表示不保留历史（无法回滚，不推荐）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-029</strong>（★★ 知识点：K16-2 为什么用 Deployment）
+相比直接用 ReplicaSet，用 Deployment 的主要优势是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Deployment
+启动速度更快</span></li><li><span class="option-label">B</span><span>Deployment 支持滚动更新与回滚的版本管理</span></li><li><span class="option-label">C</span><span>Deployment
+占用资源更少</span></li><li><span class="option-label">D</span><span>Deployment 可以跨命名空间</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Deployment 在
+ReplicaSet 之上增加了版本管理能力——每次更新镜像创建新
+ReplicaSet，保留旧的用于回滚。ReplicaSet
+只能维持副本数，不能滚动更新与回滚。实际工作中都用 Deployment，不直接用
+ReplicaSet。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-030</strong>（★★ 知识点：K16-6 CTTS 部署） 部署 CTTS
+后端 Deployment 时，imagePullPolicy 应该设成什么（镜像在 Minikube Docker
+daemon 本地构建）？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Always</span></li><li><span class="option-label">B</span><span>Never 或 IfNotPresent</span></li><li><span class="option-label">C</span><span>Forever</span></li><li><span class="option-label">D</span><span>Once</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：本地构建的镜像不存在于远程仓库，设 Always
+会去仓库拉取导致 ImagePullBackOff。应该用 Never（从不拉取，只用本地）或
+IfNotPresent（本地没有才拉取）。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>16-选择-031</strong>（★★ 知识点：K16-1 Deployment 能力）
+Deployment 提供的核心能力包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>自愈（Pod 挂了自动重建）</span></li><li><span class="option-label">B</span><span>扩缩容</span></li><li><span class="option-label">C</span><span>滚动更新</span></li><li><span class="option-label">D</span><span>回滚 E. 声明式管理</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：Deployment
+五大能力：自愈、扩缩容、滚动更新、回滚、声明式管理。全部属于 Deployment
+的核心能力。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-032</strong>（★★ 知识点：K16-1 裸 Pod 痛点） 裸 Pod
+在生产环境的痛点包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>不自愈（节点宕机 Pod 消失无人重建）</span></li><li><span class="option-label">B</span><span>不能扩缩容</span></li><li><span class="option-label">C</span><span>不能滚动更新</span></li><li><span class="option-label">D</span><span>不能回滚 E. 不能指定 namespace</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：裸 Pod
+四大痛点：不自愈、不能扩缩容、不能滚动更新、不能回滚。E 错，裸 Pod
+可以指定 namespace（metadata.namespace）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-033</strong>（★★ 知识点：K16-3 Deployment YAML）
+Deployment YAML 中 spec 必填的三要素是？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>replicas</span></li><li><span class="option-label">B</span><span>selector</span></li><li><span class="option-label">C</span><span>template</span></li><li><span class="option-label">D</span><span>strategy E. revisionHistoryLimit</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong> <strong>解析</strong>：spec
+三要素：replicas（期望副本数）、selector（标签选择器）、template（Pod
+模板）。D、E 是可选字段（有默认值）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-034</strong>（★★ 知识点：K16-4 滚动更新命令）
+下列命令与滚动更新相关的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl set image</span></li><li><span class="option-label">B</span><span>kubectl
+rollout status</span></li><li><span class="option-label">C</span><span>kubectl rollout history</span></li><li><span class="option-label">D</span><span>kubectl rollout undo E.
+kubectl scale</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A
+触发滚动更新，B 查看状态，C 查看历史，D 回滚。E
+是扩缩容，不直接与滚动更新相关（虽然修改 replicas 也会触发 Pod
+创建/删除，但不叫滚动更新）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-035</strong>（★★ 知识点：K16-4 RollingUpdate 参数）
+关于 RollingUpdate 策略的 maxSurge 和
+maxUnavailable，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>maxSurge 控制新 Pod
+启动速率</span></li><li><span class="option-label">B</span><span>maxUnavailable 控制旧 Pod 终止速率</span></li><li><span class="option-label">C</span><span>二者都可以是百分比或整数</span></li><li><span class="option-label">D</span><span>maxSurge=0 且 maxUnavailable=0 是合法配置 E.
+默认值都是 25%</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：A、B、C、E
+都正确。D 错，maxSurge=0 且 maxUnavailable=0
+会导致无法滚动更新（卡死），是错误配置，禁止使用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-036</strong>（★★ 知识点：K16-5 标签管理） 关于 K8s
+标签（labels），下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>标签是键值对</span></li><li><span class="option-label">B</span><span>标签用于标识和筛选资源</span></li><li><span class="option-label">C</span><span>一个资源可以有多个标签</span></li><li><span class="option-label">D</span><span>标签可以被 selector
+选择 E. 标签和注解（annotations）是同一个概念</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都正确。E 错，标签用于"选择"和"筛选"（selector
+能用），注解用于"附加元数据"（不能被 selector 选择），二者不同。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-037</strong>（★★ 知识点：K16-5 选择器写法） K8s
+标签选择器（selector）的两种写法是？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>matchLabels</span></li><li><span class="option-label">B</span><span>matchExpressions</span></li><li><span class="option-label">C</span><span>matchTags</span></li><li><span class="option-label">D</span><span>matchFields E. matchAnnotations</span></li></ul></div><blockquote>
+<p><strong>答案：A、B</strong> <strong>解析</strong>：selector
+两种写法：matchLabels（精确匹配键值对）和
+matchExpressions（表达式匹配，支持 In/NotIn/Exists/DoesNotExist
+操作符）。matchLabels 是 matchExpressions 的简化形式。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-038</strong>（★★ 知识点：K16-2 三层关系） 关于
+Deployment、ReplicaSet、Pod 三者关系，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Deployment 管理 ReplicaSet</span></li><li><span class="option-label">B</span><span>ReplicaSet 管理 Pod</span></li><li><span class="option-label">C</span><span>Deployment 直接管
+Pod</span></li><li><span class="option-label">D</span><span>ReplicaSet 通过 selector 匹配 Pod E. Deployment 保留历史
+ReplicaSet 用于回滚</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong> <strong>解析</strong>：A、B、D、E
+都正确。C 错，Deployment 通过 ReplicaSet 间接管 Pod，不直接管 Pod。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-039</strong>（★★ 知识点：K16-4 回滚操作） 关于
+Deployment 回滚，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl rollout undo
+默认回滚到上一版本</span></li><li><span class="option-label">B</span><span>kubectl rollout undo --to-revision=N
+回滚到指定版本</span></li><li><span class="option-label">C</span><span>回滚操作会创建新的 revision</span></li><li><span class="option-label">D</span><span>回滚后原版本从历史中删除 E. 回滚本身也是一次滚动更新</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：A、B、C、E
+都正确。D
+错，回滚后原版本仍在历史里，可以再次回滚到该版本。回滚本质是"反向滚动更新"，会创建新
+revision。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-选择-040</strong>（★★ 知识点：K16-6 CTTS 部署） 部署 CTTS
+后端 Deployment（3 副本）时，下列做法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>imagePullPolicy 设为 Never（本地构建的镜像）</span></li><li><span class="option-label">B</span><span>selector.matchLabels 与
+template.metadata.labels 匹配</span></li><li><span class="option-label">C</span><span>replicas 设为 3</span></li><li><span class="option-label">D</span><span>apiVersion 设为
+apps/v1 E. resources.requests 设为节点总资源的 200%</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都正确。E 错，requests 总和不能超过节点可用资源，3 副本每个 requests.cpu
+设为节点总 CPU 的 200% 会导致调度失败。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>16-判断-001</strong>（★ 知识点：K16-1 Deployment 定位）
+Deployment 是 K8s 中能够创建和部署的最小单元，类似于 Pod。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Pod 才是 K8s
+最小调度单元。Deployment 是工作负载控制器，通过 ReplicaSet 管理
+Pod，不是最小单元。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-002</strong>（★ 知识点：K16-2 三层关系） Deployment
+通过 ReplicaSet 管理 Pod，层级是 Deployment → ReplicaSet → Pod。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Deployment
+管理 ReplicaSet（可管理多个版本），ReplicaSet 管理
+Pod（维持副本数），三层关系。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-003</strong>（★ 知识点：K16-1 裸 Pod）
+生产环境推荐直接使用裸 Pod 部署应用。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：裸 Pod
+无自愈、不能扩缩容、不能滚动更新，生产环境几乎不用裸 Pod，都用
+Deployment 等工作负载。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-004</strong>（★ 知识点：K16-3 apiVersion） Deployment
+的 apiVersion 是 v1。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Deployment 的
+apiVersion 是 apps/v1，不是 v1。v1 是 Pod/Service/ConfigMap 等核心资源的
+apiVersion。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-005</strong>（★ 知识点：K16-3 selector 匹配）
+Deployment 的 selector.matchLabels 必须与 template.metadata.labels
+匹配。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：selector.matchLabels 必须是
+template.metadata.labels 的子集，即 template.labels 要包含 selector
+里所有的键值对，否则 Deployment 找不到自己创建的 Pod。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-006</strong>（★ 知识点：K16-4 滚动更新） kubectl set
+image 会立即删除所有旧 Pod，再创建新 Pod。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：滚动更新是渐进式的，先启新 Pod 再停旧 Pod，由
+maxSurge/maxUnavailable 控制速率。不是立即删除所有旧 Pod。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-007</strong>（★ 知识点：K16-2 自愈） 手动删除
+Deployment 管理的 Pod，ReplicaSet 会自动创建新 Pod 补齐。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：ReplicaSet
+持续监控 Pod 数量，发现少于期望值就立即创建新 Pod 补齐，这就是
+Deployment 的自愈能力。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-008</strong>（★ 知识点：K16-4 回滚） kubectl rollout
+undo 只能回滚到上一版本，不能回滚到更早的版本。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：用
+--to-revision=N 可以回滚到任意历史版本。先用 kubectl rollout history
+查看版本号，再 --to-revision=N 回滚。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-009</strong>（★★ 知识点：K16-4 旧 RS）
+滚动更新完成后，旧版本的 ReplicaSet 会被立即删除。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：旧 ReplicaSet
+保留（副本数=0），用于回滚。Deployment 默认保留 10
+个历史版本（revisionHistoryLimit: 10）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-010</strong>（★ 知识点：K16-5 扩缩容） kubectl scale
+命令可以调整 Deployment 的副本数。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：kubectl scale
+deployment xxx --replicas=N 是扩缩容的标准命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-011</strong>（★ 知识点：K16-4 maxSurge） maxSurge
+是滚动更新时最多超出期望副本数的值。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：maxSurge
+控制新 Pod
+启动速率，是滚动更新时最多超出期望副本数的值（向上浮动）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-012</strong>（★★ 知识点：K16-4 错误配置） maxSurge=0
+且 maxUnavailable=0 是合法的滚动更新配置。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：maxSurge=0 且
+maxUnavailable=0
+会导致无法滚动更新（卡死），是错误配置，禁止使用。至少一个要大于 0。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-013</strong>（★ 知识点：K16-5 标签） K8s
+标签是键值对，用于标识和筛选资源。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：标签是键值对，附加到资源上，用于标识和组织资源，可被
+selector 选择。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-014</strong>（★ 知识点：K16-5 修改标签） 修改 Pod
+已有标签的值需要加 --overwrite 参数。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：kubectl label
+修改已有标签必须加 --overwrite，否则报错提示标签已存在。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-015</strong>（★★ 知识点：K16-2 为什么用 Deployment）
+实际工作中应该直接编写 ReplicaSet YAML 部署应用。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：实际工作中写
+Deployment YAML，Deployment 自动创建和管理 ReplicaSet。直接用 ReplicaSet
+是早期做法，已被 Deployment 取代。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-016</strong>（★ 知识点：K16-4 查看历史） kubectl
+rollout history 可以查看 Deployment 的版本历史。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：kubectl
+rollout history deployment xxx 查看版本历史，可用 --revision=N
+查看指定版本详情。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-017</strong>（★ 知识点：K16-3 replicas） Deployment
+的 replicas 字段可以写成小数，如 1.5。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：replicas
+必须是正整数（1、3、5 等），不能是小数或负数。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-018</strong>（★★ 知识点：K16-4 滚动更新期间可用性）
+滚动更新期间服务会完全中断。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：滚动更新期间始终有旧 Pod 在服务（maxUnavailable
+控制），新 Pod 就绪后才停旧 Pod，默认配置下服务不中断（配合 Service
+使用）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-019</strong>（★ 知识点：K16-5 matchExpressions）
+matchLabels 是 matchExpressions 的简化形式。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：matchLabels
+用于精确匹配键值对，是 matchExpressions 的简化形式。matchExpressions
+更灵活，支持 In/NotIn/Exists/DoesNotExist 操作符。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-判断-020</strong>（★★ 知识点：K16-1 声明式） Deployment
+是声明式的，用户描述"期望状态"，K8s 维持这个状态。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Deployment
+是声明式的，YAML 描述"期望状态"（如 3 副本 + 镜像 v1），K8s
+始终维持这个状态。实际状态偏离期望状态时自动纠正。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>16-填空-001</strong>（★ 知识点：K16-3 apiVersion） Deployment
+资源的 apiVersion 是 ________。</p><blockquote>
+<p><strong>答案：apps/v1</strong> <strong>解析</strong>：Deployment 属于
+apps API 组，版本是 apps/v1。注意与 Pod 的 v1 区分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-填空-002</strong>（★ 知识点：K16-2 三层关系）
+Deployment、ReplicaSet、Pod 的三层管理关系是 Deployment 管理
+<strong><strong><strong><strong>，</strong></strong></strong></strong>
+管理 Pod。</p><blockquote>
+<p><strong>答案：ReplicaSet；ReplicaSet</strong>
+<strong>解析</strong>：Deployment 管理 ReplicaSet，ReplicaSet 管理
+Pod。Deployment 通过 ReplicaSet 间接管理 Pod。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-填空-003</strong>（★ 知识点：K16-3 spec 三要素）
+Deployment YAML 中 spec 的三要素是 replicas、________ 和 template。</p><blockquote>
+<p><strong>答案：selector</strong> <strong>解析</strong>：spec
+三要素：replicas（期望副本数）、selector（标签选择器）、template（Pod
+模板）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-填空-004</strong>（★ 知识点：K16-4 滚动更新命令） 触发
+Deployment 滚动更新的命令是 kubectl ________ deployment/xxx
+container=image:v2。</p><blockquote>
+<p><strong>答案：set image</strong> <strong>解析</strong>：kubectl set
+image deployment/xxx container=image:v2
+触发滚动更新，更新指定容器的镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-填空-005</strong>（★ 知识点：K16-4 回滚命令） 将
+Deployment 回滚到上一版本的命令是 kubectl ________ undo
+deployment/xxx。</p><blockquote>
+<p><strong>答案：rollout</strong> <strong>解析</strong>：kubectl rollout
+undo deployment/xxx 回滚到上一版本。可用 --to-revision=N
+回滚到指定版本。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-填空-006</strong>（★ 知识点：K16-5 扩缩容命令） 将
+Deployment 副本数调整为 5 的命令是 kubectl ________ deployment xxx
+--replicas=5。</p><blockquote>
+<p><strong>答案：scale</strong> <strong>解析</strong>：kubectl scale
+deployment xxx --replicas=5 是扩缩容命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-填空-007</strong>（★★ 知识点：K16-4 maxSurge）
+RollingUpdate 策略中，________
+参数表示滚动更新时最多超出期望副本数的值。</p><blockquote>
+<p><strong>答案：maxSurge</strong> <strong>解析</strong>：maxSurge
+控制新 Pod
+启动速率，是滚动更新时最多超出期望副本数的值（向上浮动）。可以是百分比或整数。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-填空-008</strong>（★★ 知识点：K16-4 maxUnavailable）
+RollingUpdate 策略中，________
+参数表示滚动更新时最多低于期望副本数的值。</p><blockquote>
+<p><strong>答案：maxUnavailable</strong>
+<strong>解析</strong>：maxUnavailable 控制旧 Pod
+终止速率，是滚动更新时最多低于期望副本数的值（向下浮动）。可以是百分比或整数。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-填空-009</strong>（★ 知识点：K16-5 标签命令） 给 Pod
+打标签的命令是 kubectl ________ pod xxx key=value。</p><blockquote>
+<p><strong>答案：label</strong> <strong>解析</strong>：kubectl label pod
+xxx key=value 给 Pod 打标签。修改已有标签需加 --overwrite，删除标签是
+key-。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-填空-010</strong>（★ 知识点：K16-4 历史版本数） Deployment
+默认保留 ________ 个历史版本（revisionHistoryLimit）。</p><blockquote>
+<p><strong>答案：10</strong> <strong>解析</strong>：revisionHistoryLimit
+默认 10，表示保留 10 个历史 ReplicaSet 版本用于回滚。设为 0
+表示不保留历史（无法回滚，不推荐）。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>16-论述-001</strong>（★★ 知识点：K16-1/K16-2 Deployment
+与三层关系，10 分） 请阐述为什么生产环境不用裸 Pod 而用
+Deployment，并说明 Deployment、ReplicaSet、Pod
+三者的层级关系与各自职责。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>裸 Pod 的痛点</strong>（3 分）：</p>
+<ul>
+<li>不自愈：裸 Pod 所在节点宕机或 Pod 被删除后无人重建（1 分）</li>
+<li>不能扩缩容：裸 Pod 只有 1 个实例，无法应对流量高峰（1 分）</li>
+<li>不能滚动更新与回滚：更新镜像只能 delete +
+apply，服务中断，无版本历史（1 分）</li>
+</ul></li>
+<li><p><strong>Deployment 的解决能力</strong>（3 分）：</p>
+<ul>
+<li>自愈：通过 ReplicaSet 持续监控副本数，少了就补（1 分）</li>
+<li>扩缩容：修改 replicas 或 kubectl scale（1 分）</li>
+<li>滚动更新与回滚：kubectl set image 触发滚动更新，kubectl rollout undo
+回滚（1 分）</li>
+</ul></li>
+<li><p><strong>三层关系与职责</strong>（4 分）：</p>
+<ul>
+<li>Deployment → ReplicaSet → Pod（1 分）</li>
+<li>Deployment：上层控制器，管理多个 ReplicaSet
+版本，负责滚动更新与回滚的版本管理（1 分）</li>
+<li>ReplicaSet：副本控制器，维持指定数量的 Pod
+副本运行（少了建、多了删），通过 selector 匹配 Pod（1 分）</li>
+<li>Pod：实际运行的实例，K8s 最小调度单元（1 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分各自独立给分；要点完整即可满分；只列项不解释每个给一半分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-论述-002</strong>（★★ 知识点：K16-4 滚动更新原理，10 分）
+请详细说明 Deployment 滚动更新的完整流程，并解释 maxSurge 和
+maxUnavailable 参数的含义。以
+replicas=3、maxSurge=25%、maxUnavailable=25%
+为例，计算滚动更新时最多和最少同时有几个 Pod。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>滚动更新流程</strong>（4 分）：</p>
+<ul>
+<li>kubectl set image 触发更新，Deployment 创建新
+ReplicaSet（RS-new，副本数=0）（1 分）</li>
+<li>RS-new 副本数逐步增加（启动新 Pod），旧
+ReplicaSet（RS-old）副本数逐步减少（终止旧 Pod）（1 分）</li>
+<li>按 maxSurge 和 maxUnavailable 控制速率，先启新再停旧（1 分）</li>
+<li>最终 RS-new 副本数=期望值，RS-old 副本数=0（但保留 RS
+对象用于回滚）（1 分）</li>
+</ul></li>
+<li><p><strong>参数含义</strong>（3 分）：</p>
+<ul>
+<li>maxSurge：滚动更新时最多超出期望副本数的值（向上浮动），控制新 Pod
+启动速率（1.5 分）</li>
+<li>maxUnavailable：滚动更新时最多低于期望副本数的值（向下浮动），控制旧
+Pod 终止速率（1.5 分）</li>
+</ul></li>
+<li><p><strong>计算</strong>（3 分）：</p>
+<ul>
+<li>replicas=3，maxSurge=25%：最多超出 3×25%=0.75→向上取整=1，最多同时
+3+1=4 个 Pod（1.5 分）</li>
+<li>replicas=3，maxUnavailable=25%：最多低于
+3×25%=0.75→向下取整=1，最少保持 3-1=2 个 Pod（1.5 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分各自独立给分；计算过程要清晰；参数含义要答全"控制什么速率"。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-论述-003</strong>（★★ 知识点：K16-3 Deployment YAML
+结构，8 分） 请写出一份完整的 Deployment YAML（CTTS 后端，3
+副本），并说明
+apiVersion、kind、spec.replicas、spec.selector、spec.template
+各自的作用，以及 selector.matchLabels 与 template.metadata.labels
+的匹配关系。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>完整 YAML</strong>（4 分，关键字段齐全即可）：</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Deployment</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> backend</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-backend:v1</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span></code></pre></div>
+<p>（apiVersion 1 分，kind 0.5 分，metadata 0.5 分，spec.replicas 0.5
+分，selector 1 分，template 0.5 分）</p>
+<ol start="2" type="1">
+<li><p><strong>各字段作用</strong>（2 分，每个 0.5 分）：</p>
+<ul>
+<li>apiVersion: apps/v1：Deployment 所属 API 组与版本</li>
+<li>kind: Deployment：资源类型</li>
+<li>spec.replicas: 3：期望副本数</li>
+<li>spec.selector：标签选择器，定义 Deployment 管理哪些 Pod</li>
+<li>spec.template：Pod 模板，定义如何创建 Pod</li>
+</ul></li>
+<li><p><strong>匹配关系</strong>（2 分）：</p>
+<ul>
+<li>selector.matchLabels 必须是 template.metadata.labels 的子集（1
+分）</li>
+<li>即 template.labels 必须包含 selector.matchLabels 的所有键值对，否则
+Deployment 找不到自己创建的 Pod（1 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：YAML
+不要求与答案完全一致，关键字段齐全即可；字段作用简答即可；匹配关系要答出"子集"概念。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>16-论述-004</strong>（★★ 知识点：K16-5 扩缩容与标签，8 分）
+请说明 kubectl scale
+扩缩容的两种方式（命令式与声明式）及各自优缺点，并阐述 K8s
+标签（labels）与选择器（selectors）的作用，以及 matchLabels 与
+matchExpressions 的区别。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>扩缩容两种方式</strong>（4 分）：</p>
+<ul>
+<li>命令式：kubectl scale deployment xxx --replicas=5，快速但不可复现（1
+分）</li>
+<li>声明式：修改 YAML 的 replicas 字段后 kubectl
+apply，可版本化、可复现（1 分）</li>
+<li>命令式优缺点：快速，适合临时调整；但没记录在 YAML
+里，不可复现，团队协作不友好（1 分）</li>
+<li>声明式优缺点：可版本化（YAML 提交
+Git）、可复现、团队协作友好；但比命令式稍慢（1 分）</li>
+<li>生产环境推荐声明式</li>
+</ul></li>
+<li><p><strong>标签与选择器的作用</strong>（2 分）：</p>
+<ul>
+<li>标签（labels）：键值对，附加到资源上，用于标识和组织资源（1
+分）</li>
+<li>选择器（selectors）：根据标签筛选资源的机制，Deployment/Service 通过
+selector 关联 Pod（1 分）</li>
+</ul></li>
+<li><p><strong>matchLabels vs matchExpressions</strong>（2 分）：</p>
+<ul>
+<li>matchLabels：精确匹配键值对，语法简单，最常用（1 分）</li>
+<li>matchExpressions：表达式匹配，支持 In/NotIn/Exists/DoesNotExist
+操作符，更灵活，用于复杂场景（1 分）</li>
+<li>matchLabels 是 matchExpressions 的简化形式</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分各自独立给分；优缺点要对比说明；matchLabels
+和 matchExpressions 要答出区别。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>16-阅读-001</strong>（★★ 知识点：K16-3 Deployment YAML
+补全，12 分） 阅读以下 Deployment YAML，补全缺失部分（每空 2 分，共 12
+分）。</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">(a)________</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> (b)________</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">(c)________</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">(d)________</span><span class="kw">:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> (e)________</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> backend</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> (f)________:v1</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) apiVersion (b) Deployment (c)
+replicas (d) template (e) ctts-backend（必须与 selector.matchLabels.app
+一致） (f) ctts-backend（镜像名，标签 :v1 单独写）</p>
+<p><strong>解析</strong>：Deployment YAML
+四要素：apiVersion（apps/v1）、kind（Deployment）、metadata、spec。spec
+三要素：replicas、selector、template。selector.matchLabels.app=ctts-backend，所以
+template.metadata.labels.app 必须也是 ctts-backend（匹配关系）。image 是
+ctts-backend:v1，(f) 填镜像名 ctts-backend，:v1 已给出。</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12 分。(e) 必须与 selector
+匹配，答 ctts-backend 给满分；答其他不给分。意思对即可，大小写敏感。</p>
+</blockquote>
+<hr />
+<p><strong>16-阅读-002</strong>（★★ 知识点：K16-4 滚动更新命令补全，12
+分） 阅读以下 Deployment 滚动更新与回滚的命令序列，补全缺失部分（每空 2
+分，共 12 分）。</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 触发滚动更新：把 backend 容器的镜像更新为 ctts-backend:v2</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="er">(</span><span class="ex">a</span><span class="kw">)</span><span class="ex">________</span> deployment/ctts-backend backend=ctts-backend:v2 <span class="at">-n</span> ctts</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 查看滚动更新状态</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="er">(</span><span class="ex">b</span><span class="kw">)</span><span class="ex">________</span> status deployment/ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 查看版本历史</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout <span class="er">(</span><span class="ex">c</span><span class="kw">)</span><span class="ex">________</span> deployment/ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 回滚到上一版本</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout <span class="er">(</span><span class="ex">d</span><span class="kw">)</span><span class="ex">________</span> deployment/ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 回滚到指定版本（revision 1）</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout undo deployment/ctts-backend <span class="at">-n</span> ctts <span class="at">--</span><span class="er">(</span><span class="ex">e</span><span class="kw">)</span><span class="va">________</span><span class="op">=</span>1</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 扩容到 5 副本</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="er">(</span><span class="ex">f</span><span class="kw">)</span><span class="ex">________</span> deployment/ctts-backend <span class="at">--replicas</span><span class="op">=</span>5 <span class="at">-n</span> ctts</span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) set image (b) rollout (c) history (d)
+undo (e) to-revision (f) scale</p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) kubectl set image 触发滚动更新</li>
+<li>(b) kubectl rollout status 查看状态</li>
+<li>(c) kubectl rollout history 查看历史</li>
+<li>(d) kubectl rollout undo 回滚</li>
+<li>(e) --to-revision=N 指定回滚版本</li>
+<li>(f) kubectl scale 扩缩容</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。命令拼写要准确（连字符、大小写）；(e) 答 to-revision 给满分，答
+revision 或 version 不给分。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>16-编程-001</strong>（★★ 知识点：K16-3/K16-6 Deployment YAML
+编写，15 分） <strong>编写 CTTS 后端 Deployment YAML</strong>：请为 CTTS
+后端编写一份完整的 Deployment YAML，要求：</p>
+<ol type="1">
+<li>3 副本，命名空间为 ctts（3 分）</li>
+<li>镜像为 ctts-backend:v1，imagePullPolicy 为 IfNotPresent（3 分）</li>
+<li>暴露 8080 端口（2 分）</li>
+<li>设置环境变量 SPRING_PROFILES_ACTIVE=prod 和
+DB_HOST=mysql.ctts.svc.cluster.local（3 分）</li>
+<li>资源限制：requests cpu=250m/memory=256Mi，limits
+cpu=500m/memory=512Mi（2 分）</li>
+<li>selector.matchLabels 与 template.metadata.labels 必须匹配（2
+分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span><span class="co">                    # 0.5 分</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Deployment</span><span class="co">                       # 0.5 分</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span><span class="co">                              # 0.5 分</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-backend</span><span class="co">                   # 0.5 分</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts</span><span class="co">                      # 1 分（命名空间）</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span><span class="co">                                  # 0.5 分</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span><span class="co">                          # 1.5 分（3 副本）</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span><span class="co">                            # 1 分</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span><span class="co">                            # 0.5 分</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-backend</span><span class="co">              # 1 分（必须与 selector 匹配）</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> backend</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-backend:v1</span><span class="co">         # 1 分</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">imagePullPolicy</span><span class="kw">:</span><span class="at"> IfNotPresent</span><span class="co">  # 1 分</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span><span class="co">                         # 1 分</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span><span class="co">                           # 1.5 分（每个环境变量 0.75 分）</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> SPRING_PROFILES_ACTIVE</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> prod</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> DB_HOST</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> mysql.ctts.svc.cluster.local</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">resources</span><span class="kw">:</span><span class="co">                     # 1 分</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;250m&quot;</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;256Mi&quot;</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;500m&quot;</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;512Mi&quot;</span></span></code></pre></div>
+<p><strong>评分要点</strong>：按字段给分；关键字段（apiVersion、kind、replicas、selector、template、image、ports、env、resources）齐全即可；selector
+与 template.labels 匹配是硬性要求，不匹配扣 2 分；imagePullPolicy 必须是
+IfNotPresent（或 Never），用 Always 扣 1 分。</p>
+</blockquote>
+<hr />
+<p><strong>16-编程-002</strong>（★★★ 知识点：K16-4/K16-5/K16-6
+综合应用，20 分） <strong>Deployment 运维综合题</strong>：某团队已部署
+CTTS 后端 Deployment（3 副本，镜像
+ctts-backend:v1），现在需要进行一系列运维操作。请回答：</p>
+<ol type="1">
+<li>写出查看当前 Deployment 状态和 Pod 列表的命令（4分）</li>
+<li>写出扩容到 5 副本的命令，并说明扩容后如何验证（4分）</li>
+<li>假设已构建 ctts-backend:v2 镜像，写出滚动更新到 v2
+的完整命令序列（触发更新 + 查看状态 + 查看历史）（6分）</li>
+<li>如果 v2 有问题需要回滚到
+v1，写出回滚命令，并说明如何确认回滚成功（3分）</li>
+<li>写出给某个 Pod 打标签 env=prod 的命令，以及按标签筛选 Pod
+的命令（3分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<p><strong>1. 查看 Deployment 状态和 Pod
+列表（4分，每条2分）</strong>：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看 Deployment 状态</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get deployment ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># NAME           READY   UP-TO-DATE   AVAILABLE   AGE</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend   3/3     3            3           5m</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看 Pod 列表</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> ctts <span class="at">-l</span> app=ctts-backend</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># NAME                            READY   STATUS    RESTARTS   AGE</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend-7b6f8c9d4-abc12   1/1     Running   0          5m</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend-7b6f8c9d4-def34   1/1     Running   0          5m</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend-7b6f8c9d4-ghi56   1/1     Running   0          5m</span></span></code></pre></div>
+<p>（每条命令 1 分 + 预期输出/说明 1 分）</p>
+<p><strong>2. 扩容到 5 副本并验证（4分）</strong>：</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 扩容命令</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> scale deployment ctts-backend <span class="at">--replicas</span><span class="op">=</span>5 <span class="at">-n</span> ctts</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#（2分）</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证：查看 Deployment，READY 应该是 5/5</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get deployment ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># NAME           READY   UP-TO-DATE   AVAILABLE   AGE</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend   5/5     5            5           6m</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#（2分）</span></span></code></pre></div>
+<p><strong>3. 滚动更新到 v2
+的完整命令序列（6分，每条2分）</strong>：</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 触发滚动更新</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> set image deployment/ctts-backend backend=ctts-backend:v2 <span class="at">-n</span> ctts <span class="at">--record</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># deployment.apps/ctts-backend image updated</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看滚动更新状态</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout status deployment/ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Waiting for deployment &quot;ctts-backend&quot; rollout to finish: ...</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># deployment &quot;ctts-backend&quot; successfully rolled out</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看版本历史</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout history deployment/ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># REVISION  CHANGE-CAUSE</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 1         &lt;none&gt;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 2         kubectl set image deployment/ctts-backend backend=ctts-backend:v2 ...</span></span></code></pre></div>
+<p>（每条命令 2 分；--record 可选，加不加都给分；必须指定容器名
+backend）</p>
+<p><strong>4. 回滚到 v1 并确认（3分）</strong>：</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 回滚命令</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout undo deployment/ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># deployment.apps/ctts-backend rolled back</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#（1.5分）</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 确认回滚成功：查看 Pod 镜像版本，应该都是 v1</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> ctts <span class="at">-l</span> app=ctts-backend <span class="at">-o</span> jsonpath=<span class="st">&#39;{range .items[*]}{.spec.containers[0].image}{&quot;\n&quot;}{end}&#39;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend:v1</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend:v1</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend:v1</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#（1.5分；也可以用 kubectl rollout status 或 kubectl describe deployment 确认）</span></span></code></pre></div>
+<p><strong>5. 打标签与筛选（3分）</strong>：</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 给某个 Pod 打标签 env=prod</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> label pod ctts-backend-7b6f8c9d4-abc12 env=prod <span class="at">-n</span> ctts</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#（1.5分）</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 按标签筛选 Pod</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> ctts <span class="at">-l</span> env=prod</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#（1.5分）</span></span></code></pre></div>
+<p><strong>评分要点</strong>：各小题独立给分；命令必须包含 -n
+ctts（不包含扣 0.5 分）；命令拼写要准确；set image 必须指定容器名
+backend；预期输出/说明意思对即可。</p>
+</blockquote>
+<hr />
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

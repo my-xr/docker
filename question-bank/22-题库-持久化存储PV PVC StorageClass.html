@@ -1,0 +1,1437 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>持久化存储PV PVC StorageClass</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 22 次课 · 题库</div>
+      <h1>持久化存储PV PVC StorageClass</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 22 次课</span>
+        <span class="hero-chip"><b>主题</b>持久化存储PV PVC StorageClass</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#题型分布">题型分布</a>
+<ul>
+</ul></li>
+<li><a href="#一单项选择题30题每题2分">一、单项选择题（30题，每题2分）</a>
+<ul>
+<li><a href="#22-单选-01-">22-单选-01 ★</a></li>
+<li><a href="#22-单选-02-">22-单选-02 ★</a></li>
+<li><a href="#22-单选-03-">22-单选-03 ★</a></li>
+<li><a href="#22-单选-04-">22-单选-04 ★</a></li>
+<li><a href="#22-单选-05-">22-单选-05 ★★</a></li>
+<li><a href="#22-单选-06-">22-单选-06 ★</a></li>
+<li><a href="#22-单选-07-">22-单选-07 ★★</a></li>
+<li><a href="#22-单选-08-">22-单选-08 ★</a></li>
+<li><a href="#22-单选-09-">22-单选-09 ★★</a></li>
+<li><a href="#22-单选-10-">22-单选-10 ★</a></li>
+<li><a href="#22-单选-11-">22-单选-11 ★★</a></li>
+<li><a href="#22-单选-12-">22-单选-12 ★★</a></li>
+<li><a href="#22-单选-13-">22-单选-13 ★</a></li>
+<li><a href="#22-单选-14-">22-单选-14 ★★</a></li>
+<li><a href="#22-单选-15-">22-单选-15 ★★</a></li>
+<li><a href="#22-单选-16-">22-单选-16 ★</a></li>
+<li><a href="#22-单选-17-">22-单选-17 ★★</a></li>
+<li><a href="#22-单选-18-">22-单选-18 ★★</a></li>
+<li><a href="#22-单选-19-">22-单选-19 ★</a></li>
+<li><a href="#22-单选-20-">22-单选-20 ★★</a></li>
+<li><a href="#22-单选-21-">22-单选-21 ★★★</a></li>
+<li><a href="#22-单选-22-">22-单选-22 ★★</a></li>
+<li><a href="#22-单选-23-">22-单选-23 ★★</a></li>
+<li><a href="#22-单选-24-">22-单选-24 ★</a></li>
+<li><a href="#22-单选-25-">22-单选-25 ★★</a></li>
+<li><a href="#22-单选-26-">22-单选-26 ★★</a></li>
+<li><a href="#22-单选-27-">22-单选-27 ★★★</a></li>
+<li><a href="#22-单选-28-">22-单选-28 ★</a></li>
+<li><a href="#22-单选-29-">22-单选-29 ★★</a></li>
+<li><a href="#22-单选-30-">22-单选-30 ★★★</a></li>
+</ul></li>
+<li><a href="#二多项选择题10题每题3分">二、多项选择题（10题，每题3分）</a>
+<ul>
+<li><a href="#22-多选-01-">22-多选-01 ★</a></li>
+<li><a href="#22-多选-02-">22-多选-02 ★★</a></li>
+<li><a href="#22-多选-03-">22-多选-03 ★★</a></li>
+<li><a href="#22-多选-04-">22-多选-04 ★★</a></li>
+<li><a href="#22-多选-05-">22-多选-05 ★★</a></li>
+<li><a href="#22-多选-06-">22-多选-06 ★★★</a></li>
+<li><a href="#22-多选-07-">22-多选-07 ★★</a></li>
+<li><a href="#22-多选-08-">22-多选-08 ★★</a></li>
+<li><a href="#22-多选-09-">22-多选-09 ★★★</a></li>
+<li><a href="#22-多选-10-">22-多选-10 ★★</a></li>
+</ul></li>
+<li><a href="#三判断题20题每题1分">三、判断题（20题，每题1分）</a>
+<ul>
+<li><a href="#22-判断-01-">22-判断-01 ★</a></li>
+<li><a href="#22-判断-02-">22-判断-02 ★</a></li>
+<li><a href="#22-判断-03-">22-判断-03 ★</a></li>
+<li><a href="#22-判断-04-">22-判断-04 ★★</a></li>
+<li><a href="#22-判断-05-">22-判断-05 ★★</a></li>
+<li><a href="#22-判断-06-">22-判断-06 ★</a></li>
+<li><a href="#22-判断-07-">22-判断-07 ★★</a></li>
+<li><a href="#22-判断-08-">22-判断-08 ★</a></li>
+<li><a href="#22-判断-09-">22-判断-09 ★★</a></li>
+<li><a href="#22-判断-10-">22-判断-10 ★</a></li>
+<li><a href="#22-判断-11-">22-判断-11 ★★</a></li>
+<li><a href="#22-判断-12-">22-判断-12 ★★</a></li>
+<li><a href="#22-判断-13-">22-判断-13 ★</a></li>
+<li><a href="#22-判断-14-">22-判断-14 ★★</a></li>
+<li><a href="#22-判断-15-">22-判断-15 ★★</a></li>
+<li><a href="#22-判断-16-">22-判断-16 ★</a></li>
+<li><a href="#22-判断-17-">22-判断-17 ★★★</a></li>
+<li><a href="#22-判断-18-">22-判断-18 ★★</a></li>
+<li><a href="#22-判断-19-">22-判断-19 ★</a></li>
+<li><a href="#22-判断-20-">22-判断-20 ★★</a></li>
+</ul></li>
+<li><a href="#四填空题10题每题2分">四、填空题（10题，每题2分）</a>
+<ul>
+<li><a href="#22-填空-01-">22-填空-01 ★</a></li>
+<li><a href="#22-填空-02-">22-填空-02 ★</a></li>
+<li><a href="#22-填空-03-">22-填空-03 ★★</a></li>
+<li><a href="#22-填空-04-">22-填空-04 ★★</a></li>
+<li><a href="#22-填空-05-">22-填空-05 ★</a></li>
+<li><a href="#22-填空-06-">22-填空-06 ★★</a></li>
+<li><a href="#22-填空-07-">22-填空-07 ★★</a></li>
+<li><a href="#22-填空-08-">22-填空-08 ★★</a></li>
+<li><a href="#22-填空-09-">22-填空-09 ★</a></li>
+<li><a href="#22-填空-10-">22-填空-10 ★★</a></li>
+</ul></li>
+<li><a href="#五论述简答题4题每题10分">五、论述简答题（4题，每题10分）</a>
+<ul>
+<li><a href="#22-论述-01-">22-论述-01 ★★</a></li>
+<li><a href="#22-论述-02-">22-论述-02 ★★★</a></li>
+<li><a href="#22-论述-03-">22-论述-03 ★★</a></li>
+<li><a href="#22-论述-04-">22-论述-04 ★★★</a></li>
+<li><a href="#22-程序阅读-01-">22-程序阅读-01 ★★</a></li>
+<li><a href="#22-程序阅读-02-">22-程序阅读-02 ★★★</a></li>
+<li><a href="#22-编程-01-">22-编程-01 ★★★</a></li>
+<li><a href="#22-编程-02-">22-编程-02 ★★★</a></li>
+</ul></li>
+<li><a href="#附题目统计表">附：题目统计表</a>
+<ul>
+<li><a href="#按题型统计">按题型统计</a></li>
+<li><a href="#按知识点统计">按知识点统计</a></li>
+<li><a href="#按难度统计">按难度统计</a></li>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 22 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>课程：Docker云容器与管理技术 课次：第22次课 题目总数：78题
+编号规则：22-题型-序号 难度标注：★（基础）/ ★★（进阶）/ ★★★（综合）
+所有题目均附答案与解析，主观题附评分标准</p>
+</blockquote>
+<hr />
+<h2 id="题型分布">题型分布</h2>
+<table>
+<thead>
+<tr>
+<th>题型</th>
+<th>数量</th>
+<th>分值建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一、单项选择题</td>
+<td>30</td>
+<td>每题2分，共60分</td>
+</tr>
+<tr>
+<td>二、多项选择题</td>
+<td>10</td>
+<td>每题3分，共30分</td>
+</tr>
+<tr>
+<td>三、判断题</td>
+<td>20</td>
+<td>每题1分，共20分</td>
+</tr>
+<tr>
+<td>四、填空题</td>
+<td>10</td>
+<td>每题2分，共20分</td>
+</tr>
+<tr>
+<td>五、论述简答题</td>
+<td>4</td>
+<td>每题10分，共40分</td>
+</tr>
+<tr>
+<td>六、程序阅读补全题</td>
+<td>2</td>
+<td>每题10分，共20分</td>
+</tr>
+<tr>
+<td>七、编程接口设计题</td>
+<td>2</td>
+<td>每题15分，共30分</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td><strong>78</strong></td>
+<td><strong>220分</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="一单项选择题30题每题2分">一、单项选择题（30题，每题2分）</h2>
+<h3 id="22-单选-01-">22-单选-01 ★</h3>
+<p><strong>题目</strong>：K8s中，Pod销毁后容器内文件系统的数据会怎样？
+A. 自动迁移到其他节点 B. 保留在原节点等待Pod重新调度 C. 随Pod销毁而丢失
+D. 自动备份到etcd</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：Pod的容器文件系统基于容器的可写层（overlayfs），具有临时性，Pod销毁时可写层数据随之丢失。这是K8s引入持久化存储体系的根本原因。</p>
+<hr />
+<h3 id="22-单选-02-">22-单选-02 ★</h3>
+<p><strong>题目</strong>：下列哪个属于K8s集群级（cluster-scoped）资源？
+A. PVC B. PV C. ConfigMap D. Secret</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：PV是集群级资源，不属于任何命名空间；PVC、ConfigMap、Secret都是命名空间级资源。</p>
+<hr />
+<h3 id="22-单选-03-">22-单选-03 ★</h3>
+<p><strong>题目</strong>：PV的访问模式 <code>ReadWriteOnce</code>
+表示什么？ A. 可被多节点读写 B. 可被单节点读写 C. 可被多节点只读 D.
+可被单节点只读</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：<code>ReadWriteOnce</code> (RWO)
+表示该PV可被单节点以读写方式挂载。<code>ReadOnlyMany</code> (ROX)
+是多节点只读，<code>ReadWriteMany</code> (RWX) 是多节点读写。</p>
+<hr />
+<h3 id="22-单选-04-">22-单选-04 ★</h3>
+<p><strong>题目</strong>：下列哪种存储类型支持
+<code>ReadWriteMany</code> 访问模式？ A. hostPath B. NFS C. 本地磁盘 D.
+AWS EBS</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：NFS是网络文件系统，天然支持多节点同时读写。hostPath绑定单节点，AWS
+EBS等块存储通常只支持RWO。</p>
+<hr />
+<h3 id="22-单选-05-">22-单选-05 ★★</h3>
+<p><strong>题目</strong>：PV的回收策略中，删除PVC后PV会自动删除底层存储的是？
+A. Retain B. Recycle C. Delete D. Keep</p>
+<p><strong>答案</strong>：C <strong>解析</strong>：<code>Delete</code>
+策略下，PVC删除后PV及底层存储资源自动删除，常用于动态供给。<code>Retain</code>
+保留数据，<code>Recycle</code> 已废弃。</p>
+<hr />
+<h3 id="22-单选-06-">22-单选-06 ★</h3>
+<p><strong>题目</strong>：PV生命周期的初始状态是？ A. Bound B. Released
+C. Available D. Failed</p>
+<p><strong>答案</strong>：C <strong>解析</strong>：PV创建后处于
+<code>Available</code> 状态，等待PVC匹配。被PVC绑定后变为
+<code>Bound</code>，PVC删除后变为 <code>Released</code>。</p>
+<hr />
+<h3 id="22-单选-07-">22-单选-07 ★★</h3>
+<p><strong>题目</strong>：PV处于 <code>Released</code>
+状态后，如何使其重新被新PVC绑定？ A. 删除PV重建 B.
+重启kube-controller-manager C. 清除 <code>spec.claimRef</code> 字段 D.
+修改PV的capacity</p>
+<p><strong>答案</strong>：C <strong>解析</strong>：<code>Released</code>
+状态的PV仍保留对旧PVC的引用（<code>spec.claimRef</code>），需通过
+<code>kubectl patch pv &lt;name&gt; -p '{"spec":{"claimRef":null}}'</code>
+清除引用后才会回到 <code>Available</code>。</p>
+<hr />
+<h3 id="22-单选-08-">22-单选-08 ★</h3>
+<p><strong>题目</strong>：PVC属于哪一级资源？ A.
+集群级（cluster-scoped） B. 命名空间级（namespaced） C.
+节点级（node-scoped） D. Pod级（pod-scoped）</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：PVC是命名空间级资源，Pod只能引用同命名空间的PVC。PV是集群级资源，可被任何命名空间的PVC绑定。</p>
+<hr />
+<h3 id="22-单选-09-">22-单选-09 ★★</h3>
+<p><strong>题目</strong>：PVC与PV绑定时不需要匹配的字段是？ A. capacity
+B. accessModes C. storageClassName D. metadata.name</p>
+<p><strong>答案</strong>：D
+<strong>解析</strong>：绑定匹配条件包括容量（PV≥PVC）、访问模式（PV包含PVC所需模式）、storageClassName（一致）、selector（可选）。名称不参与匹配。</p>
+<hr />
+<h3 id="22-单选-10-">22-单选-10 ★</h3>
+<p><strong>题目</strong>：StorageClass的核心字段是？ A. capacity B.
+accessModes C. provisioner D. reclaimPolicy</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：<code>provisioner</code>
+是StorageClass最核心字段，指定动态供给时调用的存储供给器（如
+<code>k8s.io/minikube-hostpath</code>）。其他字段如reclaimPolicy、volumeBindingMode是辅助配置。</p>
+<hr />
+<h3 id="22-单选-11-">22-单选-11 ★★</h3>
+<p><strong>题目</strong>：Minikube默认的StorageClass provisioner是？ A.
+kubernetes.io/nfs B. k8s.io/minikube-hostpath C. kubernetes.io/aws-ebs
+D. kubernetes.io/gce-pd</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：Minikube通过storage-provisioner插件提供
+<code>k8s.io/minikube-hostpath</code>
+provisioner，在Minikube节点上创建hostPath类型的PV。</p>
+<hr />
+<h3 id="22-单选-12-">22-单选-12 ★★</h3>
+<p><strong>题目</strong>：StorageClass中
+<code>volumeBindingMode: WaitForFirstConsumer</code> 的作用是？ A.
+立即绑定PVC B. 等到Pod调度后再绑定PVC C. 等待管理员手动批准 D.
+等待StorageClass配置完成</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：<code>WaitForFirstConsumer</code>
+模式下，PVC创建后不会立即绑定PV，而是等到有Pod使用该PVC且Pod完成调度后才绑定，确保PV与Pod在同一拓扑域（如节点、区域）。</p>
+<hr />
+<h3 id="22-单选-13-">22-单选-13 ★</h3>
+<p><strong>题目</strong>：在Pod中引用PVC的字段是？ A.
+volumes.persistentVolumeClaim.claimName B. volumes.hostPath.path C.
+volumes.emptyDir D. volumes.configMap.name</p>
+<p><strong>答案</strong>：A <strong>解析</strong>：Pod通过
+<code>spec.volumes[].persistentVolumeClaim.claimName</code>
+引用PVC，再通过 <code>containers[].volumeMounts</code>
+挂载到容器路径。</p>
+<hr />
+<h3 id="22-单选-14-">22-单选-14 ★★</h3>
+<p><strong>题目</strong>：StatefulSet中为每个Pod自动创建独立PVC的字段是？
+A. volumes B. volumeMounts C. volumeClaimTemplates D.
+persistentVolumeClaim</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：<code>volumeClaimTemplates</code>
+是StatefulSet专用字段，会为每个Pod副本自动创建独立PVC（命名格式
+<code>&lt;volumeClaimTemplate.name&gt;-&lt;statefulset.name&gt;-&lt;ordinal&gt;</code>），Pod销毁后PVC保留。</p>
+<hr />
+<h3 id="22-单选-15-">22-单选-15 ★★</h3>
+<p><strong>题目</strong>：下列哪种访问模式在K8s
+1.22+引入，且只能被单个Pod读写？ A. ReadWriteOnce B. ReadOnlyMany C.
+ReadWriteMany D. ReadWriteOncePod</p>
+<p><strong>答案</strong>：D
+<strong>解析</strong>：<code>ReadWriteOncePod</code> (RWOP) 是K8s
+1.22+引入的，比RWO更严格，限制只能被单个Pod（而非单节点多Pod）读写。</p>
+<hr />
+<h3 id="22-单选-16-">22-单选-16 ★</h3>
+<p><strong>题目</strong>：存储容量单位 <code>Gi</code> 表示什么？ A.
+1000字节 B. 1024字节 C. 1000兆字节（10^9） D. 1024兆字节（2^30）</p>
+<p><strong>答案</strong>：D <strong>解析</strong>：<code>Gi</code>
+是二进制单位（Gibibyte），表示2^30字节。<code>G</code>
+是十进制单位（Gigabyte），表示10^9字节。K8s存储建议使用
+<code>Gi</code>。</p>
+<hr />
+<h3 id="22-单选-17-">22-单选-17 ★★</h3>
+<p><strong>题目</strong>：MySQL Deployment建议使用的更新策略是？ A.
+RollingUpdate B. Recreate C. Blue-Green D. Canary</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：MySQL是有状态应用，同时只能有一个实例写入数据。<code>Recreate</code>
+策略先删除旧Pod再创建新Pod，避免双写冲突。<code>RollingUpdate</code>
+可能导致新旧Pod同时挂载同一PVC引发数据损坏。</p>
+<hr />
+<h3 id="22-单选-18-">22-单选-18 ★★</h3>
+<p><strong>题目</strong>：下列哪个不是PVC一直Pending的可能原因？ A.
+无匹配的PV B. storageClassName不匹配 C. selector标签不匹配 D.
+Pod未创建</p>
+<p><strong>答案</strong>：D
+<strong>解析</strong>：PVC的绑定与Pod是否创建无关（除非使用WaitForFirstConsumer模式）。A/B/C都是常见Pending原因。</p>
+<hr />
+<h3 id="22-单选-19-">22-单选-19 ★</h3>
+<p><strong>题目</strong>：hostPath类型的PV主要适用于？ A.
+生产环境多节点集群 B. 单节点开发环境（如Minikube） C. 跨节点数据共享 D.
+高可用数据库</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：hostPath绑定到具体节点，Pod重调度到其他节点后数据不跟随，仅适合单节点开发环境。生产环境应使用NFS/CSI等。</p>
+<hr />
+<h3 id="22-单选-20-">22-单选-20 ★★</h3>
+<p><strong>题目</strong>：将StorageClass设为默认的注解是？ A.
+<code>storageclass.kubernetes.io/is-default: "true"</code> B.
+<code>storageclass.kubernetes.io/is-default-class: "true"</code> C.
+<code>storageclass.beta.kubernetes.io/is-default-class: "true"</code> D.
+<code>storage.k8s.io/default-class: "true"</code></p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：<code>storageclass.kubernetes.io/is-default-class: "true"</code>
+是当前版本的注解（旧版
+<code>storageclass.beta.kubernetes.io/is-default-class</code>
+已废弃）。设为默认后，PVC不指定storageClassName时会自动使用。</p>
+<hr />
+<h3 id="22-单选-21-">22-单选-21 ★★★</h3>
+<p><strong>题目</strong>：关于PV和PVC的命名空间，下列说法正确的是？ A.
+PV和PVC都必须在同一命名空间 B.
+PV属于集群级，PVC属于命名空间级，但绑定不受命名空间限制 C.
+PV属于命名空间级，PVC属于集群级 D. PV和PVC都是集群级资源</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：PV是集群级资源（不属于任何命名空间），PVC是命名空间级资源。绑定时不看命名空间，但Pod只能引用同命名空间的PVC。</p>
+<hr />
+<h3 id="22-单选-22-">22-单选-22 ★★</h3>
+<p><strong>题目</strong>：下列哪种存储类型属于CSI？ A. hostPath B. nfs
+C. awsElasticBlockStore D. 腾讯云CBS通过csi.driver</p>
+<p><strong>答案</strong>：D <strong>解析</strong>：CSI（Container
+Storage Interface）是K8s
+1.13+推荐的标准存储接口，第三方存储厂商通过CSI插件接入。A/B/C是K8s内置存储类型（部分已废弃，推荐迁移到CSI）。</p>
+<hr />
+<h3 id="22-单选-23-">22-单选-23 ★★</h3>
+<p><strong>题目</strong>：StatefulSet使用volumeClaimTemplates创建的PVC命名规则是？
+A. <code>&lt;pvc-name&gt;-&lt;pod-name&gt;</code> B.
+<code>&lt;volumeClaimTemplate.name&gt;-&lt;statefulset.name&gt;-&lt;ordinal&gt;</code>
+C.
+<code>&lt;statefulset.name&gt;-&lt;volumeClaimTemplate.name&gt;-&lt;ordinal&gt;</code>
+D.
+<code>&lt;namespace&gt;-&lt;statefulset.name&gt;-&lt;ordinal&gt;</code></p>
+<p><strong>答案</strong>：B <strong>解析</strong>：命名格式为
+<code>&lt;volumeClaimTemplate.name&gt;-&lt;statefulset.name&gt;-&lt;ordinal&gt;</code>，如
+<code>www-web-0</code>、<code>www-web-1</code>。Pod销毁后PVC保留，新Pod重新挂载同一PVC。</p>
+<hr />
+<h3 id="22-单选-24-">22-单选-24 ★</h3>
+<p><strong>题目</strong>：K8s中已废弃的PV回收策略是？ A. Retain B.
+Delete C. Recycle D. Archive</p>
+<p><strong>答案</strong>：C <strong>解析</strong>：<code>Recycle</code>
+策略在K8s
+1.11+废弃，原行为是删除PV内数据后变为Available。现在推荐使用动态供给+Delete或Retain手动管理。</p>
+<hr />
+<h3 id="22-单选-25-">22-单选-25 ★★</h3>
+<p><strong>题目</strong>：下列哪个命令可以查看PVC的绑定事件？ A.
+<code>kubectl get pvc</code> B.
+<code>kubectl describe pvc &lt;name&gt;</code> C.
+<code>kubectl logs pvc &lt;name&gt;</code> D.
+<code>kubectl exec pvc &lt;name&gt;</code></p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：<code>kubectl describe pvc &lt;name&gt;</code>
+输出中的Events部分会显示PVC的绑定过程和失败原因。<code>kubectl get</code>
+只显示状态摘要。</p>
+<hr />
+<h3 id="22-单选-26-">22-单选-26 ★★</h3>
+<p><strong>题目</strong>：PV的 <code>volumeMode</code> 字段默认值是？ A.
+Block B. Filesystem C. Raw D. Directory</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：<code>volumeMode</code> 默认为
+<code>Filesystem</code>，PV会被格式化为文件系统后挂载。<code>Block</code>
+模式提供原始块设备，适用于高性能数据库。</p>
+<hr />
+<h3 id="22-单选-27-">22-单选-27 ★★★</h3>
+<p><strong>题目</strong>：关于动态供给，下列说法错误的是？ A.
+动态供给无需管理员预先创建PV B.
+动态供给由StorageClass的provisioner自动创建PV C.
+动态供给的PV默认reclaimPolicy为Retain D. 动态供给适合云盘等按需存储</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：动态供给的PV默认reclaimPolicy为
+<code>Delete</code>（与StorageClass配置一致），删除PVC后PV及底层存储自动删除。如需保留数据，应配置为
+<code>Retain</code>。</p>
+<hr />
+<h3 id="22-单选-28-">22-单选-28 ★</h3>
+<p><strong>题目</strong>：Pod中volumeMounts的name字段必须与什么一致？ A.
+Pod的name B. PVC的name C. volumes中的name D. PV的name</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：<code>volumeMounts.name</code> 必须与
+<code>volumes.name</code> 一致，建立挂载点与卷的对应关系。PVC的name通过
+<code>volumes.persistentVolumeClaim.claimName</code> 引用。</p>
+<hr />
+<h3 id="22-单选-29-">22-单选-29 ★★</h3>
+<p><strong>题目</strong>：NFS类型PV的 <code>server</code> 字段指定的是？
+A. NFS服务器的IP或主机名 B. NFS服务器的端口号 C. NFS挂载路径 D.
+NFS版本号</p>
+<p><strong>答案</strong>：A <strong>解析</strong>：<code>server</code>
+字段指定NFS服务器的IP地址或主机名，<code>path</code>
+字段指定NFS导出路径，<code>readOnly</code> 指定是否只读。</p>
+<hr />
+<h3 id="22-单选-30-">22-单选-30 ★★★</h3>
+<p><strong>题目</strong>：下列关于StatefulSet与Deployment在存储使用上的区别，正确的是？
+A. Deployment支持volumeClaimTemplates，StatefulSet不支持 B.
+StatefulSet支持volumeClaimTemplates，每个Pod有独立PVC C.
+两者都支持volumeClaimTemplates D. StatefulSet只能使用静态PV</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：<code>volumeClaimTemplates</code>
+是StatefulSet专用字段，为每个Pod副本自动创建独立PVC，适合有状态应用。Deployment不支持该字段，多个Pod共享同一PVC（可能引发数据冲突）。</p>
+<hr />
+<h2 id="二多项选择题10题每题3分">二、多项选择题（10题，每题3分）</h2>
+<h3 id="22-多选-01-">22-多选-01 ★</h3>
+<p><strong>题目</strong>：K8s存储体系的四层抽象包括？（多选） A. Volume
+B. PersistentVolume (PV) C. PersistentVolumeClaim (PVC) D. StorageClass
+E. Namespace</p>
+<p><strong>答案</strong>：ABCD
+<strong>解析</strong>：K8s存储体系四层抽象是Volume、PV、PVC、StorageClass。Namespace是资源隔离机制，不属于存储抽象。</p>
+<hr />
+<h3 id="22-多选-02-">22-多选-02 ★★</h3>
+<p><strong>题目</strong>：PV的访问模式包括哪些？（多选） A.
+ReadWriteOnce B. ReadOnlyMany C. ReadWriteMany D. ReadWriteOncePod E.
+ReadWriteAll</p>
+<p><strong>答案</strong>：ABCD
+<strong>解析</strong>：K8s支持四种访问模式：RWO、ROX、RWX、RWOP（K8s
+1.22+）。<code>ReadWriteAll</code> 不是有效模式。</p>
+<hr />
+<h3 id="22-多选-03-">22-多选-03 ★★</h3>
+<p><strong>题目</strong>：PV的回收策略包括哪些？（多选） A. Retain B.
+Delete C. Recycle D. Archive E. Keep</p>
+<p><strong>答案</strong>：ABC <strong>解析</strong>：PV回收策略有
+<code>Retain</code>（保留）、<code>Delete</code>（删除）、<code>Recycle</code>（已废弃）。<code>Archive</code>
+和 <code>Keep</code> 不是有效策略。</p>
+<hr />
+<h3 id="22-多选-04-">22-多选-04 ★★</h3>
+<p><strong>题目</strong>：PVC与PV绑定时的匹配条件包括？（多选） A.
+容量（PV容量≥PVC申请容量） B. 访问模式（PV包含PVC所需模式） C.
+storageClassName一致 D. selector标签匹配（如有） E.
+PV与PVC在同一命名空间</p>
+<p><strong>答案</strong>：ABCD
+<strong>解析</strong>：A/B/C/D都是绑定匹配条件。PV是集群级资源，PVC是命名空间级资源，绑定不受命名空间限制，E错误。</p>
+<hr />
+<h3 id="22-多选-05-">22-多选-05 ★★</h3>
+<p><strong>题目</strong>：下列哪些存储类型支持
+<code>ReadWriteMany</code>？（多选） A. NFS B. CephFS C. hostPath D. AWS
+EBS E. GlusterFS</p>
+<p><strong>答案</strong>：ABE
+<strong>解析</strong>：NFS、CephFS、GlusterFS是共享文件系统，支持多节点读写。hostPath绑定单节点，AWS
+EBS等块存储通常只支持RWO。</p>
+<hr />
+<h3 id="22-多选-06-">22-多选-06 ★★★</h3>
+<p><strong>题目</strong>：StorageClass的核心字段包括？（多选） A.
+provisioner B. reclaimPolicy C. volumeBindingMode D. parameters E.
+allowVolumeExpansion</p>
+<p><strong>答案</strong>：ABCDE
+<strong>解析</strong>：五个都是StorageClass的重要字段。<code>provisioner</code>
+指定供给器，<code>reclaimPolicy</code>
+回收策略，<code>volumeBindingMode</code>
+绑定模式，<code>parameters</code>
+供给器参数，<code>allowVolumeExpansion</code> 是否允许扩容。</p>
+<hr />
+<h3 id="22-多选-07-">22-多选-07 ★★</h3>
+<p><strong>题目</strong>：PVC一直Pending的可能原因有？（多选） A.
+无匹配容量的PV B. accessModes不匹配 C. storageClassName不一致 D.
+selector标签不匹配 E. provisioner未部署</p>
+<p><strong>答案</strong>：ABCDE
+<strong>解析</strong>：五种都是常见Pending原因。静态供给场景A/B/C/D是匹配失败，动态供给场景E导致无法自动创建PV。</p>
+<hr />
+<h3 id="22-多选-08-">22-多选-08 ★★</h3>
+<p><strong>题目</strong>：下列哪些属于PV的生命周期状态？（多选） A.
+Available B. Bound C. Released D. Failed E. Pending</p>
+<p><strong>答案</strong>：ABCD
+<strong>解析</strong>：PV生命周期四态：Available（可用）、Bound（已绑定）、Released（已释放）、Failed（失败）。<code>Pending</code>
+是PVC的状态，不是PV的状态。</p>
+<hr />
+<h3 id="22-多选-09-">22-多选-09 ★★★</h3>
+<p><strong>题目</strong>：关于StatefulSet的volumeClaimTemplates，下列说法正确的有？（多选）
+A. 为每个Pod副本自动创建独立PVC B. PVC命名格式为
+<code>&lt;volumeClaimTemplate.name&gt;-&lt;statefulset.name&gt;-&lt;ordinal&gt;</code>
+C. Pod销毁后PVC保留，新Pod重新挂载 D. 适合有状态应用如MySQL主从 E.
+可用于Deployment</p>
+<p><strong>答案</strong>：ABCD
+<strong>解析</strong>：A/B/C/D都正确。E错误，<code>volumeClaimTemplates</code>
+是StatefulSet专用字段，Deployment不支持。</p>
+<hr />
+<h3 id="22-多选-10-">22-多选-10 ★★</h3>
+<p><strong>题目</strong>：CTTS
+MySQL持久化方案中，推荐的实践包括？（多选） A. 使用Recreate策略避免双写
+B. 数据目录挂载到 <code>/var/lib/mysql</code> C. 密码通过Secret注入 D.
+使用StatefulSet + volumeClaimTemplates E. 生产环境使用hostPath</p>
+<p><strong>答案</strong>：ABCD
+<strong>解析</strong>：A/B/C/D都是推荐实践。E错误，hostPath仅适合开发环境，生产应使用NFS/CSI等共享存储或StatefulSet+动态供给。</p>
+<hr />
+<h2 id="三判断题20题每题1分">三、判断题（20题，每题1分）</h2>
+<h3 id="22-判断-01-">22-判断-01 ★</h3>
+<p><strong>题目</strong>：Pod销毁后，容器内文件系统的数据会自动迁移到其他节点。
+<strong>答案</strong>：错误
+<strong>解析</strong>：Pod容器文件系统基于可写层，Pod销毁时数据丢失，不会自动迁移。这是需要持久化存储的根本原因。</p>
+<hr />
+<h3 id="22-判断-02-">22-判断-02 ★</h3>
+<p><strong>题目</strong>：PV是命名空间级资源，PVC是集群级资源。
+<strong>答案</strong>：错误
+<strong>解析</strong>：相反。PV是集群级（cluster-scoped）资源，PVC是命名空间级（namespaced）资源。</p>
+<hr />
+<h3 id="22-判断-03-">22-判断-03 ★</h3>
+<p><strong>题目</strong>：<code>emptyDir</code>
+类型的Volume可以实现数据持久化。 <strong>答案</strong>：错误
+<strong>解析</strong>：<code>emptyDir</code>
+生命周期与Pod相同，Pod销毁时数据丢失，不能实现持久化。持久化需使用PV/PVC。</p>
+<hr />
+<h3 id="22-判断-04-">22-判断-04 ★★</h3>
+<p><strong>题目</strong>：PV的 <code>Retain</code>
+回收策略会在删除PVC后自动删除底层存储。 <strong>答案</strong>：错误
+<strong>解析</strong>：<code>Retain</code>
+策略下，删除PVC后PV保留数据，状态变为Released。自动删除底层存储的是
+<code>Delete</code> 策略。</p>
+<hr />
+<h3 id="22-判断-05-">22-判断-05 ★★</h3>
+<p><strong>题目</strong>：NFS类型的PV支持 <code>ReadWriteMany</code>
+访问模式。 <strong>答案</strong>：正确
+<strong>解析</strong>：NFS是网络文件系统，天然支持多节点同时读写，可以使用RWX模式。</p>
+<hr />
+<h3 id="22-判断-06-">22-判断-06 ★</h3>
+<p><strong>题目</strong>：Pod可以引用任意命名空间的PVC。
+<strong>答案</strong>：错误
+<strong>解析</strong>：Pod只能引用同命名空间的PVC。PVC是命名空间级资源，跨命名空间引用不被允许。</p>
+<hr />
+<h3 id="22-判断-07-">22-判断-07 ★★</h3>
+<p><strong>题目</strong>：StatefulSet使用
+<code>volumeClaimTemplates</code> 为每个Pod创建共享的PVC。
+<strong>答案</strong>：错误
+<strong>解析</strong>：<code>volumeClaimTemplates</code>
+为每个Pod副本创建<strong>独立</strong>的PVC（命名带序号），不是共享的。每个Pod有自己独立的数据卷。</p>
+<hr />
+<h3 id="22-判断-08-">22-判断-08 ★</h3>
+<p><strong>题目</strong>：StorageClass可以实现PV的动态供给。
+<strong>答案</strong>：正确
+<strong>解析</strong>：StorageClass通过provisioner按需自动创建PV并绑定到PVC，实现动态供给。</p>
+<hr />
+<h3 id="22-判断-09-">22-判断-09 ★★</h3>
+<p><strong>题目</strong>：PV处于Released状态时，可以被新PVC直接绑定。
+<strong>答案</strong>：错误
+<strong>解析</strong>：Released状态的PV保留对旧PVC的claimRef引用，需手动清除
+<code>spec.claimRef</code> 后才会回到Available，才能被新PVC绑定。</p>
+<hr />
+<h3 id="22-判断-10-">22-判断-10 ★</h3>
+<p><strong>题目</strong>：<code>hostPath</code>
+类型的PV适合生产环境多节点集群。 <strong>答案</strong>：错误
+<strong>解析</strong>：hostPath绑定到具体节点，Pod重调度到其他节点后数据不跟随，仅适合单节点开发环境（如Minikube）。生产应使用NFS/CSI。</p>
+<hr />
+<h3 id="22-判断-11-">22-判断-11 ★★</h3>
+<p><strong>题目</strong>：Minikube默认提供
+<code>k8s.io/minikube-hostpath</code> provisioner。
+<strong>答案</strong>：正确
+<strong>解析</strong>：Minikube通过storage-provisioner插件提供该provisioner，支持StorageClass动态供给。</p>
+<hr />
+<h3 id="22-判断-12-">22-判断-12 ★★</h3>
+<p><strong>题目</strong>：<code>volumeBindingMode: WaitForFirstConsumer</code>
+模式下，PVC创建后会立即绑定PV。 <strong>答案</strong>：错误
+<strong>解析</strong>：<code>WaitForFirstConsumer</code>
+模式下，PVC创建后不立即绑定，等到有Pod使用该PVC且Pod完成调度后才绑定，确保拓扑一致。</p>
+<hr />
+<h3 id="22-判断-13-">22-判断-13 ★</h3>
+<p><strong>题目</strong>：Pod的 <code>volumeMounts.name</code> 必须与
+<code>volumes.name</code> 一致。 <strong>答案</strong>：正确
+<strong>解析</strong>：二者必须一致，建立挂载点与卷的对应关系，否则挂载失败。</p>
+<hr />
+<h3 id="22-判断-14-">22-判断-14 ★★</h3>
+<p><strong>题目</strong>：MySQL Deployment建议使用
+<code>RollingUpdate</code> 策略。 <strong>答案</strong>：错误
+<strong>解析</strong>：MySQL是有状态应用，同时只能一个实例写入。应使用
+<code>Recreate</code> 策略，避免新旧Pod同时挂载同一PVC引发数据损坏。</p>
+<hr />
+<h3 id="22-判断-15-">22-判断-15 ★★</h3>
+<p><strong>题目</strong>：动态供给的PV默认reclaimPolicy为
+<code>Delete</code>。 <strong>答案</strong>：正确
+<strong>解析</strong>：动态供给的PV继承StorageClass的reclaimPolicy，默认为
+<code>Delete</code>，删除PVC后PV及底层存储自动删除。</p>
+<hr />
+<h3 id="22-判断-16-">22-判断-16 ★</h3>
+<p><strong>题目</strong>：<code>Gi</code> 和 <code>G</code>
+在K8s中表示相同的容量。 <strong>答案</strong>：错误
+<strong>解析</strong>：<code>Gi</code>
+是二进制单位（2^30），<code>G</code> 是十进制单位（10^9）。建议使用
+<code>Gi</code> 避免歧义。</p>
+<hr />
+<h3 id="22-判断-17-">22-判断-17 ★★★</h3>
+<p><strong>题目</strong>：CSI是K8s 1.13+推荐的标准存储接口。
+<strong>答案</strong>：正确 <strong>解析</strong>：CSI（Container
+Storage
+Interface）是K8s推荐的存储接口标准，第三方存储厂商通过CSI插件接入，替代旧的in-tree存储插件。</p>
+<hr />
+<h3 id="22-判断-18-">22-判断-18 ★★</h3>
+<p><strong>题目</strong>：StatefulSet的Pod销毁后，对应的PVC会被自动删除。
+<strong>答案</strong>：错误
+<strong>解析</strong>：StatefulSet的Pod销毁后，<code>volumeClaimTemplates</code>
+创建的PVC会保留，新Pod重新挂载同一PVC，实现数据持久化。需手动删除PVC才会释放存储。</p>
+<hr />
+<h3 id="22-判断-19-">22-判断-19 ★</h3>
+<p><strong>题目</strong>：PV和PVC通过selector标签进行必选匹配。
+<strong>答案</strong>：错误
+<strong>解析</strong>：selector是可选匹配条件，不是必选。只有PVC定义了selector时才进行标签匹配。</p>
+<hr />
+<h3 id="22-判断-20-">22-判断-20 ★★</h3>
+<p><strong>题目</strong>：StorageClass可以设为默认，使PVC不指定storageClassName时自动使用。
+<strong>答案</strong>：正确 <strong>解析</strong>：通过注解
+<code>storageclass.kubernetes.io/is-default-class: "true"</code>
+设为默认，PVC不指定storageClassName时会自动使用该StorageClass。</p>
+<hr />
+<h2 id="四填空题10题每题2分">四、填空题（10题，每题2分）</h2>
+<h3 id="22-填空-01-">22-填空-01 ★</h3>
+<p><strong>题目</strong>：K8s存储体系四层抽象包括Volume、<strong><strong><strong><strong>、</strong></strong></strong></strong>、StorageClass。
+<strong>答案</strong>：PersistentVolume (PV)；PersistentVolumeClaim
+(PVC)
+<strong>解析</strong>：K8s通过Volume→PV→PVC→StorageClass四层抽象实现存储资源与Pod解耦。</p>
+<hr />
+<h3 id="22-填空-02-">22-填空-02 ★</h3>
+<p><strong>题目</strong>：PV的访问模式中，________表示可被单节点读写，________表示可被多节点读写。
+<strong>答案</strong>：ReadWriteOnce (RWO)；ReadWriteMany (RWX)
+<strong>解析</strong>：RWO是单节点读写（最常用），RWX是多节点读写（需NFS/CephFS等共享存储支持）。</p>
+<hr />
+<h3 id="22-填空-03-">22-填空-03 ★★</h3>
+<p><strong>题目</strong>：PV生命周期的四个状态是________、<strong><strong><strong><strong>、</strong></strong></strong></strong>、________。
+<strong>答案</strong>：Available；Bound；Released；Failed
+<strong>解析</strong>：Available（可用）、Bound（已绑定）、Released（已释放）、Failed（失败）。</p>
+<hr />
+<h3 id="22-填空-04-">22-填空-04 ★★</h3>
+<p><strong>题目</strong>：PV的回收策略有________、<strong><strong><strong><strong>、</strong></strong></strong></strong>（已废弃）。
+<strong>答案</strong>：Retain；Delete；Recycle
+<strong>解析</strong>：Retain保留数据，Delete自动删除，Recycle已废弃。</p>
+<hr />
+<h3 id="22-填空-05-">22-填空-05 ★</h3>
+<p><strong>题目</strong>：PV是________级资源，PVC是________级资源。
+<strong>答案</strong>：集群（cluster-scoped）；命名空间（namespaced）
+<strong>解析</strong>：PV属于集群级，PVC属于命名空间级，Pod只能引用同命名空间的PVC。</p>
+<hr />
+<h3 id="22-填空-06-">22-填空-06 ★★</h3>
+<p><strong>题目</strong>：StorageClass中________字段指定存储供给器，________字段指定绑定模式。
+<strong>答案</strong>：provisioner；volumeBindingMode
+<strong>解析</strong>：provisioner指定动态供给时调用的供给器（如
+<code>k8s.io/minikube-hostpath</code>），volumeBindingMode指定绑定时机（Immediate或WaitForFirstConsumer）。</p>
+<hr />
+<h3 id="22-填空-07-">22-填空-07 ★★</h3>
+<p><strong>题目</strong>：StatefulSet通过________字段为每个Pod自动创建独立PVC。
+<strong>答案</strong>：volumeClaimTemplates
+<strong>解析</strong>：<code>volumeClaimTemplates</code>
+是StatefulSet专用字段，为每个Pod副本创建独立PVC（命名带序号），Pod销毁后PVC保留。</p>
+<hr />
+<h3 id="22-填空-08-">22-填空-08 ★★</h3>
+<p><strong>题目</strong>：Pod中通过
+<code>volumes.________.claimName</code> 字段引用PVC。
+<strong>答案</strong>：persistentVolumeClaim
+<strong>解析</strong>：完整路径为
+<code>spec.volumes[].persistentVolumeClaim.claimName</code>，再通过
+<code>volumeMounts</code> 挂载到容器路径。</p>
+<hr />
+<h3 id="22-填空-09-">22-填空-09 ★</h3>
+<p><strong>题目</strong>：将StorageClass设为默认的注解是________。
+<strong>答案</strong>：<code>storageclass.kubernetes.io/is-default-class: "true"</code>
+<strong>解析</strong>：通过该注解设为默认，PVC不指定storageClassName时自动使用该StorageClass。</p>
+<hr />
+<h3 id="22-填空-10-">22-填空-10 ★★</h3>
+<p><strong>题目</strong>：PV处于Released状态时，需清除________字段才能回到Available。
+<strong>答案</strong>：spec.claimRef <strong>解析</strong>：通过
+<code>kubectl patch pv &lt;name&gt; -p '{"spec":{"claimRef":null}}'</code>
+清除claimRef引用，PV回到Available状态可被新PVC绑定。</p>
+<hr />
+<h2 id="五论述简答题4题每题10分">五、论述简答题（4题，每题10分）</h2>
+<h3 id="22-论述-01-">22-论述-01 ★★</h3>
+<p><strong>题目</strong>：简述K8s存储体系四层抽象（Volume/PV/PVC/StorageClass）的职责与关系。</p>
+<p><strong>评分标准</strong>（满分10分）：</p>
+<ul>
+<li>四层抽象各自职责（每层1.5分，共6分）</li>
+<li>层级关系说明（2分）</li>
+<li>类比或图示（1分）</li>
+<li>语言表述清晰（1分）</li>
+</ul>
+<p><strong>参考答案</strong>：</p>
+<p>K8s存储体系通过四层抽象实现存储资源与Pod的解耦：</p>
+<ol type="1">
+<li><p><strong>Volume（卷）</strong>：Pod级最基础存储抽象，生命周期与Pod相同。包括emptyDir（临时）、hostPath（节点目录）、configMap/secret（配置注入）等类型。Volume是Pod内部概念，无法跨Pod共享。</p></li>
+<li><p><strong>PersistentVolume
+(PV)</strong>：集群级存储资源，由管理员创建（静态）或StorageClass自动创建（动态）。PV描述"集群有什么存储"，包含capacity、accessModes、reclaimPolicy等字段，是存储资源的抽象。</p></li>
+<li><p><strong>PersistentVolumeClaim
+(PVC)</strong>：命名空间级存储申请，用户创建。PVC描述"我要什么存储"，声明所需容量、访问模式、storageClassName。K8s自动匹配符合条件的PV并绑定。</p></li>
+<li><p><strong>StorageClass</strong>：动态供给模板，描述"如何自动创建PV"。包含provisioner、reclaimPolicy、volumeBindingMode等字段。当PVC指定StorageClass且无匹配静态PV时，provisioner按模板自动创建PV。</p></li>
+</ol>
+<p><strong>关系</strong>：</p>
+<ul>
+<li>Volume是Pod内基础抽象，可引用PVC。</li>
+<li>PV是资源提供方，PVC是资源消费方，二者通过绑定关联。</li>
+<li>StorageClass是PV的工厂，按需动态创建PV。</li>
+<li>类比：PV≈机房机柜，PVC≈租户申请工单，StorageClass≈自动派工系统。</li>
+</ul>
+<hr />
+<h3 id="22-论述-02-">22-论述-02 ★★★</h3>
+<p><strong>题目</strong>：详细描述PVC与PV的绑定机制，并说明PVC一直Pending的常见原因及排查方法。</p>
+<p><strong>评分标准</strong>（满分10分）：</p>
+<ul>
+<li>绑定机制流程（4分）</li>
+<li>Pending常见原因（至少3个，3分）</li>
+<li>排查方法与命令（2分）</li>
+<li>表述清晰（1分）</li>
+</ul>
+<p><strong>参考答案</strong>：</p>
+<p><strong>绑定机制流程</strong>：</p>
+<ol type="1">
+<li>用户创建PVC，声明所需容量、访问模式、storageClassName、selector。</li>
+<li>K8s的PersistentVolumeController控制循环监听PVC创建事件。</li>
+<li>遍历所有Available状态的PV，检查匹配条件：
+<ul>
+<li>容量匹配：PV容量 ≥ PVC申请容量</li>
+<li>访问模式匹配：PV的accessModes包含PVC所需模式</li>
+<li>storageClassName匹配：二者一致（或都为空）</li>
+<li>selector匹配：PVC的labelSelector匹配PV的labels（如有）</li>
+</ul></li>
+<li>找到匹配PV后，将PVC与PV绑定，二者状态变为Bound。</li>
+<li>若无匹配PV且指定了StorageClass，触发动态供给创建PV。</li>
+<li>若无匹配PV且无StorageClass，PVC保持Pending。</li>
+</ol>
+<p><strong>Pending常见原因</strong>：</p>
+<ol type="1">
+<li><strong>无匹配容量的PV</strong>：集群中没有容量足够的PV。</li>
+<li><strong>accessModes不匹配</strong>：如PVC需要RWO但PV只有RWX（部分场景下不匹配）。</li>
+<li><strong>storageClassName不一致</strong>：PVC和PV的storageClassName必须一致。</li>
+<li><strong>selector标签不匹配</strong>：PVC的selector与PV的labels不匹配。</li>
+<li><strong>动态供给provisioner未部署</strong>：如NFS
+StorageClass未部署nfs-provisioner。</li>
+<li><strong>WaitForFirstConsumer模式未创建Pod</strong>：该模式下需Pod调度后才绑定。</li>
+</ol>
+<p><strong>排查方法</strong>：</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 查看PVC状态和事件</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pvc <span class="op">&lt;</span>name<span class="op">&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 关注Events部分的提示信息</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 查看可用PV</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pv</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 检查是否有Available状态且匹配的PV</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 检查StorageClass</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get sc</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe sc <span class="op">&lt;</span>name<span class="op">&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 确认provisioner是否部署</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 检查provisioner Pod</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pod <span class="at">-n</span> kube-system <span class="kw">|</span> <span class="fu">grep</span> provisioner</span></code></pre></div>
+<hr />
+<h3 id="22-论述-03-">22-论述-03 ★★</h3>
+<p><strong>题目</strong>：对比静态供给与动态供给的区别，并说明各自适用场景。</p>
+<p><strong>评分标准</strong>（满分10分）：</p>
+<ul>
+<li>静态供给定义与流程（3分）</li>
+<li>动态供给定义与流程（3分）</li>
+<li>区别对比（2分）</li>
+<li>适用场景（2分）</li>
+</ul>
+<p><strong>参考答案</strong>：</p>
+<p><strong>静态供给</strong>：</p>
+<ul>
+<li>定义：管理员手动创建PV，描述存储资源的详细信息（capacity、accessModes、后端存储类型）。</li>
+<li>流程：管理员创建PV → 用户创建PVC → K8s匹配并绑定。</li>
+<li>特点：PV预先存在，PVC只需匹配，不触发创建。</li>
+</ul>
+<p><strong>动态供给</strong>：</p>
+<ul>
+<li>定义：用户创建PVC指定StorageClass，无匹配静态PV时，provisioner按StorageClass模板自动创建PV。</li>
+<li>流程：管理员创建StorageClass → 用户创建PVC（指定SC）→ 无匹配静态PV →
+provisioner自动创建PV并绑定。</li>
+<li>特点：PV按需创建，无需预先规划。</li>
+</ul>
+<p><strong>区别对比</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>静态供给</th>
+<th>动态供给</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PV创建</td>
+<td>管理员手动</td>
+<td>provisioner自动</td>
+</tr>
+<tr>
+<td>灵活性</td>
+<td>低，需预先规划</td>
+<td>高，按需创建</td>
+</tr>
+<tr>
+<td>运维成本</td>
+<td>高</td>
+<td>低</td>
+</tr>
+<tr>
+<td>回收策略</td>
+<td>多用Retain</td>
+<td>多用Delete</td>
+</tr>
+<tr>
+<td>存储类型</td>
+<td>hostPath、固定NFS路径</td>
+<td>云盘、按需NFS、Ceph</td>
+</tr>
+</tbody>
+</table>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li>静态供给：已有存储资源（如自建NFS固定路径）、开发测试环境、需要精细控制PV配置。</li>
+<li>动态供给：云环境（AWS
+EBS、腾讯云CBS）、大规模生产、按需存储、多租户隔离。</li>
+</ul>
+<hr />
+<h3 id="22-论述-04-">22-论述-04 ★★★</h3>
+<p><strong>题目</strong>：结合CTTS项目，说明为MySQL配置持久化存储的完整方案，包括YAML设计要点、数据验证步骤和思政感悟。</p>
+<p><strong>评分标准</strong>（满分10分）：</p>
+<ul>
+<li>方案设计（PV/PVC/Deployment YAML要点）（4分）</li>
+<li>数据验证步骤（3分）</li>
+<li>思政感悟（数据安全）（2分）</li>
+<li>表述与完整性（1分）</li>
+</ul>
+<p><strong>参考答案</strong>：</p>
+<p><strong>方案设计</strong>：</p>
+<p>CTTS MySQL持久化方案采用StatefulSet +
+volumeClaimTemplates（生产最佳实践）：</p>
+<ol type="1">
+<li><p><strong>PV/PVC设计</strong>：</p>
+<ul>
+<li>开发环境：hostPath静态供给，capacity 5Gi，RWO，Retain策略。</li>
+<li>生产环境：StorageClass动态供给，或NFS静态供给支持RWX。</li>
+<li>selector标签匹配：<code>app: ctts, component: mysql</code>。</li>
+</ul></li>
+<li><p><strong>Deployment/StatefulSet要点</strong>：</p>
+<ul>
+<li>策略：<code>strategy.type: Recreate</code>，避免新旧Pod同时挂载引发双写。</li>
+<li>数据目录：<code>/var/lib/mysql</code> 挂载到PVC。</li>
+<li>配置文件：通过ConfigMap挂载到 <code>/etc/mysql/conf.d</code>。</li>
+<li>密码：通过Secret注入，不硬编码。</li>
+<li>资源限制：requests 200m/512Mi，limits 1000m/1Gi。</li>
+</ul></li>
+<li><p><strong>Service设计</strong>：</p>
+<ul>
+<li>Headless Service（clusterIP:
+None），便于StatefulSet稳定网络标识。</li>
+</ul></li>
+</ol>
+<p><strong>YAML核心结构</strong>：</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># StatefulSet + volumeClaimTemplates</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">volumeClaimTemplates</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">metadata</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-data</span><span class="kw">}</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">accessModes</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;ReadWriteOnce&quot;</span><span class="kw">]</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">storageClassName</span><span class="kw">:</span><span class="at"> standard</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">resources</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="fu">requests</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="fu">storage</span><span class="kw">:</span><span class="at"> 5Gi</span><span class="kw">}}</span></span></code></pre></div>
+<p><strong>数据验证步骤</strong>：</p>
+<ol type="1">
+<li>创建PV/PVC，验证状态Bound。</li>
+<li>部署MySQL Pod，等待Ready。</li>
+<li>写入测试数据：<code>INSERT INTO users VALUES (...)</code>。</li>
+<li>验证宿主机数据：<code>minikube ssh -- ls /data/ctts/mysql/</code>。</li>
+<li>删除Pod模拟故障：<code>kubectl delete pod -l app=ctts,component=mysql</code>。</li>
+<li>等待新Pod重建，查询数据：<code>SELECT * FROM users</code>。</li>
+<li>确认数据仍在——持久化成功。</li>
+</ol>
+<p><strong>思政感悟</strong>：</p>
+<p>数据是用户信任的载体，持久化存储是数据保障的最后一道防线。作为工程师，在设计存储方案时必须贯彻"数据安全第一"原则：</p>
+<ol type="1">
+<li><strong>责任意识</strong>：每一条用户数据背后都是真实用户的信任，数据丢失不仅造成业务损失，更损害用户信任。</li>
+<li><strong>预防胜于补救</strong>：通过Retain策略、定期备份、多副本等机制，将数据丢失风险降至最低。</li>
+<li><strong>敬畏生产</strong>：生产环境的存储配置需经过严格测试，遵循《数据安全法》要求，建立完善的数据安全制度。</li>
+<li><strong>终身学习</strong>：存储技术不断演进（CSI、快照、扩容），工程师需持续学习，跟上技术发展，才能更好地守护数据安全。</li>
+</ol>
+<hr />
+<h2
+id="六程序阅读补全题2题每题10分">六、程序阅读补全题（2题，每题10分）</h2>
+<h3 id="22-程序阅读-01-">22-程序阅读-01 ★★</h3>
+<p><strong>题目</strong>：阅读以下PV YAML，补全缺失字段。</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> PersistentVolume</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-mysql-pv</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">capacity</span><span class="kw">:</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">storage</span><span class="kw">:</span><span class="at"> ________①________</span><span class="co">      # 容量5Gi</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">accessModes</span><span class="kw">:</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> ________②________</span><span class="co">             # 单节点读写</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">persistentVolumeReclaimPolicy</span><span class="kw">:</span><span class="at"> ________③________</span><span class="co">   # 保留数据</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">storageClassName</span><span class="kw">:</span><span class="at"> manual</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">hostPath</span><span class="kw">:</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">path</span><span class="kw">:</span><span class="at"> ________④________</span><span class="co">         # 路径 /data/ctts/mysql</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> ________⑤________</span><span class="co">         # 目录不存在则创建</span></span></code></pre></div>
+<p><strong>评分标准</strong>（每空2分，共10分）：</p>
+<p><strong>答案</strong>：</p>
+<ul>
+<li>① <code>5Gi</code></li>
+<li>② <code>ReadWriteOnce</code>（或 <code>RWO</code>）</li>
+<li>③ <code>Retain</code></li>
+<li>④ <code>/data/ctts/mysql</code></li>
+<li>⑤ <code>DirectoryOrCreate</code></li>
+</ul>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>① 容量单位建议用 <code>Gi</code>（二进制）。</li>
+<li>② hostPath单节点适用RWO。</li>
+<li>③ Retain策略保留数据，适合开发环境。</li>
+<li>④ 标准Linux绝对路径。</li>
+<li>⑤ <code>DirectoryOrCreate</code> 表示路径不存在时自动创建目录。</li>
+</ul>
+<hr />
+<h3 id="22-程序阅读-02-">22-程序阅读-02 ★★★</h3>
+<p><strong>题目</strong>：阅读以下StatefulSet
+YAML，补全缺失字段，实现MySQL数据持久化。</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> StatefulSet</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">serviceName</span><span class="kw">:</span><span class="at"> ________①________</span><span class="co">     # 关联的Headless Service名</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> mysql:8.0</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> MYSQL_ROOT_PASSWORD</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Root@123456&quot;</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">volumeMounts</span><span class="kw">:</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ________②________</span><span class="co">    # 与volumeClaimTemplates.name一致</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> ________③________</span><span class="co">   # MySQL数据目录</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">________④________</span><span class="kw">:</span><span class="co">                  # 声明PVC模板的字段</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ________⑤________</span><span class="co">        # 与volumeMounts.name一致</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">accessModes</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;ReadWriteOnce&quot;</span><span class="kw">]</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">storageClassName</span><span class="kw">:</span><span class="at"> standard</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">storage</span><span class="kw">:</span><span class="at"> 5Gi</span></span></code></pre></div>
+<p><strong>评分标准</strong>（每空2分，共10分）：</p>
+<p><strong>答案</strong>：</p>
+<ul>
+<li>① <code>ctts-mysql</code></li>
+<li>② <code>mysql-data</code></li>
+<li>③ <code>/var/lib/mysql</code></li>
+<li>④ <code>volumeClaimTemplates</code></li>
+<li>⑤ <code>mysql-data</code></li>
+</ul>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>① StatefulSet必须关联Headless Service（serviceName字段）。</li>
+<li>②⑤
+volumeMounts.name必须与volumeClaimTemplates.name一致，建立挂载关系。</li>
+<li>③ MySQL默认数据目录是 <code>/var/lib/mysql</code>。</li>
+<li>④ <code>volumeClaimTemplates</code>
+是StatefulSet专用字段，为每个Pod自动创建独立PVC。</li>
+</ul>
+<hr />
+<h2
+id="七编程接口设计题2题每题15分">七、编程接口设计题（2题，每题15分）</h2>
+<h3 id="22-编程-01-">22-编程-01 ★★★</h3>
+<p><strong>题目</strong>：为CTTS项目编写完整的MySQL持久化存储YAML，要求：</p>
+<ol type="1">
+<li>创建一个5Gi的hostPath PV（路径
+<code>/data/ctts/mysql</code>，RWO，Retain策略）。</li>
+<li>创建PVC通过selector绑定该PV。</li>
+<li>创建Deployment（副本1，Recreate策略），挂载PVC到
+<code>/var/lib/mysql</code>，密码通过Secret注入。</li>
+<li>创建Headless Service。</li>
+<li>所有资源打标签 <code>app: ctts, component: mysql</code>。</li>
+</ol>
+<p><strong>评分标准</strong>（满分15分）：</p>
+<ul>
+<li>PV YAML完整正确（3分）</li>
+<li>PVC YAML含selector且匹配PV（3分）</li>
+<li>Deployment YAML（含Recreate策略、PVC挂载、Secret引用）（4分）</li>
+<li>Secret定义（1分）</li>
+<li>Headless Service定义（2分）</li>
+<li>标签规范（1分）</li>
+<li>YAML语法正确（1分）</li>
+</ul>
+<p><strong>参考答案</strong>：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 文件名：ctts-mysql-persistent.yaml</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Secret</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Secret</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-mysql-secret</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> default</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">type</span><span class="kw">:</span><span class="at"> Opaque</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">stringData</span><span class="kw">:</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">root-password</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Root@123456&quot;</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">user-password</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Ctts@123456&quot;</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># PV</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> PersistentVolume</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-mysql-pv</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">capacity</span><span class="kw">:</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">storage</span><span class="kw">:</span><span class="at"> 5Gi</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">accessModes</span><span class="kw">:</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> ReadWriteOnce</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">persistentVolumeReclaimPolicy</span><span class="kw">:</span><span class="at"> Retain</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">storageClassName</span><span class="kw">:</span><span class="at"> manual</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">hostPath</span><span class="kw">:</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /data/ctts/mysql</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> DirectoryOrCreate</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="co"># PVC</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> PersistentVolumeClaim</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-mysql-pvc</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> default</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">accessModes</span><span class="kw">:</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> ReadWriteOnce</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">storageClassName</span><span class="kw">:</span><span class="at"> manual</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">storage</span><span class="kw">:</span><span class="at"> 5Gi</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Deployment</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Deployment</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> default</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">strategy</span><span class="kw">:</span></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> Recreate</span></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> mysql:8.0</span></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> MYSQL_ROOT_PASSWORD</span></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">valueFrom</span><span class="kw">:</span></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">secretKeyRef</span><span class="kw">:</span></span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-mysql-secret</span></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">key</span><span class="kw">:</span><span class="at"> root-password</span></span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> MYSQL_DATABASE</span></span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> MYSQL_USER</span></span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> MYSQL_PASSWORD</span></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">valueFrom</span><span class="kw">:</span></span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">secretKeyRef</span><span class="kw">:</span></span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-mysql-secret</span></span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">key</span><span class="kw">:</span><span class="at"> user-password</span></span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">3306</span></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">volumeMounts</span><span class="kw">:</span></span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-data</span></span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /var/lib/mysql</span></span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-data</span></span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">persistentVolumeClaim</span><span class="kw">:</span></span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">claimName</span><span class="kw">:</span><span class="at"> ctts-mysql-pvc</span></span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="co"># Headless Service</span></span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Service</span></span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> default</span></span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">3306</span></span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">targetPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">3306</span></span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">clusterIP</span><span class="kw">:</span><span class="at"> None</span></span></code></pre></div>
+<hr />
+<h3 id="22-编程-02-">22-编程-02 ★★★</h3>
+<p><strong>题目</strong>：为CTTS项目编写StorageClass动态供给方案，要求：</p>
+<ol type="1">
+<li>定义StorageClass（provisioner为
+<code>k8s.io/minikube-hostpath</code>，reclaimPolicy为Delete，设为默认）。</li>
+<li>使用StatefulSet部署MySQL（1副本），通过
+<code>volumeClaimTemplates</code>
+自动创建PVC（5Gi，RWO，使用上述StorageClass）。</li>
+<li>定义Headless Service。</li>
+<li>编写数据验证的kubectl命令序列：部署→写入数据→删除Pod→验证数据持久化。</li>
+</ol>
+<p><strong>评分标准</strong>（满分15分）：</p>
+<ul>
+<li>StorageClass YAML完整正确（含默认注解）（3分）</li>
+<li>StatefulSet YAML含volumeClaimTemplates（4分）</li>
+<li>Headless Service定义（2分）</li>
+<li>YAML语法正确（2分）</li>
+<li>数据验证命令序列完整正确（4分）</li>
+</ul>
+<p><strong>参考答案</strong>：</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 文件名：ctts-mysql-dynamic.yaml</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># StorageClass（设为默认）</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> storage.k8s.io/v1</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> StorageClass</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> standard</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">annotations</span><span class="kw">:</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">storageclass.kubernetes.io/is-default-class</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;true&quot;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">provisioner</span><span class="kw">:</span><span class="at"> k8s.io/minikube-hostpath</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">reclaimPolicy</span><span class="kw">:</span><span class="at"> Delete</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">volumeBindingMode</span><span class="kw">:</span><span class="at"> Immediate</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">allowVolumeExpansion</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Headless Service</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Service</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> default</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">3306</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">targetPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">3306</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">clusterIP</span><span class="kw">:</span><span class="at"> None</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co"># StatefulSet</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> StatefulSet</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> default</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">serviceName</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">component</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> mysql:8.0</span></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> MYSQL_ROOT_PASSWORD</span></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Root@123456&quot;</span></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> MYSQL_DATABASE</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">3306</span></span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">volumeMounts</span><span class="kw">:</span></span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-data</span></span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /var/lib/mysql</span></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">volumeClaimTemplates</span><span class="kw">:</span></span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-data</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">accessModes</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;ReadWriteOnce&quot;</span><span class="kw">]</span></span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">storageClassName</span><span class="kw">:</span><span class="at"> standard</span></span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">storage</span><span class="kw">:</span><span class="at"> 5Gi</span></span></code></pre></div>
+<p><strong>数据验证命令序列</strong>：</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 部署</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> ctts-mysql-dynamic.yaml</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 等待Pod就绪</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> wait pod <span class="at">-l</span> app=ctts,component=mysql <span class="at">--for</span><span class="op">=</span>condition=Ready <span class="at">--timeout</span><span class="op">=</span>300s</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 验证PVC和自动创建的PV</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pvc</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pv</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 写入测试数据</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="va">POD_NAME</span><span class="op">=</span><span class="va">$(</span><span class="ex">kubectl</span> get pod <span class="at">-l</span> app=ctts,component=mysql <span class="at">-o</span> jsonpath=<span class="st">&#39;{.items[0].metadata.name}&#39;</span><span class="va">)</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="va">$POD_NAME</span> <span class="at">--</span> mysql <span class="at">-uroot</span> <span class="at">-pRoot@123456</span> <span class="at">-e</span> <span class="st">&quot;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="st">USE ctts;</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="st">CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50));</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="st">INSERT INTO users (name) VALUES (&#39;test_user_1&#39;), (&#39;test_user_2&#39;);</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT * FROM users;</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 删除Pod模拟故障（StatefulSet会自动重建）</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> delete pod <span class="at">-l</span> app=ctts,component=mysql</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 等待新Pod就绪</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> wait pod <span class="at">-l</span> app=ctts,component=mysql <span class="at">--for</span><span class="op">=</span>condition=Ready <span class="at">--timeout</span><span class="op">=</span>300s</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. 验证数据持久化</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="va">POD_NAME</span><span class="op">=</span><span class="va">$(</span><span class="ex">kubectl</span> get pod <span class="at">-l</span> app=ctts,component=mysql <span class="at">-o</span> jsonpath=<span class="st">&#39;{.items[0].metadata.name}&#39;</span><span class="va">)</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="va">$POD_NAME</span> <span class="at">--</span> mysql <span class="at">-uroot</span> <span class="at">-pRoot@123456</span> <span class="at">-e</span> <span class="st">&quot;</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="st">USE ctts;</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT * FROM users;</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="co"># 期望输出：仍能看到 test_user_1 和 test_user_2 —— 持久化成功</span></span></code></pre></div>
+<hr />
+<h2 id="附题目统计表">附：题目统计表</h2>
+<h3 id="按题型统计">按题型统计</h3>
+<table>
+<thead>
+<tr>
+<th>题型</th>
+<th>数量</th>
+<th>分值</th>
+<th>难度分布</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单项选择题</td>
+<td>30</td>
+<td>60</td>
+<td>★:10 ★★:14 ★★★:6</td>
+</tr>
+<tr>
+<td>多项选择题</td>
+<td>10</td>
+<td>30</td>
+<td>★:1 ★★:6 ★★★:3</td>
+</tr>
+<tr>
+<td>判断题</td>
+<td>20</td>
+<td>20</td>
+<td>★:7 ★★:10 ★★★:3</td>
+</tr>
+<tr>
+<td>填空题</td>
+<td>10</td>
+<td>20</td>
+<td>★:3 ★★:6 ★★★:1</td>
+</tr>
+<tr>
+<td>论述简答题</td>
+<td>4</td>
+<td>40</td>
+<td>★★:2 ★★★:2</td>
+</tr>
+<tr>
+<td>程序阅读补全</td>
+<td>2</td>
+<td>20</td>
+<td>★★:1 ★★★:1</td>
+</tr>
+<tr>
+<td>编程接口设计</td>
+<td>2</td>
+<td>30</td>
+<td>★★★:2</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td><strong>78</strong></td>
+<td><strong>220</strong></td>
+<td>★:21 ★★:39 ★★★:18</td>
+</tr>
+</tbody>
+</table>
+<h3 id="按知识点统计">按知识点统计</h3>
+<table>
+<thead>
+<tr>
+<th>知识点</th>
+<th>题目数量</th>
+<th>涉及题号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K22-1 存储需求与体系总览</td>
+<td>8</td>
+<td>单选1,2；多选1；判断1,2,3；填空1；论述1</td>
+</tr>
+<tr>
+<td>K22-2 PV</td>
+<td>18</td>
+<td>单选3,4,5,6,7,16,19,21,22,24,26,29；多选2,3,5,8；判断4,5,9,10,16,17,19；填空2,3,4,5</td>
+</tr>
+<tr>
+<td>K22-3 PVC</td>
+<td>14</td>
+<td>单选8,9,18,25；多选4,7；判断6,13；填空5,10；论述2</td>
+</tr>
+<tr>
+<td>K22-4 StorageClass</td>
+<td>14</td>
+<td>单选10,11,12,20,27；多选6；判断8,11,12,15,20；填空6,9；论述3</td>
+</tr>
+<tr>
+<td>K22-5 Pod使用PVC</td>
+<td>14</td>
+<td>单选13,14,17,23,28,30；多选9,10；判断7,14,18；填空7,8；论述4</td>
+</tr>
+<tr>
+<td>综合应用</td>
+<td>10</td>
+<td>程序阅读1,2；编程1,2；论述4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="按难度统计">按难度统计</h3>
+<table>
+<thead>
+<tr>
+<th>难度</th>
+<th>数量</th>
+<th>占比</th>
+<th>主要题型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>★ 基础</td>
+<td>21</td>
+<td>26.9%</td>
+<td>单选、判断、填空</td>
+</tr>
+<tr>
+<td>★★ 进阶</td>
+<td>39</td>
+<td>50.0%</td>
+<td>全题型</td>
+</tr>
+<tr>
+<td>★★★ 综合</td>
+<td>18</td>
+<td>23.1%</td>
+<td>单选、多选、论述、编程</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>题库编制：云原生课程组 版本：v1.0
+所有题目均附答案与解析，主观题含评分标准 建议组卷：基础题60% + 进阶题30%
++ 综合题10%</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

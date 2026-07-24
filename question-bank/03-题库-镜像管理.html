@@ -1,0 +1,1082 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>镜像管理</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 03 次课 · 题库</div>
+      <h1>镜像管理</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 03 次课</span>
+        <span class="hero-chip"><b>主题</b>镜像管理</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 03 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>03-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>03-选择-001</strong>（★ 知识点：K3-1 镜像概念） 关于 Docker
+镜像，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像是可读写的运行实例</span></li><li><span class="option-label">B</span><span>镜像是只读的、分层的容器运行模板</span></li><li><span class="option-label">C</span><span>镜像就是容器</span></li><li><span class="option-label">D</span><span>镜像删除后容器一定不存在</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：镜像是只读的、分层的容器运行模板，包含应用运行所需的全部内容。A
+错，可读写的是容器；C 错，镜像是模板、容器是运行实例；D
+错，删除镜像前需先删容器，逻辑反了。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-002</strong>（★ 知识点：K3-1 镜像组成）
+下列哪一项<strong>不属于</strong> Docker 镜像包含的内容？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>应用代码</span></li><li><span class="option-label">B</span><span>运行时（如 JRE）</span></li><li><span class="option-label">C</span><span>宿主机的内核</span></li><li><span class="option-label">D</span><span>配置文件与环境变量</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：镜像包含应用代码、运行时、依赖库、配置文件、环境变量、元数据等，但<strong>不包含宿主机内核</strong>——容器共享宿主内核。这是容器与虚拟机的核心区别。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-003</strong>（★ 知识点：K3-1 不可变特性） 关于 Docker
+镜像的不可变（Immutable）特性，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像构建后可以随时直接修改其中的文件</span></li><li><span class="option-label">B</span><span>镜像一旦构建完成，其内容不可修改，要改只能构建新镜像</span></li><li><span class="option-label">C</span><span>不可变特性导致镜像无法回滚</span></li><li><span class="option-label">D</span><span>不可变特性使镜像不可信任</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：镜像一旦构建完成，内容不可修改，要改只能基于它构建新镜像。不可变带来可复现、可回滚、可信任三大好处。A、C、D
+都错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-004</strong>（★ 知识点：K3-2 docker pull）
+<code>docker pull mysql</code> 命令（不写标签）实际拉取的镜像是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>mysql:stable</span></li><li><span class="option-label">B</span><span>mysql:latest</span></li><li><span class="option-label">C</span><span>mysql:8.0</span></li><li><span class="option-label">D</span><span>报错，必须指定标签</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：docker 命令中不指定
+tag 时默认 <code>:latest</code>。所以 <code>docker pull mysql</code>
+等价于 <code>docker pull mysql:latest</code>。但生产环境不建议用
+latest，应指定明确版本号。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-005</strong>（★ 知识点：K3-2 docker images 字段）
+<code>docker images</code> 命令输出中的 <code>IMAGE ID</code> 字段是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像的仓库名</span></li><li><span class="option-label">B</span><span>镜像的标签</span></li><li><span class="option-label">C</span><span>镜像唯一 ID（SHA256 前 12 位）</span></li><li><span class="option-label">D</span><span>镜像的创建者</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：IMAGE ID 是镜像完整
+SHA256 摘要的前 12 位，是镜像的唯一标识。仓库名是 REPOSITORY，标签是
+TAG。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-006</strong>（★ 知识点：K3-2 CREATED 字段）
+<code>docker images</code> 输出中的 <code>CREATED</code> 字段表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像拉取到本地的时间</span></li><li><span class="option-label">B</span><span>镜像构建者构建镜像的时间</span></li><li><span class="option-label">C</span><span>镜像最后一次启动容器的时间</span></li><li><span class="option-label">D</span><span>镜像被修改的时间</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：CREATED
+是镜像构建者构建这个镜像的时间（Dockerfile
+构建完成时间），不是本地拉取时间。所以会看到
+<code>2 weeks ago</code>、<code>6 months ago</code> 这种时间。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-007</strong>（★ 知识点：K3-2 命令等价）
+下列哪两个命令是等价的？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker pull</code> 和
+<code>docker push</code></span></li><li><span class="option-label">B</span><span><code>docker images</code> 和
+<code>docker image ls</code></span></li><li><span class="option-label">C</span><span><code>docker rmi</code> 和
+<code>docker rm</code></span></li><li><span class="option-label">D</span><span><code>docker tag</code> 和
+<code>docker build</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker images</code>
+是老语法，<code>docker image ls</code> 是新语法（Docker
+1.13+），两者完全等价。A 是拉取和推送（相反操作）；C
+是删镜像和删容器（不同）；D 是打标签和构建（不同）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-008</strong>（★ 知识点：K3-3 分层结构） Docker
+镜像采用分层结构，每一层是由什么生成的？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>一条 Dockerfile 指令</span></li><li><span class="option-label">B</span><span>一次
+docker run 命令</span></li><li><span class="option-label">C</span><span>一次 docker pull 命令</span></li><li><span class="option-label">D</span><span>一次 docker tag 命令</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：每条 Dockerfile
+指令生成一层（Layer）。如 FROM、RUN、COPY 等指令各自生成一层。docker
+run、pull、tag 命令不直接生成层。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-009</strong>（★ 知识点：K3-3 UnionFS） Docker
+默认使用的联合文件系统（UnionFS）驱动是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>ext4</span></li><li><span class="option-label">B</span><span>xfs</span></li><li><span class="option-label">C</span><span>overlay2（OverlayFS）</span></li><li><span class="option-label">D</span><span>nfs</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Docker 默认使用
+overlay2 驱动（基于 OverlayFS）。ext4、xfs 是普通文件系统，nfs
+是网络文件系统，都不是联合文件系统。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-010</strong>（★ 知识点：K3-3 层共享） 两个 MySQL
+镜像（mysql:8.0 和 mysql:5.7）实际磁盘占用远小于两者 SIZE
+字段之和，原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Docker 压缩了镜像</span></li><li><span class="option-label">B</span><span>镜像层共享，相同摘要的层只存一份</span></li><li><span class="option-label">C</span><span>SIZE 字段显示错误</span></li><li><span class="option-label">D</span><span>MySQL
+镜像本身很小</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：镜像采用分层结构，相同 SHA256
+摘要的层在多个镜像间共享，只存一份。所以两个 MySQL 镜像共享 Debian
+基础层和部分依赖层，实际占用小于 SIZE 之和。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-011</strong>（★ 知识点：K3-3 docker history）
+查看镜像构建层（每条 Dockerfile 指令生成的层）的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker
+images</span></li><li><span class="option-label">B</span><span>docker image inspect</span></li><li><span class="option-label">C</span><span>docker history</span></li><li><span class="option-label">D</span><span>docker layers</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>docker history 镜像名:标签</code>
+查看镜像的构建层，显示每层的创建时间、生成命令、大小等。inspect
+是详情，images 是列表，docker layers 不是有效命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-012</strong>（★★ 知识点：K3-3 history 输出）
+<code>docker history mysql:8.0</code> 输出中的
+<code>&lt;missing&gt;</code> 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>该层文件丢失，镜像损坏</span></li><li><span class="option-label">B</span><span>该层来自基础镜像，不在最外层镜像 ID 中显示</span></li><li><span class="option-label">C</span><span>该层是空的，没有内容</span></li><li><span class="option-label">D</span><span>该层是错误的，需要修复</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>&lt;missing&gt;</code>
+只表示该层来自基础镜像（被 FROM 引入），不在最外层镜像 ID
+的"快照"中显示，并非真的缺失或损坏。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-013</strong>（★ 知识点：K3-4 docker image inspect）
+查看镜像完整元数据（JSON 输出）的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker image inspect</span></li><li><span class="option-label">B</span><span>docker image ls</span></li><li><span class="option-label">C</span><span>docker image info</span></li><li><span class="option-label">D</span><span>docker image show</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>docker image inspect 镜像名:标签</code>
+查看镜像完整元数据，输出 JSON。ls 是列表，info 和 show
+不是有效命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-014</strong>（★ 知识点：K3-4 inspect 字段）
+<code>docker image inspect</code> 输出中，镜像的默认启动命令字段是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>.Config.Cmd</span></li><li><span class="option-label">B</span><span>.Config.Env</span></li><li><span class="option-label">C</span><span>.Config.ExposedPorts</span></li><li><span class="option-label">D</span><span>.Config.WorkingDir</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>.Config.Cmd</code>
+是容器启动默认命令；<code>.Config.Env</code>
+是环境变量；<code>.Config.ExposedPorts</code>
+是暴露端口；<code>.Config.WorkingDir</code> 是工作目录。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-015</strong>（★★ 知识点：K3-4 ExposedPorts） 关于
+<code>docker image inspect</code> 输出中的
+<code>Config.ExposedPorts</code>，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>ExposedPorts
+就是实际映射到宿主机的端口</span></li><li><span class="option-label">B</span><span>ExposedPorts 只是声明，要外部访问仍需
+<code>docker run -p</code> 端口映射</span></li><li><span class="option-label">C</span><span>ExposedPorts
+决定了容器一定能从外部访问</span></li><li><span class="option-label">D</span><span>ExposedPorts
+是镜像构建时自动生成的随机端口</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：EXPOSE
+只是声明镜像"打算"暴露的端口，不等于实际映射。要外部访问仍需
+<code>docker run -p 宿主端口:容器端口</code> 做端口映射。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-016</strong>（★ 知识点：K3-5 docker tag）
+<code>docker tag mysql:8.0 ctts-mysql:v1</code> 命令的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>删除
+mysql:8.0 镜像</span></li><li><span class="option-label">B</span><span>创建一个新的镜像</span></li><li><span class="option-label">C</span><span>给 mysql:8.0 镜像打一个新标签
+ctts-mysql:v1（加别名）</span></li><li><span class="option-label">D</span><span>拉取 ctts-mysql:v1 镜像</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>docker tag</code>
+给已有镜像打新标签（加别名），不创建新镜像，IMAGE ID
+不变。两个标签指向同一个镜像 ID。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-017</strong>（★★ 知识点：K3-5 tag 本质） 关于
+<code>docker tag</code> 命令，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>会创建一个全新的镜像</span></li><li><span class="option-label">B</span><span>会复制镜像的所有层，占用额外磁盘</span></li><li><span class="option-label">C</span><span>只是元数据操作，给同一个镜像 ID
+加别名，不创建新层</span></li><li><span class="option-label">D</span><span>必须指定完整的仓库地址</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>docker tag</code>
+只是元数据操作，给同一个镜像 ID
+加一个别名，不创建新层，不占额外磁盘。一个镜像 ID 可以有多个标签。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-018</strong>（★★ 知识点：K3-5 latest 陷阱） 关于
+<code>:latest</code> 标签，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>:latest</code>
+一定指向最新最稳定的版本</span></li><li><span class="option-label">B</span><span>生产环境推荐使用 <code>:latest</code> 标签</span></li><li><span class="option-label">C</span><span><code>:latest</code>
+只是默认标签名，可能指向任意版本，生产环境应指定明确版本</span></li><li><span class="option-label">D</span><span>不写标签时镜像会报错</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：<code>:latest</code>
+只是默认标签名，不保证最新最稳定，可能指向任意版本。生产环境应指定明确版本号（如
+<code>mysql:8.0.35</code>）以保证可复现。A、B 错误；D 错，不写标签默认
+latest 不报错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-019</strong>（★ 知识点：K3-6 docker rmi）
+删除本地镜像的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker rm 镜像名</span></li><li><span class="option-label">B</span><span>docker rmi 镜像名</span></li><li><span class="option-label">C</span><span>docker delete 镜像名</span></li><li><span class="option-label">D</span><span>docker remove 镜像名</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker rmi</code> 或
+<code>docker image rm</code> 删除本地镜像。<code>docker rm</code>
+是删除容器，不是镜像。delete 和 remove 不是有效命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-020</strong>（★ 知识点：K3-6 rmi vs rm）
+<code>docker rmi</code> 和 <code>docker rm</code> 的区别是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>两者完全相同</span></li><li><span class="option-label">B</span><span><code>docker rmi</code> 删除镜像，<code>docker rm</code>
+删除容器</span></li><li><span class="option-label">C</span><span><code>docker rmi</code> 删除容器，<code>docker rm</code>
+删除镜像</span></li><li><span class="option-label">D</span><span>两者都是删除容器</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker rmi</code>（image 的
+i）删除镜像，<code>docker rm</code>
+删除容器。两者操作对象不同，不能混用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-021</strong>（★★ 知识点：K3-6 删除规则）
+当镜像有对应容器存在（即使已停止）时，直接 <code>docker rmi</code>
+会怎样？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>正常删除镜像</span></li><li><span class="option-label">B</span><span>报错，提示先删除依赖的容器</span></li><li><span class="option-label">C</span><span>自动删除容器和镜像</span></li><li><span class="option-label">D</span><span>删除镜像但保留容器</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Docker
+默认拒绝删除有容器依赖的镜像，会报错
+<code>image is being used by stopped container xxx</code>。需先
+<code>docker rm</code> 删除容器，或用 <code>docker rmi -f</code>
+强制删除。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-022</strong>（★★ 知识点：K3-6 -f 强制删除） 关于
+<code>docker rmi -f 镜像</code> 命令，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>-f
+表示友好删除，更安全</span></li><li><span class="option-label">B</span><span>-f
+会先删除所有依赖此镜像的容器，再删镜像，可能误删运行中的容器</span></li><li><span class="option-label">C</span><span>-f
+只删除镜像的标签，不删层</span></li><li><span class="option-label">D</span><span>-f 是 dry-run 模式，不实际删除</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>-f</code>
+是强制删除，会先删除所有依赖此镜像的容器（包括运行中的），再删镜像。生产环境慎用，可能误删运行中的容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-023</strong>（★ 知识点：K3-6 docker image prune）
+<code>docker image prune</code> 命令（不带参数）清理的是什么？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>所有未使用的镜像</span></li><li><span class="option-label">B</span><span>所有本地镜像</span></li><li><span class="option-label">C</span><span>悬空镜像（dangling，<code>&lt;none&gt;:&lt;none&gt;</code>）</span></li><li><span class="option-label">D</span><span>所有正在使用的镜像</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>docker image prune</code>
+不带参数只清理悬空镜像（dangling images，即
+<code>&lt;none&gt;:&lt;none&gt;</code> 的镜像）。加 <code>-a</code>
+才清理所有未被容器使用的镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-024</strong>（★★ 知识点：K3-6 prune -a）
+<code>docker image prune -a</code> 与 <code>docker image prune</code>
+的区别是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>两者完全相同</span></li><li><span class="option-label">B</span><span><code>-a</code>
+清理所有未被容器使用的镜像，不带 <code>-a</code> 只清理悬空镜像</span></li><li><span class="option-label">C</span><span><code>-a</code> 清理所有镜像包括正在使用的</span></li><li><span class="option-label">D</span><span><code>-a</code>
+是强制模式，不询问确认</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker image prune</code>
+默认只清理悬空镜像（<code>&lt;none&gt;:&lt;none&gt;</code>）；<code>docker image prune -a</code>
+清理所有未被任何容器使用的镜像（含已打标签的）。<code>-f</code>
+才是跳过确认。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-025</strong>（★★ 知识点：K3-6 悬空镜像）
+下列哪种情况会产生悬空镜像（dangling image）？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>拉取新镜像</span></li><li><span class="option-label">B</span><span>用相同标签重新构建镜像，旧镜像失去标签</span></li><li><span class="option-label">C</span><span>删除容器</span></li><li><span class="option-label">D</span><span>启动容器</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：用相同标签重新构建镜像时，新镜像占用该标签，旧镜像失去标签变成
+<code>&lt;none&gt;:&lt;none&gt;</code>，即悬空镜像。其他选项不会产生悬空镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-026</strong>（★ 知识点：K3-3 层缓存） 为什么
+<code>docker pull</code> 同一个镜像第二次通常很快？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>网络变快了</span></li><li><span class="option-label">B</span><span>镜像变小了</span></li><li><span class="option-label">C</span><span>分层 + 层缓存，本地已有的层不重复下载</span></li><li><span class="option-label">D</span><span>Docker
+自动跳过下载</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Docker 会校验每层的
+SHA256
+摘要，本地已有的层不重复下载（层缓存），只下载缺失或更新的层。所以第二次拉取很快。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-027</strong>（★ 知识点：K3-2 SIZE 字段） 关于
+<code>docker images</code> 输出中的 <code>SIZE</code>
+字段，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>SIZE 是镜像实际占用磁盘的大小</span></li><li><span class="option-label">B</span><span>SIZE
+是镜像所有层大小之和（逻辑大小），实际占用可能因层共享更小</span></li><li><span class="option-label">C</span><span>SIZE
+是镜像被下载时占用的网络流量</span></li><li><span class="option-label">D</span><span>SIZE 是镜像构建时间</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：SIZE
+是镜像所有层大小之和（逻辑大小），不是实际磁盘占用。实际占用因层共享可能更小，用
+<code>docker system df</code> 查看真实占用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-028</strong>（★★ 知识点：K3-4 Go 模板） 用
+<code>docker image inspect</code> 提取镜像的完整 ID，正确的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker image inspect -f '{{.Id}}' mysql:8.0</code></span></li><li><span class="option-label">B</span><span><code>docker image inspect -f '{{.ImageID}}' mysql:8.0</code></span></li><li><span class="option-label">C</span><span><code>docker image inspect -f '{{.ID}}' mysql:8.0</code></span></li><li><span class="option-label">D</span><span><code>docker image inspect -f '{{.RepoTags}}' mysql:8.0</code></span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：<code>{{.Id}}</code>
+是 Go 模板提取完整 SHA256 ID 的语法。<code>{{.RepoTags}}</code>
+提取的是标签列表。其他两个不是有效字段。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-029</strong>（★★ 知识点：K3-4 提取层数） 用
+<code>docker image inspect</code> 查看镜像有几层，正确的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker image inspect -f '{{.Layers}}' mysql:8.0</code></span></li><li><span class="option-label">B</span><span><code>docker image inspect -f '{{len .RootFS.Layers}}' mysql:8.0</code></span></li><li><span class="option-label">C</span><span><code>docker image inspect -f '{{.RootFS}}' mysql:8.0</code></span></li><li><span class="option-label">D</span><span><code>docker image inspect -f '{{count .Layers}}' mysql:8.0</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：层信息在
+<code>.RootFS.Layers</code> 字段，用 <code>len</code>
+函数计算数组长度。<code>{{len .RootFS.Layers}}</code> 输出层数。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-030</strong>（★★★ 知识点：K3-6 综合清理）
+某运维工程师发现 Docker
+主机磁盘快满了，要安全清理无用镜像但保留正在运行容器使用的镜像，最合适的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker rmi -f $(docker images -q)</code></span></li><li><span class="option-label">B</span><span><code>docker system prune -a --volumes</code></span></li><li><span class="option-label">C</span><span><code>docker image prune -a</code></span></li><li><span class="option-label">D</span><span><code>docker rmi $(docker images -q)</code></span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>docker image prune -a</code>
+清理所有未被容器使用的镜像，正在运行容器使用的镜像不会被删，安全。A 和 D
+会尝试删所有镜像，会因容器依赖报错或误删；B
+会清理所有资源含卷，可能丢数据，过激。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>03-选择-031</strong>（★★ 知识点：K3-1 镜像组成） Docker
+镜像包含下列哪些内容？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>应用代码</span></li><li><span class="option-label">B</span><span>运行时（如 JRE、Python
+解释器）</span></li><li><span class="option-label">C</span><span>依赖库</span></li><li><span class="option-label">D</span><span>配置文件与环境变量 E. 宿主机内核</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：镜像包含应用代码、运行时、依赖库、配置文件、环境变量、元数据等。E
+错，容器共享宿主内核，镜像不包含内核。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-032</strong>（★★ 知识点：K3-3 分层价值） Docker
+镜像采用分层结构带来的价值包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>层共享，多个镜像共用基础层</span></li><li><span class="option-label">B</span><span>层缓存，加速构建和拉取</span></li><li><span class="option-label">C</span><span>增量传输，push/pull 只传差异层</span></li><li><span class="option-label">D</span><span>让镜像变得可写 E. 层独立可复用</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong>
+<strong>解析</strong>：分层带来共享（A）、缓存（B）、增量传输（C）、层复用（E）。D
+错，镜像层只读，容器才有可写层。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-033</strong>（★★ 知识点：K3-2 docker images） 关于
+<code>docker images</code> 命令的输出字段，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>REPOSITORY 是镜像仓库名</span></li><li><span class="option-label">B</span><span>TAG 是镜像标签</span></li><li><span class="option-label">C</span><span>IMAGE ID 是镜像唯一
+ID（SHA256 前 12 位）</span></li><li><span class="option-label">D</span><span>CREATED 是镜像构建时间（不是拉取时间） E. SIZE
+是镜像实际占用磁盘大小</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都正确。E 错，SIZE
+是逻辑大小（所有层之和），实际占用因层共享可能更小。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-034</strong>（★★ 知识点：K3-4 inspect 字段）
+<code>docker image inspect</code> 输出中属于 <code>Config</code>
+字段的子字段有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Cmd</span></li><li><span class="option-label">B</span><span>Entrypoint</span></li><li><span class="option-label">C</span><span>ExposedPorts</span></li><li><span class="option-label">D</span><span>Env E.
+RootFS</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：Cmd、Entrypoint、ExposedPorts、Env 都是 Config
+的子字段。RootFS 是顶层字段（与 Config 同级），不在 Config 下。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-035</strong>（★★ 知识点：K3-5 latest 陷阱） 关于
+<code>:latest</code> 标签，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>:latest</code> 只是默认标签名，不保证最新最稳定</span></li><li><span class="option-label">B</span><span>不写标签时
+docker 命令默认使用 <code>:latest</code></span></li><li><span class="option-label">C</span><span><code>:latest</code>
+可能随时指向不同版本，导致不可复现</span></li><li><span class="option-label">D</span><span>生产环境应指定明确版本号而非
+<code>:latest</code> E. <code>:latest</code> 一定是最近推送的镜像</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都正确。E 错，<code>:latest</code>
+不一定是最近推送的，镜像维护者可以随时把 <code>:latest</code>
+指向任何版本。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-036</strong>（★★ 知识点：K3-6 删除与清理）
+下列关于镜像删除与清理的命令，说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker rmi 镜像</code> 删除指定镜像</span></li><li><span class="option-label">B</span><span><code>docker rmi -f 镜像</code> 强制删除（含依赖容器，慎用）</span></li><li><span class="option-label">C</span><span><code>docker image prune</code> 清理悬空镜像</span></li><li><span class="option-label">D</span><span><code>docker image prune -a</code> 清理所有未被容器使用的镜像 E.
+<code>docker rm 镜像</code> 也能删除镜像</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都正确。E 错，<code>docker rm</code> 是删除容器，不是镜像；删镜像用
+<code>docker rmi</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-037</strong>（★★ 知识点：K3-3 层共享）
+关于镜像层共享，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>两个镜像如果用了相同的基础镜像，可以共享基础层</span></li><li><span class="option-label">B</span><span>层通过 SHA256
+摘要标识，相同摘要的层只存一份</span></li><li><span class="option-label">C</span><span>不同基础系统（如 Debian 和
+Alpine）的层也能共享</span></li><li><span class="option-label">D</span><span>层共享减少了磁盘占用 E.
+层共享减少了网络传输量</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong> <strong>解析</strong>：A、B、D、E
+都正确。C 错，只有 SHA256 摘要完全相同的层才能共享，不同基础系统（Debian
+vs Alpine）的层内容不同，不能共享。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-038</strong>（★★ 知识点：K3-2 pull 用法） 下列
+<code>docker pull</code> 命令中，写法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker pull mysql:8.0</code></span></li><li><span class="option-label">B</span><span><code>docker pull mysql</code>（等价于
+<code>docker pull mysql:latest</code>）</span></li><li><span class="option-label">C</span><span><code>docker pull nginx:alpine</code></span></li><li><span class="option-label">D</span><span><code>docker pull openjdk:17-slim</code> E.
+<code>docker pull mysql@sha256:abc123...</code>（通过摘要拉取）</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong> <strong>解析</strong>：A
+指定版本、B 默认 latest、C alpine 变体、D slim 变体、E
+通过摘要拉取，都是合法的 docker pull 用法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-039</strong>（★★ 知识点：K3-4 inspect 实用）
+下列哪些信息可以通过 <code>docker image inspect</code> 获取？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像的默认启动命令（Cmd）</span></li><li><span class="option-label">B</span><span>镜像暴露的端口（ExposedPorts）</span></li><li><span class="option-label">C</span><span>镜像的环境变量（Env）</span></li><li><span class="option-label">D</span><span>镜像的层数（RootFS.Layers 长度） E.
+镜像使用的存储驱动（GraphDriver.Name）</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：A、B、C、D、E 都可以通过 inspect 获取。inspect
+是查看镜像元数据的"X 光机"，包含镜像的所有底层信息。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-选择-040</strong>（★★★ 知识点：K3-5/K3-6 综合运维）
+运维工程师管理一台 Docker 主机，下列做法合理的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>生产环境镜像用明确版本号（如 <code>mysql:8.0.35</code>），不用
+<code>:latest</code></span></li><li><span class="option-label">B</span><span>定期用 <code>docker image prune</code>
+清理悬空镜像</span></li><li><span class="option-label">C</span><span>为项目镜像打专用标签（如
+<code>ctts-mysql:8.0</code>）便于识别</span></li><li><span class="option-label">D</span><span>用 <code>docker rmi -f</code>
+强制删除所有报错的镜像 E. 用 <code>docker system df</code>
+查看磁盘占用情况</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：A（避免
+latest
+陷阱）、B（定期清理）、C（项目标签）、E（监控磁盘）都是合理做法。D
+错，<code>-f</code>
+会先删容器，可能误删运行中的容器，应先手动删容器再删镜像。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>03-判断-001</strong>（★ 知识点：K3-1 镜像概念） Docker
+镜像是只读的、分层的容器运行模板。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：镜像是只读、分层、不可变的容器运行模板，包含应用运行所需的全部内容。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-002</strong>（★ 知识点：K3-1 不可变特性） Docker
+镜像一旦构建完成，其内容不可修改，要改只能构建新镜像。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：镜像不可变（Immutable），保证可复现、可回滚、可信任。修改需基于原镜像构建新镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-003</strong>（★ 知识点：K3-1 镜像与容器关系）
+删除容器后，对应的镜像也会被自动删除。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：容器只是镜像的运行实例，删除容器不影响镜像。镜像仍可再次启动新容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-004</strong>（★ 知识点：K3-2 默认标签）
+<code>docker pull mysql</code> 不写标签时，会拉取
+<code>mysql:latest</code> 镜像。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：docker
+命令不指定 tag 时默认 <code>:latest</code>。但生产环境不建议用
+latest，应指定明确版本号。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-005</strong>（★ 知识点：K3-2 CREATED 字段）
+<code>docker images</code> 输出中的 CREATED
+字段是镜像拉取到本地的时间。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：CREATED
+是镜像构建者构建镜像的时间，不是本地拉取时间。所以会看到
+<code>2 weeks ago</code>、<code>6 months ago</code> 这种时间。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-006</strong>（★ 知识点：K3-2 命令等价）
+<code>docker images</code> 和 <code>docker image ls</code>
+是两个完全等价的命令。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>docker images</code>
+是老语法，<code>docker image ls</code> 是新语法（Docker
+1.13+），两者输出完全相同。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-007</strong>（★ 知识点：K3-3 分层结构） Docker
+镜像由多个只读层（Layer）叠加而成，每条 Dockerfile 指令生成一层。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：镜像是分层的，每条 Dockerfile
+指令生成一层，多层通过 UnionFS（OverlayFS）叠加成统一视图。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-008</strong>（★★ 知识点：K3-3 层共享） 两个 MySQL
+镜像（mysql:8.0 和 mysql:5.7）的实际磁盘占用等于两者 SIZE 字段之和。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：两个镜像共享部分层（如 Debian
+基础层），实际占用小于 SIZE 之和。用 <code>docker system df</code>
+查看真实占用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-009</strong>（★★ 知识点：K3-3 history missing）
+<code>docker history</code> 输出中的 <code>&lt;missing&gt;</code>
+表示该层文件丢失，镜像已损坏。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>&lt;missing&gt;</code>
+只表示该层来自基础镜像，不在最外层镜像 ID
+中显示，并非真的缺失或损坏。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-010</strong>（★ 知识点：K3-4 inspect 命令）
+<code>docker image inspect</code> 命令以 JSON
+格式输出镜像的完整元数据。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>docker image inspect</code> 输出 JSON
+数组，包含镜像的所有元数据——ID、配置、层级、驱动等。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-011</strong>（★★ 知识点：K3-4 ExposedPorts）
+<code>docker image inspect</code> 输出中的
+<code>Config.ExposedPorts</code> 就是实际映射到宿主机的端口。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：ExposedPorts
+只是声明，不等于实际映射。要外部访问仍需
+<code>docker run -p 宿主端口:容器端口</code> 做端口映射。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-012</strong>（★★ 知识点：K3-5 tag 本质）
+<code>docker tag</code>
+命令会创建一个全新的镜像，占用额外的磁盘空间。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>docker tag</code>
+只是元数据操作，给同一个镜像 ID 加别名，不创建新层，不占额外磁盘。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-013</strong>（★★ 知识点：K3-5 latest 陷阱）
+<code>:latest</code> 标签一定指向最新且最稳定的镜像版本。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>:latest</code>
+只是默认标签名，可能指向任意版本，不保证最新最稳定。生产环境应指定明确版本号。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-014</strong>（★ 知识点：K3-6 rmi vs rm）
+<code>docker rmi</code> 用于删除镜像，<code>docker rm</code>
+用于删除容器。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>docker rmi</code>（image 的
+i）删除镜像，<code>docker rm</code> 删除容器，两者操作对象不同。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-015</strong>（★★ 知识点：K3-6 删除规则）
+当镜像有对应容器存在时，直接 <code>docker rmi</code>
+会报错，需先删除容器或使用 <code>-f</code> 强制删除。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Docker
+默认拒绝删除有容器依赖的镜像。需先 <code>docker rm</code> 删容器，或用
+<code>docker rmi -f</code> 强删（慎用）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-016</strong>（★★ 知识点：K3-6 prune 默认）
+<code>docker image prune</code>
+不带参数会清理所有未被容器使用的镜像。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>docker image prune</code>
+默认只清理悬空镜像（<code>&lt;none&gt;:&lt;none&gt;</code>）。加
+<code>-a</code> 才清理所有未被容器使用的镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-017</strong>（★ 知识点：K3-6 悬空镜像）
+悬空镜像（dangling image）是指有层但无标签的镜像，在
+<code>docker images</code> 中显示为
+<code>&lt;none&gt;:&lt;none&gt;</code>。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：悬空镜像就是失去标签的镜像，REPOSITORY 和 TAG
+都显示 <code>&lt;none&gt;</code>。常由相同标签重新构建产生。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-018</strong>（★★ 知识点：K3-3 层缓存）
+<code>docker pull</code> 同一个镜像第二次很快，是因为 Docker
+校验每层摘要，本地已有的层不重复下载。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：分层 +
+层缓存机制。Docker 校验每层 SHA256
+摘要，本地已有的层不重复下载，只下载缺失或更新的层。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-019</strong>（★★ 知识点：K3-4 存储驱动）
+<code>docker image inspect</code> 输出中的 <code>GraphDriver.Name</code>
+字段表示镜像使用的存储驱动，通常是 overlay2。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Docker
+默认使用 overlay2 驱动（基于 OverlayFS），可通过
+<code>GraphDriver.Name</code> 字段查看。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-判断-020</strong>（★★★ 知识点：K3-6 综合清理）
+<code>docker system prune -a</code>
+会清理所有未使用的容器、网络、镜像和构建缓存，是核弹级清理命令，应慎用。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>docker system prune -a</code>
+清理所有未使用资源（含镜像、容器、网络、构建缓存），加
+<code>--volumes</code> 还会清理卷。仅在确定要彻底清理时使用。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>03-填空-001</strong>（★ 知识点：K3-1 镜像特性） Docker 镜像是
+________ 的、分层的容器运行模板，一旦构建完成其内容不可修改。</p><blockquote>
+<p><strong>答案：只读（或 readonly）</strong>
+<strong>解析</strong>：镜像是只读的、分层的、不可变的容器运行模板。只读保证不可变，不可变带来可复现、可回滚、可信任。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-填空-002</strong>（★ 知识点：K3-2 默认标签）
+<code>docker pull mysql</code> 命令不写标签时，实际拉取的是
+<code>mysql:________</code> 镜像。</p><blockquote>
+<p><strong>答案：latest</strong> <strong>解析</strong>：docker
+命令不指定 tag 时默认 <code>:latest</code>。但生产环境不建议用
+latest，应指定明确版本号。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-填空-003</strong>（★ 知识点：K3-2 IMAGE ID）
+<code>docker images</code> 输出中的 IMAGE ID 是镜像完整 ________
+摘要的前 12 位。</p><blockquote>
+<p><strong>答案：SHA256</strong> <strong>解析</strong>：IMAGE ID
+是镜像完整 SHA256 摘要的前 12 位，是镜像的唯一标识。完整摘要可通过
+<code>docker image inspect</code> 的 <code>.Id</code> 字段查看。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-填空-004</strong>（★ 知识点：K3-3 联合文件系统） Docker
+镜像通过 ________ 联合文件系统把多个只读层叠加成统一视图，默认驱动是
+overlay2。</p><blockquote>
+<p><strong>答案：UnionFS（或 联合文件系统）</strong>
+<strong>解析</strong>：UnionFS 把多个只读层叠加成统一视图，Docker
+默认使用 overlay2 驱动（基于 OverlayFS）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-填空-005</strong>（★ 知识点：K3-3 查看层）
+查看镜像构建层（每条 Dockerfile 指令生成的层）的命令是
+<code>docker ________</code>。</p><blockquote>
+<p><strong>答案：history</strong>
+<strong>解析</strong>：<code>docker history 镜像名:标签</code>
+查看镜像的构建层，显示每层的创建时间、生成命令、大小等。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-填空-006</strong>（★ 知识点：K3-4 查看详情）
+查看镜像完整元数据（JSON 输出）的命令是
+<code>docker ________</code>。</p><blockquote>
+<p><strong>答案：image inspect</strong>
+<strong>解析</strong>：<code>docker image inspect 镜像名:标签</code>
+查看镜像完整元数据，输出 JSON 数组，包含镜像的所有底层信息。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-填空-007</strong>（★★ 知识点：K3-4 启动命令字段）
+<code>docker image inspect</code> 输出中，容器的默认启动命令存储在
+<code>Config.________</code> 字段。</p><blockquote>
+<p><strong>答案：Cmd</strong>
+<strong>解析</strong>：<code>Config.Cmd</code> 是容器启动默认命令。如
+MySQL 镜像的 <code>Config.Cmd</code> 是 <code>["mysqld"]</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-填空-008</strong>（★ 知识点：K3-5 打标签）
+给镜像打新标签（别名）的命令是
+<code>docker ________ 源镜像:标签 目标镜像:标签</code>。</p><blockquote>
+<p><strong>答案：tag</strong>
+<strong>解析</strong>：<code>docker tag</code>
+给已有镜像打新标签，不创建新镜像，只是给同一个镜像 ID 加别名。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-填空-009</strong>（★ 知识点：K3-6 删除镜像）
+删除本地镜像的命令是 <code>docker ________</code>（或
+<code>docker image rm</code>）。</p><blockquote>
+<p><strong>答案：rmi</strong>
+<strong>解析</strong>：<code>docker rmi</code> 或
+<code>docker image rm</code> 删除本地镜像。注意 <code>docker rmi</code>
+删镜像，<code>docker rm</code> 删容器，两者不同。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-填空-010</strong>（★★ 知识点：K3-6 清理悬空镜像）
+清理悬空镜像（<code>&lt;none&gt;:&lt;none&gt;</code>）的命令是
+<code>docker image ________</code>，加 <code>-a</code>
+参数可清理所有未被容器使用的镜像。</p><blockquote>
+<p><strong>答案：prune</strong>
+<strong>解析</strong>：<code>docker image prune</code>
+清理悬空镜像；<code>docker image prune -a</code>
+清理所有未被容器使用的镜像；<code>docker system prune</code>
+清理所有未使用资源。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>03-论述-001</strong>（★★ 知识点：K3-3 分层结构，10 分）
+请阐述 Docker 镜像分层结构的原理，并说明分层带来的核心价值。为什么两个
+MySQL 镜像（mysql:8.0 和 mysql:5.7）的实际磁盘占用小于两者 SIZE
+字段之和？</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>分层原理</strong>（3 分）：
+<ul>
+<li>Docker 镜像由多个只读层（Layer）叠加而成，每条 Dockerfile
+指令生成一层（1 分）。</li>
+<li>多层通过联合文件系统（UnionFS，默认 OverlayFS）叠加成统一视图（1
+分）。</li>
+<li>每层有 SHA256
+摘要，相同摘要的层可共享；容器在镜像层之上加一层可写层，修改时用写时复制（CoW）（1
+分）。</li>
+</ul></li>
+<li><strong>分层的核心价值</strong>（4 分，每点 1 分）：
+<ul>
+<li><strong>层共享</strong>：多个镜像共用同一基础层，节省磁盘和传输。</li>
+<li><strong>层缓存</strong>：构建时未变化的层用缓存，加速构建；拉取时已有的层不重复下载。</li>
+<li><strong>增量传输</strong>：push/pull
+只传输差异层，大幅减少网络流量。</li>
+<li><strong>可复用</strong>：一个基础镜像（如
+openjdk:17）可被多个应用镜像复用。</li>
+</ul></li>
+<li><strong>为什么实际占用小于 SIZE 之和</strong>（3 分）：
+<ul>
+<li><code>docker images</code> 显示的 SIZE
+是镜像所有层大小之和（逻辑大小）（1 分）。</li>
+<li>两个 MySQL 镜像虽然 SIZE 之和约 969MB，但它们共享 Debian
+基础层、共享部分依赖层（相同 SHA256 摘要的层只存一份）（1.5 分）。</li>
+<li>实际磁盘占用通过 <code>docker system df</code> 查看，通常小于 SIZE
+之和（如约 723MB），这就是层共享的效果（0.5 分）。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分各自独立给分；要点齐全即可满分；学生能用"层共享""SHA256
+摘要""逻辑大小 vs 实际占用"等关键词解释即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-论述-002</strong>（★★ 知识点：K3-4/K3-3 inspect 与
+history，8 分） 请说明 <code>docker image inspect</code> 和
+<code>docker history</code> 两个命令各自的用途，并列举至少 4 个可通过
+<code>docker image inspect</code> 获取的关键字段及其含义。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>两个命令的用途</strong>（2 分）：
+<ul>
+<li><code>docker image inspect 镜像:标签</code>：查看镜像的完整元数据，输出
+JSON，包含镜像的所有底层信息——ID、配置、层级、驱动等。是排查镜像问题的"X
+光机"（1 分）。</li>
+<li><code>docker history 镜像:标签</code>：查看镜像的构建层历史，显示每层的创建时间、生成命令（Dockerfile
+指令）、大小等。用于分析镜像是怎么构建的（1 分）。</li>
+</ul></li>
+<li><strong><code>docker image inspect</code> 的关键字段</strong>（6
+分，每个字段 1.5 分，答出 4 个即满分）：
+<ul>
+<li><code>Id</code>：镜像完整 SHA256 摘要（比 IMAGE ID 前 12
+位更完整）。</li>
+<li><code>RepoTags</code>：镜像的所有标签列表。</li>
+<li><code>Config.Cmd</code>：容器启动默认命令（如 MySQL 是
+<code>["mysqld"]</code>）。</li>
+<li><code>Config.Entrypoint</code>：容器入口点（不易被覆盖，Cmd
+的"前置"命令）。</li>
+<li><code>Config.ExposedPorts</code>：镜像声明暴露的端口（注意：只是声明，实际映射需
+<code>-p</code>）。</li>
+<li><code>Config.Env</code>：默认环境变量列表。</li>
+<li><code>Config.WorkingDir</code>：默认工作目录。</li>
+<li><code>RootFS.Layers</code>：所有层的 SHA256
+摘要列表，可数层数。</li>
+<li><code>GraphDriver.Name</code>：存储驱动名（通常是 overlay2）。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：两部分独立给分；字段含义答对即可，不要求逐字一致；列出
+4 个以上字段每个 1.5 分，满分 6 分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-论述-003</strong>（★★ 知识点：K3-5 latest 陷阱，8 分）
+请阐述 Docker 镜像 <code>:latest</code>
+标签的"陷阱"是什么，为什么生产环境不能用
+<code>:latest</code>？生产环境应该如何正确指定镜像版本？</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong><code>:latest</code> 陷阱的本质</strong>（3 分）：
+<ul>
+<li><code>:latest</code>
+只是一个普通的标签名，没有任何"最新最稳定"的语义（1 分）。</li>
+<li>镜像维护者可以随时把 <code>:latest</code> 指向任何版本（如从 8.0.35
+变成 8.1.0），所以"今天构建的 <code>:latest</code>"和"一个月后构建的
+<code>:latest</code>"可能是完全不同的镜像（1.5 分）。</li>
+<li>不写标签时 docker 命令默认用
+<code>:latest</code>，容易让人误以为"自动用最新版"（0.5 分）。</li>
+</ul></li>
+<li><strong>生产环境不能用 <code>:latest</code> 的原因</strong>（3
+分，每点 1 分）：
+<ul>
+<li><strong>不可复现</strong>：今天和一个月后构建的镜像可能基于不同版本，行为不一致，导致"今天能跑、明天就报错"。</li>
+<li><strong>不可追溯</strong>：出问题时不知道用的是哪个具体版本，无法定位和回滚。</li>
+<li><strong>不可审计</strong>：合规审计要求明确版本号，<code>:latest</code>
+不满足。</li>
+</ul></li>
+<li><strong>生产环境正确做法</strong>（2 分）：
+<ul>
+<li>使用明确版本号：如 <code>mysql:8.0.35</code> 而非
+<code>mysql:latest</code>（1 分）。</li>
+<li>或使用镜像摘要（digest）：<code>mysql@sha256:abc123...</code>，比标签更精确（标签会漂移，摘要永远不变）（0.5
+分）。</li>
+<li>或使用 Git 提交哈希作为应用镜像标签：如
+<code>ctts-api:a1b2c3d</code>（0.5 分）。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分独立给分；学生能举出具体场景（如"今天能跑明天报错"）说明陷阱即可给分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>03-论述-004</strong>（★★ 知识点：K3-6 删除与清理，8 分）
+请说明
+<code>docker rmi</code>、<code>docker image prune</code>、<code>docker image prune -a</code>、<code>docker system prune</code>
+四个命令的区别，并说明在什么场景下使用哪个命令。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>四个命令的区别</strong>（4 分，每个 1 分）：
+<ul>
+<li><code>docker rmi 镜像</code>：删除指定的镜像（按标签或
+ID）。如果镜像有容器依赖会报错，需先删容器或用 <code>-f</code>
+强删。</li>
+<li><code>docker image prune</code>：清理悬空镜像（dangling，<code>&lt;none&gt;:&lt;none&gt;</code>），即失去标签的中间层镜像。风险低。</li>
+<li><code>docker image prune -a</code>：清理所有未被任何容器使用的镜像（含已打标签的）。风险中等，可能删掉"打算用但还没用"的镜像。</li>
+<li><code>docker system prune</code>：清理所有未使用的资源（含镜像、容器、网络、构建缓存）。加
+<code>-a</code> 更彻底，加 <code>--volumes</code>
+还清理卷。风险高。</li>
+</ul></li>
+<li><strong>使用场景</strong>（4 分，每个 1 分）：
+<ul>
+<li><strong>删除某个具体镜像</strong>：用
+<code>docker rmi 镜像:标签</code>。如删 hello-world 镜像。</li>
+<li><strong>日常清理悬空镜像</strong>（推荐定期执行）：用
+<code>docker image prune</code>。安全，只清无用中间层。</li>
+<li><strong>磁盘紧张，清理所有未使用镜像</strong>：用
+<code>docker image prune -a</code>。会删掉未使用的已打标签镜像，谨慎使用。</li>
+<li><strong>彻底清理所有无用资源</strong>（如重置环境）：用
+<code>docker system prune -a</code>。核弹级清理，仅在确定要彻底清理时使用。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：两部分独立给分；命令区别要说清"清理范围"和"风险等级"；场景要对应命令。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>03-阅读-001</strong>（★★ 知识点：K3-2/K3-3 镜像拉取与分层，12
+分） 阅读以下镜像拉取与查看的命令序列，补全缺失部分（每空 2 分，共 12
+分）。</p>
+<pre class="text"><code>操作序列：
+1. docker pull mysql:8.0
+   从 (a)________ 拉取 mysql 的 8.0 版本镜像到本地。
+   拉取过程中，每一层下载完会显示 (b)________ complete。
+   MySQL 镜像通常有 13 层，这是因为 (c)________。
+
+2. docker images
+   列出本地所有镜像，输出包含五个字段：
+   REPOSITORY、(d)________、IMAGE ID、CREATED、(e)________。
+   其中 (f)________ 字段是镜像唯一标识（SHA256 前 12 位）。
+
+3. docker history mysql:8.0
+   查看镜像的构建层历史，最底层通常是基础系统层（如 Debian）。</code></pre>
+<blockquote>
+<p><strong>参考答案</strong>： (a) Docker Hub（或 镜像仓库 / Registry）
+(b) Pull (c) 镜像是分层的，每条 Dockerfile 指令生成一层 (d) TAG (e) SIZE
+(f) IMAGE ID</p>
+<p><strong>解析</strong>：docker pull 从 Docker Hub
+拉取镜像，每层下载完显示 <code>Pull complete</code>；镜像分层是因为每条
+Dockerfile 指令生成一层；<code>docker images</code> 五字段是
+REPOSITORY、TAG、IMAGE ID、CREATED、SIZE；IMAGE ID
+是镜像唯一标识（SHA256 前 12 位）。</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。意思对即可，专有名词拼写错误不扣分（如 Docker Hub 写成 docker
+hub）。</p>
+</blockquote>
+<hr />
+<p><strong>03-阅读-002</strong>（★★ 知识点：K3-4 inspect 字段解读，12
+分） 阅读以下 <code>docker image inspect mysql:8.0</code> 的部分 JSON
+输出，回答问题（每问 3 分，共 12 分）。</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;Id&quot;</span><span class="fu">:</span> <span class="st">&quot;sha256:d1dc36f8e78f3e5bf7a8e6f4c5b6a7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4&quot;</span><span class="fu">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;RepoTags&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;mysql:8.0&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;Created&quot;</span><span class="fu">:</span> <span class="st">&quot;2024-01-15T08:30:00.123456789Z&quot;</span><span class="fu">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;Config&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Cmd&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;mysqld&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Entrypoint&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;docker-entrypoint.sh&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;ExposedPorts&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;3306/tcp&quot;</span><span class="fu">:</span> <span class="fu">{},</span> <span class="dt">&quot;33060/tcp&quot;</span><span class="fu">:</span> <span class="fu">{}},</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Env&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;</span><span class="ot">,</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;MYSQL_MAJOR=8.0&quot;</span><span class="ot">,</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;MYSQL_VERSION=8.0.35-1.el8&quot;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Volumes&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;/var/lib/mysql&quot;</span><span class="fu">:</span> <span class="fu">{}}</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;RootFS&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Type&quot;</span><span class="fu">:</span> <span class="st">&quot;layers&quot;</span><span class="fu">,</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Layers&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;sha256:72a69066d2fe...&quot;</span><span class="ot">,</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;sha256:93619dbc5b36...&quot;</span><span class="ot">,</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;sha256:99da31dd3474...&quot;</span><span class="ot">,</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;...（共13层）&quot;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>问题</strong>：</p>
+<ol type="1">
+<li>该镜像的默认启动命令是什么？入口点（Entrypoint）是什么？（3
+分）</li>
+<li>该镜像声明暴露了哪些端口？是否意味着这些端口自动映射到宿主机？（3
+分）</li>
+<li>该镜像声明了哪个匿名卷？这暗示了什么？（3 分）</li>
+<li>该镜像有几层？层数信息在哪个字段？（3 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案</strong>：</p>
+<ol type="1">
+<li>默认启动命令（Cmd）是 <code>["mysqld"]</code>，即启动 MySQL
+服务进程。入口点（Entrypoint）是
+<code>["docker-entrypoint.sh"]</code>，即先执行 docker-entrypoint.sh
+脚本，再执行 Cmd。（3 分）</li>
+<li>声明暴露的端口是 <code>3306/tcp</code>（MySQL 默认端口）和
+<code>33060/tcp</code>（MySQL X
+协议端口）。<strong>不意味着自动映射到宿主机</strong>，EXPOSE
+只是声明，要外部访问仍需 <code>docker run -p 3306:3306</code>
+做端口映射。（3 分）</li>
+<li>声明的匿名卷是 <code>/var/lib/mysql</code>，这是 MySQL
+数据存储目录。这暗示了 MySQL 数据应持久化到该目录，生产环境建议用
+<code>-v</code> 显式挂载数据卷，避免容器删除后数据丢失。（3 分）</li>
+<li>该镜像有 13 层。层数信息在 <code>RootFS.Layers</code> 字段，是一个
+SHA256 摘要数组，每个摘要对应一层。可用
+<code>docker image inspect -f '{{len .RootFS.Layers}}' mysql:8.0</code>
+直接输出层数。（3 分）</li>
+</ol>
+<p><strong>解析</strong>：本题考查 <code>docker image inspect</code>
+输出的关键字段解读——Cmd/Entrypoint（启动命令）、ExposedPorts（暴露端口）、Volumes（匿名卷）、RootFS.Layers（层数）。这些都是排查镜像问题的核心字段。</p>
+<p><strong>评分标准</strong>：每问 3 分，共 12
+分。每问要点齐全即可满分；第 2 问必须明确指出"不自动映射"才给满分；第 4
+问必须提到 <code>RootFS.Layers</code> 字段才给满分。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>03-编程-001</strong>（★★ 知识点：K3-2/K3-5 CTTS 镜像准备，15
+分） <strong>CTTS 三服务镜像准备方案设计</strong>：请为 CTTS
+多服务容器化部署项目设计一份镜像准备方案，要求包含：</p>
+<ol type="1">
+<li>三个服务（前端 Nginx / 后端 OpenJDK / 数据库
+MySQL）分别需要拉取哪些基础镜像？为什么选这些版本？（6 分）</li>
+<li>给每个镜像打上 CTTS 项目专用标签的命令（3 分）</li>
+<li>如何验证三个镜像都拉取成功？给出命令和预期输出关键字段（3 分）</li>
+<li>如何分析 MySQL 镜像的分层结构和启动命令？给出命令（3 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<p><strong>1. 三个服务基础镜像选型（6 分，每服务 2 分）</strong>：</p>
+<ul>
+<li><strong>前端 Nginx</strong>：<code>docker pull nginx:1.25</code>
+<ul>
+<li>理由：Nginx 是托管 Vue3 静态构建产物的标准 Web 服务器；指定 1.25
+明确版本，避免 latest 陷阱。</li>
+</ul></li>
+<li><strong>后端
+OpenJDK</strong>：<code>docker pull openjdk:17-slim</code>
+<ul>
+<li>理由：SpringBoot 需要 JDK 17 运行时；slim 变体比完整版小很多（约
+271MB vs 470MB），更适合生产。</li>
+</ul></li>
+<li><strong>数据库 MySQL</strong>：<code>docker pull mysql:8.0</code>
+<ul>
+<li>理由：MySQL 8.0 是当前主流稳定版本；指定 8.0 明确版本，避免 latest
+陷阱。</li>
+</ul></li>
+</ul>
+<p><strong>2. 打 CTTS 项目专用标签（3 分，每条 1 分）</strong>：</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag mysql:8.0 ctts-mysql:8.0</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag nginx:1.25 ctts-nginx:1.25</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag openjdk:17-slim ctts-backend-jdk:17</span></code></pre></div>
+<p><strong>3. 验证拉取成功（3 分）</strong>：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images <span class="kw">|</span> <span class="fu">grep</span> ctts-</span></code></pre></div>
+<p>预期输出（关键字段：REPOSITORY、TAG、IMAGE ID 与原镜像相同）：</p>
+<pre><code>ctts-mysql        8.0       d1dc36f8e78f   2 weeks ago    521MB
+ctts-nginx        1.25      605c77e624dd   3 weeks ago    142MB
+ctts-backend-jdk  17        a3562aa0b991   2 months ago   271MB</code></pre>
+<p>（答出 <code>docker images</code> 或 <code>docker image ls</code>
+命令即给 1 分；答出预期输出含三个 ctts- 镜像给 2 分）</p>
+<p><strong>4. 分析 MySQL 镜像（3 分）</strong>：</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看分层结构</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> history mysql:8.0</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看启动命令</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{.Config.Cmd}}&#39;</span> mysql:8.0</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：[mysqld]</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看层数</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{len .RootFS.Layers}}&#39;</span> mysql:8.0</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：13</span></span></code></pre></div>
+<p>（答出 <code>docker history</code> 给 1 分；答出
+<code>docker image inspect</code> 查看 Cmd 给 1 分；答出查看层数给 1
+分）</p>
+<p><strong>评分要点</strong>：四部分独立给分；镜像版本选型合理即可，不要求与答案完全一致（如后端用
+<code>eclipse-temurin:17-jre</code> 同样给分）；命令必须可执行。</p>
+</blockquote>
+<hr />
+<p><strong>03-编程-002</strong>（★★★ 知识点：K3-3/K3-4/K3-6 综合应用，20
+分） <strong>镜像管理与清理综合题</strong>：某团队 Docker
+主机磁盘告警，运维工程师小李需要排查和清理。请回答问题：</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令1：查看磁盘占用</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> system df</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Images          8         2         2.1GB     1.8GB (85%)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Containers      3         1         50MB      30MB (60%)</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Local Volumes   2         1         500MB     400MB (80%)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Build Cache     0         0         0B        0B</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令2：查看本地镜像</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出（部分）：</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># REPOSITORY    TAG       IMAGE ID       CREATED        SIZE</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># mysql         8.0       d1dc36f8e78f   2 weeks ago    521MB</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># mysql         5.7       7faa3c53e6d1   1 month ago    448MB</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># nginx         1.25      605c77e624dd   3 weeks ago    142MB</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># hello-world   latest    feb5d9fea6a5   6 months ago   13.3kB</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;none&gt;        &lt;none&gt;    a1b2c3d4e5f6   1 day ago      380MB</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-api      v1        b2c3d4e5f6a7   2 days ago     350MB</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-api      v2        c3d4e5f6a7b8   1 day ago      360MB</span></span></code></pre></div>
+<p><strong>问题</strong>：</p>
+<ol type="1">
+<li>命令1 输出中 RECLAIMABLE 列 1.8GB (85%)
+表示什么？这说明什么问题？（4分）</li>
+<li>命令2 输出中 <code>&lt;none&gt;:&lt;none&gt;</code>
+镜像是什么？是怎么产生的？应该用什么命令清理？（4分）</li>
+<li>假设 ctts-api:v1 已不再使用（v2 是最新版），hello-world
+也只是测试用，如何安全删除这两个镜像？给出命令（4分）</li>
+<li>如果想一次性清理所有未被容器使用的镜像（保留 mysql:8.0 和
+ctts-api:v2，因为它们正在被容器使用），应该用什么命令？该命令会删除哪些镜像？（4分）</li>
+<li>小李想确认 mysql:8.0 和 mysql:5.7
+是否共享层，应该用什么命令验证？给出命令和判断依据（4分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<p><strong>1. RECLAIMABLE 1.8GB (85%) 的含义（4分）</strong>：</p>
+<ul>
+<li>RECLAIMABLE
+表示"可回收空间"——即未被任何容器使用、可被清理的镜像大小（2 分）。</li>
+<li>1.8GB (85%) 表示 2.1GB 镜像总占用中有
+1.8GB（85%）可被回收，说明磁盘上有大量未使用的镜像，应该清理（2
+分）。</li>
+</ul>
+<p><strong>2. <code>&lt;none&gt;:&lt;none&gt;</code>
+镜像（4分）</strong>：</p>
+<ul>
+<li>这是<strong>悬空镜像（dangling
+image）</strong>，即有层但无标签的镜像（1 分）。</li>
+<li>产生原因：通常是用相同标签重新构建镜像时，新镜像占用该标签，旧镜像失去标签变成
+<code>&lt;none&gt;:&lt;none&gt;</code>。如本题中 ctts-api 从 v1 升级到
+v2 时可能产生（2 分）。</li>
+<li>清理命令：<code>docker image prune</code>（或
+<code>docker image prune -f</code> 跳过确认）（1 分）。</li>
+</ul>
+<p><strong>3. 安全删除 ctts-api:v1 和 hello-world（4分）</strong>：</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 先确认没有容器依赖（如有先 docker rm）</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rmi ctts-api:v1</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rmi hello-world:latest</span></code></pre></div>
+<ul>
+<li>注意：如果 ctts-api:v1 有容器依赖会报错，需先
+<code>docker rm 容器</code> 再 <code>docker rmi</code>（2 分）。</li>
+<li>不用 <code>-f</code> 强删，避免误删运行中的容器（2 分）。</li>
+</ul>
+<p><strong>4. 一次性清理所有未被容器使用的镜像（4分）</strong>：</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image prune <span class="at">-a</span></span></code></pre></div>
+<ul>
+<li>该命令会清理所有未被任何容器使用的镜像（含已打标签的）（2
+分）。</li>
+<li>会删除的镜像：mysql:5.7、nginx:1.25、hello-world、<code>&lt;none&gt;:&lt;none&gt;</code>、ctts-api:v1（即所有未被容器使用的）（1.5
+分）。</li>
+<li>保留的镜像：mysql:8.0 和 ctts-api:v2（因为它们正在被容器使用）（0.5
+分）。</li>
+</ul>
+<p><strong>5. 验证两个 MySQL 镜像是否共享层（4分）</strong>：</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 方法1：查看两个镜像的层摘要列表</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{.RootFS.Layers}}&#39;</span> mysql:8.0</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image inspect <span class="at">-f</span> <span class="st">&#39;{{.RootFS.Layers}}&#39;</span> mysql:5.7</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 对比两个列表，相同的 SHA256 摘要就是共享的层</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 方法2：查看实际磁盘占用</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> system df</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 如果两个 MySQL 镜像 SIZE 之和（521+448=969MB）大于实际 Images SIZE（如 700MB），说明共享了层</span></span></code></pre></div>
+<ul>
+<li>判断依据：相同的 SHA256 摘要 = 共享层（2 分）；实际占用小于 SIZE
+之和 = 层共享（2 分）。</li>
+</ul>
+<p><strong>评分要点</strong>：五部分独立给分；命令必须可执行；第 4
+问必须明确指出"会删哪些、保留哪些"才给满分；第 5
+问两种方法答出一种即可，但需说明判断依据。</p>
+</blockquote>
+<hr />
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

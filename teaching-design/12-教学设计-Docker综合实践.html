@@ -1,0 +1,574 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docker综合实践</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 12 次课 · 教学设计</div>
+      <h1>Docker综合实践</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 12 次课</span>
+        <span class="hero-chip"><b>主题</b>Docker综合实践</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1开场回顾docker-知识体系串联讲解-k12-1-时">互动 1：开场回顾——Docker 知识体系串联（讲解 K12-1 时）</a></li>
+<li><a href="#互动-2项目演示docker-部署成果展示讲解-k12-6-时">互动 2：项目演示——Docker 部署成果展示（讲解 K12-6 时）</a></li>
+<li><a href="#互动-3故障排查为什么我的后端连不上数据库k12-6-排障环节">互动 3：故障排查——&quot;为什么我的后端连不上数据库&quot;（K12-6 排障环节）</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+<li><a href="#随堂练习5-分钟k12-5-讲解后进行">随堂练习（5 分钟，K12-5 讲解后进行）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 12 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M4 Compose 与网络存储 ｜ 课程：《Docker 云容器与管理技术》
+配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库） 本节为 Docker 部分（前 12 次课）收官实践课，端到端跑通 CTTS
+三服务容器化部署。</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 12 次课（全课程 24 次之 12，Docker 部分收官）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>实践课</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M4 Compose 与网络存储</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>综合实践——CTTS 多服务 Docker 完整部署</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>已完成第 1~11 次课学习；能独立编写
+Dockerfile、配置网络与数据卷、编写 docker-compose.yml</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>理解 CTTS 三服务（MySQL + Backend +
+Frontend）的完整容器化部署架构。</li>
+<li>掌握 MySQL 容器化的完整方案：初始化 SQL
+脚本、数据卷持久化、环境变量配置。</li>
+<li>掌握后端服务多阶段 Dockerfile 编写（Maven 打包 → JRE 运行）。</li>
+<li>掌握前端服务多阶段 Dockerfile 编写（Node 构建 Vue3 → Nginx 部署）及
+nginx.conf 反向代理配置。</li>
+<li>掌握 docker-compose.yml 完整编排：三服务 + 自定义网络 + 具名数据卷 +
+depends_on 依赖 + healthcheck 健康检查。</li>
+<li>掌握一键部署全流程（<code>docker compose up -d</code> → 验证 → 访问
+→ API 联调）与常见问题排障方法。</li>
+<li>系统回顾 Docker 部分（前 12 次课）的知识体系，明确向 K8s
+部分过渡的衔接点。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能够独立编写 CTTS 数据库初始化 SQL 脚本并完成 MySQL 容器化。</li>
+<li>能够独立编写后端多阶段 Dockerfile，实现 Maven 打包与 JRE
+运行分离。</li>
+<li>能够独立编写前端多阶段 Dockerfile，并配置 Nginx 反向代理后端
+API。</li>
+<li>能够编写完整的 docker-compose.yml，使用 healthcheck + depends_on
+实现可靠的启动依赖。</li>
+<li>能够一键部署 CTTS
+三服务，并通过浏览器、curl、容器内命令验证全链路。</li>
+<li>能够定位并修复部署中的常见故障（数据库连不上、前端跨域、后端启动失败等）。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>树立"完整交付"意识——从代码到容器的全链路是工程师的核心能力。</li>
+<li>培养"工程闭环"思维——能部署、能验证、能排障、能交付，才是合格交付。</li>
+<li>强化"系统思维"——单服务容器化只是起点，多服务协同才是工程现实。</li>
+<li>建立"质量与责任"意识——一键部署的可复现性是团队协作的基石。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K12-1</td>
+<td>实践总览与项目架构回顾</td>
+<td>CTTS 三服务架构图回顾；Docker 部分（1~12
+次课）知识体系串联；本节目标：一键部署完整应用</td>
+</tr>
+<tr>
+<td>K12-2</td>
+<td>MySQL 服务容器化</td>
+<td>编写 ctts.sql 建表与初始数据；数据卷持久化配置；环境变量配置 root
+密码与数据库；init 目录机制</td>
+</tr>
+<tr>
+<td>K12-3</td>
+<td>后端服务 Dockerfile 与构建</td>
+<td>多阶段构建：Maven 打包阶段 → JRE 运行阶段；连接 MySQL
+的配置注入；镜像体积优化</td>
+</tr>
+<tr>
+<td>K12-4</td>
+<td>前端服务 Dockerfile 与构建</td>
+<td>多阶段构建：Node 构建 Vue3 → Nginx 部署；nginx.conf 反向代理后端
+API；SPA 路由处理</td>
+</tr>
+<tr>
+<td>K12-5</td>
+<td>docker-compose.yml 完整编排与一键部署</td>
+<td>三服务 + 自定义网络 + 具名数据卷完整编排；depends_on
+依赖顺序；healthcheck 健康检查；<code>docker compose up -d</code>
+一键启动；全流程验证</td>
+</tr>
+<tr>
+<td>K12-6</td>
+<td>综合部署验证、排障与项目演示</td>
+<td>前后端连通验证；常见问题排查（数据库连不上 / 前端跨域 /
+后端启动失败）；部署成果演示；Docker 部分总结</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3
+id="贯穿项目阶段交付ctts-三服务-docker-完整部署">贯穿项目阶段交付：CTTS
+三服务 Docker 完整部署</h3>
+<p><strong>本次课任务</strong>（对应课程项目阶段 4 的最终交付）：</p>
+<ol type="1">
+<li>在 <code>~/ctts/</code> 目录下建立完整项目结构（docker-compose.yml +
+init.sql + backend/ + frontend/）。</li>
+<li>编写 <code>init.sql</code>：建立 CTTS
+数据库核心表（用户表、课程表、选课表）并插入初始数据。</li>
+<li>编写 <code>backend/Dockerfile</code>：多阶段构建，第一阶段用
+<code>maven:3.9-eclipse-temurin-17</code> 打包，第二阶段用
+<code>eclipse-temurin:17-jre</code> 运行。</li>
+<li>编写 <code>frontend/Dockerfile</code>：多阶段构建，第一阶段用
+<code>node:20-alpine</code> 构建 Vue3，第二阶段用
+<code>nginx:alpine</code> 部署；配套 <code>nginx.conf</code> 反向代理
+<code>/api/</code> 到 <code>backend:8080</code>。</li>
+<li>编写 <code>docker-compose.yml</code>：编排 mysql + backend +
+frontend 三服务，配置 <code>ctts-net</code>
+自定义网络、<code>ctts-mysql-data</code> 具名数据卷、healthcheck +
+depends_on 依赖。</li>
+<li>一键启动 <code>docker compose up -d --build</code>，验证：MySQL
+数据初始化、后端 API 可访问、前端页面可访问、前后端联调成功。</li>
+<li>排障演练：模拟"数据库连不上""前端跨域""后端启动失败"三类故障并定位修复。</li>
+<li>项目演示：每组展示部署成果，说明架构、演示访问、回答教师提问。</li>
+</ol>
+<p><strong>项目背景概述</strong>（详见 <code>教学资料.md</code>
+K12-1）：</p>
+<ul>
+<li>项目名称：多服务容器化部署项目（CTTS）</li>
+<li>项目架构：CTTS 前端（Vue3 + Nginx）+ CTTS 后端（SpringBoot +
+JDK17）+ MySQL 8.0 三服务</li>
+<li>本节交付物：完整可运行的 Docker 部署方案（Dockerfile × 2 +
+docker-compose.yml + init.sql + nginx.conf）</li>
+<li>课程衔接：本节完成后，Docker 部分收官；第 13 次课进入 Kubernetes
+部分</li>
+</ul>
+<blockquote>
+<p>📌
+本节课为实践课，以学生动手实操为主，教师演示为辅。所有文件必须完整可执行，学生在课堂上完成端到端部署。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1开场回顾docker-知识体系串联讲解-k12-1-时">互动
+1：开场回顾——Docker 知识体系串联（讲解 K12-1 时）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"前 11 次课我们学了 Docker
+的哪些核心能力？请用一句话总结每个模块。如果让你现在独立部署 CTTS
+三服务，你会按什么步骤来？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>全班自由发言，教师在黑板/白板上画出"Docker
+知识地图"思维导图，学生补充节点</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>提到"装 Docker、管镜像、管容器、写
+Dockerfile、配网络、挂数据卷、Compose 编排"等关键词；能大致说出"先
+MySQL、再后端、最后前端"的部署顺序</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定学生的体系认知；指出"散点知识"必须通过"完整项目"才能转化为"工程能力"；引出本节课目标——把所有散点串成一条完整的部署链路</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2项目演示docker-部署成果展示讲解-k12-6-时">互动
+2：项目演示——Docker 部署成果展示（讲解 K12-6 时）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>每组（4~5 人）上台演示本组 CTTS 部署成果：①展示项目结构 ②执行
+<code>docker compose up -d --build</code> ③浏览器访问前端 ④curl 调用后端
+API ⑤回答教师 1~2 个提问</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>每组演示 5 分钟 + 教师提问 2 分钟，共约 30
+分钟；其余组同步在台下观摩并记录问题</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能完整跑通部署流程；能讲清楚"为什么 backend 要等 mysql
+健康检查通过""为什么前端 Nginx
+要反代后端""多阶段构建的好处"等关键点</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>重点评价三点：①部署是否一次成功（工程规范）②排障思路是否清晰（运维能力）③表达是否准确（技术沟通能力）。对典型问题做集中讲解，对优秀实践做推广</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-3故障排查为什么我的后端连不上数据库k12-6-排障环节">互动
+3：故障排查——"为什么我的后端连不上数据库"（K12-6 排障环节）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>教师现场制造一个故障（如把
+<code>depends_on: condition: service_healthy</code> 改成默认
+<code>service_started</code>），让全班观察后端启动日志，分析原因</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>全班观察 → 分组讨论 2 分钟 → 推代表回答 → 教师复盘</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能从日志中识别"Connection refused""HikariCP connection
+failed"等关键字；能定位到"MySQL 还没就绪，后端就启动了"；能给出"加
+healthcheck + service_healthy"的解决方案</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调"看日志是排障的第一步"；总结"启动顺序 ≠ 就绪顺序"是 Compose
+工程的常见坑；引出 K8s 中类似问题的处理思路（liveness/readiness
+probe）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>完整交付——从代码到容器的全链路</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td>单个 Dockerfile 只是"碎片化的容器化"，只有把
+SQL/Dockerfile/Compose/网络/存储/反代串联起来，才能真正交付一个"用户能访问的应用"。这背后是"全链路工程"思维：开发→打包→编排→部署→验证→排障，缺一不可</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"如果一个工程师只会写
+Dockerfile，但不会编排、不会排障，他能独立交付项目吗？企业真正需要的是什么样的人？"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>让学生理解"完整交付"是工程师的核心竞争力；鼓励学生从"会写命令"升级为"能独立交付项目"；培养系统思维与责任意识——交付的每一步都要对结果负责</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入，不空喊口号。通过"完整部署一个能跑的应用"的真实体验，让学生体会"工程闭环"的价值。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3 id="随堂练习5-分钟k12-5-讲解后进行">随堂练习（5 分钟，K12-5
+讲解后进行）</h3>
+<p><strong>判断题（口头快速作答）</strong>：</p>
+<ol type="1">
+<li><code>docker compose up -d --build</code> 中的 <code>--build</code>
+表示启动前强制重新构建镜像。（✓）</li>
+<li>MySQL 容器的 <code>healthcheck</code> 用
+<code>mysqladmin ping</code> 即可，不需要传用户名密码。（✗，需要
+<code>-uroot -p密码</code>）</li>
+<li>前端 Nginx 反向代理 <code>/api/</code> 到
+<code>backend:8080</code>，可以避免浏览器跨域问题。（✓）</li>
+<li>多阶段构建的最大价值是把"构建工具"与"运行时"分离，减小镜像体积。（✓）</li>
+<li><code>docker compose down</code>
+默认会删除具名数据卷，数据库数据会丢失。（✗，默认保留，加
+<code>-v</code> 才删）</li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速互动，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>完善交付</strong>：把课堂上的 CTTS 部署方案完善（如增加
+Redis 缓存服务、增加日志卷、优化 Dockerfile 缓存层），提交完整
+<code>ctts-deploy.zip</code>（含所有文件 + README.md 部署说明）。</li>
+<li><strong>排障复盘</strong>：写一份《CTTS 部署排障记录》，记录至少 3
+个实际遇到的问题及解决过程（含日志截图、原因分析、解决方案）。</li>
+<li><strong>思考题</strong>：对比"手工 <code>docker run</code>
+部署"与"Compose
+一键部署"，从效率、可复现性、可维护性、团队协作四个维度分析，写 300
+字小结。</li>
+<li><strong>过渡预习</strong>：阅读课程总览中第 13 次课（Kubernetes
+认知与架构）部分，思考"为什么 Compose 解决了单机部署，但生产环境仍需要
+K8s？"。</li>
+<li><strong>拓展阅读</strong>：了解 <code>kompose</code> 工具（把
+docker-compose.yml 转换为 K8s YAML），尝试把本节课的 compose 文件转换为
+K8s 资源清单（选做，为第 13 次课做铺垫）。</li>
+<li><strong>Docker 部分总复习</strong>：通读第 1~12 次课的
+<code>教学资料.md</code>，重点复习 Dockerfile 多阶段构建、Compose
+编排、网络与存储，准备 Docker 部分阶段性测验。</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>多阶段 Dockerfile 编写（面试高频）</td>
+<td>K12-3、K12-4</td>
+</tr>
+<tr>
+<td>docker-compose.yml 完整编排（DevOps 必备）</td>
+<td>K12-5</td>
+</tr>
+<tr>
+<td>健康检查与依赖顺序（生产环境关键）</td>
+<td>K12-5</td>
+</tr>
+<tr>
+<td>Nginx 反向代理配置（前后端联调必备）</td>
+<td>K12-4</td>
+</tr>
+<tr>
+<td>容器化部署排障（云运维核心能力）</td>
+<td>K12-6</td>
+</tr>
+<tr>
+<td>一键部署与可复现交付（CI/CD 基础）</td>
+<td>K12-5</td>
+</tr>
+<tr>
+<td>完整项目交付能力（中级以上工程师要求）</td>
+<td>K12-1~K12-6</td>
+</tr>
+<tr>
+<td>Docker 综合应用能力（面试项目演示）</td>
+<td>K12-6</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"请描述一个你做过的容器化部署项目""多阶段构建的好处""Compose
+中 depends_on
+的局限""容器间如何通信""如何排查后端连不上数据库"等，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + CTTS 完整部署示例 + 思维导图 + 复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>开场回顾：Docker 知识体系串联 + 本节目标说明（K12-1 + 互动 1）</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~25 min</td>
+<td>K12-2：MySQL 服务容器化（init.sql + 数据卷 + 环境变量，教师演示 +
+学生同步）</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>25~45 min</td>
+<td>K12-3 + K12-4：后端 + 前端多阶段 Dockerfile 编写（教师讲解关键点 +
+学生动手）</td>
+<td>20 min</td>
+</tr>
+<tr>
+<td>45~60 min</td>
+<td>K12-5：docker-compose.yml 完整编排 + 一键部署
+<code>docker compose up -d --build</code></td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>60~70 min</td>
+<td>部署验证 + 随堂练习（访问前端 / 调用 API / 查看日志）</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>70~80 min</td>
+<td>K12-6：常见问题排障演示（互动 3：故障排查）</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>80~90 min</td>
+<td>项目演示（互动 2）+ Docker 部分总结 + 课后任务布置</td>
+<td>10 min</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⏱ 时间分配说明：本节为实践课，学生动手时间不少于 50
+分钟。教师演示精简到 30
+分钟以内，剩余时间留给学生实操与排障。如学生基础较弱，可适当延长
+K12-2/K12-3 的演示时间，缩短项目演示环节。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

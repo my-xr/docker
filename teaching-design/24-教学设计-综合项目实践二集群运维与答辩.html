@@ -1,0 +1,554 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>综合项目实践二集群运维与答辩</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 24 次课 · 教学设计</div>
+      <h1>综合项目实践二集群运维与答辩</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 24 次课</span>
+        <span class="hero-chip"><b>主题</b>综合项目实践二集群运维与答辩</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一教学目标">一、教学目标</a>
+<ul>
+<li><a href="#11-知识目标">1.1 知识目标</a></li>
+<li><a href="#12-能力目标">1.2 能力目标</a></li>
+<li><a href="#13-素质目标课程思政">1.3 素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#二教学重点与难点">二、教学重点与难点</a>
+<ul>
+<li><a href="#21-教学重点">2.1 教学重点</a></li>
+<li><a href="#22-教学难点">2.2 教学难点</a></li>
+<li><a href="#23-重点难点突破策略">2.3 重点难点突破策略</a></li>
+</ul></li>
+<li><a href="#三学情分析">三、学情分析</a>
+<ul>
+</ul></li>
+<li><a href="#四教学方法">四、教学方法</a>
+<ul>
+</ul></li>
+<li><a href="#五教学环境与资源">五、教学环境与资源</a>
+<ul>
+<li><a href="#阶段二故障排查实战30分钟">阶段二：故障排查实战（30分钟）</a></li>
+<li><a href="#阶段三运维操作演练15分钟">阶段三：运维操作演练（15分钟）</a></li>
+<li><a href="#阶段四项目答辩25分钟">阶段四：项目答辩（25分钟）</a></li>
+</ul></li>
+<li><a href="#七答辩流程与评分标准">七、答辩流程与评分标准</a>
+<ul>
+<li><a href="#71-答辩流程">7.1 答辩流程</a></li>
+<li><a href="#72-评分标准100分制">7.2 评分标准（100分制）</a></li>
+</ul></li>
+<li><a href="#八交付物清单">八、交付物清单</a>
+<ul>
+</ul></li>
+<li><a href="#九教学评价设计">九、教学评价设计</a>
+<ul>
+<li><a href="#91-过程性评价60">9.1 过程性评价（60%）</a></li>
+<li><a href="#92-终结性评价40">9.2 终结性评价（40%）</a></li>
+<li><a href="#93-评价方式">9.3 评价方式</a></li>
+</ul></li>
+<li><a href="#十教学反思与改进">十、教学反思与改进</a>
+<ul>
+<li><a href="#101-预期反思点">10.1 预期反思点</a></li>
+<li><a href="#102-改进方向">10.2 改进方向</a></li>
+</ul></li>
+<li><a href="#附录课程思政融入点">附录：课程思政融入点</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 24 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>课程名称：Docker云容器与管理技术 模块归属：M8 综合项目实践模块
+课次：第24次课（课程收官课） 学时：2学时（90分钟） 课型：实践课 +
+项目答辩 贯穿项目：CTTS（云原生运维训练平台）多服务部署到K8s</p>
+</blockquote>
+<hr />
+<h2 id="一教学目标">一、教学目标</h2>
+<h3 id="11-知识目标">1.1 知识目标</h3>
+<ul>
+<li>掌握K8s集群5大典型故障的现象识别、根因分析与排查方法（CrashLoopBackOff、NotReady、Service无端点、ImagePullBackOff、OOMKilled）</li>
+<li>理解滚动更新、回滚、扩缩容的底层原理与生产级运维操作流程</li>
+<li>系统回顾24次课八大模块知识体系，构建Docker+K8s完整技术图谱</li>
+<li>掌握云原生岗位能力要求与后续学习路线</li>
+</ul>
+<h3 id="12-能力目标">1.2 能力目标</h3>
+<ul>
+<li>能够独立完成K8s集群故障模拟、定位、修复的全流程操作</li>
+<li>能够使用kubectl set image/rollout
+undo/scale/logs/describe等命令完成生产级运维</li>
+<li>能够基于CTTS项目产出完整K8s交付物（YAML清单、部署文档、运维手册、项目报告）</li>
+<li>能够进行清晰的项目答辩，展示技术决策与工程落地能力</li>
+</ul>
+<h3 id="13-素质目标课程思政">1.3 素质目标（课程思政）</h3>
+<ul>
+<li><strong>完整交付意识</strong>：能部署、能运维、能排障才是合格交付，培养工程闭环思维</li>
+<li><strong>责任担当</strong>：生产环境无小事，运维操作要谨慎、可追溯、可回滚</li>
+<li><strong>系统思维</strong>：从单容器到多服务到集群运维，构建云原生全栈视角</li>
+<li><strong>协作精神</strong>：项目答辩强调团队协作，师生共同评审，培养沟通表达能力</li>
+</ul>
+<hr />
+<h2 id="二教学重点与难点">二、教学重点与难点</h2>
+<h3 id="21-教学重点">2.1 教学重点</h3>
+<ul>
+<li>5大故障场景的排查命令链与解决方案</li>
+<li>滚动更新与回滚的实战操作</li>
+<li>CTTS项目答辩流程与交付物规范</li>
+<li>课程知识体系总结与岗位能力映射</li>
+</ul>
+<h3 id="22-教学难点">2.2 教学难点</h3>
+<ul>
+<li>故障现象到根因的快速定位（需综合运用kubectl
+describe/logs/events/get多命令）</li>
+<li>滚动更新过程中的版本管理与回滚策略选择</li>
+<li>项目答辩中技术决策的表达与问答应对</li>
+</ul>
+<h3 id="23-重点难点突破策略">2.3 重点难点突破策略</h3>
+<ul>
+<li>故障排查采用"现象→原因→命令→方案"四步法，配合实机演示</li>
+<li>运维操作采用"演示-模仿-实战"三段式训练</li>
+<li>答辩采用"分组演示+师生提问+集体评议"模式，提前1周下发答辩要求</li>
+</ul>
+<hr />
+<h2 id="三学情分析">三、学情分析</h2>
+<ul>
+<li><strong>知识基础</strong>：学生已完成23次课学习，掌握Docker全部内容（镜像/容器/网络/存储/Compose/Dockerfile）与K8s核心内容（Pod/Deployment/Service/ConfigMap/Secret/Ingress/存储/HPA/Job/CronJob/安全/网络策略/Helm）</li>
+<li><strong>实践能力</strong>：已完成CTTS项目Docker化部署与K8s基础部署，具备单服务部署能力</li>
+<li><strong>薄弱环节</strong>：故障排查经验不足、生产级运维命令不熟练、项目表达与文档化能力弱</li>
+<li><strong>学习动机</strong>：课程收官课，学生期望通过项目答辩验证学习成果，对就业相关内容（岗位能力、学习路线）关注度高</li>
+</ul>
+<hr />
+<h2 id="四教学方法">四、教学方法</h2>
+<ul>
+<li><strong>任务驱动法</strong>：以5大故障排查任务为驱动，边做边学</li>
+<li><strong>案例教学法</strong>：每个故障场景配真实生产案例</li>
+<li><strong>演示模仿法</strong>：教师演示运维操作，学生模仿实战</li>
+<li><strong>答辩评审法</strong>：分组答辩，师生共同评审</li>
+<li><strong>思维导图法</strong>：课程总结环节使用思维导图回顾全课程</li>
+</ul>
+<hr />
+<h2 id="五教学环境与资源">五、教学环境与资源</h2>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>硬件环境</td>
+<td>教师机1台 + 学生机40台（每台≥8GB内存），K8s集群（1 master + 2
+worker，或单节点minikube/kind）</td>
+</tr>
+<tr>
+<td>软件环境</td>
+<td>Docker 24+、K8s 1.28+、kubectl、Helm 3、Git、VS Code</td>
+</tr>
+<tr>
+<td>项目资源</td>
+<td>CTTS项目代码仓库、K8s YAML清单模板、故障模拟脚本</td>
+</tr>
+<tr>
+<td>教学资源</td>
+<td>故障排查指南、运维操作手册、答辩评分表、课程知识图谱</td>
+</tr>
+<tr>
+<td>网络环境</td>
+<td>教室局域网 + 互联网（拉取镜像、查文档）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2
+id="六教学过程设计90分钟时间分配">六、教学过程设计（90分钟时间分配）</h2>
+<h3
+id="阶段一课程回顾与任务导入10分钟">阶段一：课程回顾与任务导入（10分钟）</h3>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>环节</th>
+<th>教师活动</th>
+<th>学生活动</th>
+<th>设计意图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0-5min</td>
+<td>课程回顾</td>
+<td>用思维导图回顾24次课八大模块、Docker+K8s技术图谱</td>
+<td>跟随回顾，对照笔记</td>
+<td>唤醒先验知识，为综合实践奠基</td>
+</tr>
+<tr>
+<td>5-10min</td>
+<td>任务导入</td>
+<td>宣布本课三大任务：故障排查实战、运维操作演练、项目答辩；强调"能部署+能运维+能排障=合格交付"的工程闭环理念</td>
+<td>明确任务与交付要求</td>
+<td>课程思政融入，明确收官目标</td>
+</tr>
+</tbody>
+</table>
+<h3 id="阶段二故障排查实战30分钟">阶段二：故障排查实战（30分钟）</h3>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>环节</th>
+<th>教师活动</th>
+<th>学生活动</th>
+<th>设计意图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10-15min</td>
+<td>故障1演示</td>
+<td>演示CrashLoopBackOff：制造容器启动失败，用kubectl
+describe/logs定位，修复应用启动命令</td>
+<td>观察、记录命令</td>
+<td>掌握Pod级故障排查四步法</td>
+</tr>
+<tr>
+<td>15-20min</td>
+<td>故障2演示</td>
+<td>演示NotReady：模拟节点失联（停止kubelet/网络隔离），用kubectl get
+nodes定位</td>
+<td>观察、记录命令</td>
+<td>掌握节点级故障排查</td>
+</tr>
+<tr>
+<td>20-25min</td>
+<td>故障3演示</td>
+<td>演示Service无端点：制造标签不匹配，用kubectl get endpoints定位</td>
+<td>观察、记录命令</td>
+<td>掌握服务发现故障排查</td>
+</tr>
+<tr>
+<td>25-30min</td>
+<td>故障4+5演示</td>
+<td>演示ImagePullBackOff（错误镜像名）与OOMKilled（resources限制过低），定位与修复</td>
+<td>观察、记录命令</td>
+<td>掌握镜像与资源故障排查</td>
+</tr>
+<tr>
+<td>30-40min</td>
+<td>学生实战</td>
+<td>下发故障模拟脚本，学生在自己集群复现3个故障并修复</td>
+<td>动手实战，填写排查记录表</td>
+<td>实操能力训练</td>
+</tr>
+</tbody>
+</table>
+<h3 id="阶段三运维操作演练15分钟">阶段三：运维操作演练（15分钟）</h3>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>环节</th>
+<th>教师活动</th>
+<th>学生活动</th>
+<th>设计意图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>40-47min</td>
+<td>滚动更新与回滚</td>
+<td>演示kubectl set image触发滚动更新，kubectl rollout
+status查看进度，kubectl rollout undo回滚</td>
+<td>跟随操作</td>
+<td>掌握生产级发布能力</td>
+</tr>
+<tr>
+<td>47-52min</td>
+<td>扩缩容与HPA</td>
+<td>演示kubectl scale手动扩缩容，配置HPA基于CPU自动扩缩容</td>
+<td>跟随操作</td>
+<td>掌握弹性伸缩能力</td>
+</tr>
+<tr>
+<td>52-55min</td>
+<td>日志与排障</td>
+<td>演示kubectl logs -f/--previous、kubectl describe pod排障技巧</td>
+<td>跟随操作</td>
+<td>掌握日常排障能力</td>
+</tr>
+</tbody>
+</table>
+<h3 id="阶段四项目答辩25分钟">阶段四：项目答辩（25分钟）</h3>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>环节</th>
+<th>教师活动</th>
+<th>学生活动</th>
+<th>设计意图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>55-58min</td>
+<td>答辩规则说明</td>
+<td>宣布答辩流程、演示要点、评分标准、提问规则</td>
+<td>明确答辩要求</td>
+<td>规范答辩流程</td>
+</tr>
+<tr>
+<td>58-78min</td>
+<td>分组答辩</td>
+<td>5组依次答辩（每组4分钟演示+1分钟提问），师生共同评审</td>
+<td>分组演示、回答提问</td>
+<td>综合能力展示</td>
+</tr>
+<tr>
+<td>78-80min</td>
+<td>集体评议</td>
+<td>师生集体评议各组表现，宣布答辩成绩</td>
+<td>互评、反思</td>
+<td>强化反馈</td>
+</tr>
+</tbody>
+</table>
+<h3
+id="阶段五课程总结与展望10分钟">阶段五：课程总结与展望（10分钟）</h3>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>环节</th>
+<th>教师活动</th>
+<th>学生活动</th>
+<th>设计意图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>80-85min</td>
+<td>课程总结</td>
+<td>回顾24次课八大模块、Docker+K8s技术图谱、云原生岗位能力图谱</td>
+<td>跟随回顾</td>
+<td>系统化知识体系</td>
+</tr>
+<tr>
+<td>85-90min</td>
+<td>后续展望</td>
+<td>介绍后续学习路线（Service
+Mesh/Serverless/GitOps/可观测性）、推荐认证（CKA/CKAD/CKS）、推荐社区</td>
+<td>记录学习路线</td>
+<td>延伸学习，职业发展引导</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="七答辩流程与评分标准">七、答辩流程与评分标准</h2>
+<h3 id="71-答辩流程">7.1 答辩流程</h3>
+<ol type="1">
+<li><strong>答辩准备</strong>（课前1周下发）：每组提交答辩PPT（≤10页）+
+演示视频（≤3分钟）+ 交付物压缩包</li>
+<li><strong>现场演示</strong>（4分钟/组）：
+<ul>
+<li>项目架构与K8s部署拓扑介绍（1分钟）</li>
+<li>核心YAML清单讲解（1分钟）</li>
+<li>故障排查与运维操作演示（1分钟）</li>
+<li>亮点与难点总结（1分钟）</li>
+</ul></li>
+<li><strong>师生提问</strong>（1分钟/组）：教师1问 + 学生互问1问</li>
+<li><strong>集体评议</strong>（2分钟）：师生共同打分</li>
+</ol>
+<h3 id="72-评分标准100分制">7.2 评分标准（100分制）</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>权重</th>
+<th>评分细则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能完整度</td>
+<td>20%</td>
+<td>CTTS多服务全部成功部署到K8s并能访问（20分）；部分服务部署（10-15分）；未完成（0-10分）</td>
+</tr>
+<tr>
+<td>Dockerfile与YAML质量</td>
+<td>20%</td>
+<td>镜像分层合理、多阶段构建、YAML规范、使用ConfigMap/Secret/资源限制（20分）；基本规范（12-18分）；不规范（0-12分）</td>
+</tr>
+<tr>
+<td>运维能力</td>
+<td>20%</td>
+<td>能完成5大故障排查与滚动更新/回滚/扩缩容（20分）；能完成3项以上（12-18分）；能完成1-2项（0-12分）</td>
+</tr>
+<tr>
+<td>文档与部署</td>
+<td>20%</td>
+<td>4类交付物齐全规范、可复现部署（20分）；文档基本完整（12-18分）；文档缺失（0-12分）</td>
+</tr>
+<tr>
+<td>答辩表现</td>
+<td>20%</td>
+<td>表达清晰、技术决策合理、问答应对得当（20分）；表达基本清晰（12-18分）；表达不清（0-12分）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="八交付物清单">八、交付物清单</h2>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>交付物</th>
+<th>要求</th>
+<th>提交形式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>K8s资源清单YAML</td>
+<td>CTTS全部服务的Deployment/Service/ConfigMap/Secret/Ingress/PVC等YAML文件，按服务分目录组织</td>
+<td>YAML文件包</td>
+</tr>
+<tr>
+<td>2</td>
+<td>部署文档</td>
+<td>详细的K8s部署步骤、前置条件、命令清单、验证方法、常见问题</td>
+<td>Markdown文档</td>
+</tr>
+<tr>
+<td>3</td>
+<td>运维手册</td>
+<td>5大故障排查指南、滚动更新/回滚/扩缩容操作手册、日志查看方法、监控告警建议</td>
+<td>Markdown文档</td>
+</tr>
+<tr>
+<td>4</td>
+<td>项目报告</td>
+<td>项目背景、架构设计、技术选型、部署方案、运维实践、问题与解决、总结与展望</td>
+<td>Word/PDF</td>
+</tr>
+<tr>
+<td>5</td>
+<td>答辩PPT</td>
+<td>≤10页，含架构图、部署拓扑、核心YAML、演示截图</td>
+<td>PPT</td>
+</tr>
+<tr>
+<td>6</td>
+<td>演示视频</td>
+<td>≤3分钟，含部署演示+故障排查+运维操作</td>
+<td>MP4</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="九教学评价设计">九、教学评价设计</h2>
+<h3 id="91-过程性评价60">9.1 过程性评价（60%）</h3>
+<ul>
+<li>故障排查实战记录表（20%）</li>
+<li>运维操作演练完成度（20%）</li>
+<li>课堂参与与互动（20%）</li>
+</ul>
+<h3 id="92-终结性评价40">9.2 终结性评价（40%）</h3>
+<ul>
+<li>项目答辩成绩（40%）</li>
+</ul>
+<h3 id="93-评价方式">9.3 评价方式</h3>
+<ul>
+<li>教师评价（60%）+ 学生互评（20%）+ 自我评价（20%）</li>
+</ul>
+<hr />
+<h2 id="十教学反思与改进">十、教学反思与改进</h2>
+<h3 id="101-预期反思点">10.1 预期反思点</h3>
+<ul>
+<li>故障排查实战时间是否充足（30分钟可能偏紧，考虑课前预下发故障脚本）</li>
+<li>答辩分组数与时间是否合理（5组×5分钟=25分钟，若组数多需调整）</li>
+<li>课程总结是否覆盖到位（10分钟较紧，可提前下发知识图谱供课后细化）</li>
+</ul>
+<h3 id="102-改进方向">10.2 改进方向</h3>
+<ul>
+<li>可将故障模拟脚本提前1周下发，让学生课前预习，课堂重点演示与答疑</li>
+<li>答辩可引入"最佳项目""最佳运维""最佳文档"等单项奖，激发积极性</li>
+<li>课程总结可制作一页纸"云原生学习路线图"作为课程纪念</li>
+</ul>
+<hr />
+<h2 id="附录课程思政融入点">附录：课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>思政元素</th>
+<th>融入环节</th>
+<th>融入方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完整交付意识</td>
+<td>任务导入、答辩评分</td>
+<td>强调"能部署+能运维+能排障=合格交付"，工程闭环思维</td>
+</tr>
+<tr>
+<td>责任担当</td>
+<td>故障排查实战</td>
+<td>生产环境无小事，运维操作可追溯、可回滚</td>
+</tr>
+<tr>
+<td>系统思维</td>
+<td>课程总结</td>
+<td>从单容器到多服务到集群运维，云原生全栈视角</td>
+</tr>
+<tr>
+<td>协作精神</td>
+<td>项目答辩</td>
+<td>分组答辩、师生共同评审，团队协作与沟通表达</td>
+</tr>
+<tr>
+<td>工匠精神</td>
+<td>运维操作演练</td>
+<td>YAML规范、镜像优化、文档严谨，精益求精</td>
+</tr>
+<tr>
+<td>职业素养</td>
+<td>后续展望</td>
+<td>云原生岗位能力、认证路线、终身学习理念</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>本课次为课程收官，承载知识总结、能力验证、职业引导三重使命。通过故障排查实战检验运维能力，通过项目答辩验证综合交付能力，通过课程总结构建技术图谱与学习路线，实现"学-练-战-评-展"闭环。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

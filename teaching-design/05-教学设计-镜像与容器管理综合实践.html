@@ -1,0 +1,547 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>镜像与容器管理综合实践</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 05 次课 · 教学设计</div>
+      <h1>镜像与容器管理综合实践</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 05 次课</span>
+        <span class="hero-chip"><b>主题</b>镜像与容器管理综合实践</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1任务说明与镜像选型讨论开场导入10-min">互动 1：任务说明与镜像选型讨论（开场导入，10 min）</a></li>
+<li><a href="#互动-2项目任务复盘容器踩坑k5-6-复盘阶段10-min">互动 2：项目任务复盘——容器踩坑（K5-6 复盘阶段，10 min）</a></li>
+<li><a href="#互动-3容器通信思考k5-5-后5-min">互动 3：容器通信思考（K5-5 后，5 min）</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 05 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M2 镜像与容器管理 ｜ 课程：《Docker 云容器与管理技术》
+配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 5 次课（全课程 24 次之第 5 次，M2 模块第 3 次课）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>实践课</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M2 镜像与容器管理</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>综合实践——完成 CTTS 各服务容器操作</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>第 1~4 次课内容（Docker 认知、Docker 安装、镜像管理、容器管理）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>掌握 MySQL/Nginx/OpenJDK 三类官方镜像的拉取与标签管理策略。</li>
+<li>掌握 MySQL 容器的完整运行命令、初始化数据库与执行 SQL 的方法。</li>
+<li>掌握 Nginx 容器运行与静态页面挂载部署的方法。</li>
+<li>掌握基于 OpenJDK 镜像运行简单 Java 应用的方法。</li>
+<li>理解容器间通信的基本方式（<code>--link</code> 与容器互 ping），为第
+9 次课网络专题埋下伏笔。</li>
+<li>掌握容器无法启动、端口冲突、数据丢失等常见问题的排查与解决方法。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能够独立完成 CTTS
+三服务（MySQL/Nginx/Java）镜像准备与容器运行。</li>
+<li>能够使用 <code>docker exec</code> 进入 MySQL 容器执行 SQL，初始化
+CTTS 数据库表。</li>
+<li>能够使用 <code>-v</code> 挂载静态页面到 Nginx 容器并验证访问。</li>
+<li>能够使用 <code>docker run</code> 启动 Java 容器运行简单 jar
+包。</li>
+<li>能够使用 <code>docker exec</code>
+在容器间进行网络连通性验证（ping）。</li>
+<li>能够根据容器日志、状态、端口占用等信息排查常见容器故障。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>培养<strong>工匠精神</strong>——每一个 <code>docker run</code>
+参数都要理解其含义，不能照抄照搬。</li>
+<li>培养<strong>工程规范意识</strong>——命令可复现、操作可记录、结果可验证。</li>
+<li>培养<strong>问题排查能力</strong>——遇到报错先看日志、查状态，而非盲目重装。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K5-1</td>
+<td>实践任务总览与 CTTS 三服务镜像准备</td>
+<td>CTTS 三服务镜像选型；MySQL/Nginx/OpenJDK
+镜像拉取；标签管理；本地镜像盘点</td>
+</tr>
+<tr>
+<td>K5-2</td>
+<td>MySQL 容器运行与数据库初始化</td>
+<td><code>docker run</code>
+完整命令（端口/环境变量/命名/数据卷）；进入容器执行 SQL；CTTS
+数据库建表脚本</td>
+</tr>
+<tr>
+<td>K5-3</td>
+<td>Nginx 容器运行与静态页面部署</td>
+<td><code>docker run nginx</code>；<code>-v</code> 挂载
+HTML；浏览器/curl 验证访问；默认配置说明</td>
+</tr>
+<tr>
+<td>K5-4</td>
+<td>Java/OpenJDK 镜像与简单 Java 应用运行</td>
+<td>OpenJDK 镜像选型；运行简单 jar 容器；验证 Java 环境</td>
+</tr>
+<tr>
+<td>K5-5</td>
+<td>容器间通信验证</td>
+<td><code>--link</code> 简介与局限；容器互 ping；为第 9
+次课网络专题埋伏笔</td>
+</tr>
+<tr>
+<td>K5-6</td>
+<td>综合实践复盘与常见问题排查</td>
+<td>容器无法启动、端口冲突、数据丢失、中文乱码等常见问题与解决方案</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3
+id="贯穿项目阶段任务ctts-三服务容器化操作m2-模块阶段成果">贯穿项目阶段任务：CTTS
+三服务容器化操作（M2 模块阶段成果）</h3>
+<p><strong>本次课任务</strong>：</p>
+<ol type="1">
+<li><strong>镜像准备</strong>：拉取
+<code>mysql:8.0</code>、<code>nginx:stable</code>、<code>openjdk:17-jdk-slim</code>
+三个镜像，盘点本地镜像。</li>
+<li><strong>MySQL 容器</strong>：运行 MySQL 容器，使用
+<code>docker exec</code> 进入容器，创建 <code>ctts</code>
+数据库并初始化业务表（用户表、试题表）。</li>
+<li><strong>Nginx 容器</strong>：编写 CTTS 简易首页
+<code>index.html</code>，挂载到 Nginx 容器，浏览器访问验证。</li>
+<li><strong>Java 容器</strong>：使用 OpenJDK 镜像运行一个简单 jar
+容器（或执行 <code>java -version</code> 验证环境）。</li>
+<li><strong>容器通信</strong>：使用 <code>--link</code> 让 Nginx
+容器链接到 MySQL 容器，进入容器互 ping 验证。</li>
+<li><strong>复盘总结</strong>：记录操作中遇到的问题与解决方案，形成《CTTS
+容器踩坑笔记》。</li>
+</ol>
+<p><strong>项目阶段定位</strong>：</p>
+<ul>
+<li>本次课对应项目阶段 2（M2 模块）：拉取 MySQL/Java/Nginx
+镜像，运行容器。</li>
+<li>上承第 3~4 次课（镜像管理、容器管理的命令学习），下接第 6
+次课（Dockerfile 构建自定义镜像）。</li>
+<li>完成本次课后，学生应具备"用官方镜像跑起来 CTTS 三服务"的能力，为后续
+Dockerfile 构建自定义镜像打下基础。</li>
+</ul>
+<blockquote>
+<p>📌 本次课是 M2
+模块的综合实践课，重点是把前两次课学的命令"串起来用"，强调操作流程的完整性与可复现性。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1任务说明与镜像选型讨论开场导入10-min">互动
+1：任务说明与镜像选型讨论（开场导入，10 min）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"我们要把 CTTS
+三服务（MySQL/Nginx/Java）容器化，每个服务应该选哪个官方镜像？标签怎么选？为什么不用
+<code>:latest</code>？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>全班自由发言，教师板书三服务镜像选型，对比 <code>:latest</code>
+与固定版本</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>MySQL 选 <code>mysql:8.0</code>；Nginx 选 <code>nginx:stable</code>
+或 <code>nginx:1.25</code>；Java 选
+<code>openjdk:17-jdk-slim</code>；不使用 <code>:latest</code>
+因为不可控</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调"镜像选型是工程第一步"，标签要明确版本号；引出 K5-1
+镜像准备任务</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2项目任务复盘容器踩坑k5-6-复盘阶段10-min">互动
+2：项目任务复盘——容器踩坑（K5-6 复盘阶段，10 min）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"刚才操作中你遇到了哪些坑？是怎么解决的？请用一句话总结你的踩坑经验。"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>小组讨论 5 分钟 → 每组派代表分享 1 分钟 → 教师汇总板书"踩坑 Top
+5"</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>端口 3306/80 被占用、MySQL 密码忘记、容器起不来、Nginx
+挂载路径错误、<code>docker exec</code> 进不去、中文乱码等</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调"先看日志再行动"的排查思路；每个坑都对应一个工程经验；引出 K5-6
+常见问题排查</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-3容器通信思考k5-5-后5-min">互动 3：容器通信思考（K5-5 后，5
+min）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"<code>--link</code> 能让 Nginx 容器访问 MySQL 容器，但 Docker
+官方说 <code>--link</code> 是 legacy，那现代做法是什么？我们第 9
+次课会学什么？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>自由发言，教师引导</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td><code>--link</code> 已过时；现代做法是自定义网络（bridge
+network）；第 9 次课会学 Docker 网络</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定学生的预习意识；强调 <code>--link</code>
+只是过渡方案，真正要做容器间通信要用自定义网络；为第 9 次课埋伏笔</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>工匠精神——每个命令参数都要理解</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td><code>docker run</code>
+命令有十几个常用参数（<code>-d</code>/<code>-p</code>/<code>-e</code>/<code>--name</code>/<code>-v</code>/<code>--link</code>/<code>--restart</code>
+等），每个参数都对应一个工程需求；不理解参数照抄命令，遇到问题就抓瞎</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"为什么 MySQL 容器要加
+<code>-e MYSQL_ROOT_PASSWORD=123456</code>？不加会怎样？为什么 Nginx 要
+<code>-p 80:80</code>？为什么挂载用
+<code>-v /宿主路径:/容器路径</code>？"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>培养学生"知其然更知其所以然"的工匠精神，每个参数都要搞懂含义、用途、不写的后果，养成严谨的工程素养</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入：通过"参数理解"这一具体行为，让学生体会工匠精神不是空泛口号，而是"每个细节都搞懂"的工程习惯。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3
+id="随堂实操检查实践课以操作结果代测验最后-10-min-进行">随堂实操检查（实践课，以操作结果代测验，最后
+10 min 进行）</h3>
+<p><strong>检查清单（学生自检 + 教师抽查）</strong>：</p>
+<ol type="1">
+<li>✅ <code>docker images</code> 能看到
+<code>mysql:8.0</code>、<code>nginx:stable</code>、<code>openjdk:17-jdk-slim</code>
+三个镜像。</li>
+<li>✅ <code>docker ps</code> 能看到 MySQL、Nginx
+两个运行中的容器。</li>
+<li>✅
+<code>docker exec -it &lt;mysql容器&gt; mysql -uroot -p123456 -e "SHOW DATABASES;"</code>
+能看到 <code>ctts</code> 数据库。</li>
+<li>✅ 浏览器访问 <code>http://localhost</code> 能看到 CTTS
+简易首页。</li>
+<li>✅ <code>docker logs &lt;nginx容器&gt;</code> 无报错。</li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速检查，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>完善</strong>：完善课堂未完成的操作，确保 CTTS
+三服务容器全部跑通，记录完整命令到《CTTS 容器踩坑笔记》。</li>
+<li><strong>思考</strong>：本次课 MySQL
+容器没有配置数据卷持久化，重启容器后数据会丢失吗？如何持久化？（为第 10
+次课数据卷埋伏笔）</li>
+<li><strong>进阶</strong>：尝试用 <code>--link</code> 让 Java 容器链接
+MySQL 容器，并用一段简单 JDBC 代码（或 <code>mysql</code> 客户端）验证
+Java 容器能否访问 MySQL。</li>
+<li><strong>整理</strong>：整理本次课的"踩坑 Top
+5"与解决方案，下次课开课抽查 1~2 组分享。</li>
+<li><strong>预习</strong>：阅读第 6 次课《Dockerfile
+基础指令》教材内容，思考"如果要把 CTTS 后端 jar 包做成镜像，Dockerfile
+该怎么写"。</li>
+<li><strong>拓展（选做）</strong>：访问 Docker Hub，查看
+<code>mysql:8.0</code> 镜像的官方说明，了解
+<code>MYSQL_DATABASE</code>、<code>MYSQL_USER</code>
+等环境变量的作用。</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>能够独立运行 MySQL/Nginx 容器并完成初始化（运维基础操作）</td>
+<td>K5-1、K5-2、K5-3</td>
+</tr>
+<tr>
+<td>能够使用 <code>docker exec</code> 进入容器执行命令（高频操作）</td>
+<td>K5-2、K5-4</td>
+</tr>
+<tr>
+<td>能够使用 <code>-v</code>
+挂载文件到容器（部署静态页面/配置文件）</td>
+<td>K5-3</td>
+</tr>
+<tr>
+<td>能够根据日志和状态排查容器故障（运维核心能力）</td>
+<td>K5-6</td>
+</tr>
+<tr>
+<td>理解容器间通信的基本方式（面试常问"容器间怎么通信"）</td>
+<td>K5-5</td>
+</tr>
+<tr>
+<td>理解 <code>docker run</code> 各参数含义（面试常问"docker run
+的参数"）</td>
+<td>K5-2、K5-3、K5-4</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"docker run 的常用参数""MySQL
+容器怎么初始化数据库""容器间怎么通信""容器起不来怎么排查"等，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + 完整 SQL/HTML/命令 + 思维导图 + 复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2
+id="附课堂时间分配建议90-分钟实践课侧重实操">附：课堂时间分配建议（90
+分钟，实践课侧重实操）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>任务说明 + 镜像选型讨论（互动 1）</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~25 min</td>
+<td>K5-1：拉取 MySQL/Nginx/OpenJDK 镜像 + 本地镜像盘点</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>25~50 min</td>
+<td>K5-2：MySQL 容器运行 + <code>docker exec</code> 进容器 + CTTS
+数据库建表</td>
+<td>25 min</td>
+</tr>
+<tr>
+<td>50~65 min</td>
+<td>K5-3：Nginx 容器运行 + 挂载 HTML 静态页面 + 访问验证</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>65~75 min</td>
+<td>K5-4：OpenJDK 容器运行 Java 应用 + K5-5：容器间 <code>--link</code>
+互 ping</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>75~85 min</td>
+<td>K5-6：综合复盘 + 容器踩坑互动（互动 2）+ 容器通信思考（互动 3）</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>85~90 min</td>
+<td>随堂实操检查 + 小结 + 课后任务布置</td>
+<td>5 min</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>实践课时间分配说明：教师演示与学生操作交替进行，每个 K
+知识点教师先演示 3~5 分钟，学生跟着操作 10~20
+分钟。教师巡视指导，遇到共性问题统一讲解。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

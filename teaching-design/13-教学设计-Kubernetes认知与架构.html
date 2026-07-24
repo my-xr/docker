@@ -1,0 +1,569 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kubernetes认知与架构</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 13 次课 · 教学设计</div>
+      <h1>Kubernetes认知与架构</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 13 次课</span>
+        <span class="hero-chip"><b>主题</b>Kubernetes认知与架构</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1课前-5-分钟讨论开场导入">互动 1：课前 5 分钟讨论（开场导入）</a></li>
+<li><a href="#互动-2k8s-vs-compose-场景辨析讲解-k13-2-后">互动 2：K8s vs Compose 场景辨析（讲解 K13-2 后）</a></li>
+<li><a href="#互动-3k8s-架构图画图讲解-k13-4k13-5-后">互动 3：K8s 架构图画图（讲解 K13-4、K13-5 后）</a></li>
+<li><a href="#互动-4ctts-升级目标认领讲解-k13-6-时">互动 4：CTTS 升级目标认领（讲解 K13-6 时）</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+<li><a href="#随堂练习5-分钟讲解结束前进行">随堂练习（5 分钟，讲解结束前进行）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 13 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M5 K8s 认知与集群搭建 ｜ 课程：《Docker 云容器与管理技术》
+配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 13 次课（全课程 24 次之中，K8s 部分开篇）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>理论课</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M5 K8s 认知与集群搭建</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>Kubernetes 认知与架构</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>Docker 容器化基础（前 12 次课）、Docker Compose 编排、Linux
+基础、计算机网络基础</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>理解"容器编排"概念，明确 Kubernetes
+要解决的核心问题（多机调度、自愈、弹性、滚动更新）。</li>
+<li>掌握 Docker Compose
+的局限性（单机、无自愈、无弹性、无滚动更新），理解从 Compose 到 K8s
+的演进动因。</li>
+<li>能够对比 Docker Compose 与 Kubernetes，判断何时用 Compose、何时用
+K8s。</li>
+<li>掌握 K8s 的 Master-Node 整体架构（控制平面 Control Plane 与工作节点
+Worker Node）。</li>
+<li>掌握 Master 控制平面四大组件的职责（API
+Server、etcd、scheduler、controller-manager）。</li>
+<li>掌握 Node
+工作节点三大组件的职责（kubelet、kube-proxy、container-runtime）。</li>
+<li>了解 K8s
+核心概念总览（Pod/Deployment/Service/ConfigMap/Secret/PV/PVC/Ingress/Namespace），为后续
+11 次课铺垫。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能够用自己的语言准确描述"什么是容器编排""为什么需要 K8s"。</li>
+<li>能够画出 K8s 的 Master-Node 架构图，标注各组件职责与数据流。</li>
+<li>能够辨析 Docker Compose 与 Kubernetes 的适用场景。</li>
+<li>能够识别一个应用部署场景中是否需要升级到 K8s。</li>
+<li>能够说出 CTTS 三服务从 Docker 部署升级到 K8s 部署的目标与价值。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>树立"自主可控"意识——K8s
+是云原生时代的"操作系统"，属于关键基础设施，理解国产化替代与自主可控的意义。</li>
+<li>培养"系统思维"——从单机到集群、从手动到自动、从 Compose 到 K8s
+的全局视角。</li>
+<li>建立"演进思维"——技术选型要看场景与规模，没有银弹，合适的才是最好的。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K13-1</td>
+<td>什么是 Kubernetes</td>
+<td>K8s 定义；容器编排概念；为什么要编排；Docker Compose
+的局限性（单机、无自愈、无弹性、无滚动更新）</td>
+</tr>
+<tr>
+<td>K13-2</td>
+<td>K8s vs Docker Compose 对比</td>
+<td>单机 vs 集群；手动编排 vs 自动调度；功能对比表；何时用 Compose
+何时用 K8s</td>
+</tr>
+<tr>
+<td>K13-3</td>
+<td>K8s 整体架构</td>
+<td>Master-Node 架构；控制平面 Control Plane vs 工作节点 Worker
+Node；集群数据流</td>
+</tr>
+<tr>
+<td>K13-4</td>
+<td>Master 控制平面组件</td>
+<td>API
+Server：统一入口；etcd：键值存储；scheduler：调度器；controller-manager：控制器管理器</td>
+</tr>
+<tr>
+<td>K13-5</td>
+<td>Node 工作节点组件</td>
+<td>kubelet：节点代理；kube-proxy：网络代理；容器运行时
+container-runtime：containerd/Docker</td>
+</tr>
+<tr>
+<td>K13-6</td>
+<td>K8s 核心概念总览</td>
+<td>Pod/Deployment/Service/ConfigMap/Secret/PV/PVC/Ingress/Namespace
+概念简介，为后续课程铺垫</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3
+id="贯穿项目升级ctts-从-docker-部署升级到-k8s-集群部署">贯穿项目升级：CTTS
+从 Docker 部署升级到 K8s 集群部署</h3>
+<p><strong>本次课任务</strong>：</p>
+<ol type="1">
+<li>教师回顾前 12 次课的成果：CTTS 三服务（前端 Vue3 + 后端 SpringBoot +
+MySQL）已用 Docker 容器化，并通过 Docker Compose 实现一键编排部署。</li>
+<li>教师抛出问题："如果 CTTS 用户量从 100 人涨到 10 万人，单机 Docker
+部署还能扛住吗？如果某台机器宕机，服务还能用吗？"引导学生发现 Compose
+的局限。</li>
+<li>学生分组（沿用前 12 次课的 4~5 人小组），讨论："把 CTTS 从单机
+Compose 部署升级到 K8s 集群部署，你期望解决什么问题？"</li>
+<li>教师引出 K8s
+的核心价值：多机调度、自愈、弹性扩缩容、滚动更新，并介绍后 12
+次课的项目升级路线。</li>
+</ol>
+<p><strong>项目升级背景概述</strong>（详见 <code>教学资料.md</code>
+综合示例）：</p>
+<ul>
+<li>项目名称：多服务容器化部署项目（K8s 升级阶段）</li>
+<li>已有成果（前 12 次课）：CTTS 三服务镜像 + docker-compose.yml
+一键部署</li>
+<li>升级目标（后 12 次课）：将 CTTS 三服务部署到 K8s
+集群，实现高可用、弹性扩缩容、滚动更新</li>
+<li>升级路线：K8s 集群搭建（M5）→ Pod 与工作负载（M6）→ Service
+与网络（M7）→ 配置存储与综合实践（M8）</li>
+</ul>
+<blockquote>
+<p>📌 本节课不敲命令，重点是建立 K8s
+全局认知、理解架构与核心概念。命令操作从第 14 次课（K8s
+集群搭建）开始。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1课前-5-分钟讨论开场导入">互动 1：课前 5
+分钟讨论（开场导入）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"Docker Compose 能解决所有部署问题吗？哪些场景下 Compose
+会力不从心？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>自由发言，教师板书关键词，不评判对错</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>提到"单机扛不住""机器挂了服务就没了""不能自动扩容""更新要停机""几台机器一起管太麻烦"等关键词</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定合理认知，引出 Compose
+的四大局限（单机、无自愈、无弹性、无滚动更新）；这正是 K8s
+要解决的核心问题，引出 K13-1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2k8s-vs-compose-场景辨析讲解-k13-2-后">互动 2：K8s vs
+Compose 场景辨析（讲解 K13-2 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>给出 4 个场景（本地开发联调、个人博客部署、企业级电商大促、CI
+流水线测试环境），判断哪些适合 Compose、哪些必须上 K8s</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>全班举手投票，少数派陈述理由</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能区分"小规模/单机用 Compose""大规模/高可用用
+K8s"；对部分场景可能有分歧</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调"技术选型要看规模与场景"，没有银弹；本地开发用 Compose
+足够，生产高可用必须 K8s；引出"演进思维"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-3k8s-架构图画图讲解-k13-4k13-5-后">互动 3：K8s
+架构图画图（讲解 K13-4、K13-5 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>请学生在纸上画出 K8s 的 Master-Node 架构图：Master 上的 API
+Server/etcd/scheduler/controller-manager，Node 上的
+kubelet/kube-proxy/container-runtime，并标出一次"kubectl create
+deployment"的数据流</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>个人独立完成 3 分钟 → 同桌互查 1 分钟 → 教师投影标准图讲解</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能画出 Master 与 Node 两大区域及各自组件；数据流可能画错（如把
+scheduler 画成直接操作容器）</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>纠正常见错误（如把 etcd 当成数据库、把 scheduler
+当成执行器）；强调"API Server 是唯一入口，所有组件都通过它通信"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-4ctts-升级目标认领讲解-k13-6-时">互动 4：CTTS
+升级目标认领（讲解 K13-6 时）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>分组讨论："把 CTTS 升级到
+K8s，你负责的视角（前端/后端/数据库/运维）期望 K8s
+帮你解决什么问题？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>小组讨论 5 分钟 → 每组派代表发言 1 分钟</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>前端：多副本负载均衡；后端：滚动更新不停机、自动扩缩容；数据库：数据持久化、故障迁移；运维：自愈、统一管理多节点</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>引导发现"多副本 + 自愈 + 弹性 + 滚动更新 + 持久化"正是 K8s
+的核心能力，为后续 Pod/Deployment/Service/存储课程埋伏笔</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>自主可控——K8s 是云原生时代的"操作系统"</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td>Kubernetes 是云原生基础设施的核心，被称"云原生操作系统"；CNCF 生态以
+K8s 为底座构建；国内有华为云 CCE、阿里云 ACK、腾讯云 TKE、青云
+KubeSphere 等自主产品，国产化替代正在推进</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"如果整个国家的互联网应用都跑在国外厂商掌控的容器编排平台上，会有什么风险？我们为什么要关注自主可控的云原生技术？"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>树立自主可控意识，理解 K8s
+作为"云原生操作系统"的战略意义，激发学习云原生技术的责任感与使命感</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入，不空喊口号。通过"K8s = 云原生操作系统 =
+国之重器"的真实视角让学生体会"为什么要学 K8s"。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3 id="随堂练习5-分钟讲解结束前进行">随堂练习（5
+分钟，讲解结束前进行）</h3>
+<p><strong>判断题（口头快速作答）</strong>：</p>
+<ol type="1">
+<li>Docker Compose 可以跨多台机器调度容器，实现集群编排。（✗）</li>
+<li>K8s 的 API Server 是集群的统一入口，所有组件都通过它通信。（✓）</li>
+<li>etcd 是 K8s 的键值存储数据库，保存集群的所有状态数据。（✓）</li>
+<li>kubelet 运行在 Master 上，负责调度 Pod 到合适的 Node。（✗）</li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速互动，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>阅读</strong>：通读同文件夹
+<code>教学资料.md</code>，重点理解 K8s
+架构、控制平面与工作节点组件、核心概念总览。</li>
+<li><strong>思考</strong>：用 200 字描述"Docker Compose 与 Kubernetes
+的区别与适用场景"，下次课抽查。</li>
+<li><strong>画图</strong>：手绘 K8s 的 Master-Node 架构图，标出 Master
+四大组件、Node 三大组件，并标出一次
+<code>kubectl create deployment</code>
+的完整数据流，下次课带到课堂。</li>
+<li><strong>项目准备</strong>：每组讨论并提交一份《CTTS K8s
+升级初步设想》（1 页），列出从 Compose 升级到 K8s 期望解决的问题（至少 5
+条），并标注对应 K8s 的哪个能力。</li>
+<li><strong>环境准备（可选预习）</strong>：了解自己电脑是否支持安装
+Minikube（需虚拟化支持），为第 14 次课搭建 K8s 集群做准备。</li>
+<li><strong>拓展阅读</strong>：访问 Kubernetes
+官网（kubernetes.io/zh-cn）浏览"K8s 是什么"文档（选做）。</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>理解容器编排概念与 K8s 定位（面试高频基础题）</td>
+<td>K13-1</td>
+</tr>
+<tr>
+<td>能清晰表述 K8s 与 Docker Compose 的区别</td>
+<td>K13-2</td>
+</tr>
+<tr>
+<td>掌握 K8s 架构（Master/Node、控制平面、工作节点）</td>
+<td>K13-3、K13-4、K13-5</td>
+</tr>
+<tr>
+<td>掌握 API Server/etcd/scheduler/controller-manager 职责</td>
+<td>K13-4</td>
+</tr>
+<tr>
+<td>掌握 kubelet/kube-proxy/container-runtime 职责</td>
+<td>K13-5</td>
+</tr>
+<tr>
+<td>了解 K8s 核心资源（Pod/Deployment/Service 等）</td>
+<td>K13-6</td>
+</tr>
+<tr>
+<td>容器化场景判断（DevOps/云运维岗位常见）</td>
+<td>K13-2</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"说一下 K8s 的架构""K8s 各组件的作用""K8s 和 Docker Compose
+有什么区别""为什么用 K8s"等，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + CTTS K8s 升级导入 + 思维导图 + 复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>课前 5 分钟讨论 + K8s 部分开篇介绍</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~25 min</td>
+<td>知识点 K13-1：什么是 K8s + 为什么要编排 + Compose 局限</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>25~40 min</td>
+<td>知识点 K13-2：K8s vs Docker Compose 对比 + 场景辨析互动</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>40~60 min</td>
+<td>知识点 K13-3、K13-4：K8s 整体架构 + Master 控制平面组件</td>
+<td>20 min</td>
+</tr>
+<tr>
+<td>60~75 min</td>
+<td>知识点 K13-5：Node 工作节点组件 + 架构图画图互动</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>75~85 min</td>
+<td>知识点 K13-6：核心概念总览 + CTTS K8s 升级目标认领</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>85~90 min</td>
+<td>随堂练习 + 小结 + 课后任务布置</td>
+<td>5 min</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1584 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>综合项目实践二集群运维与答辩</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 24 次课 · 教学资料</div>
+      <h1>综合项目实践二集群运维与答辩</h1>
+      <p>面向学生复习、自学、命令示例与知识图示 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 24 次课</span>
+        <span class="hero-chip"><b>主题</b>综合项目实践二集群运维与答辩</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#目录">目录</a>
+<ul>
+</ul></li>
+<li><a href="#一故障排查指南5大故障场景">一、故障排查指南（5大故障场景）</a>
+<ul>
+<li><a href="#11-故障一crashloopbackoffpod崩溃循环">1.1 故障一：CrashLoopBackOff（Pod崩溃循环）</a></li>
+<li><a href="#12-故障二notready节点不可达">1.2 故障二：NotReady（节点不可达）</a></li>
+<li><a href="#13-故障三service无端点服务不可达">1.3 故障三：Service无端点（服务不可达）</a></li>
+<li><a href="#14-故障四imagepullbackoff镜像拉取失败">1.4 故障四：ImagePullBackOff（镜像拉取失败）</a></li>
+<li><a href="#15-故障五oomkilled资源不足被杀">1.5 故障五：OOMKilled（资源不足被杀）</a></li>
+<li><a href="#16-故障排查通用方法论">1.6 故障排查通用方法论</a></li>
+</ul></li>
+<li><a href="#二运维操作手册">二、运维操作手册</a>
+<ul>
+<li><a href="#21-滚动更新kubectl-set-image">2.1 滚动更新（kubectl set image）</a></li>
+<li><a href="#22-回滚kubectl-rollout-undo">2.2 回滚（kubectl rollout undo）</a></li>
+<li><a href="#23-扩缩容kubectl-scale--hpa">2.3 扩缩容（kubectl scale + HPA）</a></li>
+<li><a href="#24-日志查看与排障">2.4 日志查看与排障</a></li>
+<li><a href="#25-运维操作速查表">2.5 运维操作速查表</a></li>
+</ul></li>
+<li><a href="#三答辩指南">三、答辩指南</a>
+<ul>
+<li><a href="#31-答辩流程">3.1 答辩流程</a></li>
+<li><a href="#32-演示要点">3.2 演示要点</a></li>
+<li><a href="#33-答辩ppt建议结构10页">3.3 答辩PPT建议结构（≤10页）</a></li>
+<li><a href="#34-常见答辩问题20个">3.4 常见答辩问题（20个）</a></li>
+</ul></li>
+<li><a href="#四交付物清单和模板">四、交付物清单和模板</a>
+<ul>
+<li><a href="#41-交付物清单">4.1 交付物清单</a></li>
+<li><a href="#42-k8s-yaml清单目录结构模板">4.2 K8s YAML清单目录结构模板</a></li>
+<li><a href="#43-部署文档模板">4.3 部署文档模板</a></li>
+<li><a href="#44-运维手册模板">4.4 运维手册模板</a></li>
+<li><a href="#45-项目报告模板">4.5 项目报告模板</a></li>
+</ul></li>
+<li><a href="#五评分标准表">五、评分标准表</a>
+<ul>
+<li><a href="#51-项目答辩评分标准100分制">5.1 项目答辩评分标准（100分制）</a></li>
+<li><a href="#52-等级评定">5.2 等级评定</a></li>
+<li><a href="#53-单项奖设置可选">5.3 单项奖设置（可选）</a></li>
+</ul></li>
+<li><a href="#六课程总结">六、课程总结</a>
+<ul>
+<li><a href="#61-24次课知识图谱">6.1 24次课知识图谱</a></li>
+<li><a href="#62-dockerk8s技术栈总览">6.2 Docker+K8s技术栈总览</a></li>
+<li><a href="#63-云原生岗位能力图谱">6.3 云原生岗位能力图谱</a></li>
+<li><a href="#64-后续学习路线建议">6.4 后续学习路线建议</a></li>
+<li><a href="#65-课程核心知识点回顾表">6.5 课程核心知识点回顾表</a></li>
+<li><a href="#66-课程思政总结">6.6 课程思政总结</a></li>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 24 次课 <span>｜</span> <strong>文档：</strong>教学资料</p>
+<blockquote>
+<p>课程：Docker云容器与管理技术 | 模块：M8 综合项目实践 |
+课次：第24次课（收官课） 贯穿项目：CTTS多服务部署到K8s
+本资料面向运维实践与项目交付，包含故障排查指南、运维操作手册、答辩指南、交付物模板、评分标准、课程总结六大模块</p>
+</blockquote>
+<hr />
+<h2 id="目录">目录</h2>
+<ol type="1">
+<li><a
+href="#一故障排查指南5大故障场景">故障排查指南（5大故障场景）</a></li>
+<li><a href="#二运维操作手册">运维操作手册</a></li>
+<li><a href="#三答辩指南">答辩指南</a></li>
+<li><a href="#四交付物清单和模板">交付物清单和模板</a></li>
+<li><a href="#五评分标准表">评分标准表</a></li>
+<li><a href="#六课程总结">课程总结</a></li>
+</ol>
+<hr />
+<h2 id="一故障排查指南5大故障场景">一、故障排查指南（5大故障场景）</h2>
+<h3 id="11-故障一crashloopbackoffpod崩溃循环">1.1
+故障一：CrashLoopBackOff（Pod崩溃循环）</h3>
+<p><strong>现象</strong>：</p>
+<pre><code>$ kubectl get pods
+NAME                    READY   STATUS             RESTARTS   AGE
+ctts-web-xxx-yyy        0/1     CrashLoopBackOff   5          3m</code></pre>
+<p>Pod反复重启，状态在<code>Running</code>与<code>CrashLoopBackOff</code>之间循环，RESTARTS计数持续增加。</p>
+<p><strong>常见原因</strong>：</p>
+<ol type="1">
+<li>容器启动命令错误（command/args配置不当）</li>
+<li>应用启动失败（配置文件缺失、依赖服务未就绪、端口被占用）</li>
+<li>容器内进程异常退出（应用代码异常、依赖缺失）</li>
+<li>存活探针配置过严，应用未就绪即被杀死</li>
+<li>资源限制过严（CPU/内存过低导致OOM后重启）</li>
+</ol>
+<p><strong>排查命令链</strong>：</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤1：查看Pod详细事件</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pod <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤2：查看当前容器日志</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤3：查看上一次崩溃的日志（关键！）</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> --previous</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤4：查看Pod事件</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get events <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> --sort-by=<span class="st">&#39;.lastTimestamp&#39;</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-20</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤5：进入容器排查（如果Pod偶尔Running）</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -- /bin/sh</span></code></pre></div>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>启动命令错误：修正Deployment中的command/args</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-web:v1</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">command</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;/app/server&quot;</span><span class="kw">]</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">args</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;--config=/etc/ctts/config.yaml&quot;</span><span class="kw">]</span></span></code></pre></div>
+<ul>
+<li>依赖服务未就绪：配置initContainer等待依赖</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">initContainers</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> wait-db</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">image</span><span class="kw">:</span><span class="at"> busybox</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">command</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&#39;sh&#39;</span><span class="kw">,</span><span class="at"> </span><span class="st">&#39;-c&#39;</span><span class="kw">,</span><span class="at"> </span><span class="st">&#39;until nslookup mysql-service; do sleep 2; done&#39;</span><span class="kw">]</span></span></code></pre></div>
+<ul>
+<li>存活探针过严：调大initialDelaySeconds、failureThreshold</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">livenessProbe</span><span class="kw">:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /health</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">60</span><span class="co">   # 应用启动慢时调大</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">failureThreshold</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span><span class="co">       # 允许失败次数调大</span></span></code></pre></div>
+<hr />
+<h3 id="12-故障二notready节点不可达">1.2
+故障二：NotReady（节点不可达）</h3>
+<p><strong>现象</strong>：</p>
+<pre><code>$ kubectl get nodes
+NAME           STATUS                     ROLES    AGE   VERSION
+k8s-master     Ready                      master   30d   v1.28.0
+k8s-worker1    Ready                      &lt;none&gt;   30d   v1.28.0
+k8s-worker2    NotReady                   &lt;none&gt;   30d   v1.28.0</code></pre>
+<p>节点状态显示<code>NotReady</code>，该节点上Pod可能被驱逐或无法调度。</p>
+<p><strong>常见原因</strong>：</p>
+<ol type="1">
+<li>kubelet服务停止或崩溃</li>
+<li>节点网络故障（与master失联）</li>
+<li>节点资源耗尽（内存/CPU/磁盘满）</li>
+<li>容器运行时（containerd/docker）异常</li>
+<li>节点主机宕机或硬件故障</li>
+</ol>
+<p><strong>排查命令链</strong>：</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤1：查看节点详情与条件</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe node <span class="op">&lt;</span>node-name<span class="op">&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 关注 Conditions 部分：MemoryPressure/DiskPressure/PIDPressure/Ready</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤2：查看节点上的Pod</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">--all-namespaces</span> <span class="at">--field-selector</span> spec.nodeName=<span class="op">&lt;</span>node-name<span class="op">&gt;</span> -o wide</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤3：SSH登录故障节点，检查kubelet</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> status kubelet</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-u</span> kubelet <span class="at">--since</span> <span class="st">&quot;10 minutes ago&quot;</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-50</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤4：检查容器运行时</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="ex">crictl</span> ps    <span class="co"># 或 docker ps</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> status containerd   <span class="co"># 或 docker</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤5：检查节点资源</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="fu">free</span> <span class="at">-h</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="ex">top</span></span></code></pre></div>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>kubelet停止：<code>systemctl restart kubelet</code>，并设置开机自启<code>systemctl enable kubelet</code></li>
+<li>网络故障：检查节点与master的网络连通性<code>ping &lt;master-ip&gt;</code>、<code>telnet &lt;master-ip&gt; 6443</code></li>
+<li>磁盘满：清理无用镜像与日志</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">crictl</span> rmi <span class="at">--prune</span>    <span class="co"># 清理未使用镜像</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">--vacuum-size</span><span class="op">=</span>100M   <span class="co"># 清理日志</span></span></code></pre></div>
+<ul>
+<li>容器运行时异常：<code>systemctl restart containerd</code></li>
+<li>节点长期不恢复：<code>kubectl drain &lt;node-name&gt; --ignore-daemonsets --delete-emptydir-data</code>
+后维护</li>
+</ul>
+<hr />
+<h3 id="13-故障三service无端点服务不可达">1.3
+故障三：Service无端点（服务不可达）</h3>
+<p><strong>现象</strong>：</p>
+<pre><code>$ kubectl get svc ctts-web-service
+NAME                 TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+ctts-web-service     ClusterIP   10.96.50.100   &lt;none&gt;        80/TCP     5m
+
+$ kubectl get endpoints ctts-web-service
+NAME                 ENDPOINTS       AGE
+ctts-web-service     &lt;none&gt;          5m</code></pre>
+<p>Service存在但ENDPOINTS为<code>&lt;none&gt;</code>，访问Service无响应或连接拒绝。</p>
+<p><strong>常见原因</strong>：</p>
+<ol type="1">
+<li>Service的selector与Pod标签不匹配</li>
+<li>Pod未正常运行（未Ready）</li>
+<li>Service的targetPort与Pod容器端口不一致</li>
+<li>Pod的readinessProbe未通过</li>
+<li>命名空间不一致（Service与Pod不在同一namespace）</li>
+</ol>
+<p><strong>排查命令链</strong>：</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤1：查看Service详情，确认selector与targetPort</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe svc <span class="op">&lt;</span>service-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤2：查看Endpoints（关键！）</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get endpoints <span class="op">&lt;</span>service-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe endpoints <span class="op">&lt;</span>service-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤3：查看Pod标签，与Service selector对比</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> --show-labels</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤4：查看Pod是否Ready</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -o wide</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤5：查看Pod事件，确认readinessProbe是否通过</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pod <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span></code></pre></div>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>标签不匹配：修正Service的selector或Pod的labels</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Service</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-web</span><span class="co">      # 必须与Pod标签完全一致</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Pod（Deployment模板）</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-web</span></span></code></pre></div>
+<ul>
+<li>targetPort不一致：修正Service的targetPort为容器实际监听端口</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">targetPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span><span class="co">     # 必须与containerPort一致</span></span></code></pre></div>
+<ul>
+<li>readinessProbe未通过：检查应用健康检查接口，或临时调整探针配置</li>
+</ul>
+<hr />
+<h3 id="14-故障四imagepullbackoff镜像拉取失败">1.4
+故障四：ImagePullBackOff（镜像拉取失败）</h3>
+<p><strong>现象</strong>：</p>
+<pre><code>$ kubectl get pods
+NAME                    READY   STATUS              RESTARTS   AGE
+ctts-web-xxx-yyy        0/1     ImagePullBackOff    0          2m</code></pre>
+<p>Pod状态为<code>ImagePullBackOff</code>或<code>ErrImagePull</code>。</p>
+<p><strong>常见原因</strong>：</p>
+<ol type="1">
+<li>镜像名称拼写错误（image: ctts-web:v1 写成 ctts_web:v1）</li>
+<li>镜像不存在（tag错误、仓库无此镜像）</li>
+<li>私有仓库未配置认证（imagePullSecrets缺失）</li>
+<li>网络无法访问镜像仓库（防火墙/DNS问题）</li>
+<li>镜像仓库限流（如Docker Hub速率限制）</li>
+</ol>
+<p><strong>排查命令链</strong>：</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤1：查看Pod事件（关键！会显示拉取失败的详细原因）</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pod <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 关注 Events 部分：</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Failed to pull image &quot;xxx&quot;: rpc error: code = Unknown desc = Error response from daemon: manifest unknown</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤2：确认镜像名称与tag</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pod <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -o jsonpath=<span class="st">&#39;{.spec.containers[*].image}&#39;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤3：在节点上手动拉取测试</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>node-ip<span class="op">&gt;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="ex">crictl</span> pull <span class="op">&lt;</span>image-name<span class="op">&gt;</span>   <span class="co"># 或 docker pull &lt;image-name&gt;</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤4：检查私有仓库认证</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get secret <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pod <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-A5</span> imagePullSecrets</span></code></pre></div>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>镜像名错误：修正Deployment中的image字段</li>
+<li>私有仓库认证：创建imagePullSecrets</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> create secret docker-registry regcred <span class="dt">\</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--docker-server</span><span class="op">=&lt;</span>registry<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--docker-username</span><span class="op">=&lt;</span>user<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--docker-password</span><span class="op">=&lt;</span>pass<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--docker-email</span><span class="op">=&lt;</span>email<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">imagePullSecrets</span><span class="kw">:</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> regcred</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> &lt;registry&gt;/ctts-web:v1</span></span></code></pre></div>
+<ul>
+<li>网络问题：配置节点代理或使用国内镜像源</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># containerd配置镜像加速</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># /etc/containerd/config.toml 添加 registry_mirrors</span></span></code></pre></div>
+<hr />
+<h3 id="15-故障五oomkilled资源不足被杀">1.5
+故障五：OOMKilled（资源不足被杀）</h3>
+<p><strong>现象</strong>：</p>
+<pre><code>$ kubectl describe pod &lt;pod-name&gt;
+...
+Last State: Terminated
+  Reason: OOMKilled
+  Exit Code: 137
+  Started: ...
+  Finished: ...</code></pre>
+<p>Pod被终止，退出码137，RESTARTS计数增加，状态可能为<code>CrashLoopBackOff</code>。</p>
+<p><strong>常见原因</strong>：</p>
+<ol type="1">
+<li>resources.limits.memory设置过低，应用内存需求超过限制</li>
+<li>应用内存泄漏</li>
+<li>Java应用JVM堆未根据容器限制调整（-Xmx设置过大）</li>
+<li>节点内存压力，kubelet主动驱逐</li>
+<li>未设置resources.requests导致调度到资源不足节点</li>
+</ol>
+<p><strong>排查命令链</strong>：</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤1：查看Pod详情，确认OOMKilled</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pod <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 关注 Last State: Terminated, Reason: OOMKilled, Exit Code: 137</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤2：查看资源限制</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pod <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -o jsonpath=<span class="st">&#39;{.spec.containers[0].resources}&#39;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤3：查看节点资源使用</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe node <span class="op">&lt;</span>node-name<span class="op">&gt;</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-A5</span> <span class="st">&quot;Allocated resources&quot;</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤4：查看Pod历史资源使用（需metrics-server）</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> top pod <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 步骤5：查看应用日志，确认内存使用情况</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> --previous <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-i</span> <span class="st">&quot;memory\|heap\|oom&quot;</span></span></code></pre></div>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>调大内存限制：</li>
+</ul>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;256Mi&quot;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;250m&quot;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;512Mi&quot;</span><span class="co">     # 从256Mi调大到512Mi</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;500m&quot;</span></span></code></pre></div>
+<ul>
+<li>Java应用调整JVM参数（关键！）：</li>
+</ul>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> JAVA_OPTS</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">value</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0&quot;</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Java 8u191+ 和 Java 11+ 支持容器感知，自动按比例分配堆</span></span></code></pre></div>
+<ul>
+<li>应用内存泄漏：排查应用代码，使用jmap/jstack分析堆dump</li>
+<li>设置合理的resources.requests避免调度到资源不足节点</li>
+</ul>
+<hr />
+<h3 id="16-故障排查通用方法论">1.6 故障排查通用方法论</h3>
+<div class="visual">
+  <div class="visual-title">图示 1：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">发现故障 <span class="arrow-token">→</span> kubectl get pods/nodes (定位对象)</span>
+<span class="diagram-line">        <span class="arrow-token">→</span> kubectl describe (查看详情与事件)</span>
+<span class="diagram-line">        <span class="arrow-token">→</span> kubectl logs --previous (查看崩溃前日志)</span>
+<span class="diagram-line">        <span class="arrow-token">→</span> kubectl get events (查看集群事件)</span>
+<span class="diagram-line">        <span class="arrow-token">→</span> 分析根因 <span class="arrow-token">→</span> 修复 <span class="arrow-token">→</span> 验证 <span class="arrow-token">→</span> 记录</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>故障排查速查表</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>故障状态</th>
+<th>第一命令</th>
+<th>第二命令</th>
+<th>关键信息位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CrashLoopBackOff</td>
+<td>kubectl describe pod</td>
+<td>kubectl logs --previous</td>
+<td>Events + 容器日志</td>
+</tr>
+<tr>
+<td>NotReady</td>
+<td>kubectl describe node</td>
+<td>systemctl status kubelet</td>
+<td>Conditions + kubelet日志</td>
+</tr>
+<tr>
+<td>Service无端点</td>
+<td>kubectl get endpoints</td>
+<td>kubectl describe svc</td>
+<td>ENDPOINTS字段 + selector对比</td>
+</tr>
+<tr>
+<td>ImagePullBackOff</td>
+<td>kubectl describe pod</td>
+<td>crictl pull</td>
+<td>Events 拉取错误信息</td>
+</tr>
+<tr>
+<td>OOMKilled</td>
+<td>kubectl describe pod</td>
+<td>kubectl top pod</td>
+<td>Last State + 资源使用</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二运维操作手册">二、运维操作手册</h2>
+<h3 id="21-滚动更新kubectl-set-image">2.1 滚动更新（kubectl set
+image）</h3>
+<p><strong>场景</strong>：将CTTS-web服务从v1版本更新到v2版本，零停机。</p>
+<p><strong>操作命令</strong>：</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 方式1：kubectl set image命令（推荐用于快速更新）</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> set image deployment/ctts-web ctts-web=ctts-web:v2 <span class="at">-n</span> ctts-prod</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 方式2：kubectl apply更新YAML（推荐用于生产）</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 先修改 deployment.yaml 中 image: ctts-web:v2</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> deployment.yaml <span class="at">-n</span> ctts-prod</span></code></pre></div>
+<p><strong>查看更新进度</strong>：</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看滚动更新状态</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout status deployment/ctts-web <span class="at">-n</span> ctts-prod</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：deployment &quot;ctts-web&quot; successfully rolled out</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看更新历史</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout history deployment/ctts-web <span class="at">-n</span> ctts-prod</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看某个版本的详情</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout history deployment/ctts-web <span class="at">-n</span> ctts-prod <span class="at">--revision</span><span class="op">=</span>2</span></code></pre></div>
+<p><strong>滚动更新原理</strong>：</p>
+<ul>
+<li>Deployment默认策略：先创建新Pod，Ready后再删除旧Pod</li>
+<li>maxSurge：超出期望副本数的最大比例（默认25%）</li>
+<li>maxUnavailable：不可用副本的最大比例（默认25%）</li>
+</ul>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">strategy</span><span class="kw">:</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> RollingUpdate</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">rollingUpdate</span><span class="kw">:</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxSurge</span><span class="kw">:</span><span class="at"> 25%</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxUnavailable</span><span class="kw">:</span><span class="at"> 25%</span></span></code></pre></div>
+<hr />
+<h3 id="22-回滚kubectl-rollout-undo">2.2 回滚（kubectl rollout
+undo）</h3>
+<p><strong>场景</strong>：v2版本有bug，需回滚到v1版本。</p>
+<p><strong>操作命令</strong>：</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 回滚到上一版本</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout undo deployment/ctts-web <span class="at">-n</span> ctts-prod</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 回滚到指定版本</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout undo deployment/ctts-web <span class="at">-n</span> ctts-prod <span class="at">--to-revision</span><span class="op">=</span>1</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看回滚状态</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout status deployment/ctts-web <span class="at">-n</span> ctts-prod</span></code></pre></div>
+<p><strong>回滚注意事项</strong>：</p>
+<ul>
+<li>回滚同样采用滚动更新策略，零停机</li>
+<li>回滚后建议立即修复新版本问题，避免反复回滚</li>
+<li>生产环境回滚前先备份当前版本配置</li>
+</ul>
+<hr />
+<h3 id="23-扩缩容kubectl-scale--hpa">2.3 扩缩容（kubectl scale +
+HPA）</h3>
+<h4 id="231-手动扩缩容">2.3.1 手动扩缩容</h4>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 扩容到5个副本</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> scale deployment ctts-web <span class="at">--replicas</span><span class="op">=</span>5 <span class="at">-n</span> ctts-prod</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 缩容到2个副本</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> scale deployment ctts-web <span class="at">--replicas</span><span class="op">=</span>2 <span class="at">-n</span> ctts-prod</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看扩缩容结果</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> ctts-prod <span class="at">-l</span> app=ctts-web</span></code></pre></div>
+<h4 id="232-hpa自动扩缩容horizontal-pod-autoscaler">2.3.2
+HPA自动扩缩容（Horizontal Pod Autoscaler）</h4>
+<p><strong>HPA配置YAML</strong>：</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> autoscaling/v2</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> HorizontalPodAutoscaler</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web-hpa</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">scaleTargetRef</span><span class="kw">:</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">kind</span><span class="kw">:</span><span class="at"> Deployment</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">minReplicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">maxReplicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">metrics</span><span class="kw">:</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> Resource</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">resource</span><span class="kw">:</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">name</span><span class="kw">:</span><span class="at"> cpu</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">target</span><span class="kw">:</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">type</span><span class="kw">:</span><span class="at"> Utilization</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">averageUtilization</span><span class="kw">:</span><span class="at"> </span><span class="dv">70</span><span class="co">   # CPU使用率超过70%扩容</span></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> Resource</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">resource</span><span class="kw">:</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">name</span><span class="kw">:</span><span class="at"> memory</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">target</span><span class="kw">:</span></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">type</span><span class="kw">:</span><span class="at"> Utilization</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">averageUtilization</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span><span class="co">   # 内存使用率超过80%扩容</span></span></code></pre></div>
+<p><strong>HPA操作命令</strong>：</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 创建HPA</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> hpa.yaml</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看HPA状态</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get hpa <span class="at">-n</span> ctts-prod</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co"># NAME            REFERENCE                 TARGETS   MINPODS   MAXPODS   REPLICAS</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-web-hpa    Deployment/ctts-web       50%/70%   2         10        2</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看HPA详情</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe hpa ctts-web-hpa <span class="at">-n</span> ctts-prod</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 压测触发自动扩容（需安装hey或ab）</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="ex">hey</span> <span class="at">-z</span> 5m <span class="at">-c</span> 50 http://<span class="op">&lt;</span>service-ip<span class="op">&gt;</span>/</span></code></pre></div>
+<p><strong>HPA前置条件</strong>：</p>
+<ul>
+<li>集群必须安装metrics-server</li>
+<li>Deployment必须配置resources.requests（HPA基于requests计算使用率）</li>
+</ul>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 安装metrics-server</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml</span></code></pre></div>
+<hr />
+<h3 id="24-日志查看与排障">2.4 日志查看与排障</h3>
+<h4 id="241-kubectl-logs-常用命令">2.4.1 kubectl logs 常用命令</h4>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看当前日志</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 实时跟踪日志（类似tail -f）</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="at">-f</span> <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看上一个容器的日志（崩溃后排查关键）</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> --previous</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看多容器Pod指定容器日志</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -c <span class="op">&lt;</span>container-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看最近1小时日志</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="at">--since</span><span class="op">=</span>1h <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看最近100行日志</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="at">--tail</span><span class="op">=</span>100 <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看指定时间段日志</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="at">--since-time</span><span class="op">=</span>2024-01-01T00:00:00Z <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span></code></pre></div>
+<h4 id="242-kubectl-describe-排障">2.4.2 kubectl describe 排障</h4>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看Pod详情（排障第一命令）</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pod <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 关注：</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># - Events部分：调度、拉取镜像、探针检查等事件</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co"># - Containers部分：State、Last State、Restart Count</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co"># - Conditions部分：PodReady、ContainersReady等</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看Node详情</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe node <span class="op">&lt;</span>node-name<span class="op">&gt;</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 关注：Conditions、Allocated resources、系统信息</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看Service详情</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe svc <span class="op">&lt;</span>service-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 关注：Endpoints、Selector、Ports</span></span></code></pre></div>
+<h4 id="243-kubectl-exec-进入容器">2.4.3 kubectl exec 进入容器</h4>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 进入容器交互</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -- /bin/sh</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 或</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -- /bin/bash</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 进入指定容器</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -c <span class="op">&lt;</span>container-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -- /bin/sh</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 直接执行命令</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -- ls /app</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -- cat /etc/ctts/config.yaml</span></code></pre></div>
+<h4 id="244-kubectl-get-常用查询">2.4.4 kubectl get 常用查询</h4>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看所有资源</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get all <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 宽格式输出（显示IP、节点）</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -o wide</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># YAML格式输出</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pod <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -o yaml</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co"># JSON格式输出（配合jq查询）</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pod <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -o json <span class="kw">|</span> <span class="ex">jq</span> <span class="st">&#39;.spec.containers[0].image&#39;</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 按标签查询</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -l app=ctts-web</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看所有命名空间资源</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">--all-namespaces</span></span></code></pre></div>
+<h4 id="245-kubectl-events-事件查看">2.4.5 kubectl events 事件查看</h4>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看命名空间事件（按时间排序）</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get events <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> --sort-by=<span class="st">&#39;.lastTimestamp&#39;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看指定Pod事件</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get events <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> --field-selector involvedObject.name=<span class="op">&lt;</span>pod-name<span class="op">&gt;</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看警告事件</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get events <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> --field-selector type=Warning</span></code></pre></div>
+<hr />
+<h3 id="25-运维操作速查表">2.5 运维操作速查表</h3>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>滚动更新</td>
+<td><code>kubectl set image deploy/&lt;name&gt; &lt;container&gt;=&lt;image&gt;:&lt;tag&gt;</code></td>
+<td>快速更新镜像版本</td>
+</tr>
+<tr>
+<td>查看更新状态</td>
+<td><code>kubectl rollout status deploy/&lt;name&gt;</code></td>
+<td>等待更新完成</td>
+</tr>
+<tr>
+<td>查看更新历史</td>
+<td><code>kubectl rollout history deploy/&lt;name&gt;</code></td>
+<td>查看历史版本</td>
+</tr>
+<tr>
+<td>回滚上一版本</td>
+<td><code>kubectl rollout undo deploy/&lt;name&gt;</code></td>
+<td>快速回滚</td>
+</tr>
+<tr>
+<td>回滚指定版本</td>
+<td><code>kubectl rollout undo deploy/&lt;name&gt; --to-revision=N</code></td>
+<td>回滚到指定版本</td>
+</tr>
+<tr>
+<td>手动扩缩容</td>
+<td><code>kubectl scale deploy/&lt;name&gt; --replicas=N</code></td>
+<td>调整副本数</td>
+</tr>
+<tr>
+<td>创建HPA</td>
+<td><code>kubectl autoscale deploy/&lt;name&gt; --min=2 --max=10 --cpu-percent=70</code></td>
+<td>命令行创建HPA</td>
+</tr>
+<tr>
+<td>查看资源使用</td>
+<td><code>kubectl top pod/node</code></td>
+<td>需metrics-server</td>
+</tr>
+<tr>
+<td>查看日志</td>
+<td><code>kubectl logs &lt;pod&gt; -f</code></td>
+<td>实时日志</td>
+</tr>
+<tr>
+<td>查看崩溃日志</td>
+<td><code>kubectl logs &lt;pod&gt; --previous</code></td>
+<td>崩溃前日志</td>
+</tr>
+<tr>
+<td>查看详情</td>
+<td><code>kubectl describe pod &lt;pod&gt;</code></td>
+<td>排障第一命令</td>
+</tr>
+<tr>
+<td>进入容器</td>
+<td><code>kubectl exec -it &lt;pod&gt; -- /bin/sh</code></td>
+<td>容器内排障</td>
+</tr>
+<tr>
+<td>查看端点</td>
+<td><code>kubectl get endpoints &lt;svc&gt;</code></td>
+<td>Service排障</td>
+</tr>
+<tr>
+<td>查看事件</td>
+<td><code>kubectl get events --sort-by='.lastTimestamp'</code></td>
+<td>集群事件</td>
+</tr>
+<tr>
+<td>暂停更新</td>
+<td><code>kubectl rollout pause deploy/&lt;name&gt;</code></td>
+<td>暂停滚动更新</td>
+</tr>
+<tr>
+<td>恢复更新</td>
+<td><code>kubectl rollout resume deploy/&lt;name&gt;</code></td>
+<td>恢复滚动更新</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="三答辩指南">三、答辩指南</h2>
+<h3 id="31-答辩流程">3.1 答辩流程</h3>
+<div class="visual">
+  <div class="visual-title">图示 2：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">课前准备（提前1周）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 提交交付物压缩包（YAML+文档+报告）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 提交答辩PPT（≤10页）</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 提交演示视频（≤3分钟）</span>
+<span class="diagram-line">现场答辩（5分钟/组）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 项目演示（4分钟）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 架构与部署拓扑介绍（1分钟）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 核心YAML清单讲解（1分钟）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 故障排查与运维演示（1分钟）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 亮点与难点总结（1分钟）</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 师生提问（1分钟）</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 教师1问</span>
+<span class="diagram-line">    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 学生互问1问</span>
+<span class="diagram-line">集体评议（2分钟）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 师生共同打分</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 宣布答辩成绩</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h3 id="32-演示要点">3.2 演示要点</h3>
+<h4 id="321-架构与部署拓扑介绍1分钟">3.2.1
+架构与部署拓扑介绍（1分钟）</h4>
+<ul>
+<li>展示CTTS系统架构图（用户层/网关层/服务层/数据层）</li>
+<li>展示K8s部署拓扑（namespace/Deployment/Service/Ingress/ConfigMap/Secret/PVC）</li>
+<li>说明技术选型理由（为什么用K8s、为什么用Ingress、为什么用ConfigMap）</li>
+</ul>
+<h4 id="322-核心yaml清单讲解1分钟">3.2.2 核心YAML清单讲解（1分钟）</h4>
+<ul>
+<li>展示1-2个核心YAML（如Deployment+Service）</li>
+<li>重点讲解：资源限制、探针配置、滚动更新策略、标签选择器</li>
+<li>体现规范性：使用ConfigMap管理配置、Secret管理敏感信息、命名规范</li>
+</ul>
+<h4 id="323-故障排查与运维演示1分钟">3.2.3
+故障排查与运维演示（1分钟）</h4>
+<ul>
+<li>现场演示1个故障排查（推荐CrashLoopBackOff或OOMKilled，现象明显）</li>
+<li>现场演示1个运维操作（推荐滚动更新+回滚，可视化强）</li>
+<li>强调"能部署+能运维+能排障"的完整交付能力</li>
+</ul>
+<h4 id="324-亮点与难点总结1分钟">3.2.4 亮点与难点总结（1分钟）</h4>
+<ul>
+<li>项目亮点：多服务部署、配置分离、弹性伸缩、零停机更新等</li>
+<li>遇到的难点与解决方案（真实问题更有说服力）</li>
+<li>后续优化方向（监控、日志收集、CI/CD等）</li>
+</ul>
+<h3 id="33-答辩ppt建议结构10页">3.3 答辩PPT建议结构（≤10页）</h3>
+<table>
+<thead>
+<tr>
+<th>页码</th>
+<th>内容</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>封面</td>
+<td>项目名+组员+课程</td>
+</tr>
+<tr>
+<td>2</td>
+<td>项目背景</td>
+<td>CTTS项目介绍+技术选型</td>
+</tr>
+<tr>
+<td>3</td>
+<td>系统架构</td>
+<td>架构图+服务列表</td>
+</tr>
+<tr>
+<td>4</td>
+<td>K8s部署拓扑</td>
+<td>namespace+资源清单清单</td>
+</tr>
+<tr>
+<td>5</td>
+<td>核心YAML</td>
+<td>Deployment+Service截图</td>
+</tr>
+<tr>
+<td>6</td>
+<td>部署演示</td>
+<td>部署命令+结果截图</td>
+</tr>
+<tr>
+<td>7</td>
+<td>故障排查</td>
+<td>1个故障排查案例</td>
+</tr>
+<tr>
+<td>8</td>
+<td>运维操作</td>
+<td>滚动更新/扩缩容演示</td>
+</tr>
+<tr>
+<td>9</td>
+<td>难点与亮点</td>
+<td>问题与解决方案</td>
+</tr>
+<tr>
+<td>10</td>
+<td>总结与展望</td>
+<td>收获+后续优化</td>
+</tr>
+</tbody>
+</table>
+<h3 id="34-常见答辩问题20个">3.4 常见答辩问题（20个）</h3>
+<h4 id="基础概念类">基础概念类</h4>
+<ol type="1">
+<li><p><strong>请解释Pod、Deployment、Service三者关系。</strong></p>
+<ul>
+<li>答：Pod是最小调度单元，封装容器；Deployment管理Pod副本集，负责滚动更新与回滚；Service提供稳定访问入口，通过标签选择器关联Pod。</li>
+</ul></li>
+<li><p><strong>ConfigMap和Secret有什么区别？如何使用？</strong></p>
+<ul>
+<li>答：ConfigMap存非敏感配置（明文），Secret存敏感信息（Base64编码）。通过env或volume挂载使用。</li>
+</ul></li>
+<li><p><strong>K8s的Service有哪几种类型？区别是什么？</strong></p>
+<ul>
+<li>答：ClusterIP（集群内访问）、NodePort（节点端口暴露）、LoadBalancer（云负载均衡）、ExternalName（CNAME别名）。</li>
+</ul></li>
+<li><p><strong>Ingress和Service的区别？为什么需要Ingress？</strong></p>
+<ul>
+<li>答：Service是L4负载均衡，Ingress是L7（HTTP/HTTPS）负载均衡，支持域名路由与TLS终止，适合HTTP服务统一入口。</li>
+</ul></li>
+<li><p><strong>什么是Namespace？生产环境如何划分？</strong></p>
+<ul>
+<li>答：Namespace是虚拟集群隔离。生产环境常按环境（dev/test/prod）或团队划分。</li>
+</ul></li>
+</ol>
+<h4 id="故障排查类">故障排查类</h4>
+<ol start="6" type="1">
+<li><p><strong>CrashLoopBackOff如何排查？</strong></p>
+<ul>
+<li>答：kubectl describe看事件 → kubectl logs --previous看崩溃前日志 →
+定位根因（启动命令/配置/依赖）→ 修复。</li>
+</ul></li>
+<li><p><strong>Pod状态OOMKilled是什么原因？如何解决？</strong></p>
+<ul>
+<li>答：内存限制过低或应用内存泄漏。解决：调大resources.limits.memory、Java应用调整JVM参数、排查内存泄漏。</li>
+</ul></li>
+<li><p><strong>Service没有端点（ENDPOINTS为none）可能的原因？</strong></p>
+<ul>
+<li>答：selector与Pod标签不匹配、Pod未Ready、targetPort不一致、namespace不一致。</li>
+</ul></li>
+<li><p><strong>节点NotReady如何处理？</strong></p>
+<ul>
+<li>答：kubectl describe node看Conditions →
+SSH登录检查kubelet/容器运行时/资源 → 重启服务或清理资源。</li>
+</ul></li>
+<li><p><strong>ImagePullBackOff如何解决？</strong></p>
+<ul>
+<li>答：检查镜像名拼写、确认镜像存在、配置私有仓库imagePullSecrets、检查网络连通性。</li>
+</ul></li>
+</ol>
+<h4 id="运维操作类">运维操作类</h4>
+<ol start="11" type="1">
+<li><p><strong>如何实现零停机滚动更新？</strong></p>
+<ul>
+<li>答：Deployment默认滚动更新策略，maxSurge+maxUnavailable控制更新节奏，readinessProbe确保新Pod
+Ready后才删旧Pod。</li>
+</ul></li>
+<li><p><strong>如何回滚到上一个版本？</strong></p>
+<ul>
+<li>答：kubectl rollout undo
+deployment/<name>，可加--to-revision=N回滚到指定版本。</li>
+</ul></li>
+<li><p><strong>HPA自动扩缩容的原理？需要什么前提？</strong></p>
+<ul>
+<li>答：HPA基于CPU/内存使用率或自定义指标自动调整副本数。前提：安装metrics-server、Deployment配置resources.requests。</li>
+</ul></li>
+<li><p><strong>如何查看Pod崩溃前的日志？</strong></p>
+<ul>
+<li>答：kubectl logs <pod> --previous，查看上一个容器的日志。</li>
+</ul></li>
+<li><p><strong>如何进入容器排查问题？</strong></p>
+<ul>
+<li>答：kubectl exec -it <pod> -- /bin/sh，进入容器shell。</li>
+</ul></li>
+</ol>
+<h4 id="项目实践类">项目实践类</h4>
+<ol start="16" type="1">
+<li><p><strong>CTTS项目为什么要拆分多服务部署？</strong></p>
+<ul>
+<li>答：微服务架构、独立伸缩、独立部署、故障隔离、技术栈灵活。</li>
+</ul></li>
+<li><p><strong>你们的YAML清单如何组织？</strong></p>
+<ul>
+<li>答：按服务分目录，每个服务含deployment.yaml+service.yaml+configmap.yaml，公共资源单独存放，使用Kustomize/Helm管理多环境。</li>
+</ul></li>
+<li><p><strong>如何保证配置与镜像解耦？</strong></p>
+<ul>
+<li>答：使用ConfigMap/Secret管理配置，通过env或volume注入，镜像不包含环境相关配置。</li>
+</ul></li>
+<li><p><strong>项目部署过程中遇到的最大难点是什么？如何解决？</strong></p>
+<ul>
+<li>答：（开放题，结合实际回答，如服务间依赖、配置管理、网络策略、存储持久化等）</li>
+</ul></li>
+<li><p><strong>如果让你优化这个项目，你会做哪些改进？</strong></p>
+<ul>
+<li>答：增加监控告警（Prometheus+Grafana）、日志收集（EFK）、CI/CD流水线、Service
+Mesh、HPA自动伸缩、网络策略加固等。</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="四交付物清单和模板">四、交付物清单和模板</h2>
+<h3 id="41-交付物清单">4.1 交付物清单</h3>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>交付物</th>
+<th>格式</th>
+<th>必交</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>K8s资源清单YAML</td>
+<td>.yaml文件包</td>
+<td>是</td>
+<td>全部服务的K8s资源清单</td>
+</tr>
+<tr>
+<td>2</td>
+<td>部署文档</td>
+<td>Markdown</td>
+<td>是</td>
+<td>K8s部署步骤与说明</td>
+</tr>
+<tr>
+<td>3</td>
+<td>运维手册</td>
+<td>Markdown</td>
+<td>是</td>
+<td>故障排查与运维操作</td>
+</tr>
+<tr>
+<td>4</td>
+<td>项目报告</td>
+<td>Word/PDF</td>
+<td>是</td>
+<td>项目总结报告</td>
+</tr>
+<tr>
+<td>5</td>
+<td>答辩PPT</td>
+<td>.pptx</td>
+<td>是</td>
+<td>答辩演示文稿</td>
+</tr>
+<tr>
+<td>6</td>
+<td>演示视频</td>
+<td>.mp4</td>
+<td>是</td>
+<td>部署与运维演示</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-k8s-yaml清单目录结构模板">4.2 K8s YAML清单目录结构模板</h3>
+<div class="visual">
+  <div class="visual-title">图示 3：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">ctts-k8s/</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> README.md                    # 项目说明</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> namespace.yaml               # 命名空间</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> base/                        # 公共基础资源</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> configmap.yaml           # 公共配置</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> secret.yaml              # 公共密钥</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> pvc.yaml                 # 持久化存储</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> services/                    # 各服务资源</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ctts-web/                # Web前端服务</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> deployment.yaml</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> service.yaml</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> configmap.yaml</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> hpa.yaml</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ctts-api/                # API服务</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> deployment.yaml</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> service.yaml</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> configmap.yaml</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ctts-auth/               # 认证服务</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> deployment.yaml</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> service.yaml</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> mysql/                   # MySQL服务</span>
+<span class="diagram-line"><span class="tree-token">│</span>       <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> statefulset.yaml</span>
+<span class="diagram-line"><span class="tree-token">│</span>       <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> service.yaml</span>
+<span class="diagram-line"><span class="tree-token">│</span>       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> pvc.yaml</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> networking/                  # 网络资源</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ingress.yaml             # Ingress路由</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> networkpolicy.yaml       # 网络策略</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> kustomization.yaml           # Kustomize配置</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h3 id="43-部署文档模板">4.3 部署文档模板</h3>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># CTTS项目K8s部署文档</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. 项目概述</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>项目名称：CTTS云原生运维训练平台</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>项目描述：<span class="co">[</span><span class="ot">一句话描述</span><span class="co">]</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>技术栈：<span class="co">[</span><span class="ot">前端/后端/数据库/中间件</span><span class="co">]</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. 环境要求</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>K8s版本：1.28+</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>节点配置：1 master + 2 worker，每节点≥4C8G</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>存储类：standard（或指定）</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>前置组件：metrics-server、Ingress Controller</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. 部署步骤</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.1 创建命名空间</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>kubectl apply -f namespace.yaml</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.2 部署基础资源</span></span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>kubectl apply -f base/</span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3 部署数据层</span></span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>kubectl apply -f services/mysql/</span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.4 部署服务层</span></span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a>kubectl apply -f services/ctts-auth/</span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a>kubectl apply -f services/ctts-api/</span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a>kubectl apply -f services/ctts-web/</span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.5 部署网络层</span></span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a>kubectl apply -f networking/</span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.6 一键部署（Kustomize）</span></span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true" tabindex="-1"></a>kubectl apply -k .</span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-36"><a href="#cb38-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. 验证方法</span></span>
+<span id="cb38-37"><a href="#cb38-37" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>查看所有Pod：kubectl get pods -n ctts-prod</span>
+<span id="cb38-38"><a href="#cb38-38" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>查看所有Service：kubectl get svc -n ctts-prod</span>
+<span id="cb38-39"><a href="#cb38-39" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>访问应用：curl http://<span class="dt">&lt;</span><span class="kw">ingress-ip</span><span class="dt">&gt;</span> 或浏览器访问</span>
+<span id="cb38-40"><a href="#cb38-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-41"><a href="#cb38-41" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. 常见问题</span></span>
+<span id="cb38-42"><a href="#cb38-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>问题1：MySQL启动慢 → 等待初始化完成</span>
+<span id="cb38-43"><a href="#cb38-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>问题2：服务间调用失败 → 检查Service名称与DNS</span>
+<span id="cb38-44"><a href="#cb38-44" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>问题3：Ingress无法访问 → 检查Ingress Controller安装</span>
+<span id="cb38-45"><a href="#cb38-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-46"><a href="#cb38-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. 卸载方法</span></span>
+<span id="cb38-47"><a href="#cb38-47" aria-hidden="true" tabindex="-1"></a>kubectl delete -k .</span></code></pre></div>
+<h3 id="44-运维手册模板">4.4 运维手册模板</h3>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># CTTS项目K8s运维手册</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. 故障排查指南</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">参考本资料&quot;一、故障排查指南&quot;</span><span class="co">]</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. 日常运维操作</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.1 滚动更新</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">操作步骤与命令</span><span class="co">]</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.2 回滚</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">操作步骤与命令</span><span class="co">]</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.3 扩缩容</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">手动与HPA操作步骤</span><span class="co">]</span></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.4 日志查看</span></span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">日志查询命令与技巧</span><span class="co">]</span></span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. 监控告警</span></span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>推荐方案：Prometheus + Grafana</span>
+<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>关键指标：Pod CPU/内存、节点资源、API响应时间</span>
+<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>告警规则：Pod重启、节点NotReady、CPU&gt;80%</span>
+<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. 备份恢复</span></span>
+<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>配置备份：kubectl get configmap/secret -o yaml &gt; backup.yaml</span>
+<span id="cb39-26"><a href="#cb39-26" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>数据备份：MySQL定期dump到PVC或对象存储</span>
+<span id="cb39-27"><a href="#cb39-27" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>灾难恢复：定期测试备份恢复流程</span>
+<span id="cb39-28"><a href="#cb39-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-29"><a href="#cb39-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. 安全加固</span></span>
+<span id="cb39-30"><a href="#cb39-30" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>RBAC：最小权限原则配置ServiceAccount</span>
+<span id="cb39-31"><a href="#cb39-31" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>网络策略：限制Pod间访问</span>
+<span id="cb39-32"><a href="#cb39-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>镜像安全：使用私有仓库、定期扫描漏洞</span>
+<span id="cb39-33"><a href="#cb39-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Secret管理：避免硬编码，使用外部密钥管理</span></code></pre></div>
+<h3 id="45-项目报告模板">4.5 项目报告模板</h3>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># CTTS项目K8s部署项目报告</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. 项目背景</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">项目来源、业务需求、技术背景</span><span class="co">]</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. 架构设计</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.1 系统架构图</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">架构图</span><span class="co">]</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.2 服务划分</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">服务列表与职责</span><span class="co">]</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.3 K8s部署拓扑</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">部署拓扑图</span><span class="co">]</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. 技术选型</span></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 技术 <span class="pp">|</span> 选型 <span class="pp">|</span> 理由 <span class="pp">|</span></span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|------|------|</span></span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 容器编排 <span class="pp">|</span> K8s <span class="pp">|</span> 行业标准、生态完善 <span class="pp">|</span></span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 服务暴露 <span class="pp">|</span> Ingress <span class="pp">|</span> L7路由、TLS支持 <span class="pp">|</span></span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 配置管理 <span class="pp">|</span> ConfigMap <span class="pp">|</span> 配置与镜像解耦 <span class="pp">|</span></span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 持久化 <span class="pp">|</span> PVC <span class="pp">|</span> 数据持久化 <span class="pp">|</span></span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 弹性伸缩 <span class="pp">|</span> HPA <span class="pp">|</span> 自动应对负载 <span class="pp">|</span></span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. 部署方案</span></span>
+<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4.1 资源清单设计</span></span>
+<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">YAML组织与关键配置</span><span class="co">]</span></span>
+<span id="cb40-26"><a href="#cb40-26" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4.2 部署流程</span></span>
+<span id="cb40-27"><a href="#cb40-27" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">部署步骤</span><span class="co">]</span></span>
+<span id="cb40-28"><a href="#cb40-28" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4.3 验证与测试</span></span>
+<span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">验证方法与结果</span><span class="co">]</span></span>
+<span id="cb40-30"><a href="#cb40-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-31"><a href="#cb40-31" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. 运维实践</span></span>
+<span id="cb40-32"><a href="#cb40-32" aria-hidden="true" tabindex="-1"></a><span class="fu">### 5.1 故障排查案例</span></span>
+<span id="cb40-33"><a href="#cb40-33" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">实际遇到的故障与解决</span><span class="co">]</span></span>
+<span id="cb40-34"><a href="#cb40-34" aria-hidden="true" tabindex="-1"></a><span class="fu">### 5.2 运维操作实践</span></span>
+<span id="cb40-35"><a href="#cb40-35" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">滚动更新/回滚/扩缩容实践</span><span class="co">]</span></span>
+<span id="cb40-36"><a href="#cb40-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-37"><a href="#cb40-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. 问题与解决</span></span>
+<span id="cb40-38"><a href="#cb40-38" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 问题 <span class="pp">|</span> 原因 <span class="pp">|</span> 解决方案 <span class="pp">|</span></span>
+<span id="cb40-39"><a href="#cb40-39" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|------|----------|</span></span>
+<span id="cb40-40"><a href="#cb40-40" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">问题1</span><span class="co">]</span> <span class="pp">|</span> <span class="co">[</span><span class="ot">原因</span><span class="co">]</span> <span class="pp">|</span> <span class="co">[</span><span class="ot">方案</span><span class="co">]</span> <span class="pp">|</span></span>
+<span id="cb40-41"><a href="#cb40-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-42"><a href="#cb40-42" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7. 总结与展望</span></span>
+<span id="cb40-43"><a href="#cb40-43" aria-hidden="true" tabindex="-1"></a><span class="fu">### 7.1 项目收获</span></span>
+<span id="cb40-44"><a href="#cb40-44" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">技术能力、工程思维、团队协作</span><span class="co">]</span></span>
+<span id="cb40-45"><a href="#cb40-45" aria-hidden="true" tabindex="-1"></a><span class="fu">### 7.2 不足与改进</span></span>
+<span id="cb40-46"><a href="#cb40-46" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">当前不足与改进方向</span><span class="co">]</span></span>
+<span id="cb40-47"><a href="#cb40-47" aria-hidden="true" tabindex="-1"></a><span class="fu">### 7.3 后续规划</span></span>
+<span id="cb40-48"><a href="#cb40-48" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">监控、CI/CD、Service Mesh等</span><span class="co">]</span></span></code></pre></div>
+<hr />
+<h2 id="五评分标准表">五、评分标准表</h2>
+<h3 id="51-项目答辩评分标准100分制">5.1 项目答辩评分标准（100分制）</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>权重</th>
+<th>满分</th>
+<th>评分细则</th>
+<th>评分等级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>功能完整度</strong></td>
+<td>20%</td>
+<td>20</td>
+<td>CTTS多服务全部成功部署到K8s并能正常访问</td>
+<td>18-20：全部部署成功，服务可访问<br>14-17：大部分服务部署成功<br>10-13：部分服务部署成功<br>0-9：未完成部署</td>
+</tr>
+<tr>
+<td><strong>Dockerfile与YAML质量</strong></td>
+<td>20%</td>
+<td>20</td>
+<td>镜像分层合理、多阶段构建、YAML规范、使用ConfigMap/Secret/资源限制/探针</td>
+<td>18-20：镜像优化+YAML规范+最佳实践<br>14-17：YAML基本规范<br>10-13：YAML可运行但不规范<br>0-9：YAML不规范或缺失</td>
+</tr>
+<tr>
+<td><strong>运维能力</strong></td>
+<td>20%</td>
+<td>20</td>
+<td>能完成5大故障排查与滚动更新/回滚/扩缩容操作</td>
+<td>18-20：能完成全部故障排查+运维操作<br>14-17：能完成3-4项<br>10-13：能完成1-2项<br>0-9：未完成运维操作</td>
+</tr>
+<tr>
+<td><strong>文档与部署</strong></td>
+<td>20%</td>
+<td>20</td>
+<td>4类交付物齐全规范、可复现部署</td>
+<td>18-20：文档齐全规范+可复现<br>14-17：文档基本完整<br>10-13：文档有缺失<br>0-9：文档缺失严重</td>
+</tr>
+<tr>
+<td><strong>答辩表现</strong></td>
+<td>20%</td>
+<td>20</td>
+<td>表达清晰、技术决策合理、问答应对得当</td>
+<td>18-20：表达清晰+问答得当<br>14-17：表达基本清晰<br>10-13：表达一般<br>0-9：表达不清</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-等级评定">5.2 等级评定</h3>
+<table>
+<thead>
+<tr>
+<th>等级</th>
+<th>分数区间</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>优秀</td>
+<td>90-100</td>
+<td>各维度均优秀，能独立完成全流程，文档规范，答辩出色</td>
+</tr>
+<tr>
+<td>良好</td>
+<td>80-89</td>
+<td>各维度良好，能完成主要流程，文档较规范，答辩清晰</td>
+</tr>
+<tr>
+<td>中等</td>
+<td>70-79</td>
+<td>各维度中等，能完成基础流程，文档基本完整，答辩一般</td>
+</tr>
+<tr>
+<td>及格</td>
+<td>60-69</td>
+<td>各维度及格，能完成部分流程，文档有缺失，答辩勉强</td>
+</tr>
+<tr>
+<td>不及格</td>
+<td>&lt;60</td>
+<td>各维度不达标，未完成部署，文档缺失，答辩不清</td>
+</tr>
+</tbody>
+</table>
+<h3 id="53-单项奖设置可选">5.3 单项奖设置（可选）</h3>
+<table>
+<thead>
+<tr>
+<th>奖项</th>
+<th>评选标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最佳项目奖</td>
+<td>综合得分最高，各维度均衡优秀</td>
+</tr>
+<tr>
+<td>最佳运维奖</td>
+<td>故障排查与运维操作维度得分最高</td>
+</tr>
+<tr>
+<td>最佳文档奖</td>
+<td>文档与部署维度得分最高，文档规范可复现</td>
+</tr>
+<tr>
+<td>最佳答辩奖</td>
+<td>答辩表现维度得分最高，表达清晰问答得当</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程总结">六、课程总结</h2>
+<h3 id="61-24次课知识图谱">6.1 24次课知识图谱</h3>
+<div class="visual">
+  <div class="visual-title">图示 4：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">Docker云容器与管理技术（24次课&#183;八大模块）</span>
+<span class="diagram-line">M1 容器基础（第1-3次课）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第1次课：云原生与容器技术概述</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第2次课：Docker安装与初体验</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 第3次课：镜像基础与容器生命周期</span>
+<span class="diagram-line">M2 镜像管理（第4-6次课）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第4次课：Dockerfile基础</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第5次课：Dockerfile进阶（多阶段构建、构建优化）</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 第6次课：镜像仓库与分发</span>
+<span class="diagram-line">M3 容器编排（第7-9次课）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第7次课：Docker Compose基础</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第8次课：Compose多服务编排实战</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 第9次课：容器网络基础</span>
+<span class="diagram-line">M4 容器存储与数据（第10-11次课）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第10次课：数据卷与持久化</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 第11次课：容器存储驱动与优化</span>
+<span class="diagram-line">M5 Kubernetes基础（第12-15次课）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第12次课：K8s架构与集群搭建</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第13次课：Pod与Deployment</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第14次课：Service与服务发现</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 第15次课：ConfigMap与Secret</span>
+<span class="diagram-line">M6 Kubernetes进阶（第16-19次课）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第16次课：存储卷与PersistentVolume</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第17次课：StatefulSet与DaemonSet</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第18次课：Job与CronJob</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 第19次课：Helm包管理</span>
+<span class="diagram-line">M7 Kubernetes高级（第20-22次课）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第20次课：Ingress与网络策略</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第21次课：RBAC与安全上下文</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 第22次课：HPA弹性伸缩与调度</span>
+<span class="diagram-line">M8 综合项目实践（第23-24次课）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 第23次课：综合项目实践一：CTTS多服务K8s部署</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 第24次课：综合项目实践二：K8s集群运维与项目答辩</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h3 id="62-dockerk8s技术栈总览">6.2 Docker+K8s技术栈总览</h3>
+<div class="visual">
+  <div class="visual-title">图示 5：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span>                  云原生技术栈总览                        <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line"><span class="tree-token">│</span>                                                         <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span>   Docker 技术栈  <span class="tree-token">│</span>    <span class="tree-token">│</span>     Kubernetes 技术栈    <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span> • 镜像管理       <span class="tree-token">│</span>    <span class="tree-token">│</span> • 集群架构              <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span>   - Dockerfile  <span class="tree-token">│</span>    <span class="tree-token">│</span>   - master/worker       <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span>   - 多阶段构建   <span class="tree-token">│</span>    <span class="tree-token">│</span>   - etcd/apiserver      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span>   - 镜像仓库     <span class="tree-token">│</span>    <span class="tree-token">│</span>   - scheduler/controller<span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span> • 容器管理       <span class="tree-token">│</span>    <span class="tree-token">│</span> • 工作负载              <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span>   - run/exec    <span class="tree-token">│</span>    <span class="tree-token">│</span>   - Pod/Deployment      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span>   - logs/ps     <span class="tree-token">│</span>    <span class="tree-token">│</span>   - StatefulSet         <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span>   - 网络/存储    <span class="tree-token">│</span>    <span class="tree-token">│</span>   - DaemonSet/Job       <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span> • 编排           <span class="tree-token">│</span>    <span class="tree-token">│</span> • 服务网络              <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span>   - Compose     <span class="tree-token">│</span>    <span class="tree-token">│</span>   - Service/Endpoints   <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span>   - Swarm简介    <span class="tree-token">│</span>    <span class="tree-token">│</span>   - Ingress             <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span> • 数据管理       <span class="tree-token">│</span>    <span class="tree-token">│</span>   - NetworkPolicy       <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span>   - Volume       <span class="tree-token">│</span>    <span class="tree-token">│</span> • 配置与密钥            <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span>   - Bind Mount  <span class="tree-token">│</span>    <span class="tree-token">│</span>   - ConfigMap/Secret    <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘    <span class="tree-token">│</span> • 存储编排              <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                          <span class="tree-token">│</span>   - PV/PVC/StorageClass <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    <span class="tree-token">│</span> • 调度与伸缩            <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span>   贯穿技能       <span class="tree-token">│</span>    <span class="tree-token">│</span>   - HPA/VPA             <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤    <span class="tree-token">│</span>   - 节点亲和/反亲和      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span> • 容器化思维     <span class="tree-token">│</span>    <span class="tree-token">│</span>   - 污点与容忍          <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span> • 微服务部署     <span class="tree-token">│</span>    <span class="tree-token">│</span> • 安全                  <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span> • DevOps实践    <span class="tree-token">│</span>    <span class="tree-token">│</span>   - RBAC/ServiceAccount <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span> • 故障排查       <span class="tree-token">│</span>    <span class="tree-token">│</span>   - SecurityContext     <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span> • 生产运维       <span class="tree-token">│</span>    <span class="tree-token">│</span> • 包管理                <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘    <span class="tree-token">│</span>   - Helm                <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                          <span class="tree-token">│</span> • 运维                  <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                          <span class="tree-token">│</span>   - 滚动更新/回滚       <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                          <span class="tree-token">│</span>   - 故障排查            <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                          <span class="tree-token">│</span>   - 日志/监控           <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                          <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h3 id="63-云原生岗位能力图谱">6.3 云原生岗位能力图谱</h3>
+<div class="visual">
+  <div class="visual-title">图示 6：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span>              云原生岗位能力图谱                          <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line"><span class="tree-token">│</span>                                                         <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  初级能力（入门1-2年）                                   <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 容器基础操作（Docker run/build/push）              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> K8s基础资源操作（Pod/Deploy/Service）              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> YAML编写与调试                                     <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 基础故障排查（kubectl logs/describe）              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 持续集成基础（CI/CD流水线）                        <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                                                         <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  中级能力（3-5年）                                       <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 集群规划与部署（kubeadm/二进制）                   <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 多环境管理（dev/test/prod）                        <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 监控告警体系（Prometheus/Grafana/AlertManager）    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 日志收集体系（EFK/ELK）                            <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Helm包管理与私有仓库                               <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 网络与存储方案选型                                 <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 生产级故障排查与应急响应                           <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                                                         <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  高级能力（5年+）                                       <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 集群高可用与多集群管理                             <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Service Mesh（Istio/Linkerd）                     <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Serverless（Knative/OpenFaaS）                    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> GitOps（ArgoCD/Flux）                             <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 安全合规（镜像扫描/RBAC/网络策略/审计）            <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 性能调优与容量规划                                 <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 云原生架构设计与技术决策                           <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                                                         <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  相关岗位                                                <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 云原生运维工程师                                   <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> DevOps工程师                                      <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> SRE（站点可靠性工程师）                            <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 云原生架构师                                       <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 平台工程师（Platform Engineer）                    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h3 id="64-后续学习路线建议">6.4 后续学习路线建议</h3>
+<div class="visual">
+  <div class="visual-title">图示 7：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">                    后续学习路线</span>
+<span class="diagram-line">                         <span class="tree-token">│</span></span>
+<span class="diagram-line">        ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┼<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">        <span class="tree-token">│</span>                <span class="tree-token">│</span>                <span class="tree-token">│</span></span>
+<span class="diagram-line">    深度方向          广度方向          认证方向</span>
+<span class="diagram-line">        <span class="tree-token">│</span>                <span class="tree-token">│</span>                <span class="tree-token">│</span></span>
+<span class="diagram-line">    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐       ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐       ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">    <span class="tree-token">│</span>       <span class="tree-token">│</span>       <span class="tree-token">│</span>       <span class="tree-token">│</span>       <span class="tree-token">│</span>       <span class="tree-token">│</span></span>
+<span class="diagram-line">  可观测性  服务网格  CI/CD   Serverless  CKA   CKAD</span>
+<span class="diagram-line">    <span class="tree-token">│</span>       <span class="tree-token">│</span>       <span class="tree-token">│</span>       <span class="tree-token">│</span>       <span class="tree-token">│</span>       <span class="tree-token">│</span></span>
+<span class="diagram-line">  Prom    Istio  ArgoCD  Knative  管理员  开发者</span>
+<span class="diagram-line">  Grafana Linkerd Flux   OpenFaaS  认证   认证</span>
+<span class="diagram-line">  Jaeger         Jenkins           <span class="tree-token">│</span></span>
+<span class="diagram-line">  ELK                             CKS</span>
+<span class="diagram-line">                                 安全认证</span>
+<span class="diagram-line">第一阶段（1-3个月）：巩固深化</span>
+<span class="diagram-line">- 深入学习K8s源码与原理</span>
+<span class="diagram-line">- 实践监控告警体系（Prometheus+Grafana）</span>
+<span class="diagram-line">- 搭建日志收集体系（EFK）</span>
+<span class="diagram-line">- 完善CI/CD流水线（Jenkins/GitLab CI）</span>
+<span class="diagram-line">第二阶段（3-6个月）：进阶扩展</span>
+<span class="diagram-line">- 学习Service Mesh（Istio）</span>
+<span class="diagram-line">- 实践GitOps（ArgoCD）</span>
+<span class="diagram-line">- 探索Serverless（Knative）</span>
+<span class="diagram-line">- 考取CKA/CKAD认证</span>
+<span class="diagram-line">第三阶段（6-12个月）：高级专题</span>
+<span class="diagram-line">- 多集群管理</span>
+<span class="diagram-line">- 安全合规加固</span>
+<span class="diagram-line">- 性能调优</span>
+<span class="diagram-line">- 云原生架构设计</span>
+<span class="diagram-line">推荐资源：</span>
+<span class="diagram-line">- 官方文档：kubernetes.io/docs</span>
+<span class="diagram-line">- 书籍：《Kubernetes权威指南》《云原生模式》</span>
+<span class="diagram-line">- 社区：CNCF、Kubernetes中文社区</span>
+<span class="diagram-line">- 开源项目：阅读源码、参与贡献</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h3 id="65-课程核心知识点回顾表">6.5 课程核心知识点回顾表</h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>核心知识点</th>
+<th>关键命令/技术</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M1 容器基础</td>
+<td>容器概念、Docker安装、镜像与容器</td>
+<td>docker run/ps/images</td>
+</tr>
+<tr>
+<td>M2 镜像管理</td>
+<td>Dockerfile、多阶段构建、镜像仓库</td>
+<td>docker build/push</td>
+</tr>
+<tr>
+<td>M3 容器编排</td>
+<td>Compose、多服务编排、网络</td>
+<td>docker-compose up</td>
+</tr>
+<tr>
+<td>M4 容器存储</td>
+<td>数据卷、存储驱动、持久化</td>
+<td>docker volume</td>
+</tr>
+<tr>
+<td>M5 K8s基础</td>
+<td>架构、Pod、Deployment、Service、ConfigMap</td>
+<td>kubectl get/apply</td>
+</tr>
+<tr>
+<td>M6 K8s进阶</td>
+<td>PV/PVC、StatefulSet、Job、Helm</td>
+<td>kubectl create/helm</td>
+</tr>
+<tr>
+<td>M7 K8s高级</td>
+<td>Ingress、RBAC、HPA、调度</td>
+<td>kubectl autoscale</td>
+</tr>
+<tr>
+<td>M8 综合实践</td>
+<td>CTTS多服务部署、集群运维、项目答辩</td>
+<td>综合运用</td>
+</tr>
+</tbody>
+</table>
+<h3 id="66-课程思政总结">6.6 课程思政总结</h3>
+<table>
+<thead>
+<tr>
+<th>思政元素</th>
+<th>贯穿模块</th>
+<th>核心理念</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>工匠精神</td>
+<td>M2镜像管理、M5 K8s基础</td>
+<td>精益求精，镜像优化、YAML规范</td>
+</tr>
+<tr>
+<td>系统思维</td>
+<td>M3容器编排、M8综合实践</td>
+<td>从单容器到多服务到集群运维</td>
+</tr>
+<tr>
+<td>责任担当</td>
+<td>M4容器存储、M8集群运维</td>
+<td>数据安全、生产运维无小事</td>
+</tr>
+<tr>
+<td>创新精神</td>
+<td>M6 K8s进阶、M7 K8s高级</td>
+<td>技术创新、架构设计</td>
+</tr>
+<tr>
+<td>协作精神</td>
+<td>M8综合实践</td>
+<td>团队协作、项目答辩</td>
+</tr>
+<tr>
+<td>完整交付</td>
+<td>M8综合实践</td>
+<td>能部署+能运维+能排障=合格交付</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>本课程从Docker容器基础到K8s集群运维，历经24次课、八大模块，构建了完整的云原生技术体系。课程以CTTS项目为贯穿载体，实现"学-练-战-评-展"闭环。希望同学们以本课程为起点，持续深入云原生领域，成为合格的云原生工程师。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

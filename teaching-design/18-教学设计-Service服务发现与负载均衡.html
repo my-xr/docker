@@ -1,0 +1,616 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Service服务发现与负载均衡</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 18 次课 · 教学设计</div>
+      <h1>Service服务发现与负载均衡</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 18 次课</span>
+        <span class="hero-chip"><b>主题</b>Service服务发现与负载均衡</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+<li><a href="#贯穿项目任务为-ctts-各-deployment-创建-service">贯穿项目任务：为 CTTS 各 Deployment 创建 Service</a></li>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1课前-5-分钟回顾与问题导入开场">互动 1：课前 5 分钟回顾与问题导入（开场）</a></li>
+<li><a href="#互动-2四种-service-类型辨析讲解-k18-2-后">互动 2：四种 Service 类型辨析（讲解 K18-2 后）</a></li>
+<li><a href="#互动-3service-yaml-找错讲解-k18-3-后">互动 3：Service YAML 找错（讲解 K18-3 后）</a></li>
+<li><a href="#互动-4小组讨论何时用-clusterip何时用-nodeport核心互动">互动 4：小组讨论——何时用 ClusterIP，何时用 NodePort（核心互动）</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+<li><a href="#随堂练习5-分钟讲解结束前进行">随堂练习（5 分钟，讲解结束前进行）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 18 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M7 Service 与网络 ｜ 课程：《Docker 云容器与管理技术》
+配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 18 次课（全课程 24 次之第 18，M7 模块开篇）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>理论课</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M7 Service 与网络</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>Service 服务发现与负载均衡</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>K8s 集群搭建（第 14 次课）、Pod 与生命周期（第 15 次课）、Deployment
+与 ReplicaSet（第 16 次课）、工作负载管理实践（第 17 次课，CTTS 三
+Deployment 已部署）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>理解 Service 的概念与作用——为什么需要 Service（Pod IP 不固定、Pod
+会重建、负载均衡需求）。</li>
+<li>掌握 Service
+的四种类型：ClusterIP、NodePort、LoadBalancer、ExternalName，并能根据场景选择合适类型。</li>
+<li>掌握 Service YAML
+结构（apiVersion/kind/spec.type/selector/ports），理解 selector 如何关联
+Pod。</li>
+<li>理解 Endpoints 概念，掌握 <code>kubectl get endpoints</code>
+查看后端 Pod 列表。</li>
+<li>理解 DNS
+服务发现机制（CoreDNS、service-name.namespace.svc.cluster.local
+格式）。</li>
+<li>掌握无选择器 Service 的应用场景与配置方式。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能够编写 Service YAML（含 selector 关联 Pod、ports
+配置）并部署到集群。</li>
+<li>能够使用
+<code>kubectl get svc</code>、<code>kubectl describe svc</code>、<code>kubectl get endpoints</code>
+查询和排查 Service。</li>
+<li>能够为 CTTS 三 Deployment（MySQL / Backend / Frontend）创建
+ClusterIP Service，并验证服务发现与负载均衡。</li>
+<li>能够通过 Service DNS 名实现服务间通信（后端通过 mysql Service
+名访问数据库，前端通过 backend Service 名访问后端 API）。</li>
+<li>能够根据访问需求选择合适的 Service 类型（ClusterIP
+内部通信、NodePort 对外暴露）。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>培养"服务化思维"——微服务间通过 Service 通信，而非硬编码
+IP，理解解耦的工程价值。</li>
+<li>建立"稳定接口"意识——Service 提供稳定 IP 与 DNS 名，后端 Pod
+可任意变更，体现"接口稳定、实现可变"的工程思想。</li>
+<li>强化"系统协作"视角——从单 Pod
+视角跃迁到服务间协作视角，理解云原生应用的组合艺术。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K18-1</td>
+<td>Service 概念与作用</td>
+<td>Pod IP 不固定；Pod 会重建；负载均衡需求；Service 提供稳定 IP + DNS
+名 + 负载均衡</td>
+</tr>
+<tr>
+<td>K18-2</td>
+<td>Service 类型详解</td>
+<td>ClusterIP（默认，集群内部）、NodePort（节点端口对外）、LoadBalancer（云负载均衡）、ExternalName（外部名称映射）；四种类型对比表</td>
+</tr>
+<tr>
+<td>K18-3</td>
+<td>Service YAML 结构</td>
+<td>apiVersion: v1, kind: Service, spec.type/selector/ports；selector
+关联 Pod 标签；ports.port/targetPort/nodePort</td>
+</tr>
+<tr>
+<td>K18-4</td>
+<td>标签选择器与 Endpoints</td>
+<td>selector 匹配 Pod 标签；Endpoints
+端点列表概念；<code>kubectl get endpoints</code> 查看后端 Pod；无选择器
+Service</td>
+</tr>
+<tr>
+<td>K18-5</td>
+<td>DNS 服务发现</td>
+<td>CoreDNS 组件；Service DNS
+名格式：service-name.namespace.svc.cluster.local；服务间通过 Service
+名通信；跨命名空间访问</td>
+</tr>
+<tr>
+<td>K18-6</td>
+<td>CTTS 各 Service 创建</td>
+<td>为三 Deployment 创建 ClusterIP
+Service；验证服务发现与负载均衡；后端通过 mysql Service
+名访问数据库；前端通过 backend Service 名访问后端 API</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3 id="贯穿项目任务为-ctts-各-deployment-创建-service">贯穿项目任务：为
+CTTS 各 Deployment 创建 Service</h3>
+<p><strong>本次课任务</strong>：</p>
+<ol type="1">
+<li>教师演示：为 CTTS MySQL Deployment 创建 ClusterIP
+Service（mysql），验证后端可通过
+<code>mysql.ctts.svc.cluster.local</code> 连接数据库。</li>
+<li>学生实操：为 CTTS Backend Deployment 创建 ClusterIP
+Service（ctts-backend），验证前端 Nginx 可通过
+<code>ctts-backend.ctts.svc.cluster.local</code> 反向代理到后端。</li>
+<li>学生实操：为 CTTS Frontend Deployment 创建 ClusterIP
+Service（ctts-frontend），并用 <code>kubectl port-forward</code>
+临时验证前端访问。</li>
+<li>进阶任务：将前端 Service 改为 NodePort
+类型，从集群外部通过节点端口访问前端页面。</li>
+<li>验证：用 <code>kubectl get endpoints</code> 查看各 Service 的后端
+Pod 列表，验证 Endpoints 与 Pod 标签的关联。</li>
+</ol>
+<p><strong>项目背景衔接</strong>（详见 <code>教学资料.md</code>
+综合示例）：</p>
+<ul>
+<li>第 17 次课已部署 CTTS 三 Deployment（MySQL 1 副本 + Backend 3 副本 +
+Frontend 2 副本）。</li>
+<li>第 17 次课用 <code>kubectl expose</code> 临时创建了 mysql 和
+ctts-backend 两个 Service（仅暴露端口，未深入讲解）。</li>
+<li>本节课系统学习 Service 理论，并为三 Deployment 编写标准 Service
+YAML，统一管理。</li>
+<li>本节课完成后，CTTS 集群内部服务间通信全链路打通：Frontend →
+ctts-backend Service → Backend Pods → mysql Service → MySQL Pod。</li>
+</ul>
+<blockquote>
+<p>📌 本节课是 M7 模块（Service 与网络）的开篇课，重点建立 Service
+概念体系。Ingress（第 19 次课）和 NetworkPolicy（第 20
+次课）是后续延伸。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1课前-5-分钟回顾与问题导入开场">互动 1：课前 5
+分钟回顾与问题导入（开场）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"上节课我们部署了 CTTS 三个 Deployment。请问：后端 Pod 连接 MySQL
+时，DB_HOST 写的是
+<code>mysql.ctts.svc.cluster.local</code>——这个域名是怎么来的？如果
+MySQL Pod 重建后 IP 变了，后端还能连上吗？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>自由发言，教师板书关键词</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>提到"Service""DNS""上节课用 kubectl expose 创建过""IP
+变了应该还能连，因为有 Service"等关键词；部分学生可能答不上来</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定学生的回忆，引出"Service 是 K8s 中解决'Pod IP
+不稳定'的核心机制"，本节课系统学习。强调"Service 提供稳定 IP + DNS 名 +
+负载均衡"三大能力</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2四种-service-类型辨析讲解-k18-2-后">互动 2：四种 Service
+类型辨析（讲解 K18-2 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>给出 4 个场景：① 后端访问数据库；②
+开发测试时临时从外部访问前端页面；③ 生产环境对外暴露 Web
+服务（云厂商环境）；④ 集群内应用访问外部已有数据库（如
+RDS）。判断各场景适合用哪种 Service 类型</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>小组讨论 3 分钟 → 每组派代表发言 1 分钟 → 教师投影对比表讲解</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能区分：① ClusterIP（内部通信）；② NodePort（临时对外）；③
+LoadBalancer（云生产对外）；④
+ExternalName（外部名称映射）。部分场景可能有分歧（如②③都可能选
+NodePort）</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调"选择 Service 类型要看访问场景"：内部通信用
+ClusterIP（最常见，默认）；临时对外调试用
+NodePort（暴露节点端口）；云生产对外用 LoadBalancer（云厂商提供
+ELB/SLB）；对接外部服务用 ExternalName（CNAME
+映射）。生产环境对外访问通常用
+Ingress（下节课学），NodePort/LoadBalancer 是底层机制</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-3service-yaml-找错讲解-k18-3-后">互动 3：Service YAML
+找错（讲解 K18-3 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>教师给出一含错误的 Service YAML（selector 与 Pod 标签不匹配 /
+ports.targetPort 写错 / apiVersion 写错），学生 3
+分钟内找出错误并修正</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>个人独立完成 3 分钟 → 同桌互查 1 分钟 → 教师投影标准答案讲解</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能找出 selector 不匹配、targetPort 与 containerPort
+不一致等常见错误</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调"selector 必须与 Pod 模板的 labels 匹配""targetPort 必须与
+containerPort 一致""apiVersion: v1（注意不是 apps/v1）"。这是 Service
+部署最常见的踩坑点</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-4小组讨论何时用-clusterip何时用-nodeport核心互动">互动
+4：小组讨论——何时用 ClusterIP，何时用 NodePort（核心互动）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"在 CTTS 项目中，三个 Service（mysql / ctts-backend /
+ctts-frontend）应该分别用哪种类型？为什么？如果让你对外发布 CTTS
+前端，你会选 NodePort 还是其他方式？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>4~5 人一组讨论 8 分钟 → 每组派代表发言 2 分钟 → 教师汇总点评</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td><strong>mysql</strong>：ClusterIP（仅后端访问，不需要对外）；<strong>ctts-backend</strong>：ClusterIP（仅前端访问，不需要对外）；<strong>ctts-frontend</strong>：ClusterIP（默认）+
+Ingress（生产对外）或
+NodePort（临时调试）。讨论中可能产生分歧：部分学生认为前端应该直接用
+NodePort 对外</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>① 内部服务（数据库、后端 API）一律
+ClusterIP，避免不必要的对外暴露（安全原则）；② 前端对外通常用
+Ingress（七层路由，下节课学），NodePort 仅用于临时调试或非云环境；③
+生产环境几乎不用 NodePort 直接对外（端口范围受限 30000-32767、暴露节点
+IP 不优雅）；④ 体现"最小暴露原则"——只暴露必须暴露的服务</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>服务化思维——微服务间通过 Service 通信</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td>Service 提供稳定 IP + DNS 名，使微服务间解耦：调用方只需知道 Service
+名，不需关心后端 Pod IP 与数量。这是"微服务架构"能在 K8s
+上落地的核心基础</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"如果让你设计一个电商系统，订单服务要调用商品服务，你会让订单服务直接记商品服务的
+Pod IP 吗？为什么？Service 这种'稳定接口 +
+后端可变'的设计思想，在哪些领域也有体现？"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>建立"服务化思维"：接口稳定、实现可变；解耦是复杂系统协作的基础。引申到"标准接口""契约精神"——服务间通过标准协议通信，是工程协作的素养</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入：从技术层面的"Service
+解耦"延伸到工程协作层面的"接口契约"，再到团队协作的"稳定承诺"。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3 id="随堂练习5-分钟讲解结束前进行">随堂练习（5
+分钟，讲解结束前进行）</h3>
+<p><strong>判断题（口头快速作答）</strong>：</p>
+<ol type="1">
+<li>Service 的 ClusterIP
+类型只能在集群内部访问，外部无法直接访问。（✓）</li>
+<li>Service 通过 selector 关联 Pod，selector 必须与 Pod 的 labels
+完全匹配。（✓）</li>
+<li>NodePort 类型的 Service 会占用节点的一个端口（默认
+30000-32767）对外暴露。（✓）</li>
+<li>Pod 重建后 IP 变化，依赖该 Pod 的 Service
+也会失效需要重建。（✗）</li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速互动，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>阅读</strong>：通读同文件夹
+<code>教学资料.md</code>，重点理解 Service 四种类型对比、Service YAML
+结构、Endpoints、DNS 服务发现。</li>
+<li><strong>思考</strong>：用 200 字描述"为什么 K8s 需要
+Service"，下次课抽查。</li>
+<li><strong>实操</strong>：在 Minikube 集群中为 CTTS 三 Deployment
+编写标准 Service YAML（mysql / ctts-backend / ctts-frontend 均为
+ClusterIP），apply 后用
+<code>kubectl get svc</code>、<code>kubectl get endpoints</code>、<code>kubectl exec ... nslookup</code>
+验证。</li>
+<li><strong>进阶实操</strong>：将 ctts-frontend Service 改为 NodePort
+类型，从宿主机浏览器通过 <code>minikube ip:节点端口</code>
+访问前端页面。</li>
+<li><strong>画图</strong>：手绘 CTTS 三 Service 与三 Deployment
+的关联图，标出 selector、ClusterIP、Pod IP、DNS
+名，下次课带到课堂。</li>
+<li><strong>思考题</strong>：为什么 Service 的 ClusterIP 是"虚拟
+IP"（Virtual IP），无法被 ping 通但可以被 curl 访问？（为第 20 次课 K8s
+网络进阶做铺垫）</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Service 四种类型的区别与选型（面试高频基础题）</td>
+<td>K18-2</td>
+</tr>
+<tr>
+<td>Service YAML 编写与 selector 关联 Pod（实操必备）</td>
+<td>K18-3、K18-4</td>
+</tr>
+<tr>
+<td>Endpoints 概念与排查（中级运维岗位常考）</td>
+<td>K18-4</td>
+</tr>
+<tr>
+<td>DNS 服务发现机制（面试常考"K8s 服务间怎么通信"）</td>
+<td>K18-5</td>
+</tr>
+<tr>
+<td>无选择器 Service（ExternalName / 对接外部服务）</td>
+<td>K18-4</td>
+</tr>
+<tr>
+<td>Service 负载均衡原理（默认轮询，面试常考）</td>
+<td>K18-1、K18-4</td>
+</tr>
+<tr>
+<td>生产环境对外暴露服务的几种方式对比</td>
+<td>K18-2（延伸到 Ingress）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"说一下 Service 的几种类型""Service 和 Pod 怎么关联""K8s
+服务间怎么通信""Endpoints 是什么"等，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + CTTS 三 Service 综合示例 + 思维导图 +
+复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+<tr>
+<td>上节课资料</td>
+<td><code>../17 工作负载管理实践/教学资料.md</code></td>
+<td>第 17 次课 Deployment 综合实践，本节课在其基础上创建 Service</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>课前 5 分钟回顾 + 问题导入（互动 1）</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~25 min</td>
+<td>知识点 K18-1：Service 概念与作用</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>25~45 min</td>
+<td>知识点 K18-2：Service 四种类型详解 + 辨析互动（互动 2）</td>
+<td>20 min</td>
+</tr>
+<tr>
+<td>45~60 min</td>
+<td>知识点 K18-3：Service YAML 结构 + 找错互动（互动 3）</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>60~70 min</td>
+<td>知识点 K18-4：标签选择器与 Endpoints</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>70~80 min</td>
+<td>知识点 K18-5：DNS 服务发现</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>80~85 min</td>
+<td>知识点 K18-6：CTTS 各 Service 创建（演示+小讨论）</td>
+<td>5 min</td>
+</tr>
+<tr>
+<td>85~90 min</td>
+<td>小组讨论（互动 4）+ 小结 + 课后任务布置</td>
+<td>5 min</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

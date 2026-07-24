@@ -1,0 +1,1068 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docker安装与初体验</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 02 次课 · 题库</div>
+      <h1>Docker安装与初体验</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 02 次课</span>
+        <span class="hero-chip"><b>主题</b>Docker安装与初体验</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 02 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>02-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>02-选择-001</strong>（★ 知识点：K2-1 系统要求） 本课程推荐的
+Docker 安装操作系统是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Windows 10</span></li><li><span class="option-label">B</span><span>macOS</span></li><li><span class="option-label">C</span><span>Ubuntu 22.04 LTS</span></li><li><span class="option-label">D</span><span>CentOS 6</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：本课程统一用 Ubuntu
+22.04 LTS，内核 5.15+ 满足 Docker
+要求，社区活跃、官方源支持完善。Windows/macOS 用 Docker Desktop
+与生产环境有差异；CentOS 6 内核过旧、CentOS 8 已 EOL。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-002</strong>（★ 知识点：K2-1 内核要求） Docker 对
+Linux 内核版本的最低要求是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>2.6</span></li><li><span class="option-label">B</span><span>3.10</span></li><li><span class="option-label">C</span><span>4.15</span></li><li><span class="option-label">D</span><span>5.0</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Docker 要求内核 ≥
+3.10（建议 3.10+）。Ubuntu 22.04 自带 5.15
+内核，完全满足。内核过低会导致 namespaces/cgroups 特性不全。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-003</strong>（★ 知识点：K2-2 卸载旧版本） 安装 Docker
+前建议先卸载旧版本，主要原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>旧版本无法启动</span></li><li><span class="option-label">B</span><span>避免新旧版本冲突</span></li><li><span class="option-label">C</span><span>旧版本占用内存</span></li><li><span class="option-label">D</span><span>卸载是必须步骤，不卸载无法安装</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：防御性卸载旧版本（如
+docker.io、docker-engine）是为避免与官方 docker-ce
+冲突。没装过旧版执行卸载命令也不会报错。D
+错，不卸载技术上也能装，但有冲突风险。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-004</strong>（★ 知识点：K2-2 GPG 密钥） 添加 Docker
+官方 apt 源时，GPG 密钥的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>加速软件下载</span></li><li><span class="option-label">B</span><span>验证软件包来源真实性，防止被篡改</span></li><li><span class="option-label">C</span><span>压缩软件包体积</span></li><li><span class="option-label">D</span><span>自动安装依赖</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：apt 通过 GPG
+密钥验证软件包签名，确保包来自 Docker 官方未被篡改。没有 GPG 密钥 apt
+会警告 NO_PUBKEY 并拒绝安装。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-005</strong>（★ 知识点：K2-2 apt 源配置） 在 Ubuntu
+22.04 上，Docker 官方 apt 源配置文件应放在？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>/etc/apt/sources.list</span></li><li><span class="option-label">B</span><span>/etc/docker/daemon.json</span></li><li><span class="option-label">C</span><span>/etc/apt/sources.list.d/docker.list</span></li><li><span class="option-label">D</span><span>/etc/docker/sources.list</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：第三方源统一放在
+/etc/apt/sources.list.d/ 目录下，Docker 源文件名为
+docker.list。/etc/apt/sources.list
+是系统主源文件，不建议直接改。daemon.json 是 Docker 运行配置，不是 apt
+源。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-006</strong>（★ 知识点：K2-2 安装包名） 通过 Docker
+官方源安装 Docker 引擎主体使用的包名是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker.io</span></li><li><span class="option-label">B</span><span>docker</span></li><li><span class="option-label">C</span><span>docker-ce</span></li><li><span class="option-label">D</span><span>docker-engine</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：官方源提供
+docker-ce（Community Edition 社区版）。docker.io 是 Ubuntu
+发行版自己打包的旧版本，不推荐。docker-engine 是更早的旧包名。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-007</strong>（★ 知识点：K2-2 包组成） 下列哪个包是
+Docker 的命令行客户端？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker-ce</span></li><li><span class="option-label">B</span><span>docker-ce-cli</span></li><li><span class="option-label">C</span><span>containerd.io</span></li><li><span class="option-label">D</span><span>docker-buildx-plugin</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：docker-ce-cli 是
+docker 命令行客户端；docker-ce 是引擎主体（含 dockerd）；containerd.io
+是容器运行时；docker-buildx-plugin 是构建增强插件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-008</strong>（★ 知识点：K2-2 验证安装） 安装 Docker
+后，查看 Docker 版本号的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker version --all</span></li><li><span class="option-label">B</span><span>docker
+--version</span></li><li><span class="option-label">C</span><span>docker info --version</span></li><li><span class="option-label">D</span><span>systemctl status docker</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker --version</code>
+查看客户端版本号（精简）。<code>docker version</code>（不带 --）查看
+Client + Server 详细信息。<code>docker info</code> 看系统详情。systemctl
+status 看服务状态。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-009</strong>（★ 知识点：K2-3 服务管理） 启动 Docker
+服务的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>sudo systemctl start docker</span></li><li><span class="option-label">B</span><span>sudo systemctl enable
+docker</span></li><li><span class="option-label">C</span><span>sudo systemctl status docker</span></li><li><span class="option-label">D</span><span>sudo systemctl restart
+docker</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：start
+启动服务；enable 是设置开机自启；status 是查看状态；restart
+是重启。启动当前服务用 start。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-010</strong>（★ 知识点：K2-3 开机自启） 设置 Docker
+开机自启的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>sudo systemctl start docker</span></li><li><span class="option-label">B</span><span>sudo systemctl
+enable docker</span></li><li><span class="option-label">C</span><span>sudo systemctl status docker</span></li><li><span class="option-label">D</span><span>sudo systemctl restart
+docker</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：enable
+是设置开机自启（持久化）；start 是当前启动。生产环境两者都要执行，或用
+<code>enable --now</code> 一步到位。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-011</strong>（★ 知识点：K2-3 服务状态）
+<code>systemctl status docker</code> 输出中，表示服务正常运行的字段是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Loaded: loaded</span></li><li><span class="option-label">B</span><span>Active: active (running)</span></li><li><span class="option-label">C</span><span>Main PID: 12345</span></li><li><span class="option-label">D</span><span>Tasks: 10</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>Active: active (running)</code>
+表示服务正在运行（关键判断）。Loaded 表示单元文件已加载；Main PID
+是主进程号；Tasks 是任务数。看到 active (running) 才算服务正常。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-012</strong>（★ 知识点：K2-3 重启生效） 修改
+/etc/docker/daemon.json 后，使其生效需要执行？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>systemctl reload
+docker</span></li><li><span class="option-label">B</span><span>systemctl restart docker</span></li><li><span class="option-label">C</span><span>systemctl daemon-reload</span></li><li><span class="option-label">D</span><span>source
+/etc/docker/daemon.json</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：dockerd
+只在启动时读取 daemon.json，运行中改了配置必须
+<code>systemctl restart docker</code> 重新加载。reload 对 docker
+服务无效；daemon-reload 是让 systemd 重载单元文件（不是配置）；source
+不能用于 JSON 文件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-013</strong>（★ 知识点：K2-4 配置文件） Docker
+镜像加速器的配置文件路径是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>/etc/docker/config.json</span></li><li><span class="option-label">B</span><span>/etc/docker/daemon.json</span></li><li><span class="option-label">C</span><span>/etc/docker/mirror.json</span></li><li><span class="option-label">D</span><span>/etc/docker/registry.json</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Docker
+守护进程配置文件固定为 /etc/docker/daemon.json。镜像加速器在其中
+registry-mirrors 字段配置。其他文件名都不对。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-014</strong>（★ 知识点：K2-4 配置字段） daemon.json
+中配置镜像加速器的字段名是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>mirrors</span></li><li><span class="option-label">B</span><span>registry-mirrors</span></li><li><span class="option-label">C</span><span>image-mirrors</span></li><li><span class="option-label">D</span><span>docker-mirrors</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：字段名是
+<code>registry-mirrors</code>，值是地址数组。字段名必须严格一致，写错不报错但不生效。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-015</strong>（★ 知识点：K2-4 加速器作用）
+配置镜像加速器的主要目的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>加快镜像拉取速度</span></li><li><span class="option-label">B</span><span>减小镜像体积</span></li><li><span class="option-label">C</span><span>提高容器运行性能</span></li><li><span class="option-label">D</span><span>自动清理无用镜像</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：镜像加速器是国内镜像站缓存，加速从 Docker Hub
+拉取镜像的速度。不影响镜像体积、容器性能或清理。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-016</strong>（★ 知识点：K2-4 生效方式）
+配置镜像加速器后，使其生效的正确操作是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>重新登录系统</span></li><li><span class="option-label">B</span><span>重启 Docker
+服务</span></li><li><span class="option-label">C</span><span>重新打开终端</span></li><li><span class="option-label">D</span><span>等待自动生效</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：dockerd 启动时读取
+daemon.json，改配置后必须 <code>systemctl restart docker</code>
+重新加载。重新登录/重开终端/等待都不会让 dockerd 重新读取配置。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-017</strong>（★ 知识点：K2-4 验证生效）
+验证镜像加速器是否生效的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker version</span></li><li><span class="option-label">B</span><span>docker images</span></li><li><span class="option-label">C</span><span>docker info</span></li><li><span class="option-label">D</span><span>docker ps</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>docker info</code> 输出中的
+<code>Registry Mirrors</code> 字段会列出已生效的加速器地址。docker
+version 看版本；docker images 看本地镜像；docker ps 看运行中容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-018</strong>（★ 知识点：K2-5 docker run 原理）
+<code>docker run hello-world</code> 第一次执行时，dockerd 会？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>直接报错，因为本地没有镜像</span></li><li><span class="option-label">B</span><span>自动从仓库拉取 hello-world 镜像再运行</span></li><li><span class="option-label">C</span><span>需要先手动 docker pull 才能运行</span></li><li><span class="option-label">D</span><span>从本地缓存创建容器</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：docker run
+时若本地没有指定镜像，dockerd 会自动从仓库 pull 再运行，不需要手动
+pull。第一次看到 "Unable to find image locally" + "Pulling from"。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-019</strong>（★ 知识点：K2-5 输出含义）
+<code>docker run hello-world</code> 输出 "Unable to find image
+'hello-world:latest' locally" 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像拉取失败</span></li><li><span class="option-label">B</span><span>本地没有该镜像，准备拉取</span></li><li><span class="option-label">C</span><span>Docker 安装失败</span></li><li><span class="option-label">D</span><span>网络不通</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：这句话表示本地没有
+hello-world:latest 镜像，dockerd
+接下来会从仓库拉取。是正常流程的第一步，不是报错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-020</strong>（★ 知识点：K2-5 容器状态） hello-world
+容器运行后的状态是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Up（运行中）</span></li><li><span class="option-label">B</span><span>Exited (0)（正常退出）</span></li><li><span class="option-label">C</span><span>Exited
+(1)（异常退出）</span></li><li><span class="option-label">D</span><span>Restarting（重启中）</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：hello-world
+程序打印完说明文字就结束，容器正常退出，状态是 Exited (0)（退出码 0
+表示正常）。nginx 等守护进程容器才会持续 Up。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-021</strong>（★ 知识点：K2-5 第二次运行） 第二次执行
+<code>docker run hello-world</code> 时，与第一次的区别是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>不再显示
+"Pulling from" 拉取过程</span></li><li><span class="option-label">B</span><span>报错说镜像已存在</span></li><li><span class="option-label">C</span><span>需要重新拉取镜像</span></li><li><span class="option-label">D</span><span>容器无法运行</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：第一次已把
+hello-world:latest 拉到本地，第二次直接用本地镜像创建容器，不再
+pull，所以没有 "Unable to find image locally" 和 "Pulling from"
+输出。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-022</strong>（★ 知识点：K2-6 命令区别）
+<code>docker version</code> 和 <code>docker info</code> 的主要区别是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>version 看版本，info 看运行状态详情</span></li><li><span class="option-label">B</span><span>version 看客户端，info
+看服务端</span></li><li><span class="option-label">C</span><span>两个命令完全相同</span></li><li><span class="option-label">D</span><span>version 是旧命令，info 是新命令</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：docker version
+查看客户端与服务端版本（版本号、API 版本等）；docker info
+查看系统级运行详情（容器数、存储驱动、镜像加速器、内核等）。用途不同。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-023</strong>（★ 知识点：K2-6 排查）
+<code>docker version</code> 输出只显示 Client 段，没有 Server
+段，最可能的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Docker 未安装</span></li><li><span class="option-label">B</span><span>dockerd 守护进程未启动</span></li><li><span class="option-label">C</span><span>网络不通</span></li><li><span class="option-label">D</span><span>镜像加速器未配置</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Client 段有说明
+docker 命令装了；Server 段空说明连不上 dockerd，最可能是 dockerd
+未启动（用 systemctl start docker 启动）。也可能是用户无权限（加入
+docker 组）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-024</strong>（★ 知识点：K2-6 存储驱动） Ubuntu 22.04
+上 Docker 推荐的存储驱动是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>aufs</span></li><li><span class="option-label">B</span><span>devicemapper</span></li><li><span class="option-label">C</span><span>overlay2</span></li><li><span class="option-label">D</span><span>vfs</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：overlay2 性能最好，是
+Ubuntu 22.04 默认推荐。aufs 已不推荐；devicemapper 是老方案；vfs
+性能最差（仅兼容用）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-025</strong>（★ 知识点：K2-6 数据目录） Docker
+默认的数据目录（存放镜像、容器、卷）是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>/etc/docker</span></li><li><span class="option-label">B</span><span>/var/lib/docker</span></li><li><span class="option-label">C</span><span>/var/run/docker</span></li><li><span class="option-label">D</span><span>/usr/lib/docker</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：docker info 中
+<code>Docker Root Dir: /var/lib/docker</code> 是 Docker
+数据目录，镜像、容器、卷都存这里。/etc/docker 是配置目录。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-026</strong>（★ 知识点：K2-2 免 sudo） 让普通用户免
+sudo 运行 docker 命令的操作是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>chmod 777 /var/run/docker.sock</span></li><li><span class="option-label">B</span><span>把用户加入 docker 组：usermod -aG docker 用户名</span></li><li><span class="option-label">C</span><span>修改 daemon.json</span></li><li><span class="option-label">D</span><span>用 root 用户登录</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：把用户加入 docker
+组后，该用户有权限访问 /var/run/docker.sock，可免 sudo。chmod 777
+不安全；daemon.json 不控制权限；用 root 不推荐。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-027</strong>（★★ 知识点：K2-2 安装流程顺序） 下列
+Docker 安装步骤的正确顺序是？ ①apt install docker-ce ②添加 GPG 密钥 ③apt
+update ④添加 apt 仓库 ⑤卸载旧版本</p><div class="option-list"><ul><li><span class="option-label">A</span><span>⑤②④③①</span></li><li><span class="option-label">B</span><span>⑤④②③①</span></li><li><span class="option-label">C</span><span>②④⑤③①</span></li><li><span class="option-label">D</span><span>⑤②③④①</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：正确顺序：先卸载旧版本(⑤)→添加 GPG 密钥(②)→添加
+apt 仓库(④)→apt update(③)→apt install(①)。GPG 密钥要在仓库之前，apt
+update 要在 install 之前。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-028</strong>（★★ 知识点：K2-2 GPG 密钥路径）
+本课推荐的 GPG 密钥存放路径是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>/etc/apt/trusted.gpg</span></li><li><span class="option-label">B</span><span>/etc/apt/keyrings/docker.gpg</span></li><li><span class="option-label">C</span><span>/root/docker.gpg</span></li><li><span class="option-label">D</span><span>/etc/docker/gpg</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Ubuntu 22.04 推荐用
+keyring 方式，密钥放 /etc/apt/keyrings/docker.gpg，并在 sources.list
+中用 signed-by= 指定路径。旧的 trusted.gpg 方式已不推荐。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-029</strong>（★★ 知识点：K2-3 enable --now）
+<code>sudo systemctl enable --now docker</code> 命令的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>仅设置开机自启</span></li><li><span class="option-label">B</span><span>仅立即启动</span></li><li><span class="option-label">C</span><span>同时设置开机自启并立即启动</span></li><li><span class="option-label">D</span><span>重启
+Docker 服务</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：<code>--now</code>
+参数等同于 enable + start
+一步到位：既设置开机自启，又立即启动服务。是实际运维常用写法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-030</strong>（★★ 知识点：K2-4 daemon.json 格式） 下列
+daemon.json 内容中，格式错误的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>{"registry-mirrors": ["<a
+href="https://a.com">https://a.com</a>"]}</span></li><li><span class="option-label">B</span><span>{"registry-mirrors": ["<a
+href="https://a.com">https://a.com</a>",]}</span></li><li><span class="option-label">C</span><span>{"registry-mirrors": ["<a
+href="https://a.com&quot;,&quot;https://b.com">https://a.com","https://b.com</a>"]}</span></li><li><span class="option-label">D</span><span>{"log-driver": "json-file"}</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：B
+选项数组最后一项多了逗号（trailing comma），JSON
+标准不允许末尾逗号，会导致 dockerd 启动失败。A、C、D 格式正确。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>02-选择-031</strong>（★★ 知识点：K2-2 安装包） 通过 apt 安装
+Docker 引擎时，建议安装的包包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker-ce</span></li><li><span class="option-label">B</span><span>docker-ce-cli</span></li><li><span class="option-label">C</span><span>containerd.io</span></li><li><span class="option-label">D</span><span>docker-buildx-plugin E. docker-compose-plugin</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：完整安装建议五个包都装：docker-ce（引擎主体）、docker-ce-cli（客户端）、containerd.io（运行时）、docker-buildx-plugin（构建增强）、docker-compose-plugin（Compose
+编排）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-032</strong>（★★ 知识点：K2-4 镜像加速器）
+下列属于国内 Docker 镜像加速器的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>中科大镜像站</span></li><li><span class="option-label">B</span><span>阿里云加速器</span></li><li><span class="option-label">C</span><span>网易镜像站</span></li><li><span class="option-label">D</span><span>Docker Hub E. 百度云加速器</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong>
+<strong>解析</strong>：中科大、阿里云、网易、百度云都是国内镜像加速器。D
+错，Docker Hub 是官方源（在国外），不是加速器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-033</strong>（★★ 知识点：K2-3 服务管理） 下列
+systemctl 命令中，用于管理 Docker 服务的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>systemctl start
+docker</span></li><li><span class="option-label">B</span><span>systemctl stop docker</span></li><li><span class="option-label">C</span><span>systemctl restart docker</span></li><li><span class="option-label">D</span><span>systemctl
+enable docker E. systemctl status docker</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：五个都是常用 systemctl 命令：start 启动、stop
+停止、restart 重启、enable 开机自启、status 查状态。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-034</strong>（★★ 知识点：K2-2 安装前置） 安装 Docker
+前需要准备的条件包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Ubuntu 22.04 操作系统</span></li><li><span class="option-label">B</span><span>内核版本 ≥
+3.10</span></li><li><span class="option-label">C</span><span>sudo 权限</span></li><li><span class="option-label">D</span><span>网络连接 E. 安装 ca-certificates、curl、gnupg
+依赖</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：环境准备五要素：操作系统（Ubuntu
+22.04）、内核（≥3.10）、sudo
+权限、网络、依赖包（ca-certificates/curl/gnupg/lsb-release）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-035</strong>（★★ 知识点：K2-5 docker run 流程）
+<code>docker run hello-world</code>
+第一次执行时，发生的步骤包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker CLI 通过 REST API 联系
+dockerd</span></li><li><span class="option-label">B</span><span>dockerd 检查本地无 hello-world 镜像</span></li><li><span class="option-label">C</span><span>dockerd 从仓库拉取
+hello-world 镜像</span></li><li><span class="option-label">D</span><span>dockerd 基于镜像创建容器并运行 E.
+容器输出返回给客户端显示</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：完整流程：CLI 联系
+dockerd(A)→检查本地无镜像(B)→从仓库
+pull(C)→创建容器运行(D)→输出返回(E)。五步都发生。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-036</strong>（★★ 知识点：K2-6 docker info 字段）
+<code>docker info</code> 输出中，可用于诊断 Docker
+运行状态的字段包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Storage Driver（存储驱动）</span></li><li><span class="option-label">B</span><span>Registry
+Mirrors（镜像加速器）</span></li><li><span class="option-label">C</span><span>Containers（容器数量统计）</span></li><li><span class="option-label">D</span><span>Operating
+System（操作系统） E. Kernel Version（内核版本）</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong> <strong>解析</strong>：docker
+info 提供全面信息：存储驱动（确认
+overlay2）、镜像加速器（确认配置生效）、容器统计、操作系统、内核版本等，都是诊断依据。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-037</strong>（★★ 知识点：K2-4 daemon.json） 下列关于
+daemon.json 的说法，正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>文件路径是
+/etc/docker/daemon.json</span></li><li><span class="option-label">B</span><span>格式必须是合法 JSON</span></li><li><span class="option-label">C</span><span>修改后需 restart
+docker 才生效</span></li><li><span class="option-label">D</span><span>registry-mirrors 字段配置镜像加速器 E.
+可配置日志驱动与日志轮转</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：五项都正确。daemon.json 在 /etc/docker/ 下，JSON
+格式，改后需 restart，registry-mirrors 配加速器，还可配
+log-driver/log-opts 等。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-038</strong>（★★ 知识点：K2-2 旧版本包名） 安装
+Docker 前建议卸载的旧版本包名包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker</span></li><li><span class="option-label">B</span><span>docker-engine</span></li><li><span class="option-label">C</span><span>docker.io</span></li><li><span class="option-label">D</span><span>containerd E. runc</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong> <strong>解析</strong>：Ubuntu
+源里可能存在的旧包名：docker、docker-engine、docker.io、containerd、runc，都建议卸载避免与
+docker-ce 冲突。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-039</strong>（★★ 知识点：K2-3 服务状态判断）
+下列情况中，表示 Docker 服务可能未正常运行的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>systemctl
+status 显示 Active: inactive (dead)</span></li><li><span class="option-label">B</span><span>systemctl status 显示 Active:
+failed</span></li><li><span class="option-label">C</span><span>docker version 只显示 Client 段，无 Server 段</span></li><li><span class="option-label">D</span><span>docker ps 报
+"Cannot connect to the Docker daemon" E. docker info 显示 Server
+Version: 24.0.7</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：A（inactive/dead）、B（failed）、C（Server
+段空）、D（连不上守护进程）都说明服务未正常运行。E 显示 Server Version
+说明服务正常。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-选择-040</strong>（★★ 知识点：K2-1/K2-2 综合环境） 关于
+Docker 安装环境，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Docker 基于 Linux
+内核特性，原生运行在 Linux</span></li><li><span class="option-label">B</span><span>Windows/macOS 通过 Docker Desktop 提供轻量
+Linux 虚拟机运行 Docker</span></li><li><span class="option-label">C</span><span>生产环境推荐用 Linux 服务器</span></li><li><span class="option-label">D</span><span>Ubuntu 22.04
+自带内核 5.15，满足 Docker 要求 E. ARM 架构也能安装 Docker，但 apt
+源地址需调整</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：五项都正确。Docker 原生基于 Linux(A)；Win/Mac 用
+Desktop+轻量 Linux VM(B)；生产用 Linux(C)；Ubuntu 22.04 内核 5.15
+满足(D)；ARM 需调整源 arch 参数(E)。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>02-判断-001</strong>（★ 知识点：K2-1 系统要求） Ubuntu 22.04
+LTS 自带的内核版本满足 Docker 的安装要求。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Ubuntu 22.04
+自带内核 5.15，Docker 要求 ≥ 3.10，完全满足。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-002</strong>（★ 知识点：K2-2 卸载旧版本） 安装 Docker
+前必须卸载旧版本，否则无法安装。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：卸载旧版本是防御性操作，避免冲突。没装过旧版或旧版不冲突时也能直接安装，不是"必须"步骤。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-003</strong>（★ 知识点：K2-2 GPG 密钥） 添加 Docker
+apt 源时，GPG 密钥用于验证软件包来源真实性。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：GPG 密钥让
+apt 验证软件包签名，确保来自 Docker 官方未被篡改。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-004</strong>（★ 知识点：K2-2 包选择） Ubuntu
+默认源里的 docker.io 包与 Docker 官方源的 docker-ce 是同一个包。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：docker.io 是
+Ubuntu 自己打包的旧版本，docker-ce 是 Docker
+官方维护的社区版，二者不同。推荐用 docker-ce。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-005</strong>（★ 知识点：K2-3 服务管理）
+<code>systemctl enable docker</code> 命令会立即启动 Docker 服务。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：enable
+只设置开机自启（持久化），不会立即启动。立即启动用 start。两者都做用
+<code>enable --now</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-006</strong>（★ 知识点：K2-3 重启生效） 修改
+/etc/docker/daemon.json 后，需要重启 Docker 服务才能生效。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：dockerd
+只在启动时读取 daemon.json，改配置后必须
+<code>systemctl restart docker</code> 重新加载。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-007</strong>（★ 知识点：K2-4 配置文件）
+镜像加速器配置文件是 /etc/docker/daemon.json。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Docker
+守护进程配置文件固定为 /etc/docker/daemon.json，镜像加速器在
+registry-mirrors 字段。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-008</strong>（★ 知识点：K2-4 JSON 格式） daemon.json
+允许使用单引号包裹字段名和值。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：JSON
+标准必须用双引号，单引号会导致解析失败。这是常见易错点。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-009</strong>（★ 知识点：K2-5 docker run）
+<code>docker run hello-world</code>
+第一次执行时会自动从仓库拉取镜像。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：docker run
+时本地无镜像会自动 pull，不需手动 docker pull。看到 "Unable to find
+image locally" + "Pulling from"。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-010</strong>（★ 知识点：K2-5 容器状态） hello-world
+容器运行后状态是 Exited (0)，表示安装失败。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Exited (0)
+是正常退出（退出码 0），hello-world 程序打印完就结束。看到 "Hello from
+Docker!" 即安装成功。非 0 退出码才是异常。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-011</strong>（★ 知识点：K2-5 第二次运行） 第二次执行
+<code>docker run hello-world</code> 时，仍会从仓库拉取镜像。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：第一次已拉取到本地，第二次直接用本地镜像，不再
+pull，所以没有 "Pulling from" 输出。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-012</strong>（★ 知识点：K2-6 命令区别）
+<code>docker version</code> 和 <code>docker info</code>
+是同一个命令的不同写法。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：两个命令不同。docker version
+看客户端/服务端版本；docker info
+看系统级运行详情（容器数、存储驱动、加速器等）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-013</strong>（★ 知识点：K2-6 排查）
+<code>docker version</code> 只显示 Client 段没有 Server 段，可能是
+dockerd 未启动。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Client
+段有说明 docker 命令装了；Server 段空说明连不上
+dockerd，最可能是服务未启动，也可能是用户无权限。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-014</strong>（★ 知识点：K2-6 存储驱动） Ubuntu 22.04
+上 Docker 默认的存储驱动是 overlay2。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：overlay2
+性能最好，是 Ubuntu 22.04 默认推荐。可用 docker info 查看 Storage Driver
+字段确认。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-015</strong>（★ 知识点：K2-2 免 sudo） 把用户加入
+docker 组后，该用户可免 sudo 运行 docker 命令。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>usermod -aG docker 用户名</code>
+后该用户有权限访问 /var/run/docker.sock，可免 sudo。需 newgrp
+或重新登录生效。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-016</strong>（★★ 知识点：K2-3 stop 影响） 停止 Docker
+服务（systemctl stop docker）后，正在运行的容器会继续运行。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：stop docker
+会停止 dockerd
+守护进程，所有正在运行的容器也会被停止（但容器配置仍在，可重新
+start）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-017</strong>（★ 知识点：K2-4 加速器顺序） daemon.json
+中配置多个镜像加速器时，dockerd
+会按顺序尝试，第一个不通自动用下一个。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：registry-mirrors 是数组，dockerd
+按顺序尝试，第一个不通自动切换下一个，提高可用性。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-018</strong>（★★ 知识点：K2-2 apt update） 添加
+Docker apt 仓库后，必须执行 apt update 让 apt 识别新源。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：apt update
+刷新软件包索引，让 apt 知道新源里有哪些包。不 update 直接 install
+会找不到 docker-ce。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-019</strong>（★ 知识点：K2-1 SSH）
+使用云主机时，可通过 SSH 远程连接服务器进行 Docker 安装操作。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：云主机场景下，本地通过 ssh 用户名@IP
+连接服务器，在远程终端执行安装命令，与本地操作一致。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-判断-020</strong>（★★ 知识点：K2-2 一键脚本）
+<code>curl -fsSL https://get.docker.com | sh</code> 一键脚本与手动配置
+apt 源安装的 Docker 本质相同。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：一键脚本内部执行的就是手动步骤（卸载、配源、装包），只是自动化了。理解手动流程后可用脚本提速。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>02-填空-001</strong>（★ 知识点：K2-1 系统要求） 本课程 Docker
+安装推荐的操作系统是 ________。</p><blockquote>
+<p><strong>答案：Ubuntu 22.04 LTS</strong> <strong>解析</strong>：Ubuntu
+22.04 LTS 内核 5.15+，满足 Docker
+要求，社区活跃、官方源支持完善，是本课程统一推荐环境。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-填空-002</strong>（★ 知识点：K2-2 安装包） 通过 apt 安装
+Docker 引擎主体时，使用的包名是 ________。</p><blockquote>
+<p><strong>答案：docker-ce</strong>
+<strong>解析</strong>：docker-ce（Community Edition 社区版）是 Docker
+官方维护的引擎主体包，区别于 Ubuntu 源的旧版 docker.io。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-填空-003</strong>（★ 知识点：K2-3 服务管理） 启动 Docker
+服务的 systemctl 命令是 ________。</p><blockquote>
+<p><strong>答案：systemctl start docker</strong>
+<strong>解析</strong>：start 启动当前服务；enable 设置开机自启；restart
+重启；status 查看状态。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-填空-004</strong>（★ 知识点：K2-3 开机自启） 设置 Docker
+开机自启的 systemctl 命令是 ________。</p><blockquote>
+<p><strong>答案：systemctl enable docker</strong>
+<strong>解析</strong>：enable 设置开机自启（持久化）。实际常用
+<code>enable --now docker</code> 一步到位（自启+立即启动）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-填空-005</strong>（★ 知识点：K2-4 配置文件） Docker
+镜像加速器的配置文件路径是 ________。</p><blockquote>
+<p><strong>答案：/etc/docker/daemon.json</strong>
+<strong>解析</strong>：Docker 守护进程配置文件固定为
+/etc/docker/daemon.json，镜像加速器在 registry-mirrors 字段配置。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-填空-006</strong>（★ 知识点：K2-4 配置字段） daemon.json
+中配置镜像加速器的字段名是 ________。</p><blockquote>
+<p><strong>答案：registry-mirrors</strong> <strong>解析</strong>：字段名
+registry-mirrors，值是加速器地址数组，如 ["<a
+href="https://docker.mirrors.ustc.edu.cn">https://docker.mirrors.ustc.edu.cn</a>"]。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-填空-007</strong>（★ 知识点：K2-5 验证命令） 验证 Docker
+安装是否成功的标准命令是 ________。</p><blockquote>
+<p><strong>答案：docker run hello-world</strong>
+<strong>解析</strong>：看到 "Hello from Docker!" 即安装成功。这是 Docker
+官方推荐的安装验证命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-填空-008</strong>（★ 知识点：K2-5 容器状态） hello-world
+容器运行后的状态是 ________（退出码 0 表示正常退出）。</p><blockquote>
+<p><strong>答案：Exited (0)</strong> <strong>解析</strong>：hello-world
+程序打印完就结束，容器正常退出，状态 Exited (0)。非 0
+退出码才表示异常。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-填空-009</strong>（★ 知识点：K2-6 信息查看） 查看 Docker
+客户端与服务端版本信息的命令是 ________。</p><blockquote>
+<p><strong>答案：docker version</strong> <strong>解析</strong>：docker
+version 查看 Client + Server 两段版本信息。docker info
+看系统级运行详情。docker --version 只看客户端精简版本。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-填空-010</strong>（★ 知识点：K2-2 免 sudo） 让普通用户免
+sudo 运行 docker 命令，需把用户加入 ________ 组。</p><blockquote>
+<p><strong>答案：docker</strong>
+<strong>解析</strong>：<code>sudo usermod -aG docker $USER</code>
+把当前用户加入 docker 组，之后可免 sudo 运行 docker 命令。需 newgrp
+docker 或重新登录生效。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>02-论述-001</strong>（★★ 知识点：K2-2 安装流程，10 分）
+请写出在 Ubuntu 22.04 上通过 apt 官方源安装 Docker
+引擎的完整步骤，并说明每步的作用。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>环境准备</strong>（1 分）：确认 Ubuntu 22.04 + 内核
+5.15+，执行 <code>apt update</code> 更新索引，安装
+ca-certificates/curl/gnupg/lsb-release 依赖。</li>
+<li><strong>卸载旧版本</strong>（1
+分）：<code>sudo apt remove -y docker docker-engine docker.io containerd runc</code>，防御性卸载避免冲突。</li>
+<li><strong>添加 GPG 密钥</strong>（2 分）：
+<pre><code>sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg</code></pre>
+作用：让 apt 验证软件包来源真实性，防止被篡改。</li>
+<li><strong>添加 apt 仓库</strong>（2 分）：
+<pre><code>echo &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&quot; | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null</code></pre>
+作用：告诉 apt 从 download.docker.com 拉取 docker-ce。</li>
+<li><strong>apt update</strong>（1 分）：让 apt 识别新加的 Docker
+源。</li>
+<li><strong>安装 Docker</strong>（2
+分）：<code>sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</code>，安装引擎主体、客户端、运行时、构建插件、Compose
+插件。</li>
+<li><strong>验证</strong>（1 分）：<code>docker --version</code>
+看版本，<code>docker run hello-world</code> 看 "Hello from
+Docker!"。</li>
+<li><strong>免
+sudo（可选）</strong>：<code>sudo usermod -aG docker $USER</code> +
+<code>newgrp docker</code>。</li>
+</ol>
+<p><strong>评分要点</strong>：步骤完整给分，每步作用说明清楚才给满分；命令可略简但要关键参数齐全。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-论述-002</strong>（★★ 知识点：K2-4 镜像加速器，8 分）
+请说明为什么要配置 Docker 镜像加速器，如何配置（写出完整 daemon.json
+内容与生效步骤），以及如何验证配置生效。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>为什么配置</strong>（2 分）：Docker Hub
+在国外，国内直拉镜像很慢甚至超时。镜像加速器是国内镜像缓存站点，配置后从国内站点拉取，速度大幅提升。</li>
+<li><strong>完整 daemon.json 内容</strong>（3 分）：
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;registry-mirrors&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;https://docker.mirrors.ustc.edu.cn&quot;</span><span class="ot">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;https://hub-mirror.c.163.com&quot;</span><span class="ot">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;https://docker.mirrors.baidubce.com&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+文件路径 /etc/docker/daemon.json，字段 registry-mirrors
+是数组，可配多个按顺序尝试。</li>
+<li><strong>生效步骤</strong>（1.5 分）：
+<pre><code>sudo systemctl daemon-reload
+sudo systemctl restart docker</code></pre>
+dockerd 只在启动时读取配置，必须 restart 才生效。</li>
+<li><strong>验证</strong>（1.5 分）：执行
+<code>docker info</code>，在输出中查找 <code>Registry Mirrors</code>
+字段，看到配置的加速器地址列出即生效。</li>
+</ol>
+<p><strong>评分要点</strong>：四部分各自给分；daemon.json 必须是合法
+JSON 格式（双引号、无末尾逗号）；生效必须 restart。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-论述-003</strong>（★★ 知识点：K2-5/K2-6 docker run
+原理与排查，8 分） 请描述 <code>docker run hello-world</code>
+第一次执行时的完整流程（对应 C/S 架构），并说明
+<code>docker version</code> 只显示 Client 段时如何排查问题。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>docker run 第一次执行流程</strong>（5 分，每步1分）：
+<ul>
+<li>用户敲 <code>docker run hello-world</code>，docker CLI 通过 REST API
+把命令发给 dockerd（1分）</li>
+<li>dockerd 检查本地是否有 hello-world:latest 镜像（1分）</li>
+<li>本地没有 → dockerd 从配置的镜像源（Docker Hub 或加速器）拉取
+hello-world:latest（1分）</li>
+<li>拉取成功 → dockerd 基于镜像创建容器并运行（1分）</li>
+<li>容器执行程序打印输出，返回给客户端显示，程序结束容器退出
+Exited(0)（1分）</li>
+</ul></li>
+<li><strong>docker version 只显示 Client 的排查</strong>（3 分）：
+<ul>
+<li>第一步：<code>sudo systemctl status docker</code> 检查 dockerd
+是否运行，若 inactive 用 <code>sudo systemctl start docker</code>
+启动（1分）</li>
+<li>第二步：<code>groups</code> 检查当前用户是否在 docker 组，若不在用
+<code>sudo usermod -aG docker $USER</code> +
+<code>newgrp docker</code>（1分）</li>
+<li>第三步：<code>sudo journalctl -u docker.service</code> 查看 dockerd
+启动日志定位故障（1分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：流程顺序正确即可；排查三步骤答出核心命令给分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>02-论述-004</strong>（★★ 知识点：K2-3 服务管理+思政，8 分）
+请说明 systemctl 管理 Docker
+服务的常用命令（start/stop/restart/enable/status
+各自作用），并阐述"为什么生产环境必须设置 Docker
+开机自启"以及这体现了什么工程规范意识。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>常用命令及作用</strong>（5 分，每个1分）：
+<ul>
+<li><code>systemctl start docker</code>：启动 Docker
+服务（当前生效）</li>
+<li><code>systemctl stop docker</code>：停止 Docker 服务（停止
+dockerd，运行中的容器也会停）</li>
+<li><code>systemctl restart docker</code>：重启服务（改 daemon.json
+后必做，重新加载配置）</li>
+<li><code>systemctl enable docker</code>：设置开机自启（持久化，服务器重启后
+Docker 自动启动）</li>
+<li><code>systemctl status docker</code>：查看服务状态（看 Active:
+active (running) 确认运行）</li>
+</ul></li>
+<li><strong>生产环境开机自启的必要性</strong>（2
+分）：生产服务器可能因维护、故障、断电等原因重启，若 Docker
+未设开机自启，重启后所有容器都不会运行，导致业务中断。<code>enable docker</code>
+确保服务器重启后 Docker 自动拉起，容器也能随之启动（配合容器 restart
+policy），是生产稳定的基本保障。</li>
+<li><strong>体现的工程规范意识</strong>（1
+分）：体现"环境标准化是协作基础"——统一的安装流程、统一的服务管理、统一的开机自启配置，让团队每个人的环境行为一致，减少"在我机器上能跑"类问题，是工程化的起点。</li>
+</ol>
+<p><strong>评分要点</strong>：命令作用准确给分；开机自启必要性要点齐全；思政部分自然融入即可，不要求长篇大论。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>02-阅读-001</strong>（★★ 知识点：K2-2 安装流程补全，12 分）
+阅读以下 Docker 安装脚本，补全缺失部分（每空 2 分，共 12 分）。</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 卸载旧版本</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt remove <span class="at">-y</span> docker docker-engine <span class="er">(</span><span class="ex">a</span><span class="kw">)</span><span class="ex">________</span> containerd runc</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 添加 GPG 密钥</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /etc/apt/keyrings</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://download.docker.com/linux/ubuntu/gpg <span class="kw">|</span> <span class="fu">sudo</span> <span class="er">(</span><span class="ex">b</span><span class="kw">)</span><span class="ex">________</span> <span class="at">-o</span> /etc/apt/keyrings/docker.gpg</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 添加 apt 仓库</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;deb [arch=</span><span class="va">$(</span><span class="ex">dpkg</span> <span class="at">--print-architecture</span><span class="va">)</span><span class="st"> (c)________=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu </span><span class="va">$(</span><span class="ex">lsb_release</span> <span class="at">-cs</span><span class="va">)</span><span class="st"> stable&quot;</span> <span class="kw">|</span> <span class="fu">sudo</span> tee /etc/apt/sources.list.d/docker.list <span class="op">&gt;</span> /dev/null</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 更新 apt 索引</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> <span class="er">(</span><span class="ex">d</span><span class="kw">)</span><span class="ex">________</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 安装 Docker</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> docker-ce docker-ce-cli <span class="er">(</span><span class="ex">e</span><span class="kw">)</span><span class="ex">________</span> docker-buildx-plugin docker-compose-plugin</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 把用户加入 docker 组（免 sudo）</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> <span class="er">(</span><span class="ex">f</span><span class="kw">)</span><span class="ex">________</span> <span class="at">-aG</span> docker <span class="va">$USER</span></span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) docker.io (b) gpg --dearmor (c)
+signed-by (d) apt update (e) containerd.io (f) usermod</p>
+<p><strong>解析</strong>： (a) 卸载旧版本包括 docker.io 这个 Ubuntu
+源旧包 (b) GPG 密钥需用 gpg --dearmor 转为二进制格式 (c) sources.list
+中用 signed-by= 指定 GPG 密钥路径 (d) 添加源后必须 apt update 让 apt
+识别新源 (e) containerd.io 是容器运行时包，必须安装 (f) usermod -aG
+把用户追加到 docker 组</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。命令拼写需准确（gpg、usermod 等小写）；(b) 答出 gpg 和 --dearmor
+即给分；(c) signed-by 大小写不敏感。</p>
+</blockquote>
+<hr />
+<p><strong>02-阅读-002</strong>（★★ 知识点：K2-4 daemon.json 补全，12
+分） 阅读以下镜像加速器配置与验证流程，补全缺失部分（每空 2 分，共 12
+分）。</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 写入 daemon.json 配置镜像加速器</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/docker/daemon.json <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">  &quot;(a)________&quot;: [</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;https://docker.mirrors.ustc.edu.cn&quot;,</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;https://hub-mirror.c.163.com&quot;,</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;https://docker.mirrors.baidubce.com&quot;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="st">  ],</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="st">  &quot;log-driver&quot;: &quot;(b)________&quot;,</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="st">  &quot;log-opts&quot;: {</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;max-size&quot;: &quot;10m&quot;,</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;max-file&quot;: &quot;(c)________&quot;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 校验 JSON 格式</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> cat /etc/docker/daemon.json <span class="kw">|</span> <span class="kw">(</span><span class="ex">d</span><span class="kw">)</span><span class="ex">________</span> <span class="at">-m</span> json.tool</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 重启 Docker 让配置生效</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl <span class="er">(</span><span class="ex">e</span><span class="kw">)</span><span class="ex">________</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 验证镜像加速器是否生效</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> <span class="er">(</span><span class="ex">f</span><span class="kw">)</span><span class="ex">________</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 在输出中查找 Registry Mirrors 字段，看到配置的加速器地址即生效</span></span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) registry-mirrors (b) json-file (c) 3
+(d) python3 (e) restart docker（或 daemon-reload 然后 restart docker）
+(f) info</p>
+<p><strong>解析</strong>： (a) 镜像加速器字段名是 registry-mirrors (b)
+默认日志驱动是 json-file (c) max-file: 3 表示保留 3 个日志文件 (d) 用
+python3 -m json.tool 校验 JSON 格式 (e) 改 daemon.json 后必须 restart
+docker 生效 (f) docker info 输出含 Registry Mirrors
+字段，用于验证加速器</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12 分。(e) 答出 restart
+docker 即给分（daemon-reload 可选）；(f) info 大小写不敏感。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>02-编程-001</strong>（★★ 知识点：K2-2/K2-3/K2-4
+综合安装脚本，15 分） <strong>编写 Docker 安装脚本</strong>：请为 CTTS
+项目环境准备编写一个完整的 Docker 安装 Bash 脚本
+<code>install-docker.sh</code>，要求：</p>
+<ol type="1">
+<li>包含环境检查（操作系统是否为 Ubuntu 22.04，1分）</li>
+<li>包含卸载旧版本步骤（2分）</li>
+<li>包含添加 GPG 密钥与 apt 仓库步骤（3分）</li>
+<li>包含 apt update 与安装 docker-ce 全套包步骤（3分）</li>
+<li>包含设置开机自启并立即启动（2分）</li>
+<li>包含配置镜像加速器 daemon.json（2分）</li>
+<li>包含把当前用户加入 docker 组（1分）</li>
+<li>脚本末尾运行 <code>docker run hello-world</code> 验证（1分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+</blockquote>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install-docker.sh - CTTS 项目 Docker 安装脚本</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 用法：sudo bash install-docker.sh</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span>  <span class="co"># 任一步骤失败即退出</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;==== 1. 环境检查 ====&quot;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="ot">! </span><span class="fu">grep</span> <span class="at">-q</span> <span class="st">&quot;Ubuntu 22.04&quot;</span> /etc/os-release<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;错误：本脚本仅支持 Ubuntu 22.04&quot;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;操作系统检查通过&quot;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;==== 2. 卸载旧版本 ====&quot;</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> remove <span class="at">-y</span> docker docker-engine docker.io containerd runc <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">||</span> <span class="fu">true</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;==== 3. 安装依赖 ====&quot;</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> update</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> install <span class="at">-y</span> ca-certificates curl gnupg lsb-release</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;==== 4. 添加 GPG 密钥 ====&quot;</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> /etc/apt/keyrings</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://download.docker.com/linux/ubuntu/gpg <span class="kw">|</span> <span class="ex">gpg</span> <span class="at">--dearmor</span> <span class="at">-o</span> /etc/apt/keyrings/docker.gpg</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;==== 5. 添加 apt 仓库 ====&quot;</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;deb [arch=</span><span class="va">$(</span><span class="ex">dpkg</span> <span class="at">--print-architecture</span><span class="va">)</span><span class="st"> signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu </span><span class="va">$(</span><span class="ex">lsb_release</span> <span class="at">-cs</span><span class="va">)</span><span class="st"> stable&quot;</span> <span class="kw">|</span> <span class="fu">tee</span> /etc/apt/sources.list.d/docker.list <span class="op">&gt;</span> /dev/null</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;==== 6. 安装 Docker ====&quot;</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> update</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> install <span class="at">-y</span> docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;==== 7. 设置开机自启并立即启动 ====&quot;</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> enable <span class="at">--now</span> docker</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;==== 8. 配置镜像加速器 ====&quot;</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> /etc/docker</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="fu">tee</span> /etc/docker/daemon.json <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="st">{</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="st">  &quot;registry-mirrors&quot;: [</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;https://docker.mirrors.ustc.edu.cn&quot;,</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;https://hub-mirror.c.163.com&quot;,</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;https://docker.mirrors.baidubce.com&quot;</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="st">  ],</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="st">  &quot;log-driver&quot;: &quot;json-file&quot;,</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="st">  &quot;log-opts&quot;: {</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;max-size&quot;: &quot;10m&quot;,</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;max-file&quot;: &quot;3&quot;</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;==== 9. 重启 Docker 让加速器生效 ====&quot;</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> daemon-reload</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> restart docker</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;==== 10. 把当前用户加入 docker 组 ====&quot;</span></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="va">CURRENT_USER</span><span class="op">=</span><span class="va">${SUDO_USER</span><span class="op">:-</span><span class="va">$USER}</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a><span class="ex">usermod</span> <span class="at">-aG</span> docker <span class="st">&quot;</span><span class="va">$CURRENT_USER</span><span class="st">&quot;</span></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;用户 </span><span class="va">$CURRENT_USER</span><span class="st"> 已加入 docker 组，重新登录后免 sudo&quot;</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;==== 11. 验证安装 ====&quot;</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run hello-world</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;==== Docker 安装完成 ====&quot;</span></span></code></pre></div>
+<blockquote>
+<p><strong>评分要点</strong>：</p>
+<ul>
+<li>8 个要求每项对应分值，全部实现给满分</li>
+<li>脚本可执行、逻辑顺序正确给基础分</li>
+<li>加分项：set -e 容错、SUDO_USER 处理、友好 echo 提示</li>
+<li>减分项：缺少 #!/bin/bash、命令顺序错乱、JSON 格式错</li>
+</ul>
+</blockquote>
+<hr />
+<p><strong>02-编程-002</strong>（★★★ 知识点：K2-6 排查接口设计，20 分）
+<strong>Docker 安装问题排查方案设计</strong>：某同学安装 Docker 后执行
+<code>docker version</code> 只显示 Client 段，没有 Server 段；执行
+<code>docker ps</code> 报 "Cannot connect to the Docker
+daemon"。请设计一份排查方案，要求：</p>
+<ol type="1">
+<li>列出至少 3 种可能导致该问题的原因（6分）</li>
+<li>针对每个原因，写出对应的排查命令与解决方法（9分）</li>
+<li>设计一个一键诊断脚本 <code>docker-doctor.sh</code>，自动检查 Docker
+安装健康状态并输出诊断报告（5分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<p><strong>1. 可能原因（6分，每个2分）</strong>：</p>
+<ul>
+<li>原因1：dockerd 守护进程未启动（最常见）</li>
+<li>原因2：当前用户无权限访问 /var/run/docker.sock（未加入 docker
+组）</li>
+<li>原因3：dockerd 启动失败（如 daemon.json
+格式错误、端口冲突、存储驱动问题）</li>
+<li>（补充原因：Docker 未安装或安装不完整；docker.sock 文件被删除）</li>
+</ul>
+<p><strong>2. 排查命令与解决方法（9分，每个3分）</strong>：</p>
+<ul>
+<li><p><strong>原因1排查与解决</strong>：</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 排查</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl status docker</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 若显示 inactive (dead) 或 failed</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 解决</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl start docker</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl status docker  <span class="co"># 确认 active (running)</span></span></code></pre></div></li>
+<li><p><strong>原因2排查与解决</strong>：</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 排查</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">groups</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 若输出中无 docker</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 解决</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> docker <span class="va">$USER</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">newgrp</span> docker  <span class="co"># 或重新登录</span></span></code></pre></div></li>
+<li><p><strong>原因3排查与解决</strong>：</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 排查：查看 dockerd 启动日志</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> journalctl <span class="at">-u</span> docker.service <span class="at">--no-pager</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-50</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 若日志显示 daemon.json 解析错误</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 排查 JSON 格式</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> cat /etc/docker/daemon.json <span class="kw">|</span> <span class="ex">python3</span> <span class="at">-m</span> json.tool</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 解决：修正 JSON 格式错误（如末尾逗号、单引号）</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 然后重启</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart docker</span></code></pre></div></li>
+</ul>
+<p><strong>3. 一键诊断脚本 docker-doctor.sh（5分）</strong>：</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># docker-doctor.sh - Docker 安装健康诊断</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;===== Docker 诊断报告 =====&quot;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;时间: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;【1. 检查 docker 命令是否存在】&quot;</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">command</span> <span class="at">-v</span> docker <span class="op">&amp;&gt;</span> /dev/null<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ✓ docker 命令已安装: </span><span class="va">$(</span><span class="ex">docker</span> <span class="at">--version</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ✗ docker 命令未安装，请先安装 Docker&quot;</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;【2. 检查 dockerd 服务状态】&quot;</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="ex">systemctl</span> is-active <span class="at">--quiet</span> docker<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ✓ docker 服务运行中 (active)&quot;</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ✗ docker 服务未运行，尝试启动...&quot;</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sudo</span> systemctl start docker</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="ex">systemctl</span> is-active <span class="at">--quiet</span> docker<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>        <span class="bu">echo</span> <span class="st">&quot;  ✓ 启动成功&quot;</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>        <span class="bu">echo</span> <span class="st">&quot;  ✗ 启动失败，查看日志: journalctl -u docker.service&quot;</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>        <span class="bu">exit</span> 1</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">fi</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;【3. 检查 docker version 通信】&quot;</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="va">SERVER_VER</span><span class="op">=</span><span class="va">$(</span><span class="ex">docker</span> version <span class="at">--format</span> <span class="st">&#39;{{.Server.Version}}&#39;</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null<span class="va">)</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="va">$SERVER_VER</span><span class="st">&quot;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ✓ Client 与 Server 通信正常，Server 版本: </span><span class="va">$SERVER_VER</span><span class="st">&quot;</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ✗ 无法连接 dockerd，可能权限不足&quot;</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;    解决: sudo usermod -aG docker </span><span class="dt">\$</span><span class="st">USER &amp;&amp; newgrp docker&quot;</span></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;【4. 检查当前用户是否在 docker 组】&quot;</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="fu">groups</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-qw</span> docker<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ✓ 当前用户在 docker 组（可免 sudo）&quot;</span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ! 当前用户不在 docker 组，需加 sudo 或加入组&quot;</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;    解决: sudo usermod -aG docker </span><span class="dt">\$</span><span class="st">USER &amp;&amp; newgrp docker&quot;</span></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;【5. 检查开机自启】&quot;</span></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="ex">systemctl</span> is-enabled <span class="at">--quiet</span> docker<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ✓ docker 已设为开机自启&quot;</span></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ! docker 未设为开机自启&quot;</span></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;    解决: sudo systemctl enable docker&quot;</span></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;【6. 检查镜像加速器配置】&quot;</span></span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a><span class="va">MIRRORS</span><span class="op">=</span><span class="va">$(</span><span class="ex">docker</span> info <span class="at">--format</span> <span class="st">&#39;{{json .RegistryConfig.Mirrors}}&#39;</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null<span class="va">)</span></span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="st">&quot;</span><span class="va">$MIRRORS</span><span class="st">&quot;</span> <span class="ot">!=</span> <span class="st">&quot;[]&quot;</span> <span class="bu">]</span> <span class="kw">&amp;&amp;</span> <span class="bu">[</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="va">$MIRRORS</span><span class="st">&quot;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ✓ 镜像加速器已配置: </span><span class="va">$MIRRORS</span><span class="st">&quot;</span></span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ! 未配置镜像加速器，建议编辑 /etc/docker/daemon.json&quot;</span></span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;【7. 检查存储驱动】&quot;</span></span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a><span class="va">DRIVER</span><span class="op">=</span><span class="va">$(</span><span class="ex">docker</span> info <span class="at">--format</span> <span class="st">&#39;{{.Driver}}&#39;</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null<span class="va">)</span></span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="st">&quot;</span><span class="va">$DRIVER</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="st">&quot;overlay2&quot;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ✓ 存储驱动: overlay2（推荐）&quot;</span></span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;  ! 存储驱动: </span><span class="va">$DRIVER</span><span class="st">（推荐 overlay2）&quot;</span></span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;===== 诊断完成 =====&quot;</span></span></code></pre></div>
+<p><strong>评分要点</strong>：</p>
+<ul>
+<li>三个原因各 2 分，合理即可（答出 3 种即满分）</li>
+<li>排查命令与解决方法各 3 分，命令正确、能解决问题给满分</li>
+<li>诊断脚本 5 分：能检查至少 4
+项（命令存在/服务状态/通信/用户组/自启/加速器/存储驱动）给满分；脚本结构清晰、有友好输出加分</li>
+<li>脚本不要求完全可运行，逻辑正确即可</li>
+</ul>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

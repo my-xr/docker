@@ -1,0 +1,1562 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kubernetes认知与架构</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 13 次课 · 教学资料</div>
+      <h1>Kubernetes认知与架构</h1>
+      <p>面向学生复习、自学、命令示例与知识图示 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 13 次课</span>
+        <span class="hero-chip"><b>主题</b>Kubernetes认知与架构</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一学习导读">一、学习导读</a>
+<ul>
+<li><a href="#11-本节定位">1.1 本节定位</a></li>
+<li><a href="#12-先修基础">1.2 先修基础</a></li>
+<li><a href="#13-学习目标">1.3 学习目标</a></li>
+</ul></li>
+<li><a href="#二知识点详解">二、知识点详解</a>
+<ul>
+<li><a href="#知识点-k13-1什么是-kubernetes">知识点 K13-1：什么是 Kubernetes</a></li>
+<li><a href="#知识点-k13-2k8s-vs-docker-compose-对比">知识点 K13-2：K8s vs Docker Compose 对比</a></li>
+<li><a href="#知识点-k13-3k8s-整体架构">知识点 K13-3：K8s 整体架构</a></li>
+<li><a href="#知识点-k13-4master-控制平面组件">知识点 K13-4：Master 控制平面组件</a></li>
+<li><a href="#知识点-k13-5node-工作节点组件">知识点 K13-5：Node 工作节点组件</a></li>
+<li><a href="#知识点-k13-6k8s-核心概念总览">知识点 K13-6：K8s 核心概念总览</a></li>
+</ul></li>
+<li><a href="#三综合示例从-compose-到-k8s--ctts-的演进逻辑">三、综合示例：从 Compose 到 K8s — CTTS 的演进逻辑</a>
+<ul>
+</ul></li>
+<li><a href="#四拓展阅读选学">四、拓展阅读（选学）</a>
+<ul>
+</ul></li>
+<li><a href="#五本节小结与知识结构图">五、本节小结与知识结构图</a>
+<ul>
+<li><a href="#知识结构图思维导图">知识结构图（思维导图）</a></li>
+<li><a href="#一句话总结">一句话总结</a></li>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 13 次课 <span>｜</span> <strong>文档：</strong>教学资料</p>
+<blockquote>
+<p>学生复习资料 ｜
+配套：<code>教学设计.md</code>（教师教案）、<code>题库.md</code>（78
+题考试题库）
+本资料面向学生课后复习自学，包含定义、原理、问题、完整示例、图示、易错点与小结。</p>
+</blockquote>
+<hr />
+<h2 id="一学习导读">一、学习导读</h2>
+<h3 id="11-本节定位">1.1 本节定位</h3>
+<p>这是《Docker 云容器与管理技术》的<strong>第 13 次课</strong>，是 K8s
+部分（后 12
+次课）的<strong>开篇认知课</strong>，也是课程前后半的<strong>转折点</strong>。前
+12 次课你已经学会了用 Docker 把应用容器化、用 Compose
+编排多服务；从本节课开始，我们要进入"集群编排"的世界——Kubernetes。</p>
+<p>本节课不敲大量命令，重点是<strong>建立对 K8s
+的全局认知</strong>：它是什么、为什么要它、它的架构是什么样的、有哪些核心概念。学完本节，你应当能回答：</p>
+<ul>
+<li>什么是容器编排？为什么 Docker Compose 不够用？</li>
+<li>K8s 是什么？它和 Docker / Docker Compose 是什么关系？</li>
+<li>K8s 的整体架构是什么样的？Master 和 Node 各跑什么组件？</li>
+<li>API Server、etcd、scheduler、controller-manager 各做什么？</li>
+<li>kubelet、kube-proxy、container-runtime 各做什么？</li>
+<li>Pod、Deployment、Service、ConfigMap、Secret、PV/PVC、Ingress、Namespace
+是什么？后续课程会怎么学？</li>
+<li>我们的 CTTS 项目为什么要从 Docker 部署升级到 K8s 部署？</li>
+</ul>
+<h3 id="12-先修基础">1.2 先修基础</h3>
+<table>
+<thead>
+<tr>
+<th>先修知识</th>
+<th>用到程度</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker 容器化基础（前 12 次课）</td>
+<td>必备</td>
+<td>理解镜像、容器、Dockerfile、网络、存储卷</td>
+</tr>
+<tr>
+<td>Docker Compose 编排（第 11 次课）</td>
+<td>必备</td>
+<td>理解多容器编排、depends_on、服务间通信</td>
+</tr>
+<tr>
+<td>Linux 基础</td>
+<td>基础认知</td>
+<td>知道进程、网络、文件系统概念</td>
+</tr>
+<tr>
+<td>计算机网络基础</td>
+<td>基础认知</td>
+<td>了解 IP、端口、DNS、负载均衡概念</td>
+</tr>
+<tr>
+<td>分布式系统常识</td>
+<td>有则更好</td>
+<td>了解多机协同、容错、一致性概念，有助于理解 K8s 设计</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-学习目标">1.3 学习目标</h3>
+<ul>
+<li>✅ 理解容器编排概念与 K8s 的定位</li>
+<li>✅ 掌握 Docker Compose 的四大局限性</li>
+<li>✅ 能够对比 Docker Compose 与 K8s，判断适用场景</li>
+<li>✅ 掌握 K8s 的 Master-Node 整体架构</li>
+<li>✅ 掌握 Master 控制平面四大组件的职责</li>
+<li>✅ 掌握 Node 工作节点三大组件的职责</li>
+<li>✅ 了解 K8s 核心概念总览，为后续 11 次课铺垫</li>
+<li>✅ 明确 CTTS 项目从 Docker 升级到 K8s 的目标</li>
+</ul>
+<hr />
+<h2 id="二知识点详解">二、知识点详解</h2>
+<h3 id="知识点-k13-1什么是-kubernetes">知识点 K13-1：什么是
+Kubernetes</h3>
+<h4 id="定义">定义</h4>
+<p><strong>Kubernetes</strong>（简称 <strong>K8s</strong>，因为 K 和 s
+之间有 8
+个字母）是一个开源的<strong>容器编排平台</strong>，用于自动化部署、扩展和管理容器化应用。它最初由
+Google 基于内部 Borg 系统的设计经验开源，2014 年捐给
+CNCF，现在是云原生生态的核心项目。</p>
+<p><strong>容器编排（Container Orchestration）</strong>
+是指对集群中成百上千个容器进行自动化调度、扩缩容、故障恢复、滚动更新等管理工作的技术与系统。</p>
+<p>一句话理解 K8s 的定位：</p>
+<blockquote>
+<p><strong>K8s
+是云原生时代的"操作系统"，它把整个数据中心当成一台计算机来管理。</strong></p>
+</blockquote>
+<h4 id="原理">原理</h4>
+<p><strong>为什么需要容器编排？</strong></p>
+<p>Docker 把应用装进了"集装箱"，但生产环境远不止一个集装箱：</p>
+<div class="visual">
+  <div class="visual-title">图示 1：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">开发/测试环境（前 12 次课）：</span>
+<span class="diagram-line">  一台机器 + Docker Compose 编排 3~5 个容器 <span class="arrow-token">→</span> 够用</span>
+<span class="diagram-line">生产环境：</span>
+<span class="diagram-line">  几十台机器 + 成百上千个容器</span>
+<span class="diagram-line">  问题1：哪个容器跑在哪台机器？           <span class="arrow-token">→</span> 调度</span>
+<span class="diagram-line">  问题2：某台机器挂了，容器怎么办？       <span class="arrow-token">→</span> 自愈</span>
+<span class="diagram-line">  问题3：流量突增，容器怎么扩容？         <span class="arrow-token">→</span> 弹性</span>
+<span class="diagram-line">  问题4：版本升级，怎么不停机更新？       <span class="arrow-token">→</span> 滚动更新</span>
+<span class="diagram-line">  问题5：容器之间怎么互相发现？           <span class="arrow-token">→</span> 服务发现</span>
+<span class="diagram-line">  问题6：怎么统一管理这么大规模？         <span class="arrow-token">→</span> 声明式 API</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p>这些问题 Docker Compose 解决不了，需要"容器编排系统"——K8s
+就是事实标准。</p>
+<p><strong>Docker Compose 的四大局限性</strong>（K8s
+要解决的核心问题）：</p>
+<table>
+<thead>
+<tr>
+<th>局限</th>
+<th>说明</th>
+<th>K8s 如何解决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 单机局限</td>
+<td>Compose 只能在单台机器上编排容器，跨机器无能为力</td>
+<td>K8s 管理多节点集群，Pod 可调度到任意节点</td>
+</tr>
+<tr>
+<td>② 无自愈</td>
+<td>容器挂了 Compose 不会自动重启（除非加 restart
+策略，且机器挂了完全没救）</td>
+<td>K8s 的控制器持续监控，Pod 挂了自动重建，节点挂了自动迁移</td>
+</tr>
+<tr>
+<td>③ 无弹性</td>
+<td>不能根据负载自动扩缩容，副本数写死在 yml 里</td>
+<td>K8s 的 HPA（HorizontalPodAutoscaler）根据 CPU/内存自动扩缩容</td>
+</tr>
+<tr>
+<td>④ 无滚动更新</td>
+<td>更新镜像要手动停旧启新，会中断服务</td>
+<td>K8s Deployment 支持滚动更新与回滚，零停机</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景">问题 / 场景</h4>
+<p><strong>问：有了 Docker Compose，为什么还要 K8s？</strong></p>
+<ul>
+<li>Compose 解决的是"单机上多个容器怎么一起启动"，K8s
+解决的是"集群上成百上千个容器怎么调度、自愈、扩缩容、滚动更新"。二者不是替代，而是规模递进：开发/小规模用
+Compose，生产/大规模用 K8s。</li>
+</ul>
+<p><strong>问：K8s 是 Google 的吗？</strong></p>
+<ul>
+<li>K8s 最初由 Google 开源（基于内部 Borg 系统经验），2014 年捐给
+CNCF。现在是 CNCF
+托管的开源项目，由社区共同维护，不属于任何一家公司。Google、微软、阿里、华为等都是核心贡献者。</li>
+</ul>
+<p><strong>问：K8s 只能编排 Docker 容器吗？</strong></p>
+<ul>
+<li>不是。K8s 通过 CRI（Container Runtime
+Interface）标准支持多种容器运行时：containerd、CRI-O、Docker（已弃用
+dockershim，但仍可通过 containerd 兼容）。K8s
+编排的是"容器"，不是"Docker 容器"。</li>
+</ul>
+<p><strong>问：K8s 难学吗？</strong></p>
+<ul>
+<li>K8s 概念多、组件多、YAML
+长，初学者确实有门槛。但它的核心思想是"声明式"——你描述"我想要 3
+个后端副本"，K8s
+帮你达到并维持这个状态。理解了声明式思维，后续就顺了。本课程后 12
+次课会逐步带你掌握。</li>
+</ul>
+<h4 id="完整示例">完整示例</h4>
+<p>CTTS 项目从 Docker 到 K8s
+的演进对比（伪代码描述，说明问题即可，本节不执行）：</p>
+<pre class="text"><code>【第 11 次课成果：Docker Compose 部署 CTTS】
+docker-compose.yml（单机）：
+  services:
+    mysql:    ...  ← 1 个 MySQL 容器
+    backend:  ...  ← 1 个后端容器
+    frontend: ...  ← 1 个前端容器
+执行：docker compose up -d
+结果：3 个容器跑在同一台机器上
+
+问题：
+- 机器挂了 → 全部服务不可用
+- 后端扛不住 → 不能自动加副本
+- 更新后端 → 要停服务再启
+- 流量上来 → 一台机器扛不住
+
+【第 13~24 次课目标：K8s 部署 CTTS】
+K8s 集群（3 台机器）：
+  - Master：管理节点
+  - Node1、Node2：工作节点
+
+K8s 资源清单（声明式 YAML）：
+  - Deployment backend（replicas: 3）  ← 3 个后端副本，自动调度到不同节点
+  - Deployment frontend（replicas: 2） ← 2 个前端副本
+  - StatefulSet mysql（replicas: 1）+ PVC ← MySQL 持久化
+  - Service × 3 + Ingress               ← 统一访问入口
+  - ConfigMap + Secret                  ← 配置与密码分离
+
+执行：kubectl apply -f ctts.yaml
+结果：
+- 3 个后端副本分布在 Node1、Node2，Node1 挂了自动迁移到 Node2
+- 流量增加 → HPA 自动扩到 5 副本
+- 更新后端 → 滚动更新，零停机
+- 比单机 Compose 强太多</code></pre>
+<blockquote>
+<p>📌 这个对比体现了 K8s
+的核心价值：<strong>从"单机手动编排"到"集群自动调度"</strong>。具体 K8s
+YAML 在第 15~23 次课逐步学习。</p>
+</blockquote>
+<h4 id="图示">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 2：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">容器编排演进：</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span> Docker       <span class="tree-token">│</span>    <span class="tree-token">│</span> Docker       <span class="tree-token">│</span>    <span class="tree-token">│</span> Kubernetes       <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> (单容器)      <span class="tree-token">│</span> <span class="arrow-token">→</span>  <span class="tree-token">│</span> Compose      <span class="tree-token">│</span> <span class="arrow-token">→</span>  <span class="tree-token">│</span> (集群编排)        <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>              <span class="tree-token">│</span>    <span class="tree-token">│</span> (单机多容器)  <span class="tree-token">│</span>    <span class="tree-token">│</span>                  <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">  打包一个应用       一台机器多个容器       多台机器成百上千容器</span>
+<span class="diagram-line">  docker run        docker compose up    kubectl apply</span>
+<span class="diagram-line">  靠人工             半自动               全自动（调度/自愈/弹性/滚动）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点">易错点</h4>
+<ol type="1">
+<li>❌ 误认为"K8s = 升级版 Docker"。✅ K8s 不是 Docker
+的升级，二者定位不同：Docker 是容器化平台（装箱），K8s
+是容器编排平台（调度），K8s 建立在容器（如 containerd/Docker
+产物）之上。</li>
+<li>❌ 误认为"K8s 取代 Docker"。✅ K8s 不取代 Docker，K8s
+编排的是"容器"，容器运行时可以是 containerd 或 Docker（产物）。K8s
+取代的是"手动运维"。</li>
+<li>❌ 误认为"Docker Compose 没用了"。✅ Compose 在本地开发、CI
+测试、小规模部署仍然非常好用，K8s 适合生产大规模。二者并存。</li>
+<li>❌ 误认为"K8s 只能编排 Docker 容器"。✅ K8s 通过 CRI
+支持多种容器运行时（containerd、CRI-O 等），不只 Docker。</li>
+</ol>
+<h4 id="小结">小结</h4>
+<p>Kubernetes（K8s）是开源的容器编排平台，解决"集群中成百上千容器的调度、自愈、弹性、滚动更新"问题。Docker
+Compose 在单机多容器场景够用，但生产环境需要 K8s 做集群编排。K8s
+是云原生时代的"操作系统"，是后 12 次课的核心。</p>
+<hr />
+<h3 id="知识点-k13-2k8s-vs-docker-compose-对比">知识点 K13-2：K8s vs
+Docker Compose 对比</h3>
+<h4 id="定义-1">定义</h4>
+<p><strong>Docker Compose</strong> 是 Docker
+官方的单机多容器编排工具，通过 <code>docker-compose.yml</code>
+描述服务、网络、存储，一键启动/停止一组容器。</p>
+<p><strong>Kubernetes</strong> 是跨机器的集群级容器编排平台，通过声明式
+YAML 描述"期望状态"，由集群自动调度、维护。</p>
+<h4 id="原理-1">原理</h4>
+<p><strong>核心区别</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>Docker Compose</th>
+<th>Kubernetes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>规模</strong></td>
+<td>单机（一台机器）</td>
+<td>集群（多台机器，几十~几千节点）</td>
+</tr>
+<tr>
+<td><strong>编排方式</strong></td>
+<td>手动编排（写死服务定义）</td>
+<td>自动调度（声明期望状态，集群自动分配）</td>
+</tr>
+<tr>
+<td><strong>调度</strong></td>
+<td>不调度，容器就在执行命令的机器上</td>
+<td>scheduler 自动选择最合适的节点运行 Pod</td>
+</tr>
+<tr>
+<td><strong>自愈</strong></td>
+<td>restart 策略可重启容器，但机器挂了没救</td>
+<td>控制器持续监控，Pod 挂了重建，节点挂了迁移</td>
+</tr>
+<tr>
+<td><strong>弹性扩缩容</strong></td>
+<td>不支持自动扩缩容（手动改 replicas 重启）</td>
+<td>HPA 根据 CPU/内存自动扩缩容</td>
+</tr>
+<tr>
+<td><strong>滚动更新</strong></td>
+<td>不支持原生滚动更新（需手动停旧启新）</td>
+<td>Deployment 原生支持滚动更新与回滚</td>
+</tr>
+<tr>
+<td><strong>服务发现</strong></td>
+<td>通过容器名 + 自定义网络</td>
+<td>通过 Service + CoreDNS 自动发现</td>
+</tr>
+<tr>
+<td><strong>负载均衡</strong></td>
+<td>不提供（需自己加 Nginx）</td>
+<td>Service 内置负载均衡（kube-proxy）</td>
+</tr>
+<tr>
+<td><strong>配置管理</strong></td>
+<td>environment/env_file</td>
+<td>ConfigMap + Secret，支持热更新</td>
+</tr>
+<tr>
+<td><strong>存储管理</strong></td>
+<td>volumes（绑定挂载/数据卷）</td>
+<td>PV/PVC/StorageClass，集群级持久化</td>
+</tr>
+<tr>
+<td><strong>外部访问</strong></td>
+<td>ports 端口映射</td>
+<td>Service NodePort/LoadBalancer + Ingress 七层路由</td>
+</tr>
+<tr>
+<td><strong>资源限制</strong></td>
+<td>deploy.resources（v2 支持但有限）</td>
+<td>resources requests/limits，调度依据</td>
+</tr>
+<tr>
+<td><strong>学习曲线</strong></td>
+<td>简单（一个 yml 文件）</td>
+<td>陡峭（概念多、YAML 长、组件多）</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>本地开发、CI 测试、小规模部署</td>
+<td>生产环境、大规模、高可用</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景-1">问题 / 场景</h4>
+<p><strong>问：什么时候用 Docker Compose？什么时候用 K8s？</strong></p>
+<pre class="text"><code>场景                              推荐        理由
+────────────────────────────────────────────────────────────────────
+本地开发联调（前端+后端+MySQL）    Compose    简单、启动快、单机够用
+个人博客/小型网站部署             Compose    流量小、单机够用、运维简单
+CI 流水线测试环境                 Compose    每次构建启动一组容器，快
+企业级应用（用户上万）            K8s        多副本、自愈、弹性、滚动更新
+金融/电商生产系统（高可用）       K8s        不能停机、需要故障自动迁移
+微服务架构（几十个服务）          K8s        服务发现、负载均衡、统一管理
+跨地域多机房部署                  K8s        多集群联邦、统一编排</code></pre>
+<p><strong>判断原则</strong>：</p>
+<ul>
+<li>机器数 ≥ 2 且需要高可用 → K8s</li>
+<li>容器数 ≥ 10 且需要弹性 → K8s</li>
+<li>单机够用、追求简单 → Compose</li>
+<li>开发/测试环境 → Compose</li>
+<li>生产环境 → K8s</li>
+</ul>
+<p><strong>问：学 K8s 是不是要抛弃 Compose？</strong></p>
+<ul>
+<li>不是。Compose 在本地开发、CI
+测试场景仍然是首选。很多公司的工作流：开发用 Compose 联调，测试环境用
+Compose 或 K8s，生产环境用 K8s。Compose 和 K8s 各有所长。</li>
+</ul>
+<p><strong>问：能不能从 Compose 平滑迁移到 K8s？</strong></p>
+<ul>
+<li>可以。工具有 Kompose（kompose.io）能把
+<code>docker-compose.yml</code> 转成 K8s
+YAML。但生产迁移不是简单转换，需要重新设计 Deployment/Service/ConfigMap
+等。本课程第 23 次课会做 CTTS 的完整 K8s 部署。</li>
+</ul>
+<h4 id="完整示例-1">完整示例</h4>
+<p>同一个 CTTS 后端服务，在 Compose 与 K8s
+中的描述对比（本节只看差异，命令后续详讲）：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Docker Compose 描述（单机，第 11 次课）</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-backend:v1</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8080:8080&quot;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> mysql</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/ctts</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> unless-stopped</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 局限：只有 1 个副本，机器挂了就没了，不能扩容，不能滚动更新</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># K8s Deployment 描述（集群，第 16 次课详讲）</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Deployment</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span><span class="co">                # 3 个副本，自动调度到不同节点</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> backend</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-backend:v1</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> SPRING_DATASOURCE_URL</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> jdbc:mysql://ctts-mysql:3306/ctts</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> 200m</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 256Mi</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> 500m</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 512Mi</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="co"># 优势：3 副本高可用、自动调度、资源限制、滚动更新、自愈</span></span></code></pre></div>
+<blockquote>
+<p>📌 对比可见：K8s 的 YAML 更长，但表达力更强——声明"我要 3
+个副本"，集群自动帮你维持。这就是声明式的力量。</p>
+</blockquote>
+<h4 id="图示-1">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 3：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">Compose vs K8s 规模对比：</span>
+<span class="diagram-line">Docker Compose（单机）：              Kubernetes（集群）：</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐                  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span>   一台机器       <span class="tree-token">│</span>                  <span class="tree-token">│</span> Master  <span class="tree-token">│</span>  <span class="tree-token">│</span>  Node1  <span class="tree-token">│</span>  <span class="tree-token">│</span>  Node2  <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐ ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐ ┌<span class="tree-token">─</span>┐ <span class="tree-token">│</span>                  <span class="tree-token">│</span> 控制平面 <span class="tree-token">│</span>  <span class="tree-token">│</span> Pod Pod <span class="tree-token">│</span>  <span class="tree-token">│</span> Pod Pod <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> <span class="tree-token">│</span>DB <span class="tree-token">│</span> <span class="tree-token">│</span>BE <span class="tree-token">│</span> <span class="tree-token">│</span>F<span class="tree-token">│</span> <span class="tree-token">│</span>                  <span class="tree-token">│</span>         <span class="tree-token">│</span>  <span class="tree-token">│</span> Pod     <span class="tree-token">│</span>  <span class="tree-token">│</span> Pod Pod <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘ <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘ <span class="tree-token">└</span><span class="tree-token">─</span>┘ <span class="tree-token">│</span>                  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘                       <span class="tree-token">│</span> 调度</span>
+<span class="diagram-line">   单点故障，不能扩容                      ▼ 自动分配</span>
+<span class="diagram-line">                                       多副本，自愈，弹性</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-1">易错点</h4>
+<ol type="1">
+<li>❌ 误认为"K8s 是 Compose 的升级版，用法一样"。✅
+二者模型不同：Compose 是"启动这组容器"，K8s 是"维持这个期望状态"。声明式
+vs 命令式。</li>
+<li>❌ 误认为"小项目也必须用 K8s"。✅ 小项目用 Compose 足够，K8s
+有运维成本，过度设计是问题。</li>
+<li>❌ 误认为"Compose 完全没价值了"。✅ Compose 在本地开发、CI
+测试场景仍是首选。</li>
+<li>❌ 误认为"K8s 比 Compose 难就一定更好"。✅
+技术选型看场景，合适的才是最好的。</li>
+</ol>
+<h4 id="小结-1">小结</h4>
+<p>Docker Compose
+适合单机多容器编排（开发、测试、小规模部署），Kubernetes
+适合集群级容器编排（生产、大规模、高可用）。二者不是替代关系，而是规模递进。选型原则：单机够用用
+Compose，多机高可用用 K8s。</p>
+<hr />
+<h3 id="知识点-k13-3k8s-整体架构">知识点 K13-3：K8s 整体架构</h3>
+<h4 id="定义-2">定义</h4>
+<p>Kubernetes 采用 <strong>Master-Node
+架构</strong>（也叫控制平面-工作节点架构）：</p>
+<ul>
+<li><strong>Master（控制平面，Control
+Plane）</strong>：集群的"大脑"，负责管理集群状态、调度决策、故障检测。可以有多个
+Master 做高可用（本课程以单 Master 为例）。</li>
+<li><strong>Node（工作节点，Worker
+Node）</strong>：集群的"手脚"，负责实际运行容器（Pod）。一个集群通常有多个
+Node。</li>
+</ul>
+<h4 id="原理-2">原理</h4>
+<p><strong>K8s 集群整体架构图</strong>：</p>
+<div class="visual">
+  <div class="visual-title">图示 4：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span>                   Kubernetes 集群                             <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                                                              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>              Master（控制平面 Control Plane）        <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>                                                    <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐         <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>  <span class="tree-token">│</span> API      <span class="tree-token">│</span>  <span class="tree-token">│</span>scheduler <span class="tree-token">│</span>  <span class="tree-token">│</span>controller<span class="tree-token">│</span>         <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>  <span class="tree-token">│</span> Server   <span class="tree-token">│</span>  <span class="tree-token">│</span> 调度器    <span class="tree-token">│</span>  <span class="tree-token">│</span>-manager  <span class="tree-token">│</span>         <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>  <span class="tree-token">│</span> 统一入口  <span class="tree-token">│</span>  <span class="tree-token">│</span>          <span class="tree-token">│</span>  <span class="tree-token">│</span> 控制器    <span class="tree-token">│</span>         <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘         <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>       <span class="tree-token">│</span>             <span class="tree-token">│</span>             <span class="tree-token">│</span>                <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>       <span class="tree-token">│</span>     ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘                <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>       <span class="tree-token">│</span>     <span class="tree-token">│</span>                                      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>       ▼     ▼                                      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐                              <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>  <span class="tree-token">│</span>      etcd        <span class="tree-token">│</span>  ← 集群状态存储（键值数据库）   <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘                              <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                          ▲                                   <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                          <span class="tree-token">│</span> 监控/上报                          <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                          <span class="tree-token">│</span> 调度/下发                          <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                          ▼                                   <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>              Node1（工作节点 Worker Node）           <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>  <span class="tree-token">│</span> kubelet  <span class="tree-token">│</span>  <span class="tree-token">│</span>kube-proxy<span class="tree-token">│</span>  <span class="tree-token">│</span> container-   <span class="tree-token">│</span>      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>  <span class="tree-token">│</span> 节点代理  <span class="tree-token">│</span>  <span class="tree-token">│</span> 网络代理  <span class="tree-token">│</span>  <span class="tree-token">│</span> runtime      <span class="tree-token">│</span>      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>  <span class="tree-token">│</span>          <span class="tree-token">│</span>  <span class="tree-token">│</span>          <span class="tree-token">│</span>  <span class="tree-token">│</span> (containerd) <span class="tree-token">│</span>      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>       <span class="tree-token">│</span>             <span class="tree-token">│</span>               <span class="tree-token">│</span>              <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>       <span class="tree-token">│</span>             <span class="tree-token">│</span>               ▼              <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>       <span class="tree-token">│</span>             <span class="tree-token">│</span>        ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>       <span class="tree-token">│</span>             <span class="tree-token">│</span>        <span class="tree-token">│</span> Pod  Pod  Pod <span class="tree-token">│</span>      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>       <span class="tree-token">│</span>             <span class="tree-token">│</span>        <span class="tree-token">│</span>(容器组)        <span class="tree-token">│</span>      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>       <span class="tree-token">│</span>             <span class="tree-token">│</span>        <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘      <span class="tree-token">│</span>    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                                                              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>              Node2（工作节点 Worker Node）             <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   kubelet + kube-proxy + container-runtime + Pods     <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                                                              <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">用户通过 kubectl 命令 <span class="arrow-token">→</span> API Server <span class="arrow-token">→</span> 集群</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>核心数据流</strong>（以
+<code>kubectl create deployment</code> 为例）：</p>
+<pre class="text"><code>1. 用户：kubectl create -f deployment.yaml
+2. kubectl → API Server：提交请求
+3. API Server：把&quot;期望状态（3 副本）&quot;写入 etcd
+4. controller-manager：监听到有新 Deployment，创建 ReplicaSet，再创建 Pod（但 Pod 还没分配节点）
+5. scheduler：监听到有未调度的 Pod，根据资源/规则选择一个 Node，把 Pod 与 Node 的绑定信息写回 API Server → etcd
+6. 目标 Node 上的 kubelet：监听到自己被分配了 Pod，调用 container-runtime 拉镜像、启容器
+7. kubelet：持续上报 Pod 状态给 API Server → etcd
+8. kube-proxy：为 Service 配置网络规则（iptables/ipvs），让流量能路由到 Pod</code></pre>
+<p><strong>Master 与 Node 的关系</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Master（控制平面）</th>
+<th>Node（工作节点）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>角色</td>
+<td>大脑（决策）</td>
+<td>手脚（执行）</td>
+</tr>
+<tr>
+<td>数量</td>
+<td>通常 1 个（生产 3 个高可用）</td>
+<td>几个~几千个</td>
+</tr>
+<tr>
+<td>是否跑业务容器</td>
+<td>一般不跑（ tainted）</td>
+<td>跑业务 Pod</td>
+</tr>
+<tr>
+<td>核心组件</td>
+<td>API Server、etcd、scheduler、controller-manager</td>
+<td>kubelet、kube-proxy、container-runtime</td>
+</tr>
+<tr>
+<td>故障影响</td>
+<td>Master 挂了集群不能变更（但已运行的 Pod 仍工作）</td>
+<td>Node 挂了上面的 Pod 由控制器迁移</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景-2">问题 / 场景</h4>
+<p><strong>问：Master 挂了，集群就崩溃吗？</strong></p>
+<ul>
+<li>不完全。Master 挂了，<strong>已运行的 Pod 仍在 Node
+上跑</strong>，业务不中断。但不能做新操作（创建/删除/扩缩容）。生产环境用
+3 个 Master 做高可用，单 Master 挂了另外两个接管。</li>
+</ul>
+<p><strong>问：一个 Node 上能跑多少 Pod？</strong></p>
+<ul>
+<li>取决于 Node 的资源（CPU/内存）和 Pod 的资源请求。一台 4 核 8G 的
+Node 通常能跑 10~30 个普通 Pod。K8s 调度器会根据资源自动分配。</li>
+</ul>
+<p><strong>问：Master 和 Node 必须是不同机器吗？</strong></p>
+<ul>
+<li>学习环境（如 Minikube）单机版 Master 和 Node
+在同一台机器。生产环境建议分离，Master 专门做管理，Node
+专门跑业务。本课程第 14 次课用 Minikube 单机学习，生产用 kubeadm
+多节点。</li>
+</ul>
+<p><strong>问：Master 上的组件必须都在一台机器吗？</strong></p>
+<ul>
+<li>不必。生产环境可拆分：etcd 单独集群（3~5 节点）、API Server
+多副本负载均衡。学习环境都跑一起即可。</li>
+</ul>
+<h4 id="完整示例-2">完整示例</h4>
+<p>一个典型的 K8s 集群拓扑（CTTS 项目目标集群，本节只看结构，第 14
+次课搭建）：</p>
+<pre class="text"><code>CTTS K8s 集群拓扑（学习环境）：
+
+┌──────────────────────────────────┐
+│  Master（1 台，2 核 4G）          │
+│  - API Server                    │
+│  - etcd                          │
+│  - scheduler                     │
+│  - controller-manager            │
+└──────────────────────────────────┘
+        │
+        │  ┌─────────────────────────┐
+        │  │ Node1（2 核 4G）         │
+        └─▶│ - kubelet               │
+           │ - kube-proxy            │
+           │ - containerd            │
+           │ - Pods: backend×2       │
+           └─────────────────────────┘
+        │  ┌─────────────────────────┐
+        │  │ Node2（2 核 4G）         │
+        └─▶│ - kubelet               │
+           │ - kube-proxy            │
+           │ - containerd            │
+           │ - Pods: backend×1,      │
+           │   frontend×2, mysql×1   │
+           └─────────────────────────┘
+
+总览：1 Master + 2 Node，3 个 Node 上的 Pod 由 Master 统一调度</code></pre>
+<blockquote>
+<p>📌 这个拓扑是 CTTS 在 K8s 上的目标形态，第 14 次课会动手搭建，第
+15~23 次课逐步部署服务。</p>
+</blockquote>
+<h4 id="图示-2">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 5：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">K8s 架构核心关系：</span>
+<span class="diagram-line">           kubectl（用户命令）</span>
+<span class="diagram-line">                <span class="tree-token">│</span></span>
+<span class="diagram-line">                ▼</span>
+<span class="diagram-line">         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">         <span class="tree-token">│</span>  API Server  <span class="tree-token">│</span> ← 唯一入口，所有组件都通过它通信</span>
+<span class="diagram-line">         <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">                <span class="tree-token">│</span></span>
+<span class="diagram-line">       ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┼<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">       <span class="tree-token">│</span>        <span class="tree-token">│</span>        <span class="tree-token">│</span>              <span class="tree-token">│</span></span>
+<span class="diagram-line">       ▼        ▼        ▼              ▼</span>
+<span class="diagram-line">   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐ ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐ ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">   <span class="tree-token">│</span>etcd  <span class="tree-token">│</span> <span class="tree-token">│</span>sched-<span class="tree-token">│</span> <span class="tree-token">│</span>controller<span class="tree-token">│</span>  <span class="tree-token">│</span> kubelet <span class="tree-token">│</span> (Node上)</span>
+<span class="diagram-line">   <span class="tree-token">│</span>存储  <span class="tree-token">│</span> <span class="tree-token">│</span>  uler<span class="tree-token">│</span> <span class="tree-token">│</span>-manager <span class="tree-token">│</span>  <span class="tree-token">│</span>         <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘ <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘ <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">                                       <span class="tree-token">│</span> 调用</span>
+<span class="diagram-line">                                       ▼</span>
+<span class="diagram-line">                                ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">                                <span class="tree-token">│</span>container-    <span class="tree-token">│</span></span>
+<span class="diagram-line">                                <span class="tree-token">│</span>runtime       <span class="tree-token">│</span></span>
+<span class="diagram-line">                                <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">                                       <span class="tree-token">│</span> 启停</span>
+<span class="diagram-line">                                       ▼</span>
+<span class="diagram-line">                                ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">                                <span class="tree-token">│</span>   Pod/容器    <span class="tree-token">│</span></span>
+<span class="diagram-line">                                <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">关键：API Server 是中枢，etcd 是状态存储，scheduler/controller 在 Master，kubelet/runtime 在 Node</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-2">易错点</h4>
+<ol type="1">
+<li>❌ 误认为"Master 跑业务容器"。✅ Master 一般不跑业务 Pod（通过 taint
+污点标记），业务 Pod 跑在 Node 上。学习环境 Minikube 例外。</li>
+<li>❌ 误认为"etcd 是关系型数据库"。✅ etcd 是分布式键值（KV）存储，不是
+MySQL 那种关系型数据库。</li>
+<li>❌ 误认为"所有组件直接互相通信"。✅ 不是。所有组件都只跟 API Server
+通信，组件之间不直接连接（解耦设计）。</li>
+<li>❌ 误认为"Master 挂了业务就停了"。✅ Master 挂了已运行 Pod
+仍工作，只是不能做新操作。</li>
+</ol>
+<h4 id="小结-2">小结</h4>
+<p>K8s 采用 Master-Node
+架构：Master（控制平面）负责集群管理与决策，Node（工作节点）负责运行业务
+Pod。Master 挂了业务不中断（但无法变更），生产环境用多 Master
+高可用。所有组件通过 API Server 通信，状态存在 etcd。</p>
+<hr />
+<h3 id="知识点-k13-4master-控制平面组件">知识点 K13-4：Master
+控制平面组件</h3>
+<h4 id="定义-3">定义</h4>
+<p>Master（控制平面）包含四大核心组件：</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>名称</th>
+<th>一句话职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>kube-apiserver</strong></td>
+<td>API Server</td>
+<td>集群统一入口，所有组件与用户都通过它通信</td>
+</tr>
+<tr>
+<td><strong>etcd</strong></td>
+<td>键值存储</td>
+<td>集群的"数据库"，保存集群所有状态数据</td>
+</tr>
+<tr>
+<td><strong>kube-scheduler</strong></td>
+<td>调度器</td>
+<td>决定新 Pod 跑在哪个 Node 上</td>
+</tr>
+<tr>
+<td><strong>kube-controller-manager</strong></td>
+<td>控制器管理器</td>
+<td>运行各种控制器，持续让"实际状态"趋近"期望状态"</td>
+</tr>
+</tbody>
+</table>
+<h4 id="原理-3">原理</h4>
+<p><strong>1. API Server（kube-apiserver）— 集群唯一入口</strong></p>
+<div class="visual">
+  <div class="visual-title">图示 6：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">所有操作都经过 API Server：</span>
+<span class="diagram-line">  用户(kubectl) <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> API Server <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> etcd</span>
+<span class="diagram-line">  scheduler     <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> API Server <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> etcd</span>
+<span class="diagram-line">  controller    <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> API Server <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> etcd</span>
+<span class="diagram-line">  kubelet       <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> API Server <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> etcd</span>
+<span class="diagram-line">API Server 的职责：</span>
+<span class="diagram-line">  - 提供 RESTful API（HTTPS）</span>
+<span class="diagram-line">  - 认证（你是谁）+ 授权（你能干什么）+ 准入（操作是否合规）</span>
+<span class="diagram-line">  - 唯一能直接读写 etcd 的组件</span>
+<span class="diagram-line">  - 其他组件都通过它间接读写 etcd</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>2. etcd — 集群状态存储</strong></p>
+<pre><code>etcd 是什么：
+  - 分布式键值（KV）存储数据库
+  - 使用 Raft 协议保证一致性
+  - K8s 集群所有状态都存在这里：Pod/Service/Deployment/ConfigMap...
+
+存什么：
+  - 期望状态：用户通过 kubectl 提交的&quot;我想要 3 个副本&quot;
+  - 实际状态：kubelet 上报的&quot;现在 Node1 上有 2 个，Node2 上有 1 个&quot;
+
+特点：
+  - 强一致性（Raft）
+  - 生产环境部署 3 或 5 节点集群
+  - K8s 的&quot;真相之源&quot;（source of truth）</code></pre>
+<p><strong>3. scheduler（kube-scheduler）— 调度器</strong></p>
+<div class="visual">
+  <div class="visual-title">图示 7：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">scheduler 的职责：</span>
+<span class="diagram-line">  - 监听 API Server，发现有&quot;未调度&quot;的 Pod（Pod 没指定 Node）</span>
+<span class="diagram-line">  - 根据调度算法选择最合适的 Node</span>
+<span class="diagram-line">  - 把&quot;Pod <span class="arrow-token">→</span> Node&quot;的绑定信息写回 API Server <span class="arrow-token">→</span> etcd</span>
+<span class="diagram-line">调度考虑因素：</span>
+<span class="diagram-line">  - 资源请求（CPU/内存是否够）</span>
+<span class="diagram-line">  - 亲和性/反亲和性（要不要和某 Pod 同节点）</span>
+<span class="diagram-line">  - 污点/容忍（Node 是否允许调度）</span>
+<span class="diagram-line">  - 节点选择器（指定跑在带某标签的节点）</span>
+<span class="diagram-line">注意：scheduler 只&quot;决定&quot;跑哪，不&quot;执行&quot;启动容器</span>
+<span class="diagram-line">       真正启动容器的是目标 Node 上的 kubelet</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>4. controller-manager（kube-controller-manager）—
+控制器管理器</strong></p>
+<div class="visual">
+  <div class="visual-title">图示 8：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">controller-manager 是什么：</span>
+<span class="diagram-line">  - 控制器的大集合，内置多种控制器</span>
+<span class="diagram-line">  - 每个控制器持续做&quot;调和循环&quot;（reconcile loop）：</span>
+<span class="diagram-line">    观察&quot;实际状态&quot; <span class="arrow-token">→</span> 对比&quot;期望状态&quot; <span class="arrow-token">→</span> 不一致就操作让它们一致</span>
+<span class="diagram-line">内置控制器举例：</span>
+<span class="diagram-line">  - Deployment Controller：管理 Deployment，创建/扩缩 ReplicaSet</span>
+<span class="diagram-line">  - ReplicaSet Controller：维持 Pod 副本数（少了补，多了杀）</span>
+<span class="diagram-line">  - Node Controller：监控 Node 健康，Node 挂了迁移 Pod</span>
+<span class="diagram-line">  - Endpoint Controller：维护 Service 与 Pod 的映射</span>
+<span class="diagram-line">  - ServiceAccount Controller：管理服务账号</span>
+<span class="diagram-line">举例：Deployment 期望 3 副本</span>
+<span class="diagram-line">  - ReplicaSet Controller 发现实际只有 2 个 <span class="arrow-token">→</span> 创建 1 个新 Pod</span>
+<span class="diagram-line">  - Node Controller 发现 Node2 挂了 <span class="arrow-token">→</span> 上面的 Pod 标记失败</span>
+<span class="diagram-line">  - ReplicaSet Controller 发现实物只有 1 个 <span class="arrow-token">→</span> 再创建 2 个新 Pod</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 最终维持 3 副本</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="问题--场景-3">问题 / 场景</h4>
+<p><strong>问：为什么所有组件都通过 API Server
+通信，不直接连？</strong></p>
+<ul>
+<li>解耦 + 安全。所有操作经过 API
+Server，可以做认证授权审计。组件之间不直接连接，便于横向扩展（API Server
+可多副本）。etcd 只对 API Server 开放，保护"真相之源"。</li>
+</ul>
+<p><strong>问：etcd 挂了会怎样？</strong></p>
+<ul>
+<li>etcd 是 K8s
+的"真相之源"，挂了集群无法知道当前状态，无法做任何变更。但已运行的 Pod
+仍工作（kubelet 还在 Node 上）。生产环境 etcd 部署 3/5 节点高可用。</li>
+</ul>
+<p><strong>问：scheduler 挂了会怎样？</strong></p>
+<ul>
+<li>新 Pod 无法被调度（卡在 Pending），但已运行的 Pod 不受影响。多
+Master 时 scheduler 多副本，靠 leader election 选主。</li>
+</ul>
+<p><strong>问：controller-manager
+中的"调和循环"是什么意思？</strong></p>
+<ul>
+<li>持续循环："我期望 3
+副本，实际几个？少了就加，多了就删"。这种"观察-对比-操作"的循环叫
+reconcile loop，是 K8s
+声明式模型的核心。系统会持续逼近用户声明的期望状态。</li>
+</ul>
+<h4 id="完整示例-3">完整示例</h4>
+<p>以部署 CTTS 后端 3
+副本为例，四大组件的协作流程（伪流程，说明原理）：</p>
+<pre class="text"><code>用户操作：kubectl apply -f ctts-backend-deployment.yaml（replicas: 3）
+
+协作流程：
+1. API Server 收到请求
+   - 认证：验证用户身份
+   - 授权：检查用户能否创建 Deployment
+   - 准入：校验 YAML 格式与策略
+   - 通过 → 把 Deployment 对象写入 etcd
+
+2. controller-manager 的 Deployment Controller 监听到新 Deployment
+   - 创建一个 ReplicaSet（rs-abc123）
+   - ReplicaSet Controller 监听到新 RS，期望 3 副本
+   - 当前 0 个 → 创建 3 个 Pod 对象（Pod 还没分配 Node）
+   - Pod 对象写入 etcd（状态：Pending）
+
+3. scheduler 监听到有 3 个 Pending 的 Pod
+   - 对每个 Pod 跑调度算法：
+     Pod1 → 选 Node1（资源够、负载低）
+     Pod2 → 选 Node2（资源够、与 Pod1 反亲和）
+     Pod3 → 选 Node2（资源够）
+   - 把绑定信息写回 API Server → etcd
+
+4. Node1 的 kubelet 监听到自己被分了 Pod1
+   - 调用 container-runtime 拉镜像、启容器
+   - 上报状态：Pending → Running
+   Node2 的 kubelet 同理处理 Pod2、Pod3
+
+5. 持续监控（reconcile loop）
+   - 如果 Node2 挂了，Node Controller 上报
+   - ReplicaSet Controller 发现实际只剩 1 副本，期望 3
+   - 再创建 2 个新 Pod，scheduler 重新调度到 Node1
+   → 最终稳定在 3 副本</code></pre>
+<blockquote>
+<p>📌 这个流程体现了 K8s 的"声明式 + 控制循环"核心设计：你声明"3
+副本"，K8s 持续维持这个状态。</p>
+</blockquote>
+<h4 id="图示-3">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 9：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">Master 控制平面组件协作：</span>
+<span class="diagram-line">                kubectl apply -f deployment.yaml</span>
+<span class="diagram-line">                          <span class="tree-token">│</span></span>
+<span class="diagram-line">                          ▼</span>
+<span class="diagram-line">                  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">                  <span class="tree-token">│</span>  API Server   <span class="tree-token">│</span> ← 唯一入口</span>
+<span class="diagram-line">                  <span class="tree-token">│</span>  (认证/授权/   <span class="tree-token">│</span></span>
+<span class="diagram-line">                  <span class="tree-token">│</span>   准入/校验)   <span class="tree-token">│</span></span>
+<span class="diagram-line">                  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">                          <span class="tree-token">│</span></span>
+<span class="diagram-line">              ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┼<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">              <span class="tree-token">│</span>           <span class="tree-token">│</span>           <span class="tree-token">│</span></span>
+<span class="diagram-line">              ▼           ▼           ▼</span>
+<span class="diagram-line">        ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐ ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐ ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">        <span class="tree-token">│</span>  etcd   <span class="tree-token">│</span> <span class="tree-token">│</span>scheduler <span class="tree-token">│</span> <span class="tree-token">│</span>controller-mgr  <span class="tree-token">│</span></span>
+<span class="diagram-line">        <span class="tree-token">│</span> 状态存储<span class="tree-token">│</span> <span class="tree-token">│</span> 调度      <span class="tree-token">│</span> <span class="tree-token">│</span> Deployment/RS/ <span class="tree-token">│</span></span>
+<span class="diagram-line">        <span class="tree-token">│</span>         <span class="tree-token">│</span> <span class="tree-token">│</span>          <span class="tree-token">│</span> <span class="tree-token">│</span> Node/Endpoint  <span class="tree-token">│</span></span>
+<span class="diagram-line">        <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘ <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘ <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">            ▲           <span class="tree-token">│</span>              <span class="tree-token">│</span></span>
+<span class="diagram-line">            <span class="tree-token">│</span>           <span class="tree-token">│</span>              <span class="tree-token">│</span></span>
+<span class="diagram-line">            <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">                  都通过 API Server 读写 etcd</span>
+<span class="diagram-line">四大组件职责速记：</span>
+<span class="diagram-line">  API Server  = 前台接待（唯一入口）</span>
+<span class="diagram-line">  etcd        = 档案室（存所有状态）</span>
+<span class="diagram-line">  scheduler   = 调度员（决定 Pod 跑哪）</span>
+<span class="diagram-line">  controller  = 巡查员（维持期望状态）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-3">易错点</h4>
+<ol type="1">
+<li>❌ 误认为"scheduler 启动容器"。✅ scheduler 只"决定"Pod 跑在哪个
+Node，真正启动容器的是该 Node 上的 kubelet。</li>
+<li>❌ 误认为"etcd 是 MySQL 那种数据库"。✅ etcd
+是分布式键值存储（KV），不是关系型数据库。</li>
+<li>❌ 误认为"controller-manager 只有一个控制器"。✅
+它是多种控制器的集合（Deployment/ReplicaSet/Node/Endpoint 等）。</li>
+<li>❌ 误认为"组件之间直接互相调用"。✅ 所有组件都只跟 API Server
+通信，不直接互联。</li>
+<li>❌ 误认为"API Server 直接启动 Pod"。✅ API Server
+只负责接收请求和存状态，启动 Pod 由 kubelet 在 Node 上执行。</li>
+</ol>
+<h4 id="小结-3">小结</h4>
+<p>Master 控制平面四大组件：API
+Server（唯一入口，认证授权）、etcd（键值存储，集群状态）、scheduler（调度
+Pod 到
+Node）、controller-manager（多种控制器，维持期望状态）。组件之间通过 API
+Server 通信，状态存在 etcd，scheduler 决策调度，controller
+持续调和。</p>
+<hr />
+<h3 id="知识点-k13-5node-工作节点组件">知识点 K13-5：Node
+工作节点组件</h3>
+<h4 id="定义-4">定义</h4>
+<p>Node（工作节点）包含三大核心组件：</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>名称</th>
+<th>一句话职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>kubelet</strong></td>
+<td>节点代理</td>
+<td>管理本节点上的 Pod 生命周期，与 API Server 通信</td>
+</tr>
+<tr>
+<td><strong>kube-proxy</strong></td>
+<td>网络代理</td>
+<td>维护 Service 的网络规则，实现服务发现与负载均衡</td>
+</tr>
+<tr>
+<td><strong>container-runtime</strong></td>
+<td>容器运行时</td>
+<td>真正运行容器的引擎（containerd/CRI-O/Docker）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="原理-4">原理</h4>
+<p><strong>1. kubelet — 节点代理</strong></p>
+<div class="visual">
+  <div class="visual-title">图示 10：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">kubelet 是什么：</span>
+<span class="diagram-line">  - 跑在每个 Node 上的代理进程</span>
+<span class="diagram-line">  - 是 Master 在 Node 上的&quot;代表&quot;</span>
+<span class="diagram-line">  - 负责 Pod 的生命周期管理</span>
+<span class="diagram-line">kubelet 的职责：</span>
+<span class="diagram-line">  - 监听 API Server，知道自己节点上被分配了哪些 Pod</span>
+<span class="diagram-line">  - 调用 container-runtime 拉镜像、启停容器</span>
+<span class="diagram-line">  - 执行 Pod 的健康检查（livenessProbe/readinessProbe）</span>
+<span class="diagram-line">  - 持续向 API Server 上报 Pod 状态与 Node 状态</span>
+<span class="diagram-line">  - Pod 挂了 <span class="arrow-token">→</span> 重启；Node 资源不足 <span class="arrow-token">→</span> 上报</span>
+<span class="diagram-line">特点：</span>
+<span class="diagram-line">  - 每个 Node 一个 kubelet</span>
+<span class="diagram-line">  - kubelet 不通过 API Server，直接调用容器运行时（CRI）</span>
+<span class="diagram-line">  - 是 K8s 与容器之间的&quot;桥梁&quot;</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>2. kube-proxy — 网络代理</strong></p>
+<div class="visual">
+  <div class="visual-title">图示 11：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">kube-proxy 是什么：</span>
+<span class="diagram-line">  - 跑在每个 Node 上的网络代理</span>
+<span class="diagram-line">  - 维护 Service 的网络规则</span>
+<span class="diagram-line">kube-proxy 的职责：</span>
+<span class="diagram-line">  - 监听 Service 与 Endpoints 变化</span>
+<span class="diagram-line">  - 在 Node 上配置 iptables/ipvs 规则</span>
+<span class="diagram-line">  - 让访问 Service VIP 的流量能路由到后端 Pod</span>
+<span class="diagram-line">  - 实现负载均衡（轮询/最少连接）</span>
+<span class="diagram-line">举例：</span>
+<span class="diagram-line">  Service ctts-backend（VIP: 10.96.0.10）<span class="arrow-token">→</span> 后端 3 个 Pod</span>
+<span class="diagram-line">  kube-proxy 在每个 Node 上写 iptables 规则：</span>
+<span class="diagram-line">    访问 10.96.0.10:8080 <span class="arrow-token">→</span> 转发到 Pod1/Pod2/Pod3（轮询）</span>
+<span class="diagram-line">  这样任何 Node 上的 Pod 访问 ctts-backend 都能命中后端</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>3. container-runtime — 容器运行时</strong></p>
+<div class="visual">
+  <div class="visual-title">图示 12：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">container-runtime 是什么：</span>
+<span class="diagram-line">  - 真正运行容器的软件</span>
+<span class="diagram-line">  - K8s 通过 CRI（Container Runtime Interface）标准接入</span>
+<span class="diagram-line">支持的运行时：</span>
+<span class="diagram-line">  - containerd（推荐，CNCF 毕业项目，Docker 捐赠）</span>
+<span class="diagram-line">  - CRI-O（Red Hat 主导，专为 K8s 设计）</span>
+<span class="diagram-line">  - Docker（已弃用 dockershim，1.24+ 不再原生支持，但仍可用 containerd 兼容）</span>
+<span class="diagram-line">工作方式：</span>
+<span class="diagram-line">  - kubelet 调用 CRI 接口 <span class="arrow-token">→</span> containerd</span>
+<span class="diagram-line">  - containerd 调用 runC <span class="arrow-token">→</span> 真正创建容器进程</span>
+<span class="diagram-line">  - 这与 Docker 引擎的运行时层次一致（见第 1 次课 K1-4）</span>
+<span class="diagram-line">注意：K8s 1.24 起移除了 dockershim，不再直接支持 Docker Engine</span>
+<span class="diagram-line">       但 Docker 构建的镜像仍可在 containerd 上运行（OCI 标准兼容）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="问题--场景-4">问题 / 场景</h4>
+<p><strong>问：kubelet 和 docker daemon 什么关系？</strong></p>
+<ul>
+<li>kubelet 不直接调 docker daemon，而是通过 CRI 调
+container-runtime（可能是 containerd 或 CRI-O）。早期 K8s 通过
+dockershim 支持 Docker Engine，1.24 起移除。但 Docker 构建的镜像（OCI
+格式）仍能在 containerd 上跑。</li>
+</ul>
+<p><strong>问：kube-proxy 是不是负载均衡器？</strong></p>
+<ul>
+<li>是一种"内核态负载均衡"。它通过 iptables/ipvs
+规则在内核层做流量转发，比应用层 LB（如
+Nginx）更高效。但只做四层（TCP/UDP），七层（HTTP 路由）需要
+Ingress。</li>
+</ul>
+<p><strong>问：为什么 K8s 不再用 Docker Engine 了？</strong></p>
+<ul>
+<li>Docker Engine 不是为 K8s 设计的，多了一层 dockershim
+适配，复杂且易出问题。containerd 是 Docker 捐给 CNCF
+的运行时，更精简、专注。K8s 1.24 移除 dockershim，直接用
+containerd。<strong>注意：镜像还是用 Docker build</strong>，只是 K8s
+跑容器不再用 Docker Engine。</li>
+</ul>
+<p><strong>问：每个 Node 都要装这三个组件吗？</strong></p>
+<ul>
+<li>是。每个 Node 都装 kubelet + kube-proxy + container-runtime，这样
+Master 才能管理这个 Node 上的 Pod。</li>
+</ul>
+<h4 id="完整示例-4">完整示例</h4>
+<p>以 CTTS 后端 Pod 部署到 Node1 为例，三大组件协作流程（伪流程）：</p>
+<pre class="text"><code>scheduler 决定把 ctts-backend Pod 调度到 Node1 →
+
+Node1 上的协作：
+
+1. kubelet 监听 API Server，发现 Node1 被分了新 Pod
+   - 读取 Pod 规格：image=ctts-backend:v1, port=8080
+   - 调用 container-runtime 的 CRI 接口：
+     &quot;拉取 ctts-backend:v1 镜像，启动容器&quot;
+
+2. container-runtime（containerd）执行：
+   - 检查本地是否有 ctts-backend:v1
+   - 没有则从仓库拉取
+   - 调用 runC 创建容器进程
+   - 容器跑起来
+
+3. kubelet 持续监控：
+   - 执行 livenessProbe（如 curl http://localhost:8080/health）
+   - 执行 readinessProbe（如检查端口是否通）
+   - 上报状态给 API Server：Pending → Running
+
+4. kube-proxy 监听到 Service ctts-backend 关联了 Node1 上的 Pod
+   - 在 Node1 上写 iptables 规则：
+     访问 Service VIP:8080 → 可路由到本节点 Pod
+   - 同样在其他 Node 上也写规则
+   - 这样任何 Pod 访问 ctts-backend 都能命中
+
+5. 持续运行：
+   - kubelet 每隔几秒上报状态
+   - Pod 挂了 → kubelet 重启（按 restartPolicy）
+   - 节点资源不足 → kubelet 上报，scheduler 不再调度新 Pod 到这</code></pre>
+<h4 id="图示-4">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 13：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">Node 工作节点组件协作：</span>
+<span class="diagram-line">         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">         <span class="tree-token">│</span>              Node1                    <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>                                       <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐                         <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>  <span class="tree-token">│</span> kubelet  <span class="tree-token">│</span> ←<span class="arrow-token">→</span> API Server（监控/上报）</span>
+<span class="diagram-line">         <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘                         <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>       <span class="tree-token">│</span> CRI 调用                       <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>       ▼                               <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐                  <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>  <span class="tree-token">│</span> container-runtime<span class="tree-token">│</span>                 <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>  <span class="tree-token">│</span> (containerd)    <span class="tree-token">│</span>                  <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘                  <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>       <span class="tree-token">│</span> runC                           <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>       ▼                               <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐          <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>  <span class="tree-token">│</span>  Pod1   Pod2   Pod3     <span class="tree-token">│</span>          <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>  <span class="tree-token">│</span> (容器)  (容器)  (容器)    <span class="tree-token">│</span>          <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘          <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>       ▲                               <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>       <span class="tree-token">│</span> iptables 规则                  <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐                  <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">│</span>  <span class="tree-token">│</span>   kube-proxy    <span class="tree-token">│</span> ←<span class="arrow-token">→</span> API Server（监听 Service）</span>
+<span class="diagram-line">         <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘                  <span class="tree-token">│</span></span>
+<span class="diagram-line">         <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">三大组件职责速记：</span>
+<span class="diagram-line">  kubelet        = 节点管家（管 Pod 生死）</span>
+<span class="diagram-line">  kube-proxy     = 网络交警（管 Service 流量）</span>
+<span class="diagram-line">  container-runtime = 干活的工人（跑容器）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-4">易错点</h4>
+<ol type="1">
+<li>❌ 误认为"kubelet 跑在 Master 上"。✅ kubelet 跑在每个 Node 上，是
+Node 的代理。Master 上也可能跑 kubelet（用于静态 Pod
+运行控制平面组件本身），但本课程理解为 Node 组件。</li>
+<li>❌ 误认为"kube-proxy 做七层负载均衡"。✅ kube-proxy
+做四层（TCP/UDP）负载均衡（iptables/ipvs），七层（HTTP 路由）由 Ingress
+做。</li>
+<li>❌ 误认为"K8s 1.24+ 不能用 Docker 镜像了"。✅ K8s 不再原生支持
+Docker Engine（移除 dockershim），但 Docker 构建的镜像（OCI 格式）仍能在
+containerd 上正常运行。</li>
+<li>❌ 误认为"kubelet 直接调 docker daemon"。✅ kubelet 通过 CRI 调
+container-runtime（通常是 containerd），不直接连 Docker。</li>
+<li>❌ 误认为"Node 只跑业务 Pod，不跑 K8s 组件"。✅ Node 上跑
+kubelet、kube-proxy、container-runtime，它们是 K8s 组件，不是业务
+Pod。</li>
+</ol>
+<h4 id="小结-4">小结</h4>
+<p>Node 工作节点三大组件：kubelet（节点代理，管 Pod
+生命周期）、kube-proxy（网络代理，管 Service
+流量规则）、container-runtime（容器运行时，真正跑容器，通常是
+containerd）。每个 Node 都装这三个组件，由 Master 通过 API Server
+统一管理。</p>
+<hr />
+<h3 id="知识点-k13-6k8s-核心概念总览">知识点 K13-6：K8s
+核心概念总览</h3>
+<h4 id="定义-5">定义</h4>
+<p>K8s 有很多资源对象（Resource
+Objects），本节做"概念总览"，每个概念用一句话简介，并标注后续哪次课详讲。本节不要求深入掌握，只要建立"K8s
+有哪些核心资源"的全局认知。</p>
+<h4 id="原理-5">原理</h4>
+<p><strong>K8s 核心资源一览表</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>资源</th>
+<th>一句话概念</th>
+<th>类比</th>
+<th>详讲次课</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pod</strong></td>
+<td>K8s 最小调度单元，包含一个或多个紧密协作的容器</td>
+<td>一个"小盒子"装 1~N 个容器</td>
+<td>第 15 次</td>
+</tr>
+<tr>
+<td><strong>Deployment</strong></td>
+<td>管理 Pod 副本，支持滚动更新与回滚</td>
+<td>Pod 的"指挥官"</td>
+<td>第 16 次</td>
+</tr>
+<tr>
+<td><strong>ReplicaSet</strong></td>
+<td>维持 Pod 副本数（Deployment 内部用）</td>
+<td>Pod 的"保镖"</td>
+<td>第 16 次</td>
+</tr>
+<tr>
+<td><strong>Service</strong></td>
+<td>为一组 Pod 提供稳定访问入口（IP+DNS）+ 负载均衡</td>
+<td>Pod 的"前台"</td>
+<td>第 18 次</td>
+</tr>
+<tr>
+<td><strong>Ingress</strong></td>
+<td>七层路由（HTTP/HTTPS），把域名/路径映射到 Service</td>
+<td>集群的"Nginx"</td>
+<td>第 19 次</td>
+</tr>
+<tr>
+<td><strong>ConfigMap</strong></td>
+<td>存储非敏感配置（key-value），可挂载为环境变量或文件</td>
+<td>配置文件</td>
+<td>第 21 次</td>
+</tr>
+<tr>
+<td><strong>Secret</strong></td>
+<td>存储敏感信息（密码/密钥），base64 编码</td>
+<td>加密保险箱</td>
+<td>第 21 次</td>
+</tr>
+<tr>
+<td><strong>PV（PersistentVolume）</strong></td>
+<td>集群级持久化存储资源</td>
+<td>集群的"硬盘"</td>
+<td>第 22 次</td>
+</tr>
+<tr>
+<td><strong>PVC（PersistentVolumeClaim）</strong></td>
+<td>用户对存储的申请</td>
+<td>"我要 10G 硬盘"</td>
+<td>第 22 次</td>
+</tr>
+<tr>
+<td><strong>StorageClass</strong></td>
+<td>动态创建 PV 的模板</td>
+<td>存储的"工厂"</td>
+<td>第 22 次</td>
+</tr>
+<tr>
+<td><strong>Namespace</strong></td>
+<td>集群内的虚拟集群，资源隔离</td>
+<td>集群的"房间"</td>
+<td>贯穿</td>
+</tr>
+<tr>
+<td><strong>Label/Selector</strong></td>
+<td>资源标签与选择器，关联资源</td>
+<td>资源的"标签贴纸"</td>
+<td>第 16 次</td>
+</tr>
+<tr>
+<td><strong>StatefulSet</strong></td>
+<td>管理有状态应用（如 MySQL），Pod 有序、稳定</td>
+<td>有状态 Pod 指挥官</td>
+<td>拓展</td>
+</tr>
+<tr>
+<td><strong>DaemonSet</strong></td>
+<td>每个节点跑一个副本（如日志收集）</td>
+<td>节点级 Pod</td>
+<td>拓展</td>
+</tr>
+<tr>
+<td><strong>Job/CronJob</strong></td>
+<td>一次性/定时任务</td>
+<td>K8s 的"crontab"</td>
+<td>拓展</td>
+</tr>
+<tr>
+<td><strong>HPA</strong></td>
+<td>根据负载自动扩缩容</td>
+<td>Pod 的"调速器"</td>
+<td>拓展</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景-5">问题 / 场景</h4>
+<p><strong>问：为什么 K8s 这么多概念？</strong></p>
+<ul>
+<li>K8s 把"运维"工程化了——每种运维需求都对应一个资源对象：扩缩容 →
+Deployment，访问入口 → Service，配置 → ConfigMap，密码 → Secret，存储 →
+PV/PVC。看起来多，但每个职责清晰，组合起来能解决几乎所有运维场景。</li>
+</ul>
+<p><strong>问：Pod 和容器什么关系？为什么不是直接管容器？</strong></p>
+<ul>
+<li>K8s 不直接管容器，管的是 Pod。Pod
+是"一个或多个紧密协作的容器组合"，共享网络与存储。这样设计是因为有些应用天然是"多容器协作"（如主容器
++ sidecar 日志收集）。Pod 是最小调度单元。</li>
+</ul>
+<p><strong>问：CTTS 部署到 K8s 需要哪些资源？</strong></p>
+<ul>
+<li>见下方综合示例，大约：3 个 Deployment/StatefulSet + 3 个 Service + 1
+个 ConfigMap + 1 个 Secret + 1 个 PVC + 1 个 Ingress。后续 11
+次课逐步学完。</li>
+</ul>
+<h4 id="完整示例-5">完整示例</h4>
+<p>CTTS 完整 K8s
+部署所需的资源清单（本节只看清单，后续课程逐一学习编写）：</p>
+<pre class="text"><code>CTTS K8s 部署资源清单：
+
+工作负载（M6 模块，第 15~17 次课）：
+  - Deployment/ctts-frontend（replicas: 2）  ← 前端 2 副本
+  - Deployment/ctts-backend  (replicas: 3)   ← 后端 3 副本
+  - StatefulSet/ctts-mysql   (replicas: 1)   ← MySQL 1 副本（有状态）
+
+网络（M7 模块，第 18~20 次课）：
+  - Service/ctts-frontend   (ClusterIP)      ← 集群内访问前端
+  - Service/ctts-backend    (ClusterIP)      ← 集群内访问后端
+  - Service/ctts-mysql      (ClusterIP)      ← 集群内访问 MySQL
+  - Ingress/ctts-ingress    (host: ctts.com) ← 域名入口，路由到前端/后端
+
+配置与存储（M8 模块，第 21~22 次课）：
+  - ConfigMap/ctts-config                    ← 数据库连接、应用配置
+  - Secret/ctts-secret                       ← MySQL root 密码
+  - PVC/ctts-mysql-pvc (10Gi)                ← MySQL 数据持久化
+  - PV（由 StorageClass 动态创建）
+
+总计约 10 个资源对象，组合起来就是 CTTS 完整 K8s 部署</code></pre>
+<h4 id="图示-5">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 14：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">K8s 核心资源关系图：</span>
+<span class="diagram-line">       ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">       <span class="tree-token">│</span>   Ingress    <span class="tree-token">│</span>  ← 域名/路径路由（第19次课）</span>
+<span class="diagram-line">       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">              <span class="tree-token">│</span></span>
+<span class="diagram-line">       ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>▼<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">       <span class="tree-token">│</span>   Service    <span class="tree-token">│</span>  ← 稳定访问入口 + 负载均衡（第18次课）</span>
+<span class="diagram-line">       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">              <span class="tree-token">│</span> 关联（标签选择器）</span>
+<span class="diagram-line">       ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>▼<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">       <span class="tree-token">│</span> Deployment   <span class="tree-token">│</span>  ← 管理 Pod 副本、滚动更新（第16次课）</span>
+<span class="diagram-line">       <span class="tree-token">│</span> (ReplicaSet) <span class="tree-token">│</span></span>
+<span class="diagram-line">       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">              <span class="tree-token">│</span> 创建</span>
+<span class="diagram-line">       ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>▼<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line">       <span class="tree-token">│</span>     Pod      <span class="tree-token">│</span>  ← 最小调度单元（第15次课）</span>
+<span class="diagram-line">       <span class="tree-token">│</span> ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐ <span class="tree-token">│</span></span>
+<span class="diagram-line">       <span class="tree-token">│</span> <span class="tree-token">│</span>  容器     <span class="tree-token">│</span> <span class="tree-token">│</span></span>
+<span class="diagram-line">       <span class="tree-token">│</span> <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘ <span class="tree-token">│</span></span>
+<span class="diagram-line">       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">              <span class="tree-token">│</span></span>
+<span class="diagram-line">              <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ConfigMap/Secret（配置/密码，第21次课）</span>
+<span class="diagram-line">              <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> PVC <span class="arrow-token">→</span> PV（持久化存储，第22次课）</span>
+<span class="diagram-line">所有资源都在某个 Namespace 内（贯穿全程）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-5">易错点</h4>
+<ol type="1">
+<li>❌ 误认为"K8s 直接管容器"。✅ K8s 管的是 Pod，Pod
+是最小调度单元，容器在 Pod 内。</li>
+<li>❌ 误认为"Deployment = Pod"。✅ Deployment 管理 Pod（通过
+ReplicaSet），不是同一个东西。Deployment 是控制器，Pod
+是被管理的实例。</li>
+<li>❌ 误认为"Secret 是加密的"。✅ Secret 是 base64
+编码（不是加密），生产环境需配合 RBAC 限制访问，或用外部密钥管理（如
+Vault）。</li>
+<li>❌ 误认为"PV 是 K8s 内置存储"。✅ PV
+是对接外部存储（NFS/Ceph/云盘）的抽象，K8s 自己不存数据。</li>
+</ol>
+<h4 id="小结-5">小结</h4>
+<p>K8s
+核心资源：Pod（最小调度单元）、Deployment（副本管理与滚动更新）、Service（访问入口与负载均衡）、Ingress（七层路由）、ConfigMap/Secret（配置与密码）、PV/PVC/StorageClass（持久化存储）、Namespace（资源隔离）。本节只做总览，后续
+11 次课会逐一详讲。</p>
+<hr />
+<h2 id="三综合示例从-compose-到-k8s--ctts-的演进逻辑">三、综合示例：从
+Compose 到 K8s — CTTS 的演进逻辑</h2>
+<p>把前面所有知识点串起来，看 CTTS 项目"为什么要从 Compose 升级到
+K8s、K8s 架构如何支撑这次升级"的完整逻辑（本节只看思路，不写实现）：</p>
+<div class="visual">
+  <div class="visual-title">图示 15：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">1. 现状回顾（前 12 次课）</span>
+<span class="diagram-line">   CTTS 三服务已用 Docker + Compose 部署：</span>
+<span class="diagram-line">   docker-compose.yml：mysql + backend + frontend</span>
+<span class="diagram-line">   单机运行，3 个容器，启动一次成功</span>
+<span class="diagram-line">2. 痛点出现（K13-1）</span>
+<span class="diagram-line">   CTTS 用户量从 100 涨到 10 万：</span>
+<span class="diagram-line">   - 单机扛不住 <span class="arrow-token">→</span> 需要多机</span>
+<span class="diagram-line">   - 机器挂了全停 <span class="arrow-token">→</span> 需要自愈</span>
+<span class="diagram-line">   - 流量突增扩容难 <span class="arrow-token">→</span> 需要弹性</span>
+<span class="diagram-line">   - 更新要停机 <span class="arrow-token">→</span> 需要滚动更新</span>
+<span class="diagram-line">   <span class="arrow-token">→</span> Compose 解决不了，需要 K8s</span>
+<span class="diagram-line">3. 选型判断（K13-2）</span>
+<span class="diagram-line">   Compose vs K8s：</span>
+<span class="diagram-line">   - 本地开发/CI 测试 <span class="arrow-token">→</span> 继续 Compose</span>
+<span class="diagram-line">   - 生产环境 <span class="arrow-token">→</span> 必须用 K8s</span>
+<span class="diagram-line">   - CTTS 已上线 <span class="arrow-token">→</span> 升级到 K8s</span>
+<span class="diagram-line">4. K8s 架构支撑（K13-3）</span>
+<span class="diagram-line">   搭建 K8s 集群：1 Master + 2 Node</span>
+<span class="diagram-line">   - Master 管全局（API Server/etcd/scheduler/controller-manager）</span>
+<span class="diagram-line">   - Node 跑业务（kubelet/kube-proxy/container-runtime）</span>
+<span class="diagram-line">   - 多机协同，单机故障不影响整体</span>
+<span class="diagram-line">5. Master 控制平面工作（K13-4）</span>
+<span class="diagram-line">   - kubectl apply <span class="arrow-token">→</span> API Server <span class="arrow-token">→</span> etcd</span>
+<span class="diagram-line">   - controller-manager 创建 ReplicaSet <span class="arrow-token">→</span> 创建 Pod</span>
+<span class="diagram-line">   - scheduler 调度 Pod 到 Node1/Node2</span>
+<span class="diagram-line">   - 持续监控维持期望状态（3 副本）</span>
+<span class="diagram-line">6. Node 工作节点执行（K13-5）</span>
+<span class="diagram-line">   - kubelet 监听 <span class="arrow-token">→</span> 调用 containerd 启容器</span>
+<span class="diagram-line">   - kube-proxy 写 iptables <span class="arrow-token">→</span> Service 流量路由</span>
+<span class="diagram-line">   - Pod 跑起来，kubelet 持续上报状态</span>
+<span class="diagram-line">7. 核心资源组织（K13-6）</span>
+<span class="diagram-line">   CTTS K8s 部署所需资源：</span>
+<span class="diagram-line">   - 3 个 Deployment/StatefulSet（前端 2 副本、后端 3 副本、MySQL 1 副本）</span>
+<span class="diagram-line">   - 3 个 Service（前端、后端、MySQL 集群内访问）</span>
+<span class="diagram-line">   - 1 个 Ingress（域名入口）</span>
+<span class="diagram-line">   - 1 个 ConfigMap（应用配置）</span>
+<span class="diagram-line">   - 1 个 Secret（MySQL 密码）</span>
+<span class="diagram-line">   - 1 个 PVC（MySQL 数据持久化）</span>
+<span class="diagram-line">8. 升级收益</span>
+<span class="diagram-line">   - 高可用：某 Node 挂了，Pod 自动迁移</span>
+<span class="diagram-line">   - 弹性：HPA 根据负载自动扩缩容</span>
+<span class="diagram-line">   - 滚动更新：零停机升级后端</span>
+<span class="diagram-line">   - 统一管理：一套 YAML 描述整个部署</span>
+<span class="diagram-line">   <span class="arrow-token">→</span> 从&quot;单机手动&quot;到&quot;集群自动&quot;的质变</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<blockquote>
+<p>这个逻辑链体现了后 12 次课的主线：<strong>Compose → K8s 集群 → Pod →
+Deployment → Service → 配置存储 → 综合部署</strong>。后续 11
+次课就是在学如何实现这条链路的每一步。</p>
+</blockquote>
+<hr />
+<h2 id="四拓展阅读选学">四、拓展阅读（选学）</h2>
+<ol type="1">
+<li><p><strong>K8s 起源 — Borg 系统</strong>：K8s 的设计思想源于 Google
+内部的 Borg 系统（2003 年开始），Google 用 Borg
+管理内部成千上万的服务。2014 年 Google 开源 K8s，2015 年捐给
+CNCF。想深入可读 Borg 论文《Large-scale cluster management at Google
+with Borg》。</p></li>
+<li><p><strong>CRI / CNI / CSI 三大接口标准</strong>：</p>
+<ul>
+<li>CRI（Container Runtime Interface）：容器运行时接口，让 K8s 支持
+containerd/CRI-O 等多种运行时</li>
+<li>CNI（Container Network Interface）：容器网络接口，让 K8s 支持
+Calico/Flannel 等多种网络插件</li>
+<li>CSI（Container Storage Interface）：容器存储接口，让 K8s 支持
+NFS/Ceph/云盘等多种存储</li>
+</ul></li>
+<li><p><strong>声明式 API 与 Reconcile Loop</strong>：K8s
+的核心设计是"声明式"——你描述期望状态，K8s
+持续让实际状态趋近期望状态。每个控制器跑一个 reconcile
+loop（观察-对比-操作）。这种模式叫"水平触发"而非"边缘触发"，更健壮。</p></li>
+<li><p><strong>国产云原生平台</strong>：华为云 CCE、阿里云 ACK、腾讯云
+TKE、青云 KubeSphere（开源 PaaS，国产化代表），都是基于 K8s
+的自主可控平台。KubeSphere 特别适合学习，对 K8s 做了友好封装。</p></li>
+<li><p><strong>Podman vs Docker</strong>：Red Hat 推出的 Podman 是
+Docker 的替代品，无守护进程，更安全。但 K8s 生态以 containerd
+为主流。了解即可。</p></li>
+</ol>
+<hr />
+<h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
+<h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
+<div class="visual">
+  <div class="visual-title">图示 16：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">Kubernetes认知与架构</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 什么是K8s</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 容器编排概念（自动化调度/自愈/弹性/滚动更新）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> K8s定义（开源容器编排平台，CNCF托管）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 起源（Google Borg <span class="arrow-token">→</span> 2014开源 <span class="arrow-token">→</span> CNCF）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> Compose四大局限（单机/无自愈/无弹性/无滚动更新）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> K8s vs Docker Compose</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 单机 vs 集群</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 手动编排 vs 自动调度</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 功能对比表（调度/自愈/弹性/滚动/服务发现/...）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 选型原则（开发用Compose，生产用K8s）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> K8s整体架构（Master-Node）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Master（控制平面）：决策大脑</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Node（工作节点）：执行手脚</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 数据流：kubectl <span class="arrow-token">→</span> API Server <span class="arrow-token">→</span> etcd <span class="arrow-token">→</span> 各组件</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 高可用：多Master + 多Node</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Master控制平面组件</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> API Server：统一入口，认证授权，唯一读写etcd</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> etcd：分布式KV存储，集群&quot;真相之源&quot;</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> scheduler：调度器，决定Pod跑哪个Node</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> controller-manager：控制器集合，维持期望状态</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Node工作节点组件</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> kubelet：节点代理，管Pod生命周期</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> kube-proxy：网络代理，管Service流量规则</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> container-runtime：容器运行时（containerd）</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 核心概念总览</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Pod（最小调度单元，第15次课）</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Deployment（副本管理与滚动更新，第16次课）</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Service（访问入口与负载均衡，第18次课）</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Ingress（七层路由，第19次课）</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ConfigMap/Secret（配置与密码，第21次课）</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> PV/PVC/StorageClass（持久化存储，第22次课）</span>
+<span class="diagram-line">    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> Namespace（资源隔离，贯穿全程）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h3 id="一句话总结">一句话总结</h3>
+<blockquote>
+<p>本节课建立 K8s 全局认知：<strong>K8s 是云原生操作系统，用 Master-Node
+架构管理集群，通过 API Server/etcd/scheduler/controller 四大组件 +
+kubelet/kube-proxy/runtime 三大组件，编排 Pod/Deployment/Service
+等资源，实现从单机 Compose 到集群 K8s 的演进</strong>。后续 11
+次课将逐步学会搭建集群、部署资源、完成 CTTS 的 K8s 升级。</p>
+</blockquote>
+<hr />
+<h2
+id="六复习思考题开放式非题库题">六、复习思考题（开放式，非题库题）</h2>
+<ol type="1">
+<li>用自己的话描述"容器编排"概念，并说明为什么 Docker Compose
+不算真正的容器编排系统。</li>
+<li>画出 K8s 的 Master-Node 架构图，标注 Master 四大组件、Node
+三大组件，并标出一次 <code>kubectl apply -f deployment.yaml</code>
+的完整数据流。</li>
+<li>解释 K8s 的"声明式"模型与"reconcile loop"机制，举例说明
+controller-manager 是如何维持期望状态的。</li>
+<li>对比 API Server、etcd、scheduler、controller-manager
+四个组件，说明它们各自的职责以及为什么 K8s 要这样设计。</li>
+<li>为什么 K8s 1.24 移除了 dockershim？这是否意味着不能用 Docker
+镜像了？请解释原因。</li>
+<li>在 CTTS 项目中，从 Compose 升级到 K8s，前端/后端/MySQL
+三个服务分别需要哪些 K8s 资源？为什么 MySQL 用 StatefulSet 而不是
+Deployment？（提示：有状态 vs 无状态，为第 16 次课铺垫）</li>
+<li>思考：如果让你为一家初创公司选型，CTTS
+类似的多服务应用，什么规模下你会建议从 Compose 迁移到
+K8s？需要考虑哪些因素？</li>
+</ol>
+<blockquote>
+<p>这些思考题不要求标准答案，旨在引导你建立对后续 11
+次课的整体认知。下次课将进入 K8s 集群搭建的实际操作。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

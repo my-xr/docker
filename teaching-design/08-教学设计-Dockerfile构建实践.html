@@ -1,0 +1,584 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dockerfile构建实践</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 08 次课 · 教学设计</div>
+      <h1>Dockerfile构建实践</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 08 次课</span>
+        <span class="hero-chip"><b>主题</b>Dockerfile构建实践</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+<li><a href="#贯穿项目阶段-3-收尾构建-ctts-前后端镜像">贯穿项目阶段 3 收尾：构建 CTTS 前后端镜像</a></li>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1课前-5-分钟回顾开场导入">互动 1：课前 5 分钟回顾（开场导入）</a></li>
+<li><a href="#互动-2构建日志解读k8-3-讲解中">互动 2：构建日志解读（K8-3 讲解中）</a></li>
+<li><a href="#互动-3踩坑复盘k8-6-实践后">互动 3：踩坑复盘（K8-6 实践后）</a></li>
+<li><a href="#互动-4镜像大小对比k8-5-优化后">互动 4：镜像大小对比（K8-5 优化后）</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+<li><a href="#随堂练习5-分钟实践操作过程中穿插">随堂练习（5 分钟，实践操作过程中穿插）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 08 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M3 Dockerfile 与镜像构建 ｜ 课程：《Docker
+云容器与管理技术》 配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 8 次课（全课程 24 次之第 8，模块 3 收尾实践课）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>实践课</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M3 Dockerfile 与镜像构建</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>综合实践——构建 CTTS 前后端镜像</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>第 6 次课 Dockerfile 基础指令、第 7 次课多阶段构建、第 3~5
+次课镜像与容器管理</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>掌握 Java 后端应用多阶段构建 Dockerfile 的编写方法（Maven 构建阶段 +
+JRE 运行阶段）。</li>
+<li>掌握 Vue3 前端应用多阶段构建 Dockerfile 的编写方法（Node 构建阶段 +
+Nginx 部署阶段）。</li>
+<li>理解镜像构建标签管理规范（<code>docker build -t</code>、<code>docker tag</code>、命名规范）。</li>
+<li>掌握构建日志的解读方法与常见构建失败的排查思路。</li>
+<li>理解镜像构建优化实践（层缓存利用、<code>.dockerignore</code>
+配置、镜像大小分析）。</li>
+<li>掌握前后端容器联调验证的完整流程（容器运行、端口映射、访问测试）。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能独立编写 CTTS 后端多阶段 Dockerfile（Maven 打包 → JRE
+运行）。</li>
+<li>能独立编写 CTTS 前端多阶段 Dockerfile（Node 构建 → Nginx
+部署）。</li>
+<li>能执行 <code>docker build</code>
+构建镜像，并依据构建日志判断构建是否成功。</li>
+<li>能运行前后端容器并通过浏览器/curl
+验证服务可用性，完成联调测试。</li>
+<li>能排查构建过程中的常见问题（COPY
+路径错误、依赖下载失败、端口不通、前端 API 跨域等）。</li>
+<li>能利用层缓存和 <code>.dockerignore</code>
+优化构建速度与镜像体积。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>培养"质量意识"——镜像构建是一次性交付物，构建质量直接决定运行稳定性。</li>
+<li>培养"工匠精神"——Dockerfile
+每条指令都要经得起推敲，不能"能跑就行"。</li>
+<li>建立"工程规范"意识——Dockerfile
+命名、标签、注释要符合团队规范，便于协作。</li>
+<li>培养"问题排查"思维——构建失败不慌张，按日志 → 定位 →
+修复的流程冷静分析。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K8-1</td>
+<td>CTTS 后端 Dockerfile 编写</td>
+<td>多阶段构建：Maven 构建阶段（FROM maven → COPY 源码 → mvn package）→
+运行阶段（FROM jre → COPY jar → CMD 启动）</td>
+</tr>
+<tr>
+<td>K8-2</td>
+<td>CTTS 前端 Dockerfile 编写</td>
+<td>多阶段构建：Node 构建阶段（FROM node → npm install → npm run
+build）→ 运行阶段（FROM nginx → COPY dist 到 html）</td>
+</tr>
+<tr>
+<td>K8-3</td>
+<td>镜像构建与标签管理</td>
+<td><code>docker build -t</code>、<code>docker tag</code>、构建日志解读、构建失败排查、命名规范</td>
+</tr>
+<tr>
+<td>K8-4</td>
+<td>容器运行与验证</td>
+<td>运行后端容器 + 前端容器、端口映射、访问验证、前后端联调测试</td>
+</tr>
+<tr>
+<td>K8-5</td>
+<td>构建优化实践</td>
+<td>层缓存利用、<code>.dockerignore</code>
+配置、镜像大小分析、<code>docker image ls</code>
+对比、多阶段构建减体积</td>
+</tr>
+<tr>
+<td>K8-6</td>
+<td>实践复盘与常见问题排查</td>
+<td>构建失败、COPY 路径错误、端口不通、前端 API
+跨域、依赖下载失败等问题排查</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3 id="贯穿项目阶段-3-收尾构建-ctts-前后端镜像">贯穿项目阶段 3
+收尾：构建 CTTS 前后端镜像</h3>
+<p><strong>本次课任务</strong>（实践课，全程实操）：</p>
+<ol type="1">
+<li><p><strong>任务一：编写并构建 CTTS
+后端镜像（K8-1、K8-3）</strong></p>
+<ul>
+<li>学生在 <code>ctts-backend/</code> 目录下编写多阶段 Dockerfile（Maven
+构建 + JRE 运行）</li>
+<li>执行 <code>docker build -t ctts-backend:v1 .</code> 构建镜像</li>
+<li>解读构建日志，确认构建成功</li>
+</ul></li>
+<li><p><strong>任务二：编写并构建 CTTS
+前端镜像（K8-2、K8-3）</strong></p>
+<ul>
+<li>学生在 <code>ctts-frontend/</code> 目录下编写多阶段 Dockerfile（Node
+构建 + Nginx 部署）</li>
+<li>执行 <code>docker build -t ctts-frontend:v1 .</code> 构建镜像</li>
+<li>解读构建日志，确认构建成功</li>
+</ul></li>
+<li><p><strong>任务三：运行容器并验证（K8-4）</strong></p>
+<ul>
+<li>运行后端容器：<code>docker run -d -p 8080:8080 --name ctts-api ctts-backend:v1</code></li>
+<li>运行前端容器：<code>docker run -d -p 80:80 --name ctts-web ctts-frontend:v1</code></li>
+<li>访问验证：<code>curl http://localhost:8080/actuator/health</code>、浏览器访问
+<code>http://localhost</code></li>
+<li>前后端联调：浏览器访问前端页面，验证能调通后端 API</li>
+</ul></li>
+<li><p><strong>任务四：构建优化与对比（K8-5）</strong></p>
+<ul>
+<li>配置 <code>.dockerignore</code> 排除
+<code>node_modules</code>、<code>target</code>、<code>.git</code>
+等</li>
+<li>对比优化前后镜像大小：<code>docker image ls</code></li>
+<li>分析层缓存：修改源码后重新构建，观察哪些层被缓存、哪些被重建</li>
+</ul></li>
+<li><p><strong>任务五：复盘与问题排查（K8-6）</strong></p>
+<ul>
+<li>各组整理构建过程中遇到的踩坑问题</li>
+<li>教师汇总典型问题并演示排查思路</li>
+</ul></li>
+</ol>
+<p><strong>项目背景回顾</strong>：</p>
+<ul>
+<li>项目名称：多服务容器化部署项目</li>
+<li>项目架构：CTTS 前端（Vue3）+ CTTS 后端（SpringBoot）+ MySQL
+三服务</li>
+<li>本次课是模块 3（Dockerfile 与镜像构建）的收尾实践课，承接第 6、7
+次课的 Dockerfile 理论</li>
+<li>本次课产出的两个镜像（ctts-backend:v1、ctts-frontend:v1）将在第 12
+次课（Compose 编排）中复用</li>
+</ul>
+<blockquote>
+<p>📌 本节课全程实操，教师演示 + 学生同步操作 + 问题排查。MySQL
+镜像使用官方 <code>mysql:8.0</code>，无需自建 Dockerfile。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1课前-5-分钟回顾开场导入">互动 1：课前 5
+分钟回顾（开场导入）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"上节课学的多阶段构建，谁能用一句话说出它的核心好处？为什么要分两个阶段？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>随机抽 2~3 名学生口头回答</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>"减小镜像体积""把构建工具和运行环境分离""构建阶段用
+Maven/Node，运行阶段只用 JRE/Nginx"</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定正确表述，强调"多阶段构建 = 构建阶段产物 +
+运行阶段最小化"，引出本节课的实战任务</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2构建日志解读k8-3-讲解中">互动 2：构建日志解读（K8-3
+讲解中）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>教师故意演示一次构建失败（如 COPY
+路径错误），让学生观察构建日志，找出失败原因</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>全班观察日志 → 小组讨论 2 分钟 → 派代表指出失败行和原因</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能从日志中找到 "COPY failed: file not found"
+等错误信息，定位到具体指令</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调"构建日志是排查的第一手资料"，教学生按 "Step → 错误行 →
+错误信息" 的顺序阅读日志</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-3踩坑复盘k8-6-实践后">互动 3：踩坑复盘（K8-6 实践后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>各组整理本次构建过程中遇到的 1~2 个踩坑问题，描述"现象 → 原因 →
+解决方案"，派代表分享</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>小组讨论 5 分钟 → 每组代表发言 1~2 分钟 → 教师汇总典型问题</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>典型问题：COPY 路径写错、npm install
+慢/失败、端口被占用、前端调后端跨域、构建上下文太大导致构建慢</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>将每组问题归类为"路径类/网络类/端口类/跨域类/缓存类"，给出通用排查思路；强调踩坑是实践课的最大价值</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-4镜像大小对比k8-5-优化后">互动 4：镜像大小对比（K8-5
+优化后）</h3>
+<p>| 项目 | 内容 | | --- | 内容 | | --- | --- | | 互动问题 |
+"优化前后的镜像大小分别是多少？差异主要来自哪里？多阶段构建省了什么？" |
+| 组织方式 | 全班查看 <code>docker image ls</code> 输出 → 自由发言 | |
+预期学生输出 | 优化前几百 MB（含 Maven/Node 工具链），优化后几十~一百多
+MB（只剩 JRE/Nginx + 应用） | | 教师点评要点 |
+强调"运行阶段镜像越小越安全"，多阶段构建是把构建工具链剔除出去的关键手段
+|</p>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>质量意识——镜像构建是一次性交付物</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td>镜像一旦构建完成推送到仓库，就会被多个环境（测试/预发/生产）拉取运行。如果构建质量有问题（如
+COPY 错文件、依赖版本不对、没做 .dockerignore
+导致敏感信息被打包），问题会在所有环境爆发。镜像 = 交付物 =
+质量载体。</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"如果构建时把数据库密码硬编码进镜像，再推到仓库，会发生什么？镜像这个交付物和源代码相比，有什么特殊的质量要求？"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>树立"镜像即交付物"的质量意识，理解构建规范（不打包敏感信息、用明确标签、最小化镜像）的重要性，培养对生产环境负责的工程态度。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入，不空喊口号。通过"镜像一旦推送就无法收回"的真实视角让学生体会"构建质量
+= 生产质量"。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3 id="随堂练习5-分钟实践操作过程中穿插">随堂练习（5
+分钟，实践操作过程中穿插）</h3>
+<p><strong>任务型快速作答</strong>：</p>
+<ol type="1">
+<li><p>在后端 Dockerfile 中，构建阶段用
+<code>FROM maven:3.9-eclipse-temurin-17 AS builder</code>，运行阶段应该如何引用构建阶段的产物？请写出关键的
+COPY 指令。</p></li>
+<li><p>前端 Dockerfile 中，<code>npm run build</code> 产出的
+<code>dist</code> 目录应该 COPY 到 Nginx 镜像的哪个路径？</p></li>
+<li><p>构建镜像时，构建上下文过大（如包含
+<code>node_modules</code>）会导致什么问题？如何解决？</p></li>
+<li><p>运行前端容器后，浏览器访问 <code>http://localhost</code>
+能看到页面，但调用后端 API 报跨域错误，可能的原因有哪些？</p></li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速互动，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>完善镜像</strong>：根据课堂踩坑复盘，优化自己的 CTTS 前后端
+Dockerfile，确保构建成功且镜像体积合理（后端 &lt; 300MB，前端 &lt;
+50MB）。</li>
+<li><strong>推送镜像（选做）</strong>：在 Docker Hub
+注册账号，将自己构建的 <code>ctts-backend:v1</code> 和
+<code>ctts-frontend:v1</code>
+推送到自己的仓库（<code>docker push &lt;用户名&gt;/ctts-backend:v1</code>）。</li>
+<li><strong>思考题</strong>：对比"单阶段构建"和"多阶段构建"两种
+Dockerfile，写出镜像大小差异和构建时间差异，下次课抽查。</li>
+<li><strong>预习准备</strong>：阅读课程总览中模块 4（Compose
+与网络存储）的部分，思考"如何让前端容器和后端容器通过容器名通信"。</li>
+<li><strong>拓展实践（选做）</strong>：尝试为后端镜像添加健康检查（<code>HEALTHCHECK</code>
+指令），让容器自动检测应用是否健康。</li>
+<li><strong>资料复习</strong>：通读同文件夹
+<code>教学资料.md</code>，重点理解多阶段构建的层缓存机制和
+<code>.dockerignore</code> 的作用。</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>能独立编写 Java 应用的多阶段 Dockerfile（面试高频）</td>
+<td>K8-1</td>
+</tr>
+<tr>
+<td>能独立编写前端应用的多阶段 Dockerfile（Vue/React + Nginx）</td>
+<td>K8-2</td>
+</tr>
+<tr>
+<td>能解读构建日志、排查构建失败（DevOps 岗位核心能力）</td>
+<td>K8-3、K8-6</td>
+</tr>
+<tr>
+<td>能用 <code>docker build</code>/<code>docker tag</code>
+管理镜像标签</td>
+<td>K8-3</td>
+</tr>
+<tr>
+<td>能运行容器并验证服务可用性、排查端口/网络问题</td>
+<td>K8-4</td>
+</tr>
+<tr>
+<td>能优化镜像体积（多阶段、.dockerignore、层缓存）——面试常考"如何减小镜像大小"</td>
+<td>K8-5</td>
+</tr>
+<tr>
+<td>能排查前后端容器联调问题（跨域、API 不通）</td>
+<td>K8-4、K8-6</td>
+</tr>
+<tr>
+<td>理解镜像即交付物的质量意识（工程素养）</td>
+<td>思政融入点</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"写一个 Java 应用的
+Dockerfile""如何减小镜像体积""多阶段构建是什么""前端项目怎么容器化"等，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + CTTS 前后端完整 Dockerfile + 构建命令 + 验证步骤 +
+思维导图 + 复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>课前回顾（多阶段构建）+ 本次任务说明 + 环境检查</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~25 min</td>
+<td>K8-1：教师演示后端 Dockerfile 编写 + 学生同步编写 + 构建镜像</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>25~40 min</td>
+<td>K8-2：教师演示前端 Dockerfile 编写 + 学生同步编写 + 构建镜像</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>40~55 min</td>
+<td>K8-3、K8-4：构建日志解读 + 容器运行 + 访问验证 + 联调测试</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>55~70 min</td>
+<td>K8-5：.dockerignore 配置 + 层缓存演示 + 镜像大小对比</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>70~82 min</td>
+<td>K8-6：踩坑复盘 + 教师汇总典型问题 + 排查思路演示</td>
+<td>12 min</td>
+</tr>
+<tr>
+<td>82~87 min</td>
+<td>随堂练习（4 道任务型快速作答）</td>
+<td>5 min</td>
+</tr>
+<tr>
+<td>87~90 min</td>
+<td>小结 + 课后任务布置</td>
+<td>3 min</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

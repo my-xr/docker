@@ -1,0 +1,588 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deployment与ReplicaSet</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 16 次课 · 教学设计</div>
+      <h1>Deployment与ReplicaSet</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 16 次课</span>
+        <span class="hero-chip"><b>主题</b>Deployment与ReplicaSet</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+<li><a href="#贯穿项目任务部署-ctts-后端-deployment3-副本">贯穿项目任务：部署 CTTS 后端 Deployment（3 副本）</a></li>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1开场导入裸-pod-的三个痛点讲解-k16-1-前">互动 1：开场导入——裸 Pod 的三个痛点（讲解 K16-1 前）</a></li>
+<li><a href="#互动-2面试题快问快答deployment-滚动更新原理讲解-k16-4-后">互动 2：面试题快问快答——Deployment 滚动更新原理（讲解 K16-4 后）</a></li>
+<li><a href="#互动-3yaml-找错deployment-常见错误讲解-k16-3-后">互动 3：YAML 找错——Deployment 常见错误（讲解 K16-3 后）</a></li>
+<li><a href="#互动-4滚动更新实操观察讲解-k16-6-时">互动 4：滚动更新实操观察（讲解 K16-6 时）</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+<li><a href="#随堂练习5-分钟讲解结束前进行">随堂练习（5 分钟，讲解结束前进行）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 16 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M6 Pod 与工作负载 ｜ 课程：《Docker 云容器与管理技术》
+配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 16 次课（全课程 24 次之第 16）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>理论课</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M6 Pod 与工作负载</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>Deployment 与 ReplicaSet</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>K8s 架构认知（第 13 次课）、K8s 集群搭建（第 14 次课）、Pod
+与生命周期（第 15 次课）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>理解 Deployment 的概念与作用，明确 Deployment vs Pod
+的区别及为什么需要
+Deployment（自愈、扩缩容、滚动更新、声明式管理）。</li>
+<li>理解 ReplicaSet 的副本控制机制，掌握 Deployment 管理 ReplicaSet
+的层级关系。</li>
+<li>掌握 Deployment YAML 结构（apiVersion: apps/v1, kind: Deployment,
+spec.replicas/selector/template，selector.matchLabels，template 与 Pod
+模板）。</li>
+<li>掌握滚动更新与回滚的完整流程（kubectl set image / rollout status /
+undo / history），理解 RollingUpdate 策略的 maxSurge 与 maxUnavailable
+参数。</li>
+<li>掌握扩缩容（kubectl scale）与标签管理（labels / selectors / kubectl
+label），理解 matchLabels 与 matchExpressions 的区别。</li>
+<li>综合运用上述知识完成 CTTS 后端 Deployment（3
+副本）部署，验证高可用、扩缩容与滚动更新。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能够编写完整的 Deployment YAML（含 replicas/selector/template，3
+副本），并部署到 K8s 集群。</li>
+<li>能够使用 kubectl scale 命令对 Deployment
+进行扩缩容，并验证副本数变化。</li>
+<li>能够使用 kubectl set image 触发滚动更新，使用 rollout
+status/undo/history 管理更新与回滚。</li>
+<li>能够使用 kubectl label 为 Pod 打标签，使用 selectors 筛选 Pod。</li>
+<li>能够排查 Deployment
+部署与更新过程中的常见问题（如副本不足、镜像拉取失败、回滚失败）。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>树立"高可用"意识——多副本是系统稳定性的保障，理解生产环境为什么不用裸
+Pod。</li>
+<li>培养"声明式思维"——Deployment 描述"期望状态"，K8s
+让实际状态趋近期望状态。</li>
+<li>建立"工程规范"——滚动更新与回滚是安全生产的底线能力。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K16-1</td>
+<td>Deployment 概念与作用</td>
+<td>Deployment vs Pod；为什么需要
+Deployment（自愈、扩缩容、滚动更新）；声明式管理</td>
+</tr>
+<tr>
+<td>K16-2</td>
+<td>ReplicaSet 副本控制</td>
+<td>ReplicaSet 概念；副本数管理；Deployment 管理 ReplicaSet
+的层级关系</td>
+</tr>
+<tr>
+<td>K16-3</td>
+<td>Deployment YAML 结构</td>
+<td>apiVersion: apps/v1, kind: Deployment,
+spec.replicas/selector/template；matchLabels；template 与 Pod 模板</td>
+</tr>
+<tr>
+<td>K16-4</td>
+<td>滚动更新与回滚</td>
+<td>kubectl set image；rollout status/undo/history；RollingUpdate 策略
+maxSurge/maxUnavailable；滚动更新原理</td>
+</tr>
+<tr>
+<td>K16-5</td>
+<td>扩缩容与标签选择器</td>
+<td>kubectl scale；labels/selectors；kubectl label；matchLabels vs
+matchExpressions</td>
+</tr>
+<tr>
+<td>K16-6</td>
+<td>CTTS 后端 Deployment 部署</td>
+<td>部署 3 副本 Deployment；验证高可用；扩缩容演示；滚动更新演示</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3 id="贯穿项目任务部署-ctts-后端-deployment3-副本">贯穿项目任务：部署
+CTTS 后端 Deployment（3 副本）</h3>
+<p><strong>本次课任务</strong>：</p>
+<ol type="1">
+<li>教师回顾第 15 次课部署的 CTTS 后端裸 Pod，引出"Pod
+挂了怎么办？怎么扩容？怎么更新？"三个问题。</li>
+<li>学生跟随教师编写 CTTS 后端 Deployment YAML（3 副本），部署到 ctts
+namespace。</li>
+<li>验证高可用：手动删除某个 Pod，观察 Deployment 自动重建。</li>
+<li>扩缩容演示：kubectl scale 从 3 副本扩到 5 副本，再缩回 3 副本。</li>
+<li>滚动更新演示：kubectl set image 把 ctts-backend:v1 更新到
+v2，观察滚动更新过程，再 rollout undo 回滚。</li>
+</ol>
+<p><strong>项目背景概述</strong>（详见 <code>教学资料.md</code>
+综合示例）：</p>
+<ul>
+<li>第 15 次课部署的 CTTS 后端是裸
+Pod，无自愈、无扩缩容、无滚动更新能力。</li>
+<li>本节课用 Deployment 管理 CTTS 后端 Pod，实现：3
+副本高可用、手动扩缩容、滚动更新与回滚。</li>
+<li>后续第 17 次课（实践）将部署 CTTS 前后端 + MySQL 全部工作负载。</li>
+<li>后续第 18 次课将为 Deployment 创建 Service 供访问。</li>
+</ul>
+<blockquote>
+<p>📌 本节课聚焦 Deployment 概念与命令操作，把 CTTS 后端从"裸
+Pod"升级到"Deployment 管理的多副本工作负载"。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1开场导入裸-pod-的三个痛点讲解-k16-1-前">互动
+1：开场导入——裸 Pod 的三个痛点（讲解 K16-1 前）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"上节课我们部署了 CTTS 后端 Pod。现在请思考三个问题：① 如果 Pod
+所在节点宕机，Pod 会怎样？② 如果双十一流量激增，单个 Pod 扛不住怎么办？③
+如果要升级到 v2 版本，怎么不停机更新？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>全班举手抢答，教师板书三个痛点关键词</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>① Pod 会消失/挂掉；② 要多开几个；③ 要先停旧再启新或一边停一边启</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定学生直觉，引出"裸 Pod
+是临时性的，无自愈、无扩缩容、无滚动更新能力"，这正是 Deployment
+要解决的三大问题，引出 K16-1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2面试题快问快答deployment-滚动更新原理讲解-k16-4-后">互动
+2：面试题快问快答——Deployment 滚动更新原理（讲解 K16-4 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"面试官问：请说一下 Deployment
+滚动更新的原理。你会怎么回答？附加题：maxSurge=25%、maxUnavailable=25%
+是什么意思？滚动更新时最多有多少个 Pod？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>两人一组讨论 2 分钟 → 抽 2~3 名学生口述回答 →
+教师点评并给出标准答案</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能答出"先启新 Pod 再停旧 Pod"或"边启边停"；能提到 ReplicaSet
+的新旧更替；maxSurge/maxUnavailable 解释可能不准</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>标准答案要点：① Deployment 更新模板后创建新 ReplicaSet，逐步增加新
+Pod；② 旧 ReplicaSet 逐步减少旧 Pod；③ maxSurge
+是超出期望副本数的最大值（向上浮动），maxUnavailable
+是低于期望副本数的最大值（向下浮动）；④ 默认 25%/25% 时，3 副本最多 4
+个（3+1）最少 2 个（3-1）同时存在。强调这是面试高频题，要答清"新旧
+ReplicaSet 协作 + 参数控制速率"。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-3yaml-找错deployment-常见错误讲解-k16-3-后">互动 3：YAML
+找错——Deployment 常见错误（讲解 K16-3 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>给出一份有 3 处错误的 Deployment YAML（apiVersion 写 v1、selector 与
+template labels 不匹配、replicas 写成 1.5），学生找出错误</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>个人独立找错 2 分钟 → 同桌互查 1 分钟 → 教师投影标准答案讲解</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能找出 apiVersion 应为 apps/v1；能发现 selector 与 labels
+不匹配；replicas 必须是整数</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调 Deployment YAML 三大易错点：① apiVersion 是 apps/v1 不是 v1；②
+selector.matchLabels 必须与 template.metadata.labels 完全匹配（否则
+Deployment 找不到自己创建的 Pod）；③ replicas 必须是整数。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-4滚动更新实操观察讲解-k16-6-时">互动
+4：滚动更新实操观察（讲解 K16-6 时）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>教师演示
+<code>kubectl set image deployment/ctts-backend backend=ctts-backend:v2</code>，学生在另一终端持续观察
+<code>kubectl get pods -w</code> 的输出，描述看到的现象</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>教师演示 → 学生观察并描述 → 教师讲解背后原理</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能看到新 Pod 逐渐创建、旧 Pod 逐渐终止；能看到 READY 状态变化</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>把"滚动更新"从抽象概念变成可视化现象，强调"先启新再停旧"的渐进式过程，对应
+K16-4 的原理。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>高可用——多副本是稳定性的保障</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td>Deployment 通过 replicas 维持多个 Pod 副本，单 Pod
+故障不影响整体服务；滚动更新保证更新期间服务不中断；这是生产环境"365
+天不宕机"的基础能力</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"如果支付宝只有一个实例，宕机 10
+分钟会怎样？为什么大型互联网应用都要部署多副本？多副本带来高可用的同时，又带来了哪些复杂性？"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>树立高可用意识，理解多副本是系统稳定性的保障；同时认识到多副本带来数据一致性、负载均衡等复杂性（为后续
+Service/StatefulSet 埋伏笔）；培养"为失败而设计"的工程思维</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入，不空喊口号。通过"多副本 =
+高可用"的真实视角让学生体会"为什么生产环境不用裸 Pod"。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3 id="随堂练习5-分钟讲解结束前进行">随堂练习（5
+分钟，讲解结束前进行）</h3>
+<p><strong>判断题（口头快速作答）</strong>：</p>
+<ol type="1">
+<li>Deployment 是 K8s 中能创建和部署的最小单元，类似于 Pod。（✗）</li>
+<li>Deployment 通过 ReplicaSet 管理 Pod
+副本，保证副本数符合期望。（✓）</li>
+<li><code>kubectl set image</code> 会立即删除所有旧 Pod，再创建新
+Pod。（✗）</li>
+<li>RollingUpdate 策略中，maxSurge=0 且 maxUnavailable=1
+时，滚动更新会变成"先停旧再启新"。（✓）</li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速互动，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>阅读</strong>：通读同文件夹
+<code>教学资料.md</code>，重点理解 Deployment vs Pod vs ReplicaSet
+三者关系、Deployment YAML 结构、滚动更新原理与 maxSurge/maxUnavailable
+参数。</li>
+<li><strong>画图</strong>：手绘 Deployment → ReplicaSet → Pod
+三层管理关系图，并标出滚动更新时新旧 ReplicaSet
+的协作过程，下次课带到课堂。</li>
+<li><strong>实践</strong>：在自己的 Minikube 集群上完成 CTTS 后端
+Deployment 部署（3 副本），执行扩缩容（scale 到 5 再缩回
+3）和滚动更新（set image v1→v2，再 undo
+回滚），记录每步命令与输出。</li>
+<li><strong>思考</strong>：用 200 字描述"为什么生产环境不用裸 Pod 而用
+Deployment"，下次课抽查。</li>
+<li><strong>YAML 编写</strong>：编写一份 CTTS 前端 Deployment
+YAML（参考后端，前端用 nginx 镜像，端口 80，3
+副本），下次课带到课堂。</li>
+<li><strong>拓展阅读</strong>：阅读 K8s 官方文档 Deployment 章节，了解
+Deployment 的其他策略（如 Recreate）和 Pause/Resume 机制（选做）。</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>理解 Deployment 与 ReplicaSet、Pod 的关系（面试高频题）</td>
+<td>K16-1、K16-2</td>
+</tr>
+<tr>
+<td>能编写完整的 Deployment YAML（含 selector/template）</td>
+<td>K16-3</td>
+</tr>
+<tr>
+<td>掌握滚动更新与回滚的命令与原理（面试高频题）</td>
+<td>K16-4</td>
+</tr>
+<tr>
+<td>理解 maxSurge 与 maxUnavailable 参数（面试进阶题）</td>
+<td>K16-4</td>
+</tr>
+<tr>
+<td>能用 kubectl scale 扩缩容（DevOps/云运维岗位常见操作）</td>
+<td>K16-5</td>
+</tr>
+<tr>
+<td>理解 labels/selectors 机制（K8s 核心概念）</td>
+<td>K16-5</td>
+</tr>
+<tr>
+<td>能部署多副本应用并验证高可用（运维岗位核心能力）</td>
+<td>K16-6</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"说一下 Deployment 滚动更新原理""maxSurge 和 maxUnavailable
+是什么""Deployment 和 ReplicaSet
+什么关系""怎么回滚"等，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + CTTS 后端 Deployment 部署综合示例 + 思维导图 +
+复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+<tr>
+<td>衔接上次课</td>
+<td><code>../15 Pod与生命周期/教学资料.md</code></td>
+<td>Pod 概念、Pod YAML、Pod 生命周期（本节课的基础）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>课前 5 分钟讨论（裸 Pod 三个痛点） + 课程回顾</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~25 min</td>
+<td>知识点 K16-1、K16-2：Deployment 概念与作用 + ReplicaSet
+副本控制</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>25~45 min</td>
+<td>知识点 K16-3：Deployment YAML 结构 + YAML 找错互动</td>
+<td>20 min</td>
+</tr>
+<tr>
+<td>45~65 min</td>
+<td>知识点 K16-4：滚动更新与回滚 + 面试题快问快答互动</td>
+<td>20 min</td>
+</tr>
+<tr>
+<td>65~80 min</td>
+<td>知识点 K16-5、K16-6：扩缩容与标签 + CTTS 后端 Deployment
+部署演示</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>80~85 min</td>
+<td>随堂练习</td>
+<td>5 min</td>
+</tr>
+<tr>
+<td>85~90 min</td>
+<td>小结 + 课后任务布置</td>
+<td>5 min</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

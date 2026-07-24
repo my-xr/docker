@@ -1,0 +1,1945 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dockerfile进阶与多阶段构建</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 07 次课 · 教学资料</div>
+      <h1>Dockerfile进阶与多阶段构建</h1>
+      <p>面向学生复习、自学、命令示例与知识图示 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 07 次课</span>
+        <span class="hero-chip"><b>主题</b>Dockerfile进阶与多阶段构建</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一学习导读">一、学习导读</a>
+<ul>
+<li><a href="#11-本节定位">1.1 本节定位</a></li>
+<li><a href="#12-先修基础">1.2 先修基础</a></li>
+<li><a href="#13-学习目标">1.3 学习目标</a></li>
+</ul></li>
+<li><a href="#二知识点详解">二、知识点详解</a>
+<ul>
+<li><a href="#知识点-k7-1env-与-arg-指令">知识点 K7-1：ENV 与 ARG 指令</a></li>
+<li><a href="#知识点-k7-2expose-与-volume-指令">知识点 K7-2：EXPOSE 与 VOLUME 指令</a></li>
+<li><a href="#知识点-k7-3cmd-指令">知识点 K7-3：CMD 指令</a></li>
+<li><a href="#知识点-k7-4entrypoint-指令">知识点 K7-4：ENTRYPOINT 指令</a></li>
+<li><a href="#知识点-k7-5多阶段构建">知识点 K7-5：多阶段构建</a></li>
+<li><a href="#知识点-k7-6镜像优化与-dockerignore">知识点 K7-6：镜像优化与 .dockerignore</a></li>
+</ul></li>
+<li><a href="#四拓展阅读选学">四、拓展阅读（选学）</a>
+<ul>
+</ul></li>
+<li><a href="#五本节小结与知识结构图">五、本节小结与知识结构图</a>
+<ul>
+<li><a href="#知识结构图思维导图">知识结构图（思维导图）</a></li>
+<li><a href="#一句话总结">一句话总结</a></li>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 07 次课 <span>｜</span> <strong>文档：</strong>教学资料</p>
+<blockquote>
+<p>学生复习资料 ｜
+配套：<code>教学设计.md</code>（教师教案）、<code>题库.md</code>（78
+题考试题库）
+本资料面向学生课后复习自学，包含定义、原理、问题、完整示例、图示、易错点与小结。</p>
+</blockquote>
+<hr />
+<h2 id="一学习导读">一、学习导读</h2>
+<h3 id="11-本节定位">1.1 本节定位</h3>
+<p>这是《Docker 云容器与管理技术》的<strong>第七次课</strong>，属于 M3
+模块"Dockerfile 与镜像构建"的第 2 节理论课。本节在上节"Dockerfile
+基础指令"之上，重点学习<strong>进阶指令、CMD/ENTRYPOINT、多阶段构建与镜像优化</strong>——这是从"能写出可跑镜像"到"能写出小而精、规范可复用镜像"的关键一跃。</p>
+<p>学完本节，你应当能回答：</p>
+<ul>
+<li><code>ENV</code> 和 <code>ARG</code>
+有什么区别？什么时候用哪个？</li>
+<li><code>EXPOSE</code> 声明了端口就真的能访问了吗？<code>VOLUME</code>
+声明的数据卷和 <code>-v</code> 挂载有什么关系？</li>
+<li><code>CMD</code> 和 <code>ENTRYPOINT</code>
+到底有什么区别？为什么生产镜像推荐两者组合使用？</li>
+<li>什么是多阶段构建？为什么能把镜像从几百 MB 优化到一百多 MB？</li>
+<li>镜像优化有哪些手段？<code>.dockerignore</code> 该写什么？</li>
+</ul>
+<h3 id="12-先修基础">1.2 先修基础</h3>
+<table>
+<thead>
+<tr>
+<th>先修知识</th>
+<th>用到程度</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 6 次课 Dockerfile 基础指令</td>
+<td>必须</td>
+<td>FROM/RUN/COPY/ADD/WORKDIR/USER、<code>docker build</code>、构建上下文</td>
+</tr>
+<tr>
+<td>Java/Maven 项目结构</td>
+<td>必须</td>
+<td>理解 pom.xml、target 目录、jar 包产出过程</td>
+</tr>
+<tr>
+<td>Linux 命令行</td>
+<td>基础</td>
+<td>文件操作、信号（SIGTERM）、进程</td>
+</tr>
+<tr>
+<td>容器基本操作</td>
+<td>基础</td>
+<td>docker run / docker images / docker ps</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-学习目标">1.3 学习目标</h3>
+<ul>
+<li>✅ 掌握 ENV 与 ARG 的区别与用法</li>
+<li>✅ 理解 EXPOSE 与 VOLUME 的声明性作用</li>
+<li>✅ 掌握 CMD 与 ENTRYPOINT 的形式、覆盖行为与组合模式</li>
+<li>✅ 能编写 Java/Maven 多阶段构建 Dockerfile</li>
+<li>✅ 掌握镜像优化的"三板斧"：精简基础镜像、合并
+RUN、.dockerignore</li>
+</ul>
+<hr />
+<h2 id="二知识点详解">二、知识点详解</h2>
+<h3 id="知识点-k7-1env-与-arg-指令">知识点 K7-1：ENV 与 ARG 指令</h3>
+<h4 id="定义">定义</h4>
+<ul>
+<li><strong>ENV 指令</strong>：在 Dockerfile
+中设置<strong>环境变量</strong>，该变量在<strong>构建阶段和容器运行时都生效</strong>，并且会持久化到镜像元数据中。</li>
+<li><strong>ARG 指令</strong>：在 Dockerfile
+中定义<strong>构建时参数（build-time
+argument）</strong>，该变量<strong>仅在构建阶段生效</strong>，不会出现在运行时的容器中。</li>
+</ul>
+<h4 id="原理">原理</h4>
+<p><strong>ENV 的语法与作用范围</strong>：</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 两种语法形式</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> KEY=VALUE                          <span class="co"># 推荐形式（一次设置一个或多个）</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> KEY VALUE                          <span class="co"># 老式形式（一次只能一个，已不推荐）</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例：设置 JAVA_HOME 与 APP_HOME</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> JAVA_HOME=/usr/lib/jvm/java-17-openjdk <span class="op">\</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    APP_HOME=/app <span class="op">\</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    APP_PORT=8080</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 后续 RUN 指令可以使用该变量</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="bu">echo</span> <span class="st">&quot;Java home is </span><span class="va">$JAVA_HOME</span><span class="st">&quot;</span> <span class="op">&gt;</span> /etc/java_info</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 容器运行时也生效</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;sh&quot;</span>, <span class="st">&quot;-c&quot;</span>, <span class="st">&quot;echo $APP_PORT&quot;</span>]</span></code></pre></div>
+<p><strong>ARG 的语法与作用范围</strong>：</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 语法</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ARG</span> NAME=default_value                 <span class="co"># 定义构建时参数，可给默认值</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例：让镜像版本可参数化</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ARG</span> JAVA_VERSION=17</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ARG</span> APP_VERSION=1.0.0</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> openjdk:${JAVA_VERSION}            <span class="co"># ARG 可以用在 FROM 之前（声明在 FROM 之前是全局 ARG）</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">ARG</span> APP_VERSION                          <span class="co"># FROM 之后需重新声明才能在当前阶段使用</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">LABEL</span> app.version=${APP_VERSION}</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="bu">echo</span> <span class="st">&quot;Building app version </span><span class="va">${APP_VERSION}</span><span class="st">&quot;</span></span></code></pre></div>
+<p><strong>ENV vs ARG 核心对比</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>ENV</th>
+<th>ARG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>生效阶段</td>
+<td>构建 + 运行时</td>
+<td>仅构建阶段</td>
+</tr>
+<tr>
+<td>是否进入镜像元数据</td>
+<td>是（<code>docker inspect</code> 可见）</td>
+<td>否</td>
+</tr>
+<tr>
+<td>运行时是否可用</td>
+<td>是（<code>echo $VAR</code> 可读）</td>
+<td>否</td>
+</tr>
+<tr>
+<td>是否能用 <code>docker run -e</code> 覆盖</td>
+<td>是（运行时覆盖，不修改镜像）</td>
+<td>否（运行时无法访问）</td>
+</tr>
+<tr>
+<td>是否能用 <code>docker build --build-arg</code> 覆盖</td>
+<td>是（构建时覆盖）</td>
+<td>是（这是 ARG 的主要用法）</td>
+</tr>
+<tr>
+<td>能否声明在 FROM 之前</td>
+<td>否（FROM 之前用 ARG）</td>
+<td>是（全局 ARG，用于 FROM 参数化）</td>
+</tr>
+<tr>
+<td>典型用途</td>
+<td>设置 JAVA_HOME、应用配置、PATH</td>
+<td>参数化基础镜像版本、版本号、构建开关</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景">问题 / 场景</h4>
+<p><strong>问：什么时候用 ENV，什么时候用 ARG？</strong></p>
+<ul>
+<li>用 <strong>ENV</strong>
+设置"运行时也需要"的变量：<code>JAVA_HOME</code>、<code>APP_PORT</code>、<code>SPRING_PROFILES_ACTIVE</code>、<code>PATH</code>
+追加等。</li>
+<li>用 <strong>ARG</strong>
+设置"只在构建时需要"的变量：基础镜像版本（<code>JAVA_VERSION</code>）、构建版本号、是否启用调试构建等。</li>
+<li>简记：<strong>运行时还要用 → ENV；只在 build 时用 →
+ARG</strong>。</li>
+</ul>
+<p><strong>问：ARG 里有敏感信息怎么办？</strong></p>
+<ul>
+<li>ARG 的值会出现在 <code>docker history</code> 中，<strong>不要用 ARG
+传递密码、token、私钥</strong>。敏感信息应在运行时通过
+<code>docker run -e</code>、Secret 文件或 K8s Secret 注入。</li>
+</ul>
+<p><strong>问：ARG 和 ENV 能配合用吗？</strong></p>
+<ul>
+<li>能，且很常见。先 ARG 接收构建参数，再 ENV 固化到运行时：</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ARG</span> APP_VERSION=1.0.0</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> APP_VERSION=${APP_VERSION}          <span class="co"># 把构建参数变成运行时环境变量</span></span></code></pre></div>
+<h4 id="完整示例">完整示例</h4>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 文件名：Dockerfile.env-arg-demo</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ARG：构建时参数（默认值 1.0.0）</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ARG</span> APP_VERSION=1.0.0</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ARG</span> BUILD_TIME=$(date +%Y-%m-%d)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ENV：运行时环境变量（持久化到镜像）</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> APP_HOME=/app <span class="op">\</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    APP_PORT=8080 <span class="op">\</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    APP_VERSION=${APP_VERSION} <span class="op">\</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    SPRING_PROFILES_ACTIVE=prod</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> ${APP_HOME}</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 把构建信息写入文件，运行时可读</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="bu">echo</span> <span class="st">&quot;App Version: </span><span class="va">${APP_VERSION}</span><span class="st">, Built at: </span><span class="va">${BUILD_TIME}</span><span class="st">&quot;</span> <span class="op">&gt;</span> /app/build-info.txt</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># COPY 应用 jar（假设同目录有 app.jar）</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> app.jar ${APP_HOME}/app.jar</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> ${APP_PORT}</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<p>构建与运行：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 使用默认 ARG 构建</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> env-arg-demo:default <span class="at">-f</span> Dockerfile.env-arg-demo .</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [internal] load build definition from Dockerfile.env-arg-demo</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [1/4] FROM docker.io/library/eclipse-temurin:17-jre</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [2/4] WORKDIR /app</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [3/4] RUN echo &quot;App Version: 1.0.0, Built at: 2026-07-22&quot; &gt; /app/build-info.txt</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [4/4] COPY app.jar /app/app.jar</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; exporting to image</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; exporting layers</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; writing image sha256:abc123...</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; naming to docker.io/library/env-arg-demo:default</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 使用 --build-arg 覆盖 APP_VERSION</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">--build-arg</span> APP_VERSION=2.0.0 <span class="at">-t</span> env-arg-demo:v2 <span class="at">-f</span> Dockerfile.env-arg-demo .</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 运行容器，验证 ENV 在运行时可用</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> env-arg-demo:v2 sh <span class="at">-c</span> <span class="st">&#39;echo &quot;APP_HOME=$APP_HOME&quot;; echo &quot;APP_VERSION=$APP_VERSION&quot;; cat /app/build-info.txt&#39;</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co"># APP_HOME=/app</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co"># APP_VERSION=2.0.0</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co"># App Version: 2.0.0, Built at: 2026-07-22</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 运行时用 -e 覆盖 ENV（不修改镜像）</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-e</span> SPRING_PROFILES_ACTIVE=dev env-arg-demo:v2 sh <span class="at">-c</span> <span class="st">&#39;echo &quot;PROFILE=$SPRING_PROFILES_ACTIVE&quot;&#39;</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：PROFILE=dev</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 用 docker history 查看 ARG 是否泄露（不要传密码！）</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> history env-arg-demo:v2 <span class="at">--no-trunc</span> <span class="kw">|</span> <span class="fu">grep</span> APP_VERSION</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出可见 ARG 值出现在历史中：</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co"># ENV APP_VERSION=2.0.0</span></span></code></pre></div>
+<h4 id="图示">图示</h4>
+<pre><code>Docker 构建与运行阶段变量作用范围：
+
+   构建阶段 (docker build)              运行阶段 (docker run)
+  ┌──────────────────────┐           ┌──────────────────────┐
+  │  ARG  ✓ 生效          │           │  ARG  ✗ 不可见        │
+  │  ENV  ✓ 生效          │   ───→   │  ENV  ✓ 生效          │
+  │  --build-arg 可覆盖 ARG│           │  -e 可覆盖 ENV         │
+  └──────────────────────┘           └──────────────────────┘
+        │                                    │
+        └─ ARG 不进入镜像元数据                └─ ENV 进入镜像元数据
+            （但会出现在 docker history）         （docker inspect 可见）
+
+最佳实践：
+  - 敏感信息 → 不放 ARG/ENV，用运行时注入
+  - 构建参数 → ARG
+  - 运行时配置 → ENV</code></pre>
+<h4 id="易错点">易错点</h4>
+<ol type="1">
+<li>❌ 误认为 ARG 在容器运行时也能用。✅ ARG
+仅在构建阶段生效，运行时容器内不可见。</li>
+<li>❌ 在 FROM 之前用 ENV。✅ FROM 之前只能用 ARG（全局 ARG），ENV
+必须在 FROM 之后的构建阶段中。</li>
+<li>❌ 用 ARG 传递密码、token。✅ ARG 值会出现在
+<code>docker history</code>，敏感信息应运行时注入。</li>
+<li>❌ 把可以运行时覆盖的配置写死成 ARG。✅ 应写成 ENV，便于运行时
+<code>-e</code> 覆盖。</li>
+<li>❌ 在多阶段构建中期望 ARG 自动跨阶段。✅ ARG
+默认只在当前阶段生效，跨阶段需在每个阶段重新声明（全局 ARG 除外）。</li>
+</ol>
+<h4 id="小结">小结</h4>
+<p>ENV 设置环境变量并持久化到镜像（构建 + 运行时都可用，可被
+<code>-e</code> 覆盖）；ARG 仅在构建阶段生效（可被
+<code>--build-arg</code>
+覆盖，不进入运行时）。简记："<strong>运行时还要用 → ENV；只在 build 时用
+→ ARG</strong>"。</p>
+<hr />
+<h3 id="知识点-k7-2expose-与-volume-指令">知识点 K7-2：EXPOSE 与 VOLUME
+指令</h3>
+<h4 id="定义-1">定义</h4>
+<ul>
+<li><strong>EXPOSE
+指令</strong>：声明容器在运行时<strong>监听的端口</strong>，是一种<strong>文档化/声明性</strong>指令，本身不会真正把端口映射到宿主机。</li>
+<li><strong>VOLUME
+指令</strong>：声明容器中某个路径为<strong>数据卷</strong>，运行时容器会自动在该路径创建一个匿名数据卷（如果用户没有通过
+<code>-v</code> 显式挂载），用于持久化数据。</li>
+</ul>
+<h4 id="原理-1">原理</h4>
+<p><strong>EXPOSE 的作用</strong>：</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 语法</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> &lt;port&gt; [&lt;port&gt;/&lt;protocol&gt;...]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8080</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 80/tcp 443/tcp</span></code></pre></div>
+<p>EXPOSE 的作用是<strong>声明性</strong>的：</p>
+<ol type="1">
+<li>它告诉使用者（运维、开发）这个镜像运行起来会监听哪些端口，相当于"使用说明"。</li>
+<li>它会在 <code>docker inspect</code> 中显示声明的端口。</li>
+<li>在使用 <code>-P</code>（大写 P，自动映射）时，Docker 会自动把 EXPOSE
+声明的端口映射到宿主机随机高位端口。</li>
+<li><strong>它不会自动把端口映射到宿主机</strong>——必须用
+<code>-p</code> 或 <code>-P</code> 才能从宿主机访问。</li>
+</ol>
+<p><strong>VOLUME 的作用</strong>：</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 语法</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VOLUME</span> [<span class="st">&quot;&lt;path&gt;&quot;</span>]                     <span class="co"># JSON 数组形式（推荐）</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">VOLUME</span> &lt;path&gt;                          <span class="co"># 字符串形式</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">VOLUME</span> [<span class="st">&quot;/var/lib/mysql&quot;</span>, <span class="st">&quot;/data/logs&quot;</span>]</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">VOLUME</span> /data</span></code></pre></div>
+<p>VOLUME 的作用：</p>
+<ol type="1">
+<li>声明该路径为数据卷，<strong>容器运行时</strong>，如果用户没有用
+<code>-v</code> 显式挂载，Docker 会自动在
+<code>/var/lib/docker/volumes/</code>
+下创建一个匿名卷挂载到该路径。</li>
+<li>该路径的数据<strong>不会随容器删除而消失</strong>（因为存在卷里）。</li>
+<li>主要用于数据库数据、日志、上传文件等需要持久化的场景。</li>
+</ol>
+<p><strong>声明性指令 vs 实际操作</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>性质</th>
+<th>是否自动生效</th>
+<th>实际操作靠什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EXPOSE 8080</td>
+<td>声明性</td>
+<td>否（不自动映射）</td>
+<td><code>docker run -p 8080:8080</code> 或 <code>-P</code></td>
+</tr>
+<tr>
+<td>VOLUME /data</td>
+<td>半声明+半自动</td>
+<td>是（运行时自动挂匿名卷）</td>
+<td><code>docker run -v /host:/data</code> 显式挂载更可控</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景-1">问题 / 场景</h4>
+<p><strong>问：EXPOSE 写了端口，为什么外面还是访问不了？</strong></p>
+<ul>
+<li>因为 EXPOSE 只是"声明"，没有真正映射。要从宿主机访问容器端口，必须用
+<code>docker run -p 宿主端口:容器端口</code>（小写 p，显式映射）或
+<code>-P</code>（大写 P，自动映射所有 EXPOSE 端口到随机高位端口）。</li>
+</ul>
+<p><strong>问：VOLUME 写了路径，运行时还需要 -v 吗？</strong></p>
+<ul>
+<li>不写也行：Docker
+会自动挂一个匿名卷，数据能持久化，但卷名是随机的（一长串
+hash），管理不便。</li>
+<li>推荐写 <code>-v 具名卷名:路径</code> 或
+<code>-v 宿主路径:路径</code>，便于管理、备份、迁移。</li>
+<li>生产环境几乎都用显式 <code>-v</code>，不依赖 Docker
+自动挂匿名卷。</li>
+</ul>
+<p><strong>问：为什么说 EXPOSE 和 VOLUME 是"声明性"指令？</strong></p>
+<ul>
+<li>因为它们的主要作用是<strong>告知</strong>而不是<strong>操作</strong>。EXPOSE
+告知"我会监听这个端口"，VOLUME
+告知"这个路径需要持久化"。这样的"声明"让镜像更可读、更可复用，符合"镜像即文档"的工程规范。</li>
+</ul>
+<h4 id="完整示例-1">完整示例</h4>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 文件名：Dockerfile.expose-volume-demo</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> mysql:8.0</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 声明端口</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 3306</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 声明数据卷（MySQL 数据目录）</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="kw">VOLUME</span> [<span class="st">&quot;/var/lib/mysql&quot;</span>]</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 设置环境变量（MySQL 必需）</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> MYSQL_ROOT_PASSWORD=123456 <span class="op">\</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    MYSQL_DATABASE=ctts</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 声明默认配置文件位置</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 3306</span></code></pre></div>
+<p>构建与运行：</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 构建</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> mysql-ctts:demo <span class="at">-f</span> Dockerfile.expose-volume-demo .</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [internal] load build definition from Dockerfile.expose-volume-demo</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [1/2] FROM docker.io/library/mysql:8.0</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [2/2] DONE</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; exporting to image</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; naming to docker.io/library/mysql-ctts:demo</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 用 -P 自动映射 EXPOSE 声明的端口</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> mysql-auto <span class="at">-P</span> mysql-ctts:demo</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出容器 ID：3a4b5c6d7e8f...</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 查看自动映射的端口</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> port mysql-auto</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 3306/tcp -&gt; 0.0.0.0:49153</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 3306/tcp -&gt; :::49153</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 解读：容器 3306 → 宿主机 49153（随机高位端口）</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 用 -p 显式映射</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> mysql-explicit <span class="at">-p</span> 13306:3306 mysql-ctts:demo</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 用具名卷挂载（推荐，比匿名卷更可控）</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> volume create mysql-ctts-data</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> mysql-named <span class="dt">\</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 13307:3306 <span class="dt">\</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> mysql-ctts-data:/var/lib/mysql <span class="dt">\</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  mysql-ctts:demo</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出容器 ID：7f8e9d0c1b2a...</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 查看挂载的卷</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect mysql-named <span class="at">--format</span> <span class="st">&#39;{{json .Mounts}}&#39;</span> <span class="kw">|</span> <span class="ex">python</span> <span class="at">-m</span> json.tool</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="co"># [</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="co">#     {</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a><span class="co">#         &quot;Type&quot;: &quot;volume&quot;,</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a><span class="co">#         &quot;Name&quot;: &quot;mysql-ctts-data&quot;,</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a><span class="co">#         &quot;Source&quot;: &quot;/var/lib/docker/volumes/mysql-ctts-data/_data&quot;,</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="co">#         &quot;Destination&quot;: &quot;/var/lib/mysql&quot;,</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a><span class="co">#         &quot;Driver&quot;: &quot;local&quot;,</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a><span class="co">#         &quot;Mode&quot;: &quot;z&quot;,</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="co">#         &quot;RW&quot;: true</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a><span class="co">#     }</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a><span class="co"># ]</span></span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. 即使不写 -v，VOLUME 指令也会让 Docker 自动挂匿名卷</span></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> mysql-anon mysql-ctts:demo</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect mysql-anon <span class="at">--format</span> <span class="st">&#39;{{json .Mounts}}&#39;</span> <span class="kw">|</span> <span class="ex">python</span> <span class="at">-m</span> json.tool</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a><span class="co"># [</span></span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a><span class="co">#     {</span></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a><span class="co">#         &quot;Type&quot;: &quot;volume&quot;,</span></span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a><span class="co">#         &quot;Name&quot;: &quot;abc123def456...&quot;,       ← 匿名卷名（hash）</span></span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a><span class="co">#         &quot;Source&quot;: &quot;/var/lib/docker/volumes/abc123def456.../_data&quot;,</span></span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a><span class="co">#         &quot;Destination&quot;: &quot;/var/lib/mysql&quot;</span></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a><span class="co">#     }</span></span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a><span class="co"># ]</span></span></code></pre></div>
+<h4 id="图示-1">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 1：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">EXPOSE 与端口映射的关系：</span>
+<span class="diagram-line">Dockerfile:                     docker run:</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐             ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span> EXPOSE 3306     <span class="tree-token">│</span>  声明端口    <span class="tree-token">│</span> docker run -p 13306:3306   <span class="tree-token">│</span>  显式映射</span>
+<span class="diagram-line"><span class="tree-token">│</span>                 <span class="tree-token">│</span>  <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span>   <span class="tree-token">│</span>   宿主 13306 <span class="arrow-token">→</span> 容器 3306    <span class="tree-token">│</span>  (推荐生产用)</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘             <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line">                                <span class="tree-token">│</span> docker run -P              <span class="tree-token">│</span>  自动映射</span>
+<span class="diagram-line">                                <span class="tree-token">│</span>   宿主 随机高位 <span class="arrow-token">→</span> 容器 3306 <span class="tree-token">│</span>  (EXPOSE 声明的端口)</span>
+<span class="diagram-line">                                <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">                                         ↑</span>
+<span class="diagram-line">                            不写 -p/-P 时，宿主访问不到容器端口！</span>
+<span class="diagram-line">VOLUME 与数据挂载的关系：</span>
+<span class="diagram-line">Dockerfile:                     docker run:</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐             ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span> VOLUME           <span class="tree-token">│</span>  声明路径    <span class="tree-token">│</span> 不写 -v:                      <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> [&quot;/var/lib/mysql&quot;]<span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span>   <span class="tree-token">│</span>   自动挂匿名卷 (难管理)        <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                 <span class="tree-token">│</span>             <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line"><span class="tree-token">│</span>                 <span class="tree-token">│</span>             <span class="tree-token">│</span> -v 具名卷:/var/lib/mysql      <span class="tree-token">│</span>  具名卷 (推荐)</span>
+<span class="diagram-line"><span class="tree-token">│</span>                 <span class="tree-token">│</span>             <span class="tree-token">│</span>   易备份、迁移、复用            <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                 <span class="tree-token">│</span>             <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
+<span class="diagram-line"><span class="tree-token">│</span>                 <span class="tree-token">│</span>             <span class="tree-token">│</span> -v /宿主路径:/var/lib/mysql   <span class="tree-token">│</span>  绑定挂载</span>
+<span class="diagram-line"><span class="tree-token">│</span>                 <span class="tree-token">│</span>             <span class="tree-token">│</span>   直接挂宿主目录                <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘             <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-1">易错点</h4>
+<ol type="1">
+<li>❌ 误认为 <code>EXPOSE</code> 会自动映射端口。✅ EXPOSE
+只是声明，要真映射必须用 <code>-p</code> 或 <code>-P</code>。</li>
+<li>❌ 把 EXPOSE 写在 FROM 之前。✅ EXPOSE 必须在构建阶段（FROM
+之后）。</li>
+<li>❌ 误认为 VOLUME 写了就一定要用 <code>-v</code>。✅ 不写
+<code>-v</code> Docker 也会自动挂匿名卷；但生产推荐显式 <code>-v</code>
+具名卷便于管理。</li>
+<li>❌ 在 Dockerfile 中用 VOLUME 挂载具体宿主路径。✅ Dockerfile 中
+VOLUME 只能写容器内路径，宿主路径只能在 <code>docker run -v</code>
+时指定。</li>
+<li>❌ VOLUME 路径下的数据在构建阶段就期望被持久化。✅ VOLUME
+仅在<strong>运行时</strong>生效，构建阶段（RUN）写入该路径的数据会被运行时挂载的卷覆盖。</li>
+</ol>
+<h4 id="小结-1">小结</h4>
+<p>EXPOSE 与 VOLUME 都是<strong>声明性指令</strong>：EXPOSE
+告诉使用者"我会监听这些端口"（需配合 <code>-p</code>/<code>-P</code>
+真正映射）；VOLUME 告诉使用者"这个路径需要持久化"（不挂 <code>-v</code>
+时 Docker
+自动挂匿名卷，生产推荐显式挂具名卷）。声明性指令让镜像自带"使用说明"，提升可读性与规范性。</p>
+<hr />
+<h3 id="知识点-k7-3cmd-指令">知识点 K7-3：CMD 指令</h3>
+<h4 id="定义-2">定义</h4>
+<p><strong>CMD
+指令</strong>：为容器指定<strong>默认启动命令</strong>。每个 Dockerfile
+只能有一个 CMD（如果有多个，只有最后一个生效）。CMD 可以被
+<code>docker run</code> 后面的参数<strong>覆盖</strong>。</p>
+<h4 id="原理-2">原理</h4>
+<p>CMD 有三种形式：</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. exec 形式（推荐！JSON 数组）</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;executable&quot;</span>,<span class="st">&quot;param1&quot;</span>,<span class="st">&quot;param2&quot;</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例：CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;/app/app.jar&quot;]</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. shell 形式（命令字符串）</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> <span class="bu">command</span> param1 param2</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例：CMD java -jar /app/app.jar</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 作为 ENTRYPOINT 的默认参数（K7-4 详讲）</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;param1&quot;</span>,<span class="st">&quot;param2&quot;</span>]</span></code></pre></div>
+<p><strong>exec 形式 vs shell 形式</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>exec 形式 <code>CMD ["java","-jar","app.jar"]</code></th>
+<th>shell 形式 <code>CMD java -jar app.jar</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>实际执行</td>
+<td>直接 exec 该命令（进程 PID=1）</td>
+<td>通过 <code>/bin/sh -c "java -jar app.jar"</code> 执行</td>
+</tr>
+<tr>
+<td>PID 1</td>
+<td>是该命令本身</td>
+<td>是 <code>/bin/sh</code>，命令是它的子进程</td>
+</tr>
+<tr>
+<td>信号传递</td>
+<td>能正确接收 SIGTERM（docker stop 优雅退出）</td>
+<td>sh 不转发信号给子进程，<strong>docker stop 会超时强杀</strong></td>
+</tr>
+<tr>
+<td>环境变量</td>
+<td><strong>不会自动展开</strong>（需用 shell 解析）</td>
+<td>会通过 sh 自动展开 <code>$VAR</code></td>
+</tr>
+<tr>
+<td>推荐度</td>
+<td>✅ 推荐生产使用</td>
+<td>⚠️ 不推荐（除非要用 shell 特性）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>CMD 被 docker run 参数覆盖</strong>：</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dockerfile 中：</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;/app/app.jar&quot;]</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 正常运行（使用 CMD 默认命令）</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> myapp</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：java -jar /app/app.jar</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 用 docker run 参数覆盖 CMD</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> myapp sh <span class="at">-c</span> <span class="st">&quot;echo hello&quot;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：sh -c &quot;echo hello&quot;  ← CMD 被完全替换！</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> myapp bash</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：bash  ← CMD 被替换为 bash，进入交互式 shell</span></span></code></pre></div>
+<h4 id="问题--场景-2">问题 / 场景</h4>
+<p><strong>问：为什么 docker stop 我的容器要等 10 秒才停？</strong></p>
+<ul>
+<li>大概率是因为你的 CMD 用了 shell
+形式（<code>CMD java -jar app.jar</code>），实际进程是
+<code>/bin/sh</code>，PID 1 是 sh，它不会把 SIGTERM 转发给 java
+进程。docker stop 默认 10 秒超时后强杀（SIGKILL）。</li>
+<li>解决：用 exec 形式 <code>CMD ["java","-jar","app.jar"]</code>，java
+进程成为 PID 1，能直接收到 SIGTERM 优雅退出。</li>
+</ul>
+<p><strong>问：CMD 和 RUN 有什么区别？</strong></p>
+<ul>
+<li><strong>RUN</strong> 在<strong>构建阶段</strong>执行，每条 RUN
+产生一个镜像层（如 <code>RUN apt install -y curl</code>）。</li>
+<li><strong>CMD</strong>
+在<strong>运行阶段</strong>执行（容器启动时），不产生镜像层，只是指定容器默认启动命令。</li>
+<li>简记：<strong>RUN 是构建时做事，CMD 是运行时启动</strong>。</li>
+</ul>
+<p><strong>问：Dockerfile 里写多个 CMD 会怎样？</strong></p>
+<ul>
+<li>只有最后一个 CMD 生效，前面的会被覆盖。Dockerfile 规范建议只写一个
+CMD。</li>
+</ul>
+<h4 id="完整示例-2">完整示例</h4>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 文件名：Dockerfile.cmd-demo</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 假设同目录有 app.jar</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> app.jar /app/app.jar</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> APP_PORT=8080</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co"># exec 形式（推荐）</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<p>构建与运行：</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 构建</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> cmd-demo:v1 <span class="at">-f</span> Dockerfile.cmd-demo .</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [1/3] FROM docker.io/library/eclipse-temurin:17-jre</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [2/3] WORKDIR /app</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [3/3] COPY app.jar /app/app.jar</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; exporting to image</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; naming to docker.io/library/cmd-demo:v1</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 默认运行（使用 CMD 默认命令）</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> cmd-default cmd-demo:v1</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：java -jar /app/app.jar</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出容器 ID：1a2b3c4d...</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看进程（PID 1 应是 java）</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec cmd-default ps <span class="at">-ef</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-5</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co"># UID        PID  PPID  C STIME TTY          TIME CMD</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="co"># root         1     0  0 10:00 ?        00:00:00 java -jar /app/app.jar  ← PID 1 = java ✓</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="co"># root        15     0  0 10:01 ?        00:00:00 ps -ef</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 用 docker run 参数覆盖 CMD</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> <span class="at">--rm</span> cmd-demo:v1 bash</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：bash（CMD 被替换）</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="co"># root@container:/app#  ← 进入交互式 shell</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 用 docker run 参数覆盖为别的命令</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> cmd-demo:v1 java <span class="at">-version</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="co"># openjdk version &quot;17.0.10&quot; 2024-01-16</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="co"># OpenJDK Runtime Environment Temurin-17.0.10+7</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="co"># OpenJDK Client VM Temurin-17.0.10+7</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 测试 shell 形式的信号问题（反例）</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Dockerfile.shell-bad:</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a><span class="co">#   CMD java -jar /app/app.jar</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> shell-bad shell-bad:v1</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec shell-bad ps <span class="at">-ef</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-5</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="co"># UID        PID  PPID  C STIME TTY          TIME CMD</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a><span class="co"># root         1     0  0 10:00 ?        00:00:00 /bin/sh -c java -jar /app/app.jar  ← PID 1 = sh ✗</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a><span class="co"># root         7     1  0 10:00 ?        00:00:00 java -jar /app/app.jar              ← java 是子进程</span></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a><span class="co"># docker stop shell-bad  →  等 10 秒后强杀</span></span></code></pre></div>
+<h4 id="图示-2">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 2：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">CMD exec 形式 vs shell 形式的进程树：</span>
+<span class="diagram-line">exec 形式 CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;app.jar&quot;]:</span>
+<span class="diagram-line">  PID 1: java -jar app.jar           ← 直接是 java，能收 SIGTERM ✓</span>
+<span class="diagram-line">         ↓ docker stop</span>
+<span class="diagram-line">         收到 SIGTERM，优雅退出（&lt;1 秒）</span>
+<span class="diagram-line">shell 形式 CMD java -jar app.jar:</span>
+<span class="diagram-line">  PID 1: /bin/sh -c &quot;java -jar app.jar&quot;   ← sh 不转发信号 ✗</span>
+<span class="diagram-line">         ↓</span>
+<span class="diagram-line">         PID 7: java -jar app.jar          ← java 收不到 SIGTERM</span>
+<span class="diagram-line">         ↓ docker stop</span>
+<span class="diagram-line">         等 10 秒超时 <span class="arrow-token">→</span> SIGKILL 强杀</span>
+<span class="diagram-line">CMD 被 docker run 参数覆盖：</span>
+<span class="diagram-line">Dockerfile:                   docker run myapp bash</span>
+<span class="diagram-line">CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;app.jar&quot;]  <span class="arrow-token">→</span>  实际执行 bash （CMD 被完全替换）</span>
+<span class="diagram-line">                              <span class="arrow-token">→</span></span>
+<span class="diagram-line">                              docker run myapp</span>
+<span class="diagram-line">                              <span class="arrow-token">→</span>  实际执行 java -jar app.jar （用默认 CMD）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-2">易错点</h4>
+<ol type="1">
+<li>❌ 用 shell 形式 <code>CMD java -jar app.jar</code>
+导致信号传递问题。✅ 用 exec 形式
+<code>CMD ["java","-jar","app.jar"]</code>。</li>
+<li>❌ 在 exec 形式中使用 shell 特性（如
+<code>CMD ["java","-jar","$APP_HOME/app.jar"]</code>）。✅ exec
+形式不会展开 <code>$VAR</code>，要用 <code>sh -c</code>
+包装：<code>CMD ["sh","-c","java -jar $APP_HOME/app.jar"]</code>。</li>
+<li>❌ 写多个 CMD 期望都执行。✅ 只有最后一个 CMD 生效。</li>
+<li>❌ 期望 CMD 在构建时执行。✅ CMD
+在容器启动时执行，构建时不执行。</li>
+<li>❌ 混淆 CMD 与 RUN。✅ RUN 构建时执行并产生层，CMD
+运行时执行不产生层。</li>
+</ol>
+<h4 id="小结-2">小结</h4>
+<p>CMD 指定容器默认启动命令，可被 <code>docker run</code>
+参数覆盖。推荐用 <strong>exec
+形式</strong>（<code>CMD ["java","-jar","app.jar"]</code>），让进程成为
+PID 1，能正确接收 SIGTERM 信号优雅退出。每个 Dockerfile 只能有一个
+CMD（多个时只有最后一个生效）。</p>
+<hr />
+<h3 id="知识点-k7-4entrypoint-指令">知识点 K7-4：ENTRYPOINT 指令</h3>
+<h4 id="定义-3">定义</h4>
+<p><strong>ENTRYPOINT
+指令</strong>：为容器指定<strong>入口点程序</strong>。与 CMD
+不同，ENTRYPOINT <strong>不会被 <code>docker run</code>
+后参数覆盖</strong>——<code>docker run</code> 后的参数会作为 ENTRYPOINT
+的<strong>追加参数</strong>传入。这让 ENTRYPOINT 适合做"固定入口 +
+可变参数"的镜像。</p>
+<h4 id="原理-3">原理</h4>
+<p>ENTRYPOINT 同样有 exec 形式和 shell 形式：</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># exec 形式（推荐）</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ENTRYPOINT</span> [<span class="st">&quot;executable&quot;</span>,<span class="st">&quot;param1&quot;</span>,<span class="st">&quot;param2&quot;</span>]</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 示例：ENTRYPOINT [&quot;java&quot;,&quot;-jar&quot;,&quot;/app/app.jar&quot;]</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># shell 形式（不推荐，同 CMD 的信号问题）</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ENTRYPOINT</span> <span class="bu">command</span> param1 param2</span></code></pre></div>
+<p><strong>ENTRYPOINT 与 CMD 的核心对比</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>CMD</th>
+<th>ENTRYPOINT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>作用</td>
+<td>默认启动命令</td>
+<td>入口点程序</td>
+</tr>
+<tr>
+<td>是否被 <code>docker run</code> 参数覆盖</td>
+<td><strong>是</strong>（完全替换）</td>
+<td><strong>否</strong>（参数作为 ENTRYPOINT 的追加参数）</td>
+</tr>
+<tr>
+<td>是否能被 <code>--entrypoint</code> 覆盖</td>
+<td>是（但少见）</td>
+<td>是（<code>docker run --entrypoint</code>）</td>
+</tr>
+<tr>
+<td>一个 Dockerfile 可有几个</td>
+<td>多个时最后一个生效</td>
+<td>多个时最后一个生效</td>
+</tr>
+<tr>
+<td>典型用途</td>
+<td>给默认参数、可被覆盖的命令</td>
+<td>固定入口程序，参数化运行</td>
+</tr>
+<tr>
+<td>是否可单独使用</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>是否推荐与对方组合</td>
+<td>推荐与 ENTRYPOINT 组合</td>
+<td>推荐与 CMD 组合</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ENTRYPOINT + CMD 组合模式（生产推荐）</strong>：</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 入口点：固定执行 java -jar app.jar</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ENTRYPOINT</span> [<span class="st">&quot;java&quot;</span>,<span class="st">&quot;-jar&quot;</span>,<span class="st">&quot;/app/app.jar&quot;</span>]</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 默认参数：--spring.profiles.active=prod</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;--spring.profiles.active=prod&quot;</span>]</span></code></pre></div>
+<p>组合效果：</p>
+<ul>
+<li><code>docker run myapp</code> → 执行
+<code>java -jar /app/app.jar --spring.profiles.active=prod</code>（用默认
+CMD 参数）</li>
+<li><code>docker run myapp --spring.profiles.active=dev</code> → 执行
+<code>java -jar /app/app.jar --spring.profiles.active=dev</code>（CMD 被
+dev 覆盖，ENTRYPOINT 不变）</li>
+<li><code>docker run myapp --debug</code> → 执行
+<code>java -jar /app/app.jar --debug</code>（参数追加到
+ENTRYPOINT）</li>
+</ul>
+<p><strong>CMD 与 ENTRYPOINT 各种组合的行为</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>组合</th>
+<th>ENTRYPOINT</th>
+<th>CMD</th>
+<th>实际执行</th>
+<th>docker run 参数行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只有 CMD</td>
+<td>无</td>
+<td><code>["java","-jar","app.jar"]</code></td>
+<td><code>java -jar app.jar</code></td>
+<td>替换 CMD</td>
+</tr>
+<tr>
+<td>只有 ENTRYPOINT</td>
+<td><code>["java","-jar","app.jar"]</code></td>
+<td>无</td>
+<td><code>java -jar app.jar</code></td>
+<td>追加到 ENTRYPOINT 后</td>
+</tr>
+<tr>
+<td>ENTRYPOINT + CMD</td>
+<td><code>["java","-jar","app.jar"]</code></td>
+<td><code>["--spring.profiles.active=prod"]</code></td>
+<td><code>java -jar app.jar --spring.profiles.active=prod</code></td>
+<td>替换 CMD 部分，追加到 ENTRYPOINT</td>
+</tr>
+<tr>
+<td>ENTRYPOINT shell + CMD exec</td>
+<td><code>java -jar app.jar</code>（shell）</td>
+<td><code>["--debug"]</code>（exec）</td>
+<td><code>java -jar app.jar</code> （CMD 被忽略！）</td>
+<td>shell 形式会忽略 CMD</td>
+</tr>
+<tr>
+<td>都没有</td>
+<td>无</td>
+<td>无</td>
+<td>报错（无启动命令）</td>
+<td>启动失败</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景-3">问题 / 场景</h4>
+<p><strong>问：ENTRYPOINT 和 CMD 到底选哪个？</strong></p>
+<ul>
+<li>如果你的镜像只是"启动一个固定命令"，两者都行，但<strong>用 CMD
+更灵活</strong>——使用者可以 <code>docker run myapp bash</code> 临时进入
+shell 调试。</li>
+<li>如果你的镜像是一个"可参数化工具"（如
+<code>myapp --port=8080</code>、<code>myapp --debug</code>），<strong>用
+ENTRYPOINT</strong>——保证入口固定，参数可变。</li>
+<li><strong>生产推荐组合模式</strong>：ENTRYPOINT 固定可执行程序，CMD
+给默认参数，既保入口又可覆盖。</li>
+</ul>
+<p><strong>问：为什么说 ENTRYPOINT 适合做"工具镜像"？</strong></p>
+<ul>
+<li>例如做一个 <code>curl</code> 工具镜像：</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> alpine:3.18</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apk</span> add <span class="at">--no-cache</span> curl</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ENTRYPOINT</span> [<span class="st">&quot;curl&quot;</span>]</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;--help&quot;</span>]</span></code></pre></div>
+<ul>
+<li><code>docker run curl-img</code> → 执行
+<code>curl --help</code></li>
+<li><code>docker run curl-img https://example.com</code> → 执行
+<code>curl https://example.com</code></li>
+<li><code>docker run curl-img -s -o /dev/null -w "%{http_code}" https://example.com</code>
+→ 执行带选项的 curl</li>
+<li>这就是 ENTRYPOINT 的"工具镜像"用法。</li>
+</ul>
+<p><strong>问：怎么覆盖 ENTRYPOINT？</strong></p>
+<ul>
+<li>用 <code>docker run --entrypoint</code> 参数：</li>
+</ul>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 原 ENTRYPOINT 是 java -jar app.jar</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--entrypoint</span> bash myapp</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行 bash（覆盖了 ENTRYPOINT）</span></span></code></pre></div>
+<h4 id="完整示例-3">完整示例</h4>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 文件名：Dockerfile.entrypoint-demo</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> app.jar /app/app.jar</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> SPRING_PROFILES_ACTIVE=prod</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># ENTRYPOINT 固定入口：固定执行 java -jar app.jar</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="kw">ENTRYPOINT</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># CMD 给默认参数：默认使用 prod profile</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;--spring.profiles.active=prod&quot;</span>]</span></code></pre></div>
+<p>构建与运行：</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 构建</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> entrypoint-demo:v1 <span class="at">-f</span> Dockerfile.entrypoint-demo .</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [1/3] FROM docker.io/library/eclipse-temurin:17-jre</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [2/3] WORKDIR /app</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [3/3] COPY app.jar /app/app.jar</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; exporting to image</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; naming to docker.io/library/entrypoint-demo:v1</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 默认运行（使用 CMD 默认参数）</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> ep-default entrypoint-demo:v1</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：java -jar /app/app.jar --spring.profiles.active=prod</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出容器 ID：2b3c4d5e...</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证启动参数</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> logs ep-default <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;Active profile&quot;</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：The following 1 profile is active: &quot;prod&quot;</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 用 docker run 参数覆盖 CMD（不覆盖 ENTRYPOINT）</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> ep-dev entrypoint-demo:v1 <span class="at">--spring.profiles.active</span><span class="op">=</span>dev</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：java -jar /app/app.jar --spring.profiles.active=dev</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="co"># CMD [&quot;--spring.profiles.active=prod&quot;] 被替换为 [&quot;--spring.profiles.active=dev&quot;]</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="co"># ENTRYPOINT 不变</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> logs ep-dev <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;Active profile&quot;</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：The following 1 profile is active: &quot;dev&quot;</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 追加多个参数</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> ep-debug entrypoint-demo:v1 <span class="at">--spring.profiles.active</span><span class="op">=</span>dev <span class="at">--debug</span></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：java -jar /app/app.jar --spring.profiles.active=dev --debug</span></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 用 --entrypoint 完全覆盖入口</span></span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> <span class="at">--rm</span> <span class="at">--entrypoint</span> bash entrypoint-demo:v1</span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：bash（ENTRYPOINT 被覆盖，CMD 也被忽略）</span></span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a><span class="co"># root@container:/app#</span></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 工具镜像示例：curl</span></span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Dockerfile:</span></span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a><span class="co">#   FROM alpine:3.18</span></span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a><span class="co">#   RUN apk add --no-cache curl</span></span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a><span class="co">#   ENTRYPOINT [&quot;curl&quot;]</span></span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a><span class="co">#   CMD [&quot;--help&quot;]</span></span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> my-curl:v1 <span class="at">-f</span> Dockerfile.curl .</span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> my-curl:v1</span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：curl --help</span></span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage: curl [options...] &lt;url&gt;</span></span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> my-curl:v1 https://www.baidu.com</span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：curl https://www.baidu.com</span></span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;!DOCTYPE html&gt;...</span></span></code></pre></div>
+<h4 id="图示-3">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 3：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">ENTRYPOINT + CMD 组合模式（生产推荐）：</span>
+<span class="diagram-line">Dockerfile:</span>
+<span class="diagram-line">  ENTRYPOINT [&quot;java&quot;,&quot;-jar&quot;,&quot;/app/app.jar&quot;]    ← 固定入口（不被覆盖）</span>
+<span class="diagram-line">  CMD [&quot;--spring.profiles.active=prod&quot;]         ← 默认参数（可被覆盖）</span>
+<span class="diagram-line">docker run myapp</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 实际执行：java -jar /app/app.jar --spring.profiles.active=prod</span>
+<span class="diagram-line">    [------ ENTRYPOINT -------] [-------- CMD --------]</span>
+<span class="diagram-line">docker run myapp --spring.profiles.active=dev</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 实际执行：java -jar /app/app.jar --spring.profiles.active=dev</span>
+<span class="diagram-line">    [------ ENTRYPOINT -------] [---- 覆盖的 CMD ----]</span>
+<span class="diagram-line">docker run myapp --spring.profiles.active=dev --debug</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 实际执行：java -jar /app/app.jar --spring.profiles.active=dev --debug</span>
+<span class="diagram-line">    [------ ENTRYPOINT -------] [---- 覆盖的 CMD ----]</span>
+<span class="diagram-line">docker run --entrypoint bash myapp</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 实际执行：bash（ENTRYPOINT 被覆盖）</span>
+<span class="diagram-line">CMD 单独 vs ENTRYPOINT 单独 vs 组合：</span>
+<span class="diagram-line">只有 CMD：           docker run myapp bash</span>
+<span class="diagram-line">  CMD [&quot;java&quot;,...]   <span class="arrow-token">→</span>  执行 bash  (CMD 被完全替换)</span>
+<span class="diagram-line">只有 ENTRYPOINT：     docker run myapp bash</span>
+<span class="diagram-line">  ENTRYPOINT [&quot;java&quot;,...]  <span class="arrow-token">→</span>  执行 java bash  (bash 作为参数追加，会报错！)</span>
+<span class="diagram-line">组合模式（推荐）：     docker run myapp --debug</span>
+<span class="diagram-line">  ENTRYPOINT [&quot;java&quot;,&quot;-jar&quot;,&quot;app.jar&quot;]   <span class="arrow-token">→</span>  执行 java -jar app.jar --debug</span>
+<span class="diagram-line">  CMD [&quot;--prod&quot;]                              (CMD 被替换为 --debug)</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-3">易错点</h4>
+<ol type="1">
+<li>❌ 用 shell 形式 <code>ENTRYPOINT java -jar app.jar</code>。✅ 用
+exec 形式
+<code>ENTRYPOINT ["java","-jar","app.jar"]</code>，避免信号问题。</li>
+<li>❌ 误认为 <code>docker run myapp bash</code> 能像 CMD 那样"替换"
+ENTRYPOINT。✅ ENTRYPOINT 不会被替换，bash 会作为参数追加到 ENTRYPOINT
+后（除非用 <code>--entrypoint</code>）。</li>
+<li>❌ ENTRYPOINT 用 shell 形式时还期望 CMD 生效。✅ ENTRYPOINT shell
+形式会忽略 CMD（CMD 不会被传入）。</li>
+<li>❌ 把可变参数写在 ENTRYPOINT 里。✅ 可变参数应写在 CMD
+中，便于运行时覆盖。</li>
+<li>❌ 在 ENTRYPOINT 中使用未展开的环境变量（如
+<code>ENTRYPOINT ["java","-jar","$APP_HOME/app.jar"]</code>）。✅ exec
+形式不展开 <code>$VAR</code>，要用
+<code>ENTRYPOINT ["sh","-c","java -jar $APP_HOME/app.jar"]</code>
+或直接用绝对路径。</li>
+</ol>
+<h4 id="小结-3">小结</h4>
+<p>ENTRYPOINT 指定容器入口点程序，<strong>不会被 <code>docker run</code>
+参数覆盖</strong>（参数会作为追加参数传入）。生产推荐 <strong>ENTRYPOINT
++ CMD 组合模式</strong>：ENTRYPOINT 固定可执行程序，CMD
+给默认参数——既保证入口固定，又允许运行时覆盖参数。同样推荐 exec
+形式以正确处理信号。</p>
+<hr />
+<h3 id="知识点-k7-5多阶段构建">知识点 K7-5：多阶段构建</h3>
+<h4 id="定义-4">定义</h4>
+<p><strong>多阶段构建（Multi-stage Build）</strong> 是 Docker 17.05+
+引入的特性，允许在一个 Dockerfile 中使用多个 <code>FROM</code>
+指令，每个 <code>FROM</code>
+开启一个新阶段（stage），最终镜像只保留<strong>最后一个阶段</strong>的内容，前面阶段的产物可以通过
+<code>COPY --from=&lt;阶段名&gt;</code>
+拷贝过来，但前面阶段的镜像层、依赖、工具等<strong>都不会进入最终镜像</strong>。</p>
+<h4 id="原理-4">原理</h4>
+<p><strong>多阶段构建的语法</strong>：</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 第一阶段：构建阶段（命名 builder）</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> maven:3.8-openjdk-17 <span class="kw">AS</span> builder</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /build</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> pom.xml .</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> src ./src</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> clean package <span class="at">-DskipTests</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 第二阶段：运行阶段（最终镜像）</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre-alpine</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 从 builder 阶段拷贝构建产物</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> /build/target/*.jar /app/app.jar</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8080</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>,<span class="st">&quot;-jar&quot;</span>,<span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<p><strong>为什么多阶段能减小镜像体积</strong>：</p>
+<div class="visual">
+  <div class="visual-title">图示 4：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">单阶段构建（传统）：</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span> 最终镜像                  <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span> Maven 3.8 (~100MB)  <span class="tree-token">│</span>  ← 构建工具，运行时不需要</span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span> JDK 17 (~300MB)     <span class="tree-token">│</span>  ← 编译时需要，运行时只需 JRE</span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span> 源码 (~5MB)          <span class="tree-token">│</span>  ← 运行时不需要</span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span> target 旧产物 (~10MB)<span class="tree-token">│</span>  ← 运行时不需要</span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span> JRE 17 (~200MB)     <span class="tree-token">│</span>  ← 运行时需要 ✓</span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span> app.jar (~30MB)     <span class="tree-token">│</span>  ← 运行时需要 ✓</span>
+<span class="diagram-line"><span class="tree-token">│</span> 总计：约 645MB            <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">多阶段构建：</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span> 阶段1: builder (丢弃)    <span class="tree-token">│</span>  <span class="tree-token">│</span> 阶段2: 最终镜像 (保留)    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span> Maven 3.8           <span class="tree-token">│</span>  <span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span> JRE 17 alpine (~80MB)<span class="tree-token">│</span> ← 精简基础镜像</span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span> JDK 17              <span class="tree-token">│</span>  <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span> app.jar (~30MB)       <span class="tree-token">│</span> ← 只拷贝产物</span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span> 源码                <span class="tree-token">│</span>  <span class="tree-token">│</span> 总计：约 110MB            <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span> target/app.jar <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┼<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> COPY --from=builder      <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> 总计：约 645MB (丢弃)    <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">                            最终镜像体积大幅减小 ✓</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<p><strong>多阶段构建的核心价值</strong>：</p>
+<ol type="1">
+<li><strong>减小镜像体积</strong>：运行镜像只保留"运行所需"，构建工具、源码、中间产物全部丢弃。</li>
+<li><strong>安全性提升</strong>：镜像里没有编译器、调试工具，攻击面减小。</li>
+<li><strong>构建与运行解耦</strong>：构建阶段可以用重型镜像（含全部工具），运行阶段用精简镜像（只含运行时）。</li>
+<li><strong>单一 Dockerfile</strong>：不需要写多份 Dockerfile 或用 CI
+脚本拼接，一个 Dockerfile 完成全流程。</li>
+</ol>
+<h4 id="问题--场景-4">问题 / 场景</h4>
+<p><strong>问：以前没有多阶段构建是怎么做的？</strong></p>
+<ul>
+<li>老办法 1：写两份 Dockerfile（Dockerfile.build +
+Dockerfile.run），用脚本串起来——构建镜像跑出 jar，再从构建容器里把 jar
+拷出来，再用运行镜像打包。复杂、易错、脚本维护成本高。</li>
+<li>老办法 2：用"builder pattern"shell 脚本，手动 docker cp
+拷贝产物。</li>
+<li>多阶段构建一个 Dockerfile 解决，是官方推荐方案。</li>
+</ul>
+<p><strong>问：多阶段构建中怎么命名阶段？</strong></p>
+<ul>
+<li>用 <code>FROM &lt;image&gt; AS &lt;name&gt;</code> 命名：</li>
+</ul>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> maven:3.8-openjdk-17 <span class="kw">AS</span> builder</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> node:18 <span class="kw">AS</span> frontend</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre-alpine <span class="kw">AS</span> runtime</span></code></pre></div>
+<ul>
+<li>用名字引用：<code>COPY --from=builder /build/target/*.jar /app/app.jar</code></li>
+<li>也可以用阶段序号引用：<code>COPY --from=0 /build/target/*.jar /app/app.jar</code>（不推荐，可读性差）</li>
+</ul>
+<p><strong>问：能不能从前一个阶段拷贝文件到后一个阶段？反向呢？</strong></p>
+<ul>
+<li>只能<strong>后拷前</strong>：后面的阶段可以用
+<code>COPY --from=&lt;前面的阶段&gt;</code> 拷贝前面阶段的文件。</li>
+<li><strong>不能前拷后</strong>：前面的阶段无法访问后面阶段的文件（执行顺序决定）。</li>
+</ul>
+<h4 id="完整示例-4">完整示例</h4>
+<p><strong>Java/Maven 项目多阶段构建（CTTS 后端优化版）</strong>：</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 文件名：Dockerfile.multistage-ctts</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 阶段 1：构建阶段（命名为 builder）</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> maven:3.8-openjdk-17 <span class="kw">AS</span> builder</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /build</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 先拷贝 pom.xml，单独下载依赖（利用层缓存：依赖不变时不重复下载）</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> pom.xml .</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> dependency:go-offline</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 再拷贝源码，编译打包</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> src ./src</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> clean package <span class="at">-DskipTests</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 阶段 2：运行阶段（最终镜像）</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre-alpine</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 从 builder 阶段拷贝构建产物</span></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> /build/target/*.jar /app/app.jar</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 设置运行时环境变量</span></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> SPRING_PROFILES_ACTIVE=prod <span class="op">\</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>    JAVA_OPTS=<span class="st">&quot;-Xms256m -Xmx512m&quot;</span></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8080</span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a><span class="kw">ENTRYPOINT</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;--spring.profiles.active=prod&quot;</span>]</span></code></pre></div>
+<p>构建与运行：</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 多阶段构建</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:multistage <span class="at">-f</span> Dockerfile.multistage-ctts .</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [internal] load build definition from Dockerfile.multistage-ctts</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [internal] load .dockerignore</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [internal] load build context</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [builder 1/5] FROM docker.io/library/maven:3.8-openjdk-17</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [builder 2/5] WORKDIR /build</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [builder 3/5] COPY pom.xml .</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [builder 4/5] RUN mvn dependency:go-offline   ← 下载依赖（缓存）</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [builder 5/5] RUN mvn clean package -DskipTests</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [stage-1 1/4] FROM docker.io/library/eclipse-temurin:17-jre-alpine</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [stage-1 2/4] WORKDIR /app</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [stage-1 3/4] COPY --from=builder /build/target/*.jar /app/app.jar</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [stage-1 4/4] EXPOSE 8080</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; exporting to image</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; naming to docker.io/library/ctts-backend:multistage</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 查看镜像大小（多阶段构建版）</span></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images ctts-backend:multistage</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="co"># REPOSITORY      TAG          IMAGE ID       CREATED         SIZE</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend    multistage   c1d2e3f4a5b6   1 minute ago    180MB     ← 优化后</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 对比单阶段构建（未优化版，Dockerfile.singlestage-ctts）</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a><span class="co"># FROM maven:3.8-openjdk-17</span></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a><span class="co"># WORKDIR /app</span></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a><span class="co"># COPY . .</span></span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a><span class="co"># RUN mvn clean package -DskipTests</span></span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a><span class="co"># CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;target/app.jar&quot;]</span></span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:singlestage <span class="at">-f</span> Dockerfile.singlestage-ctts .</span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images ctts-backend:singlestage</span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a><span class="co"># REPOSITORY      TAG           IMAGE ID       CREATED         SIZE</span></span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend    singlestage   a7b8c9d0e1f2   1 minute ago    680MB    ← 优化前</span></span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a><span class="co"># 体积对比：680MB → 180MB，减少 73% ！</span></span>
+<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 运行多阶段镜像</span></span>
+<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> ctts-api <span class="at">-p</span> 8080:8080 ctts-backend:multistage</span>
+<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出容器 ID：5e6f7a8b9c...</span></span>
+<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 验证启动</span></span>
+<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> logs ctts-api <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-5</span></span>
+<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb28-45"><a href="#cb28-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Tomcat started on port(s): 8080 (http)</span></span>
+<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Started CttsApplication in 3.456 seconds</span></span>
+<span id="cb28-47"><a href="#cb28-47" aria-hidden="true" tabindex="-1"></a><span class="co"># The following 1 profile is active: &quot;prod&quot;</span></span>
+<span id="cb28-48"><a href="#cb28-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-49"><a href="#cb28-49" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 访问健康检查</span></span>
+<span id="cb28-50"><a href="#cb28-50" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://localhost:8080/actuator/health</span>
+<span id="cb28-51"><a href="#cb28-51" aria-hidden="true" tabindex="-1"></a><span class="co"># {&quot;status&quot;:&quot;UP&quot;}</span></span></code></pre></div>
+<p><strong>镜像体积对比汇总</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>镜像版本</th>
+<th>基础镜像</th>
+<th>是否多阶段</th>
+<th>镜像大小</th>
+<th>减少比例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ctts-backend:singlestage</td>
+<td>maven:3.8-openjdk-17</td>
+<td>否</td>
+<td>680MB</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ctts-backend:multistage</td>
+<td>eclipse-temurin:17-jre-alpine</td>
+<td>是</td>
+<td>180MB</td>
+<td><strong>减少 73%</strong></td>
+</tr>
+<tr>
+<td>ctts-backend:multistage-slim</td>
+<td>eclipse-temurin:17-jre-jammy</td>
+<td>是</td>
+<td>260MB</td>
+<td>减少 62%</td>
+</tr>
+</tbody>
+</table>
+<h4 id="图示-4">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 5：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">多阶段构建数据流：</span>
+<span class="diagram-line">阶段 1: builder (maven:3.8-openjdk-17)            阶段 2: runtime (eclipse-temurin:17-jre-alpine)</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐               ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span> 1. WORKDIR /build                <span class="tree-token">│</span>               <span class="tree-token">│</span> 1. WORKDIR /app                  <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> 2. COPY pom.xml .                <span class="tree-token">│</span>               <span class="tree-token">│</span> 2. COPY --from=builder            <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> 3. RUN mvn dependency:go-offline <span class="tree-token">│</span>   只拷贝 jar   <span class="tree-token">│</span>      /build/target/*.jar /app/   <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> 4. COPY src ./src                <span class="tree-token">│</span> ◀<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>   <span class="tree-token">│</span>    app.jar                        <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> 5. RUN mvn clean package         <span class="tree-token">│</span>               <span class="tree-token">│</span> 3. ENV / EXPOSE / ENTRYPOINT      <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                                  <span class="tree-token">│</span>               <span class="tree-token">│</span>                                  <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> 含: Maven + JDK17 + 源码 + jar   <span class="tree-token">│</span>               <span class="tree-token">│</span> 含: JRE-alpine + app.jar         <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> 总计: ~680MB (会被丢弃)          <span class="tree-token">│</span>               <span class="tree-token">│</span> 总计: ~180MB (最终保留)          <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘               <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">        <span class="tree-token">│</span>                                                  ↑</span>
+<span class="diagram-line">        <span class="tree-token">│</span> 丢弃: Maven, JDK, 源码, 编译中间产物             <span class="tree-token">│</span></span>
+<span class="diagram-line">        <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">        最终镜像只有 runtime 阶段，体积大幅减小</span>
+<span class="diagram-line">层缓存优化（先 pom 后 src）：</span>
+<span class="diagram-line">  COPY pom.xml .                ← pom 变化少，依赖层稳定缓存</span>
+<span class="diagram-line">  RUN mvn dependency:go-offline ← 缓存命中率高（依赖不变时跳过）</span>
+<span class="diagram-line">  COPY src ./src                ← 源码常变，只让这之后失效</span>
+<span class="diagram-line">  RUN mvn clean package         ← 源码变才重新编译</span>
+<span class="diagram-line">  改源码时：缓存命中到 dependency:go-offline，只重跑 package</span>
+<span class="diagram-line">  改 pom 时：dependency:go-offline 之后全失效（必要代价）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-4">易错点</h4>
+<ol type="1">
+<li>❌ 在多阶段构建中期望前面阶段的镜像层进入最终镜像。✅
+最终镜像只保留最后一个 FROM 之后的阶段，前面阶段会被丢弃。</li>
+<li>❌ <code>COPY --from=builder</code> 路径写错。✅
+路径是<strong>相对前面阶段的绝对路径</strong>，如
+<code>/build/target/*.jar</code>。</li>
+<li>❌ 不命名阶段，用序号 <code>COPY --from=0</code>。✅ 推荐
+<code>AS builder</code> 命名，可读性好。</li>
+<li>❌ 在运行阶段重复装编译工具。✅ 运行阶段应该精简，只装运行时（如
+JRE）。</li>
+<li>❌ 把源码 COPY 到运行阶段。✅ 运行阶段只需要 jar/war
+等构建产物，不需要源码。</li>
+<li>❌ 不利用层缓存（先 COPY src 再下依赖）。✅ 先 COPY
+pom.xml，再下依赖，最后 COPY src，让源码变化时依赖层命中缓存。</li>
+</ol>
+<h4 id="小结-4">小结</h4>
+<p>多阶段构建用多个 <code>FROM</code>
+把"构建"与"运行"分离：构建阶段用重型镜像（含编译器、源码），运行阶段只
+<code>COPY --from=builder</code>
+拿到产物，基于精简镜像运行。最终镜像只保留运行阶段，体积大幅减小（CTTS
+后端从 680MB 优化到 180MB，减少
+73%）。这是云原生镜像优化的<strong>核心手段</strong>，企业 CI/CD
+的标配写法。</p>
+<hr />
+<h3 id="知识点-k7-6镜像优化与-dockerignore">知识点 K7-6：镜像优化与
+.dockerignore</h3>
+<h4 id="定义-5">定义</h4>
+<p><strong>镜像优化</strong>：通过一系列手段让最终镜像<strong>更小、更安全、构建更快</strong>。核心策略包括：</p>
+<ol type="1">
+<li><strong>选择精简基础镜像</strong>（alpine / slim / distroless）</li>
+<li><strong>合并 RUN 减少层数</strong>（每条 RUN 一层）</li>
+<li><strong>层缓存优化顺序</strong>（少变的放前面，多变的放后面）</li>
+<li><strong>清理构建垃圾</strong>（apt cache、临时文件）</li>
+<li><strong><code>.dockerignore</code>
+排除无关文件</strong>（不进入构建上下文）</li>
+</ol>
+<p><strong><code>.dockerignore</code>
+文件</strong>：放在构建上下文根目录，作用类似
+<code>.gitignore</code>，列出哪些文件<strong>不发送给 Docker
+守护进程</strong>（不进入构建上下文）。</p>
+<h4 id="原理-5">原理</h4>
+<p><strong>1. 选择精简基础镜像</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>基础镜像</th>
+<th>大小</th>
+<th>包含内容</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ubuntu:22.04</code></td>
+<td>~77MB</td>
+<td>完整 Ubuntu</td>
+<td>需要完整 Linux 环境</td>
+</tr>
+<tr>
+<td><code>debian:bookworm-slim</code></td>
+<td>~74MB</td>
+<td>精简 Debian（无文档/man）</td>
+<td>一般应用</td>
+</tr>
+<tr>
+<td><code>alpine:3.18</code></td>
+<td>~7MB</td>
+<td>极精简（musl libc）</td>
+<td>极致优化（注意 musl 兼容性）</td>
+</tr>
+<tr>
+<td><code>eclipse-temurin:17-jre-alpine</code></td>
+<td>~85MB</td>
+<td>JRE17 + alpine</td>
+<td>Java 应用优化</td>
+</tr>
+<tr>
+<td><code>eclipse-temurin:17-jre-jammy</code></td>
+<td>~260MB</td>
+<td>JRE17 + Ubuntu</td>
+<td>Java 应用（兼容性好）</td>
+</tr>
+<tr>
+<td><code>maven:3.8-openjdk-17</code></td>
+<td>~600MB</td>
+<td>Maven + JDK17</td>
+<td>仅构建阶段用</td>
+</tr>
+<tr>
+<td><code>gcr.io/distroless/java17</code></td>
+<td>~160MB</td>
+<td>仅 JRE（无 shell）</td>
+<td>极致安全（无 shell 难调试）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2. 合并 RUN 减少层数</strong>：</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ❌ 不推荐：多条 RUN，多个层</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> curl</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> git</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="fu">rm</span> <span class="at">-rf</span> /var/lib/apt/lists/<span class="pp">*</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 结果：4 个层，且 apt cache 中间层仍占空间（层只追加不删除）</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ✅ 推荐：合并成一条 RUN，用 &amp;&amp; 连接</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update <span class="dt">\</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install <span class="at">-y</span> <span class="at">--no-install-recommends</span> curl git <span class="dt">\</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> <span class="at">-rf</span> /var/lib/apt/lists/<span class="pp">*</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 结果：1 个层，apt cache 在同一层内清理</span></span></code></pre></div>
+<p><strong>3. 层缓存优化顺序</strong>：</p>
+<p>Docker
+构建时按指令顺序逐层执行，<strong>某层失效则其后所有层都失效</strong>。所以应该把"少变的"放前面（如装依赖），"多变的"放后面（如拷贝源码）：</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ❌ 不推荐：源码放前面，源码一变后面全失效</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> . /app</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> clean package         <span class="co"># 源码变就要重跑</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ✅ 推荐：依赖放前面，源码放后面</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> pom.xml .</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> dependency:go-offline  <span class="co"># 缓存命中率高</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> src ./src</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> clean package          <span class="co"># 只在源码变时重跑</span></span></code></pre></div>
+<p><strong>4. .dockerignore 完整配置</strong>：</p>
+<p><code>.dockerignore</code> 文件放在构建上下文根目录（与 Dockerfile
+同级），列出<strong>不发送给守护进程的文件</strong>：</p>
+<pre class="text"><code># .dockerignore 文件示例
+
+# 版本控制
+.git
+.gitignore
+.svn
+
+# 构建产物
+target/
+build/
+dist/
+*.class
+*.jar
+*.war
+!app.jar                    # 注意：! 表示反向（保留）
+
+# 依赖目录（构建阶段会重新下载）
+node_modules/
+
+# IDE 与编辑器配置
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 日志与临时文件
+*.log
+logs/
+tmp/
+
+# 环境与密钥（绝对不能进镜像！）
+.env
+.env.local
+*.pem
+*.key
+credentials.json
+
+# Docker 自身文件
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# 文档
+*.md
+docs/
+
+# 操作系统垃圾
+.DS_Store
+Thumbs.db</code></pre>
+<p><strong>5. .dockerignore 的价值</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>价值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>减小构建上下文</td>
+<td>不发送无关文件，加快 <code>Sending build context</code> 步骤</td>
+</tr>
+<tr>
+<td>提升缓存命中率</td>
+<td>避免无关文件变化导致 COPY 层缓存失效</td>
+</tr>
+<tr>
+<td>防止敏感信息泄露</td>
+<td>避免 .env、密钥、credentials 进入镜像</td>
+</tr>
+<tr>
+<td>防止本地构建产物干扰</td>
+<td>避免 target/、node_modules/ 覆盖镜像内文件</td>
+</tr>
+</tbody>
+</table>
+<h4 id="问题--场景-5">问题 / 场景</h4>
+<p><strong>问：alpine 这么小，为什么不用 alpine
+跑所有应用？</strong></p>
+<ul>
+<li>alpine 用 musl libc 而非 glibc，部分依赖 glibc
+的应用（如某些原生库、Oracle JDK）在 alpine 上跑不起来或行为异常。</li>
+<li>Java 应用要用专门的 alpine 版 JDK（如
+<code>eclipse-temurin:17-jre-alpine</code>），不能用
+<code>openjdk:17</code>（基于 glibc）。</li>
+<li>如果遇到兼容性问题，退回 <code>slim</code> 版（基于 glibc）。</li>
+</ul>
+<p><strong>问：为什么 "合并 RUN" 能减小镜像体积？即使我 rm
+清理了？</strong></p>
+<ul>
+<li>Docker 镜像是<strong>只读层</strong>叠加。如果
+<code>RUN apt install</code> 在一层装了 100MB，下一层
+<code>RUN rm -rf /var/lib/apt/lists/*</code> 删了
+50MB，<strong>最终镜像仍包含两层</strong>——装的那层是
+100MB（只是看不到文件），删的那层是
+0MB（删除操作）。所以<strong>装和删必须在同一层</strong>（用
+<code>&amp;&amp;</code> 连接），才能真正减小体积。</li>
+</ul>
+<p><strong>问：.dockerignore 和 .gitignore 有什么区别？</strong></p>
+<ul>
+<li><code>.gitignore</code>：决定哪些文件<strong>不进入版本控制</strong>。</li>
+<li><code>.dockerignore</code>：决定哪些文件<strong>不进入构建上下文</strong>（不发送给
+Docker 守护进程）。</li>
+<li>二者独立，一个文件可以 .gitignore 但不
+.dockerignore，反之亦然。但生产中通常两个文件内容相似。</li>
+</ul>
+<h4 id="完整示例-5">完整示例</h4>
+<p><strong>CTTS 后端镜像完整优化版（多阶段 + alpine + 合并 RUN +
+.dockerignore）</strong>：</p>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 文件名：Dockerfile.ctts-optimized</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 阶段 1：构建阶段（使用重型镜像装编译工具）</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> maven:3.8-openjdk-17 <span class="kw">AS</span> builder</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /build</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 层缓存优化：先拷 pom 单独下依赖</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> pom.xml .</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> dependency:go-offline</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 再拷源码编译</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> src ./src</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> clean package <span class="at">-DskipTests</span> <span class="dt">\</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">mv</span> target/<span class="pp">*</span>.jar /build/app.jar</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 阶段 2：运行阶段（精简基础镜像）</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre-alpine</span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 安装必要工具（合并 RUN，apt cache 同层清理）</span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apk</span> add <span class="at">--no-cache</span> curl tzdata <span class="dt">\</span></span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">cp</span> /usr/share/zoneinfo/Asia/Shanghai /etc/localtime <span class="dt">\</span></span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;Asia/Shanghai&quot;</span> <span class="op">&gt;</span> /etc/timezone <span class="dt">\</span></span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="ex">apk</span> del tzdata</span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a><span class="co"># 从构建阶段拷贝产物</span></span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> /build/app.jar /app/app.jar</span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a><span class="co"># 创建非 root 用户运行（安全加固）</span></span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">addgroup</span> <span class="at">-S</span> appgroup <span class="kw">&amp;&amp;</span> <span class="ex">adduser</span> <span class="at">-S</span> appuser <span class="at">-G</span> appgroup</span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span>
+<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a><span class="co"># 声明性指令</span></span>
+<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8080</span>
+<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a><span class="kw">VOLUME</span> [<span class="st">&quot;/app/logs&quot;</span>]</span>
+<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-42"><a href="#cb33-42" aria-hidden="true" tabindex="-1"></a><span class="co"># 环境变量</span></span>
+<span id="cb33-43"><a href="#cb33-43" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> SPRING_PROFILES_ACTIVE=prod <span class="op">\</span></span>
+<span id="cb33-44"><a href="#cb33-44" aria-hidden="true" tabindex="-1"></a>    JAVA_OPTS=<span class="st">&quot;-Xms256m -Xmx512m&quot;</span></span>
+<span id="cb33-45"><a href="#cb33-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-46"><a href="#cb33-46" aria-hidden="true" tabindex="-1"></a><span class="co"># 入口点 + 默认参数</span></span>
+<span id="cb33-47"><a href="#cb33-47" aria-hidden="true" tabindex="-1"></a><span class="kw">ENTRYPOINT</span> [<span class="st">&quot;sh&quot;</span>,<span class="st">&quot;-c&quot;</span>,<span class="st">&quot;java $JAVA_OPTS -jar /app/app.jar&quot;</span>]</span>
+<span id="cb33-48"><a href="#cb33-48" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;--spring.profiles.active=prod&quot;</span>]</span>
+<span id="cb33-49"><a href="#cb33-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-50"><a href="#cb33-50" aria-hidden="true" tabindex="-1"></a><span class="co"># 健康检查</span></span>
+<span id="cb33-51"><a href="#cb33-51" aria-hidden="true" tabindex="-1"></a><span class="kw">HEALTHCHECK</span> <span class="op">--interval=30s</span> <span class="op">--timeout=3s</span> <span class="op">--retries=3</span> \</span>
+<span id="cb33-52"><a href="#cb33-52" aria-hidden="true" tabindex="-1"></a>  <span class="kw">CMD</span> <span class="ex">curl</span> <span class="at">-f</span> http://localhost:8080/actuator/health <span class="kw">||</span> <span class="bu">exit</span> 1</span></code></pre></div>
+<p>配套的 <code>.dockerignore</code>：</p>
+<pre class="text"><code># .dockerignore
+.git
+.gitignore
+target/
+build/
+node_modules/
+.idea/
+.vscode/
+*.log
+logs/
+.env
+.env.local
+*.pem
+*.key
+Dockerfile*
+docker-compose*.yml
+*.md
+docs/
+.DS_Store</code></pre>
+<p>构建与运行：</p>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 构建（注意 Sending build context 大小，应远小于源码目录）</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:optimized <span class="at">-f</span> Dockerfile.ctts-optimized .</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [internal] load build definition from Dockerfile.ctts-optimized</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [internal] load .dockerignore</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [internal] load build context</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; transferring context: 2.5MB                       ← 注意上下文只有几 MB（没拷 .git/node_modules）</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [builder 1/6] FROM docker.io/library/maven:3.8-openjdk-17</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [builder 2/6] WORKDIR /build</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [builder 3/6] COPY pom.xml .</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [builder 4/6] RUN mvn dependency:go-offline</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [builder 5/6] COPY src ./src</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [builder 6/6] RUN mvn clean package -DskipTests</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [stage-1 1/7] FROM docker.io/library/eclipse-temurin:17-jre-alpine</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [stage-1 2/7] RUN apk add --no-cache curl tzdata ...</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [stage-1 3/7] WORKDIR /app</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [stage-1 4/7] COPY --from=builder /build/app.jar /app/app.jar</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [stage-1 5/7] RUN addgroup -S appgroup &amp;&amp; adduser -S appuser -G appgroup</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [stage-1 6/7] EXPOSE 8080</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; [stage-1 7/7] VOLUME [&quot;/app/logs&quot;]</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; exporting to image</span></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; naming to docker.io/library/ctts-backend:optimized</span></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 镜像大小对比</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images <span class="kw">|</span> <span class="fu">grep</span> ctts-backend</span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a><span class="co"># REPOSITORY      TAG          SIZE</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend    singlestage  680MB    ← 原始单阶段</span></span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend    multistage   180MB    ← 多阶段（alpine）</span></span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend    optimized    190MB    ← 多阶段 + alpine + curl/tzdata + 非 root 用户</span></span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a><span class="co">#                                          （比 multistage 多 10MB，因为装了 curl/tzdata）</span></span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 运行</span></span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> ctts-api-opt <span class="at">-p</span> 8080:8080 <span class="dt">\</span></span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ctts-logs:/app/logs <span class="dt">\</span></span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a>  ctts-backend:optimized</span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 验证健康检查</span></span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect <span class="at">--format</span><span class="op">=</span><span class="st">&#39;{{.State.Health.Status}}&#39;</span> ctts-api-opt</span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：healthy</span></span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 验证非 root 用户</span></span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec ctts-api-opt whoami</span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：appuser                          ← 不是 root，安全加固 ✓</span></span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 验证时区</span></span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec ctts-api-opt date</span>
+<span id="cb35-47"><a href="#cb35-47" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：Wed Jul 22 14:30:00 CST 2026      ← CST 中国标准时间 ✓</span></span></code></pre></div>
+<p><strong>镜像优化效果汇总</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>优化项</th>
+<th>优化前</th>
+<th>优化后</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基础镜像</td>
+<td>maven:3.8-openjdk-17 (~600MB)</td>
+<td>eclipse-temurin:17-jre-alpine (~85MB)</td>
+<td>用 alpine + JRE</td>
+</tr>
+<tr>
+<td>构建工具</td>
+<td>Maven/JDK 都进镜像</td>
+<td>多阶段丢弃</td>
+<td>多阶段构建</td>
+</tr>
+<tr>
+<td>源码</td>
+<td>进镜像</td>
+<td>不进镜像</td>
+<td>COPY --from=builder 只拷 jar</td>
+</tr>
+<tr>
+<td>RUN 层数</td>
+<td>5+ 层</td>
+<td>合并到 2 层</td>
+<td>apt 同层清理</td>
+</tr>
+<tr>
+<td>.dockerignore</td>
+<td>无</td>
+<td>完整配置</td>
+<td>上下文从 200MB → 2.5MB</td>
+</tr>
+<tr>
+<td>运行用户</td>
+<td>root</td>
+<td>appuser</td>
+<td>非 root 加固</td>
+</tr>
+<tr>
+<td><strong>最终镜像</strong></td>
+<td><strong>680MB</strong></td>
+<td><strong>190MB</strong></td>
+<td><strong>减少 72%</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="图示-5">图示</h4>
+<div class="visual">
+  <div class="visual-title">图示 6：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">镜像优化&quot;三板斧&quot;：</span>
+<span class="diagram-line">1. 精简基础镜像：</span>
+<span class="diagram-line">   ubuntu (77MB) &gt; debian-slim (74MB) &gt; alpine (7MB)</span>
+<span class="diagram-line">   JDK (300MB+) &gt; JRE (200MB) &gt; JRE-alpine (85MB)</span>
+<span class="diagram-line">   普通 (glibc) &gt; alpine (musl libc，注意兼容性)</span>
+<span class="diagram-line">2. 多阶段构建：</span>
+<span class="diagram-line">   构建阶段 (重型镜像) <span class="arrow-token">→</span> COPY --from <span class="arrow-token">→</span> 运行阶段 (精简镜像)</span>
+<span class="diagram-line">   丢弃 Maven/JDK/源码，只保留 jar</span>
+<span class="diagram-line">3. 合并 RUN + 同层清理：</span>
+<span class="diagram-line">   ❌ RUN apt install (100MB)</span>
+<span class="diagram-line">      RUN rm cache (50MB)  ← 实际两层，仍占 100MB</span>
+<span class="diagram-line">   ✅ RUN apt install &amp;&amp; rm cache  ← 一层，占 50MB</span>
+<span class="diagram-line">4. .dockerignore（前置防线）：</span>
+<span class="diagram-line">   排除 .git/node_modules/target/.env 等</span>
+<span class="diagram-line">   上下文从几百 MB <span class="arrow-token">→</span> 几 MB，构建快、缓存稳</span>
+<span class="diagram-line">镜像体积演进：</span>
+<span class="diagram-line">   单阶段 maven+jdk+源码+jar  : 680MB</span>
+<span class="diagram-line">      ↓ 多阶段构建</span>
+<span class="diagram-line">   多阶段 jre-alpine + jar    : 180MB</span>
+<span class="diagram-line">      ↓ + 合并 RUN + .dockerignore</span>
+<span class="diagram-line">   完整优化版                  : 190MB（含 curl/tzdata/健康检查）</span>
+<span class="diagram-line">   （多装的 10MB 是工具，可接受）</span>
+<span class="diagram-line">构建上下文演进：</span>
+<span class="diagram-line">   无 .dockerignore            : ~200MB (.git + node_modules + target)</span>
+<span class="diagram-line">      ↓ 写 .dockerignore</span>
+<span class="diagram-line">   有 .dockerignore            : ~2.5MB (只 pom + src)</span>
+<span class="diagram-line">   构建速度提升明显，缓存命中率提升</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-5">易错点</h4>
+<ol type="1">
+<li>❌ 选了 alpine 基础镜像但应用依赖 glibc 报错。✅ 用 slim 版（基于
+glibc）或用对应 alpine 版本 JDK（如
+<code>eclipse-temurin:17-jre-alpine</code>）。</li>
+<li>❌ 在 RUN 装 + 删分两步。✅ 用 <code>&amp;&amp;</code>
+连接，同一层内安装并清理。</li>
+<li>❌ 把源码放前面导致依赖层缓存频繁失效。✅ 先 COPY pom.xml 下依赖，再
+COPY src 编译。</li>
+<li>❌ 不写 .dockerignore，构建上下文几百 MB。✅ 写完整
+.dockerignore，排除 .git/node_modules/target/.env 等。</li>
+<li>❌ 把 .env、密钥文件 COPY 进镜像。✅ 用 .dockerignore
+排除，运行时通过 <code>-e</code> 或 Secret 注入。</li>
+<li>❌ 用 root 用户运行应用。✅ 创建非 root
+用户（<code>USER appuser</code>）运行，安全加固。</li>
+<li>❌ 忘记设置时区，容器时间是 UTC。✅ 装 tzdata，设置
+<code>Asia/Shanghai</code>。</li>
+</ol>
+<h4 id="小结-5">小结</h4>
+<p>镜像优化的"三板斧"：<strong>精简基础镜像（alpine/slim）、多阶段构建（丢弃构建工具）、合并
+RUN + 同层清理</strong>。再加上
+<code>.dockerignore</code>（前置防线）、层缓存优化顺序、非 root
+用户、时区设置，能让镜像从几百 MB 优化到一百多
+MB，构建快、传输省、攻击面小。这是云原生工程师的核心能力，也是企业镜像规范的标配。</p>
+<hr />
+<h2
+id="三综合示例ctts-后端镜像从-680mb-到-190mb-的完整优化">三、综合示例：CTTS
+后端镜像从 680MB 到 190MB 的完整优化</h2>
+<p>把前面所有知识点串起来，看 CTTS 后端镜像如何从"未优化的 680MB
+单阶段"逐步优化到"190MB 多阶段 + alpine + 加固版"：</p>
+<div class="visual">
+  <div class="visual-title">图示 7：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">===================================================================</span>
+<span class="diagram-line">   CTTS 后端镜像优化全过程</span>
+<span class="diagram-line">===================================================================</span>
+<span class="diagram-line">【版本 0：未优化单阶段】（K7-3 反例 + 无优化）</span>
+<span class="diagram-line">  FROM maven:3.8-openjdk-17</span>
+<span class="diagram-line">  WORKDIR /app</span>
+<span class="diagram-line">  COPY . .</span>
+<span class="diagram-line">  RUN mvn clean package -DskipTests</span>
+<span class="diagram-line">  CMD java -jar target/app.jar</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 镜像大小：680MB</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 问题：① 用了 maven+jdk 镜像（600MB）；② 源码进镜像；</span>
+<span class="diagram-line">         ③ CMD shell 形式（信号问题）；④ 无 .dockerignore；</span>
+<span class="diagram-line">         ⑤ target 旧产物也进镜像；⑥ 用 root 运行</span>
+<span class="diagram-line">【版本 1：CMD exec 形式 + .dockerignore】（K7-3 + K7-6）</span>
+<span class="diagram-line">  + 改 CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;target/app.jar&quot;]</span>
+<span class="diagram-line">  + 写 .dockerignore 排除 .git/node_modules/target</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 镜像大小：680MB（基础镜像没变，体积不变）</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 改进：信号问题修复；构建上下文从 200MB <span class="arrow-token">→</span> 2.5MB（构建快）</span>
+<span class="diagram-line">【版本 2：多阶段构建】（K7-5）</span>
+<span class="diagram-line">  FROM maven:3.8-openjdk-17 AS builder</span>
+<span class="diagram-line">  ... mvn clean package ...</span>
+<span class="diagram-line">  FROM eclipse-temurin:17-jre</span>
+<span class="diagram-line">  COPY --from=builder /build/target/*.jar /app/app.jar</span>
+<span class="diagram-line">  CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;/app/app.jar&quot;]</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 镜像大小：260MB（从 680MB <span class="arrow-token">→</span> 260MB，减少 62%）</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 改进：丢弃 Maven/JDK/源码，只保留 JRE + jar</span>
+<span class="diagram-line">【版本 3：用 alpine 精简基础镜像】（K7-6）</span>
+<span class="diagram-line">  把第二阶段 FROM eclipse-temurin:17-jre 改为 eclipse-temurin:17-jre-alpine</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 镜像大小：180MB（从 260MB <span class="arrow-token">→</span> 180MB，再减少 31%）</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 改进：alpine 基础镜像比 debian 小 ~80MB</span>
+<span class="diagram-line">【版本 4：层缓存优化】（K7-6）</span>
+<span class="diagram-line">  把 COPY pom.xml + mvn dependency:go-offline 放在 COPY src 之前</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 镜像大小：180MB（不变）</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 改进：改源码时依赖层缓存命中，构建从 3 分钟 <span class="arrow-token">→</span> 30 秒</span>
+<span class="diagram-line">【版本 5：合并 RUN + 安全加固 + 时区】（K7-4 + K7-6）</span>
+<span class="diagram-line">  + 合并 RUN（apk add curl tzdata &amp;&amp; cp 时区 &amp;&amp; apk del tzdata）</span>
+<span class="diagram-line">  + 创建非 root 用户 appuser 运行</span>
+<span class="diagram-line">  + ENTRYPOINT + CMD 组合（参数化运行）</span>
+<span class="diagram-line">  + HEALTHCHECK 健康检查</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 镜像大小：190MB（比 180MB 多 10MB，多在 curl 工具）</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 改进：安全加固、参数化启动、健康检查自动监控</span>
+<span class="diagram-line">【最终版本：完整优化版】</span>
+<span class="diagram-line">  FROM maven:3.8-openjdk-17 AS builder</span>
+<span class="diagram-line">  COPY pom.xml . &amp;&amp; RUN mvn dependency:go-offline</span>
+<span class="diagram-line">  COPY src ./src &amp;&amp; RUN mvn clean package -DskipTests</span>
+<span class="diagram-line">  FROM eclipse-temurin:17-jre-alpine</span>
+<span class="diagram-line">  RUN apk add --no-cache curl tzdata &amp;&amp; cp 时区 &amp;&amp; apk del tzdata</span>
+<span class="diagram-line">  COPY --from=builder /build/app.jar /app/app.jar</span>
+<span class="diagram-line">  RUN addgroup/adduser (非 root)</span>
+<span class="diagram-line">  USER appuser</span>
+<span class="diagram-line">  EXPOSE 8080  VOLUME [&quot;/app/logs&quot;]</span>
+<span class="diagram-line">  ENV SPRING_PROFILES_ACTIVE=prod JAVA_OPTS=&quot;-Xms256m -Xmx512m&quot;</span>
+<span class="diagram-line">  ENTRYPOINT [&quot;sh&quot;,&quot;-c&quot;,&quot;java $JAVA_OPTS -jar /app/app.jar&quot;]</span>
+<span class="diagram-line">  CMD [&quot;--spring.profiles.active=prod&quot;]</span>
+<span class="diagram-line">  HEALTHCHECK ...</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 镜像大小：190MB（含 curl + tzdata + 健康检查）</span>
+<span class="diagram-line">  <span class="arrow-token">→</span> 优化效果：从 680MB <span class="arrow-token">→</span> 190MB，减少 72%</span>
+<span class="diagram-line">===================================================================</span>
+<span class="diagram-line">   优化效果对比表</span>
+<span class="diagram-line">===================================================================</span>
+<span class="diagram-line">  版本   镜像大小   优化手段                          累计减少</span>
+<span class="diagram-line">  v0     680MB     未优化                            —</span>
+<span class="diagram-line">  v1     680MB     CMD exec + .dockerignore          0%（体积不变，构建快）</span>
+<span class="diagram-line">  v2     260MB     + 多阶段构建                      62%</span>
+<span class="diagram-line">  v3     180MB     + alpine 精简基础镜像              74%</span>
+<span class="diagram-line">  v4     180MB     + 层缓存优化（构建快）             74%</span>
+<span class="diagram-line">  v5     190MB     + 合并RUN + 加固 + 时区            72%（含工具）</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<blockquote>
+<p>这个优化链体现了镜像优化的完整思路：<strong>先解决"能跑"（基础指令），再解决"跑得对"（CMD/ENTRYPOINT
+exec 形式），最后解决"跑得快、跑得省、跑得安全"（多阶段 + alpine +
+加固）</strong>。每一步都有明确的优化目标与效果。</p>
+</blockquote>
+<hr />
+<h2 id="四拓展阅读选学">四、拓展阅读（选学）</h2>
+<ol type="1">
+<li><strong>distroless 镜像</strong>：Google
+维护的极精简镜像（<code>gcr.io/distroless/java17</code>），只含运行时，无
+shell、无包管理器，安全性极高。缺点是难调试（无
+sh）。适合对安全要求极高的生产环境。</li>
+<li><strong>BuildKit 与镜像优化</strong>：Docker 18.09+ 引入
+BuildKit，支持 <code>--mount=type=cache</code> 把 Maven/npm
+缓存挂载到构建阶段，跨构建共享缓存，大幅加速构建。</li>
+<li><strong>镜像扫描</strong>：用 Trivy、Grype
+等工具扫描镜像漏洞，把扫描集成到 CI/CD，发现漏洞自动告警。</li>
+<li><strong>OCI 镜像格式</strong>：现代镜像格式标准，支持新的特性（如
+zstd 压缩、attestation），部分功能在 Docker 24+ 可用。</li>
+<li><strong>镜像瘦身工具</strong>：docker-slim
+等工具能自动分析容器运行时实际用到的文件，反向生成极小镜像。适合调试期评估，生产慎用。</li>
+</ol>
+<hr />
+<h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
+<h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
+<div class="visual">
+  <div class="visual-title">图示 8：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">Dockerfile进阶与多阶段构建</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ENV 与 ARG</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ENV：构建+运行时都生效（持久化到镜像）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ARG：仅构建时生效（docker history 可见）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 区别：作用范围、敏感信息、FROM 前只能 ARG</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 协作：ARG 接收构建参数 <span class="arrow-token">→</span> ENV 固化到运行时</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> EXPOSE 与 VOLUME</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> EXPOSE：声明端口（文档化，不自动映射）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 配合 -p / -P 真正映射</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> VOLUME：声明数据卷路径</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 不写 -v 自动挂匿名卷，推荐具名卷</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 共性：声明性指令（告知而非操作）</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> CMD 指令</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> exec 形式：CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;app.jar&quot;]（推荐）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> PID 1 = java，能收 SIGTERM</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> shell 形式：CMD java -jar app.jar（不推荐）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> PID 1 = sh，信号不转发</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 可被 docker run 参数覆盖</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ENTRYPOINT 指令</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 入口点程序，不被 docker run 参数覆盖</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 参数作为追加参数传入</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ENTRYPOINT + CMD 组合（生产推荐）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> ENTRYPOINT 固定程序，CMD 给默认参数</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> --entrypoint 可覆盖</span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 多阶段构建</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> FROM ... AS &lt;name&gt; 命名阶段</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> COPY --from=&lt;name&gt; 跨阶段拷贝</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 最终镜像只保留最后一个阶段</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Java/Maven 示例：builder (maven+JDK) <span class="arrow-token">→</span> runtime (JRE-alpine)</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 体积从 680MB <span class="arrow-token">→</span> 180MB（减少 73%）</span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 镜像优化与 .dockerignore</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 三板斧：精简基础镜像 + 多阶段 + 合并 RUN</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 基础镜像选择：ubuntu &gt; slim &gt; alpine</span>
+<span class="diagram-line">    <span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 注意 alpine 用 musl libc（兼容性）</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 合并 RUN：装 + 清理在同一层（用 &amp;&amp; 连接）</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 层缓存顺序：少变放前（pom/依赖），多变放后（src）</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> .dockerignore：排除 .git/node_modules/target/.env 等</span>
+<span class="diagram-line">    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 加固：非 root 用户、时区、HEALTHCHECK</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h3 id="一句话总结">一句话总结</h3>
+<blockquote>
+<p>本节从"能跑的镜像"升级到"小而精、安全、规范的镜像"：用
+<strong>ENV/ARG</strong> 参数化构建，用 <strong>CMD/ENTRYPOINT
+组合</strong> 参数化运行，用 <strong>多阶段构建</strong>
+丢弃构建工具，用 <strong>alpine + 合并 RUN + .dockerignore</strong>
+把镜像从 680MB 压到 190MB。</p>
+</blockquote>
+<hr />
+<h2
+id="六复习思考题开放式非题库题">六、复习思考题（开放式，非题库题）</h2>
+<ol type="1">
+<li>用自己的话描述 ENV 与 ARG 的区别，各举一个适合的使用场景。</li>
+<li>为什么 <code>CMD ["java","-jar","app.jar"]</code> 比
+<code>CMD java -jar app.jar</code> 更推荐？从 PID
+1、信号传递角度说明。</li>
+<li>写一个 ENTRYPOINT + CMD 组合的 Dockerfile 片段，实现"固定执行 java
+-jar app.jar，默认参数 --spring.profiles.active=prod，运行时可覆盖为
+dev"。</li>
+<li>多阶段构建中，为什么前面阶段的镜像层不会进入最终镜像？这有什么好处？</li>
+<li>假设你的 CTTS 后端镜像有 680MB，列出至少 5
+条优化策略并说明每条能减少多少体积（大致估算）。</li>
+<li>写一份 .dockerignore 文件，至少包含 10
+条规则，并解释为什么每条都要排除。</li>
+<li>思考：distroless 镜像没有
+shell，怎么调试运行中的容器？（提示：<code>docker cp</code>
+拷贝调试工具、ephemeral container 调试）</li>
+</ol>
+<blockquote>
+<p>这些思考题不要求标准答案，旨在引导你建立"小而精、安全、规范"的镜像工程思维。下次课（第
+8 次课）是 Dockerfile 构建实践课，将动手实现本节的所有优化。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

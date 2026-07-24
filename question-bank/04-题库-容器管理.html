@@ -1,0 +1,1092 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>容器管理</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 04 次课 · 题库</div>
+      <h1>容器管理</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 04 次课</span>
+        <span class="hero-chip"><b>主题</b>容器管理</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 04 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>04-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>04-选择-001</strong>（★ 知识点：K4-1 容器生命周期）
+下列命令中，用于<strong>优雅停止</strong>一个运行中的容器的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker kill</code></span></li><li><span class="option-label">B</span><span><code>docker stop</code></span></li><li><span class="option-label">C</span><span><code>docker rm</code></span></li><li><span class="option-label">D</span><span><code>docker pause</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker stop</code> 先发 SIGTERM
+信号让主进程优雅退出，超时后才发
+SIGKILL，是生产推荐的停止方式。<code>docker kill</code> 直接发 SIGKILL
+强制终止；<code>docker rm</code> 是删除容器；<code>docker pause</code>
+是暂停容器（冻结进程）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-002</strong>（★ 知识点：K4-1 容器生命周期） 容器被
+<code>docker stop</code> 停止后，其状态变为？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>running</span></li><li><span class="option-label">B</span><span>paused</span></li><li><span class="option-label">C</span><span>exited</span></li><li><span class="option-label">D</span><span>dead</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>docker stop</code>
+让主进程退出，容器状态变为 exited（已退出但容器仍存在，可通过
+<code>docker ps -a</code> 查看）。running 是运行中；paused 是冻结；dead
+是异常状态。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-003</strong>（★ 知识点：K4-1 容器生命周期）
+下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器 exited 后就自动删除了</span></li><li><span class="option-label">B</span><span>容器 exited
+后仍存在，可通过 <code>docker start</code> 重新启动</span></li><li><span class="option-label">C</span><span>容器 exited
+后无法重新启动</span></li><li><span class="option-label">D</span><span>容器 exited 后镜像也被删除</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：exited
+只是主进程退出，容器本身（文件系统、配置等）仍存在。可以用
+<code>docker start</code> 重新启动，或 <code>docker rm</code>
+删除。镜像不受影响。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-004</strong>（★ 知识点：K4-2 docker run 参数）
+<code>docker run -d nginx</code> 中的 <code>-d</code> 参数表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>删除容器</span></li><li><span class="option-label">B</span><span>后台运行容器</span></li><li><span class="option-label">C</span><span>调试模式</span></li><li><span class="option-label">D</span><span>指定镜像版本</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>-d</code> 即
+<code>--detach</code>，让容器在后台运行，命令立即返回容器
+ID。前台运行时不加 <code>-d</code>，终端会被容器日志占据。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-005</strong>（★ 知识点：K4-2 docker run 参数）
+<code>docker run --name myweb nginx</code> 中 <code>--name</code>
+的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>设置镜像名</span></li><li><span class="option-label">B</span><span>给容器命名</span></li><li><span class="option-label">C</span><span>设置网络名</span></li><li><span class="option-label">D</span><span>设置主机名</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>--name</code>
+给容器指定一个可读的名字（如 myweb），便于后续管理。不指定则 Docker
+自动生成随机名（如 nostalgic_einstein）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-006</strong>（★ 知识点：K4-2 端口映射）
+<code>docker run -p 8080:80 nginx</code> 中端口映射的方向是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器
+8080 → 宿主机 80</span></li><li><span class="option-label">B</span><span>宿主机 8080 → 容器 80</span></li><li><span class="option-label">C</span><span>容器 80 → 宿主机 8080</span></li><li><span class="option-label">D</span><span>双向映射</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>-p hostPort:containerPort</code>，方向是宿主机端口映射到容器端口（外→内）。访问宿主机
+8080 端口的流量会被转发到容器内 80 端口。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-007</strong>（★ 知识点：K4-2 环境变量） 运行 MySQL
+容器时设置 root 密码的参数是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>--password=123456</code></span></li><li><span class="option-label">B</span><span><code>-e MYSQL_ROOT_PASSWORD=123456</code></span></li><li><span class="option-label">C</span><span><code>--root-password 123456</code></span></li><li><span class="option-label">D</span><span><code>--env-password 123456</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>-e</code>（即
+<code>--env</code>）用于设置环境变量。MySQL 官方镜像通过
+<code>MYSQL_ROOT_PASSWORD</code> 环境变量接收 root 密码，是必填项。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-008</strong>（★ 知识点：K4-2 docker run 参数）
+<code>docker run --rm alpine echo hello</code> 中 <code>--rm</code>
+的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>删除镜像</span></li><li><span class="option-label">B</span><span>容器退出后自动删除容器</span></li><li><span class="option-label">C</span><span>强制删除已有同名容器</span></li><li><span class="option-label">D</span><span>重启容器</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>--rm</code>
+让容器在退出（主进程结束）后自动删除，适合一次性任务容器（如运行测试、执行脚本）。<code>echo hello</code>
+执行完容器立即退出并自动删除。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-009</strong>（★ 知识点：K4-3 容器查看）
+查看<strong>所有</strong>容器（包括已停止的）的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker ps</code></span></li><li><span class="option-label">B</span><span><code>docker ps -a</code></span></li><li><span class="option-label">C</span><span><code>docker ps -q</code></span></li><li><span class="option-label">D</span><span><code>docker ps -n 5</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker ps</code>
+只显示运行中的容器；<code>docker ps -a</code> 显示所有容器（包括 exited
+状态的）；<code>-q</code> 只显示容器 ID；<code>-n 5</code> 显示最近 5
+个容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-010</strong>（★ 知识点：K4-3 容器查看）
+<code>docker stats</code> 命令用于查看？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器列表</span></li><li><span class="option-label">B</span><span>容器资源占用（CPU/内存/网络/IO）</span></li><li><span class="option-label">C</span><span>容器内进程</span></li><li><span class="option-label">D</span><span>容器日志</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker stats</code> 实时显示每个容器的
+CPU、内存、网络 IO、磁盘 IO 占用情况，类似 Linux 的 <code>top</code>
+命令。按 Ctrl+C 退出。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-011</strong>（★ 知识点：K4-3 容器查看）
+查看容器内进程列表的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker ps</code></span></li><li><span class="option-label">B</span><span><code>docker stats</code></span></li><li><span class="option-label">C</span><span><code>docker top &lt;容器&gt;</code></span></li><li><span class="option-label">D</span><span><code>docker logs &lt;容器&gt;</code></span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>docker top &lt;容器&gt;</code>
+显示容器内的进程列表（UID/PID/PPID/CMD 等），PID 是宿主机视角的进程
+ID。<code>docker ps</code> 是容器列表；<code>docker stats</code>
+是资源监控；<code>docker logs</code> 是日志。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-012</strong>（★ 知识点：K4-4 容器日志）
+实时跟踪容器日志的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker logs &lt;容器&gt;</code></span></li><li><span class="option-label">B</span><span><code>docker logs -f &lt;容器&gt;</code></span></li><li><span class="option-label">C</span><span><code>docker logs --tail 10 &lt;容器&gt;</code></span></li><li><span class="option-label">D</span><span><code>docker logs -t &lt;容器&gt;</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>-f</code> 即
+<code>--follow</code>，实时跟踪日志输出（类似
+<code>tail -f</code>），有新日志会持续显示，按 Ctrl+C
+退出（容器继续运行）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-013</strong>（★ 知识点：K4-4 容器进入）
+进入运行中的容器开一个新 bash 终端的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker attach &lt;容器&gt;</code></span></li><li><span class="option-label">B</span><span><code>docker exec -it &lt;容器&gt; bash</code></span></li><li><span class="option-label">C</span><span><code>docker enter &lt;容器&gt;</code></span></li><li><span class="option-label">D</span><span><code>docker shell &lt;容器&gt;</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker exec -it &lt;容器&gt; bash</code>
+在容器内新开一个 bash 进程，exit
+后容器继续运行，是推荐的进入容器方式。<code>docker attach</code>
+连接主进程，Ctrl+c 可能导致容器停止。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-014</strong>（★★ 知识点：K4-4 exec vs attach） 关于
+<code>docker exec</code> 和 <code>docker attach</code>
+的区别，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>二者完全等价</span></li><li><span class="option-label">B</span><span>exec 开新进程，attach
+连接主进程</span></li><li><span class="option-label">C</span><span>attach 比 exec 更安全</span></li><li><span class="option-label">D</span><span>exec 会停止容器</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：exec
+在容器内新开一个独立进程（如 bash），exit 不影响主进程；attach
+直接连接到容器主进程的 stdin/stdout，Ctrl+c
+会发信号给主进程可能导致容器停止。生产中推荐 exec。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-015</strong>（★ 知识点：K4-5 容器详情）
+查看容器完整元数据（JSON 格式）的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker info &lt;容器&gt;</code></span></li><li><span class="option-label">B</span><span><code>docker inspect &lt;容器&gt;</code></span></li><li><span class="option-label">C</span><span><code>docker show &lt;容器&gt;</code></span></li><li><span class="option-label">D</span><span><code>docker describe &lt;容器&gt;</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker inspect &lt;容器&gt;</code>
+输出容器的完整元数据，包括 ID、状态、网络、端口、挂载、配置等，JSON
+格式。可用 <code>-f</code> 模板提取特定字段。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-016</strong>（★ 知识点：K4-5 端口映射）
+<code>-P</code>（大写）参数的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>删除所有端口映射</span></li><li><span class="option-label">B</span><span>随机映射镜像中 EXPOSE 的所有端口到宿主机高位端口</span></li><li><span class="option-label">C</span><span>映射所有端口到 80</span></li><li><span class="option-label">D</span><span>与 <code>-p</code> 等价</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>-P</code>（大写）将镜像中
+<code>EXPOSE</code> 声明的端口随机映射到宿主机 49000-49900
+范围的高位端口。用 <code>docker port &lt;容器&gt;</code>
+查看随机分配的端口。<code>-p</code> 是指定端口映射。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-017</strong>（★★ 知识点：K4-5 端口映射）
+启动容器时报错
+<code>Bind for 0.0.0.0:8080 failed: port is already allocated</code>，原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像不存在</span></li><li><span class="option-label">B</span><span>容器名冲突</span></li><li><span class="option-label">C</span><span>宿主机 8080 端口已被其他容器或进程占用</span></li><li><span class="option-label">D</span><span>容器内 80 端口未开放</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：报错说明宿主机的 8080
+端口已被占用（可能被另一个容器的端口映射占用，或被宿主机其他进程占用）。解决方法是换一个宿主机端口（如
+<code>-p 8081:80</code>）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-018</strong>（★ 知识点：K4-6 MySQL 容器） 运行 MySQL
+容器时<strong>必填</strong>的环境变量是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>MYSQL_DATABASE</code></span></li><li><span class="option-label">B</span><span><code>MYSQL_USER</code></span></li><li><span class="option-label">C</span><span><code>MYSQL_ROOT_PASSWORD</code></span></li><li><span class="option-label">D</span><span><code>MYSQL_PORT</code></span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>MYSQL_ROOT_PASSWORD</code> 设置 root
+密码，是 MySQL
+官方镜像的必填项，不填会启动失败。其他变量（DATABASE/USER/PASSWORD）是可选的初始化配置。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-019</strong>（★ 知识点：K4-1 容器生命周期）
+<code>docker run</code> 命令等价于下列哪两个命令的组合？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker create</code> + <code>docker start</code></span></li><li><span class="option-label">B</span><span><code>docker create</code> + <code>docker exec</code></span></li><li><span class="option-label">C</span><span><code>docker pull</code> + <code>docker start</code></span></li><li><span class="option-label">D</span><span><code>docker build</code> + <code>docker start</code></span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>docker run</code> =
+<code>docker create</code>（创建容器）+
+<code>docker start</code>（启动容器）。run 是一步到位，create
+只创建不启动，start 启动已存在的停止容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-020</strong>（★ 知识点：K4-1 容器生命周期）
+要删除一个运行中的容器，正确做法是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>直接
+<code>docker rm &lt;容器&gt;</code></span></li><li><span class="option-label">B</span><span>先 <code>docker stop</code> 再
+<code>docker rm</code></span></li><li><span class="option-label">C</span><span>先 <code>docker kill</code> 再
+<code>docker rmi</code></span></li><li><span class="option-label">D</span><span>用
+<code>docker delete &lt;容器&gt;</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：删除运行中的容器会报错，需先
+<code>docker stop</code> 停止再 <code>docker rm</code> 删除。或用
+<code>docker rm -f</code>（强制删除，等价于
+kill+rm，生产慎用）。<code>docker rmi</code> 是删除镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-021</strong>（★★ 知识点：K4-2 docker run 参数）
+要让容器在宿主机重启后自动启动，应使用参数？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>--restart=always</code></span></li><li><span class="option-label">B</span><span><code>--autostart</code></span></li><li><span class="option-label">C</span><span><code>--boot=true</code></span></li><li><span class="option-label">D</span><span><code>--start-on-boot</code></span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>--restart</code>
+设置重启策略，<code>always</code>
+表示总是自动重启（包括宿主机重启后）。其他选项有
+<code>no</code>（默认）、<code>on-failure</code>、<code>unless-stopped</code>（推荐，除非手动
+stop 否则总是重启）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-022</strong>（★ 知识点：K4-4 容器日志）
+只查看容器最后 20 行日志的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker logs --tail 20 &lt;容器&gt;</code></span></li><li><span class="option-label">B</span><span><code>docker logs --last 20 &lt;容器&gt;</code></span></li><li><span class="option-label">C</span><span><code>docker logs -n 20 &lt;容器&gt;</code></span></li><li><span class="option-label">D</span><span><code>docker logs -f 20 &lt;容器&gt;</code></span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>--tail 20</code> 只显示最后 20 行日志，类似
+<code>tail -n 20</code>。<code>-f</code> 是实时跟踪；<code>-n</code> 和
+<code>--last</code> 不是 docker logs 的有效参数。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-023</strong>（★ 知识点：K4-3 容器查看）
+<code>docker ps -q</code> 命令的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>静默模式，不输出</span></li><li><span class="option-label">B</span><span>只显示容器 ID</span></li><li><span class="option-label">C</span><span>显示队列信息</span></li><li><span class="option-label">D</span><span>退出所有容器</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>-q</code> 即
+<code>--quiet</code>，只显示容器
+ID（每行一个），常用于脚本中批量操作，如
+<code>docker stop $(docker ps -q)</code> 停止所有运行中的容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-024</strong>（★★ 知识点：K4-4 进入容器） 在 alpine
+镜像容器中执行 <code>docker exec -it &lt;容器&gt; bash</code> 报错
+<code>bash: not found</code>，原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker 命令错误</span></li><li><span class="option-label">B</span><span>alpine
+镜像默认没有 bash，应用 sh</span></li><li><span class="option-label">C</span><span>容器未运行</span></li><li><span class="option-label">D</span><span>权限不足</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：alpine
+是精简镜像，默认只装了 <code>sh</code> 和 <code>busybox</code>
+工具，没有 <code>bash</code>。进入 alpine 容器应用
+<code>docker exec -it &lt;容器&gt; sh</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-025</strong>（★★ 知识点：K4-5 inspect 模板） 用
+<code>docker inspect</code> 提取容器 IP 地址的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker inspect &lt;容器&gt; | grep ip</code></span></li><li><span class="option-label">B</span><span><code>docker inspect -f '{{.NetworkSettings.IPAddress}}' &lt;容器&gt;</code></span></li><li><span class="option-label">C</span><span><code>docker inspect --ip &lt;容器&gt;</code></span></li><li><span class="option-label">D</span><span><code>docker inspect &lt;容器&gt;.IPAddress</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker inspect -f</code> 使用 Go
+模板语法提取特定字段。<code>.NetworkSettings.IPAddress</code> 是容器的
+IP 地址字段。直接 grep 也能找到但不够精确。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-026</strong>（★ 知识点：K4-2 数据卷）
+<code>docker run -v /data/mysql:/var/lib/mysql mysql:8.0</code> 中
+<code>-v</code> 参数的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>设置环境变量</span></li><li><span class="option-label">B</span><span>挂载数据卷（宿主机目录挂载到容器目录）</span></li><li><span class="option-label">C</span><span>设置虚拟内存</span></li><li><span class="option-label">D</span><span>指定版本</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>-v hostPath:containerPath</code>
+将宿主机目录挂载到容器内目录，实现数据持久化。<code>/data/mysql</code>
+是宿主机目录，<code>/var/lib/mysql</code> 是容器内 MySQL 数据目录。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-027</strong>（★★ 知识点：K4-1 stop vs kill） 关于
+<code>docker stop</code> 和 <code>docker kill</code>
+的区别，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>二者完全等价</span></li><li><span class="option-label">B</span><span>stop 优雅停止（先
+SIGTERM），kill 强制终止（直接 SIGKILL）</span></li><li><span class="option-label">C</span><span>kill 比 stop 更推荐</span></li><li><span class="option-label">D</span><span>stop
+会删除容器，kill 不会</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker stop</code> 先发 SIGTERM
+让主进程优雅退出（可保存数据），超时后才
+SIGKILL；<code>docker kill</code> 直接发 SIGKILL
+立即终止，可能丢数据。生产推荐 stop。两者都不删除容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-028</strong>（★★ 知识点：K4-4 attach 风险） 使用
+<code>docker attach</code> 进入容器后按 Ctrl+c，会发生什么？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>仅退出
+attach 会话，容器继续运行</span></li><li><span class="option-label">B</span><span>发送 SIGINT 给容器主进程，可能导致容器停止</span></li><li><span class="option-label">C</span><span>什么都不发生</span></li><li><span class="option-label">D</span><span>容器自动重启</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：attach 共享主进程的
+stdin，Ctrl+c 会发送 SIGINT 信号给主进程，可能导致容器停止。要脱离
+attach 但不停止容器，应按 <code>Ctrl+p</code> 然后
+<code>Ctrl+q</code>（detach keys）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-029</strong>（★★ 知识点：K4-2 端口映射）
+<code>docker run -p 127.0.0.1:8080:80 nginx</code> 的含义是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器监听 127.0.0.1:8080</span></li><li><span class="option-label">B</span><span>仅允许本机访问宿主机 8080 端口，转发到容器 80</span></li><li><span class="option-label">C</span><span>容器内 127.0.0.1:8080 转发到宿主机 80</span></li><li><span class="option-label">D</span><span>监听所有网卡的 8080</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>-p 127.0.0.1:8080:80</code>
+表示绑定到宿主机的 127.0.0.1
+网卡（仅本机回环），外部无法访问。常用于数据库等不希望对外的服务。默认
+<code>-p 8080:80</code> 绑定 <code>0.0.0.0</code>（所有网卡）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-030</strong>（★★ 知识点：K4-6 MySQL 容器） 运行 MySQL
+容器后立即用客户端连接报错 "Can't connect"，最可能的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像损坏</span></li><li><span class="option-label">B</span><span>MySQL 首次启动需 10~30 秒初始化，尚未就绪</span></li><li><span class="option-label">C</span><span>端口映射错误</span></li><li><span class="option-label">D</span><span>容器名错误</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：MySQL
+首次启动要初始化数据目录、创建系统表、创建用户和数据库，通常需 10~30
+秒。用 <code>docker logs -f</code> 看到
+<code>ready for connections</code> 后再连接。立即连接会因 MySQL
+未就绪而失败。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>04-选择-031</strong>（★★ 知识点：K4-2 docker run 参数）
+下列属于 <code>docker run</code> 常用参数的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>-d</code> 后台运行</span></li><li><span class="option-label">B</span><span><code>--name</code> 给容器命名</span></li><li><span class="option-label">C</span><span><code>-p</code> 端口映射</span></li><li><span class="option-label">D</span><span><code>-e</code> 设置环境变量 E.
+<code>-v</code> 挂载数据卷</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong> <strong>解析</strong>：五个都是
+docker run 的常用参数。<code>-d</code> 后台、<code>--name</code>
+命名、<code>-p</code> 端口映射、<code>-e</code>
+环境变量、<code>-v</code> 数据卷，组合使用是生产部署的标准做法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-032</strong>（★★ 知识点：K4-1 容器生命周期）
+下列命令中，能让容器进入 running 状态的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker run</code></span></li><li><span class="option-label">B</span><span><code>docker start</code></span></li><li><span class="option-label">C</span><span><code>docker restart</code></span></li><li><span class="option-label">D</span><span><code>docker create</code> E.
+<code>docker unpause</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong>
+<strong>解析</strong>：<code>docker run</code>
+创建并启动（→running）；<code>docker start</code>
+启动已停止的容器（→running）；<code>docker restart</code>
+重启（→running）；<code>docker unpause</code>
+恢复暂停的容器（→running）。<code>docker create</code>
+只创建不启动（→created）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-033</strong>（★★ 知识点：K4-3 容器查看） 关于
+<code>docker ps</code> 命令，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker ps</code> 显示运行中的容器</span></li><li><span class="option-label">B</span><span><code>docker ps -a</code>
+显示所有容器包括已停止的</span></li><li><span class="option-label">C</span><span><code>docker ps -q</code> 只显示容器 ID</span></li><li><span class="option-label">D</span><span><code>docker ps</code> 显示容器内的进程列表 E.
+<code>docker ps -n 5</code> 显示最近 5 个容器</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：A、B、C、E
+都是 docker ps 的正确用法。D 错，<code>docker ps</code>
+显示的是容器列表，不是容器内的进程；查看容器内进程用
+<code>docker top &lt;容器&gt;</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-034</strong>（★★ 知识点：K4-4 容器日志与进入） 关于
+<code>docker exec</code> 命令，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>在运行中的容器内执行新命令</span></li><li><span class="option-label">B</span><span>会新开一个进程，不影响主进程</span></li><li><span class="option-label">C</span><span>exit
+退出后容器继续运行</span></li><li><span class="option-label">D</span><span>可以同时开多个 exec 会话 E. 会停止容器</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：exec
+在容器内新开进程（A），不影响主进程（B），exit
+后容器继续运行（C），支持多个 exec 会话（D）。E 错，exec
+不会停止容器；attach 才有停止容器的风险。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-035</strong>（★★ 知识点：K4-4 exec vs attach）
+<code>docker exec -it</code> 和 <code>docker attach</code>
+的区别包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>exec 开新进程，attach 连接主进程</span></li><li><span class="option-label">B</span><span>exec
+退出后容器继续运行，attach 的 Ctrl+c 可能停止容器</span></li><li><span class="option-label">C</span><span>exec
+支持多会话，attach 多个连接共享同一终端</span></li><li><span class="option-label">D</span><span>exec 更安全，生产推荐 E.
+二者完全等价</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都正确描述了 exec 与 attach 的区别。E 错，二者本质不同：exec
+开新进程（安全），attach 连接主进程（危险）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-036</strong>（★★ 知识点：K4-5 端口映射） 关于 Docker
+端口映射，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>-p 8080:80</code>
+表示宿主机 8080 映射到容器 80</span></li><li><span class="option-label">B</span><span><code>-P</code>（大写）随机映射所有
+EXPOSE 的端口</span></li><li><span class="option-label">C</span><span><code>-p 127.0.0.1:8080:80</code> 表示仅本机可访问</span></li><li><span class="option-label">D</span><span>一个容器可以映射多个端口 E. 端口映射方向是"容器:宿主"</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都正确。E
+错，端口映射方向是"宿主:容器"（host:container，外:内），不是"容器:宿主"。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-037</strong>（★★ 知识点：K4-6 MySQL 容器） 运行 MySQL
+容器时，下列环境变量中属于 MySQL 官方镜像支持的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>MYSQL_ROOT_PASSWORD</code></span></li><li><span class="option-label">B</span><span><code>MYSQL_DATABASE</code></span></li><li><span class="option-label">C</span><span><code>MYSQL_USER</code></span></li><li><span class="option-label">D</span><span><code>MYSQL_PASSWORD</code> E.
+<code>MYSQL_PORT</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都是 MySQL 官方镜像支持的环境变量。A 必填，B/C/D 可选用于初始化。E
+错，MySQL 默认端口 3306 由镜像决定，无 <code>MYSQL_PORT</code>
+环境变量。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-038</strong>（★★ 知识点：K4-1 容器状态） 下列属于
+Docker 容器状态的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>created</span></li><li><span class="option-label">B</span><span>running</span></li><li><span class="option-label">C</span><span>paused</span></li><li><span class="option-label">D</span><span>exited
+E. hibernated</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：Docker
+容器状态有
+created（已创建）、running（运行中）、paused（已暂停）、exited（已退出）、dead（异常）。E
+错，hibernated 不是 Docker 容器状态。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-039</strong>（★★ 知识点：K4-2 重启策略） Docker 的
+<code>--restart</code> 策略包括哪些？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>no</code></span></li><li><span class="option-label">B</span><span><code>on-failure</code></span></li><li><span class="option-label">C</span><span><code>always</code></span></li><li><span class="option-label">D</span><span><code>unless-stopped</code> E. <code>never</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：Docker
+重启策略有四种：<code>no</code>（默认，不重启）、<code>on-failure</code>（非
+0
+退出码重启，可加重试次数）、<code>always</code>（总是重启）、<code>unless-stopped</code>（除非手动
+stop 否则总是重启，推荐）。E 错，没有 <code>never</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-选择-040</strong>（★★ 知识点：K4-6 MySQL 容器实践） 运行
+MySQL 容器时推荐的做法包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>用明确版本号
+<code>mysql:8.0</code> 而非 <code>:latest</code></span></li><li><span class="option-label">B</span><span>必填
+<code>MYSQL_ROOT_PASSWORD</code></span></li><li><span class="option-label">C</span><span>挂载数据卷做数据持久化</span></li><li><span class="option-label">D</span><span>设置
+<code>--restart=unless-stopped</code> 自动重启 E.
+生产环境用弱密码便于记忆</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都是生产推荐做法。E 错，生产环境应用强密码，且可通过 Secret
+等方式管理，不用弱密码。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>04-判断-001</strong>（★ 知识点：K4-1 容器生命周期）
+<code>docker run</code> 命令等价于 <code>docker create</code> 加
+<code>docker start</code> 两条命令。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>docker run</code> = create +
+start，一步创建并启动容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-002</strong>（★ 知识点：K4-2 docker run 参数）
+<code>docker run -d nginx</code> 中的 <code>-d</code>
+表示后台运行容器。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>-d</code> 即
+<code>--detach</code>，让容器在后台运行，命令立即返回容器 ID。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-003</strong>（★ 知识点：K4-2 端口映射）
+<code>docker run -p 8080:80 nginx</code> 中，8080 是容器端口，80
+是宿主机端口。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：方向是
+host:container，8080 是宿主机端口，80 是容器端口。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-004</strong>（★ 知识点：K4-3 容器查看）
+<code>docker ps</code>
+命令只显示运行中的容器，已停止的容器不会显示。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>docker ps</code> 只显示 status 为 Up
+的容器。要看所有容器包括已停止的，用 <code>docker ps -a</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-005</strong>（★ 知识点：K4-1 容器删除）
+运行中的容器可以直接用 <code>docker rm</code> 删除，无需先停止。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：运行中的容器不能直接 rm，会报错。需先
+<code>docker stop</code> 再 <code>docker rm</code>，或用
+<code>docker rm -f</code> 强制删除（生产慎用）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-006</strong>（★★ 知识点：K4-4 exec vs attach）
+<code>docker exec -it &lt;容器&gt; bash</code> 和
+<code>docker attach &lt;容器&gt;</code> 是等价的，都是进入容器。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：exec
+开新进程（安全），attach 连接主进程（Ctrl+c
+可能停止容器）。二者本质不同，生产推荐 exec。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-007</strong>（★ 知识点：K4-4 容器日志）
+<code>docker logs -f &lt;容器&gt;</code> 可以实时跟踪容器日志输出。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>-f</code> 即
+<code>--follow</code>，实时跟踪日志，类似 <code>tail -f</code>，按
+Ctrl+C 退出（容器继续运行）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-008</strong>（★ 知识点：K4-2 环境变量）
+<code>docker run -e MYSQL_ROOT_PASSWORD=123456 mysql:8.0</code> 中的
+<code>-e</code> 用于设置环境变量。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>-e</code> 即
+<code>--env</code>，设置容器内环境变量。MySQL 官方镜像通过此变量接收
+root 密码。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-009</strong>（★ 知识点：K4-1 stop vs kill）
+<code>docker stop</code>
+会立即强制终止容器主进程，可能导致数据丢失。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>docker stop</code> 先发 SIGTERM
+让主进程优雅退出（可保存数据），超时后才
+SIGKILL。<code>docker kill</code> 才是直接强制终止。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-010</strong>（★ 知识点：K4-5 容器详情）
+<code>docker inspect &lt;容器&gt;</code>
+输出的是容器的完整元数据，格式为 JSON。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：docker
+inspect 输出容器的完整元数据（ID/状态/网络/端口/挂载/配置等），JSON
+格式，可用 <code>-f</code> 模板提取字段。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-011</strong>（★ 知识点：K4-2 数据卷）
+<code>docker run -v /data/mysql:/var/lib/mysql mysql</code> 将宿主机
+<code>/data/mysql</code> 挂载到容器内 <code>/var/lib/mysql</code>。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>-v hostPath:containerPath</code>，方向是宿主机→容器。宿主机目录会覆盖容器内对应目录的内容。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-012</strong>（★★ 知识点：K4-2 自动清理）
+<code>docker run --rm</code> 中的 <code>--rm</code>
+表示容器退出后自动删除容器。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>--rm</code>
+让容器在主进程退出后自动删除，适合一次性任务容器。注意：<code>--rm</code>
+只删容器，不删挂载的数据卷。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-013</strong>（★★ 知识点：K4-3 资源监控）
+<code>docker stats</code> 命令显示的是宿主机的资源占用情况。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>docker stats</code>
+显示的是<strong>每个容器</strong>的资源占用（CPU/内存/网络/磁盘
+IO），不是宿主机整体的。看宿主机整体用 <code>top</code> 或
+<code>htop</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-014</strong>（★ 知识点：K4-6 MySQL 容器） 运行 MySQL
+容器时，<code>MYSQL_ROOT_PASSWORD</code> 是必填的环境变量。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：MySQL
+官方镜像要求必须设置 root 密码，不填会启动失败。如允许空密码需显式设置
+<code>MYSQL_ALLOW_EMPTY_PASSWORD=yes</code>（不安全，仅测试用）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-015</strong>（★★ 知识点：K4-5 端口冲突） 启动容器报错
+<code>port is already allocated</code> 是因为容器名冲突。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：报错说明宿主机端口已被其他容器或进程占用，不是容器名冲突。容器名冲突的报错是
+<code>Conflict. The container name "/xxx" is already in use</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-016</strong>（★★ 知识点：K4-2 重启策略）
+<code>--restart=always</code>
+表示容器退出或宿主机重启后都会自动重启该容器。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>always</code>
+策略下，容器无论何种原因退出都会重启，且 Docker daemon
+启动时（如宿主机重启后）也会自动启动该容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-017</strong>（★ 知识点：K4-1 容器状态） 容器
+<code>exited</code> 状态意味着容器已被删除，无法再次启动。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：exited
+只是主进程退出，容器仍存在（<code>docker ps -a</code> 可见）。可用
+<code>docker start</code> 重新启动。只有 <code>docker rm</code>
+才真正删除容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-018</strong>（★★ 知识点：K4-4 进入 alpine） 在 alpine
+容器中执行 <code>docker exec -it &lt;容器&gt; bash</code> 可以正常进入
+bash 终端。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：alpine
+是精简镜像，默认没有 bash，会报 <code>bash: not found</code>。应用
+<code>docker exec -it &lt;容器&gt; sh</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-019</strong>（★★ 知识点：K4-6 数据持久化） 运行 MySQL
+容器时如果不挂载数据卷，删除容器后数据会丢失。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：不挂载
+<code>-v</code> 时，MySQL 数据写在容器的可写层，<code>docker rm</code>
+删除容器后数据随之丢失。挂载数据卷后数据写在宿主机，删容器不影响数据。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-判断-020</strong>（★★ 知识点：K4-3 进程查看）
+<code>docker top &lt;容器&gt;</code> 显示的 PID 是宿主机视角的进程
+ID。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：容器本质是宿主机进程，<code>docker top</code>
+显示的是宿主机视角的 PID。这体现了"容器是进程级隔离"的本质。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>04-填空-001</strong>（★ 知识点：K4-1 容器生命周期）
+<code>docker run</code> 命令等价于 <code>docker ________</code> 和
+<code>docker start</code> 两个命令的组合。</p><blockquote>
+<p><strong>答案：create</strong>
+<strong>解析</strong>：<code>docker run</code> =
+<code>docker create</code>（创建容器）+
+<code>docker start</code>（启动容器）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-填空-002</strong>（★ 知识点：K4-2 docker run 参数）
+<code>docker run -d nginx</code> 中的 <code>-d</code> 表示 ________
+运行容器。</p><blockquote>
+<p><strong>答案：后台（或 detach）</strong>
+<strong>解析</strong>：<code>-d</code> 即
+<code>--detach</code>，让容器在后台运行，命令立即返回容器 ID。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-填空-003</strong>（★ 知识点：K4-2 端口映射）
+<code>docker run -p 8080:80 nginx</code> 中，8080 是 ________ 端口，80
+是 ________ 端口。</p><blockquote>
+<p><strong>答案：宿主机（或 host）；容器（或 container）</strong>
+<strong>解析</strong>：<code>-p hostPort:containerPort</code>，方向是宿主机端口映射到容器端口（外:内）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-填空-004</strong>（★ 知识点：K4-3 容器查看）
+查看所有容器（包括已停止的）的命令是
+<code>docker ps ________</code>。</p><blockquote>
+<p><strong>答案：-a（或 --all）</strong>
+<strong>解析</strong>：<code>docker ps</code>
+只显示运行中的容器；<code>docker ps -a</code> 显示所有容器包括 exited
+状态的。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-填空-005</strong>（★ 知识点：K4-4 容器日志）
+实时跟踪容器日志的命令是
+<code>docker logs ________ &lt;容器&gt;</code>。</p><blockquote>
+<p><strong>答案：-f（或 --follow）</strong>
+<strong>解析</strong>：<code>-f</code> 即
+<code>--follow</code>，实时跟踪日志输出，类似 <code>tail -f</code>，按
+Ctrl+C 退出。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-填空-006</strong>（★ 知识点：K4-4 容器进入）
+进入运行中的容器开一个新 bash 终端的命令是
+<code>docker ________ -it &lt;容器&gt; bash</code>。</p><blockquote>
+<p><strong>答案：exec</strong>
+<strong>解析</strong>：<code>docker exec -it &lt;容器&gt; bash</code>
+在容器内新开 bash 进程，exit 后容器继续运行，是推荐的进入容器方式。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-填空-007</strong>（★ 知识点：K4-2 环境变量） 运行 MySQL
+容器时设置 root 密码的参数是
+<code>-e MYSQL_ROOT_PASSWORD=________</code>。</p><blockquote>
+<p><strong>答案：&lt;密码&gt;（如 123456）</strong>
+<strong>解析</strong>：<code>-e</code>
+设置环境变量，<code>MYSQL_ROOT_PASSWORD</code> 是 MySQL
+官方镜像的必填环境变量，设置 root 密码。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-填空-008</strong>（★ 知识点：K4-5 容器详情）
+查看容器完整元数据的命令是
+<code>docker ________ &lt;容器&gt;</code>。</p><blockquote>
+<p><strong>答案：inspect</strong>
+<strong>解析</strong>：<code>docker inspect</code>
+输出容器的完整元数据（JSON 格式），包括
+ID、状态、网络、端口、挂载、配置等。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-填空-009</strong>（★★ 知识点：K4-1 stop vs kill）
+<code>docker stop</code> 先发 ________ 信号让主进程优雅退出，超时后才发
+SIGKILL；而 <code>docker kill</code> 直接发 ________ 强制终止。</p><blockquote>
+<p><strong>答案：SIGTERM；SIGKILL</strong> <strong>解析</strong>：stop
+发 SIGTERM 让主进程有机会保存数据；kill 直接发 SIGKILL
+立即终止。生产推荐 stop。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-填空-010</strong>（★ 知识点：K4-2 数据卷） 将宿主机
+<code>/data/mysql</code> 挂载到容器内 <code>/var/lib/mysql</code>
+的参数是 <code>-v ________:/var/lib/mysql</code>。</p><blockquote>
+<p><strong>答案：/data/mysql</strong>
+<strong>解析</strong>：<code>-v hostPath:containerPath</code>，宿主机目录在前，容器目录在后。挂载后容器内
+<code>/var/lib/mysql</code> 的内容实际存储在宿主机
+<code>/data/mysql</code>。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>04-论述-001</strong>（★★ 知识点：K4-1 容器生命周期，10 分）
+请描述 Docker
+容器的完整生命周期，画出状态流转图（或用文字描述状态间的转换），并说明
+<code>docker stop</code> 与
+<code>docker kill</code>、<code>docker pause</code> 与
+<code>docker stop</code> 的区别。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>容器生命周期状态与流转</strong>（4 分）：</p>
+<ul>
+<li>状态：created（已创建）、running（运行中）、paused（已暂停）、exited（已退出）、dead（异常）</li>
+<li>流转：
+<ul>
+<li><code>docker create</code> → created</li>
+<li><code>docker run</code> / <code>docker start</code> → running</li>
+<li><code>docker pause</code> → paused；<code>docker unpause</code> →
+running</li>
+<li><code>docker stop</code> / <code>docker kill</code> → exited</li>
+<li><code>docker start</code> 可让 exited → running</li>
+<li><code>docker rm</code> → 删除容器</li>
+</ul></li>
+<li>（状态名正确 2 分，流转关系正确 2 分）</li>
+</ul></li>
+<li><p><strong>stop vs kill</strong>（3 分）：</p>
+<ul>
+<li><code>docker stop</code>：先发 SIGTERM
+信号，让主进程优雅退出（可保存数据、关闭连接），10 秒后未退出才发
+SIGKILL。生产推荐。</li>
+<li><code>docker kill</code>：直接发
+SIGKILL，立即强制终止，主进程没有机会清理，可能丢数据。仅在 stop
+无效时使用。</li>
+<li>（各自特点 2 分，推荐场景 1 分）</li>
+</ul></li>
+<li><p><strong>pause vs stop</strong>（3 分）：</p>
+<ul>
+<li><code>docker pause</code>：冻结容器进程（cgroups
+freezer），内存保留，恢复后继续运行，适合临时挂起。恢复用
+<code>docker unpause</code>。</li>
+<li><code>docker stop</code>：完全停止主进程，内存释放，恢复时相当于重新启动进程。</li>
+<li>pause 比 stop 恢复更快，因为不用重新初始化进程。</li>
+<li>（各自特点 2 分，恢复速度对比 1 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分各自独立给分；状态流转可以文字描述或画图，意思对即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-论述-002</strong>（★★ 知识点：K4-4 exec vs attach，8 分）
+请详细说明 <code>docker exec -it &lt;容器&gt; bash</code> 和
+<code>docker attach &lt;容器&gt;</code>
+的区别，并解释为什么生产环境中几乎都用 exec 而不用 attach。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>原理区别</strong>（4 分）：</p>
+<ul>
+<li><code>docker exec -it</code>：在容器命名空间内<strong>新开一个进程</strong>（如
+bash），与主进程独立。exit 仅退出 exec 的进程，不影响主进程和容器。（2
+分）</li>
+<li><code>docker attach</code>：直接连接到容器<strong>主进程的
+stdin/stdout/stderr</strong>，不开新进程。多个 attach
+会话共享同一终端。（2 分）</li>
+</ul></li>
+<li><p><strong>行为区别</strong>（2 分）：</p>
+<ul>
+<li>exec 的 <code>exit</code>：仅退出 exec 进程，容器继续运行。</li>
+<li>attach 的 <code>exit</code> 或
+<code>Ctrl+c</code>：会发信号给主进程，可能导致容器停止。</li>
+<li>attach 要脱离但不停止容器，需按 <code>Ctrl+p</code> 然后
+<code>Ctrl+q</code>（detach keys）。</li>
+</ul></li>
+<li><p><strong>生产推荐 exec 的原因</strong>（2 分）：</p>
+<ul>
+<li>exec 不影响主进程，操作安全（Ctrl+c/exit 不会停容器）。</li>
+<li>exec 支持同时多个会话，便于多人协作排障。</li>
+<li>attach 的 Ctrl+c 风险高，一不小心就停了线上容器。</li>
+<li>因此生产排障几乎都用
+<code>docker exec -it &lt;容器&gt; bash</code>。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：原理区别是核心，要突出"开新进程 vs
+连接主进程"；行为区别要提到 Ctrl+c 的不同效果。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-论述-003</strong>（★★ 知识点：K4-2/K4-5 端口映射，8 分）
+请解释 <code>docker run -p 8080:80 nginx</code>
+命令中端口映射的原理，包括：① 端口映射的方向；② 客户端访问的完整链路；③
+为什么要用端口映射而不是直接访问容器 IP。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>端口映射方向</strong>（2 分）：</p>
+<ul>
+<li><code>-p hostPort:containerPort</code>，方向是<strong>宿主机端口 →
+容器端口</strong>（外:内）。</li>
+<li><code>8080:80</code> 表示宿主机的 8080 端口映射到容器内的 80
+端口。</li>
+</ul></li>
+<li><p><strong>客户端访问链路</strong>（4 分）：</p>
+<ul>
+<li>客户端访问 <code>http://宿主机IP:8080</code></li>
+<li>Docker 在宿主机启动 <code>docker-proxy</code> 进程（或 iptables NAT
+规则）监听 <code>0.0.0.0:8080</code></li>
+<li>docker-proxy / iptables 将流量转发到容器的 IP（如 172.17.0.2）的 80
+端口</li>
+<li>容器内 nginx 监听 80 端口，收到请求并响应</li>
+<li>响应原路返回给客户端</li>
+</ul></li>
+<li><p><strong>为什么要端口映射</strong>（2 分）：</p>
+<ul>
+<li>容器有自己的内部 IP（如 172.17.0.2），但这个 IP
+在宿主机外不可达（bridge 网络隔离）。</li>
+<li>外部客户端只能通过宿主机 IP
+访问，所以需要把宿主机端口转发到容器端口。</li>
+<li>端口映射是容器服务对外暴露的标准方式。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：方向、链路、原因三部分分别给分；链路要提到
+docker-proxy 或 iptables NAT。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>04-论述-004</strong>（★★ 知识点：K4-6 MySQL 容器实践，10 分）
+请为 CTTS 项目编写运行 MySQL 容器的完整命令，要求：①
+包含密码、端口映射、命名、数据卷、自动重启所有要素；②
+解释每个参数的含义；③ 说明启动后如何验证 MySQL 是否正常工作。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>完整命令</strong>（4 分）：</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> ctts-mysql <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 3306:3306 <span class="dt">\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_ROOT_PASSWORD=123456 <span class="dt">\</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_DATABASE=ctts <span class="dt">\</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_USER=ctts <span class="dt">\</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_PASSWORD=ctts123 <span class="dt">\</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> /data/ctts/mysql:/var/lib/mysql <span class="dt">\</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">--restart</span><span class="op">=</span>unless-stopped <span class="dt">\</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  mysql:8.0</span></code></pre></div>
+<p>（命令完整 2 分，参数合理 2 分）</p></li>
+<li><p><strong>参数解释</strong>（4 分，每个 0.5 分）：</p>
+<ul>
+<li><code>-d</code>：后台运行容器</li>
+<li><code>--name ctts-mysql</code>：容器命名为 ctts-mysql</li>
+<li><code>-p 3306:3306</code>：宿主机 3306 端口映射到容器 3306 端口</li>
+<li><code>-e MYSQL_ROOT_PASSWORD=123456</code>：设置 root
+密码（必填）</li>
+<li><code>-e MYSQL_DATABASE=ctts</code>：启动时自动创建 ctts 数据库</li>
+<li><code>-e MYSQL_USER=ctts</code> /
+<code>-e MYSQL_PASSWORD=ctts123</code>：创建普通用户 ctts 并授权访问
+ctts 数据库</li>
+<li><code>-v /data/ctts/mysql:/var/lib/mysql</code>：将宿主机目录挂载到容器
+MySQL 数据目录，做数据持久化</li>
+<li><code>--restart=unless-stopped</code>：容器退出或宿主机重启后自动重启（除非手动
+stop）</li>
+<li><code>mysql:8.0</code>：使用明确版本的 MySQL 镜像</li>
+</ul></li>
+<li><p><strong>验证方法</strong>（2 分）：</p>
+<ul>
+<li><code>docker ps</code> 查看容器状态为 Up</li>
+<li><code>docker logs -f ctts-mysql</code> 看到
+<code>ready for connections</code> 表示 MySQL 就绪</li>
+<li><code>docker exec -it ctts-mysql mysql -uroot -p123456 -e "SELECT VERSION();"</code>
+执行 SQL 验证连接</li>
+<li>或用 Navicat / DBeaver 连接 <code>宿主机IP:3306</code>，用户
+root，密码 123456</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：命令、参数解释、验证三部分独立给分；参数解释要每条都说到。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>04-阅读-001</strong>（★★ 知识点：K4-2 docker run 参数，12
+分） 阅读以下 <code>docker run</code> 命令，补全缺失部分（每空 2 分，共
+12 分）。</p>
+<pre class="text"><code>命令：运行一个 nginx 容器，后台运行，命名为 myweb，端口映射 8080→80，
+退出后自动清理，使用 unless-stopped 重启策略。
+
+docker run (a)________ \
+  (b)________ myweb \
+  (c)________ 8080:80 \
+  (d)________ \
+  (e)________=unless-stopped \
+  nginx
+
+参数说明：
+- (a) 让容器在后台运行，参数是 ________
+- (b) 给容器命名，参数是 ________
+- (c) 端口映射，方向是 ________ 端口:容器端口
+- (d) 让容器退出后自动删除，参数是 ________
+- (e) 重启策略参数名是 ________
+- 最后的 nginx 是 ________</code></pre>
+<blockquote>
+<p><strong>参考答案</strong>： (a) <code>-d</code> (b)
+<code>--name</code> (c) 宿主机（或 host） (d) <code>--rm</code> (e)
+<code>--restart</code> 最后的 nginx 是：<strong>镜像名（或
+image）</strong></p>
+<p><strong>解析</strong>：<code>-d</code> 后台运行；<code>--name</code>
+命名；<code>-p hostPort:containerPort</code>
+方向是宿主:容器；<code>--rm</code> 退出自动删除；<code>--restart</code>
+重启策略；最后是镜像名。</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。意思对即可，参数大小写不扣分。</p>
+</blockquote>
+<hr />
+<p><strong>04-阅读-002</strong>（★★★ 知识点：K4-6 MySQL 容器综合，12
+分） 阅读以下运行 MySQL 容器的命令序列，补全缺失部分（每空 2 分，共 12
+分）。</p>
+<pre class="text"><code># 步骤 1：运行 MySQL 容器
+docker run -d \
+  --name ctts-mysql \
+  -p (a)________:3306 \
+  -e (b)________=123456 \
+  -e MYSQL_DATABASE=ctts \
+  -v /data/ctts/mysql:(c)________ \
+  --restart=(d)________ \
+  mysql:8.0
+
+# 步骤 2：等待 MySQL 就绪，查看日志
+docker (e)________ -f ctts-mysql
+# 看到 &quot;ready for connections&quot; 表示启动成功
+
+# 步骤 3：进入容器执行 SQL 验证
+docker (f)________ -it ctts-mysql mysql -uroot -p123456 -e &quot;SELECT VERSION();&quot;
+
+问题：
+- (a) 宿主机端口：________
+- (b) 设置 root 密码的环境变量名：________
+- (c) 容器内 MySQL 数据目录：________
+- (d) 推荐的重启策略：________
+- (e) 查看日志的命令：________
+- (f) 在容器内执行命令的命令：________</code></pre>
+<blockquote>
+<p><strong>参考答案</strong>： (a)
+<code>3306</code>（宿主机端口，与容器端口一致） (b)
+<code>MYSQL_ROOT_PASSWORD</code> (c) <code>/var/lib/mysql</code> (d)
+<code>unless-stopped</code> (e) <code>logs</code> (f)
+<code>exec</code></p>
+<p><strong>解析</strong>：MySQL 默认端口
+3306；<code>MYSQL_ROOT_PASSWORD</code> 是必填环境变量；MySQL 数据目录是
+<code>/var/lib/mysql</code>；推荐重启策略
+<code>unless-stopped</code>；<code>docker logs -f</code>
+实时查看日志；<code>docker exec -it</code> 在容器内执行命令。</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。环境变量名拼写要准确（不区分大小写不扣分）；目录路径要准确。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>04-编程-001</strong>（★★ 知识点：K4-2/K4-3 容器管理综合，15
+分） <strong>容器管理综合操作题</strong>：请按顺序写出完成以下任务的
+Docker 命令，并说明每条命令的预期作用：</p>
+<ol type="1">
+<li>启动一个 nginx 容器，要求：后台运行、命名为
+<code>web-test</code>、宿主机 8080 端口映射到容器 80、退出后自动删除（3
+分）</li>
+<li>查看该容器是否在运行（2 分）</li>
+<li>实时查看该容器的日志（2 分）</li>
+<li>进入容器查看 <code>/etc/nginx</code> 目录内容（3 分）</li>
+<li>查看该容器的 IP 地址（用 docker inspect -f 模板）（3 分）</li>
+<li>查看该容器的资源占用（2 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<p><strong>1. 启动容器</strong>（3 分）：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> web-test <span class="at">-p</span> 8080:80 <span class="at">--rm</span> nginx</span></code></pre></div>
+<ul>
+<li><code>-d</code> 后台运行（0.5 分）</li>
+<li><code>--name web-test</code> 命名（0.5 分）</li>
+<li><code>-p 8080:80</code> 端口映射（0.5 分）</li>
+<li><code>--rm</code> 退出自动删除（0.5 分）</li>
+<li><code>nginx</code> 镜像名（0.5 分）</li>
+<li>预期作用：后台启动一个 nginx 容器，访问 http://localhost:8080 可见
+nginx 默认页面</li>
+</ul>
+<p><strong>2. 查看运行状态</strong>（2 分）：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="kw">|</span> <span class="fu">grep</span> web-test</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 或 docker ps --filter &quot;name=web-test&quot;</span></span></code></pre></div>
+<ul>
+<li>预期输出：容器列表中能看到 web-test，STATUS 为 Up</li>
+<li>命令正确 1 分，预期作用 1 分</li>
+</ul>
+<p><strong>3. 实时查看日志</strong>（2 分）：</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> logs <span class="at">-f</span> web-test</span></code></pre></div>
+<ul>
+<li>预期作用：实时显示 nginx 的访问日志，按 Ctrl+C
+退出（容器继续运行）</li>
+<li>命令正确 1 分，预期作用 1 分</li>
+</ul>
+<p><strong>4. 进入容器查看目录</strong>（3 分）：</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> web-test ls /etc/nginx</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 或先 docker exec -it web-test bash 进入后 ls /etc/nginx</span></span></code></pre></div>
+<ul>
+<li>预期输出：列出 nginx 配置文件（nginx.conf、conf.d 等）</li>
+<li>命令正确 2 分，预期作用 1 分</li>
+</ul>
+<p><strong>5. 查看容器 IP</strong>（3 分）：</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect <span class="at">-f</span> <span class="st">&#39;{{.NetworkSettings.IPAddress}}&#39;</span> web-test</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 或 docker inspect -f &#39;{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}&#39; web-test</span></span></code></pre></div>
+<ul>
+<li>预期输出：容器 IP，如 172.17.0.2</li>
+<li>命令正确 2 分，预期作用 1 分</li>
+</ul>
+<p><strong>6. 查看资源占用</strong>（2 分）：</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> stats <span class="at">--no-stream</span> web-test</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 或 docker stats web-test（实时，需 Ctrl+C 退出）</span></span></code></pre></div>
+<ul>
+<li>预期输出：显示 CPU%、内存、网络 IO 等资源占用</li>
+<li>命令正确 1 分，预期作用 1 分</li>
+</ul>
+<p><strong>评分要点</strong>：每部分独立给分；命令正确即可，参数顺序不扣分；预期作用要说到关键点。</p>
+</blockquote>
+<hr />
+<p><strong>04-编程-002</strong>（★★★ 知识点：K4-6 综合应用，20 分）
+<strong>MySQL 容器化部署与排障</strong>：某团队要为 CTTS 项目部署 MySQL
+容器，团队成员小王执行了以下命令序列，但遇到了问题。请回答问题：</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令 1</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> ctts-db <span class="at">-p</span> 3306:3306 mysql:8.0</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令 2（几秒后）</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> ctts-db mysql <span class="at">-uroot</span> <span class="at">-proot</span> <span class="at">-e</span> <span class="st">&quot;SELECT 1;&quot;</span></span></code></pre></div>
+<p>执行后小王发现：</p>
+<ul>
+<li>命令 1 返回了容器 ID，但 <code>docker ps</code> 看不到 ctts-db
+容器（<code>docker ps -a</code> 看到 STATUS 为 Exited）</li>
+<li>命令 2 报错 <code>Error: No such container: ctts-db</code></li>
+</ul>
+<p><strong>问题</strong>：</p>
+<ol type="1">
+<li>命令 1
+中漏掉了哪个<strong>必填</strong>的环境变量？请写出正确的命令（5
+分）</li>
+<li>为什么 <code>docker ps</code> 看不到容器，但
+<code>docker ps -a</code> 能看到？（3 分）</li>
+<li>为什么命令 2 报错 <code>No such container</code>？（3 分）</li>
+<li>假设修正了命令 1，MySQL 容器正常启动。但小王立即执行命令 2
+还是连接失败，最可能的原因是什么？如何确认？（4 分）</li>
+<li>请为 CTTS 项目编写一个生产可用的 MySQL
+容器启动命令，包含：数据持久化、自动创建数据库
+ctts、自动重启、明确版本号（5 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<p><strong>1. 漏掉的环境变量与正确命令</strong>（5 分）：</p>
+<ul>
+<li>漏掉了 <code>MYSQL_ROOT_PASSWORD</code>（必填）（2 分）</li>
+<li>正确命令（3 分）：
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> ctts-db <span class="at">-p</span> 3306:3306 <span class="at">-e</span> MYSQL_ROOT_PASSWORD=123456 mysql:8.0</span></code></pre></div></li>
+</ul>
+<p><strong>2. docker ps 看不到但 -a 能看到的原因</strong>（3 分）：</p>
+<ul>
+<li>因为缺少必填的 <code>MYSQL_ROOT_PASSWORD</code>，MySQL
+启动失败，主进程退出，容器状态变为 Exited（2 分）</li>
+<li><code>docker ps</code> 只显示运行中的容器（Up
+状态），所以看不到；<code>docker ps -a</code>
+显示所有容器包括已停止的，所以能看到 Exited 的 ctts-db（1 分）</li>
+</ul>
+<p><strong>3. 命令 2 报错 No such container 的原因</strong>（3
+分）：</p>
+<ul>
+<li>因为命令 1 失败后小王可能已经 <code>docker rm ctts-db</code>
+删除了失败的容器，或者命令 2 中的容器名与实际不符（2 分）</li>
+<li>也可能是容器虽然存在但已 Exited，<code>docker exec</code>
+无法在已停止的容器上执行（1 分）</li>
+<li>注：实际上 <code>docker exec</code> 对 Exited 容器会报
+<code>No such container</code> 或 <code>is not running</code></li>
+</ul>
+<p><strong>4. 立即连接失败的原因与确认方法</strong>（4 分）：</p>
+<ul>
+<li>最可能原因：MySQL 首次启动需要 10~30
+秒初始化（创建系统表、用户、数据库），立即连接时 MySQL 尚未就绪（2
+分）</li>
+<li>确认方法：<code>docker logs -f ctts-db</code> 查看日志，看到
+<code>ready for connections</code> 表示就绪；或 <code>docker ps</code>
+看 STATUS 是否为 Up 一段时间（2 分）</li>
+</ul>
+<p><strong>5. 生产可用的 MySQL 容器启动命令</strong>（5 分）：</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> ctts-mysql <span class="dt">\</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 3306:3306 <span class="dt">\</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_ROOT_PASSWORD=<span class="op">&lt;</span>强密码<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_DATABASE=ctts <span class="dt">\</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_USER=ctts <span class="dt">\</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_PASSWORD=<span class="op">&lt;</span>强密码<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> /data/ctts/mysql:/var/lib/mysql <span class="dt">\</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">--restart</span><span class="op">=</span>unless-stopped <span class="dt">\</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  mysql:8.0</span></code></pre></div>
+<ul>
+<li>数据持久化 <code>-v</code>（1 分）</li>
+<li>自动创建数据库 <code>MYSQL_DATABASE=ctts</code>（1 分）</li>
+<li>自动重启 <code>--restart=unless-stopped</code>（1 分）</li>
+<li>明确版本号 <code>mysql:8.0</code>（1 分）</li>
+<li>必填 root 密码 + 命名 + 端口映射（1 分）</li>
+</ul>
+<p><strong>评分要点</strong>：各小题独立给分；原因分析合理即可，不要求与答案完全一致；命令参数齐全即给分。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

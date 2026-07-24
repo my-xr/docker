@@ -1,0 +1,1032 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dockerfile基础指令</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 06 次课 · 题库</div>
+      <h1>Dockerfile基础指令</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 06 次课</span>
+        <span class="hero-chip"><b>主题</b>Dockerfile基础指令</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 06 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>06-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>06-选择-001</strong>（★ 知识点：K6-1 Dockerfile 概念） 关于
+Dockerfile，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Dockerfile
+是一个二进制文件，包含镜像的所有内容</span></li><li><span class="option-label">B</span><span>Dockerfile
+是一个文本文件，包含一条条描述镜像构建过程的指令</span></li><li><span class="option-label">C</span><span>Dockerfile
+必须用专门的 IDE 才能编辑</span></li><li><span class="option-label">D</span><span>Dockerfile 是容器运行时的配置文件</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Dockerfile
+是文本文件，由一条条指令组成，描述镜像如何构建。A
+错，是文本不是二进制；C 错，任何文本编辑器都能编辑；D 错，Dockerfile
+是构建时的，不是运行时的配置。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-002</strong>（★ 知识点：K6-1 Dockerfile vs commit）
+相比 <code>docker commit</code>，使用 Dockerfile
+制作镜像的主要优势不包括？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>可复现——任何人照着 Dockerfile 都能 build
+出同样的镜像</span></li><li><span class="option-label">B</span><span>可版本管理——Dockerfile 可提交到 Git</span></li><li><span class="option-label">C</span><span>可审计——每行修改都可 Code Review</span></li><li><span class="option-label">D</span><span>镜像体积更小——Dockerfile
+构建的镜像天然比 commit 小</span></li></ul></div><blockquote>
+<p><strong>答案：D</strong> <strong>解析</strong>：Dockerfile
+的优势是可复现（A）、可版本管理（B）、可审计（C）。D
+错，镜像体积取决于内容，不取决于用哪种方式构建；用 commit 和 Dockerfile
+都可能做出大或小的镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-003</strong>（★ 知识点：K6-1 Dockerfile 命名）
+Dockerfile 的默认文件名是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>dockerfile.txt</code></span></li><li><span class="option-label">B</span><span><code>Dockerfile</code>（无扩展名，首字母大写）</span></li><li><span class="option-label">C</span><span><code>Dockerfile.cfg</code></span></li><li><span class="option-label">D</span><span><code>docker.conf</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：默认文件名是
+<code>Dockerfile</code>，首字母大写、无扩展名。用其他名字时需
+<code>docker build -f 文件名</code>。A、C 带扩展名不符合默认；D
+是完全不同的命名。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-004</strong>（★ 知识点：K6-1 Dockerfile 语法） 关于
+Dockerfile 的语法，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>指令必须小写</span></li><li><span class="option-label">B</span><span>指令通常大写，注释以 <code>#</code> 开头</span></li><li><span class="option-label">C</span><span>指令必须以分号结尾</span></li><li><span class="option-label">D</span><span>第一条指令必须是 RUN</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：规范是指令大写（FROM、RUN 等），注释以
+<code>#</code> 开头。A 错，小写能跑但不规范；C 错，不需要分号；D
+错，第一条指令通常是 FROM，不是 RUN。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-005</strong>（★ 知识点：K6-2 FROM 指令） Dockerfile
+中通常的第一条指令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>RUN</span></li><li><span class="option-label">B</span><span>COPY</span></li><li><span class="option-label">C</span><span>FROM</span></li><li><span class="option-label">D</span><span>CMD</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：FROM
+指定基础镜像，通常是 Dockerfile 的第一条指令（除
+ARG、解析器指令等少数例外）。RUN、COPY、CMD 都在 FROM 之后。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-006</strong>（★ 知识点：K6-2 基础镜像选择）
+关于基础镜像选择，下列做法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>用
+<code>FROM ubuntu:latest</code> 保证最新</span></li><li><span class="option-label">B</span><span>用
+<code>FROM openjdk:17</code> 因为 openjdk 是官方维护</span></li><li><span class="option-label">C</span><span>用
+<code>FROM eclipse-temurin:17-jre</code> 固定版本</span></li><li><span class="option-label">D</span><span>用
+<code>FROM myjdk:latest</code> 从不知名仓库拉</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：C
+正确：eclipse-temurin 是官方维护的 OpenJDK 镜像，固定 17-jre 版本。A
+错，:latest 不固定版本不可复现；B 错，openjdk 镜像已被弃用；D
+错，不用不知名第三方镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-007</strong>（★★ 知识点：K6-2 scratch 镜像） 关于
+<code>FROM scratch</code>，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>scratch 是一个最小
+Linux 系统</span></li><li><span class="option-label">B</span><span>scratch 是一个特殊的"空镜像"，什么内容都不包含</span></li><li><span class="option-label">C</span><span>scratch
+是 Docker Hub 的官方镜像</span></li><li><span class="option-label">D</span><span>所有应用都推荐用 scratch 作为基础</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：scratch
+是空镜像，不包含任何内容。A 错，scratch 不是 Linux 系统；C 错，scratch
+是保留名，不在 Docker Hub；D 错，scratch 仅适合静态编译的程序（如
+Go），99% 应用不用 scratch。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-008</strong>（★★ 知识点：K6-2 镜像变体） 关于
+<code>alpine</code>、<code>slim</code>、普通版镜像变体的对比，正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>alpine 最大，普通版最小</span></li><li><span class="option-label">B</span><span>alpine 基于 Debian，slim 基于 Alpine</span></li><li><span class="option-label">C</span><span>alpine 体积最小（约 5MB），slim 适中（约 50MB），普通版最大</span></li><li><span class="option-label">D</span><span>三者体积相同，只是名字不同</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：alpine 基于 Alpine
+Linux，体积最小（~5MB）；slim 基于 Debian
+去除非必要文件（~50MB）；普通版完整 Debian（~几百MB）。A、B、D
+都错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-009</strong>（★ 知识点：K6-3 RUN 指令） 关于 RUN
+指令，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>RUN 在容器启动时执行</span></li><li><span class="option-label">B</span><span>RUN
+在构建时执行，每条 RUN 生成一个新的镜像层</span></li><li><span class="option-label">C</span><span>RUN 不会生成镜像层</span></li><li><span class="option-label">D</span><span>RUN
+和 CMD 完全等价</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：RUN
+在构建时执行，每条 RUN 生成一层。A 错，启动时执行的是 CMD/ENTRYPOINT；C
+错，RUN 会生成层；D 错，RUN 是构建时，CMD 是启动时。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-010</strong>（★★ 知识点：K6-3 层缓存） 关于 Docker
+构建的层缓存，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>任何指令变了，所有层都重新构建</span></li><li><span class="option-label">B</span><span>某条指令变了，只重新构建该层，前后层不受影响</span></li><li><span class="option-label">C</span><span>某条指令变了，该层及之后的所有层重新构建，之前的层可复用缓存</span></li><li><span class="option-label">D</span><span>缓存完全无法控制，每次都全部重建</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Docker
+按指令顺序检查，某条指令变了，该层及之后的所有层缓存失效并重新构建；之前的层仍可复用缓存。这就是"不常变的放前面、常变的放后面"的原理。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-011</strong>（★★ 知识点：K6-3 合并 RUN） 下列哪种
+Dockerfile 写法是工程推荐的？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>每条命令单独写一个 RUN</span></li><li><span class="option-label">B</span><span>用
+<code>&amp;&amp;</code> 合并相关命令到一个 RUN</span></li><li><span class="option-label">C</span><span>用 <code>;</code>
+分隔命令到一个 RUN</span></li><li><span class="option-label">D</span><span>不用 RUN，全用 CMD</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：用
+<code>&amp;&amp;</code> 合并相关命令到一个 RUN 是推荐做法，可减少层数且
+<code>&amp;&amp;</code> 保证前一条失败则整体失败。A 错，层数过多；C
+错，<code>;</code> 即使前一条失败也会执行下一条，不安全；D 错，CMD
+是启动时执行，不能装软件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-012</strong>（★★ 知识点：K6-3 apt update+install）
+为什么 <code>apt-get update</code> 和 <code>apt-get install</code>
+必须用 <code>&amp;&amp;</code> 连起来写？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>不连起来语法报错</span></li><li><span class="option-label">B</span><span>分开写会导致两层都用同一个包索引，缓存可能过期导致 install 找不到包</span></li><li><span class="option-label">C</span><span>连起来写得更快</span></li><li><span class="option-label">D</span><span>没有区别，怎么写都行</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：如果分开写，<code>apt-get update</code>
+单独一层，<code>apt-get install</code>
+用的是缓存中的包索引。缓存可能过期，导致 install 时找不到包或版本错。用
+<code>&amp;&amp;</code> 连起来保证 update 和 install
+在同一层执行，索引一定最新。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-013</strong>（★ 知识点：K6-4 COPY 指令） COPY
+指令的源路径是相对于什么？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像内的根目录</span></li><li><span class="option-label">B</span><span>构建上下文（build
+context）</span></li><li><span class="option-label">C</span><span>Docker 守护进程的工作目录</span></li><li><span class="option-label">D</span><span>用户的 home 目录</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：COPY
+源路径相对于构建上下文（docker build
+命令最后的路径参数）。不能写构建上下文之外的路径，这是安全设计。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-014</strong>（★★ 知识点：K6-4 COPY vs ADD） 关于 COPY
+和 ADD 的区别，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>COPY 和 ADD 功能完全相同</span></li><li><span class="option-label">B</span><span>ADD 比
+COPY 多了自动解压 tar 包和从 URL 下载的功能</span></li><li><span class="option-label">C</span><span>COPY 比 ADD 多了解压功能</span></li><li><span class="option-label">D</span><span>ADD 只能复制本地文件，COPY 才能下载 URL</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：ADD 在 COPY
+基础上多了：①自动解压 tar 包；②从 URL 下载。COPY 只能复制本地文件。所以
+ADD 功能更多，但因为行为不可预测，官方推荐优先用 COPY。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-015</strong>（★★ 知识点：K6-4 选择建议）
+你需要把本地一个 tar.gz 包复制到镜像并解压，下列哪种做法最合适？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>用
+<code>COPY file.tar.gz /app/</code> 然后用 RUN 解压</span></li><li><span class="option-label">B</span><span>用
+<code>ADD file.tar.gz /app/</code>，让 ADD 自动解压</span></li><li><span class="option-label">C</span><span>用
+<code>ADD https://example.com/file.tar.gz /app/</code></span></li><li><span class="option-label">D</span><span>用
+<code>COPY file.tar.gz /app/file.tar.gz</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：需要解压 tar
+包时，ADD 是合适的选择（这是 ADD 唯一被推荐使用的场景）。A
+也可以但更繁琐；C 错，不推荐用 ADD 下载 URL（用 RUN wget 更可控）；D
+不解压，不符合需求。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-016</strong>（★★ 知识点：K6-4 选择建议）
+你需要把本地一个普通 jar 文件复制到镜像，下列哪种做法最合适？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>用
+<code>ADD app.jar /app/</code></span></li><li><span class="option-label">B</span><span>用 <code>COPY app.jar /app/</code></span></li><li><span class="option-label">C</span><span>用 <code>RUN cp app.jar /app/</code></span></li><li><span class="option-label">D</span><span>用
+<code>RUN mv app.jar /app/</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：复制本地普通文件应该用 COPY，行为明确。A
+错，复制普通文件不需要 ADD 的额外功能，行为不如 COPY 可预测；C、D
+错，RUN cp/mv 是在容器内执行，源文件不在镜像里，会失败。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-017</strong>（★ 知识点：K6-5 WORKDIR 指令） 关于
+WORKDIR 指令，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>WORKDIR 只对下一条指令生效</span></li><li><span class="option-label">B</span><span>WORKDIR 设置的工作目录对后续所有指令（RUN/COPY/CMD 等）持续生效</span></li><li><span class="option-label">C</span><span>WORKDIR 必须在 FROM 之前</span></li><li><span class="option-label">D</span><span>WORKDIR 创建的目录如果不存在会报错</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：WORKDIR
+设置后，对后续所有指令持续生效（直到下一条 WORKDIR）。A
+错，不是只对下一条；C 错，WORKDIR 在 FROM 之后；D 错，目录不存在 Docker
+会自动创建。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-018</strong>（★★ 知识点：K6-5 WORKDIR vs cd） 为什么
+Dockerfile 中应该用 <code>WORKDIR</code> 而不是 <code>RUN cd</code>？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>WORKDIR 比 cd 速度快</span></li><li><span class="option-label">B</span><span>RUN cd 只在那条 RUN 执行时生效，下一条 RUN
+又回到原目录；WORKDIR 持续生效</span></li><li><span class="option-label">C</span><span>cd 不是有效的 shell 命令</span></li><li><span class="option-label">D</span><span>WORKDIR
+不需要参数</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：每条 RUN 是独立的
+shell，<code>RUN cd /app</code> 只在那条 RUN 生效，下一条 RUN
+又回到默认目录。WORKDIR 设置后对所有后续指令持续生效。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-019</strong>（★ 知识点：K6-5 USER 指令） USER
+指令的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>创建新用户</span></li><li><span class="option-label">B</span><span>切换后续指令和容器的运行用户</span></li><li><span class="option-label">C</span><span>删除用户</span></li><li><span class="option-label">D</span><span>修改用户密码</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：USER
+切换后续指令和容器启动时的运行用户。A 错，创建用户要用
+<code>RUN useradd</code>/<code>adduser</code>；USER 本身不创建用户。C、D
+都不是 USER 的作用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-020</strong>（★★ 知识点：K6-5 安全最佳实践）
+生产镜像中的应用应该以什么用户运行？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>root 用户（默认）</span></li><li><span class="option-label">B</span><span>非 root
+用户（如 appuser）</span></li><li><span class="option-label">C</span><span>nobody 用户</span></li><li><span class="option-label">D</span><span>任意用户都行</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：生产镜像应用应非 root
+运行（最小权限原则）。容器内 root 虽被 namespace
+隔离，但仍是特权用户，被攻击后可能内核逃逸。A 错，root 不安全；C nobody
+太受限，很多操作做不了；D 错，要明确用非 root。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-021</strong>（★★ 知识点：K6-5 USER 用法） USER
+指令切换用户前，应该先做什么？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>重启 Docker 守护进程</span></li><li><span class="option-label">B</span><span>创建该用户（如
+<code>RUN useradd</code>）并创建所需目录、设置权限</span></li><li><span class="option-label">C</span><span>安装 sudo</span></li><li><span class="option-label">D</span><span>切换到 root 用户</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：USER 切换前，必须先在
+root 阶段用 RUN 创建该用户，并创建所需目录、chown
+设置权限。否则切换后无权限操作。A、C、D 都不需要。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-022</strong>（★ 知识点：K6-6 docker build 命令）
+<code>docker build -t ctts-backend:v0.6 .</code> 命令中，最后的
+<code>.</code> 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Dockerfile 的文件名</span></li><li><span class="option-label">B</span><span>构建上下文路径（当前目录）</span></li><li><span class="option-label">C</span><span>镜像标签</span></li><li><span class="option-label">D</span><span>容器名</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker build</code>
+最后的参数是构建上下文路径，<code>.</code> 表示当前目录。Dockerfile
+默认在该路径下查找。不是文件名（A）、不是标签（C）、不是容器名（D）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-023</strong>（★ 知识点：K6-6 构建上下文）
+关于构建上下文，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>构建上下文是 Dockerfile 里的内容</span></li><li><span class="option-label">B</span><span>构建上下文是构建时发送给 Docker 守护进程的所有文件</span></li><li><span class="option-label">C</span><span>构建上下文只能是当前目录</span></li><li><span class="option-label">D</span><span>构建上下文不影响构建速度</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：构建上下文是
+<code>docker build</code>
+最后路径参数指定的目录下的所有文件，构建时全部发送给守护进程。A
+错，上下文是文件不是 Dockerfile 内容；C 错，可以是任意路径；D
+错，上下文大则发送慢。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-024</strong>（★★ 知识点：K6-6 .dockerignore）
+<code>.dockerignore</code> 文件的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>让 Dockerfile 忽略某些指令</span></li><li><span class="option-label">B</span><span>让构建上下文不发送某些文件给守护进程</span></li><li><span class="option-label">C</span><span>让容器运行时忽略某些文件</span></li><li><span class="option-label">D</span><span>让 Git 忽略某些文件</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>.dockerignore</code>
+列出不发送给守护进程的文件模式，作用：①减小上下文加快构建；②避免敏感文件（.git、.env）进入上下文；③避免无关文件改动触发缓存失效。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-025</strong>（★★ 知识点：K6-6 .dockerignore 内容）
+下列哪一项最不应该出现在 <code>.dockerignore</code> 中？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>.git/</code></span></li><li><span class="option-label">B</span><span><code>*.log</code></span></li><li><span class="option-label">C</span><span><code>ctts-backend.jar</code>（应用需要打包进镜像的 jar）</span></li><li><span class="option-label">D</span><span><code>target/</code></span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>.dockerignore</code>
+应该排除<strong>不需要进镜像的文件</strong>。jar
+是镜像必需的，不能排除。A（.git）、B（日志）、D（构建产物目录）都不该进镜像，应排除。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-026</strong>（★★ 知识点：K6-6 docker build 参数）
+下列哪个 <code>docker build</code> 参数可以强制不使用层缓存？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>--no-cache</code></span></li><li><span class="option-label">B</span><span><code>--cache=off</code></span></li><li><span class="option-label">C</span><span><code>--disable-cache</code></span></li><li><span class="option-label">D</span><span><code>--fresh</code></span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>--no-cache</code> 让 Docker
+不使用层缓存，全部重新构建。其他选项不存在。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-027</strong>（★ 知识点：K6-6 -f 参数） 如果
+Dockerfile 文件名为 <code>MyDockerfile</code>，构建命令应该是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker build -t myapp:v1 .</code></span></li><li><span class="option-label">B</span><span><code>docker build -f MyDockerfile -t myapp:v1 .</code></span></li><li><span class="option-label">C</span><span><code>docker build -t myapp:v1 MyDockerfile</code></span></li><li><span class="option-label">D</span><span><code>docker build --file MyDockerfile myapp:v1 .</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：用 <code>-f</code>
+指定 Dockerfile
+路径：<code>docker build -f MyDockerfile -t myapp:v1 .</code>。A
+错，默认找 <code>Dockerfile</code> 找不到会报错；C、D 语法错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-028</strong>（★★ 知识点：K6-3 RUN 形式） 关于 RUN 的
+shell 形式和 exec 形式，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>shell 形式不经过 shell
+执行</span></li><li><span class="option-label">B</span><span>exec 形式支持变量替换（如 <code>$NAME</code>）</span></li><li><span class="option-label">C</span><span>shell 形式通过
+<code>/bin/sh -c</code> 执行，支持变量替换和管道</span></li><li><span class="option-label">D</span><span>exec 形式比 shell
+形式更常用</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：shell 形式
+<code>RUN cmd</code> 通过 <code>/bin/sh -c</code>
+执行，支持变量替换和管道。A 错；B 错，exec 形式不经过 shell
+不解析变量；D 错，大多数情况用 shell 形式。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-029</strong>（★★ 知识点：K6-2 openjdk 弃用） 为什么
+Java 应用不再推荐使用 <code>FROM openjdk:17</code>？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>openjdk
+镜像体积太大</span></li><li><span class="option-label">B</span><span>openjdk 官方镜像已被声明弃用，不再更新</span></li><li><span class="option-label">C</span><span>openjdk
+不是开源的</span></li><li><span class="option-label">D</span><span>openjdk 不支持 Java 17</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Docker 官方已声明
+<code>openjdk</code> 镜像不再更新（已弃用）。推荐用
+<code>eclipse-temurin</code>、<code>amazoncorretto</code> 等替代。A
+错，体积问题不是弃用原因；C 错，openjdk 是开源的；D 错，openjdk 支持 17
+但镜像弃用了。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-030</strong>（★★★ 知识点：K6-3/K6-6 综合） 你的
+Dockerfile 构建时间突然从 10 秒变成 60 秒，最不可能的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>构建上下文里多了大文件（如 100MB 日志）</span></li><li><span class="option-label">B</span><span>改了 Dockerfile 靠前的 RUN
+指令，导致后续层缓存全部失效</span></li><li><span class="option-label">C</span><span>基础镜像更新了，FROM 这层缓存失效</span></li><li><span class="option-label">D</span><span>镜像名变了</span></li></ul></div><blockquote>
+<p><strong>答案：D</strong>
+<strong>解析</strong>：A（上下文变大）、B（缓存失效）、C（基础镜像更新导致
+FROM 失效）都会让构建变慢。D 错，镜像名（<code>-t</code>
+参数）不影响构建速度，只影响最终标签。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>06-选择-031</strong>（★★ 知识点：K6-1 Dockerfile 优势） 相比
+<code>docker commit</code>，使用 Dockerfile 制作镜像的优势包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>可复现——任何人照着 Dockerfile 都能 build 出同样的镜像</span></li><li><span class="option-label">B</span><span>可版本管理——Dockerfile 可提交到 Git</span></li><li><span class="option-label">C</span><span>可审计——每行修改都可 Code Review</span></li><li><span class="option-label">D</span><span>镜像自动优化体积 E. 完全取代 docker commit，commit 严禁使用</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong> <strong>解析</strong>：Dockerfile
+优势是可复现（A）、可版本管理（B）、可审计（C）。D 错，Dockerfile
+不会自动优化体积，要靠编写规范；E 错，commit
+在临时调试场景仍有用（如保留故障现场），生产镜像才必须用
+Dockerfile。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-032</strong>（★★ 知识点：K6-2 基础镜像选择原则）
+基础镜像选择的原则包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>优先用官方镜像</span></li><li><span class="option-label">B</span><span>固定版本号，不用
+:latest</span></li><li><span class="option-label">C</span><span>优先 slim/alpine 变体减小体积</span></li><li><span class="option-label">D</span><span>优先用运行时镜像而非自己装
+E. 总是用 scratch 最安全</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：A（官方镜像安全）、B（固定版本可复现）、C（slim/alpine
+体积小）、D（用现成运行时镜像如 eclipse-temurin:17-jre）都是正确原则。E
+错，scratch 仅适合静态编译程序，99% 应用不适用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-033</strong>（★★ 知识点：K6-3 RUN 优化） 关于 RUN
+指令的工程优化，下列做法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>用 <code>&amp;&amp;</code>
+合并相关命令减少层数</span></li><li><span class="option-label">B</span><span>apt update 和 apt install 用
+<code>&amp;&amp;</code> 连起来</span></li><li><span class="option-label">C</span><span>装完软件后用
+<code>rm -rf /var/lib/apt/lists/*</code> 清理包索引</span></li><li><span class="option-label">D</span><span>每条命令单独写
+RUN 便于阅读 E. 在同一层内下载、解压、删除压缩包</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong>
+<strong>解析</strong>：A（合并减层）、B（update+install
+连起来）、C（清理减体积）、E（同层处理临时文件）都是优化做法。D
+错，分开写增加层数，不是优化。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-034</strong>（★★ 知识点：K6-4 COPY vs ADD） 关于 COPY
+和 ADD，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>COPY 只能复制本地文件，行为明确</span></li><li><span class="option-label">B</span><span>ADD 比 COPY 多了自动解压 tar 和 URL 下载的功能</span></li><li><span class="option-label">C</span><span>复制本地普通文件推荐用
+COPY</span></li><li><span class="option-label">D</span><span>ADD 是 COPY 的升级版，应该总是用 ADD E. 需要解压 tar 包时可以用
+ADD</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：A、B、C、E
+都正确。D 错，ADD 行为不可预测（自动解压可能让人意外），官方推荐默认用
+COPY，仅需要解压 tar 时才用 ADD。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-035</strong>（★★ 知识点：K6-5 WORKDIR） 关于 WORKDIR
+指令，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>设置后对后续所有指令持续生效</span></li><li><span class="option-label">B</span><span>目录不存在时 Docker 会自动创建</span></li><li><span class="option-label">C</span><span>可以多次设置（每次切换工作目录）</span></li><li><span class="option-label">D</span><span>支持相对路径（基于上一条 WORKDIR） E. 必须在 FROM 之前</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：A（持续生效）、B（自动创建）、C（可多次设置）、D（相对路径叠加）都正确。E
+错，WORKDIR 在 FROM 之后。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-036</strong>（★★ 知识点：K6-5 安全最佳实践）
+关于容器安全，下列做法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>创建非 root 用户运行应用</span></li><li><span class="option-label">B</span><span>在 root 阶段创建用户、目录并 chown</span></li><li><span class="option-label">C</span><span>用 USER 切换到非 root 用户后再执行
+CMD</span></li><li><span class="option-label">D</span><span>始终以 root 运行以便有最大权限 E. 给应用最小权限即可</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：A（非
+root）、B（root 阶段准备）、C（USER
+切换）、E（最小权限）都是安全最佳实践。D 错，root 运行是安全反模式。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-037</strong>（★★ 知识点：K6-6 docker build） 关于
+<code>docker build</code> 命令，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>-t</code> 参数给镜像命名并打标签</span></li><li><span class="option-label">B</span><span>最后的路径参数指定构建上下文</span></li><li><span class="option-label">C</span><span><code>-f</code> 参数可指定 Dockerfile 文件路径</span></li><li><span class="option-label">D</span><span><code>--no-cache</code> 强制不使用层缓存 E. <code>--build-arg</code>
+传递构建参数</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：五个选项都正确，分别是 docker build
+的常用参数：<code>-t</code>（标签）、上下文路径、<code>-f</code>（Dockerfile
+路径）、<code>--no-cache</code>（不用缓存）、<code>--build-arg</code>（构建参数）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-038</strong>（★★ 知识点：K6-6 .dockerignore）
+下列文件/目录应该写入 <code>.dockerignore</code> 的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>.git/</code></span></li><li><span class="option-label">B</span><span><code>*.log</code></span></li><li><span class="option-label">C</span><span><code>target/</code>（构建产物，镜像内会重新构建）</span></li><li><span class="option-label">D</span><span><code>ctts-backend.jar</code>（应用必需的 jar） E.
+<code>.env</code>（含敏感信息的环境变量文件）</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong>
+<strong>解析</strong>：A（版本控制不进镜像）、B（日志不进镜像）、C（构建产物不进镜像）、E（敏感信息不进上下文）都应排除。D
+错，jar 是镜像必需的，不能排除。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-039</strong>（★★ 知识点：K6-3 层缓存） 关于 Docker
+层缓存，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>某条指令变了，该层及之后的所有层缓存失效</span></li><li><span class="option-label">B</span><span>某条指令变了，之前的层仍可复用缓存</span></li><li><span class="option-label">C</span><span>不常变的指令放前面，常变的放后面，可最大化缓存利用</span></li><li><span class="option-label">D</span><span><code>--no-cache</code> 参数可强制不使用缓存 E.
+缓存对构建速度没有影响</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C
+是缓存机制，D 是 <code>--no-cache</code> 参数。E
+错，缓存能极大加快构建速度（命中时秒过 vs 重新执行几分钟）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-选择-040</strong>（★★★ 知识点：K6-1~K6-6 综合） 下列
+Dockerfile 写法中，存在问题的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>FROM ubuntu:latest</code></span></li><li><span class="option-label">B</span><span><code>RUN apt-get update</code> 和
+<code>RUN apt-get install -y curl</code> 分两行写</span></li><li><span class="option-label">C</span><span><code>ADD app.jar /app/</code>（app.jar 是普通文件，非 tar）</span></li><li><span class="option-label">D</span><span><code>WORKDIR /app</code> 后 <code>COPY app.jar /app/app.jar</code> E.
+没有设置非 root 用户，默认以 root 运行</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：A（用了
+:latest）、B（update 和 install 分开）、C（普通文件用 ADD，应该用
+COPY）、E（默认 root 不安全）都存在问题。D 是正确写法（WORKDIR +
+COPY）。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>06-判断-001</strong>（★ 知识点：K6-1 Dockerfile 概念）
+Dockerfile 是一个文本文件，里面包含一条条描述镜像构建过程的指令。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Dockerfile
+是文本文件，由一条条指令组成，描述镜像如何构建。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-002</strong>（★ 知识点：K6-1 Dockerfile vs commit）
+<code>docker commit</code> 是制作生产镜像的推荐方式。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：docker commit
+不可复现、不可版本管理、不可审计，生产镜像必须用 Dockerfile。commit
+仅用于临时调试。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-003</strong>（★ 知识点：K6-1 Dockerfile 命名）
+Dockerfile 的默认文件名是
+<code>Dockerfile</code>，首字母大写、无扩展名。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：默认文件名是
+<code>Dockerfile</code>，首字母大写、无扩展名。用其他名字需
+<code>docker build -f</code> 指定。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-004</strong>（★ 知识点：K6-1 语法） Dockerfile
+中的指令必须小写，否则报错。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：指令大小写都能执行，但规范是大写（FROM、RUN
+等）。小写不报错但不规范。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-005</strong>（★ 知识点：K6-2 FROM） FROM
+指令指定基础镜像，通常是 Dockerfile 的第一条指令。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：FROM
+指定基础镜像，通常是第一条指令（除 ARG、解析器指令等少数例外）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-006</strong>（★★ 知识点：K6-2 :latest 标签）
+为了使用最新版本的软件，生产环境推荐用
+<code>FROM ubuntu:latest</code>。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：:latest
+是会变的指针，破坏可复现性。生产环境必须固定版本号，如
+<code>FROM ubuntu:22.04</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-007</strong>（★ 知识点：K6-2 scratch）
+<code>FROM scratch</code> 表示从一个最小的 Linux 系统开始构建镜像。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：scratch
+是空镜像，不包含任何内容（不是 Linux 系统）。仅适合静态编译的程序（如
+Go）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-008</strong>（★★ 知识点：K6-2 openjdk 弃用）
+<code>FROM openjdk:17</code> 是 Java 应用的推荐写法。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：openjdk
+官方镜像已被声明弃用，不再更新。Java 应用推荐用
+<code>FROM eclipse-temurin:17-jre</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-009</strong>（★ 知识点：K6-3 RUN 分层） 每条 RUN
+指令都会在镜像中生成一个新的层。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：RUN、COPY、ADD 指令都会生成新层。所以要用
+<code>&amp;&amp;</code> 合并相关 RUN 命令减少层数。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-010</strong>（★★ 知识点：K6-3 合并 RUN） Dockerfile
+中应将多条相关 shell 命令用 <code>&amp;&amp;</code> 合并到一个
+RUN，减少层数。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：用
+<code>&amp;&amp;</code>
+合并相关命令是工程规范，可减少层数、减小镜像体积，且
+<code>&amp;&amp;</code> 保证前一条失败则整体失败。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-011</strong>（★★ 知识点：K6-3 apt update）
+<code>RUN apt-get update</code> 和
+<code>RUN apt-get install -y curl</code>
+分两行写是安全的，因为缓存总是最新。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：分两行写，install 用的是 update
+那层的缓存包索引，可能过期导致找不到包。必须用 <code>&amp;&amp;</code>
+连起来。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-012</strong>（★★ 知识点：K6-3 层缓存） 如果
+Dockerfile 中某条 RUN 指令变了，所有层（包括之前的）都会重新构建。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：某条指令变了，只让该层及之后的层缓存失效重新构建，之前的层仍可复用缓存。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-013</strong>（★ 知识点：K6-4 COPY vs ADD） COPY 和
+ADD 功能完全相同，可以互换使用。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：ADD 比 COPY
+多了自动解压 tar 和 URL 下载功能。行为不同，不能随便互换。官方推荐默认用
+COPY。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-014</strong>（★★ 知识点：K6-4 ADD 解压）
+<code>ADD jdk-17.tar.gz /opt/</code> 会把 tar.gz 解压到 /opt/ 下。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：ADD
+会自动解压 tar.gz/tar/tar.bz2 等压缩包。这是 ADD 区别于 COPY
+的功能之一。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-015</strong>（★ 知识点：K6-5 WORKDIR）
+<code>RUN cd /app</code> 和 <code>WORKDIR /app</code>
+效果相同，都是切换工作目录。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：RUN cd
+只在那条 RUN 执行时生效，下一条 RUN 又回到默认目录。WORKDIR
+持续生效，应优先用 WORKDIR。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-016</strong>（★★ 知识点：K6-5 USER） USER
+指令本身会创建用户，不需要先用 RUN useradd。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：USER
+只切换用户，不创建用户。切换前必须先在 root 阶段用
+<code>RUN useradd</code>/<code>adduser</code> 创建用户。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-017</strong>（★★ 知识点：K6-5 安全）
+生产镜像中的应用应该以非 root 用户运行，遵循最小权限原则。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：非 root
+运行是安全最佳实践。容器内 root
+仍可能通过内核漏洞逃逸到宿主机，最小权限原则要求非 root。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-018</strong>（★ 知识点：K6-6 构建上下文）
+<code>docker build -t app:v1 .</code> 命令最后的 <code>.</code> 表示
+Dockerfile 所在的位置。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>.</code> 是构建上下文路径（当前目录），不是
+Dockerfile 的位置。Dockerfile 默认在该路径下查找，但二者不是一回事。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-019</strong>（★ 知识点：K6-6 .dockerignore）
+<code>.dockerignore</code>
+文件可以排除大文件和敏感文件进入构建上下文，加快构建并提升安全。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：.dockerignore
+列出不发送给守护进程的文件，可减小上下文（加快构建）、避免敏感文件（如
+.git、.env）泄漏、避免无关文件改动触发缓存失效。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-判断-020</strong>（★★ 知识点：K6-6 缓存复用）
+不修改任何文件，再次执行 <code>docker build -t app:v1 .</code>
+会很快完成，因为所有层都命中缓存。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：不修改文件时所有指令都没变，全部命中缓存（CACHED），秒级完成。这是层缓存的价值。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>06-填空-001</strong>（★ 知识点：K6-1 Dockerfile 定义）
+Dockerfile 是镜像的 ________，它用文本描述镜像如何构建。</p><blockquote>
+<p><strong>答案：源代码</strong> <strong>解析</strong>：Dockerfile
+是镜像的源代码，像源代码描述程序如何构建一样描述镜像如何构建。可版本管理、可审计。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-填空-002</strong>（★ 知识点：K6-1 默认文件名） Dockerfile
+的默认文件名是 ________，首字母大写、无扩展名。</p><blockquote>
+<p><strong>答案：Dockerfile</strong> <strong>解析</strong>：默认文件名是
+<code>Dockerfile</code>（首字母大写、无扩展名）。用其他名字需
+<code>docker build -f 文件名</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-填空-003</strong>（★ 知识点：K6-2 FROM 指令） Dockerfile
+中通常的第一条指令是 ________，用于指定基础镜像。</p><blockquote>
+<p><strong>答案：FROM</strong> <strong>解析</strong>：FROM
+指定基础镜像，通常是 Dockerfile 的第一条指令（除
+ARG、解析器指令等少数例外）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-填空-004</strong>（★ 知识点：K6-3 RUN 分层） Dockerfile
+中每条 ________ 指令都会在镜像中生成一个新的层。</p><blockquote>
+<p><strong>答案：RUN</strong> <strong>解析</strong>：RUN、COPY、ADD
+指令会生成新层。RUN 每条生成一层，所以要用 <code>&amp;&amp;</code>
+合并相关命令减少层数。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-填空-005</strong>（★★ 知识点：K6-3 合并命令）
+为了减少镜像层数，应使用 ________ 符号将多条相关 shell 命令合并到一个
+RUN 指令中。</p><blockquote>
+<p><strong>答案：&amp;&amp;</strong> <strong>解析</strong>：用
+<code>&amp;&amp;</code> 合并相关命令到一个 RUN，可减少层数且
+<code>&amp;&amp;</code>
+保证前一条失败则整体失败（避免后续命令在错误状态下执行）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-填空-006</strong>（★★ 知识点：K6-4 COPY vs ADD）
+复制本地普通文件到镜像应优先用 ________ 指令，行为更明确。</p><blockquote>
+<p><strong>答案：COPY</strong> <strong>解析</strong>：COPY
+只做复制，行为明确。ADD 有自动解压 tar 和 URL
+下载额外功能，行为不可预测。官方推荐默认用 COPY，仅需要解压 tar 时才用
+ADD。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-填空-007</strong>（★ 知识点：K6-5 WORKDIR） ________
+指令用于设置工作目录，对后续所有指令持续生效。</p><blockquote>
+<p><strong>答案：WORKDIR</strong> <strong>解析</strong>：WORKDIR
+设置工作目录，后续指令（RUN/COPY/CMD 等）的相对路径都基于此目录。比
+<code>RUN cd</code> 更可靠。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-填空-008</strong>（★★ 知识点：K6-5 安全运行）
+生产镜像应用应以 ________ 用户运行，遵循最小权限原则。</p><blockquote>
+<p><strong>答案：非 root（或 普通/appuser）</strong>
+<strong>解析</strong>：生产镜像应用应非 root
+运行（最小权限原则）。容器内 root 仍可能内核逃逸，非 root
+限制攻击影响范围。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-填空-009</strong>（★ 知识点：K6-6 构建上下文）
+<code>docker build -t app:v1 .</code> 命令最后的 <code>.</code> 表示
+________ 路径。</p><blockquote>
+<p><strong>答案：构建上下文（或 build context）</strong>
+<strong>解析</strong>：<code>.</code>
+是构建上下文路径（当前目录）。构建时该目录下所有文件发送给守护进程。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-填空-010</strong>（★★ 知识点：K6-6 .dockerignore）
+________
+文件用于排除某些文件进入构建上下文，减小上下文体积并避免敏感文件泄漏。</p><blockquote>
+<p><strong>答案：.dockerignore</strong>
+<strong>解析</strong>：.dockerignore
+列出不发送给守护进程的文件模式，作用：减小上下文、避免泄漏、避免无关改动触发缓存失效。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>06-论述-001</strong>（★★ 知识点：K6-1 Dockerfile vs
+commit，10 分） 请阐述使用 Dockerfile 制作镜像相比
+<code>docker commit</code> 的优势，并说明为什么"Dockerfile
+是镜像的源代码"。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>三大优势</strong>（6 分，每点2分）：
+<ul>
+<li><strong>可复现</strong>：任何人照着 Dockerfile 都能 build
+出同样的镜像；而 docker commit 是手工操作，无法复现。</li>
+<li><strong>可版本管理</strong>：Dockerfile 是文本文件，可提交到
+Git，每次修改都有 diff；docker commit 的镜像是一个二进制
+blob，无法版本管理。</li>
+<li><strong>可审计</strong>：Dockerfile 可 Code
+Review，安全合规可检查；docker commit 没人知道镜像里装了什么。</li>
+</ul></li>
+<li><strong>"Dockerfile 是镜像的源代码"的含义</strong>（4 分）：
+<ul>
+<li>就像源代码描述了程序如何构建，Dockerfile 描述了镜像如何构建（2
+分）。</li>
+<li>它把"制作镜像"从手工操作变成了代码化、可版本管理、可审计的工程过程（2
+分）。</li>
+<li>同源代码一样：要提交 Git、要 Code Review、要规范化、要可复现。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三大优势每个 2 分；"源代码"含义 4
+分，要点完整给满分；只列项不解释每个给 1 分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-论述-002</strong>（★★ 知识点：K6-3 RUN 分层与缓存，8 分）
+请解释 Dockerfile 中"每条 RUN
+生成一层"的机制，说明层缓存的工作原理，并举例说明如何利用层缓存优化构建。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>分层机制</strong>（2 分）：Docker 镜像是分层的，Dockerfile
+中每条 RUN/COPY/ADD
+指令都会创建一个新的层。每层只读，叠加在上一层之上。多层可共享、缓存、增量传输。</li>
+<li><strong>层缓存原理</strong>（3 分）：
+<ul>
+<li>Docker 构建时按指令顺序检查缓存（1 分）。</li>
+<li>某条指令没变则复用上次的层（缓存命中，秒过）；变了则该层及之后所有层重新构建（缓存失效）（1
+分）。</li>
+<li>之前的层不受影响，仍可复用缓存（1 分）。</li>
+</ul></li>
+<li><strong>优化示例</strong>（3 分）：
+<ul>
+<li>把不常变的指令（如 FROM、apt install）放前面，常变的（如 COPY
+应用代码）放后面（1 分）。</li>
+<li>例：
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre          <span class="co"># 不变，缓存</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> curl          <span class="co"># 不变，缓存</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app                          <span class="co"># 不变，缓存</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> app.jar /app/                    <span class="co"># 常变，这层失效</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]  <span class="co"># 跟着失效</span></span></code></pre></div>
+改 jar 后只有最后两层重新构建（2 分）。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分独立给分；示例只要体现"不常变放前面"思想即可给分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-论述-003</strong>（★★ 知识点：K6-4 COPY vs ADD，8 分）
+请说明 COPY 和 ADD 指令的区别，并阐述"Docker 官方推荐优先用
+COPY"的原因。在什么场景下仍然可以使用 ADD？</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>功能区别</strong>（3 分）：
+<ul>
+<li>COPY 只做一件事：把本地文件复制到镜像，行为明确（1 分）。</li>
+<li>ADD 在 COPY 基础上多了两个功能：①自动解压 tar
+包（tar.gz/tar/tar.bz2）；②支持从 URL 下载文件（2 分）。</li>
+</ul></li>
+<li><strong>官方推荐 COPY 的原因</strong>（3 分）：
+<ul>
+<li>ADD 的"自动解压"和"URL 下载"功能容易让人意外（行为不可预测）（1
+分）。</li>
+<li>例：你以为 <code>ADD file.tar.gz /app/</code> 是复制
+tar.gz，结果它解压成了一堆文件（1 分）。</li>
+<li>行为不可预测是工程大忌，所以默认用行为明确的 COPY（1 分）。</li>
+</ul></li>
+<li><strong>可用 ADD 的场景</strong>（2 分）：
+<ul>
+<li>需要复制并自动解压 tar 包时可以用 ADD，如
+<code>ADD jdk-17.tar.gz /opt/</code>（1 分）。</li>
+<li>但即使这种场景，有人也偏好用 COPY + RUN tar 更显式（1 分）。</li>
+<li>URL 下载场景不推荐用 ADD，应用 RUN wget + COPY 更可控。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分独立给分；要点齐全即可满分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>06-论述-004</strong>（★★ 知识点：K6-5 安全最佳实践，8 分）
+请说明为什么生产镜像应该用非 root 用户运行应用，并写出一个"创建非 root
+用户并切换"的标准 Dockerfile 片段。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>非 root 运行的原因</strong>（4 分）：
+<ul>
+<li>容器内的 root 虽然被 namespace 隔离，但仍然是特权用户（2 分）。</li>
+<li>如果应用有漏洞被攻击，攻击者拿到容器内的
+root，可能通过内核漏洞逃逸到宿主机 root，造成灾难（2 分）。</li>
+<li>最小权限原则：应用能用普通用户跑就用普通用户跑，限制攻击影响范围。</li>
+</ul></li>
+<li><strong>标准 Dockerfile 片段</strong>（4 分）：
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. root 阶段：创建用户、目录并 chown</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">useradd</span> <span class="at">-m</span> <span class="at">-d</span> /app <span class="at">-u</span> 1000 appuser <span class="dt">\</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">mkdir</span> <span class="at">-p</span> /app <span class="dt">\</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">chown</span> <span class="at">-R</span> appuser:appuser /app</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> app.jar /app/app.jar</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 切换到非 root 用户</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<ul>
+<li>root 阶段创建用户和目录（1 分）</li>
+<li>chown 设置权限（1 分）</li>
+<li>USER 切换（1 分）</li>
+<li>顺序正确（root 阶段准备 → 切换 → CMD）（1 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：原因 4 分，片段 4 分；片段顺序错误（如先
+USER 后创建）扣 2 分。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>06-阅读-001</strong>（★★ 知识点：K6-2~K6-5 综合补全，12 分）
+阅读以下 CTTS 后端 Dockerfile，补全缺失部分（每空 2 分，共 12 分）。</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CTTS 后端基础镜像 Dockerfile</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (a)________ 指定基础镜像为官方 OpenJDK 17 运行时</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>(a)________ eclipse-temurin:17-jre</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 创建非 root 用户和 /app 目录</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">useradd</span> <span class="at">-m</span> <span class="at">-d</span> /app <span class="at">-u</span> 1000 appuser <span class="dt">\</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">mkdir</span> <span class="at">-p</span> /app <span class="dt">\</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="kw">(</span><span class="ex">b</span><span class="kw">)</span><span class="ex">________</span> <span class="at">-R</span> appuser:appuser /app</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># (c)________ 设置工作目录为 /app</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>(c)________ /app</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 复制 jar 文件到镜像（用 COPY 不用 ADD）</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>(d)________ ctts-backend.jar /app/app.jar</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 切换到非 root 用户</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>(e)________ appuser</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 容器启动命令</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>(f)________ [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) FROM (b) chown (c) WORKDIR (d) COPY
+(e) USER (f) CMD</p>
+<p><strong>解析</strong>：FROM 指定基础镜像；chown
+修改文件所有者；WORKDIR 设置工作目录；COPY 复制文件（不用
+ADD，因为是普通文件）；USER 切换用户；CMD 指定启动命令。</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12 分。指令大小写不扣分（如
+from 也可）。chown 写成 chgrp 不给分。</p>
+</blockquote>
+<hr />
+<p><strong>06-阅读-002</strong>（★★ 知识点：K6-3/K6-6 综合补全，12 分）
+阅读以下构建流程，补全缺失部分（每空 2 分，共 12 分）。</p>
+<pre class="text"><code>【场景】学生小王要构建 CTTS 后端镜像，项目目录在 ~/ctts/backend/，目录里有：
+  Dockerfile、ctts-backend.jar、debug.log（100MB）、.git/（50MB）
+
+【构建命令】
+小王在 ~/ctts/backend/ 目录下执行：
+$ (a)________ -t ctts-backend:v0.6 (b)________
+
+【问题】
+执行后小王看到构建输出：
+  =&gt; [internal] load build context
+  =&gt; =&gt; transferring context: 150.05MB
+构建很慢，因为 100MB 的 debug.log 和 50MB 的 .git/ 都被发送了。
+
+【解决】
+小王应该在项目目录下创建一个 (c)________ 文件，内容包含：
+  (d)________        # 排除 .git 目录
+  (e)________        # 排除所有日志文件
+
+【再次构建】
+配置好后再次执行构建命令，看到：
+  =&gt; =&gt; transferring context: 45.00MB
+只发送了 jar 文件，构建变快。
+
+【验证】
+构建完成后，用 (f)________ 命令查看本地镜像列表确认 ctts-backend:v0.6 已生成。</code></pre>
+<blockquote>
+<p><strong>参考答案</strong>： (a) docker build (b)
+.（点，表示当前目录作为构建上下文） (c) .dockerignore (d) .git/（或
+.git） (e) *.log (f) docker images（或 docker image ls）</p>
+<p><strong>解析</strong>：docker build 命令格式
+<code>docker build -t name:tag &lt;上下文路径&gt;</code>；<code>.</code>
+表示当前目录；.dockerignore 文件排除不需要进上下文的文件；docker images
+查看本地镜像。</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12 分。(b) 必须是
+<code>.</code>；(d)、(e) 模式合理即可给分（如 .git、*.log 都对）。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>06-编程-001</strong>（★★ 知识点：K6-2~K6-6 综合，15 分）
+<strong>编写 CTTS 后端基础 Dockerfile</strong>：请为 CTTS
+后端服务编写一个基础 Dockerfile，要求：</p>
+<ol type="1">
+<li>基础镜像选用官方 OpenJDK 17 运行时（说明选型理由）（3 分）</li>
+<li>创建非 root 用户 appuser（UID 1000）并设置 /app 为工作目录（3
+分）</li>
+<li>复制 ctts-backend.jar 到镜像 /app 目录（2 分）</li>
+<li>切换到非 root 用户运行（2 分）</li>
+<li>设置启动命令 <code>java -jar /app/app.jar</code>（2 分）</li>
+<li>同时编写一个 <code>.dockerignore</code> 文件，至少包含 5 条规则（3
+分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<p><strong>Dockerfile</strong>（12 分）：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 基础镜像：eclipse-temurin 是官方维护的 OpenJDK 镜像</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#    openjdk 官方镜像已弃用，17 是 LTS 版本，jre 变体只含运行时体积小</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 创建非 root 用户和工作目录</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">useradd</span> <span class="at">-m</span> <span class="at">-d</span> /app <span class="at">-u</span> 1000 <span class="at">-s</span> /usr/sbin/nologin appuser <span class="dt">\</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">mkdir</span> <span class="at">-p</span> /app <span class="dt">\</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">chown</span> <span class="at">-R</span> appuser:appuser /app</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 复制 jar（用 COPY 不用 ADD）</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/app.jar</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 切换非 root 用户</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 启动命令</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<p><strong>.dockerignore</strong>（3 分，每条 0.5 分，最高 3 分）：</p>
+<pre class="gitignore"><code>.git/
+*.log
+target/
+.idea/
+*.md
+.env
+Dockerfile*</code></pre>
+<p><strong>评分要点</strong>：</p>
+<ul>
+<li>选型理由说明（eclipse-temurin 是官方维护、17 是 LTS、jre 体积小）3
+分</li>
+<li>创建用户用 RUN useradd + mkdir + chown（合并到一条 RUN）3 分</li>
+<li>COPY 用 COPY 不用 ADD 2 分</li>
+<li>USER 切换 2 分</li>
+<li>CMD 启动命令 2 分</li>
+<li>.dockerignore 至少 5 条合理规则 3 分</li>
+<li>顺序错误（如 USER 在创建用户之前）扣 3 分；用 ADD 代替 COPY 扣 1
+分</li>
+</ul>
+</blockquote>
+<hr />
+<p><strong>06-编程-002</strong>（★★★ 知识点：K6-1~K6-6 综合，20 分）
+<strong>Dockerfile
+反例诊断与改写</strong>：以下是一个学生写的"反面教材"Dockerfile，存在多处问题。</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> openjdk</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> curl</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> vim</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ADD</span> ctts-backend.jar /app.jar</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="bu">cd</span> /app <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;ready&quot;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> <span class="ex">java</span> <span class="at">-jar</span> /app.jar</span></code></pre></div>
+<p><strong>问题</strong>：</p>
+<ol type="1">
+<li>找出该 Dockerfile 中至少 5
+处问题，并说明每处问题为什么是问题、应该怎么改（10 分）</li>
+<li>写出改写后的"正面"Dockerfile（6 分）</li>
+<li>写出对应的 <code>.dockerignore</code> 文件（4 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<p><strong>1. 找出问题（10 分，每处 2 分，答出 5
+处给满分）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>为什么是问题</th>
+<th>怎么改</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① <code>FROM openjdk</code>（不固定版本，且 openjdk 已弃用）</td>
+<td>:latest 不可复现；openjdk 弃用</td>
+<td>改 <code>FROM eclipse-temurin:17-jre</code></td>
+</tr>
+<tr>
+<td>② <code>RUN apt-get update</code> 和两条 install 分三行写</td>
+<td>层数多（3 层）；update 和 install 分开会导致包索引过期</td>
+<td>用 <code>&amp;&amp;</code> 合并成一条 RUN</td>
+</tr>
+<tr>
+<td>③ 用 <code>ADD ctts-backend.jar</code> 复制普通文件</td>
+<td>jar 不是 tar，应用 COPY 行为更明确</td>
+<td>改 <code>COPY</code></td>
+</tr>
+<tr>
+<td>④ <code>RUN cd /app</code>（且 /app 不存在）</td>
+<td>cd 只在该 RUN 生效，下条又回默认；且 /app 不存在会失败</td>
+<td>用 <code>WORKDIR /app</code></td>
+</tr>
+<tr>
+<td>⑤ 没有设置非 root 用户，默认 root 运行</td>
+<td>不安全，违反最小权限原则</td>
+<td>创建 appuser + USER 切换</td>
+</tr>
+<tr>
+<td>⑥ 装完软件没清理 apt 缓存</td>
+<td>镜像体积大</td>
+<td>同层 <code>rm -rf /var/lib/apt/lists/*</code></td>
+</tr>
+<tr>
+<td>⑦ <code>CMD java -jar /app/app.jar</code>（shell 形式）</td>
+<td>shell 形式通过 /bin/sh 执行，信号传递有问题</td>
+<td>改 exec 形式 <code>CMD ["java","-jar","/app/app.jar"]</code></td>
+</tr>
+</tbody>
+</table>
+<p>（每处问题 2 分：找出 1 分 + 改法 1 分。答出任意 5 处即满分。）</p>
+<p><strong>2. 改写后的 Dockerfile（6 分）</strong>：</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">useradd</span> <span class="at">-m</span> <span class="at">-d</span> /app <span class="at">-u</span> 1000 appuser <span class="dt">\</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">mkdir</span> <span class="at">-p</span> /app <span class="dt">\</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">chown</span> <span class="at">-R</span> appuser:appuser /app</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update <span class="dt">\</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install <span class="at">-y</span> <span class="at">--no-install-recommends</span> curl <span class="dt">\</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> <span class="at">-rf</span> /var/lib/apt/lists/<span class="pp">*</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/app.jar</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<ul>
+<li>FROM 选对镜像 1 分</li>
+<li>RUN 合并 1 分</li>
+<li>COPY 不用 ADD 1 分</li>
+<li>WORKDIR 不用 cd 1 分</li>
+<li>USER 切换非 root 1 分</li>
+<li>CMD exec 形式 1 分</li>
+</ul>
+<p><strong>3. .dockerignore（4 分，每条 0.5 分，最高 4
+分）</strong>：</p>
+<pre class="gitignore"><code>.git/
+*.log
+target/
+.idea/
+*.md
+.env
+Dockerfile*
+*.tmp</code></pre>
+<p><strong>评分要点</strong>：找出问题部分答出 5 处给满分；改写
+Dockerfile 关键改进点（FROM、合并 RUN、COPY、WORKDIR、USER、CMD
+exec）每点 1 分；.dockerignore 至少 5 条合理规则给 3 分，8 条及以上给 4
+分。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,378 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>持久化存储PV PVC StorageClass</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 22 次课 · 教学设计</div>
+      <h1>持久化存储PV PVC StorageClass</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 22 次课</span>
+        <span class="hero-chip"><b>主题</b>持久化存储PV PVC StorageClass</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一教学目标">一、教学目标</a>
+<ul>
+<li><a href="#1-知识目标">1. 知识目标</a></li>
+<li><a href="#2-能力目标">2. 能力目标</a></li>
+<li><a href="#3-素质目标思政元素">3. 素质目标（思政元素）</a></li>
+</ul></li>
+<li><a href="#二教学内容与重难点">二、教学内容与重难点</a>
+<ul>
+<li><a href="#教学内容">教学内容</a></li>
+<li><a href="#教学重点">教学重点</a></li>
+<li><a href="#教学难点">教学难点</a></li>
+</ul></li>
+<li><a href="#三学情分析">三、学情分析</a>
+<ul>
+</ul></li>
+<li><a href="#四教学方法">四、教学方法</a>
+<ul>
+</ul></li>
+<li><a href="#五教学环境与资源">五、教学环境与资源</a>
+<ul>
+</ul></li>
+<li><a href="#六教学策略与过程设计">六、教学策略与过程设计</a>
+<ul>
+<li><a href="#1-问题驱动5分钟">1. 问题驱动（5分钟）</a></li>
+<li><a href="#2-概念建构40分钟">2. 概念建构（40分钟）</a></li>
+<li><a href="#3-实操验证25分钟">3. 实操验证（25分钟）</a></li>
+<li><a href="#4-项目应用15分钟">4. 项目应用（15分钟）</a></li>
+<li><a href="#5-总结提升5分钟">5. 总结提升（5分钟）</a></li>
+</ul></li>
+<li><a href="#七90分钟时间分配">七、90分钟时间分配</a>
+<ul>
+</ul></li>
+<li><a href="#八教学评价设计">八、教学评价设计</a>
+<ul>
+<li><a href="#1-过程性评价60">1. 过程性评价（60%）</a></li>
+<li><a href="#2-终结性评价40">2. 终结性评价（40%）</a></li>
+<li><a href="#3-评价标准">3. 评价标准</a></li>
+</ul></li>
+<li><a href="#九课后作业与拓展">九、课后作业与拓展</a>
+<ul>
+<li><a href="#必做作业">必做作业</a></li>
+<li><a href="#选做拓展">选做拓展</a></li>
+<li><a href="#预习任务">预习任务</a></li>
+</ul></li>
+<li><a href="#十教学反思课后填写">十、教学反思（课后填写）</a>
+<ul>
+<li><a href="#成功之处">成功之处</a></li>
+<li><a href="#不足之处">不足之处</a></li>
+<li><a href="#改进措施">改进措施</a></li>
+<li><a href="#学生反馈">学生反馈</a></li>
+<li><a href="#后续优化方向">后续优化方向</a></li>
+</ul></li>
+<li><a href="#附思政融入设计">附：思政融入设计</a>
+<ul>
+<li><a href="#融入节点">融入节点</a></li>
+<li><a href="#思政目标">思政目标</a></li>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 22 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>课程名称：Docker云容器与管理技术 模块：M8 K8s进阶——存储与配置
+课次：第22次课（共2学时，90分钟） 贯穿项目：CTTS多服务（Vue3 +
+SpringBoot + MySQL）部署到K8s</p>
+</blockquote>
+<hr />
+<h2 id="一教学目标">一、教学目标</h2>
+<h3 id="1-知识目标">1. 知识目标</h3>
+<ul>
+<li>理解K8s持久化存储的必要性，能复述Pod销毁数据丢失的根本原因。</li>
+<li>阐述K8s存储体系总览：Volume、PV、PVC、StorageClass四层抽象的职责与关系。</li>
+<li>掌握PersistentVolume（PV）的定义、YAML关键字段（capacity、accessModes、persistentVolumeReclaimPolicy）及生命周期四态（Available
+/ Bound / Released / Failed）。</li>
+<li>掌握PersistentVolumeClaim（PVC）的YAML定义、与PV的绑定机制及生命周期。</li>
+<li>理解StorageClass动态供给原理，能说明provisioner、reclaimPolicy、volumeBindingMode字段语义。</li>
+<li>掌握在Pod中通过volumes挂载PVC，以及在StatefulSet中使用volumeClaimTemplates的方法。</li>
+</ul>
+<h3 id="2-能力目标">2. 能力目标</h3>
+<ul>
+<li>能够独立编写PV、PVC、StorageClass的YAML并通过kubectl部署。</li>
+<li>能够完成"创建PV → 创建PVC → 验证绑定 → Pod挂载 → 写入数据 → 删除Pod
+→ 数据持久化验证"全链路操作。</li>
+<li>能够为CTTS项目的MySQL服务设计并实现持久化存储方案。</li>
+<li>能够排查PV/PVC常见报错（Pending、Failed、无法绑定等）。</li>
+</ul>
+<h3 id="3-素质目标思政元素">3. 素质目标（思政元素）</h3>
+<ul>
+<li><strong>数据安全意识</strong>：持久化存储是数据保障的最后一道防线，培养学生对生产数据负责的工程师品格。</li>
+<li><strong>抽象分层思维</strong>：通过PV/PVC/StorageClass三层解耦，体会"资源与使用解耦"的工程哲学。</li>
+<li><strong>协作沟通能力</strong>：通过两人一组讲解PV/PVC绑定流程，锻炼技术表达与团队协作。</li>
+</ul>
+<hr />
+<h2 id="二教学内容与重难点">二、教学内容与重难点</h2>
+<h3 id="教学内容">教学内容</h3>
+<ol type="1">
+<li>存储需求与K8s存储体系总览</li>
+<li>PersistentVolume（PV）——定义、字段、类型、生命周期</li>
+<li>PersistentVolumeClaim（PVC）——定义、绑定机制、生命周期</li>
+<li>StorageClass——动态供给、provisioner、Minikube示例</li>
+<li>在Pod中使用PVC——volumes挂载、StatefulSet volumeClaimTemplates</li>
+<li>CTTS项目实战：MySQL数据持久化完整示例</li>
+</ol>
+<h3 id="教学重点">教学重点</h3>
+<ul>
+<li>PV与PVC的绑定机制（accessModes匹配、容量匹配、selector选择）</li>
+<li>StorageClass动态供给流程</li>
+<li>MySQL数据持久化的完整YAML实现</li>
+</ul>
+<h3 id="教学难点">教学难点</h3>
+<ul>
+<li>PV生命周期中Released状态与Reclaim策略的联动理解</li>
+<li>StorageClass动态供给与静态供给的区别</li>
+<li>StatefulSet中volumeClaimTemplates的自动化逻辑</li>
+</ul>
+<hr />
+<h2 id="三学情分析">三、学情分析</h2>
+<ul>
+<li>学生已掌握K8s基础概念（Pod、Deployment、Service）、ConfigMap与Secret（第21次课），具备基本YAML编写与kubectl操作能力。</li>
+<li>学生对"存储"的认知停留在Docker
+Volume层面，对K8s分层存储抽象较陌生。</li>
+<li>学生容易混淆PV（资源）与PVC（申请）的角色定位，需要通过类比与图示强化。</li>
+<li>实操环节对NFS/hostPath环境差异敏感，需提前在Minikube中验证。</li>
+</ul>
+<hr />
+<h2 id="四教学方法">四、教学方法</h2>
+<ul>
+<li><strong>讲授法</strong>：核心概念与YAML字段讲解。</li>
+<li><strong>类比法</strong>：PV≈机房机柜，PVC≈租户申请工单，StorageClass≈自动派工系统。</li>
+<li><strong>演示法</strong>：Minikube现场演示MySQL持久化全流程。</li>
+<li><strong>小组讨论</strong>：两人一组讲解PV/PVC绑定流程，互相提问。</li>
+<li><strong>任务驱动</strong>：以CTTS
+MySQL持久化为贯穿任务，边学边做。</li>
+<li><strong>对比法</strong>：静态供给 vs 动态供给、hostPath vs NFS vs
+CSI。</li>
+</ul>
+<hr />
+<h2 id="五教学环境与资源">五、教学环境与资源</h2>
+<ul>
+<li><strong>硬件</strong>：教师机1台、学生机若干（每生1台），每台至少8GB内存。</li>
+<li><strong>软件</strong>：VirtualBox/WSL2、Minikube 1.30+、kubectl
+1.28+、Docker Desktop。</li>
+<li><strong>集群</strong>：每生独立Minikube单节点集群（<code>minikube start --addons=storage-provisioner</code>）。</li>
+<li><strong>素材</strong>：教学PPT、YAML模板、生命周期流程图、绑定流程图、CTTS项目仓库。</li>
+<li><strong>平台</strong>：课程Git仓库（含本课YAML）、在线考核系统。</li>
+</ul>
+<hr />
+<h2 id="六教学策略与过程设计">六、教学策略与过程设计</h2>
+<p>采用"问题驱动 → 概念建构 → 实操验证 → 项目应用 →
+总结提升"五段式教学。</p>
+<h3 id="1-问题驱动5分钟">1. 问题驱动（5分钟）</h3>
+<p>通过演示"Pod销毁后MySQL数据丢失"现象，引发存储需求思考。</p>
+<h3 id="2-概念建构40分钟">2. 概念建构（40分钟）</h3>
+<p>按"Volume → PV → PVC → StorageClass →
+Pod使用PVC"顺序递进讲解，每讲完一个抽象层立即用图示强化。</p>
+<h3 id="3-实操验证25分钟">3. 实操验证（25分钟）</h3>
+<p>学生跟随教师完成PV/PVC/Pod全链路操作，验证数据持久化。</p>
+<h3 id="4-项目应用15分钟">4. 项目应用（15分钟）</h3>
+<p>将所学应用到CTTS MySQL服务，输出项目交付物。</p>
+<h3 id="5-总结提升5分钟">5. 总结提升（5分钟）</h3>
+<p>梳理四层抽象关系，强调数据安全思政点。</p>
+<hr />
+<h2 id="七90分钟时间分配">七、90分钟时间分配</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>时长</th>
+<th>环节</th>
+<th>内容</th>
+<th>教学活动</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00:00–00:05</td>
+<td>5min</td>
+<td>导入</td>
+<td>演示Pod销毁数据丢失</td>
+<td>教师演示 + 提问</td>
+</tr>
+<tr>
+<td>00:05–00:15</td>
+<td>10min</td>
+<td>K22-1 存储需求</td>
+<td>为什么需要持久化、存储体系总览</td>
+<td>讲授 + 图示</td>
+</tr>
+<tr>
+<td>00:15–00:30</td>
+<td>15min</td>
+<td>K22-2 PV</td>
+<td>集群级资源、YAML字段、生命周期</td>
+<td>讲授 + YAML展示</td>
+</tr>
+<tr>
+<td>00:30–00:40</td>
+<td>10min</td>
+<td>K22-3 PVC</td>
+<td>申请机制、绑定流程、生命周期</td>
+<td>讲授 + 流程图</td>
+</tr>
+<tr>
+<td>00:40–00:50</td>
+<td>10min</td>
+<td>互动环节</td>
+<td>两人一组讲解PV/PVC绑定流程</td>
+<td>小组讨论 + 互评</td>
+</tr>
+<tr>
+<td>00:50–01:00</td>
+<td>10min</td>
+<td>K22-4 StorageClass</td>
+<td>动态供给、provisioner、Minikube示例</td>
+<td>讲授 + 演示</td>
+</tr>
+<tr>
+<td>01:00–01:15</td>
+<td>15min</td>
+<td>K22-5 Pod使用PVC</td>
+<td>volumes挂载、StatefulSet模板</td>
+<td>讲授 + YAML展示</td>
+</tr>
+<tr>
+<td>01:15–01:35</td>
+<td>20min</td>
+<td>实操演练</td>
+<td>创建PV→PVC→Pod→写入→删除→验证</td>
+<td>学生实操 + 答疑</td>
+</tr>
+<tr>
+<td>01:35–01:45</td>
+<td>10min</td>
+<td>项目任务</td>
+<td>CTTS MySQL持久化YAML编写</td>
+<td>项目实践</td>
+</tr>
+<tr>
+<td>01:45–01:50</td>
+<td>5min</td>
+<td>总结思政</td>
+<td>四层抽象回顾 + 数据安全思政</td>
+<td>总结 + 提问</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="八教学评价设计">八、教学评价设计</h2>
+<h3 id="1-过程性评价60">1. 过程性评价（60%）</h3>
+<ul>
+<li>课堂参与度（提问回答、小组讨论）：10%</li>
+<li>实操环节完成度（PV/PVC/Pod全链路）：25%</li>
+<li>项目任务交付（CTTS MySQL持久化YAML）：25%</li>
+</ul>
+<h3 id="2-终结性评价40">2. 终结性评价（40%）</h3>
+<ul>
+<li>课后题库练习（78题）：30%</li>
+<li>思政反思短文（数据安全与工程师责任）：10%</li>
+</ul>
+<h3 id="3-评价标准">3. 评价标准</h3>
+<table>
+<thead>
+<tr>
+<th>等级</th>
+<th>标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>优秀</td>
+<td>独立完成全链路，YAML规范，能排查报错，思政反思深刻</td>
+</tr>
+<tr>
+<td>良好</td>
+<td>完成主要操作，YAML基本正确，理解概念</td>
+</tr>
+<tr>
+<td>合格</td>
+<td>在指导下完成操作，概念基本掌握</td>
+</tr>
+<tr>
+<td>不合格</td>
+<td>未完成实操，概念理解错误</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="九课后作业与拓展">九、课后作业与拓展</h2>
+<h3 id="必做作业">必做作业</h3>
+<ol type="1">
+<li>完成题库中78道题目，正确率不低于80%。</li>
+<li>提交CTTS MySQL持久化YAML文件（PV + PVC +
+Deployment）到课程Git仓库。</li>
+<li>撰写300字思政反思：数据安全与工程师责任。</li>
+</ol>
+<h3 id="选做拓展">选做拓展</h3>
+<ol type="1">
+<li>部署NFS服务器，将PV改为NFS类型并验证跨节点数据共享。</li>
+<li>配置StorageClass动态供给，对比静态供给的差异。</li>
+<li>阅读CSI规范文档，了解第三方存储插件机制。</li>
+</ol>
+<h3 id="预习任务">预习任务</h3>
+<ul>
+<li>预习第23次课：StatefulSet有状态应用部署。</li>
+</ul>
+<hr />
+<h2 id="十教学反思课后填写">十、教学反思（课后填写）</h2>
+<h3 id="成功之处">成功之处</h3>
+<p>-（待填写）</p>
+<h3 id="不足之处">不足之处</h3>
+<p>-（待填写）</p>
+<h3 id="改进措施">改进措施</h3>
+<p>-（待填写）</p>
+<h3 id="学生反馈">学生反馈</h3>
+<p>-（待填写）</p>
+<h3 id="后续优化方向">后续优化方向</h3>
+<p>-（待填写）</p>
+<hr />
+<h2 id="附思政融入设计">附：思政融入设计</h2>
+<h3
+id="思政主题数据安全持久化存储是数据保障">思政主题：数据安全——持久化存储是数据保障</h3>
+<h3 id="融入节点">融入节点</h3>
+<ol type="1">
+<li><strong>导入环节</strong>：Pod销毁数据丢失的真实事故案例（如某公司未配置持久化导致用户数据丢失），引出数据安全责任。</li>
+<li><strong>PV生命周期</strong>：讲解Released状态时强调"删除PVC不等于数据安全"，需关注Reclaim策略，培养严谨态度。</li>
+<li><strong>项目实战</strong>：CTTS
+MySQL持久化是用户数据保障的核心，强调工程师对用户数据负责的伦理。</li>
+<li><strong>总结提升</strong>：联系国家《数据安全法》，强调数据安全是国家安全的重要组成部分，工程师应具备数据安全底线意识。</li>
+</ol>
+<h3 id="思政目标">思政目标</h3>
+<ul>
+<li>培养学生"数据为王、安全至上"的工程伦理。</li>
+<li>引导学生理解技术背后的社会责任。</li>
+<li>强化"预防胜于补救"的运维哲学。</li>
+</ul>
+<hr />
+<blockquote>
+<p>教学设计编制：云原生课程组 版本：v1.0 适用学期：2025-2026学年</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1090 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>镜像与容器管理综合实践</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 05 次课 · 题库</div>
+      <h1>镜像与容器管理综合实践</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 05 次课</span>
+        <span class="hero-chip"><b>主题</b>镜像与容器管理综合实践</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 05 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>05-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>05-选择-001</strong>（★ 知识点：K5-1 镜像选型） 本次课 CTTS
+三服务容器化，MySQL 使用的官方镜像标签是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>mysql:latest</code></span></li><li><span class="option-label">B</span><span><code>mysql:8.0</code></span></li><li><span class="option-label">C</span><span><code>mysql:8</code></span></li><li><span class="option-label">D</span><span><code>mysql:stable</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：本次课统一使用
+<code>mysql:8.0</code>，明确版本号便于复现。A 错，不使用
+<code>:latest</code> 因为不可控；C 错，<code>mysql:8</code>
+虽然也存在但不规范；D 错，MySQL 没有 <code>:stable</code> 标签。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-002</strong>（★ 知识点：K5-1 镜像选型） 关于 Nginx
+官方镜像的 Web 根目录，正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>/var/www/html</code></span></li><li><span class="option-label">B</span><span><code>/usr/share/nginx/html</code></span></li><li><span class="option-label">C</span><span><code>/etc/nginx/html</code></span></li><li><span class="option-label">D</span><span><code>/home/nginx/html</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Nginx 官方镜像默认
+Web 根目录是 <code>/usr/share/nginx/html</code>，由
+<code>/etc/nginx/conf.d/default.conf</code> 配置。A 是 Apache
+的默认目录；C、D 不是 Nginx 的目录。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-003</strong>（★ 知识点：K5-1 镜像标签）
+关于镜像标签，下列做法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>学习阶段可以用
+<code>:latest</code>，生产环境用明确版本</span></li><li><span class="option-label">B</span><span>无论学习还是生产，都应明确指定版本号</span></li><li><span class="option-label">C</span><span><code>:latest</code>
+一定指向最新最稳定版本</span></li><li><span class="option-label">D</span><span>不写标签时默认使用 <code>:stable</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：无论学习还是生产都应明确版本号，保证可复现。<code>:latest</code>
+不保证最新最稳定，可能指向任意版本；不写标签默认 <code>:latest</code>
+而非 <code>:stable</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-004</strong>（★ 知识点：K5-2 MySQL 容器） 运行 MySQL
+容器时，必须设置的环境变量是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>MYSQL_DATABASE</code></span></li><li><span class="option-label">B</span><span><code>MYSQL_USER</code></span></li><li><span class="option-label">C</span><span><code>MYSQL_ROOT_PASSWORD</code></span></li><li><span class="option-label">D</span><span><code>MYSQL_PORT</code></span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>MYSQL_ROOT_PASSWORD</code> 是 MySQL
+官方镜像的必填环境变量，不设置容器启动会报错退出。A、B 是可选环境变量；D
+不是 MySQL 镜像的环境变量（端口在镜像内已固定为 3306）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-005</strong>（★ 知识点：K5-2 MySQL 容器） 运行 MySQL
+容器的命令
+<code>docker run -d --name ctts-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql:8.0</code>
+中，<code>-p 3306:3306</code> 的含义是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>宿主机 3306 端口映射到容器
+3306 端口</span></li><li><span class="option-label">B</span><span>容器 3306 端口映射到宿主机 3306 端口</span></li><li><span class="option-label">C</span><span>仅打开容器 3306
+端口</span></li><li><span class="option-label">D</span><span>仅打开宿主机 3306 端口</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>-p 宿主端口:容器端口</code>，前者是宿主机端口，后者是容器端口，表示把宿主机
+3306 端口的流量转发到容器 3306 端口。B 顺序写反；C、D 不完整。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-006</strong>（★ 知识点：K5-2 docker exec） 进入 MySQL
+容器执行交互式 SQL 命令，正确的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker exec ctts-mysql mysql -uroot -p123456</code></span></li><li><span class="option-label">B</span><span><code>docker exec -it ctts-mysql mysql -uroot -p123456</code></span></li><li><span class="option-label">C</span><span><code>docker run -it ctts-mysql mysql -uroot -p123456</code></span></li><li><span class="option-label">D</span><span><code>docker attach ctts-mysql mysql -uroot -p123456</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：进入运行中的容器用
+<code>docker exec -it</code>（<code>-i</code> 交互式，<code>-t</code>
+分配伪终端）。A 缺少 <code>-it</code>，无法交互；C 用
+<code>docker run</code> 会创建新容器；D <code>docker attach</code>
+是连接到容器主进程，不能执行新命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-007</strong>（★★ 知识点：K5-2 SQL 初始化） 将宿主机的
+<code>ctts-init.sql</code> 文件内容传给 MySQL 容器执行，正确的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker exec -it ctts-mysql mysql -uroot -p123456 &lt; ctts-init.sql</code></span></li><li><span class="option-label">B</span><span><code>docker exec -i ctts-mysql mysql -uroot -p123456 &lt; ctts-init.sql</code></span></li><li><span class="option-label">C</span><span><code>docker exec ctts-mysql mysql -uroot -p123456 &lt; ctts-init.sql</code></span></li><li><span class="option-label">D</span><span><code>docker cp ctts-init.sql ctts-mysql:/tmp/ &amp;&amp; docker exec ctts-mysql mysql -uroot -p123456</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：用
+<code>docker exec -i</code>（仅 <code>-i</code>，不带
+<code>-t</code>）配合 <code>&lt;</code>
+重定向，可将宿主机文件内容传给容器内命令。A 带 <code>-t</code>
+会与重定向冲突报错；C 缺少 <code>-i</code> 无法接收标准输入；D 用 docker
+cp 也可行但更繁琐，且第二条命令仍需用 <code>-e</code> 执行 SQL
+文件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-008</strong>（★ 知识点：K5-3 Nginx 挂载） 将宿主机
+<code>~/ctts/nginx-html</code> 挂载到 Nginx 容器的
+<code>/usr/share/nginx/html</code>，正确的参数是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>-v /usr/share/nginx/html:~/ctts/nginx-html</code></span></li><li><span class="option-label">B</span><span><code>-v ~/ctts/nginx-html:/usr/share/nginx/html</code></span></li><li><span class="option-label">C</span><span><code>-mount ~/ctts/nginx-html:/usr/share/nginx/html</code></span></li><li><span class="option-label">D</span><span><code>-volume ~/ctts/nginx-html:/usr/share/nginx/html</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>-v 宿主路径:容器路径</code>，前者是宿主机路径，后者是容器内路径。A
+顺序反了；C、D 参数名错误，正确参数是 <code>-v</code> 或
+<code>--mount</code>（<code>--mount</code> 语法不同，需
+<code>type=bind,source=...,target=...</code>）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-009</strong>（★ 知识点：K5-3 Nginx 验证） 运行 Nginx
+容器后，在宿主机用命令行验证 HTTP 服务，可用的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>curl http://localhost</code></span></li><li><span class="option-label">B</span><span><code>ping localhost</code></span></li><li><span class="option-label">C</span><span><code>telnet localhost 80</code></span></li><li><span class="option-label">D</span><span><code>ftp localhost</code></span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>curl http://localhost</code> 发 HTTP
+请求并返回响应内容，是验证 Web 服务的常用命令。B <code>ping</code>
+只能验证网络连通性，不能验证 HTTP 服务；C <code>telnet</code>
+可验证端口但操作繁琐；D <code>ftp</code> 是文件传输协议，不适用于 HTTP
+验证。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-010</strong>（★ 知识点：K5-4 Java 镜像） 关于
+<code>openjdk:17-jdk-slim</code> 镜像，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>只能运行
+Java 程序，不能编译</span></li><li><span class="option-label">B</span><span>包含 JDK，既能编译也能运行 Java 程序</span></li><li><span class="option-label">C</span><span>体积比
+<code>openjdk:17</code> 完整版大</span></li><li><span class="option-label">D</span><span>不能运行 jar 包</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>17-jdk-slim</code> 是 JDK 的 slim
+变体，包含 javac 编译器和 java 运行时，既能编译也能运行。A 错，JDK 包含
+javac；C 错，slim 体积更小；D 错，java -jar 可以运行 jar 包。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-011</strong>（★ 知识点：K5-4 Java 运行） 用 OpenJDK
+容器运行 jar 包，正确的命令形式是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker run -v app.jar:/app.jar openjdk:17-jdk-slim java -jar app.jar</code></span></li><li><span class="option-label">B</span><span><code>docker run -v ~/app.jar:/app/app.jar -w /app openjdk:17-jdk-slim java -jar app.jar</code></span></li><li><span class="option-label">C</span><span><code>docker run openjdk:17-jdk-slim -jar app.jar</code></span></li><li><span class="option-label">D</span><span><code>docker run openjdk:17-jdk-slim java app.jar</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：需要 <code>-v</code>
+挂载 jar 到容器，<code>-w</code> 指定工作目录，再执行
+<code>java -jar app.jar</code>。A 没指定工作目录且路径不规范；C 缺少
+<code>java</code> 命令；D 缺少 <code>-jar</code> 参数。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-012</strong>（★★ 知识点：K5-4 JDK vs JRE）
+运行一个已编译好的 SpringBoot jar 包，应该选择哪个镜像体积更小？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>openjdk:17-jdk-slim</code></span></li><li><span class="option-label">B</span><span><code>openjdk:17-jre-slim</code></span></li><li><span class="option-label">C</span><span><code>openjdk:17</code></span></li><li><span class="option-label">D</span><span><code>openjdk:17-jdk</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：运行 jar 包只需
+JRE（Java Runtime Environment），不需要 JDK
+的编译工具（javac）。<code>17-jre-slim</code> 体积最小。A、C、D 都含
+JDK，体积更大。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-013</strong>（★ 知识点：K5-5 --link） 关于
+<code>docker run --link</code>，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>--link</code> 是双向通信机制</span></li><li><span class="option-label">B</span><span><code>--link</code>
+是单向通信机制，且已被官方标记为 legacy</span></li><li><span class="option-label">C</span><span><code>--link</code> 是现代
+Docker 推荐的容器通信方式</span></li><li><span class="option-label">D</span><span><code>--link</code>
+必须配合自定义网络使用</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>--link</code>
+是单向的（A link B，只有 A 能找 B），已被官方标记为
+legacy（过时）。现代推荐做法是自定义网络（第 9 次课）。A 错，单向；C
+错，已过时；D 错，<code>--link</code> 在默认 bridge 网络下即可用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-014</strong>（★ 知识点：K5-5 --link 原理）
+<code>--link</code> 实现容器间通信的原理是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>在容器内安装额外的网络驱动</span></li><li><span class="option-label">B</span><span>在新容器的 <code>/etc/hosts</code>
+中添加目标容器的 IP 映射</span></li><li><span class="option-label">C</span><span>创建一个新的虚拟网卡</span></li><li><span class="option-label">D</span><span>通过环境变量传递
+IP</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>--link</code>
+的原理是在新容器的 <code>/etc/hosts</code>
+文件中添加一条记录，把目标容器的 IP 映射到指定别名。其他选项都不是
+<code>--link</code> 的机制。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-015</strong>（★ 知识点：K5-6 故障排查）
+容器启动后立即退出，排查问题的第一步应该是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>直接删除容器重建</span></li><li><span class="option-label">B</span><span>重启
+Docker 服务</span></li><li><span class="option-label">C</span><span>用 <code>docker logs &lt;容器名&gt;</code> 查看日志</span></li><li><span class="option-label">D</span><span>重装 Docker</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：容器故障排查的第一步是看日志，<code>docker logs</code>
+能显示容器内应用的报错信息，据此定位原因。A、B、D
+都是"盲目重装"的错误做法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-016</strong>（★ 知识点：K5-6 端口冲突） 运行容器报错
+<code>Bind for 0.0.0.0:80 failed: port is already allocated</code>，原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器内 80 端口未开放</span></li><li><span class="option-label">B</span><span>宿主机 80 端口已被其他进程占用</span></li><li><span class="option-label">C</span><span>镜像不支持
+80 端口</span></li><li><span class="option-label">D</span><span>Docker 服务未启动</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：该报错表示宿主机 80
+端口已被占用（可能是宿主机的 Apache/Nginx
+等）。解决方案是换一个宿主机端口，如 <code>-p 8080:80</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-017</strong>（★ 知识点：K5-6 容器状态）
+查看所有容器（包括已停止的），正确的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker ps</code></span></li><li><span class="option-label">B</span><span><code>docker ps -a</code></span></li><li><span class="option-label">C</span><span><code>docker ps -l</code></span></li><li><span class="option-label">D</span><span><code>docker ps -q</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker ps</code>
+只显示运行中的容器；<code>docker ps -a</code>
+显示所有容器（包括已停止的）；<code>-l</code>
+显示最新创建的一个；<code>-q</code> 只显示容器 ID。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-018</strong>（★ 知识点：K5-6 数据丢失） 删除 MySQL
+容器后重建，发现数据库表数据丢失，最可能的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>MySQL 版本不对</span></li><li><span class="option-label">B</span><span>容器未配置数据卷持久化 <code>/var/lib/mysql</code></span></li><li><span class="option-label">C</span><span>root 密码错误</span></li><li><span class="option-label">D</span><span>网络不通</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：未配置数据卷时，容器删除后
+<code>/var/lib/mysql</code> 目录的数据随之丢失。需要用
+<code>-v ~/mysql-data:/var/lib/mysql</code> 挂载数据卷持久化（第 10
+次课详讲）。其他选项与数据丢失无关。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-019</strong>（★★ 知识点：K5-2 MySQL 启动） MySQL
+容器刚启动时立即连接报
+<code>Can't connect to MySQL server</code>，原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>MySQL 镜像有问题</span></li><li><span class="option-label">B</span><span>MySQL 还在初始化数据库，尚未就绪</span></li><li><span class="option-label">C</span><span>端口映射错误</span></li><li><span class="option-label">D</span><span>容器名错误</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：MySQL 容器首次启动需
+10~20 秒初始化数据库，看到日志 "ready for connections"
+才能连接。立即连接会报连接失败。其他选项不是该报错的原因。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-020</strong>（★ 知识点：K5-2 环境变量） 设置 MySQL
+容器自动创建 <code>ctts</code> 数据库的环境变量是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>MYSQL_ROOT_PASSWORD=ctts</code></span></li><li><span class="option-label">B</span><span><code>MYSQL_DATABASE=ctts</code></span></li><li><span class="option-label">C</span><span><code>MYSQL_USER=ctts</code></span></li><li><span class="option-label">D</span><span><code>CREATE_DATABASE=ctts</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>MYSQL_DATABASE=ctts</code> 让 MySQL
+官方镜像在启动时自动创建 <code>ctts</code> 数据库。A 是设置 root 密码；C
+是创建用户；D 不是 MySQL 镜像的环境变量。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-021</strong>（★ 知识点：K5-3 挂载特性） 修改宿主机的
+<code>index.html</code> 后，Nginx 容器提供的页面立即更新，原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Docker 自动重启了 Nginx 容器</span></li><li><span class="option-label">B</span><span><code>-v</code>
+挂载是实时同步的，宿主机文件变化容器内立即可见</span></li><li><span class="option-label">C</span><span>Nginx 自动检测文件变化</span></li><li><span class="option-label">D</span><span>浏览器自动刷新</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>-v</code>
+挂载是实时同步的，宿主机文件变化容器内立即可见，刷新浏览器即可看到新内容，无需重启容器。其他选项都不是原因。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-022</strong>（★★ 知识点：K5-5 --link 单向性）
+<code>docker run --link ctts-mysql:mysql nginx:stable</code>
+后，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>ctts-mysql 容器能用 "nginx" 这个名字访问 nginx
+容器</span></li><li><span class="option-label">B</span><span>nginx 容器能用 "mysql" 这个名字访问 ctts-mysql 容器</span></li><li><span class="option-label">C</span><span>两个容器互相都能用名字访问</span></li><li><span class="option-label">D</span><span>两个容器都不能用名字访问</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>--link</code>
+是单向的，A link B 后只有 A（nginx）能用别名（mysql）访问
+B（ctts-mysql），反向不行。这正是 <code>--link</code> 的局限之一。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-023</strong>（★ 知识点：K5-4 临时容器） 执行
+<code>docker run --rm openjdk:17-jdk-slim java -version</code>，<code>--rm</code>
+参数的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>删除镜像</span></li><li><span class="option-label">B</span><span>容器退出后自动删除该容器</span></li><li><span class="option-label">C</span><span>强制删除已有同名容器</span></li><li><span class="option-label">D</span><span>重启容器</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>--rm</code>
+表示容器退出后自动删除，适合一次性命令（如验证版本、编译等）。A
+错，不删镜像；C 错，不强制删除已有容器；D 错，不重启。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-024</strong>（★ 知识点：K5-3 Nginx 端口） Nginx
+官方镜像默认监听的端口是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>8080</span></li><li><span class="option-label">B</span><span>80</span></li><li><span class="option-label">C</span><span>443</span></li><li><span class="option-label">D</span><span>3306</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Nginx
+官方镜像默认监听 80 端口（HTTP），由
+<code>/etc/nginx/conf.d/default.conf</code> 配置。443 是 HTTPS
+端口（需额外配置）；8080 是常用替代端口；3306 是 MySQL 端口。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-025</strong>（★ 知识点：K5-2 进入容器）
+<code>docker exec -it ctts-mysql bash</code> 命令中，<code>-it</code>
+两个参数的含义分别是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>-i</code> 进入容器，<code>-t</code>
+分配终端</span></li><li><span class="option-label">B</span><span><code>-i</code> 保持标准输入打开，<code>-t</code> 分配伪终端</span></li><li><span class="option-label">C</span><span><code>-i</code> 交互模式，<code>-t</code> 终端模式</span></li><li><span class="option-label">D</span><span><code>-i</code>
+忽略错误，<code>-t</code> 超时设置</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>-i</code>（interactive）保持标准输入打开，<code>-t</code>（tty）分配伪终端，两者配合才能进入交互式
+shell。A、C、D 都不准确。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-026</strong>（★★ 知识点：K5-6 排查流程）
+容器故障排查的标准流程，顺序正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker rm</code> →
+<code>docker run</code> → <code>docker logs</code></span></li><li><span class="option-label">B</span><span><code>docker ps -a</code> → <code>docker logs</code> →
+<code>docker inspect</code> → <code>docker exec</code></span></li><li><span class="option-label">C</span><span><code>docker logs</code> → <code>docker rm</code> →
+<code>docker run</code></span></li><li><span class="option-label">D</span><span><code>docker exec</code> →
+<code>docker logs</code> → <code>docker ps</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：标准流程是先看容器状态（<code>docker ps -a</code>），再看日志（<code>docker logs</code>），再看详细配置（<code>docker inspect</code>），最后进入容器手动排查（<code>docker exec</code>）。盲目
+<code>docker rm</code> 重建是错误做法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-027</strong>（★ 知识点：K5-1 镜像查看）
+查看本地已拉取的镜像列表，命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker images</code></span></li><li><span class="option-label">B</span><span><code>docker ps</code></span></li><li><span class="option-label">C</span><span><code>docker list</code></span></li><li><span class="option-label">D</span><span><code>docker inspect</code></span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>docker images</code>（或
+<code>docker image ls</code>）列出本地所有镜像。B <code>docker ps</code>
+列出容器；C 不是有效命令；D <code>docker inspect</code>
+查看详细信息。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-028</strong>（★★ 知识点：K5-2 MySQL 数据目录） MySQL
+官方镜像中，数据存储的默认目录是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>/etc/mysql</code></span></li><li><span class="option-label">B</span><span><code>/var/lib/mysql</code></span></li><li><span class="option-label">C</span><span><code>/usr/share/mysql</code></span></li><li><span class="option-label">D</span><span><code>/home/mysql</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：MySQL
+官方镜像默认数据目录是 <code>/var/lib/mysql</code>，持久化数据需用
+<code>-v</code> 挂载此目录。A 是配置文件目录；C、D 不是 MySQL
+镜像的标准目录。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-029</strong>（★ 知识点：K5-3 Nginx 入口命令） Nginx
+官方镜像的入口命令（CMD）是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>nginx</code></span></li><li><span class="option-label">B</span><span><code>nginx -g 'daemon off;'</code></span></li><li><span class="option-label">C</span><span><code>service nginx start</code></span></li><li><span class="option-label">D</span><span><code>systemctl start nginx</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Nginx
+官方镜像入口命令是 <code>nginx -g 'daemon off;'</code>，以前台模式运行
+Nginx（容器需要前台进程才能保持运行）。A 会让 Nginx
+后台运行导致容器立即退出；C、D
+是宿主机的服务管理命令，不适用于容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-030</strong>（★★ 知识点：K5-6 综合排查） 某同学运行
+Nginx 容器后访问 <code>http://localhost</code> 返回 403
+Forbidden，最可能的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Nginx 镜像有问题</span></li><li><span class="option-label">B</span><span>挂载的宿主机目录为空或 HTML 文件不存在</span></li><li><span class="option-label">C</span><span>端口映射错误</span></li><li><span class="option-label">D</span><span>Docker
+服务未启动</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：403 Forbidden
+表示服务器拒绝请求，通常是因为目录为空或文件权限不足。Nginx 找不到
+index.html 会返回 403。其他选项都不是 403 的原因。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>05-选择-031</strong>（★★ 知识点：K5-1 镜像选型） 本次课 CTTS
+三服务容器化用到的官方镜像有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>mysql:8.0</code></span></li><li><span class="option-label">B</span><span><code>nginx:stable</code></span></li><li><span class="option-label">C</span><span><code>openjdk:17-jdk-slim</code></span></li><li><span class="option-label">D</span><span><code>ubuntu:22.04</code> E. <code>redis:7</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong> <strong>解析</strong>：本次课 CTTS
+三服务分别用
+<code>mysql:8.0</code>（MySQL）、<code>nginx:stable</code>（Nginx）、<code>openjdk:17-jdk-slim</code>（Java）。D、E
+不在本次课三服务范围内。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-032</strong>（★★ 知识点：K5-2 docker run 参数） 运行
+MySQL 容器的 <code>docker run</code> 命令中，用到的参数有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>-d</code></span></li><li><span class="option-label">B</span><span><code>--name</code></span></li><li><span class="option-label">C</span><span><code>-p</code></span></li><li><span class="option-label">D</span><span><code>-e</code> E. <code>--link</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：运行 MySQL
+容器用
+<code>-d</code>（后台）、<code>--name</code>（命名）、<code>-p</code>（端口映射）、<code>-e</code>（环境变量）。<code>--link</code>
+是 Nginx 容器 link MySQL 时用的，不是 MySQL 容器自身用的参数。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-033</strong>（★★ 知识点：K5-2 MySQL 环境变量） MySQL
+官方镜像支持的环境变量包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>MYSQL_ROOT_PASSWORD</code></span></li><li><span class="option-label">B</span><span><code>MYSQL_DATABASE</code></span></li><li><span class="option-label">C</span><span><code>MYSQL_USER</code></span></li><li><span class="option-label">D</span><span><code>MYSQL_PASSWORD</code> E. <code>MYSQL_PORT</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：MySQL
+官方镜像支持 <code>MYSQL_ROOT_PASSWORD</code>（root
+密码，必填）、<code>MYSQL_DATABASE</code>（自动建库）、<code>MYSQL_USER</code>/<code>MYSQL_PASSWORD</code>（自动建用户）。E
+错，MySQL 端口在镜像内固定为 3306，不能通过环境变量修改。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-034</strong>（★★ 知识点：K5-6 常见问题）
+本次课实践中可能遇到的常见问题有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器无法启动（环境变量缺失）</span></li><li><span class="option-label">B</span><span>端口冲突</span></li><li><span class="option-label">C</span><span>数据丢失</span></li><li><span class="option-label">D</span><span>容器间通信失败
+E. 中文乱码</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：五个都是本次课实践中常见的踩坑点，分别对应未设密码、80/3306
+被占用、未配数据卷、未加 <code>--link</code>、字符集非 utf8mb4
+等场景。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-035</strong>（★★ 知识点：K5-5 容器通信） 关于 Docker
+容器间通信，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>默认 bridge 网络下，容器间可用
+IP 通信</span></li><li><span class="option-label">B</span><span>默认 bridge 网络下，容器间可用容器名通信</span></li><li><span class="option-label">C</span><span><code>--link</code> 是单向通信机制</span></li><li><span class="option-label">D</span><span><code>--link</code> 已被官方标记为
+legacy E. 自定义网络支持容器名双向通信</span></li></ul></div><blockquote>
+<p><strong>答案：A、C、D、E</strong> <strong>解析</strong>：默认 bridge
+网络下容器间可用 IP 通信（A），但不能用容器名（B
+错）；<code>--link</code>
+是单向（C）且已过时（D）；自定义网络支持容器名双向通信（E）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-036</strong>（★★ 知识点：K5-3 Nginx 挂载） 关于 Nginx
+容器的 <code>-v</code> 挂载，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>挂载后宿主机文件变化容器内立即可见</span></li><li><span class="option-label">B</span><span>必须挂载到
+<code>/usr/share/nginx/html</code></span></li><li><span class="option-label">C</span><span>挂载路径可以用相对路径</span></li><li><span class="option-label">D</span><span>修改
+HTML 后需重启容器才生效 E. 一个容器可以挂载多个目录</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、E</strong> <strong>解析</strong>：<code>-v</code>
+挂载实时同步（A）；Nginx 默认根目录是
+<code>/usr/share/nginx/html</code>（B）；一个容器可以用多个
+<code>-v</code> 挂载多个目录（E）。C 错，应用绝对路径；D
+错，实时同步无需重启。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-037</strong>（★★ 知识点：K5-6 排查命令）
+容器故障排查的常用命令有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker ps -a</code></span></li><li><span class="option-label">B</span><span><code>docker logs</code></span></li><li><span class="option-label">C</span><span><code>docker inspect</code></span></li><li><span class="option-label">D</span><span><code>docker exec</code> E. <code>docker rm</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：排查四步法是
+<code>docker ps -a</code>（看状态）→ <code>docker logs</code>（看日志）→
+<code>docker inspect</code>（看配置）→
+<code>docker exec</code>（进容器）。E <code>docker rm</code>
+是删除容器，不是排查命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-038</strong>（★★ 知识点：K5-4 Java 镜像变体） 关于
+OpenJDK 镜像变体，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>openjdk:17-jdk</code> 包含完整 JDK，含 javac</span></li><li><span class="option-label">B</span><span><code>openjdk:17-jre</code> 只包含 JRE，不能编译</span></li><li><span class="option-label">C</span><span><code>openjdk:17-jdk-slim</code> 是基于 Debian slim 的精简版</span></li><li><span class="option-label">D</span><span><code>openjdk:17-jdk-slim</code> 体积比 <code>openjdk:17-jdk</code> 大
+E. 运行 jar 包用 <code>17-jre-slim</code> 体积最小</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：A、B、C、E
+都正确。D 错，slim 变体体积更小（约 400MB），完整版约 600MB。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-039</strong>（★★ 知识点：K5-2 docker exec） 关于
+<code>docker exec</code>，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>可以在运行中的容器内执行新命令</span></li><li><span class="option-label">B</span><span><code>-i</code> 保持标准输入打开</span></li><li><span class="option-label">C</span><span><code>-t</code> 分配伪终端</span></li><li><span class="option-label">D</span><span>进入交互式 shell 用
+<code>docker exec -it</code> E. 用 <code>&lt;</code> 重定向文件时需用
+<code>-it</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都正确。E 错，用 <code>&lt;</code> 重定向时只能用 <code>-i</code>（不带
+<code>-t</code>），否则会报错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-选择-040</strong>（★★ 知识点：K5-1 镜像管理）
+本次课用到的镜像管理相关命令有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker pull mysql:8.0</code></span></li><li><span class="option-label">B</span><span><code>docker images</code></span></li><li><span class="option-label">C</span><span><code>docker inspect mysql:8.0</code></span></li><li><span class="option-label">D</span><span><code>docker run mysql:8.0</code> E.
+<code>docker rmi mysql:8.0</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong> <strong>解析</strong>：A 拉取镜像、B
+查看镜像、C 查看镜像详情，都是镜像管理命令。D
+是容器管理命令（运行容器）；E 是删除镜像命令，本次课未使用。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>05-判断-001</strong>（★ 知识点：K5-1 镜像标签）
+学习阶段可以用 <code>:latest</code> 标签，生产环境再指定明确版本号。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：无论学习还是生产，都应明确指定版本号，保证可复现。<code>:latest</code>
+可能指向任意版本，导致环境不一致。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-002</strong>（★ 知识点：K5-1 镜像查看）
+<code>docker images</code> 命令可以查看本地所有已拉取的镜像。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>docker images</code>（或
+<code>docker image ls</code>）列出本地所有镜像，包含
+REPOSITORY、TAG、IMAGE ID、CREATED、SIZE 等信息。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-003</strong>（★ 知识点：K5-2 MySQL 必填变量） 运行
+MySQL 容器时必须设置 <code>MYSQL_ROOT_PASSWORD</code>
+环境变量，否则容器启动会失败。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>MYSQL_ROOT_PASSWORD</code> 是 MySQL
+官方镜像的必填环境变量，不设置容器启动会报错退出（Exit Code 1）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-004</strong>（★ 知识点：K5-2 端口映射）
+<code>docker run -p 3306:3306</code> 表示把宿主机的 3306
+端口映射到容器的 3306 端口。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>-p 宿主端口:容器端口</code>，前者是宿主机端口，后者是容器端口，方向是宿主→容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-005</strong>（★ 知识点：K5-2 MySQL 启动） MySQL
+容器启动后可以立即连接，无需等待。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：MySQL
+容器首次启动需 10~20 秒初始化数据库，看到日志 "ready for connections"
+才能连接。立即连接会报 <code>Can't connect to MySQL server</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-006</strong>（★ 知识点：K5-2 docker exec）
+<code>docker exec -i ctts-mysql mysql -uroot -p123456 &lt; ctts-init.sql</code>
+可以将宿主机的 SQL 文件传给容器执行。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>docker exec -i</code>（仅
+<code>-i</code>，不带 <code>-t</code>）配合 <code>&lt;</code>
+重定向，可将宿主机文件内容作为标准输入传给容器内命令执行。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-007</strong>（★ 知识点：K5-3 Nginx 挂载）
+<code>-v ~/ctts/nginx-html:/usr/share/nginx/html</code>
+中，前者是宿主机路径，后者是容器内路径。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>-v 宿主路径:容器路径</code>，前者是宿主机路径，后者是容器内路径，方向是宿主→容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-008</strong>（★ 知识点：K5-3 挂载特性） 修改宿主机的
+HTML 文件后，需要重启 Nginx 容器才能让修改生效。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>-v</code>
+挂载是实时同步的，宿主机文件变化容器内立即可见，刷新浏览器即可看到新内容，无需重启容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-009</strong>（★ 知识点：K5-4 JDK vs JRE）
+<code>openjdk:17-jdk-slim</code> 镜像既能编译 Java 程序，也能运行 Java
+程序。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：JDK（Java
+Development Kit）包含 javac 编译器和 java 运行时，既能编译也能运行。slim
+只是精简了不必要的文件，仍保留完整 JDK 功能。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-010</strong>（★ 知识点：K5-4 运行 jar） 运行 jar
+包时，用 <code>openjdk:17-jre-slim</code> 比
+<code>openjdk:17-jdk-slim</code> 体积更小。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：JRE（Java
+Runtime Environment）只含运行时，不含 javac 编译器，体积比 JDK 小。运行
+jar 包用 JRE 即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-011</strong>（★ 知识点：K5-5 --link 特性）
+<code>--link</code> 是 Docker 官方推荐的现代容器通信方式。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>--link</code> 已被官方标记为
+legacy（过时），现代推荐做法是自定义网络（第 9 次课）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-012</strong>（★ 知识点：K5-5 --link 单向性）
+<code>docker run --link ctts-mysql:mysql nginx</code> 后，ctts-mysql
+容器也能用 "nginx" 这个名字访问 nginx 容器。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>--link</code> 是单向的，A link B 后只有
+A（nginx）能用别名（mysql）访问 B（ctts-mysql），反向不行。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-013</strong>（★ 知识点：K5-6 故障排查）
+容器启动后立即退出，应该直接删除容器重建，不用看日志。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：容器故障排查的第一步是看日志（<code>docker logs</code>），定位原因再处理。盲目删除重建是错误做法，可能反复踩同一个坑。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-014</strong>（★ 知识点：K5-6 端口冲突） 运行容器报错
+<code>port is already allocated</code>，可以换一个宿主机端口解决。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：端口冲突时，可以换一个未被占用的宿主机端口，如把
+<code>-p 80:80</code> 改为 <code>-p 8080:80</code>，访问时用新端口。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-015</strong>（★ 知识点：K5-6 容器状态）
+<code>docker ps</code> 命令可以查看所有容器，包括已停止的。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>docker ps</code>
+只显示运行中的容器。查看所有容器（包括已停止的）需用
+<code>docker ps -a</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-016</strong>（★ 知识点：K5-6 数据持久化）
+未配置数据卷的 MySQL 容器，删除后数据会丢失。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：未配置数据卷（<code>-v ~/mysql-data:/var/lib/mysql</code>）时，容器删除后
+<code>/var/lib/mysql</code> 目录的数据随之丢失。要持久化必须用数据卷（第
+10 次课）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-017</strong>（★★ 知识点：K5-3 Nginx 端口） Nginx
+官方镜像默认监听 8080 端口。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Nginx
+官方镜像默认监听 80 端口（HTTP），由
+<code>/etc/nginx/conf.d/default.conf</code> 配置。8080
+是常用替代端口，需通过 <code>-p 8080:80</code> 映射。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-018</strong>（★ 知识点：K5-2 MySQL 数据目录） MySQL
+官方镜像的默认数据目录是 <code>/var/lib/mysql</code>。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：MySQL
+官方镜像默认数据目录是 <code>/var/lib/mysql</code>，持久化需用
+<code>-v</code> 挂载此目录到宿主机或数据卷。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-019</strong>（★ 知识点：K5-4 --rm 参数）
+<code>docker run --rm openjdk:17-jdk-slim java -version</code> 中的
+<code>--rm</code> 表示容器退出后自动删除。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>--rm</code>
+表示容器退出后自动删除，适合一次性命令（如验证版本、编译等），避免遗留临时容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-判断-020</strong>（★★ 知识点：K5-6 综合排查）
+容器故障排查的标准流程是：看状态 → 看日志 → 看配置 → 进容器。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：标准排查流程为
+<code>docker ps -a</code>（看状态）→ <code>docker logs</code>（看日志）→
+<code>docker inspect</code>（看配置）→
+<code>docker exec</code>（进容器），最后定位原因并修复。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>05-填空-001</strong>（★ 知识点：K5-1 镜像选型） 本次课 CTTS
+三服务容器化使用的三个官方镜像分别是
+<code>mysql:8.0</code>、<code>nginx:stable</code> 和 ________。</p><blockquote>
+<p><strong>答案：<code>openjdk:17-jdk-slim</code></strong>
+<strong>解析</strong>：三服务镜像分别为
+MySQL（<code>mysql:8.0</code>）、Nginx（<code>nginx:stable</code>）、Java（<code>openjdk:17-jdk-slim</code>）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-填空-002</strong>（★ 知识点：K5-2 MySQL 必填变量） 运行
+MySQL 容器时，必须设置的环境变量是 ________。</p><blockquote>
+<p><strong>答案：<code>MYSQL_ROOT_PASSWORD</code></strong>
+<strong>解析</strong>：<code>MYSQL_ROOT_PASSWORD</code> 是 MySQL
+官方镜像的必填环境变量，不设置容器启动会报错退出。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-填空-003</strong>（★ 知识点：K5-2 端口映射）
+<code>docker run -p 3306:3306</code> 中，前一个 3306 是 ________
+端口，后一个 3306 是 ________ 端口。</p><blockquote>
+<p><strong>答案：宿主机；容器</strong>
+<strong>解析</strong>：<code>-p 宿主端口:容器端口</code>，前者是宿主机端口，后者是容器内端口。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-填空-004</strong>（★ 知识点：K5-3 Nginx 挂载路径） Nginx
+官方镜像的默认 Web 根目录是 ________。</p><blockquote>
+<p><strong>答案：<code>/usr/share/nginx/html</code></strong>
+<strong>解析</strong>：Nginx 官方镜像默认 Web 根目录是
+<code>/usr/share/nginx/html</code>，由
+<code>/etc/nginx/conf.d/default.conf</code> 配置。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-填空-005</strong>（★ 知识点：K5-2 进入容器） 进入运行中的
+MySQL 容器执行交互式命令，应使用 <code>docker exec</code> 加 ________
+参数（两个字母）。</p><blockquote>
+<p><strong>答案：<code>-it</code></strong>
+<strong>解析</strong>：<code>docker exec -it &lt;容器名&gt; bash</code>
+进入交互式 shell，<code>-i</code> 保持标准输入打开，<code>-t</code>
+分配伪终端。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-填空-006</strong>（★ 知识点：K5-5 --link 机制）
+<code>--link</code> 通过在新容器的 ________ 文件中添加目标容器的 IP
+映射来实现容器间通信。</p><blockquote>
+<p><strong>答案：<code>/etc/hosts</code></strong>
+<strong>解析</strong>：<code>--link</code> 的原理是在新容器的
+<code>/etc/hosts</code> 文件中添加一条记录，把目标容器的 IP
+映射到指定别名。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-填空-007</strong>（★ 知识点：K5-6 端口冲突） 运行容器报错
+<code>port is already allocated</code>，原因是 ________
+端口已被占用。</p><blockquote>
+<p><strong>答案：宿主机</strong>
+<strong>解析</strong>：该报错表示宿主机端口已被其他进程占用。解决方案是换一个未被占用的宿主机端口。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-填空-008</strong>（★ 知识点：K5-6 数据目录） MySQL
+官方镜像的默认数据目录是 ________，持久化需用 <code>-v</code>
+挂载此目录。</p><blockquote>
+<p><strong>答案：<code>/var/lib/mysql</code></strong>
+<strong>解析</strong>：MySQL 官方镜像默认数据目录是
+<code>/var/lib/mysql</code>，未挂载时容器删除数据即丢失。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-填空-009</strong>（★★ 知识点：K5-4 JDK vs JRE）
+运行已编译的 jar 包，应选择 <code>openjdk:17-________-slim</code>
+镜像以减小体积。</p><blockquote>
+<p><strong>答案：<code>jre</code></strong> <strong>解析</strong>：运行
+jar 包只需 JRE（Java Runtime Environment），不需要 JDK
+的编译工具。<code>openjdk:17-jre-slim</code> 比 <code>17-jdk-slim</code>
+体积更小。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-填空-010</strong>（★ 知识点：K5-6 排查命令）
+查看所有容器（包括已停止的），命令是 <code>docker ps</code> 加 ________
+参数。</p><blockquote>
+<p><strong>答案：<code>-a</code>（或 <code>--all</code>）</strong>
+<strong>解析</strong>：<code>docker ps</code>
+只显示运行中的容器，<code>docker ps -a</code>
+显示所有容器（包括已停止的）。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>05-论述-001</strong>（★★ 知识点：K5-2 MySQL 容器运行，10 分）
+请写出运行 MySQL 容器的完整 <code>docker run</code>
+命令（要求：后台运行、容器名 <code>ctts-mysql</code>、端口映射
+3306、root 密码 <code>123456</code>、自动创建 <code>ctts</code>
+数据库），并说明每个参数的含义。容器启动后如何验证 MySQL 已就绪？</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>完整命令</strong>（5 分，每参数 1 分）：</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> ctts-mysql <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 3306:3306 <span class="dt">\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_ROOT_PASSWORD=123456 <span class="dt">\</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_DATABASE=ctts <span class="dt">\</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  mysql:8.0</span></code></pre></div>
+<ul>
+<li><code>-d</code>：后台运行容器（detached 模式）（1 分）</li>
+<li><code>--name ctts-mysql</code>：给容器命名为 ctts-mysql（1 分）</li>
+<li><code>-p 3306:3306</code>：宿主机 3306 端口映射到容器 3306 端口（1
+分）</li>
+<li><code>-e MYSQL_ROOT_PASSWORD=123456</code>：设置 root
+密码（必填）（1 分）</li>
+<li><code>-e MYSQL_DATABASE=ctts</code>：自动创建 ctts 数据库（1
+分）</li>
+</ul></li>
+<li><p><strong>验证 MySQL 就绪</strong>（5 分）：</p>
+<ul>
+<li>方式 1：查看日志，看到 "ready for connections" 表示就绪（2 分）
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> logs ctts-mysql</span></code></pre></div></li>
+<li>方式 2：用 mysqladmin ping 检查（2 分）
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec ctts-mysql mysqladmin ping <span class="at">-uroot</span> <span class="at">-p123456</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出 mysqld is alive 表示就绪</span></span></code></pre></div></li>
+<li>注意：MySQL 首次启动需 10~20 秒初始化，不能立即连接（1 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：命令完整正确 5 分，验证方法 5
+分；参数含义每对一个 1 分；验证方法答出任意 2 种给满分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-论述-002</strong>（★★ 知识点：K5-3 Nginx 容器部署，8 分）
+请描述如何用 Nginx 容器部署一个静态 HTML 页面，要求包含：完整
+<code>docker run</code> 命令、挂载路径说明、访问验证方法。修改 HTML
+后是否需要重启容器？为什么？</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>完整命令</strong>（3 分）：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> ctts-nginx <span class="dt">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 80:80 <span class="dt">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/ctts/nginx-html:/usr/share/nginx/html <span class="dt">\</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  nginx:stable</span></code></pre></div>
+<ul>
+<li><code>-d</code>：后台运行（0.5 分）</li>
+<li><code>--name ctts-nginx</code>：容器命名（0.5 分）</li>
+<li><code>-p 80:80</code>：端口映射（0.5 分）</li>
+<li><code>-v ~/ctts/nginx-html:/usr/share/nginx/html</code>：挂载 HTML
+目录（1 分）</li>
+<li><code>nginx:stable</code>：使用 Nginx 稳定版镜像（0.5 分）</li>
+</ul></li>
+<li><p><strong>挂载路径说明</strong>（2 分）：</p>
+<ul>
+<li>宿主机路径：<code>~/ctts/nginx-html</code>（存放 index.html
+的目录）（1 分）</li>
+<li>容器内路径：<code>/usr/share/nginx/html</code>（Nginx 官方镜像默认
+Web 根目录）（1 分）</li>
+</ul></li>
+<li><p><strong>访问验证方法</strong>（2 分）：</p>
+<ul>
+<li>命令行：<code>curl http://localhost</code>，返回 HTML 内容（1
+分）</li>
+<li>浏览器：访问 <code>http://localhost</code>，看到页面（1 分）</li>
+</ul></li>
+<li><p><strong>修改 HTML 后是否需重启</strong>（1 分）：</p>
+<ul>
+<li>不需要重启（0.5 分）</li>
+<li>原因：<code>-v</code>
+挂载是实时同步的，宿主机文件变化容器内立即可见，刷新浏览器即可（0.5
+分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：四部分各自给分；命令完整正确即可；挂载路径方向不能反。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-论述-003</strong>（★★ 知识点：K5-6 故障排查，10 分）
+某同学运行 MySQL 容器后，<code>docker ps</code>
+看不到该容器，请描述完整的排查流程。至少列出 3
+种可能导致该问题的原因及对应解决方案。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>排查流程</strong>（4 分，每步 1 分）：</p>
+<ul>
+<li>第 1 步：用 <code>docker ps -a</code>
+查看所有容器（包括已停止的），确认容器是否存在及 Exit Code（1 分）</li>
+<li>第 2 步：用 <code>docker logs &lt;容器名&gt;</code>
+查看容器日志，定位报错信息（1 分）</li>
+<li>第 3 步：用 <code>docker inspect &lt;容器名&gt;</code>
+查看容器详细配置（网络、挂载、环境变量等）（1 分）</li>
+<li>第 4 步：必要时用 <code>docker exec -it &lt;容器名&gt; bash</code>
+进入容器手动排查（1 分）</li>
+</ul></li>
+<li><p><strong>可能原因及解决方案</strong>（6 分，每种 2 分，列出 3
+种即满分）：</p>
+<ul>
+<li><strong>原因 1：未设置 <code>MYSQL_ROOT_PASSWORD</code></strong>
+<ul>
+<li>日志报错：<code>MYSQL_ROOT_PASSWORD not set</code></li>
+<li>解决：<code>docker rm &lt;容器名&gt;</code>，重新运行加
+<code>-e MYSQL_ROOT_PASSWORD=123456</code>（2 分）</li>
+</ul></li>
+<li><strong>原因 2：端口 3306 被占用</strong>
+<ul>
+<li>报错：<code>Bind for 0.0.0.0:3306 failed: port is already allocated</code></li>
+<li>解决：换宿主机端口 <code>-p 3307:3306</code>，或停止占用 3306
+的进程（2 分）</li>
+</ul></li>
+<li><strong>原因 3：镜像拉取失败或不存在</strong>
+<ul>
+<li>报错：<code>Unable to find image 'mysql:8.0' locally / manifest unknown</code></li>
+<li>解决：检查镜像名和标签是否正确，配置镜像加速器重新 pull（2 分）</li>
+</ul></li>
+<li><strong>原因 4：容器名冲突</strong>（已存在同名容器）
+<ul>
+<li>报错：<code>Conflict. The container name "/ctts-mysql" is already in use</code></li>
+<li>解决：<code>docker rm -f ctts-mysql</code> 删除旧容器后重建（2
+分）</li>
+</ul></li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：排查流程 4 分，原因与方案 6 分；答出 3
+种原因即满分；流程顺序正确即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>05-论述-004</strong>（★★ 知识点：K5-5 容器通信，8 分） 请说明
+<code>--link</code> 的工作原理、局限性以及现代 Docker
+推荐的替代方案。<code>--link</code> 是单向还是双向？如何验证？</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong><code>--link</code> 工作原理</strong>（3 分）：</p>
+<ul>
+<li>语法：<code>docker run --link &lt;目标容器名&gt;:&lt;别名&gt; &lt;新镜像&gt;</code>（1
+分）</li>
+<li>原理：Docker 在新容器的 <code>/etc/hosts</code>
+文件中添加一条记录，把目标容器的 IP 映射到指定别名（1 分）</li>
+<li>效果：新容器内可以用"别名"访问目标容器（1 分）</li>
+</ul></li>
+<li><p><strong><code>--link</code> 的局限性</strong>（3 分）：</p>
+<ul>
+<li><strong>单向通信</strong>：A link B 后只有 A 能找 B，B 不能找 A（1
+分）</li>
+<li><strong>已过时</strong>：被官方标记为 legacy，不推荐生产使用（1
+分）</li>
+<li><strong>不稳定</strong>：重启容器后可能失效，不支持动态更新（1
+分）</li>
+</ul></li>
+<li><p><strong>现代替代方案</strong>（1 分）：</p>
+<ul>
+<li>推荐用<strong>自定义网络</strong>（custom bridge network）（0.5
+分）</li>
+<li>创建网络
+<code>docker network create ctts-net</code>，把容器加入网络后即可用容器名双向通信（0.5
+分）</li>
+</ul></li>
+<li><p><strong><code>--link</code> 单向性验证</strong>（1 分）：</p>
+<ul>
+<li>在 nginx 容器（A）<code>--link</code> ctts-mysql（B）后：
+<ul>
+<li>在 nginx 容器内 <code>getent hosts mysql</code> 能解析（A 能找
+B）（0.5 分）</li>
+<li>在 mysql 容器内 <code>getent hosts nginx</code> 不能解析（B 不能找
+A）（0.5 分）</li>
+</ul></li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：四部分分别给分；原理要说到
+<code>/etc/hosts</code>；局限性至少答出单向和过时；替代方案要提自定义网络。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>05-阅读-001</strong>（★★ 知识点：K5-2 MySQL
+容器运行与初始化，12 分） 阅读以下 MySQL
+容器运行与初始化的命令序列，补全缺失部分（每空 2 分，共 12 分）。</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 拉取 MySQL 镜像</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull <span class="er">(</span><span class="ex">a</span><span class="kw">)</span><span class="ex">________</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 运行 MySQL 容器</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> <span class="er">(</span><span class="ex">b</span><span class="kw">)</span><span class="ex">________</span> <span class="dt">\</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> <span class="er">(</span><span class="ex">c</span><span class="kw">)</span><span class="ex">________:3306</span> <span class="dt">\</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> <span class="er">(</span><span class="ex">d</span><span class="kw">)</span><span class="va">________</span><span class="op">=</span>123456 <span class="dt">\</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">-e</span> MYSQL_DATABASE=ctts <span class="dt">\</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  mysql:8.0</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 等待 MySQL 启动后，执行 SQL 脚本初始化数据库</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="er">(</span><span class="ex">e</span><span class="kw">)</span><span class="ex">________</span> ctts-mysql mysql <span class="at">-uroot</span> <span class="at">-p123456</span> <span class="op">&lt;</span> ctts-init.sql</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 验证数据库表是否创建成功</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec ctts-mysql mysql <span class="at">-uroot</span> <span class="at">-p123456</span> <span class="at">-e</span> <span class="st">&quot;USE ctts; (f)________;&quot;</span></span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) <code>mysql:8.0</code> (b)
+<code>ctts-mysql</code> (c) <code>3306</code> (d)
+<code>MYSQL_ROOT_PASSWORD</code> (e) <code>-i</code> (f)
+<code>SHOW TABLES</code></p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) 拉取 MySQL 8.0 官方镜像</li>
+<li>(b) 容器命名为 ctts-mysql</li>
+<li>(c) 宿主机 3306 端口映射到容器 3306 端口</li>
+<li>(d) 必须设置 <code>MYSQL_ROOT_PASSWORD</code> 环境变量</li>
+<li>(e) 用 <code>&lt;</code> 重定向时只能用 <code>-i</code>（不带
+<code>-t</code>），否则报错</li>
+<li>(f) 查看当前数据库的所有表用 <code>SHOW TABLES</code></li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。专有名词拼写错误不扣分（如 <code>MYSQL_ROOT_PASSWORD</code>
+大小写不严格）。</p>
+</blockquote>
+<hr />
+<p><strong>05-阅读-002</strong>（★★ 知识点：K5-3 Nginx 容器部署，12 分）
+阅读以下 Nginx 容器部署静态页面的命令序列，补全缺失部分（每空 2 分，共
+12 分）。</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 创建 HTML 工作目录</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/ctts/<span class="er">(</span><span class="ex">a</span><span class="kw">)</span><span class="ex">________</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 将 index.html 保存到上述目录</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 运行 Nginx 容器，挂载 HTML 目录</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> <span class="er">(</span><span class="ex">b</span><span class="kw">)</span><span class="ex">________</span> <span class="dt">\</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> <span class="er">(</span><span class="ex">c</span><span class="kw">)</span><span class="ex">________:80</span> <span class="dt">\</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/ctts/nginx-html:/<span class="er">(</span><span class="ex">d</span><span class="kw">)</span><span class="ex">________</span> <span class="dt">\</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="er">(</span><span class="ex">e</span><span class="kw">)</span><span class="ex">________</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 验证 Nginx 服务</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="er">(</span><span class="ex">f</span><span class="kw">)</span><span class="ex">________</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 修改 HTML 后无需重启容器，刷新浏览器即可</span></span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) <code>nginx-html</code> (b)
+<code>ctts-nginx</code> (c) <code>80</code> (d)
+<code>usr/share/nginx/html</code> (e) <code>nginx:stable</code> (f)
+<code>http://localhost</code></p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) 创建 nginx-html 目录存放 HTML 文件</li>
+<li>(b) 容器命名为 ctts-nginx</li>
+<li>(c) 宿主机 80 端口映射到容器 80 端口</li>
+<li>(d) 挂载到 Nginx 官方镜像默认 Web 根目录
+<code>/usr/share/nginx/html</code></li>
+<li>(e) 使用 Nginx 稳定版镜像</li>
+<li>(f) 用 curl 访问 http://localhost 验证</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12 分。(d) 必须是
+<code>/usr/share/nginx/html</code>（前导斜杠可有可无）。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>05-编程-001</strong>（★★ 知识点：K5-2 MySQL 初始化，15 分）
+<strong>CTTS 数据库初始化 SQL 脚本设计</strong>：请为 CTTS
+项目编写一个完整的 MySQL 初始化 SQL 脚本
+<code>ctts-init.sql</code>，要求：</p>
+<ol type="1">
+<li>使用 <code>ctts</code> 数据库（2 分）</li>
+<li>创建用户表
+<code>t_user</code>，包含字段：id（自增主键）、username（用户名，唯一）、password（密码）、real_name（真实姓名）、role（角色，默认
+'student'）、create_time（创建时间，默认当前时间）（5 分）</li>
+<li>创建试题表
+<code>t_question</code>，包含字段：id（自增主键）、title（标题）、content（内容）、type（题型）、difficulty（难度）、answer（答案）、create_time（创建时间）（5
+分）</li>
+<li>向两个表各插入至少 2 条测试数据（3 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- 1. 使用 ctts 数据库（2 分）</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">USE</span> ctts;</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- 2. 创建用户表 t_user（5 分，每字段 0.5 分，主键/唯一键/默认值各 0.5 分）</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> `t_user` (</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  `id` BIGINT <span class="kw">NOT</span> <span class="kw">NULL</span> AUTO_INCREMENT <span class="kw">COMMENT</span> <span class="st">&#39;用户ID&#39;</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  `username` <span class="dt">VARCHAR</span>(<span class="dv">50</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">COMMENT</span> <span class="st">&#39;用户名&#39;</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  `password` <span class="dt">VARCHAR</span>(<span class="dv">100</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">COMMENT</span> <span class="st">&#39;密码&#39;</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  `real_name` <span class="dt">VARCHAR</span>(<span class="dv">50</span>) <span class="kw">DEFAULT</span> <span class="kw">NULL</span> <span class="kw">COMMENT</span> <span class="st">&#39;真实姓名&#39;</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  `role` <span class="dt">VARCHAR</span>(<span class="dv">20</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">&#39;student&#39;</span> <span class="kw">COMMENT</span> <span class="st">&#39;角色&#39;</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  `create_time` DATETIME <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span> <span class="kw">COMMENT</span> <span class="st">&#39;创建时间&#39;</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">PRIMARY</span> <span class="kw">KEY</span> (`id`),</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">UNIQUE</span> <span class="kw">KEY</span> `uk_username` (`username`)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>) ENGINE<span class="op">=</span>InnoDB <span class="kw">DEFAULT</span> CHARSET<span class="op">=</span>utf8mb4 <span class="kw">COMMENT</span><span class="op">=</span><span class="st">&#39;CTTS 用户表&#39;</span>;</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">-- 3. 创建试题表 t_question（5 分，每字段 0.5 分，主键/默认值 0.5 分）</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> `t_question` (</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  `id` BIGINT <span class="kw">NOT</span> <span class="kw">NULL</span> AUTO_INCREMENT <span class="kw">COMMENT</span> <span class="st">&#39;试题ID&#39;</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  `title` <span class="dt">VARCHAR</span>(<span class="dv">200</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">COMMENT</span> <span class="st">&#39;标题&#39;</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  `content` TEXT <span class="kw">COMMENT</span> <span class="st">&#39;内容&#39;</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  `type` <span class="dt">VARCHAR</span>(<span class="dv">20</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">COMMENT</span> <span class="st">&#39;题型&#39;</span>,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  `difficulty` TINYINT <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="dv">1</span> <span class="kw">COMMENT</span> <span class="st">&#39;难度&#39;</span>,</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  `answer` <span class="dt">VARCHAR</span>(<span class="dv">500</span>) <span class="kw">COMMENT</span> <span class="st">&#39;答案&#39;</span>,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  `create_time` DATETIME <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span> <span class="kw">COMMENT</span> <span class="st">&#39;创建时间&#39;</span>,</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">PRIMARY</span> <span class="kw">KEY</span> (`id`)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>) ENGINE<span class="op">=</span>InnoDB <span class="kw">DEFAULT</span> CHARSET<span class="op">=</span>utf8mb4 <span class="kw">COMMENT</span><span class="op">=</span><span class="st">&#39;CTTS 试题表&#39;</span>;</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">-- 4. 插入测试数据（3 分，每表 1.5 分）</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> `t_user` (`username`, `password`, `real_name`, `role`) <span class="kw">VALUES</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  (<span class="st">&#39;admin&#39;</span>, <span class="st">&#39;123456&#39;</span>, <span class="st">&#39;系统管理员&#39;</span>, <span class="st">&#39;admin&#39;</span>),</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  (<span class="st">&#39;teacher01&#39;</span>, <span class="st">&#39;123456&#39;</span>, <span class="st">&#39;张老师&#39;</span>, <span class="st">&#39;teacher&#39;</span>),</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  (<span class="st">&#39;student01&#39;</span>, <span class="st">&#39;123456&#39;</span>, <span class="st">&#39;李同学&#39;</span>, <span class="st">&#39;student&#39;</span>);</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> `t_question` (`title`, `content`, `type`, `difficulty`, `answer`) <span class="kw">VALUES</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  (<span class="st">&#39;Docker 是什么？&#39;</span>, <span class="st">&#39;请简述 Docker 的定义&#39;</span>, <span class="st">&#39;judge&#39;</span>, <span class="dv">1</span>, <span class="st">&#39;Docker 是开源的容器化平台&#39;</span>),</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  (<span class="st">&#39;容器和虚拟机的区别？&#39;</span>, <span class="st">&#39;从隔离机制、启动速度、资源占用三方面比较&#39;</span>, <span class="st">&#39;single&#39;</span>, <span class="dv">2</span>, <span class="st">&#39;见教学资料 K1-3&#39;</span>);</span></code></pre></div>
+<p><strong>评分要点</strong>：</p>
+<ul>
+<li>数据库选择 2 分；表结构 10 分（字段、类型、约束、字符集）；测试数据
+3 分。</li>
+<li>必须指定
+<code>ENGINE=InnoDB DEFAULT CHARSET=utf8mb4</code>（否则中文乱码）。</li>
+<li>字段名、类型合理即可，不要求与答案完全一致；合理替代（如
+<code>INT</code> 代替 <code>BIGINT</code>）同样给分。</li>
+</ul>
+</blockquote>
+<hr />
+<p><strong>05-编程-002</strong>（★★★ 知识点：K5-1~K5-5 综合应用，20 分）
+<strong>CTTS 三服务容器化完整操作方案设计</strong>：请为 CTTS
+项目设计三服务容器化的完整操作方案，要求：</p>
+<ol type="1">
+<li>写出拉取三个镜像的命令（3 分）</li>
+<li>写出运行 MySQL 容器的完整命令，要求带数据卷持久化（4 分）</li>
+<li>写出运行 Nginx 容器的完整命令，要求挂载 HTML 并 <code>--link</code>
+到 MySQL（4 分）</li>
+<li>写出用 OpenJDK 容器运行 jar 包的完整命令（4 分）</li>
+<li>写出验证三个服务是否正常的命令（3 分）</li>
+<li>说明三服务的启动顺序及原因（2 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<p><strong>1. 拉取三个镜像（3 分，每个 1 分）</strong>：</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull mysql:8.0</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull nginx:stable</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull openjdk:17-jdk-slim</span></code></pre></div>
+<p><strong>2. 运行 MySQL 容器（4 分）</strong>：</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/ctts/mysql-data</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> ctts-mysql <span class="dt">\</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 3306:3306 <span class="dt">\</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_ROOT_PASSWORD=123456 <span class="dt">\</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_DATABASE=ctts <span class="dt">\</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/ctts/mysql-data:/var/lib/mysql <span class="dt">\</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  mysql:8.0</span></code></pre></div>
+<ul>
+<li>必须包含
+<code>-d</code>、<code>--name</code>、<code>-p</code>、<code>-e MYSQL_ROOT_PASSWORD</code>、<code>-e MYSQL_DATABASE</code>、<code>-v</code>
+挂载数据目录（每项 0.5 分，共 3 分）</li>
+<li>数据卷挂载到 <code>/var/lib/mysql</code>（1 分）</li>
+</ul>
+<p><strong>3. 运行 Nginx 容器（4 分）</strong>：</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> ctts-nginx <span class="dt">\</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 80:80 <span class="dt">\</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/ctts/nginx-html:/usr/share/nginx/html <span class="dt">\</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--link</span> ctts-mysql:mysql <span class="dt">\</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  nginx:stable</span></code></pre></div>
+<ul>
+<li>必须包含
+<code>-d</code>、<code>--name</code>、<code>-p 80:80</code>、<code>-v</code>
+挂载到
+<code>/usr/share/nginx/html</code>、<code>--link ctts-mysql:mysql</code>（每项
+0.8 分，共 4 分）</li>
+</ul>
+<p><strong>4. 运行 Java 容器（4 分）</strong>：</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> ctts-backend <span class="dt">\</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 8080:8080 <span class="dt">\</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/ctts/java-app/ctts-backend.jar:/app/app.jar <span class="dt">\</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-w</span> /app <span class="dt">\</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  openjdk:17-jdk-slim <span class="dt">\</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  java <span class="at">-jar</span> app.jar</span></code></pre></div>
+<ul>
+<li>必须包含
+<code>-d</code>、<code>--name</code>、<code>-p 8080:8080</code>、<code>-v</code>
+挂载 jar、<code>-w /app</code>、<code>java -jar app.jar</code>（每项约
+0.7 分，共 4 分）</li>
+</ul>
+<p><strong>5. 验证命令（3 分）</strong>：</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证 MySQL</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec ctts-mysql mysql <span class="at">-uroot</span> <span class="at">-p123456</span> <span class="at">-e</span> <span class="st">&quot;SHOW DATABASES;&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证 Nginx</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://localhost</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证 Java 后端</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://localhost:8080/actuator/health</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 或 docker logs ctts-backend 看启动日志</span></span></code></pre></div>
+<ul>
+<li>MySQL、Nginx、Java 三个验证命令各 1 分</li>
+</ul>
+<p><strong>6. 启动顺序及原因（2 分）</strong>：</p>
+<ul>
+<li>顺序：MySQL → Java 后端 → Nginx（1 分）</li>
+<li>原因：Java 后端依赖 MySQL（需先连数据库），Nginx 依赖 Java
+后端（需后端 API 就绪）。依赖关系决定启动顺序，被依赖的服务先启动（1
+分）</li>
+</ul>
+<p><strong>评分要点</strong>：</p>
+<ul>
+<li>各部分独立给分，命令完整可执行即可。</li>
+<li>数据卷挂载路径、HTML 挂载路径、jar
+挂载路径方向不能反（宿主:容器）。</li>
+<li>端口映射合理即可，不强制 8080（用 8088 等同样给分）。</li>
+<li>启动顺序答出"MySQL 优先"即可得分。</li>
+</ul>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

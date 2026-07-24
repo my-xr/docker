@@ -1,0 +1,1159 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dockerfile构建实践</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 08 次课 · 题库</div>
+      <h1>Dockerfile构建实践</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 08 次课</span>
+        <span class="hero-chip"><b>主题</b>Dockerfile构建实践</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 08 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>08-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>08-选择-001</strong>（★ 知识点：K8-1 后端 Dockerfile） CTTS
+后端采用多阶段构建，第一阶段用 Maven 镜像的主要目的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>运行 jar 包</span></li><li><span class="option-label">B</span><span>编译打包源码产出 jar</span></li><li><span class="option-label">C</span><span>提供生产运行环境</span></li><li><span class="option-label">D</span><span>托管静态文件</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：多阶段构建第一阶段（builder）用 Maven 镜像执行
+<code>mvn package</code> 编译打包源码产出 jar。运行 jar 是第二阶段（JRE
+镜像）的职责；提供生产运行环境是第二阶段；托管静态文件是前端 Nginx
+的职责。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-002</strong>（★ 知识点：K8-2 前端 Dockerfile） CTTS
+前端多阶段构建中，第二阶段运行镜像选择的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>node:alpine</span></li><li><span class="option-label">B</span><span>nginx:alpine</span></li><li><span class="option-label">C</span><span>openjdk:17</span></li><li><span class="option-label">D</span><span>httpd:alpine</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：前端构建产物 dist
+是静态文件，用 Nginx 托管。<code>nginx:alpine</code>
+体积小（~40MB）且是高性能静态服务器。node 用于构建阶段；openjdk
+用于后端；httpd 是 Apache，不如 Nginx 常用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-003</strong>（★ 知识点：K8-3 构建命令）
+<code>docker build -t ctts-backend:v1 .</code> 命令中，末尾的
+<code>.</code> 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Dockerfile 的文件名</span></li><li><span class="option-label">B</span><span>当前用户主目录</span></li><li><span class="option-label">C</span><span>构建上下文（build context）为当前目录</span></li><li><span class="option-label">D</span><span>镜像标签的分隔符</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：<code>.</code>
+表示构建上下文为当前目录，Docker
+会把该目录下所有文件发送给守护进程，Dockerfile 中的 COPY/ADD
+从该上下文复制文件。Dockerfile 默认从上下文根目录查找。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-004</strong>（★ 知识点：K8-3 构建日志）
+构建日志中出现 <code>CACHED</code> 字样表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>构建失败，需要清除缓存</span></li><li><span class="option-label">B</span><span>该层命中缓存，复用旧层未重新执行</span></li><li><span class="option-label">C</span><span>该层被跳过不执行</span></li><li><span class="option-label">D</span><span>镜像已推送到缓存服务器</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>CACHED</code>
+表示该层命中缓存（指令相同 + 上传文件未变），Docker
+直接复用上次构建的层，加速构建。这是构建缓存机制的核心体现。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-005</strong>（★ 知识点：K8-4 容器运行）
+要让前端容器和后端容器通过容器名互相通信，正确做法是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>都用默认
+bridge 网络</span></li><li><span class="option-label">B</span><span>创建自定义网络，把两个容器都加入该网络</span></li><li><span class="option-label">C</span><span>用 host
+网络模式</span></li><li><span class="option-label">D</span><span>端口映射即可，无需关心网络</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：默认 bridge
+网络不支持容器名 DNS 解析；自定义网络支持容器名解析，前端容器可通过
+<code>http://ctts-api:8080</code> 访问后端容器。host
+模式不隔离端口不推荐；端口映射只解决宿主机访问容器，不解决容器间通信。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-006</strong>（★ 知识点：K8-1 多阶段构建） 后端
+Dockerfile 中
+<code>COPY --from=builder /build/target/ctts-backend-1.0.0.jar app.jar</code>
+的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>从本地文件系统复制 jar</span></li><li><span class="option-label">B</span><span>从名为 builder 的构建阶段复制
+jar 到当前阶段</span></li><li><span class="option-label">C</span><span>从镜像仓库拉取 jar</span></li><li><span class="option-label">D</span><span>从宿主机复制 jar</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>COPY --from=&lt;阶段名&gt;</code>
+是多阶段构建的关键指令，从前一个构建阶段复制产物到当前阶段。<code>builder</code>
+是阶段1 的命名（<code>FROM maven AS builder</code>）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-007</strong>（★ 知识点：K8-2 前端构建） 前端
+Dockerfile 中 <code>npm run build</code> 产出的静态文件目录是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>public</span></li><li><span class="option-label">B</span><span>static</span></li><li><span class="option-label">C</span><span>dist</span></li><li><span class="option-label">D</span><span>build</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Vite/Vue CLI
+默认构建输出目录是 <code>dist</code>。public
+是源码中的静态资源目录；static 不是 Vite 默认目录；build 是部分框架（如
+Next.js）的输出目录。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-008</strong>（★ 知识点：K8-2 Nginx 部署） 前端
+Dockerfile 中，应把 dist 内容 COPY 到 Nginx 镜像的哪个路径？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>/var/www/html</span></li><li><span class="option-label">B</span><span>/usr/share/nginx/html</span></li><li><span class="option-label">C</span><span>/etc/nginx/html</span></li><li><span class="option-label">D</span><span>/home/nginx/html</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Nginx
+官方镜像默认静态文件目录是
+<code>/usr/share/nginx/html</code>。<code>/var/www/html</code> 是 Apache
+的默认目录；其他选项都不是 Nginx 默认目录。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-009</strong>（★ 知识点：K8-4 端口映射） 运行后端容器
+<code>docker run -d -p 8080:8080 ctts-backend:v1</code> 中，两个 8080
+分别是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器端口、宿主机端口</span></li><li><span class="option-label">B</span><span>宿主机端口、容器端口</span></li><li><span class="option-label">C</span><span>内部端口、外部端口</span></li><li><span class="option-label">D</span><span>都是容器端口</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>-p</code>
+参数格式是 <code>宿主机端口:容器端口</code>，即
+<code>-p 8080:8080</code> 表示宿主机 8080 映射到容器 8080。访问宿主机
+8080 端口会被转发到容器的 8080。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-010</strong>（★ 知识点：K8-3 标签管理） 给已有镜像
+<code>ctts-backend:v1</code> 再打一个 <code>latest</code>
+标签，正确的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker rename ctts-backend:v1 ctts-backend:latest</code></span></li><li><span class="option-label">B</span><span><code>docker tag ctts-backend:v1 ctts-backend:latest</code></span></li><li><span class="option-label">C</span><span><code>docker label ctts-backend:v1 ctts-backend:latest</code></span></li><li><span class="option-label">D</span><span><code>docker build -t ctts-backend:latest ctts-backend:v1</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker tag &lt;源镜像&gt; &lt;新标签&gt;</code>
+给已有镜像打新标签，两个标签指向同一个 IMAGE
+ID。<code>docker rename</code> 是重命名容器；<code>docker label</code>
+不存在；<code>docker build</code> 是构建不是打标签。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-011</strong>（★★ 知识点：K8-5 层缓存） 后端
+Dockerfile 中"先 COPY pom.xml 再 COPY src"的主要目的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>减小镜像体积</span></li><li><span class="option-label">B</span><span>利用层缓存，源码变动时不重新下载依赖</span></li><li><span class="option-label">C</span><span>避免编译错误</span></li><li><span class="option-label">D</span><span>让 Dockerfile
+更易读</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：先 COPY pom.xml
+并下载依赖（耗时最久），这层只依赖 pom.xml。修改源码时 pom.xml
+没变，依赖层命中缓存跳过，只重新执行 COPY src + mvn
+package。这是利用层缓存加速构建的经典技巧。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-012</strong>（★ 知识点：K8-5 .dockerignore）
+<code>.dockerignore</code> 文件的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>让 Dockerfile 忽略某些指令</span></li><li><span class="option-label">B</span><span>排除构建上下文中的特定文件，不发送给守护进程</span></li><li><span class="option-label">C</span><span>让容器运行时忽略某些环境变量</span></li><li><span class="option-label">D</span><span>让 docker 命令忽略某些错误</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>.dockerignore</code> 类似
+<code>.gitignore</code>，列出要排除的文件，让构建上下文更小、构建更快、避免敏感信息被打包进镜像。它影响的是构建上下文，不影响
+Dockerfile 指令或容器运行。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-013</strong>（★ 知识点：K8-1 基础镜像选型）
+后端运行阶段应选择哪个基础镜像最合适（兼顾体积与功能）？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>maven:3.9-eclipse-temurin-17</span></li><li><span class="option-label">B</span><span>eclipse-temurin:17</span></li><li><span class="option-label">C</span><span>eclipse-temurin:17-jre-alpine</span></li><li><span class="option-label">D</span><span>ubuntu:22.04</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：运行阶段只需 JRE 运行
+jar，不需要 JDK 和 Maven。<code>eclipse-temurin:17-jre-alpine</code> 含
+JRE 且基于 alpine（体积最小，~170MB）。A 含 Maven+JDK 太大；B 含完整 JDK
+体积大；D 需要自己装 Java 太麻烦。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-014</strong>（★ 知识点：K8-4 容器验证）
+运行后端容器后，最快的健康验证方式是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker exec 进入容器查看进程</span></li><li><span class="option-label">B</span><span>curl http://localhost:8080/actuator/health</span></li><li><span class="option-label">C</span><span>docker inspect
+查看容器详情</span></li><li><span class="option-label">D</span><span>docker top 查看容器进程</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：SpringBoot Actuator
+提供 <code>/actuator/health</code> 健康检查接口，<code>curl</code>
+访问返回 <code>{"status":"UP"}</code>
+即健康。这是最直接的应用层验证。其他方法只能看容器/进程在跑，不能确认应用就绪。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-015</strong>（★ 知识点：K8-6 问题排查） 构建日志出现
+<code>COPY failed: no such file or directory</code>，最可能的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>网络不通</span></li><li><span class="option-label">B</span><span>COPY 源路径在构建上下文中不存在</span></li><li><span class="option-label">C</span><span>Docker daemon 未启动</span></li><li><span class="option-label">D</span><span>镜像仓库不可达</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>COPY failed: no such file or directory</code>
+表示 COPY 指令的源文件/目录在构建上下文中不存在，通常是路径写错（如
+<code>COPY srcc ./src</code> 多打了一个 c）。需核对路径。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-016</strong>（★★ 知识点：K8-6 跨域问题）
+前端容器（端口 80）调用后端容器（端口 8080）报 CORS
+错误，最干净的解决方案是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>后端加 @CrossOrigin 注解</span></li><li><span class="option-label">B</span><span>把前端和后端合并到一个容器</span></li><li><span class="option-label">C</span><span>Nginx 配置 /api/
+反向代理到后端，前端用相对路径调用</span></li><li><span class="option-label">D</span><span>关闭浏览器 CORS 检查</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：用 Nginx 反向代理
+<code>/api/</code> 到后端，前端用相对路径 <code>/api/hello</code>
+调用，浏览器视为同源，无跨域问题。这是最干净的方案。A
+也能解决但侵入后端代码；B 违反单容器单进程原则；D 是 hack 不可行。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-017</strong>（★ 知识点：K8-3 构建上下文）
+构建上下文过大会导致？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像体积变大</span></li><li><span class="option-label">B</span><span>构建变慢，因为上下文要传给守护进程</span></li><li><span class="option-label">C</span><span>Dockerfile 语法错误</span></li><li><span class="option-label">D</span><span>容器无法运行</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：构建时整个上下文目录会打包发给
+dockerd，上下文越大传输越慢。需用 <code>.dockerignore</code> 排除
+node_modules、target、.git 等。上下文不影响最终镜像体积（COPY 哪些由
+Dockerfile 决定）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-018</strong>（★ 知识点：K8-2 npm ci） 前端 Dockerfile
+中推荐用 <code>npm ci</code> 而不是 <code>npm install</code> 的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>npm ci 速度更快、严格按 lock 文件安装、可复现性强</span></li><li><span class="option-label">B</span><span>npm ci 不需要
+package.json</span></li><li><span class="option-label">C</span><span>npm ci 能装更多包</span></li><li><span class="option-label">D</span><span>npm install 已被废弃</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：<code>npm ci</code>
+严格按 <code>package-lock.json</code> 安装，速度更快、可复现性更强，适合
+CI/CD 和 Docker 构建。它要求有 lock 文件，先删除 node_modules
+再安装。<code>npm install</code> 仍可用，但不如 ci 严格。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-019</strong>（★★ 知识点：K8-5 镜像大小对比）
+对比单阶段构建（FROM maven）与多阶段构建（FROM maven + FROM
+jre-alpine），多阶段镜像体积大约能减少？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>10%</span></li><li><span class="option-label">B</span><span>30%</span></li><li><span class="option-label">C</span><span>76%（如 820MB
+→ 198MB）</span></li><li><span class="option-label">D</span><span>100%</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：单阶段含
+Maven+JDK+源码+jar（~820MB），多阶段只含 JRE+jar（~198MB），减少约
+76%。多阶段把构建工具链（Maven、JDK）剔除出最终镜像，是减小体积的关键手段。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-020</strong>（★ 知识点：K8-4 容器退出）
+<code>docker run -d</code> 后 <code>docker ps</code>
+看不到容器，应如何排查？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>重新运行 docker run</span></li><li><span class="option-label">B</span><span>docker ps -a
+查看已停止容器，docker logs 看错误</span></li><li><span class="option-label">C</span><span>重启 Docker 服务</span></li><li><span class="option-label">D</span><span>重装
+Docker</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：容器可能启动失败立即退出。<code>docker ps</code>
+只显示运行中的，<code>docker ps -a</code> 显示所有（含已停止）。看到
+Exited 状态后用 <code>docker logs &lt;容器名&gt;</code>
+看错误日志定位原因。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-021</strong>（★ 知识点：K8-6 端口占用）
+<code>docker run -p 80:80</code> 报错
+<code>bind: address already in use</code>，原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像不存在</span></li><li><span class="option-label">B</span><span>宿主机 80 端口被其他进程占用</span></li><li><span class="option-label">C</span><span>容器内 80 端口被占用</span></li><li><span class="option-label">D</span><span>Docker
+网络配置错误</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：端口映射时如果宿主机端口已被占用（如本机装了
+Nginx/Apache），会报此错误。解决：换端口（如
+<code>-p 8081:80</code>）或停掉占用进程。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-022</strong>（★★ 知识点：K8-1 多阶段命名） 后端
+Dockerfile 中 <code>FROM maven:3.9-eclipse-temurin-17 AS builder</code>
+的 <code>AS builder</code> 作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>指定镜像别名</span></li><li><span class="option-label">B</span><span>给构建阶段命名，后续可用 COPY --from=builder 引用</span></li><li><span class="option-label">C</span><span>指定构建者</span></li><li><span class="option-label">D</span><span>设置镜像标签</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>AS &lt;名字&gt;</code>
+给构建阶段命名，后续阶段可用 <code>COPY --from=&lt;名字&gt;</code>
+引用该阶段的产物。比用数字序号（<code>COPY --from=0</code>）更清晰、更易维护。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-023</strong>（★ 知识点：K8-3 构建日志） 构建日志中
+<code>=&gt; [builder 4/5] RUN mvn dependency:go-offline -B</code> 的
+<code>4/5</code> 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>构建阶段 4，共 5 个阶段</span></li><li><span class="option-label">B</span><span>builder 阶段第 4
+步，该阶段共 5 步</span></li><li><span class="option-label">C</span><span>第 4 次构建，共构建 5 次</span></li><li><span class="option-label">D</span><span>镜像第 4 层，共 5
+层</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>[builder 4/5]</code> 表示在 builder
+阶段的第 4 步指令，该阶段共 5 步。这是 BuildKit
+日志的格式，便于定位构建进度和失败位置。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-024</strong>（★ 知识点：K8-5 强制无缓存） 要强制
+Docker 构建时不使用缓存，应加哪个参数？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>--no-cache</span></li><li><span class="option-label">B</span><span>--force</span></li><li><span class="option-label">C</span><span>--fresh</span></li><li><span class="option-label">D</span><span>--rebuild</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>docker build --no-cache -t &lt;镜像&gt; .</code>
+强制不使用缓存，每层都重新执行。用于排查缓存导致的问题或确保完全重新构建。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-025</strong>（★★ 知识点：K8-2 Nginx 配置） Vue Router
+用 history 模式时，刷新 <code>/about</code> 页面 404，正确的 Nginx
+配置是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>location / { return 200; }</code></span></li><li><span class="option-label">B</span><span><code>location / { try_files $uri $uri/ /index.html; }</code></span></li><li><span class="option-label">C</span><span><code>location / { proxy_pass http://backend; }</code></span></li><li><span class="option-label">D</span><span><code>location / { deny all; }</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：history
+模式刷新时浏览器请求真实路径（如 /about），Nginx 找不到对应文件返回
+404。<code>try_files $uri $uri/ /index.html</code>
+先找文件，找不到就返回 index.html，让 Vue Router 在前端处理路由。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-026</strong>（★ 知识点：K8-1 EXPOSE） Dockerfile 中
+<code>EXPOSE 8080</code> 的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>自动映射宿主机端口</span></li><li><span class="option-label">B</span><span>声明容器监听端口（仅文档作用，运行时仍需 -p 映射）</span></li><li><span class="option-label">C</span><span>开放防火墙端口</span></li><li><span class="option-label">D</span><span>让容器必须用 8080 端口</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>EXPOSE</code>
+是声明性指令，仅说明容器打算监听该端口，不会自动映射。运行时仍需
+<code>docker run -p 8080:8080</code>
+才能从宿主机访问。它的作用类似注释，便于使用者了解端口需求。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-027</strong>（★ 知识点：K8-4 容器日志）
+实时跟踪容器日志的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker logs --tail ctts-api</span></li><li><span class="option-label">B</span><span>docker logs
+-f ctts-api</span></li><li><span class="option-label">C</span><span>docker logs --follow ctts-api</span></li><li><span class="option-label">D</span><span>docker logs --realtime
+ctts-api</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker logs -f &lt;容器名&gt;</code>
+实时跟踪日志输出（类似 <code>tail -f</code>）。<code>--tail</code>
+只显示最后几行不跟踪；<code>--follow</code>
+不是有效参数；<code>--realtime</code> 不存在。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-028</strong>（★★ 知识点：K8-5 镜像分析）
+查看镜像每层大小的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker image ls</span></li><li><span class="option-label">B</span><span>docker image history
+&lt;镜像名&gt;</span></li><li><span class="option-label">C</span><span>docker image inspect &lt;镜像名&gt;</span></li><li><span class="option-label">D</span><span>docker image
+size &lt;镜像名&gt;</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker image history &lt;镜像名&gt;</code>
+显示镜像每一层的创建命令和大小，便于定位哪层最大、优化哪层。<code>docker image ls</code>
+只看总大小；<code>inspect</code> 看元数据；<code>size</code>
+不存在。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-029</strong>（★ 知识点：K8-6 DNS 失败）
+前端容器日志报 <code>ctts-api could not be resolved</code>，原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>后端容器没启动</span></li><li><span class="option-label">B</span><span>前后端容器不在同一网络，无法 DNS 解析容器名</span></li><li><span class="option-label">C</span><span>Nginx
+配置错误</span></li><li><span class="option-label">D</span><span>后端端口不对</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：容器间通过容器名通信要求在同一个自定义网络中。默认
+bridge
+网络不支持容器名解析。把两个容器都加入同一自定义网络（<code>--network ctts-net</code>）即可解析。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-030</strong>（★★ 知识点：K8-3 标签规范）
+关于生产环境镜像标签，下列做法最规范的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>用 :latest 标签</span></li><li><span class="option-label">B</span><span>不指定标签</span></li><li><span class="option-label">C</span><span>用明确版本号如 :v1.0.0 或 :1.0.0-20260722</span></li><li><span class="option-label">D</span><span>用 :dev
+标签</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：生产环境应指定明确版本号，便于版本追踪、回滚和复现。<code>:latest</code>
+不可控（不知具体版本）；不指定标签默认 latest
+同样不可控；<code>:dev</code> 是开发环境标签。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>08-选择-031</strong>（★★ 知识点：K8-5 .dockerignore）
+<code>.dockerignore</code> 应排除的文件包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>node_modules</span></li><li><span class="option-label">B</span><span>target</span></li><li><span class="option-label">C</span><span>.git</span></li><li><span class="option-label">D</span><span>package.json E. .env</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong>
+<strong>解析</strong>：node_modules（容器内重装）、target（容器内重构建）、.git（版本元数据不需要进镜像）、.env（可能含密码）都应排除。package.json
+是构建必需文件，不能排除。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-032</strong>（★★ 知识点：K8-1 多阶段构建）
+多阶段构建的好处包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>减小最终镜像体积</span></li><li><span class="option-label">B</span><span>把构建工具链剔除出运行镜像</span></li><li><span class="option-label">C</span><span>提高镜像安全性（攻击面小）</span></li><li><span class="option-label">D</span><span>让构建过程不可复现 E. 让 Dockerfile 完整描述构建流程</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong>
+<strong>解析</strong>：多阶段构建减小体积（A）、剔除构建工具链（B）、提高安全性（C）、完整描述构建流程保证可复现（E）。D
+错，多阶段反而让构建更可复现。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-033</strong>（★★ 知识点：K8-6 构建失败原因）
+构建镜像失败的可能原因有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>COPY 源路径不存在</span></li><li><span class="option-label">B</span><span>网络问题导致依赖下载失败</span></li><li><span class="option-label">C</span><span>基础镜像名拼错</span></li><li><span class="option-label">D</span><span>.dockerignore
+排除了必要文件 E. Dockerfile 语法错误</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：五个都是常见构建失败原因。COPY
+路径错（A）、网络问题（B）、镜像名错（C）、.dockerignore
+误排（D）、Dockerfile 语法错（E）都会导致构建失败。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-034</strong>（★★ 知识点：K8-4 容器运行参数）
+<code>docker run -d --name ctts-api -p 8080:8080 --network ctts-net ctts-backend:v1</code>
+中各参数作用正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>-d 后台运行</span></li><li><span class="option-label">B</span><span>--name 给容器命名</span></li><li><span class="option-label">C</span><span>-p
+端口映射</span></li><li><span class="option-label">D</span><span>--network 加入指定网络 E. ctts-backend:v1 是镜像名:标签</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：五个参数含义都正确。-d 后台运行、--name 命名、-p
+端口映射、--network 加入网络、最后是镜像名:标签。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-035</strong>（★★ 知识点：K8-5 镜像优化） 减小 Docker
+镜像体积的手段包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>使用多阶段构建</span></li><li><span class="option-label">B</span><span>选择 alpine 基础镜像</span></li><li><span class="option-label">C</span><span>合并 RUN 指令减少层数</span></li><li><span class="option-label">D</span><span>配置 .dockerignore E. 用 :latest 标签</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：多阶段构建剔除构建工具链（A）、alpine
+镜像更小（B）、合并 RUN 减少层数（C）、.dockerignore
+减小上下文（D，间接减小可能被打包的文件）都能减小体积。E
+与体积无关。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-036</strong>（★★ 知识点：K8-2 前端构建）
+前端多阶段构建中，第一阶段（builder）执行的指令包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>npm
+ci（安装依赖）</span></li><li><span class="option-label">B</span><span>npm run build（构建产出 dist）</span></li><li><span class="option-label">C</span><span>COPY dist 到 Nginx
+目录</span></li><li><span class="option-label">D</span><span>COPY package.json E. COPY 源码</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong>
+<strong>解析</strong>：第一阶段（builder）执行 COPY
+package.json（D）、npm ci（A）、COPY 源码（E）、npm run build（B）。C
+是第二阶段（Nginx）的指令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-037</strong>（★★ 知识点：K8-1 后端构建）
+后端多阶段构建中，运行阶段（stage-2）包含的指令有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>FROM
+eclipse-temurin:17-jre-alpine</span></li><li><span class="option-label">B</span><span>WORKDIR /app</span></li><li><span class="option-label">C</span><span>COPY --from=builder jar</span></li><li><span class="option-label">D</span><span>RUN mvn package E. CMD ["java", "-jar", "app.jar"]</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：运行阶段含
+FROM jre（A）、WORKDIR（B）、COPY --from=builder jar（C）、CMD java
+-jar（E）。D 是构建阶段的指令，运行阶段不需要 Maven。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-038</strong>（★★ 知识点：K8-6 容器问题排查）
+容器运行后访问不通，可能的排查步骤有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker ps
+确认容器在运行</span></li><li><span class="option-label">B</span><span>docker logs 查看容器日志</span></li><li><span class="option-label">C</span><span>docker port 查看端口映射</span></li><li><span class="option-label">D</span><span>docker exec 进容器 curl 测试 E. netstat 查看宿主机端口</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：五个都是有效的排查步骤。确认容器在跑（A）、看日志（B）、看端口映射（C）、容器内测试（D）、宿主机端口（E）逐步定位问题。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-039</strong>（★★ 知识点：K8-3 构建日志）
+关于构建日志，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>CACHED 表示该层命中缓存</span></li><li><span class="option-label">B</span><span>ERROR 行定位失败位置</span></li><li><span class="option-label">C</span><span>transferring context 表示上下文传输大小</span></li><li><span class="option-label">D</span><span>naming to 表示最终镜像标签 E. 日志不重要，构建成功即可</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：CACHED
+命中缓存（A）、ERROR 行定位失败（B）、transferring context
+是上下文大小（C）、naming to 是镜像标签（D）都正确。E
+错，日志是排查问题的关键。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-选择-040</strong>（★★ 知识点：K8-4 联调验证）
+前后端容器联调验证时，需要检查的项有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>两个容器是否在同一自定义网络</span></li><li><span class="option-label">B</span><span>后端健康检查接口是否返回 UP</span></li><li><span class="option-label">C</span><span>前端浏览器能否访问首页</span></li><li><span class="option-label">D</span><span>前端调后端 API 是否返回数据 E. Nginx
+是否配置了 /api/ 代理</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：联调验证需检查：网络（A）、后端健康（B）、前端可访问（C）、API
+调通（D）、Nginx 代理配置（E）。任一项出问题都会导致联调失败。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>08-判断-001</strong>（★ 知识点：K8-1 多阶段构建）
+多阶段构建可以把构建工具链（如
+Maven、Node）剔除出最终镜像，减小镜像体积。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：多阶段构建第一阶段用构建工具链产出产物，第二阶段只
+COPY 产物到运行镜像，构建工具链不进入最终镜像，显著减小体积。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-002</strong>（★ 知识点：K8-3 构建上下文）
+<code>docker build -t ctts-backend:v1 .</code> 中的 <code>.</code> 表示
+Dockerfile 的位置。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>.</code> 表示构建上下文（build
+context）为当前目录，即把这个目录的文件发给守护进程。Dockerfile
+默认从上下文根目录查找，但 <code>.</code> 本身是上下文路径不是
+Dockerfile 位置。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-003</strong>（★ 知识点：K8-5 层缓存）
+修改源码后重新构建，Maven 依赖下载层会命中缓存被跳过。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：如果
+Dockerfile 中先 COPY pom.xml 再下载依赖，这层只依赖 pom.xml。修改源码时
+pom.xml 没变，依赖层命中缓存被跳过，加速构建。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-004</strong>（★ 知识点：K8-2 Nginx 目录） Nginx
+镜像的默认静态文件目录是 <code>/var/www/html</code>。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Nginx
+官方镜像默认静态目录是
+<code>/usr/share/nginx/html</code>。<code>/var/www/html</code> 是 Apache
+的默认目录。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-005</strong>（★ 知识点：K8-4 端口映射）
+<code>-p 8080:8080</code> 表示容器 8080 端口映射到宿主机 8080 端口。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>-p</code> 参数格式是
+<code>宿主机端口:容器端口</code>。<code>-p 8080:8080</code> 即宿主机
+8080 映射到容器 8080，访问宿主机 8080 会被转发到容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-006</strong>（★ 知识点：K8-3 标签管理）
+一个镜像只能有一个标签。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：一个镜像可以打多个标签（<code>docker tag</code>），多个标签指向同一个
+IMAGE ID。如 <code>ctts-backend:v1</code> 和
+<code>ctts-backend:1.0.0</code> 可以是同一个镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-007</strong>（★ 知识点：K8-5 .dockerignore）
+<code>.dockerignore</code> 可以排除 node_modules
+等目录，减小构建上下文，加速构建。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>.dockerignore</code>
+列出要排除的文件，让这些文件不进入构建上下文，减小传输大小，加速构建，同时避免敏感信息被打包。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-008</strong>（★ 知识点：K8-6 跨域问题）
+前端容器和后端容器在不同端口会触发浏览器跨域问题，可以用 Nginx
+反向代理解决。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：浏览器同源策略下，不同端口视为跨域。Nginx
+反向代理 <code>/api/</code>
+到后端，前端用相对路径调用，浏览器视为同源，无跨域问题。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-009</strong>（★ 知识点：K8-1 EXPOSE） Dockerfile 中
+<code>EXPOSE 8080</code> 会自动把容器 8080 端口映射到宿主机。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>EXPOSE</code>
+是声明性指令，仅文档作用，不会自动映射。运行时仍需
+<code>docker run -p 8080:8080</code> 才能从宿主机访问。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-010</strong>（★ 知识点：K8-4 容器通信） 默认 bridge
+网络下，容器之间可以通过容器名互相通信。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：默认 bridge
+网络不支持容器名 DNS
+解析。需要创建自定义网络（<code>docker network create</code>）并把容器加入该网络，才能通过容器名通信。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-011</strong>（★ 知识点：K8-2 npm ci）
+<code>npm ci</code> 比 <code>npm install</code> 更适合 Docker
+构建，因为它严格按 lock 文件安装、速度更快。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>npm ci</code> 严格按
+<code>package-lock.json</code> 安装，先删 node_modules
+再装，速度更快、可复现性更强，适合 CI/CD 和 Docker 构建。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-012</strong>（★★ 知识点：K8-5 alpine 镜像） alpine
+镜像基于 Ubuntu，体积比普通镜像小。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：alpine 基于
+Alpine Linux（用 musl libc 和 BusyBox），不是 Ubuntu。基础镜像只有
+5MB，比基于 Ubuntu 的镜像小很多。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-013</strong>（★ 知识点：K8-6 容器退出）
+<code>docker run -d</code> 后容器立即退出，可以用
+<code>docker logs &lt;容器名&gt;</code> 查看错误原因。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：容器退出后日志仍保留，<code>docker logs</code>
+可以查看容器启动时的错误信息，是排查容器退出问题的第一步。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-014</strong>（★ 知识点：K8-3 构建失败）
+构建失败时应先看日志的 ERROR 行和错误信息，而不是盲目修改
+Dockerfile。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：构建日志的
+ERROR 行定位失败位置，错误信息说明失败原因。按"日志 → ERROR 行 →
+错误信息 → Dockerfile 行 → 修复"流程排查是正确做法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-015</strong>（★ 知识点：K8-1 多阶段引用）
+<code>COPY --from=builder</code> 中的 <code>builder</code>
+是构建阶段的名字，由 <code>FROM ... AS builder</code> 指定。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>AS builder</code>
+给第一阶段命名，第二阶段用 <code>COPY --from=builder</code>
+引用第一阶段产物。比用数字序号（<code>--from=0</code>）更清晰。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-016</strong>（★ 知识点：K8-4 健康检查） SpringBoot
+Actuator 的 <code>/actuator/health</code> 接口返回
+<code>{"status":"UP"}</code> 表示应用健康。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：SpringBoot
+Actuator 提供健康检查端点，<code>status</code> 为 <code>UP</code>
+表示应用健康，<code>DOWN</code>
+表示不健康。这是容器化验证应用就绪的常用方式。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-017</strong>（★★ 知识点：K8-5 缓存失效） 在
+Dockerfile 中调换指令顺序不会影响层缓存的命中。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：层缓存按指令顺序判断，调换指令顺序会让缓存失效。这也是为什么把变动少的层放前面、变动多的层放后面的原因。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-018</strong>（★ 知识点：K8-2 前端构建）
+前端容器化时，<code>npm run build</code> 产出的 dist 目录必须 COPY 到
+Nginx 镜像中才能提供服务。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：dist
+是前端构建产物（静态文件），需要 COPY 到 Nginx 镜像的
+<code>/usr/share/nginx/html</code> 目录，Nginx
+才能托管这些文件对外提供服务。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-019</strong>（★★ 知识点：K8-6 端口占用）
+<code>docker run -p 80:80</code> 报
+<code>address already in use</code>，唯一的解决办法是停掉占用 80
+端口的进程。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：不是唯一办法。可以换端口（如
+<code>-p 8081:80</code>，访问
+<code>http://localhost:8081</code>），或停掉占用进程。两种方案都可行。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-判断-020</strong>（★ 知识点：K8-3 镜像标签）
+生产环境推荐使用 <code>:latest</code> 标签，因为它总是指向最新版本。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>:latest</code>
+只是默认标签名，不保证最新最稳定，可能指向任意版本，不可控。生产环境应指定明确版本号（如
+<code>:v1.0.0</code>）便于追踪和回滚。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>08-填空-001</strong>（★ 知识点：K8-1 多阶段构建） CTTS 后端
+Dockerfile 采用多阶段构建，第一阶段用 ________ 镜像编译打包产出
+jar，第二阶段用 ________ 镜像运行 jar。</p><blockquote>
+<p><strong>答案：maven（或 maven:3.9-eclipse-temurin-17）；jre（或
+eclipse-temurin:17-jre-alpine）</strong>
+<strong>解析</strong>：第一阶段用 Maven 镜像执行
+<code>mvn package</code> 产出 jar；第二阶段用 JRE 镜像（如
+eclipse-temurin:17-jre-alpine）运行 jar，最终镜像只含运行时和
+jar，体积小。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-填空-002</strong>（★ 知识点：K8-3 构建命令）
+构建镜像并打标签的命令是
+<code>docker ________ -t ctts-backend:v1 .</code>，其中 <code>.</code>
+表示 ________。</p><blockquote>
+<p><strong>答案：build；构建上下文（或 build context /
+当前目录）</strong>
+<strong>解析</strong>：<code>docker build -t &lt;名&gt;:&lt;标签&gt; &lt;上下文&gt;</code>
+构建镜像，<code>.</code> 表示构建上下文为当前目录，Docker
+会把该目录文件发给守护进程。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-填空-003</strong>（★ 知识点：K8-2 前端部署） 前端
+Dockerfile 中，需要把构建产出的 dist 目录 COPY 到 Nginx 镜像的 ________
+目录。</p><blockquote>
+<p><strong>答案：/usr/share/nginx/html</strong>
+<strong>解析</strong>：Nginx 官方镜像默认静态文件目录是
+<code>/usr/share/nginx/html</code>，把 dist 内容放到这里，Nginx
+启动后就能托管静态文件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-填空-004</strong>（★ 知识点：K8-5 .dockerignore） ________
+文件用于排除构建上下文中的特定文件（如
+node_modules、target、.git），减小上下文、加速构建。</p><blockquote>
+<p><strong>答案：.dockerignore</strong>
+<strong>解析</strong>：<code>.dockerignore</code> 类似
+<code>.gitignore</code>，列出要排除的文件，让这些文件不进入构建上下文，减小传输大小、加速构建、避免敏感信息被打包。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-填空-005</strong>（★ 知识点：K8-4 容器网络）
+要让前端容器和后端容器通过容器名通信，需要创建 ________
+网络并把两个容器都加入该网络。</p><blockquote>
+<p><strong>答案：自定义（或 docker network create 创建的）</strong>
+<strong>解析</strong>：默认 bridge 网络不支持容器名 DNS 解析。用
+<code>docker network create &lt;网络名&gt;</code>
+创建自定义网络，容器加入后即可通过容器名互相访问。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-填空-006</strong>（★ 知识点：K8-3 构建日志）
+构建日志中出现 ________ 字样表示该层命中缓存，复用旧层未重新执行。</p><blockquote>
+<p><strong>答案：CACHED</strong>
+<strong>解析</strong>：<code>CACHED</code> 表示该层命中缓存（指令相同 +
+文件未变），Docker 直接复用上次构建的层，加速构建。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-填空-007</strong>（★★ 知识点：K8-5 层缓存顺序） 后端
+Dockerfile 中应先 COPY ________ 并下载依赖，再 COPY
+________，以利用层缓存加速构建。</p><blockquote>
+<p><strong>答案：pom.xml；src（或 源码）</strong>
+<strong>解析</strong>：先 COPY pom.xml 下载依赖（这层只依赖
+pom.xml），修改源码时这层命中缓存跳过，只重新执行 COPY src + mvn
+package。如果先 COPY src，任何源码变动都会让依赖层失效。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-填空-008</strong>（★ 知识点：K8-1 多阶段引用）
+多阶段构建中，用 <code>FROM maven:... AS builder</code>
+给阶段命名后，第二阶段用 <code>COPY ________=builder ...</code>
+引用该阶段产物。</p><blockquote>
+<p><strong>答案：--from</strong>
+<strong>解析</strong>：<code>COPY --from=&lt;阶段名&gt; &lt;源路径&gt; &lt;目标路径&gt;</code>
+从指定构建阶段复制产物。如
+<code>COPY --from=builder /build/target/app.jar app.jar</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-填空-009</strong>（★ 知识点：K8-4 端口映射）
+<code>docker run -p 8080:8080</code> 中，前一个 8080 是 ________
+端口，后一个 8080 是 ________ 端口。</p><blockquote>
+<p><strong>答案：宿主机；容器</strong>
+<strong>解析</strong>：<code>-p</code> 参数格式是
+<code>宿主机端口:容器端口</code>。前一个是宿主机端口，后一个是容器端口，访问宿主机端口会被转发到容器端口。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-填空-010</strong>（★★ 知识点：K8-6 跨域解决）
+前端容器调后端容器报跨域错误，最干净的解决方案是在 Nginx 中配置 ________
+反向代理到后端容器，前端用 ________ 路径调用。</p><blockquote>
+<p><strong>答案：/api/（或 location /api/）；相对（或 /api/）</strong>
+<strong>解析</strong>：Nginx 配置
+<code>location /api/ { proxy_pass http://ctts-api:8080; }</code>，前端用相对路径
+<code>/api/hello</code> 调用，浏览器视为同源（都是 80
+端口），无跨域问题。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>08-论述-001</strong>（★★ 知识点：K8-1/K8-2 多阶段构建，10
+分） 请说明什么是多阶段构建，为什么要使用多阶段构建？以 CTTS
+后端为例，描述多阶段构建的两个阶段分别做什么，最终镜像相比单阶段构建有何优势。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>多阶段构建定义</strong>（2 分）：在一个 Dockerfile
+中使用多个 <code>FROM</code> 指令，每个 <code>FROM</code>
+开始一个新阶段，前一阶段的产物可以通过
+<code>COPY --from=&lt;阶段名&gt;</code>
+复制到后一阶段，最终镜像只包含最后一个阶段的内容。</p></li>
+<li><p><strong>为什么要用多阶段构建</strong>（3 分）：</p>
+<ul>
+<li>减小最终镜像体积：构建工具链（Maven、Node、JDK）不进入最终镜像（1
+分）</li>
+<li>提高安全性：镜像越小攻击面越小，且不含构建工具减少潜在风险（1
+分）</li>
+<li>让构建过程可复现：Dockerfile
+完整描述构建流程，任何机器构建结果一致（1 分）</li>
+</ul></li>
+<li><p><strong>CTTS 后端两个阶段</strong>（3 分）：</p>
+<ul>
+<li>阶段1（builder）：<code>FROM maven:3.9-eclipse-temurin-17 AS builder</code>，COPY
+pom.xml + 源码，执行 <code>mvn package</code> 产出 jar（1.5 分）</li>
+<li>阶段2（runtime）：<code>FROM eclipse-temurin:17-jre-alpine</code>，用
+<code>COPY --from=builder</code> 复制 jar，CMD 启动 java -jar（1.5
+分）</li>
+</ul></li>
+<li><p><strong>优势对比</strong>（2 分）：</p>
+<ul>
+<li>单阶段构建（FROM maven）：最终镜像约 820MB，含
+Maven+JDK+源码+jar</li>
+<li>多阶段构建：最终镜像约 198MB，仅含 JRE+jar，体积减少约 76%</li>
+<li>体积小意味着拉取快、启动快、攻击面小</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：四部分独立给分；要点齐全即可满分；技术细节合理即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-论述-002</strong>（★★ 知识点：K8-5 构建优化，8 分）
+请列举至少三种减小 Docker 镜像体积或加速构建的方法，并分别说明原理。以
+CTTS 前端为例，说明 <code>.dockerignore</code>
+应排除哪些文件以及为什么。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>减小体积/加速构建的方法</strong>（5 分，每种 1.5 分，答出
+3 种即 4.5 分，加 0.5 分完整性）：</p>
+<ul>
+<li><strong>多阶段构建</strong>：第一阶段用构建工具链产出产物，第二阶段只
+COPY 产物到运行镜像，剔除构建工具链（1.5 分）</li>
+<li><strong>选择 alpine 基础镜像</strong>：alpine 基于 musl libc 和
+BusyBox，基础镜像仅 5MB，比 Ubuntu 镜像小很多（1.5 分）</li>
+<li><strong>配置
+.dockerignore</strong>：排除无用文件（node_modules、target、.git），减小构建上下文，加速上下文传输（1
+分）</li>
+<li><strong>合并 RUN 指令</strong>：把多个 RUN 用
+<code>&amp;&amp;</code> 合并成一条，减少层数（1 分）</li>
+<li><strong>利用层缓存</strong>：把变动少的层（如依赖下载）放前面，变动多的层（如源码
+COPY）放后面（1 分）</li>
+</ul></li>
+<li><p><strong>CTTS 前端 .dockerignore 排除内容</strong>（3 分）：</p>
+<ul>
+<li><code>node_modules</code>：容器内 <code>npm ci</code>
+重新安装，本地的不需要进镜像（1 分）</li>
+<li><code>dist</code>、<code>build</code>：容器内
+<code>npm run build</code> 重新生成，本地构建产物不需要（1 分）</li>
+<li><code>.git</code>、<code>.idea</code>、<code>.vscode</code>、<code>*.log</code>、<code>.env</code>：版本元数据、IDE
+配置、日志、敏感文件都不需要进镜像（1 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：方法部分答出 3 种即满分；.dockerignore
+部分要点齐全即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-论述-003</strong>（★★ 知识点：K8-6 问题排查，8 分） 在
+CTTS 前后端容器联调时，浏览器访问前端首页能显示，但调用后端 API 报 502
+Bad Gateway。请列出至少 4 种可能的原因及对应的排查/解决方法。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，每种 2 分，答出 4
+种即满分）：</p>
+<ol type="1">
+<li><p><strong>后端容器未运行或已退出</strong>（2 分）：</p>
+<ul>
+<li>排查：<code>docker ps</code>
+看后端容器是否在运行，<code>docker ps -a</code>
+看是否退出，<code>docker logs ctts-api</code> 看错误</li>
+<li>解决：根据日志修复后重启容器</li>
+</ul></li>
+<li><p><strong>前后端容器不在同一网络</strong>（2 分）：</p>
+<ul>
+<li>排查：<code>docker network inspect ctts-net</code>
+看两个容器是否都在网络中</li>
+<li>解决：把两个容器都加入同一自定义网络
+<code>--network ctts-net</code></li>
+</ul></li>
+<li><p><strong>Nginx 代理配置错误</strong>（2 分）：</p>
+<ul>
+<li>排查：检查 nginx.conf 中
+<code>proxy_pass http://ctts-api:8080;</code>
+的容器名和端口是否正确</li>
+<li>解决：修正容器名或端口，重新构建前端镜像并运行</li>
+</ul></li>
+<li><p><strong>后端 SpringBoot 未启动完</strong>（2 分）：</p>
+<ul>
+<li>排查：<code>docker logs ctts-api</code> 看是否出现 "Started
+Application"</li>
+<li>解决：等待启动完成（约 10~20 秒）再访问</li>
+</ul></li>
+<li><p><strong>后端应用监听端口与 EXPOSE 不一致</strong>（2 分）：</p>
+<ul>
+<li>排查：进容器
+<code>docker exec -it ctts-api sh</code>，<code>netstat -tlnp</code>
+看应用实际监听端口</li>
+<li>解决：修正 application.yml 的 server.port 或 Nginx 代理端口</li>
+</ul></li>
+<li><p><strong>防火墙/网络策略拦截</strong>（2 分）：</p>
+<ul>
+<li>排查：检查宿主机防火墙或 Docker 网络策略</li>
+<li>解决：放行相关端口或调整网络策略</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：每种原因 2 分（原因 1 分 + 排查/解决 1
+分）；答出 4 种即满分；合理原因均给分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>08-论述-004</strong>（★★ 知识点：K8-4 容器运行与联调，8 分）
+请描述 CTTS
+前后端容器从构建到联调验证的完整流程，包括：网络创建、容器运行命令、验证步骤。为什么前端容器调用后端要用容器名而不是
+localhost？</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>网络创建</strong>（1 分）：</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> network create ctts-net</span></code></pre></div>
+<p>创建自定义网络，让前后端容器能通过容器名通信。</p></li>
+<li><p><strong>容器运行命令</strong>（3 分）：</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 后端容器</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> ctts-api <span class="at">--network</span> ctts-net <span class="at">-p</span> 8080:8080 ctts-backend:v1</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 前端容器</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> ctts-web <span class="at">--network</span> ctts-net <span class="at">-p</span> 80:80 ctts-frontend:v1</span></code></pre></div>
+<p>两个容器都加入 ctts-net 网络，分别映射 8080 和 80 端口。</p></li>
+<li><p><strong>验证步骤</strong>（2 分）：</p>
+<ul>
+<li>后端验证：<code>curl http://localhost:8080/actuator/health</code>
+返回 <code>{"status":"UP"}</code></li>
+<li>前端验证：浏览器访问 <code>http://localhost</code> 看到首页</li>
+<li>联调验证：浏览器访问前端，看接口返回数据正常</li>
+</ul></li>
+<li><p><strong>为什么用容器名不用 localhost</strong>（2 分）：</p>
+<ul>
+<li>每个容器有独立的 localhost，前端容器里的 localhost 指向自己（端口
+80），不是后端容器</li>
+<li>在自定义网络中，Docker 内置 DNS 解析容器名，前端容器通过
+<code>http://ctts-api:8080</code> 能访问后端容器</li>
+<li>用 localhost 永远访问不到后端，用容器名才能跨容器通信</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：四部分独立给分；命令完整正确即可；localhost
+解释要点到位。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>08-阅读-001</strong>（★★ 知识点：K8-1 后端 Dockerfile
+补全，12 分） 阅读以下 CTTS 后端多阶段构建
+Dockerfile，补全缺失部分（每空 2 分，共 12 分）。</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------- 阶段1：构建阶段 ----------</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> (a)________ <span class="kw">AS</span> builder</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /build</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 先 COPY pom.xml 下载依赖（利用层缓存）</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> (b)________ .</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="kw">(</span><span class="ex">c</span><span class="kw">)</span><span class="ex">________</span> <span class="at">-B</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># COPY 源码</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> (d)________ ./</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 编译打包</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> clean package <span class="at">-DskipTests</span> <span class="at">-B</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------- 阶段2：运行阶段 ----------</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> (e)________</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 从构建阶段复制 jar</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=(f)________</span> /build/target/ctts-backend-1.0.0.jar app.jar</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8080</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;app.jar&quot;</span>]</span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a)
+<code>maven:3.9-eclipse-temurin-17</code> (b) <code>pom.xml</code> (c)
+<code>mvn dependency:go-offline</code> (d) <code>src</code> (e)
+<code>eclipse-temurin:17-jre-alpine</code> (f) <code>builder</code></p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) 阶段1 用 Maven 镜像编译打包，命名 AS builder</li>
+<li>(b) 先 COPY pom.xml</li>
+<li>(c) 用 <code>mvn dependency:go-offline</code> 预下载依赖</li>
+<li>(d) 再 COPY src 源码</li>
+<li>(e) 阶段2 用 JRE alpine 镜像运行</li>
+<li>(f) 用 <code>COPY --from=builder</code> 引用阶段1 产物</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。镜像名拼写近似即可（如 maven:3.9-eclipse-temurin-17 写成 maven:3.9
+也给分）；意思对即可。</p>
+</blockquote>
+<hr />
+<p><strong>08-阅读-002</strong>（★★ 知识点：K8-2 前端 Dockerfile
+补全，12 分） 阅读以下 CTTS 前端多阶段构建
+Dockerfile，补全缺失部分（每空 2 分，共 12 分）。</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------- 阶段1：构建阶段 ----------</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> (a)________ <span class="kw">AS</span> builder</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /build</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 先 COPY package.json 和 lock 文件</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> (b)________ ./</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 安装依赖</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="kw">(</span><span class="ex">c</span><span class="kw">)</span><span class="ex">________</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># COPY 源码</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> . .</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 构建产出 dist</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="kw">(</span><span class="ex">d</span><span class="kw">)</span><span class="ex">________</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------- 阶段2：运行阶段 ----------</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> (e)________</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 从构建阶段复制 dist 到 Nginx 静态目录</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> (f)________ /usr/share/nginx/html</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 80</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Nginx 镜像默认 CMD 即 nginx -g &#39;daemon off;&#39;</span></span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) <code>node:20-alpine</code> (b)
+<code>package.json package-lock.json*</code> (c) <code>npm ci</code> (d)
+<code>npm run build</code> (e) <code>nginx:alpine</code> (f)
+<code>/build/dist</code></p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) 阶段1 用 Node alpine 镜像构建</li>
+<li>(b) COPY package.json 和 lock 文件</li>
+<li>(c) 用 <code>npm ci</code> 严格按 lock 安装</li>
+<li>(d) <code>npm run build</code> 产出 dist</li>
+<li>(e) 阶段2 用 Nginx alpine 托管静态文件</li>
+<li>(f) 从 builder 阶段的 <code>/build/dist</code> 复制</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。镜像名拼写近似即可；<code>npm install</code> 替代
+<code>npm ci</code> 给 1 分（不够严格）。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>08-编程-001</strong>（★★ 知识点：K8-1/K8-2 综合应用，15 分）
+<strong>Dockerfile 编写题</strong>：请为一个 SpringBoot + Vue3
+全栈应用编写两个多阶段 Dockerfile。</p>
+<p>要求：</p>
+<ol type="1">
+<li><p><strong>后端 Dockerfile</strong>（7 分）：</p>
+<ul>
+<li>项目结构：<code>pom.xml</code> + <code>src/</code> + 产出
+<code>ctts-backend-1.0.0.jar</code></li>
+<li>阶段1：用 <code>maven:3.9-eclipse-temurin-17</code> 编译打包</li>
+<li>阶段2：用 <code>eclipse-temurin:17-jre-alpine</code> 运行</li>
+<li>要求利用层缓存（先 COPY pom.xml 下载依赖）</li>
+<li>监听 8080 端口</li>
+</ul></li>
+<li><p><strong>前端 Dockerfile</strong>（7 分）：</p>
+<ul>
+<li>项目结构：<code>package.json</code> + <code>package-lock.json</code>
++ <code>src/</code> + 产出 <code>dist/</code></li>
+<li>阶段1：用 <code>node:20-alpine</code> 执行 <code>npm ci</code> +
+<code>npm run build</code></li>
+<li>阶段2：用 <code>nginx:alpine</code> 托管 dist</li>
+<li>要求利用层缓存（先 COPY package.json）</li>
+<li>监听 80 端口</li>
+</ul></li>
+<li><p><strong>简述</strong>（1 分）：两个 Dockerfile
+分别利用层缓存的关键技巧。</p></li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<p><strong>1. 后端 Dockerfile</strong>（7 分）：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 阶段1：构建</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> maven:3.9-eclipse-temurin-17 <span class="kw">AS</span> builder</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /build</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> pom.xml .</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> dependency:go-offline <span class="at">-B</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> src ./src</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> clean package <span class="at">-DskipTests</span> <span class="at">-B</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 阶段2：运行</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre-alpine</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> /build/target/ctts-backend-1.0.0.jar app.jar</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8080</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;app.jar&quot;</span>]</span></code></pre></div>
+<p>评分点：</p>
+<ul>
+<li>多阶段 FROM 两个镜像（2 分）</li>
+<li>阶段1 命名 AS builder（1 分）</li>
+<li>先 COPY pom.xml + mvn dependency（1 分）</li>
+<li>COPY src + mvn package（1 分）</li>
+<li>COPY --from=builder jar（1 分）</li>
+<li>EXPOSE 8080 + CMD java -jar（1 分）</li>
+</ul>
+<p><strong>2. 前端 Dockerfile</strong>（7 分）：</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 阶段1：构建</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> node:20-alpine <span class="kw">AS</span> builder</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /build</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> package.json package-lock.json* ./</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">npm</span> ci</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> . .</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">npm</span> run build</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 阶段2：运行</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> nginx:alpine</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> /build/dist /usr/share/nginx/html</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 80</span></code></pre></div>
+<p>评分点：</p>
+<ul>
+<li>多阶段 FROM 两个镜像（2 分）</li>
+<li>阶段1 命名 AS builder（1 分）</li>
+<li>先 COPY package*.json + npm ci（1.5 分）</li>
+<li>COPY . . + npm run build（1 分）</li>
+<li>COPY --from=builder dist 到 nginx html（1 分）</li>
+<li>EXPOSE 80（0.5 分）</li>
+</ul>
+<p><strong>3. 层缓存关键技巧</strong>（1 分）：</p>
+<ul>
+<li>后端：先 COPY pom.xml 下载依赖，再 COPY src。修改源码时 pom.xml
+没变，依赖层命中缓存跳过。</li>
+<li>前端：先 COPY package.json + lock，再 COPY 源码。修改源码时
+package.json 没变，npm ci 层命中缓存跳过。</li>
+</ul>
+<p><strong>评分要点</strong>：Dockerfile
+语法正确、多阶段结构清晰、缓存技巧到位即可；镜像名合理替代（如
+maven:3.9-eclipse-temurin-17 写成 maven:3.9）同样给分。</p>
+</blockquote>
+<hr />
+<p><strong>08-编程-002</strong>（★★★ 知识点：K8-4/K8-5/K8-6 综合应用，20
+分） <strong>综合实践题</strong>：某团队构建 CTTS
+前后端镜像并运行联调，遇到以下问题。请回答：</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 构建后端镜像</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ctts-backend</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:v1 .</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 构建前端镜像</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../ctts-frontend</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-frontend:v1 .</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 运行后端容器</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> ctts-api <span class="at">-p</span> 8080:8080 ctts-backend:v1</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 运行前端容器</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> ctts-web <span class="at">-p</span> 80:80 ctts-frontend:v1</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 验证</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://localhost:8080/actuator/health   <span class="co"># 返回 {&quot;status&quot;:&quot;UP&quot;}</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://localhost                          <span class="co"># 返回 HTML</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 浏览器访问 http://localhost，前端调 /api/hello 报 502 Bad Gateway</span></span></code></pre></div>
+<p><strong>问题</strong>：</p>
+<ol type="1">
+<li><p><strong>问题定位</strong>（5
+分）：后端单独访问正常、前端单独访问正常，但前端调后端 API 报
+502，最可能的原因是什么？为什么？</p></li>
+<li><p><strong>解决方案</strong>（6
+分）：写出完整的修复命令序列（包括网络创建、容器重建）。</p></li>
+<li><p><strong>Nginx 配置</strong>（5 分）：如果前端 Dockerfile
+中需要启用 Nginx 反向代理 <code>/api/</code> 到后端容器，写出
+<code>nginx.conf</code> 内容，并说明如何在 Dockerfile 中启用。</p></li>
+<li><p><strong>构建优化</strong>（4 分）：如果前端构建上下文包含
+node_modules（140MB），导致构建慢。写出 <code>.dockerignore</code>
+内容，并说明优化前后构建上下文大小的变化。</p></li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<p><strong>1. 问题定位</strong>（5 分）：
+最可能原因：<strong>前端容器和后端容器不在同一自定义网络</strong>，Nginx
+无法通过容器名 <code>ctts-api</code> 解析到后端容器 IP，导致 502 Bad
+Gateway。</p>
+<ul>
+<li>命令中两个容器都用默认 bridge 网络（未指定
+<code>--network</code>），默认 bridge 不支持容器名 DNS 解析</li>
+<li>Nginx 代理 <code>proxy_pass http://ctts-api:8080</code>
+时，<code>ctts-api</code> 无法解析，返回 502</li>
+<li>评分：定位到网络问题 3 分，解释默认 bridge 不支持容器名解析 2
+分</li>
+</ul>
+<p><strong>2. 解决方案</strong>（6 分）：</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 停止并删除原容器</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> stop ctts-web ctts-api</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rm ctts-web ctts-api</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 创建自定义网络</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> network create ctts-net</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 重新运行，加入同一网络</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> ctts-api <span class="at">--network</span> ctts-net <span class="at">-p</span> 8080:8080 ctts-backend:v1</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> ctts-web <span class="at">--network</span> ctts-net <span class="at">-p</span> 80:80 ctts-frontend:v1</span></code></pre></div>
+<ul>
+<li>评分：停删原容器 1 分，创建网络 1 分，两个容器都加 --network 4
+分</li>
+</ul>
+<p><strong>3. Nginx 配置</strong>（5 分）： <code>nginx.conf</code>
+内容：</p>
+<pre class="nginx"><code>server {
+    listen 80;
+    server_name localhost;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /api/ {
+        proxy_pass http://ctts-api:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}</code></pre>
+<p>在 Dockerfile 中启用：</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> nginx:alpine</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> /build/dist /usr/share/nginx/html</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> nginx.conf /etc/nginx/conf.d/default.conf</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 80</span></code></pre></div>
+<ul>
+<li>评分：nginx.conf 含 /api/ 代理 3 分，try_files history 路由 1
+分，Dockerfile 中 COPY nginx.conf 1 分</li>
+</ul>
+<p><strong>4. 构建优化</strong>（4 分）： <code>.dockerignore</code>
+内容：</p>
+<pre class="text"><code>node_modules
+dist
+build
+.git
+.idea
+.vscode
+*.log
+npm-debug.log*
+.env
+Dockerfile
+.dockerignore</code></pre>
+<p>优化前后变化：</p>
+<ul>
+<li>优化前：构建上下文约 150MB（含 node_modules 140MB）</li>
+<li>优化后：构建上下文约 8KB（仅源码和配置）</li>
+<li>构建日志 <code>transferring context</code> 从 150MB 降到
+8KB，构建明显加速</li>
+<li>评分：.dockerignore 内容合理 2 分，对比说明 2 分</li>
+</ul>
+<p><strong>评分要点</strong>：各小题独立给分；命令完整可执行；合理替代方案同样给分。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

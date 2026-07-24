@@ -1,0 +1,1014 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pod与生命周期</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 15 次课 · 题库</div>
+      <h1>Pod与生命周期</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 15 次课</span>
+        <span class="hero-chip"><b>主题</b>Pod与生命周期</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 15 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>15-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>15-选择-001</strong>（★ 知识点：K15-1 Pod 概念） 关于
+Pod，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod 是 K8s 中可以直接操作容器的最小单元</span></li><li><span class="option-label">B</span><span>Pod 是 K8s 的最小调度单元，K8s 不直接管容器</span></li><li><span class="option-label">C</span><span>一个 Pod 只能包含一个容器</span></li><li><span class="option-label">D</span><span>Pod 是持久的，创建后不会消失</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Pod 是 K8s
+最小调度单元，K8s 不直接操作容器而是操作 Pod。A 错，K8s
+不直接操作容器；C 错，一个 Pod 可含多个容器（sidecar 模式）；D 错，Pod
+是临时性的，会因各种原因消失。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-002</strong>（★ 知识点：K15-1 Pod 概念） K8s
+为什么引入 Pod 而不直接管容器？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>因为 K8s 不支持容器技术</span></li><li><span class="option-label">B</span><span>因为 Pod
+比容器更轻量</span></li><li><span class="option-label">C</span><span>因为实际应用中多个容器需要紧密协作，Pod
+把它们作为整体调度管理，并共享网络和存储</span></li><li><span class="option-label">D</span><span>因为 Pod 启动比容器快</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：引入 Pod
+的核心原因是：① 容器组的管理需求（多容器协作）；② 共享网络和存储；③
+屏蔽容器运行时差异。A、B、D 都不对。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-003</strong>（★ 知识点：K15-1 Pod 共享） Pod
+内容器共享下列哪些资源？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>PID 命名空间和 IPC 命名空间</span></li><li><span class="option-label">B</span><span>网络命名空间和存储卷</span></li><li><span class="option-label">C</span><span>CPU 和内存</span></li><li><span class="option-label">D</span><span>容器镜像</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Pod
+内容器共享同一个网络命名空间（同一 IP、端口空间，可通过 localhost
+通信）和存储卷。A 不完全准确（默认共享网络和存储，PID/IPC
+共享需显式配置）；C 错，资源是按容器隔离的；D
+错，每个容器有自己的镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-004</strong>（★ 知识点：K15-1 Pod 通信） Pod
+内的两个容器 A 和 B，A 如何访问 B 监听的 8080 端口？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>通过 Pod IP 访问
+<code>pod-ip:8080</code></span></li><li><span class="option-label">B</span><span>通过 <code>localhost:8080</code></span></li><li><span class="option-label">C</span><span>通过容器
+B 的 IP 访问</span></li><li><span class="option-label">D</span><span>无法访问</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Pod
+内容器共享网络命名空间，可以通过 localhost 互相通信。A
+也可行但不常用（Pod IP 主要用于 Pod 间通信）；C 错，容器没有独立 IP；D
+错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-005</strong>（★ 知识点：K15-2 YAML 四要素） Pod YAML
+的四要素不包括下列哪一项？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>apiVersion</span></li><li><span class="option-label">B</span><span>kind</span></li><li><span class="option-label">C</span><span>metadata</span></li><li><span class="option-label">D</span><span>status</span></li></ul></div><blockquote>
+<p><strong>答案：D</strong> <strong>解析</strong>：四要素是
+apiVersion、kind、metadata、spec。status 是 K8s
+自动维护的（实际状态），用户不写。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-006</strong>（★ 知识点：K15-2 apiVersion） Pod 资源的
+apiVersion 是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>apps/v1</span></li><li><span class="option-label">B</span><span>v1</span></li><li><span class="option-label">C</span><span>batch/v1</span></li><li><span class="option-label">D</span><span>networking.k8s.io/v1</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Pod 是 K8s
+核心资源，apiVersion 是 v1。apps/v1 是 Deployment/ReplicaSet；batch/v1
+是 Job/CronJob；networking.k8s.io/v1 是 Ingress。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-007</strong>（★ 知识点：K15-2 kind） Pod YAML 中 kind
+字段的正确写法是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>pod</span></li><li><span class="option-label">B</span><span>POD</span></li><li><span class="option-label">C</span><span>Pod</span></li><li><span class="option-label">D</span><span>pods</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：kind
+必须首字母大写，写作 Pod。小写 pod 或全大写 POD 都会报错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-008</strong>（★ 知识点：K15-2 metadata） 关于 Pod
+YAML 的 metadata.name 字段，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>是 Pod
+的唯一标识，namespace 内不能重复</span></li><li><span class="option-label">B</span><span>是 Pod 的标签，可重复</span></li><li><span class="option-label">C</span><span>全集群唯一，跨 namespace 也不能重复</span></li><li><span class="option-label">D</span><span>可不填，K8s 自动生成</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：metadata.name 是 Pod
+唯一标识，namespace 内唯一，必填。B 错，labels 才是标签；C 错，不同
+namespace 可以有同名 Pod；D 错，name 必填。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-009</strong>（★ 知识点：K15-2 labels） Pod YAML 中
+labels 的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>标识 Pod 唯一性</span></li><li><span class="option-label">B</span><span>用于 Service/Deployment 通过
+selector 选择 Pod</span></li><li><span class="option-label">C</span><span>限制 Pod 的资源使用</span></li><li><span class="option-label">D</span><span>定义 Pod 的启动顺序</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：labels
+是键值对，用于被 Service/Deployment 通过 label selector 选择。A
+错，唯一性由 name 保证；C、D 都不对。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-010</strong>（★ 知识点：K15-3 image） Pod YAML 中
+image 字段的格式是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像名:标签</span></li><li><span class="option-label">B</span><span>仓库地址:镜像名</span></li><li><span class="option-label">C</span><span>镜像ID</span></li><li><span class="option-label">D</span><span>镜像URL</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：image 格式是
+<code>[仓库地址/]镜像名:标签</code>，如
+<code>ctts-backend:v1</code>、<code>mysql:8.0</code>。不写标签默认
+<code>:latest</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-011</strong>（★ 知识点：K15-3 ports） Pod YAML 中
+ports 字段的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>自动映射容器端口到宿主机</span></li><li><span class="option-label">B</span><span>声明容器暴露的端口，供 Service 引用和文档性</span></li><li><span class="option-label">C</span><span>限制容器只能监听该端口</span></li><li><span class="option-label">D</span><span>必填字段</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：ports
+是声明性字段，不写也能通过 Pod IP 访问，写了便于 Service 引用和文档性。A
+错，端口映射到宿主机由 Service/NodePort 处理；C 错，不限制容器监听；D
+错，非必填。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-012</strong>（★ 知识点：K15-3 env） Pod YAML 中 env
+字段的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>设置容器的环境变量</span></li><li><span class="option-label">B</span><span>设置容器的端口</span></li><li><span class="option-label">C</span><span>设置容器的资源限制</span></li><li><span class="option-label">D</span><span>设置容器的启动命令</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：env
+用于设置容器环境变量，如 <code>SPRING_PROFILES_ACTIVE=prod</code>。B 是
+ports；C 是 resources；D 是 command/args。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-013</strong>（★★ 知识点：K15-3 requests vs limits）
+关于 resources.requests 和 limits 的区别，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>requests
+是资源上限，limits 是资源保底</span></li><li><span class="option-label">B</span><span>requests 是资源保底（影响调度），limits
+是资源上限（限制运行时）</span></li><li><span class="option-label">C</span><span>两者作用相同，只是写法不同</span></li><li><span class="option-label">D</span><span>只设 requests
+就够了，limits 可不设</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：requests
+是保底（调度依据，至少这么多），limits
+是上限（运行时限制，最多这么多）。A 说反了；C 错；D
+错，生产环境两者都要设。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-014</strong>（★ 知识点：K15-3 CPU 单位） K8s 中 CPU
+资源单位 <code>500m</code> 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>500 个 CPU 核</span></li><li><span class="option-label">B</span><span>0.5 核 CPU</span></li><li><span class="option-label">C</span><span>500
+MB 内存</span></li><li><span class="option-label">D</span><span>500 MHz 频率</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：m 是
+millicore（毫核），1000m = 1 核，所以 500m = 0.5 核。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-015</strong>（★ 知识点：K15-3 内存单位） K8s
+中内存资源 <code>1Gi</code> 等于？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>1000 MB</span></li><li><span class="option-label">B</span><span>1024 MB（即 1024×1024
+KiB）</span></li><li><span class="option-label">C</span><span>1 GB</span></li><li><span class="option-label">D</span><span>100 MB</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Gi 是
+GiB（二进制单位），1 Gi = 1024 Mi = 1024×1024 KiB。M/Mi 区别：M
+是十进制（1000），Mi 是二进制（1024）。K8s 推荐用 Mi/Gi。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-016</strong>（★★ 知识点：K15-3 imagePullPolicy）
+imagePullPolicy 的三种策略是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Always / Never / IfNotPresent</span></li><li><span class="option-label">B</span><span>Always / Sometimes / Never</span></li><li><span class="option-label">C</span><span>Pull / Push / Cache</span></li><li><span class="option-label">D</span><span>Auto / Manual /
+Force</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：三种策略：Always（每次都拉）、Never（从不拉，用本地）、IfNotPresent（本地没有才拉）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-017</strong>（★★ 知识点：K15-3 imagePullPolicy 默认）
+当镜像标签是 <code>:latest</code> 时，imagePullPolicy 的默认值是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Never</span></li><li><span class="option-label">B</span><span>IfNotPresent</span></li><li><span class="option-label">C</span><span>Always</span></li><li><span class="option-label">D</span><span>无默认值，必填</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：镜像标签是
+<code>:latest</code> 或不写标签时，默认 Always；明确版本标签（如
+<code>:v1</code>）时，默认 IfNotPresent。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-018</strong>（★★ 知识点：K15-3 imagePullPolicy 应用）
+使用 Minikube Docker daemon 本地构建的 <code>ctts-backend:v1</code>
+镜像，部署 Pod 时 imagePullPolicy 应设为？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Always</span></li><li><span class="option-label">B</span><span>Never</span></li><li><span class="option-label">C</span><span>IfNotPresent</span></li><li><span class="option-label">D</span><span>不设置</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：本地构建的镜像只存在于 Minikube 节点 Docker
+daemon，没推到仓库。设 Always 会去仓库拉导致 ImagePullBackOff。应设
+Never（从不拉，只用本地）或 IfNotPresent（本地有就不拉）。Never
+更明确。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-019</strong>（★★ 知识点：K15-3 command/args） K8s
+YAML 中的 command 字段覆盖镜像的哪个指令？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>CMD</span></li><li><span class="option-label">B</span><span>ENTRYPOINT</span></li><li><span class="option-label">C</span><span>RUN</span></li><li><span class="option-label">D</span><span>EXPOSE</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：K8s 的 command 覆盖
+Dockerfile 的 ENTRYPOINT；args 覆盖 Dockerfile 的 CMD。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-020</strong>（★ 知识点：K15-4 Pod 状态） Pod
+的五种状态不包括下列哪一项？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pending</span></li><li><span class="option-label">B</span><span>Running</span></li><li><span class="option-label">C</span><span>Succeeded</span></li><li><span class="option-label">D</span><span>Starting</span></li></ul></div><blockquote>
+<p><strong>答案：D</strong> <strong>解析</strong>：五种状态是
+Pending、Running、Succeeded、Failed、Unknown。Starting 不是 K8s Pod
+状态。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-021</strong>（★ 知识点：K15-4 Pending 状态） Pod
+状态为 Pending 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod 已被 K8s
+接受，但还没全部就绪（正在调度、拉镜像、创建容器）</span></li><li><span class="option-label">B</span><span>Pod
+内所有容器都已正常运行</span></li><li><span class="option-label">C</span><span>Pod 内所有容器都已正常退出</span></li><li><span class="option-label">D</span><span>Pod
+与节点失联</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：Pending 表示 Pod
+已被接受但未就绪（调度中、拉镜像中、创建容器中）。B 是 Running；C 是
+Succeeded；D 是 Unknown。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-022</strong>（★ 知识点：K15-4 Running 状态） Pod
+状态为 Running 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod 内所有容器都已正常退出</span></li><li><span class="option-label">B</span><span>Pod
+已被调度到节点，所有容器已创建，至少一个正在运行</span></li><li><span class="option-label">C</span><span>Pod 无法访问</span></li><li><span class="option-label">D</span><span>Pod
+正在被删除</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Running 表示 Pod
+已调度、容器已创建、至少一个在运行。A 是 Succeeded；C 是 Unknown；D 是
+Terminating。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-023</strong>（★★ 知识点：K15-4 Succeeded 状态） Pod
+状态为 Succeeded 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod 正在运行</span></li><li><span class="option-label">B</span><span>Pod
+内所有容器都正常退出（exit code 0），不会再重启</span></li><li><span class="option-label">C</span><span>Pod
+至少一个容器异常退出</span></li><li><span class="option-label">D</span><span>Pod 调度成功</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Succeeded
+表示所有容器正常退出（exit 0），不再重启，主要用于 Job。C 是
+Failed。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-024</strong>（★ 知识点：K15-4 restartPolicy） Pod 的
+restartPolicy 默认值是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Always</span></li><li><span class="option-label">B</span><span>OnFailure</span></li><li><span class="option-label">C</span><span>Never</span></li><li><span class="option-label">D</span><span>Never</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：Pod 的 restartPolicy
+默认是 Always（容器退出后总是重启）。OnFailure 用于 Job，Never
+用于一次性任务或调试。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-025</strong>（★★ 知识点：K15-4 CrashLoopBackOff） Pod
+状态 CrashLoopBackOff 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>镜像拉取失败</span></li><li><span class="option-label">B</span><span>容器反复崩溃重启，K8s
+退避重启</span></li><li><span class="option-label">C</span><span>Pod 资源不足</span></li><li><span class="option-label">D</span><span>Pod 与节点失联</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：CrashLoopBackOff
+表示容器反复崩溃被重启，K8s 按指数退避（10s/20s/40s...）尝试重启。A 是
+ImagePullBackOff；C 是 Pending；D 是 Unknown。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-026</strong>（★ 知识点：K15-4 ImagePullBackOff） Pod
+状态为 ImagePullBackOff，最可能的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>资源不足无法调度</span></li><li><span class="option-label">B</span><span>镜像名错误、仓库不可达或 imagePullPolicy 设错</span></li><li><span class="option-label">C</span><span>应用启动失败</span></li><li><span class="option-label">D</span><span>节点宕机</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：ImagePullBackOff
+是拉取镜像失败，常见原因：镜像名错、仓库不可达、认证失败、imagePullPolicy
+设错（本地镜像设了 Always）。A 是 Pending；C 是 CrashLoopBackOff；D 是
+Unknown。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-027</strong>（★ 知识点：K15-5 kubectl 命令） 查看所有
+namespace 的 Pod，命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl get pods</span></li><li><span class="option-label">B</span><span>kubectl get pods -A</span></li><li><span class="option-label">C</span><span>kubectl get pods -n default</span></li><li><span class="option-label">D</span><span>kubectl get pods --all</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：-A 是
+--all-namespaces 简写，查看所有 namespace 的 Pod。A 只看 default；C 指定
+default；D 不是合法选项。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-028</strong>（★ 知识点：K15-5 kubectl 命令） 查看 Pod
+详情（含 Events），命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl get pod <name></span></li><li><span class="option-label">B</span><span>kubectl
+describe pod <name></span></li><li><span class="option-label">C</span><span>kubectl logs <name></span></li><li><span class="option-label">D</span><span>kubectl inspect pod
+<name></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubectl describe pod
+显示 Pod 详细信息（含
+Events、容器状态、环境变量等），是排查问题的必用命令。A 是列表概要；C
+是日志；D 不是 kubectl 命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-029</strong>（★ 知识点：K15-5 kubectl logs） 查看 Pod
+实时日志（类似 tail -f），命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl logs <pod> -f</span></li><li><span class="option-label">B</span><span>kubectl
+logs <pod> -r</span></li><li><span class="option-label">C</span><span>kubectl logs <pod> --realtime</span></li><li><span class="option-label">D</span><span>kubectl logs <pod>
+--follow</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：-f 参数表示
+follow，实时输出新日志，类似 tail -f。D 也对（--follow 是 -f
+的全写），但 A 更常用。本题选 A（最简写法）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-030</strong>（★ 知识点：K15-5 kubectl exec） 进入 Pod
+容器交互式 shell，命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl exec <pod> bash</span></li><li><span class="option-label">B</span><span>kubectl exec
+-it <pod> -- bash</span></li><li><span class="option-label">C</span><span>kubectl ssh <pod></span></li><li><span class="option-label">D</span><span>kubectl attach <pod></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubectl exec -it
+<pod> -- bash 进入交互式 shell。-it 表示交互式 + 分配 TTY；-- 分隔
+kubectl 参数和容器命令。A 缺 -it 和 --；C、D 不是进入容器的命令。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>15-选择-031</strong>（★★ 知识点：K15-1 Pod 概念） 关于
+Pod，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod 是 K8s 最小调度单元</span></li><li><span class="option-label">B</span><span>一个 Pod
+可以包含多个容器</span></li><li><span class="option-label">C</span><span>Pod 内容器共享网络命名空间</span></li><li><span class="option-label">D</span><span>Pod
+是持久的，创建后永远存在 E. Pod 内容器共享存储卷</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：A、B、C、E
+都对。D 错，Pod
+是临时性的，会因节点故障、资源不足、人为删除等原因消失。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-032</strong>（★★ 知识点：K15-2 YAML 四要素） Pod YAML
+的四要素包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>apiVersion</span></li><li><span class="option-label">B</span><span>kind</span></li><li><span class="option-label">C</span><span>metadata</span></li><li><span class="option-label">D</span><span>spec E.
+status</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：四要素是
+apiVersion、kind、metadata、spec。status 是 K8s
+自动维护的，用户不写。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-033</strong>（★★ 知识点：K15-3 容器字段）
+容器定义中属于核心字段的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>name</span></li><li><span class="option-label">B</span><span>image</span></li><li><span class="option-label">C</span><span>resources</span></li><li><span class="option-label">D</span><span>imagePullPolicy E. hostNetwork</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：核心字段包括
+name、image、ports、env、resources、command、args、imagePullPolicy。E 是
+Pod 级字段，不是容器字段。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-034</strong>（★★ 知识点：K15-3 requests/limits） 关于
+resources.requests 和 limits，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>requests
+是资源保底，影响调度</span></li><li><span class="option-label">B</span><span>limits 是资源上限，限制运行时</span></li><li><span class="option-label">C</span><span>requests 和
+limits 必须相等</span></li><li><span class="option-label">D</span><span>生产环境 requests 和 limits 都建议设置 E. 只设 limits
+就够了</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D</strong> <strong>解析</strong>：A、B、D 都对。C
+错，requests 和 limits 可以不等（通常 requests ≤ limits）；E 错，只设
+limits 不设 requests，调度按 limits 算可能失败。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-035</strong>（★★ 知识点：K15-3 imagePullPolicy） 关于
+imagePullPolicy，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Always
+表示每次创建容器都从仓库拉取</span></li><li><span class="option-label">B</span><span>Never 表示从不拉取，只用本地镜像</span></li><li><span class="option-label">C</span><span>IfNotPresent 表示本地没有才拉取</span></li><li><span class="option-label">D</span><span>镜像标签是 latest 时默认 Always E.
+本地构建的镜像应该用 Always</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都对。E 错，本地构建的镜像（未推到仓库）应该用 Never 或 IfNotPresent，用
+Always 会导致 ImagePullBackOff。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-036</strong>（★★ 知识点：K15-4 Pod 状态） 下列属于
+Pod 状态的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pending</span></li><li><span class="option-label">B</span><span>Running</span></li><li><span class="option-label">C</span><span>Succeeded</span></li><li><span class="option-label">D</span><span>Failed E.
+Unknown</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：五种状态都是 Pod
+的合法状态：Pending（挂起）、Running（运行）、Succeeded（成功退出）、Failed（失败退出）、Unknown（失联）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-037</strong>（★★ 知识点：K15-4 restartPolicy） Pod 的
+restartPolicy 可选值包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Always</span></li><li><span class="option-label">B</span><span>OnFailure</span></li><li><span class="option-label">C</span><span>Never</span></li><li><span class="option-label">D</span><span>UntilSucceeded E. OnSuccess</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong> <strong>解析</strong>：restartPolicy
+三种：Always（总是重启，默认）、OnFailure（异常退出才重启）、Never（不重启）。D、E
+不是合法值。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-038</strong>（★★ 知识点：K15-5 kubectl 命令） 下列
+kubectl 命令用于操作 Pod 的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl run</span></li><li><span class="option-label">B</span><span>kubectl get
+pods</span></li><li><span class="option-label">C</span><span>kubectl describe pod</span></li><li><span class="option-label">D</span><span>kubectl logs E. kubectl exec</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：五个命令都是操作 Pod 的常用命令：run 创建、get
+查看、describe 详情、logs 日志、exec 进入。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-039</strong>（★★ 知识点：K15-4 故障状态） 下列属于
+Pod 异常状态的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>ImagePullBackOff</span></li><li><span class="option-label">B</span><span>CrashLoopBackOff</span></li><li><span class="option-label">C</span><span>OOMKilled</span></li><li><span class="option-label">D</span><span>Running E. ErrImagePull</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：A、B、C、E
+都是异常状态。D 是正常状态。ImagePullBackOff/ErrImagePull
+是拉镜像失败，CrashLoopBackOff 是反复崩溃，OOMKilled
+是内存不足被杀。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-选择-040</strong>（★★ 知识点：K15-5 创建方式） 关于
+kubectl run 和 kubectl apply -f 的对比，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubectl run 是命令式，直接敲命令创建 Pod</span></li><li><span class="option-label">B</span><span>kubectl apply -f
+是声明式，通过 YAML 创建 Pod</span></li><li><span class="option-label">C</span><span>kubectl apply -f 可版本化，YAML 可提交
+Git</span></li><li><span class="option-label">D</span><span>生产环境推荐 kubectl apply -f E. kubectl run 创建的 Pod
+不可删除</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都对。E 错，kubectl run 创建的 Pod 也可以用 kubectl delete 删除。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>15-判断-001</strong>（★ 知识点：K15-1 Pod 概念） Pod 是 K8s
+中能够创建和部署的最小单元，是 K8s 调度的最小单位。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Pod 是 K8s
+最小调度单元，K8s 不直接管容器而管 Pod。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-002</strong>（★ 知识点：K15-1 K8s 与容器） K8s
+直接操作容器，不需要通过 Pod。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：K8s
+不直接操作容器，而是操作 Pod。Pod 是最小调度单元，容器是 Pod
+内的组成部分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-003</strong>（★ 知识点：K15-1 多容器 Pod） 一个 Pod
+只能包含一个容器。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：一个 Pod
+可以包含一个或多个容器。单容器 Pod 最常见，多容器 Pod 用于 sidecar
+等模式。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-004</strong>（★ 知识点：K15-1 Pod 通信） Pod
+内的容器可以通过 localhost 互相通信。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Pod
+内容器共享网络命名空间（同一 IP 和端口空间），可通过 localhost
+通信。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-005</strong>（★ 知识点：K15-2 YAML 四要素） Pod YAML
+的四要素是 apiVersion、kind、metadata、spec，缺一不可。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：四要素缺一不可，kubectl apply 会校验。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-006</strong>（★ 知识点：K15-2 kind 写法） Pod YAML 中
+kind 字段可以写成小写 pod。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：kind
+必须首字母大写，写作 Pod。小写 pod 会报错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-007</strong>（★ 知识点：K15-2 namespace） Pod YAML
+中不指定 namespace 时，默认创建到 default namespace。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：不指定
+namespace 默认 default。生产环境建议用独立 namespace 隔离资源。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-008</strong>（★ 知识点：K15-3 ports） Pod YAML 中
+ports 字段是必填的，不写无法访问容器。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：ports
+是声明性字段，不写也能通过 Pod IP 访问容器端口。写了便于 Service
+引用和文档性。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-009</strong>（★★ 知识点：K15-3 requests/limits）
+resources.requests 表示资源上限，resources.limits 表示资源保底。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：说反了。requests 是保底（影响调度），limits
+是上限（限制运行时）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-010</strong>（★ 知识点：K15-3 CPU 单位） K8s 中 CPU
+单位 500m 表示 0.5 核 CPU。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：m 是
+millicore（毫核），1000m = 1 核，500m = 0.5 核。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-011</strong>（★★ 知识点：K15-3 imagePullPolicy）
+imagePullPolicy: Always 表示每次创建容器都从仓库拉取镜像。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Always
+策略下，每次创建容器都去仓库拉取镜像，不使用本地缓存。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-012</strong>（★★ 知识点：K15-3 本地镜像） 使用
+Minikube Docker daemon 本地构建的镜像，部署 Pod 时 imagePullPolicy
+应设为 Always。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：本地构建的镜像没推到仓库，设 Always
+会去仓库拉导致 ImagePullBackOff。应设 Never 或 IfNotPresent。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-013</strong>（★ 知识点：K15-4 Pod 状态） Pod 状态为
+Succeeded 表示所有容器正常退出（exit 0），不会再重启。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Succeeded
+表示所有容器正常退出，主要用于 Job 类一次性任务。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-014</strong>（★ 知识点：K15-4 Running） Pod 状态为
+Running 表示服务已经可用，可以接受请求。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Running
+只表示容器在跑，应用可能还在启动中（如 SpringBoot
+启动慢）。要确认服务可用需看应用日志或配 readinessProbe。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-015</strong>（★★ 知识点：K15-4 restartPolicy） Pod 的
+restartPolicy 默认是 Always，容器崩溃会自动重启。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：restartPolicy
+默认 Always，容器退出（无论正常异常）都重启。这也是 Pod 一直 Running
+的原因。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-016</strong>（★★ 知识点：K15-4 CrashLoopBackOff）
+CrashLoopBackOff 表示 Pod 永久卡死，无法恢复。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：CrashLoopBackOff 是退避重启，K8s
+按指数退避（10s/20s/40s...）尝试重启，不是永久卡死。修复应用问题后会恢复
+Running。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-017</strong>（★ 知识点：K15-5 kubectl get） kubectl
+get pods 默认查看所有 namespace 的 Pod。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：默认只看
+default namespace。要看所有 namespace 用 -A（--all-namespaces）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-018</strong>（★ 知识点：K15-5 kubectl describe）
+kubectl describe pod 命令可以查看 Pod 的
+Events，是排查问题的必用命令。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：describe 显示
+Pod 详细信息（含 Events、容器状态、环境变量等），排查问题必用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-019</strong>（★ 知识点：K15-5 kubectl apply） kubectl
+apply -f 是声明式创建 Pod，可版本化、可复现，生产环境推荐使用。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：apply -f 通过
+YAML 创建，YAML 可提交 Git 版本化，同样 YAML 在任何集群都能创建同样
+Pod，生产推荐。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-判断-020</strong>（★ 知识点：K15-5 kubectl exec） kubectl
+exec -it <pod> -- bash 可以进入 Pod 容器的交互式 shell。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：-it
+表示交互式 + 分配 TTY，-- bash 表示在容器内执行 bash，进入交互式
+shell。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>15-填空-001</strong>（★ 知识点：K15-1 Pod 概念） Pod 是 K8s
+中能够创建和部署的 ________ 单元，是 K8s 调度的最小单位。</p><blockquote>
+<p><strong>答案：最小</strong> <strong>解析</strong>：Pod 是 K8s
+最小调度单元，K8s 不直接管容器而管 Pod。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-填空-002</strong>（★ 知识点：K15-1 Pod 共享） Pod
+内的容器共享 ________ 命名空间和存储卷，可通过 localhost 互相通信。</p><blockquote>
+<p><strong>答案：网络</strong> <strong>解析</strong>：Pod
+内容器共享网络命名空间（同一 IP、端口空间），可通过 localhost 通信。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-填空-003</strong>（★ 知识点：K15-2 apiVersion） Pod 资源的
+apiVersion 是 ________。</p><blockquote>
+<p><strong>答案：v1</strong> <strong>解析</strong>：Pod 是 K8s
+核心资源，apiVersion 是 v1。注意 Deployment 是 apps/v1。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-填空-004</strong>（★ 知识点：K15-2 YAML 四要素） Pod YAML
+的四要素是 apiVersion、kind、________ 和 spec。</p><blockquote>
+<p><strong>答案：metadata</strong>
+<strong>解析</strong>：四要素：apiVersion、kind、metadata（元数据）、spec（规格）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-填空-005</strong>（★★ 知识点：K15-3 requests/limits）
+resources 中 ________ 是资源保底（影响调度），________
+是资源上限（限制运行时）。</p><blockquote>
+<p><strong>答案：requests；limits</strong>
+<strong>解析</strong>：requests 是保底（调度依据），limits
+是上限（运行时限制）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-填空-006</strong>（★ 知识点：K15-3 CPU 单位） K8s 中 CPU
+资源单位 ________ 表示毫核，1000m 等于 1 核 CPU。</p><blockquote>
+<p><strong>答案：m</strong> <strong>解析</strong>：m 是
+millicore（毫核），1000m = 1 核，500m = 0.5 核。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-填空-007</strong>（★ 知识点：K15-3 imagePullPolicy）
+imagePullPolicy 的三种策略是 Always、________ 和 IfNotPresent。</p><blockquote>
+<p><strong>答案：Never</strong>
+<strong>解析</strong>：三种策略：Always（每次都拉）、Never（从不拉）、IfNotPresent（本地没有才拉）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-填空-008</strong>（★ 知识点：K15-4 Pod 状态） Pod
+的五种状态是 Pending、________、Succeeded、Failed 和 Unknown。</p><blockquote>
+<p><strong>答案：Running</strong>
+<strong>解析</strong>：五种状态：Pending（挂起）、Running（运行）、Succeeded（成功退出）、Failed（失败退出）、Unknown（失联）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-填空-009</strong>（★ 知识点：K15-4 restartPolicy） Pod 的
+restartPolicy 默认值是 ________，表示容器退出后总是重启。</p><blockquote>
+<p><strong>答案：Always</strong> <strong>解析</strong>：restartPolicy
+默认 Always，容器退出（无论正常异常）都重启。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-填空-010</strong>（★ 知识点：K15-5 kubectl 命令） 从 YAML
+文件创建 Pod 的命令是 kubectl ________ -f pod.yaml。</p><blockquote>
+<p><strong>答案：apply</strong> <strong>解析</strong>：kubectl apply -f
+是声明式创建/更新资源的命令，生产推荐。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>15-论述-001</strong>（★★ 知识点：K15-1 Pod 概念，8 分）
+请阐述"什么是 Pod"，并说明 K8s 为什么引入 Pod 而不直接管容器。Pod
+内的容器如何共享资源？</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>Pod 的定义</strong>（2 分）：Pod 是 K8s
+中能够创建和部署的最小单元，是 K8s 调度的最小单位。一个 Pod
+可以包含一个或多个容器。</p></li>
+<li><p><strong>为什么引入 Pod 而不直接管容器</strong>（4 分，每点 1~2
+分）：</p>
+<ul>
+<li><strong>容器组的管理需求</strong>：实际应用中多个容器需要紧密协作（如主容器
++ 日志收集 sidecar），Pod 把它们作为一个整体调度和管理（1.5 分）</li>
+<li><strong>共享网络和存储</strong>：Pod 内容器共享网络命名空间（同一
+IP、端口空间，可通过 localhost 通信）和存储卷，便于容器间协作（1.5
+分）</li>
+<li><strong>屏蔽容器运行时差异</strong>：K8s 通过 Pod 抽象屏蔽了
+Docker/containerd/CRI-O 等不同运行时的差异，K8s 只管
+Pod，不管底层容器（1 分）</li>
+</ul></li>
+<li><p><strong>Pod 内容器如何共享资源</strong>（2 分）：</p>
+<ul>
+<li><strong>共享网络</strong>：Pod
+内所有容器共享同一个网络命名空间（同一 Pod
+IP、同一端口空间），容器间通过 localhost 通信（1 分）</li>
+<li><strong>共享存储</strong>：Pod 内容器可挂载相同的
+Volume，通过文件系统共享数据（1 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分各自给分；要点完整即可满分；用自己的话表述意思对即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-论述-002</strong>（★★ 知识点：K15-3
+resources/imagePullPolicy，10 分） 请详细说明 resources.requests 和
+limits 的区别，以及 imagePullPolicy 三种策略的含义和适用场景。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>requests 和 limits 的区别</strong>（5 分）：</p>
+<ul>
+<li><strong>requests（请求/保底）</strong>（2 分）：告诉调度器"这个 Pod
+至少需要多少资源"，是调度依据。如 <code>cpu: 500m</code> 表示至少 0.5 核
+CPU。kubelet 保证 Pod 至少有这么多资源。</li>
+<li><strong>limits（上限/限制）</strong>（2
+分）：告诉容器运行时"这个容器最多能用多少资源"，是运行时限制。如
+<code>cpu: 1000m</code> 表示最多用 1 核。超过 CPU 会被限流，超过内存会被
+OOM 杀掉。</li>
+<li><strong>生产环境建议</strong>（1 分）：requests 和 limits
+都要设置。只设 limits 不设 requests，调度按 limits 算可能失败；只设
+requests 不设 limits，Pod 可能用爆节点资源。</li>
+</ul></li>
+<li><p><strong>imagePullPolicy 三种策略</strong>（5 分，每策略 1.5 分 +
+默认规则 0.5 分）：</p>
+<ul>
+<li><strong>Always</strong>（1.5
+分）：每次创建容器都从仓库拉取镜像。适用于用 <code>:latest</code>
+标签的镜像（latest 标签默认 Always）。</li>
+<li><strong>Never</strong>（1.5
+分）：从不拉取，只用本地镜像。适用于本地构建的镜像（如 Minikube Docker
+daemon 构建的镜像，未推到仓库）。</li>
+<li><strong>IfNotPresent</strong>（1.5
+分）：本地没有才拉取。适用于明确版本标签的镜像（如
+<code>mysql:8.0</code>），避免重复拉取已存在的镜像。</li>
+<li><strong>默认规则</strong>（0.5 分）：镜像标签是 <code>:latest</code>
+或不写标签时默认 Always；明确版本标签时默认 IfNotPresent。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：两部分独立给分；要点完整即可满分；意思对即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-论述-003</strong>（★★ 知识点：K15-4 Pod 生命周期，10 分）
+请描述 Pod
+的五种状态及其含义，并画出（或描述）它们之间的流转关系。同时说明
+restartPolicy 的三种取值及适用场景。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>Pod 的五种状态及含义</strong>（5 分，每状态 1 分）：</p>
+<ul>
+<li><strong>Pending</strong>：Pod 已被 K8s
+接受，但还没全部就绪（正在调度、拉镜像、创建容器）</li>
+<li><strong>Running</strong>：Pod
+已被调度到节点，所有容器已创建，至少一个正在运行</li>
+<li><strong>Succeeded</strong>：Pod 内所有容器都正常退出（exit code
+0），不会再重启</li>
+<li><strong>Failed</strong>：Pod
+内所有容器都已终止，至少一个异常退出（exit code 非 0）</li>
+<li><strong>Unknown</strong>：无法获取 Pod
+状态，通常是跟节点失联（节点宕机或网络不通）</li>
+</ul></li>
+<li><p><strong>状态流转关系</strong>（2 分）：</p>
+<ul>
+<li>创建 → Pending → Running（容器创建成功）</li>
+<li>Running → Succeeded（正常退出，exit 0）</li>
+<li>Running → Failed（异常退出，exit 非 0）</li>
+<li>Failed → Running（restartPolicy=Always/OnFailure 时重启）</li>
+<li>反复崩溃 → CrashLoopBackOff（退避重启）</li>
+<li>节点失联 → Unknown</li>
+<li>用户删除 → Terminating → 已删除</li>
+</ul></li>
+<li><p><strong>restartPolicy 三种取值</strong>（3 分，每策略 1
+分）：</p>
+<ul>
+<li><strong>Always</strong>：容器退出后总是重启（无论正常异常）。适用于长期运行的服务（默认值）。</li>
+<li><strong>OnFailure</strong>：容器异常退出（非
+0）才重启。适用于一次性任务（Job）。</li>
+<li><strong>Never</strong>：容器退出后不重启。适用于一次性任务、调试。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分独立给分；状态流转不必画图，描述清楚即可；restartPolicy
+适用场景意思对即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>15-论述-004</strong>（★★ 知识点：K15-5/kubectl 命令，8 分）
+请列出 kubectl 操作 Pod 的七大命令及其作用，并对比 kubectl run 和
+kubectl apply -f 两种创建 Pod
+方式的优缺点，说明生产环境推荐哪种及原因。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>kubectl 操作 Pod 的七大命令</strong>（4 分，每命令 0.5 分
++ 作用简述）：</p>
+<ul>
+<li><code>kubectl run</code>：命令式创建 Pod（快速测试用）</li>
+<li><code>kubectl get pods</code>：查看 Pod 列表（-A 看所有
+namespace）</li>
+<li><code>kubectl describe pod</code>：查看 Pod 详情（含
+Events，排查问题必用）</li>
+<li><code>kubectl logs</code>：查看 Pod 日志（-f 实时，--tail=N 最后 N
+行）</li>
+<li><code>kubectl exec</code>：进入 Pod 容器（-it 交互式）</li>
+<li><code>kubectl delete pod</code>：删除 Pod</li>
+<li><code>kubectl apply -f</code>：从 YAML 创建/更新 Pod（声明式）</li>
+</ul></li>
+<li><p><strong>kubectl run vs kubectl apply -f 对比</strong>（2
+分）：</p>
+<ul>
+<li><strong>kubectl run（命令式）</strong>：直接敲命令创建
+Pod，快速、适合临时测试；但不可复现（没记录在文件里），不适合生产（1
+分）</li>
+<li><strong>kubectl apply -f（声明式）</strong>：通过 YAML 创建
+Pod，可版本化（YAML 可提交 Git）、可复现（同样 YAML
+在任何集群都能创建同样 Pod）；生产推荐（1 分）</li>
+</ul></li>
+<li><p><strong>生产环境推荐</strong>（2 分）：</p>
+<ul>
+<li>生产环境推荐 <code>kubectl apply -f</code>（声明式）（1 分）</li>
+<li>原因：① YAML 可版本化，提交 Git 可追溯历史；② 可复现，同样 YAML
+在任何集群都能创建同样 Pod，便于环境一致；③
+声明式思维——描述"期望状态"，K8s
+维持实际状态趋近期望，更符合云原生理念（1 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分独立给分；命令作用简述即可；对比和推荐部分意思对即可。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>15-阅读-001</strong>（★★ 知识点：K15-2/K15-3 Pod YAML，12
+分） 阅读以下 CTTS 后端 Pod YAML，补全缺失部分（每空 2 分，共 12
+分）。</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> (a)________</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> (b)________</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> (c)________</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> backend</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> (d)________</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">imagePullPolicy</span><span class="kw">:</span><span class="at"> (e)________</span><span class="co">    # 本地构建的镜像，不拉取</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> (f)________</span><span class="co">    # SpringBoot 默认端口</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> SPRING_PROFILES_ACTIVE</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">value</span><span class="kw">:</span><span class="at"> prod</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;500m&quot;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;512Mi&quot;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;1000m&quot;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;1Gi&quot;</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">restartPolicy</span><span class="kw">:</span><span class="at"> Always</span></span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) v1 (b) Pod (c) ctts-backend (d)
+ctts-backend:v1 (e) Never（或 IfNotPresent） (f) 8080</p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) Pod 是核心资源，apiVersion 是 v1</li>
+<li>(b) kind 首字母大写，写作 Pod</li>
+<li>(c) metadata.name 是 Pod 唯一标识，命名为 ctts-backend</li>
+<li>(d) image 是镜像名，CTTS 后端镜像是 ctts-backend:v1</li>
+<li>(e) 本地构建的镜像不推仓库，imagePullPolicy 用 Never（或
+IfNotPresent），不能用 Always</li>
+<li>(f) SpringBoot 默认端口 8080</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12 分。意思对即可，(e) 写
+Never 或 IfNotPresent 都给分。</p>
+</blockquote>
+<hr />
+<p><strong>15-阅读-002</strong>（★★ 知识点：K15-4 Pod 状态与排查，12
+分） 阅读以下 Pod 排查过程，补全缺失部分（每空 2 分，共 12 分）。</p>
+<pre class="text"><code>某同学部署了一个 Pod 后，执行 kubectl get pods 发现 Pod 状态是 (a)________，
+表示镜像拉取失败。该同学用 kubectl (b)________ pod &lt;name&gt; 命令查看详情，
+在 Events 部分看到 &quot;Failed to pull image ... Error: ErrImagePull&quot;。
+
+可能原因：
+1. 镜像名拼写错误
+2. 镜像在仓库不存在
+3. (c)________ 设错了（本地镜像设成了 Always）
+
+解决方法：
+- 检查镜像名是否正确
+- 如果是本地构建的镜像，把 imagePullPolicy 改成 (d)________ 或 IfNotPresent
+- 修改 YAML 后重新 kubectl (e)________ -f pod.yaml
+- 如果还是不行，可以先用 kubectl (f)________ pod &lt;name&gt; 删除，再重新部署
+
+另一个常见异常状态是 CrashLoopBackOff，表示容器反复崩溃，应用 kubectl logs 看应用日志排查。</code></pre>
+<blockquote>
+<p><strong>参考答案</strong>： (a) ImagePullBackOff (b) describe (c)
+imagePullPolicy (d) Never (e) apply (f) delete</p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) 镜像拉取失败的 Pod 状态是 ImagePullBackOff</li>
+<li>(b) kubectl describe pod 查看详情（含 Events）</li>
+<li>(c) imagePullPolicy 设错是常见原因（本地镜像设了 Always）</li>
+<li>(d) 本地镜像应该用 Never 或 IfNotPresent</li>
+<li>(e) 修改 YAML 后用 kubectl apply -f 重新部署</li>
+<li>(f) 用 kubectl delete pod 删除 Pod</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12 分。意思对即可，(d) 写
+Never 或 IfNotPresent 都给分。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>15-编程-001</strong>（★★ 知识点：K15-2/K15-3/K15-6 Pod YAML
+编写，15 分） <strong>编写 CTTS 后端 Pod YAML</strong>：请为 CTTS
+后端服务编写一份完整的 Pod YAML，要求：</p>
+<ol type="1">
+<li>Pod 名称：ctts-backend，部署到 ctts namespace（2 分）</li>
+<li>标签：app=ctts-backend, tier=backend（2 分）</li>
+<li>容器名：backend，镜像：ctts-backend:v1（2 分）</li>
+<li>镜像拉取策略：适合本地构建镜像的策略（2 分）</li>
+<li>暴露端口：8080，名称 http（2 分）</li>
+<li>环境变量：SPRING_PROFILES_ACTIVE=prod, DB_HOST=mysql,
+DB_PORT=3306（2 分）</li>
+<li>资源限制：requests cpu=500m/memory=512Mi, limits
+cpu=1000m/memory=1Gi（2 分）</li>
+<li>重启策略：Always（1 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span><span class="co">                          # ① API 版本（不单独计分，但必须有）</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Pod</span><span class="co">                               # ② 资源类型</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-backend</span><span class="co">                    # ③ Pod 名（2 分）</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts</span><span class="co">                       # ④ namespace（含在③）</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span><span class="co">                               # ⑤ 标签（2 分）</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">tier</span><span class="kw">:</span><span class="at"> backend</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> backend</span><span class="co">                       # ⑥ 容器名（2 分）</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-backend:v1</span><span class="co">              # ⑦ 镜像（含在⑥）</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">imagePullPolicy</span><span class="kw">:</span><span class="at"> Never</span><span class="co">              # ⑧ 拉取策略（2 分，Never 或 IfNotPresent）</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span><span class="co">                              # ⑨ 端口（2 分）</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">name</span><span class="kw">:</span><span class="at"> http</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span><span class="co">                                # ⑩ 环境变量（2 分）</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> SPRING_PROFILES_ACTIVE</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">value</span><span class="kw">:</span><span class="at"> prod</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> DB_HOST</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">value</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> DB_PORT</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">value</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;3306&quot;</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">resources</span><span class="kw">:</span><span class="co">                          # ⑪ 资源限制（2 分）</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;500m&quot;</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;512Mi&quot;</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;1000m&quot;</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;1Gi&quot;</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">restartPolicy</span><span class="kw">:</span><span class="at"> Always</span><span class="co">                 # ⑫ 重启策略（1 分）</span></span></code></pre></div>
+<p><strong>评分要点</strong>：</p>
+<ul>
+<li>各项按标注分值给分，共 15 分</li>
+<li>imagePullPolicy 写 Never 或 IfNotPresent 都给分（2 分），写 Always
+不给分（本地镜像不能用 Always）</li>
+<li>YAML 缩进错误但字段齐全给一半分</li>
+<li>缺 apiVersion/kind 扣 2 分（四要素缺一不可）</li>
+</ul>
+</blockquote>
+<hr />
+<p><strong>15-编程-002</strong>（★★★ 知识点：K15-5/K15-6 综合应用，20
+分） <strong>Pod 部署与排查综合题</strong>：某团队要将 CTTS 后端部署到
+K8s 集群，团队成员小明执行了以下操作序列。请回答问题：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 操作 1：编写 YAML（文件名 ctts-backend.yaml）</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> ctts-backend.yaml <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">apiVersion: v1</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">kind: Pod</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">metadata:</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">  name: ctts-backend</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">  namespace: ctts</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">  labels:</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">    app: ctts-backend</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">spec:</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="st">  containers:</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="st">  - name: backend</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="st">    image: ctts-backend:v1</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="st">    imagePullPolicy: Always</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="st">    ports:</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="st">    - containerPort: 8080</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="st">    env:</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="st">    - name: SPRING_PROFILES_ACTIVE</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="st">      value: prod</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="st">    resources:</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="st">      requests:</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="st">        cpu: &quot;500m&quot;</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="st">        memory: &quot;512Mi&quot;</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="st">      limits:</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="st">        cpu: &quot;1000m&quot;</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="st">        memory: &quot;1Gi&quot;</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="st">  restartPolicy: Always</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 操作 2：部署</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> ctts-backend.yaml <span class="at">-n</span> ctts</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="co"># 操作 3：查看</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pod ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出：</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="co"># NAME           READY   STATUS              RESTARTS   AGE</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend   0/1     ImagePullBackOff    0          30s</span></span></code></pre></div>
+<p><strong>问题</strong>：</p>
+<ol type="1">
+<li>操作 3 中 Pod 状态是 ImagePullBackOff，请分析最可能的原因（4
+分）</li>
+<li>给出修复方案（修改 YAML 的哪个字段，改成什么）（4 分）</li>
+<li>修复后重新部署并验证，写出完整命令序列（含预期输出）（6 分）</li>
+<li>假设修复后 Pod 状态变成
+CrashLoopBackOff，应该如何排查？写出排查命令和可能原因（6 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<p><strong>1. ImagePullBackOff 的原因分析（4 分）</strong>： YAML 中
+<code>imagePullPolicy: Always</code>，但 <code>ctts-backend:v1</code>
+是用 Minikube Docker daemon 本地构建的镜像，没有推送到镜像仓库。Always
+策略会让 K8s 每次都去仓库拉取，但仓库里没有这个镜像，所以拉取失败，进入
+ImagePullBackOff 状态。（4 分）</p>
+<p><strong>2. 修复方案（4 分）</strong>： 把 YAML 中的
+<code>imagePullPolicy: Always</code> 改成
+<code>imagePullPolicy: Never</code>（或 <code>IfNotPresent</code>）。（4
+分）</p>
+<ul>
+<li>Never：从不拉取，只用本地镜像（最明确）</li>
+<li>IfNotPresent：本地没有才拉取（本地有就用本地）</li>
+<li>两者都给分，Always 不给分</li>
+</ul>
+<p><strong>3. 修复后的完整命令序列（6 分）</strong>：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3.1 先删除旧的失败 Pod</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> delete pod ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pod &quot;ctts-backend&quot; deleted</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 3.2 修改 YAML 后重新部署</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> ctts-backend.yaml <span class="at">-n</span> ctts</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># pod/ctts-backend created</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3.3 查看 Pod 状态（应该 Running）</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pod ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># NAME           READY   STATUS    RESTARTS   AGE</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend   1/1     Running   0          10s</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 3.4 查看日志确认应用启动</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出（节选）：</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co"># :: Spring Boot ::               (v3.1.0)</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Tomcat started on port(s): 8080 (http)</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Started CttsBackendApplication in 5.234 seconds</span></span></code></pre></div>
+<p>（每步 1.5 分，含命令和预期输出；只写命令不写输出给一半）</p>
+<p><strong>4. CrashLoopBackOff 排查（6 分）</strong>：
+<strong>排查命令</strong>（3 分）：</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 4.1 查看应用日志（最关键）</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 看应用启动失败的具体原因</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 4.2 查看上次崩溃的日志（容器崩溃重启后，看前一次的日志）</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs ctts-backend <span class="at">-n</span> ctts <span class="at">--previous</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 4.3 查看 Pod 详情（看 Events 和容器状态）</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pod ctts-backend <span class="at">-n</span> ctts</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 看 Last State 里的 Exit Code 和 Reason</span></span></code></pre></div>
+<p>（每条命令 1 分，共 3 分）</p>
+<p><strong>可能原因</strong>（3 分，每点 1 分，答出 3 点即满分）：</p>
+<ul>
+<li>应用配置错误（如 SPRING_PROFILES_ACTIVE 指定的配置文件不存在）</li>
+<li>依赖服务不可达（如 DB_HOST 指向的 MySQL
+还没部署，连不上数据库导致启动失败）</li>
+<li>资源不足（如 limits.memory 设太小，应用启动时内存不够被
+OOMKilled）</li>
+<li>启动命令错误（command/args 配置错误，应用无法启动）</li>
+<li>镜像本身有问题（如 jar 包路径错误、JDK 版本不符）</li>
+</ul>
+<p><strong>评分要点</strong>：各小题独立给分；命令和原因合理即可；意思对即可。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

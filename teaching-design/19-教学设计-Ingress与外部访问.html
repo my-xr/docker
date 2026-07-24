@@ -1,0 +1,669 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ingress与外部访问</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 19 次课 · 教学设计</div>
+      <h1>Ingress与外部访问</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 19 次课</span>
+        <span class="hero-chip"><b>主题</b>Ingress与外部访问</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息表">一、课程信息表</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#21-知识目标">2.1 知识目标</a></li>
+<li><a href="#22-能力目标">2.2 能力目标</a></li>
+<li><a href="#23-素质目标">2.3 素质目标</a></li>
+</ul></li>
+<li><a href="#三知识点纲要表">三、知识点纲要表</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务">四、项目任务</a>
+<ul>
+<li><a href="#41-任务名称">4.1 任务名称</a></li>
+<li><a href="#42-任务背景">4.2 任务背景</a></li>
+<li><a href="#43-任务产出">4.3 任务产出</a></li>
+<li><a href="#44-任务流程">4.4 任务流程</a></li>
+</ul></li>
+<li><a href="#五课堂互动">五、课堂互动</a>
+<ul>
+<li><a href="#51-互动一代码阅读分析ingress路由规则核心互动约10分钟">5.1 互动一：代码阅读——分析Ingress路由规则（核心互动，约10分钟）</a></li>
+<li><a href="#52-互动二方案对比小辩论约5分钟">5.2 互动二：方案对比小辩论（约5分钟）</a></li>
+</ul></li>
+<li><a href="#六课程思政">六、课程思政</a>
+<ul>
+<li><a href="#61-主题">6.1 主题</a></li>
+<li><a href="#62-融入方式">6.2 融入方式</a></li>
+<li><a href="#63-思政小结">6.3 思政小结</a></li>
+</ul></li>
+<li><a href="#七课堂练习">七、课堂练习</a>
+<ul>
+<li><a href="#练习1基础5分钟">练习1（基础，5分钟）</a></li>
+<li><a href="#练习2进阶5分钟">练习2（进阶，5分钟）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+<li><a href="#任务1必做完成ctts-ingress配置并提交截图">任务1（必做）：完成CTTS Ingress配置并提交截图</a></li>
+<li><a href="#任务2必做为ctts配置https">任务2（必做）：为CTTS配置HTTPS</a></li>
+<li><a href="#任务3选做路径路由探索">任务3（选做）：路径路由探索</a></li>
+</ul></li>
+<li><a href="#九岗位面试考点">九、岗位面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十资料题库索引">十、资料题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#十一90分钟时间分配">十一、90分钟时间分配</a>
+<ul>
+</ul></li>
+<li><a href="#十二教学反思教师课后填写">十二、教学反思（教师课后填写）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 19 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p><strong>课程模块</strong>：M7 Kubernetes进阶（服务暴露与外部访问）
+<strong>贯穿项目</strong>：CTTS多服务（Vue3 + SpringBoot +
+MySQL）部署到K8s <strong>技术栈</strong>：K8s 1.28+ + Minikube + kubectl
++ Nginx Ingress Controller
+<strong>学时</strong>：2学时（90分钟，理论课）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息表">一、课程信息表</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>课程名称</td>
+<td>Docker云容器与管理技术</td>
+</tr>
+<tr>
+<td>课次</td>
+<td>第19次课</td>
+</tr>
+<tr>
+<td>课题</td>
+<td>Ingress与外部访问</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M7 Kubernetes进阶</td>
+</tr>
+<tr>
+<td>课程类型</td>
+<td>理论课（含演示与代码阅读）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2学时 / 90分钟</td>
+</tr>
+<tr>
+<td>授课对象</td>
+<td>软件工程 / 计算机科学与技术 本科三年级</td>
+</tr>
+<tr>
+<td>先修内容</td>
+<td>第18次课 Service服务暴露（ClusterIP/NodePort/LoadBalancer）</td>
+</tr>
+<tr>
+<td>后续内容</td>
+<td>第20次课 ConfigMap与Secret配置管理</td>
+</tr>
+<tr>
+<td>教学环境</td>
+<td>多媒体教室 + Minikube单节点集群（教师演示机）</td>
+</tr>
+<tr>
+<td>教学方法</td>
+<td>讲授法 + 演示法 + 代码阅读法 + 案例驱动法</td>
+</tr>
+<tr>
+<td>核心工具</td>
+<td>kubectl、minikube、Nginx Ingress Controller、openssl</td>
+</tr>
+<tr>
+<td>思政融入点</td>
+<td>用户体验（统一入口让访问更简单）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="21-知识目标">2.1 知识目标</h3>
+<ul>
+<li><strong>K19-1</strong>：理解Ingress概念，能阐述七层HTTP/HTTPS路由的工作原理，对比Service四层负载的区别。</li>
+<li><strong>K19-2</strong>：掌握Ingress
+Controller的本质（独立Pod），熟悉Nginx Ingress
+Controller在Minikube下的安装方式。</li>
+<li><strong>K19-3</strong>：掌握Ingress资源YAML结构（apiVersion、kind、rules/host/path/backend、pathType）。</li>
+<li><strong>K19-4</strong>：理解域名虚拟主机与路径路由的两种模式，掌握defaultBackend兜底机制。</li>
+<li><strong>K19-5</strong>：掌握TLS/HTTPS配置方法，能创建TLS
+Secret并接入Ingress。</li>
+</ul>
+<h3 id="22-能力目标">2.2 能力目标</h3>
+<ul>
+<li>能独立为CTTS项目编写Ingress YAML，实现
+<code>frontend.ctts.local</code>
+路由到前端Service、<code>api.ctts.local</code> 路由到后端Service。</li>
+<li>能安装Nginx Ingress
+Controller、配置本机hosts、生成自签证书并完成HTTPS访问验证。</li>
+<li>能根据
+<code>kubectl get ingress</code>、<code>kubectl describe ingress</code>、Controller
+Pod日志排查路由异常。</li>
+<li>能区分Prefix与Exact两种pathType的差异，并合理选用。</li>
+</ul>
+<h3 id="23-素质目标">2.3 素质目标</h3>
+<ul>
+<li><strong>工程素养</strong>：建立"统一入口、单一对外"的架构审美，避免端口乱放、入口分散。</li>
+<li><strong>用户体验意识</strong>：从使用者视角思考访问路径的设计，让"复杂后端"对用户透明。</li>
+<li><strong>安全意识</strong>：理解HTTPS/TLS对生产环境的基础性意义，养成"明文HTTP不出网"的习惯。</li>
+<li><strong>协作精神</strong>：Ingress涉及开发、运维、前端多方协作，培养接口契约意识。</li>
+</ul>
+<hr />
+<h2 id="三知识点纲要表">三、知识点纲要表</h2>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>核心内容</th>
+<th>难度</th>
+<th>学时分配</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K19-1</td>
+<td>Ingress概念</td>
+<td>七层HTTP/HTTPS路由；与Service（四层）的对比；为什么需要Ingress（统一入口、域名路由、TLS卸载、节省NodePort）</td>
+<td>★★</td>
+<td>12 min</td>
+</tr>
+<tr>
+<td>K19-2</td>
+<td>Ingress Controller</td>
+<td>Ingress资源是规则，Controller才是执行者；Nginx Ingress
+Controller是独立Pod；<code>minikube addons enable ingress</code>
+安装与验证</td>
+<td>★★</td>
+<td>12 min</td>
+</tr>
+<tr>
+<td>K19-3</td>
+<td>Ingress资源YAML</td>
+<td><code>apiVersion: networking.k8s.io/v1</code>；rules/host/path/backend结构；pathType（Prefix/Exact）语义与差异；IngressClassName</td>
+<td>★★★</td>
+<td>18 min</td>
+</tr>
+<tr>
+<td>K19-4</td>
+<td>域名虚拟主机与路径路由</td>
+<td>多域名路由不同Service（虚拟主机）；单域名多路径路由；defaultBackend兜底；命名Ingress规则合并</td>
+<td>★★★</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>K19-5</td>
+<td>TLS/HTTPS配置</td>
+<td><code>kubectl create secret tls</code>；Ingress的tls字段；证书与hosts对应关系；自签证书生成；HTTP→HTTPS重定向</td>
+<td>★★★</td>
+<td>15 min</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务">四、项目任务</h2>
+<h3 id="41-任务名称">4.1 任务名称</h3>
+<p><strong>CTTS项目Ingress统一入口配置</strong></p>
+<h3 id="42-任务背景">4.2 任务背景</h3>
+<p>CTTS项目已通过Deployment+Service部署到Minikube，目前前端Service（<code>ctts-frontend</code>：ClusterIP
+80→8080）与后端Service（<code>ctts-backend</code>：ClusterIP
+80→8081）仅集群内可访问。若使用NodePort对外，会出现端口难以记忆、无域名、无HTTPS等问题。本次课通过Ingress实现：</p>
+<ul>
+<li><code>http://frontend.ctts.local</code> → 前端Vue3页面</li>
+<li><code>http://api.ctts.local/</code> → 后端SpringBoot REST API</li>
+<li>后续支持HTTPS：<code>https://frontend.ctts.local</code>、<code>https://api.ctts.local</code></li>
+</ul>
+<h3 id="43-任务产出">4.3 任务产出</h3>
+<ol type="1">
+<li><code>ctts-ingress.yaml</code>（含两条host规则）</li>
+<li><code>ctts-tls-secret.yaml</code>（或命令行创建的TLS Secret）</li>
+<li><code>ctts-ingress-tls.yaml</code>（启用HTTPS的Ingress）</li>
+<li>验证记录：<code>kubectl get ingress</code>
+截图、浏览器访问截图、<code>curl -H "Host: frontend.ctts.local" http://&lt;minikube ip&gt;</code>
+输出</li>
+</ol>
+<h3 id="44-任务流程">4.4 任务流程</h3>
+<pre><code>启用ingress addon → 确认Controller Pod运行 → 编写Ingress YAML
+→ 应用YAML → 配置本机hosts → 浏览器/curl验证 → 生成自签证书
+→ 创建TLS Secret → 更新Ingress TLS字段 → HTTPS验证</code></pre>
+<hr />
+<h2 id="五课堂互动">五、课堂互动</h2>
+<h3 id="51-互动一代码阅读分析ingress路由规则核心互动约10分钟">5.1
+互动一：代码阅读——分析Ingress路由规则（核心互动，约10分钟）</h3>
+<p><strong>问题</strong>：教师展示如下Ingress
+YAML，请学生口头回答5个问题。</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Ingress</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-ingress</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> default</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">annotations</span><span class="kw">:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nginx.ingress.kubernetes.io/rewrite-target</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ingressClassName</span><span class="kw">:</span><span class="at"> nginx</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> frontend.ctts.local</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> api.ctts.local</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
+<p><strong>提问清单</strong>：</p>
+<ol type="1">
+<li>该Ingress定义了几条路由规则？分别指向哪些Service？</li>
+<li><code>pathType: Prefix</code> 表示什么？如果改为
+<code>Exact</code>，访问 <code>/user/login</code> 还能命中吗？</li>
+<li><code>nginx.ingress.kubernetes.io/rewrite-target: /</code>
+这个注解的作用是什么？不加会怎样？</li>
+<li>如果用户访问
+<code>http://frontend.ctts.local/abc/def</code>，会被转发到哪个Service的哪个路径？</li>
+<li>若用户访问的Host既不是 <code>frontend.ctts.local</code> 也不是
+<code>api.ctts.local</code>（例如直接用IP访问），会发生什么？如何改善？</li>
+</ol>
+<p><strong>组织方式</strong>：</p>
+<ul>
+<li>4人一组讨论3分钟，每组指定一名发言人。</li>
+<li>教师随机抽3组回答，每组至少回答1题。</li>
+<li>其他组可补充或质疑。</li>
+</ul>
+<p><strong>学生输出</strong>：</p>
+<ul>
+<li>5个问题的口头答案。</li>
+<li>1份小组讨论纪要（课后提交至学习通）。</li>
+</ul>
+<p><strong>教师点评要点</strong>：</p>
+<ul>
+<li>第1题强调"host数=规则数=2"，每条规则内部paths可以是多条。</li>
+<li>第2题澄清Prefix是前缀匹配（含子路径），Exact是精确匹配（仅<code>/</code>本身）。</li>
+<li>第3题说明rewrite-target与前后端路径前缀差异的关系，提醒"非必要不重写"。</li>
+<li>第4题引导学生追踪 <code>/abc/def</code> 的命中流程：host匹配 →
+path前缀匹配 → 转发到 <code>ctts-frontend:80/abc/def</code>。</li>
+<li>第5题引出 <code>defaultBackend</code>，并联系K19-4。</li>
+</ul>
+<h3 id="52-互动二方案对比小辩论约5分钟">5.2
+互动二：方案对比小辩论（约5分钟）</h3>
+<p><strong>问题</strong>：CTTS项目要对外发布，A组主张NodePort、B组主张LoadBalancer、C组主张Ingress。请三组各用1分钟陈述优劣。</p>
+<p><strong>教师点评</strong>：NodePort端口难记、LoadBalancer在本地Minikube需
+<code>minikube tunnel</code>、Ingress统一入口且支持域名/TLS，是生产标准做法。</p>
+<hr />
+<h2 id="六课程思政">六、课程思政</h2>
+<h3 id="61-主题">6.1 主题</h3>
+<p><strong>用户体验——统一入口让访问更简单</strong></p>
+<h3 id="62-融入方式">6.2 融入方式</h3>
+<ul>
+<li><strong>导入阶段</strong>：以"打开淘宝、访问GitHub"为例，用户只需输入一个域名，背后是成百上千个微服务。这背后正是Ingress这类七层网关在做"复杂后端、简单入口"的工作。</li>
+<li><strong>讲解阶段</strong>：强调"统一入口"不仅是技术选择，更是产品哲学——把复杂留给自己，把简单留给用户。</li>
+<li><strong>对比阶段</strong>：NodePort方式让用户记忆
+<code>IP:30001</code>、<code>IP:30002</code>，是"以开发者为中心"的设计；Ingress用域名，是"以用户为中心"的设计。</li>
+<li><strong>总结阶段</strong>：引申至软件工程的"接口契约"——好的接口对调用方友好、对提供方解耦。从CTTS的小入口，看大系统的统一治理。</li>
+</ul>
+<h3 id="63-思政小结">6.3 思政小结</h3>
+<p>统一入口体现的是"用户至上"的工程伦理，是开发者为使用者负责的具体表现。在云原生时代，谁掌握了入口，谁就掌握了治理权——这也是国家推进自主云原生网关（如Higress、APISIX）的战略意义所在。</p>
+<hr />
+<h2 id="七课堂练习">七、课堂练习</h2>
+<h3 id="练习1基础5分钟">练习1（基础，5分钟）</h3>
+<p>写出一条Ingress规则：将 <code>blog.ctts.local/blog</code>
+路径前缀路由到 <code>blog-service:8080</code>，pathType使用Prefix。</p>
+<p><strong>参考答案</strong>：</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Ingress</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> blog-ingress</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ingressClassName</span><span class="kw">:</span><span class="at"> nginx</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> blog.ctts.local</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /blog</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> blog-service</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span></code></pre></div>
+<h3 id="练习2进阶5分钟">练习2（进阶，5分钟）</h3>
+<p>已有Ingress
+<code>ctts-ingress</code>，现要求在不删除原有规则的前提下，新增一条路径
+<code>/api/v2</code> 路由到
+<code>ctts-backend-v2:80</code>。简述操作步骤。</p>
+<p><strong>参考答案</strong>：</p>
+<ul>
+<li>使用 <code>kubectl edit ingress ctts-ingress</code> 或
+<code>kubectl apply</code> 更新YAML，在 <code>api.ctts.local</code>
+的paths下新增一条path：<code>/api/v2</code>，backend指向
+<code>ctts-backend-v2:80</code>。</li>
+<li>注意路径匹配顺序：更具体的 <code>/api/v2</code> 应写在更宽泛的
+<code>/</code> 之前（Nginx Ingress
+Controller会按最长前缀优先匹配）。</li>
+</ul>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<h3 id="任务1必做完成ctts-ingress配置并提交截图">任务1（必做）：完成CTTS
+Ingress配置并提交截图</h3>
+<ol type="1">
+<li>启用Minikube ingress addon。</li>
+<li>编写并应用 <code>ctts-ingress.yaml</code>，实现
+<code>frontend.ctts.local</code>→前端、<code>api.ctts.local</code>→后端。</li>
+<li>配置本机hosts文件，浏览器访问验证。</li>
+<li>截图：<code>kubectl get ingress</code>、<code>kubectl get pods -n ingress-nginx</code>、浏览器访问
+<code>frontend.ctts.local</code> 与
+<code>api.ctts.local/actuator/health</code> 的页面。</li>
+</ol>
+<h3 id="任务2必做为ctts配置https">任务2（必做）：为CTTS配置HTTPS</h3>
+<ol type="1">
+<li>使用openssl生成自签证书（涵盖 <code>frontend.ctts.local</code> 与
+<code>api.ctts.local</code>）。</li>
+<li>创建TLS Secret。</li>
+<li>更新Ingress的tls字段。</li>
+<li>验证 <code>https://frontend.ctts.local</code>
+可访问（浏览器可能警告证书不受信任，需手动接受）。</li>
+</ol>
+<h3 id="任务3选做路径路由探索">任务3（选做）：路径路由探索</h3>
+<p>为CTTS新增 <code>ctts.local/admin</code> 路由到
+<code>ctts-admin-service:80</code>，探索rewrite-target注解对前端静态资源路径的影响，写一段不少于200字的总结。</p>
+<h3
+id="任务4选做面向岗位调研云厂商ingress-controller">任务4（选做，面向岗位）：调研云厂商Ingress
+Controller</h3>
+<p>对比阿里云SLB Ingress、腾讯云TKE Ingress、Nginx
+Ingress、Traefik、Higress的差异，整理为表格（维度：协议支持、性能、生态、成本、国内适配）。</p>
+<hr />
+<h2 id="九岗位面试考点">九、岗位面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>难度</th>
+<th>典型问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ingress vs Service</td>
+<td>★★</td>
+<td>"Ingress和Service的区别？为什么有了Service还要Ingress？"</td>
+</tr>
+<tr>
+<td>Ingress Controller本质</td>
+<td>★★</td>
+<td>"Ingress Controller是什么？必须装吗？常见实现有哪些？"</td>
+</tr>
+<tr>
+<td>pathType Prefix vs Exact</td>
+<td>★★★</td>
+<td>"Prefix和Exact有什么区别？给一个会出错的例子。"</td>
+</tr>
+<tr>
+<td>多Ingress合并</td>
+<td>★★★</td>
+<td>"两个YAML都定义了同一个host，会发生什么？"</td>
+</tr>
+<tr>
+<td>TLS卸载</td>
+<td>★★★</td>
+<td>"Ingress如何做HTTPS？证书放在哪？后端是HTTPS还是HTTP？"</td>
+</tr>
+<tr>
+<td>命名空间隔离</td>
+<td>★★</td>
+<td>"Ingress资源能路由到其他命名空间的Service吗？"</td>
+</tr>
+<tr>
+<td>故障排查</td>
+<td>★★★</td>
+<td>"curl域名返回404，如何定位？请说出至少3步排查。"</td>
+</tr>
+<tr>
+<td>蓝绿/灰度发布</td>
+<td>★★★★</td>
+<td>"如何用Ingress做灰度发布？（提示：canary注解）"</td>
+</tr>
+<tr>
+<td>性能与限流</td>
+<td>★★★★</td>
+<td>"Nginx Ingress如何限流？annotations有哪些？"</td>
+</tr>
+<tr>
+<td>生产架构</td>
+<td>★★★★</td>
+<td>"大型系统中Ingress前面还需要什么？WAF、CDN、SLB如何配合？"</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="十资料题库索引">十、资料题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料</th>
+<th>位置</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>本课教学资料.md</td>
+<td>课程文件夹/19 Ingress与外部访问</td>
+<td>课前预习、课后复习</td>
+</tr>
+<tr>
+<td>本课题库.md</td>
+<td>课程文件夹/19 Ingress与外部访问</td>
+<td>自测、备考（78题）</td>
+</tr>
+<tr>
+<td>K8s官方Ingress文档</td>
+<td><a
+href="https://kubernetes.io/docs/concepts/services-networking/ingress/">https://kubernetes.io/docs/concepts/services-networking/ingress/</a></td>
+<td>权威定义与字段说明</td>
+</tr>
+<tr>
+<td>K8s官方Ingress Controller文档</td>
+<td><a
+href="https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/">https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/</a></td>
+<td>Controller实现对比</td>
+</tr>
+<tr>
+<td>Nginx Ingress Controller官网</td>
+<td><a
+href="https://kubernetes.github.io/ingress-nginx/">https://kubernetes.github.io/ingress-nginx/</a></td>
+<td>注解、配置、最佳实践</td>
+</tr>
+<tr>
+<td>Minikube addons文档</td>
+<td><a
+href="https://minikube.sigs.k8s.io/docs/handbook/addons/ingress/">https://minikube.sigs.k8s.io/docs/handbook/addons/ingress/</a></td>
+<td>Minikube下ingress启用</td>
+</tr>
+<tr>
+<td>第18次课Service资料</td>
+<td>课程文件夹/18 Service服务暴露</td>
+<td>先修内容回顾</td>
+</tr>
+<tr>
+<td>第20次课ConfigMap资料</td>
+<td>课程文件夹/20 ConfigMap与Secret配置管理</td>
+<td>后续TLS证书Secret可结合</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="十一90分钟时间分配">十一、90分钟时间分配</h2>
+<table>
+<thead>
+<tr>
+<th>时间段</th>
+<th>时长</th>
+<th>环节</th>
+<th>内容</th>
+<th>师生活动</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00:00–00:05</td>
+<td>5 min</td>
+<td>课前导入</td>
+<td>从"淘宝一个域名背后是几千个服务"切入，引出Ingress价值</td>
+<td>教师讲述 + 提问</td>
+</tr>
+<tr>
+<td>00:05–00:17</td>
+<td>12 min</td>
+<td>K19-1 Ingress概念</td>
+<td>七层 vs 四层、为什么需要Ingress（4个理由）</td>
+<td>讲授 + 图示对比</td>
+</tr>
+<tr>
+<td>00:17–00:29</td>
+<td>12 min</td>
+<td>K19-2 Ingress Controller</td>
+<td>Controller是执行者、Nginx Ingress Controller安装</td>
+<td>讲授 + 演示 <code>minikube addons enable ingress</code></td>
+</tr>
+<tr>
+<td>00:29–00:47</td>
+<td>18 min</td>
+<td>K19-3 Ingress资源YAML</td>
+<td>字段精讲、pathType对比、ingressClassName</td>
+<td>讲授 + YAML逐行解读</td>
+</tr>
+<tr>
+<td>00:47–00:52</td>
+<td>5 min</td>
+<td>课堂练习1</td>
+<td>写blog.ctts.local的Ingress规则</td>
+<td>学生练习 + 教师巡场</td>
+</tr>
+<tr>
+<td>00:52–01:02</td>
+<td>10 min</td>
+<td>课堂互动一</td>
+<td>代码阅读分析ctts-ingress.yaml（5个问题）</td>
+<td>小组讨论 + 抽答 + 点评</td>
+</tr>
+<tr>
+<td>01:02–01:17</td>
+<td>15 min</td>
+<td>K19-4 虚拟主机与路径路由</td>
+<td>多域名/多路径/defaultBackend</td>
+<td>讲授 + 案例演示</td>
+</tr>
+<tr>
+<td>01:17–01:32</td>
+<td>15 min</td>
+<td>K19-5 TLS/HTTPS配置</td>
+<td>Secret、tls字段、自签证书、HTTP→HTTPS重定向</td>
+<td>讲授 + 演示openssl + 验证</td>
+</tr>
+<tr>
+<td>01:32–01:37</td>
+<td>5 min</td>
+<td>课堂练习2</td>
+<td>新增/api/v2路径规则</td>
+<td>学生练习 + 答疑</td>
+</tr>
+<tr>
+<td>01:37–01:42</td>
+<td>5 min</td>
+<td>思政总结</td>
+<td>统一入口与用户体验</td>
+<td>教师讲述</td>
+</tr>
+<tr>
+<td>01:42–01:48</td>
+<td>6 min</td>
+<td>课后任务布置</td>
+<td>必做2项 + 选做2项</td>
+<td>教师讲解要求</td>
+</tr>
+<tr>
+<td>01:48–01:50</td>
+<td>2 min</td>
+<td>答疑</td>
+<td>学生自由提问</td>
+<td>师生互动</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="十二教学反思教师课后填写">十二、教学反思（教师课后填写）</h2>
+<ul class="task-list">
+<li><p><label><input type="checkbox" />学生对"四层 vs
+七层"的理解是否到位？是否有混淆NodePort/Ingress端口的现象？</label></p></li>
+<li><p><label><input type="checkbox" />pathType
+Prefix与Exact的区分是否被多数学生掌握？练习正确率？</label></p></li>
+<li><p><label><input type="checkbox" />Ingress
+Controller与Ingress资源的关系是否清晰？是否有学生误以为"启用addon就有Ingress规则"？</label></p></li>
+<li><p><label><input type="checkbox" />TLS
+Secret的创建步骤是否有学生卡在openssl命令？</label></p></li>
+<li><p><label><input
+type="checkbox" />90分钟时间分配是否合理？K19-3是否需要增加练习时间？</label></p></li>
+<li><p><label><input
+type="checkbox" />思政融入是否自然？是否需要增加国产云原生网关（Higress）的案例？</label></p></li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

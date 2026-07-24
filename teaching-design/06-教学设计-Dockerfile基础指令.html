@@ -1,0 +1,621 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dockerfile基础指令</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 06 次课 · 教学设计</div>
+      <h1>Dockerfile基础指令</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 06 次课</span>
+        <span class="hero-chip"><b>主题</b>Dockerfile基础指令</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+<li><a href="#贯穿项目阶段-3编写-ctts-后端基础-dockerfile">贯穿项目阶段 3：编写 CTTS 后端基础 Dockerfile</a></li>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1开场对比5-分钟讲解-k6-1-前">互动 1：开场对比（5 分钟，讲解 K6-1 前）</a></li>
+<li><a href="#互动-2代码阅读分析官方-nginx-镜像的-dockerfile讲解-k6-2-后">互动 2：代码阅读——分析官方 nginx 镜像的 Dockerfile（讲解 K6-2 后）</a></li>
+<li><a href="#互动-3找错游戏找出-dockerfile-中的反模式讲解-k6-3k6-4-后">互动 3：找错游戏——找出 Dockerfile 中的反模式（讲解 K6-3、K6-4 后）</a></li>
+<li><a href="#互动-4构建上下文实战体会讲解-k6-6-时">互动 4：构建上下文实战体会（讲解 K6-6 时）</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+<li><a href="#随堂练习5-分钟讲解结束前进行">随堂练习（5 分钟，讲解结束前进行）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 06 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M3 Dockerfile 与镜像构建 ｜ 课程：《Docker
+云容器与管理技术》 配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 6 次课（全课程 24 次之第 6）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>理论课</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M3 Dockerfile 与镜像构建</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>Dockerfile 概念；基础指令；构建镜像</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>Docker 镜像与容器管理（第 3~5 次课）、Linux 基础命令、Java
+应用打包（jar）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>理解 Dockerfile 的概念与作用，明确"Dockerfile
+是镜像的源代码"这一工程规范。</li>
+<li>掌握 Dockerfile 的基本结构（指令 + 参数 + 注释 + 大小写规范）。</li>
+<li>掌握 <code>FROM</code>
+指令的作用与基础镜像选择原则（官方镜像、版本固定、scratch 场景）。</li>
+<li>掌握 <code>RUN</code> 指令的两种形式（shell / exec）与"每条 RUN
+生成一层"的分层原理，理解层缓存对构建优化的影响。</li>
+<li>掌握 <code>COPY</code> 与 <code>ADD</code>
+指令的差异（解压、URL）以及"优先用 COPY"的工程建议。</li>
+<li>掌握 <code>WORKDIR</code> 与 <code>USER</code> 指令的作用，理解非
+root 运行的安全最佳实践。</li>
+<li>掌握 <code>docker build -t name:tag .</code> 命令、构建上下文（build
+context）概念以及 <code>.dockerignore</code> 的作用与编写。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能独立编写一个最小可构建的 Dockerfile（FROM + COPY +
+WORKDIR）。</li>
+<li>能用 <code>docker build</code> 命令构建镜像并通过
+<code>docker images</code> 验证构建结果。</li>
+<li>能识别并优化 Dockerfile 中的常见反模式（多条 RUN、绝对路径硬编码、用
+ADD 复制本地文件）。</li>
+<li>能为 CTTS 后端服务编写基础 Dockerfile（FROM openjdk → COPY jar →
+设置 WORKDIR）。</li>
+<li>能编写合理的 <code>.dockerignore</code> 文件减小构建上下文。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>树立"工程规范"意识——Dockerfile
+是镜像的源代码，必须像写代码一样规范。</li>
+<li>培养"安全意识"——非 root 运行、最小权限原则。</li>
+<li>建立"性能意识"——合并 RUN、利用层缓存、减小构建上下文。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K6-1</td>
+<td>Dockerfile 概念与作用</td>
+<td>Dockerfile 定义；为什么用 Dockerfile 而非 docker commit；Dockerfile
+基本结构（指令、注释、大小写）</td>
+</tr>
+<tr>
+<td>K6-2</td>
+<td>FROM 指令</td>
+<td>基础镜像选择；<code>FROM ubuntu:22.04</code>；<code>scratch</code>
+空基础镜像；官方镜像选择原则</td>
+</tr>
+<tr>
+<td>K6-3</td>
+<td>RUN 指令</td>
+<td>执行 shell 命令；每条 RUN
+生成一层；层缓存影响；<code>&amp;&amp;</code> 合并命令优化；shell vs
+exec 形式</td>
+</tr>
+<tr>
+<td>K6-4</td>
+<td>COPY 与 ADD 指令</td>
+<td>COPY 复制本地文件；ADD 额外功能（解压 tar、URL）；COPY vs ADD
+选择建议</td>
+</tr>
+<tr>
+<td>K6-5</td>
+<td>WORKDIR 与 USER 指令</td>
+<td>WORKDIR 设置工作目录；USER 切换用户；非 root 运行的安全最佳实践</td>
+</tr>
+<tr>
+<td>K6-6</td>
+<td>docker build 与构建上下文</td>
+<td><code>docker build -t name:tag .</code>；构建上下文概念；<code>.dockerignore</code>
+作用与示例</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3 id="贯穿项目阶段-3编写-ctts-后端基础-dockerfile">贯穿项目阶段
+3：编写 CTTS 后端基础 Dockerfile</h3>
+<p><strong>本次课任务</strong>：</p>
+<ol type="1">
+<li>教师讲解 Dockerfile 基础指令后，演示为 CTTS 后端编写一个"最小可用"的
+Dockerfile。</li>
+<li>学生跟随编写并构建 CTTS 后端基础镜像（FROM openjdk → COPY jar → 设置
+WORKDIR）。</li>
+<li>用 <code>docker build</code> 构建镜像，用 <code>docker images</code>
+和 <code>docker run</code> 验证镜像可用。</li>
+</ol>
+<p><strong>CTTS 后端基础 Dockerfile（课堂演示版）</strong>：</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CTTS 后端基础镜像 Dockerfile（第 6 次课版本，进阶版在第 7 次课）</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/app.jar</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<p><strong>构建与验证命令</strong>：</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 切换到 jar 包所在目录</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/ctts/backend</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 构建镜像</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> ctts-backend:v0.6 .</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证镜像</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images ctts-backend</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 运行容器验证（暂时不连数据库，只验证 java 进程能起来）</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> ctts-backend:v0.6 java <span class="at">-version</span></span></code></pre></div>
+<blockquote>
+<p>📌 第 6 次课只做"基础 Dockerfile"，重点是 FROM/COPY/WORKDIR
+三件套。CMD/ENTRYPOINT、多阶段构建、镜像优化在第 7 次课讲。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1开场对比5-分钟讲解-k6-1-前">互动 1：开场对比（5 分钟，讲解
+K6-1 前）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"上节课我们用 <code>docker commit</code>
+把一个容器提交成镜像。如果让你把 CTTS 后端的环境（JDK17 +
+jar）做成镜像，你会怎么做？这种方式有什么问题？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>自由发言，教师板书学生提出的步骤</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>"启动一个 openjdk 容器 → docker cp 拷 jar 进去 → docker commit
+提交成镜像"；可能说出"不可复现""步骤多易错""没办法版本管理"等问题</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定 <code>docker commit</code>
+思路，但引出三大痛点：不可复现（没人知道你做了什么）、不可版本管理、不可审计。引出
+Dockerfile——"用代码描述镜像构建过程"，对应 K6-1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2代码阅读分析官方-nginx-镜像的-dockerfile讲解-k6-2-后">互动
+2：代码阅读——分析官方 nginx 镜像的 Dockerfile（讲解 K6-2 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>投影展示 <code>nginx:alpine</code> 官方镜像的
+Dockerfile（精简版），学生分组阅读并回答：①FROM
+用的什么基础镜像？②为什么选 alpine？③有几条 RUN？每条在做什么？④有没有
+COPY/WORKDIR？</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>4 人一组，5 分钟讨论 → 每组派代表发言 1 分钟</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能找出 FROM nginx:alpine；能识别 RUN 在装依赖；可能不理解为何用
+alpine（轻量）；可能注意到没有显式 WORKDIR</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调三点：①官方镜像选 alpine 是为减小体积；②RUN 用
+<code>&amp;&amp;</code> 合并命令减少层数；③WORKDIR 不写时默认
+<code>/</code>，工程上应显式设置。引出"看官方 Dockerfile
+是学习最佳实践的最快路径"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>官方 nginx:alpine
+Dockerfile（精简版，用于课堂阅读）</strong>：</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> alpine:3.18</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="bu">set</span> <span class="at">-x</span> <span class="dt">\</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="ex">addgroup</span> <span class="at">-g</span> 101 <span class="at">-S</span> nginx <span class="dt">\</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="ex">adduser</span> <span class="at">-S</span> <span class="at">-D</span> <span class="at">-H</span> <span class="at">-u</span> 101 <span class="at">-h</span> /var/cache/nginx <span class="at">-s</span> /sbin/nologin <span class="at">-G</span> nginx <span class="at">-g</span> nginx nginx <span class="dt">\</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="va">apkArch</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$(</span><span class="fu">cat</span> /etc/apk/arch<span class="va">)</span><span class="st">&quot;</span> <span class="dt">\</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;&amp;</span> <span class="ex">apk</span> add <span class="at">--no-cache</span> nginx</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> docker-entrypoint.sh /</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> nginx.conf /etc/nginx/nginx.conf</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /usr/share/nginx/html</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 80</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;nginx&quot;</span>, <span class="st">&quot;-g&quot;</span>, <span class="st">&quot;daemon off;&quot;</span>]</span></code></pre></div>
+<h3 id="互动-3找错游戏找出-dockerfile-中的反模式讲解-k6-3k6-4-后">互动
+3：找错游戏——找出 Dockerfile 中的反模式（讲解 K6-3、K6-4 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>投影一段"反面教材"Dockerfile，学生找出其中的问题（至少 4 处）</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>个人独立找 2 分钟 → 同桌互相对照 1 分钟 → 教师点名回答</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能找出：①每条 RUN 单独写（层数过多）；②用 ADD 复制本地 jar（应该用
+COPY）；③没有 WORKDIR（路径硬编码）；④没有指定基础镜像版本（用了
+:latest）</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>把"反面教材"改写成"正面示例"，让学生直观看到对比。强调工程规范："Dockerfile
+不是写出来能跑就行，是要写给团队和未来的自己看的"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>反面教材 Dockerfile</strong>：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> openjdk</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> curl</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> install <span class="at">-y</span> vim</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ADD</span> ctts-backend.jar /app.jar</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> <span class="ex">java</span> <span class="at">-jar</span> /app.jar</span></code></pre></div>
+<h3 id="互动-4构建上下文实战体会讲解-k6-6-时">互动
+4：构建上下文实战体会（讲解 K6-6 时）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>教师故意在一个含 2GB 日志文件的目录执行
+<code>docker build</code>，让学生观察构建开始的输出
+<code>sending build context to Docker daemon  2.1GB</code>，问"为什么会传
+2GB？怎么避免？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>教师演示 → 全班观察输出 → 自由回答</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能说出"构建上下文是当前目录所有文件""日志文件被传过去了""应该用
+.dockerignore 排除"</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>引出 <code>.dockerignore</code> 的重要性：减小上下文 = 加快构建 =
+减少泄漏。给出现实 <code>.dockerignore</code> 示例</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>工程规范——Dockerfile 是镜像的源代码</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td>Dockerfile 像代码一样：要版本管理（提交到 Git）、要 Code
+Review、要规范化（指令大写、合并 RUN、固定版本）、要可复现（任何人 build
+出同样的镜像）</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"如果你的同事给你一个镜像说'就用这个'，你能知道里面装了什么、改了什么吗？但如果他给你一个
+Dockerfile，是不是一目了然？这就是为什么我们说 Dockerfile
+是镜像的源代码"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>让学生养成"Dockerfile 优先"的工程习惯，杜绝"docker commit
+做镜像"的不规范做法；建立"代码即文档、代码即审计"的工程规范意识</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入：通过 <code>docker commit</code> 与 Dockerfile
+的对比，让学生体会"工程规范不是教条，是协作的基础"。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3 id="随堂练习5-分钟讲解结束前进行">随堂练习（5
+分钟，讲解结束前进行）</h3>
+<p><strong>判断题（口头快速作答）</strong>：</p>
+<ol type="1">
+<li><code>docker commit</code>
+是制作镜像的推荐方式，因为它最直接。（✗）</li>
+<li>Dockerfile 中每条 <code>RUN</code>
+指令都会生成一个新的镜像层。（✓）</li>
+<li><code>COPY</code> 和 <code>ADD</code>
+功能完全相同，可以互换使用。（✗）</li>
+<li><code>docker build</code> 命令最后的 <code>.</code> 表示 Dockerfile
+所在的位置。（✗，更准确说是构建上下文路径）</li>
+<li>生产镜像应该用非 root 用户运行应用。（✓）</li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速互动，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>阅读</strong>：通读同文件夹
+<code>教学资料.md</code>，重点理解 FROM/RUN/COPY/ADD/WORKDIR/USER
+六条指令与 docker build 命令。</li>
+<li><strong>动手</strong>：在自己的 Docker 环境中，按教学资料 K6-1~K6-6
+的示例完整跑一遍构建流程，截图下次课抽查。</li>
+<li><strong>编写</strong>：为 CTTS 后端编写一个基础 Dockerfile（FROM
+eclipse-temurin:17-jre → COPY jar → WORKDIR /app），并构建镜像
+<code>ctts-backend:v0.6</code>。</li>
+<li><strong>优化</strong>：编写一个 <code>.dockerignore</code>
+文件，排除 <code>target/</code>、<code>*.log</code>、<code>.git/</code>
+等不该进镜像的文件。</li>
+<li><strong>阅读</strong>：访问 Docker Hub 查看 <code>mysql:8.0</code>
+或 <code>nginx:alpine</code> 官方镜像的 Dockerfile，记录至少 3
+条你认为是"最佳实践"的写法。</li>
+<li><strong>思考</strong>：为什么"Dockerfile 是镜像的源代码"？用 200
+字表述，下次课抽查。</li>
+<li><strong>预习</strong>：第 7 次课将讲
+CMD/ENTRYPOINT、多阶段构建、镜像优化，预习时思考"如何把第 6 次课的 CTTS
+后端镜像做得更小"。</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>能编写规范的 Dockerfile（面试高频）</td>
+<td>K6-1~K6-5</td>
+</tr>
+<tr>
+<td>理解镜像分层与层缓存（面试常考）</td>
+<td>K6-3</td>
+</tr>
+<tr>
+<td>COPY 与 ADD 的区别（面试高频基础题）</td>
+<td>K6-4</td>
+</tr>
+<tr>
+<td>docker build 与构建上下文（实操必考）</td>
+<td>K6-6</td>
+</tr>
+<tr>
+<td>.dockerignore 的作用（DevOps 岗位常问）</td>
+<td>K6-6</td>
+</tr>
+<tr>
+<td>非 root 运行的安全最佳实践（安全岗位）</td>
+<td>K6-5</td>
+</tr>
+<tr>
+<td>基础镜像选择原则（架构设计能力）</td>
+<td>K6-2</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"Dockerfile 有哪些常用指令""COPY 和 ADD 的区别""为什么
+Dockerfile 中要用 &amp;&amp; 合并 RUN""docker build 最后的 .
+是什么意思"等，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + CTTS 后端基础 Dockerfile 综合示例 + 思维导图 +
+复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>开场对比互动（docker commit vs Dockerfile）+ K6-1 概念</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~25 min</td>
+<td>K6-2 FROM 指令 + 官方镜像选择原则 + 互动 2（代码阅读 nginx
+Dockerfile）</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>25~45 min</td>
+<td>K6-3 RUN 指令 + 分层原理 + 层缓存 + &amp;&amp;合并优化 + 互动
+3（找错游戏）</td>
+<td>20 min</td>
+</tr>
+<tr>
+<td>45~60 min</td>
+<td>K6-4 COPY vs ADD + K6-5 WORKDIR/USER（含安全最佳实践）</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>60~80 min</td>
+<td>K6-6 docker build 与构建上下文 + .dockerignore + 互动 4 + CTTS 后端
+Dockerfile 演示</td>
+<td>20 min</td>
+</tr>
+<tr>
+<td>80~85 min</td>
+<td>随堂练习（5 道判断题）</td>
+<td>5 min</td>
+</tr>
+<tr>
+<td>85~90 min</td>
+<td>小结 + 课后任务布置</td>
+<td>5 min</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

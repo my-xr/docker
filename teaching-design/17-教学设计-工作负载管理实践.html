@@ -1,0 +1,602 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>工作负载管理实践</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 17 次课 · 教学设计</div>
+      <h1>工作负载管理实践</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 17 次课</span>
+        <span class="hero-chip"><b>主题</b>工作负载管理实践</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+<li><a href="#贯穿项目阶段-6ctts-工作负载部署">贯穿项目阶段 6：CTTS 工作负载部署</a></li>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1实践启动--部署规划讨论开场">互动 1：实践启动 — 部署规划讨论（开场）</a></li>
+<li><a href="#互动-2滚动更新过程观察k17-5-讲解时">互动 2：滚动更新过程观察（K17-5 讲解时）</a></li>
+<li><a href="#互动-3项目任务复盘--k8s-部署踩坑k17-6-讲解时">互动 3：项目任务复盘 — K8s 部署踩坑（K17-6 讲解时）</a></li>
+<li><a href="#互动-4面试题快问快答实践结束前">互动 4：面试题快问快答（实践结束前）</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+<li><a href="#随堂练习5-分钟实践结束前进行">随堂练习（5 分钟，实践结束前进行）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 17 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M6 Pod 与工作负载 ｜ 课程：《Docker 云容器与管理技术》
+配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 17 次课（全课程 24 次之第 17，K8s 部分第 5 次课）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>实践课（K8s 部分第 1 次实践课）</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M6 Pod 与工作负载</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>综合实践 — CTTS 工作负载部署</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>第 14 次课 K8s 集群搭建、第 15 次课 Pod 与生命周期、第 16 次课
+Deployment 与 ReplicaSet</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>掌握 CTTS 三服务（MySQL + 后端 + 前端）Deployment
+部署的总体规划方法（副本数、资源限制、标签、Namespace）。</li>
+<li>掌握 MySQL Deployment YAML 编写要点：数据卷挂载、root
+密码环境变量、资源限制、副本数选择。</li>
+<li>掌握后端 Deployment YAML 编写要点：3 副本、连接 MySQL
+的环境变量、requests/limits 资源限制。</li>
+<li>掌握前端 Deployment YAML 编写要点：2 副本、Nginx
+静态服务、资源限制。</li>
+<li>掌握滚动更新与回滚的完整操作流程（kubectl set image / rollout status
+/ rollout undo / rollout history）。</li>
+<li>掌握 K8s
+部署常见问题排查方法：CrashLoopBackOff、ImagePullBackOff、资源不足、标签不匹配。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能够独立规划 CTTS 三服务 Deployment
+部署方案（含副本数、资源、标签、Namespace）。</li>
+<li>能够编写 MySQL、后端、前端三个 Deployment YAML 并成功部署到 Minikube
+集群。</li>
+<li>能够使用 kubectl 验证 Deployment 运行状态（get / describe /
+logs）。</li>
+<li>能够执行滚动更新（v1→v2）并使用 kubectl rollout status
+观察过程，必要时回滚。</li>
+<li>能够根据 Pod 状态（CrashLoopBackOff / ImagePullBackOff /
+Pending）定位并修复部署问题。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>培养运维能力——声明式部署是云原生核心，运维从"操作机器"升级为"描述期望状态"。</li>
+<li>培养工程规范意识——YAML
+清单即基础设施代码（IaC），可版本化、可复现、可审计。</li>
+<li>培养排障思维——遇到问题先看 <code>kubectl describe</code> 与
+<code>kubectl logs</code>，定位根因再修复，不盲目重试。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K17-1</td>
+<td>实践总览与 CTTS 三服务 Deployment 规划</td>
+<td>三服务部署架构图；资源规划（副本数/资源限制/标签设计）；Namespace
+规划</td>
+</tr>
+<tr>
+<td>K17-2</td>
+<td>MySQL Deployment 部署</td>
+<td>MySQL Deployment YAML（1 副本+数据卷挂载）；root
+密码环境变量；资源限制；部署与验证</td>
+</tr>
+<tr>
+<td>K17-3</td>
+<td>后端 Deployment 部署</td>
+<td>CTTS 后端 Deployment YAML（3 副本）；连接 MySQL
+的环境变量；requests/limits；部署与验证</td>
+</tr>
+<tr>
+<td>K17-4</td>
+<td>前端 Deployment 部署</td>
+<td>CTTS 前端 Deployment YAML（2 副本）；Nginx
+静态服务；资源限制；部署与验证</td>
+</tr>
+<tr>
+<td>K17-5</td>
+<td>滚动更新与回滚实践</td>
+<td>后端镜像 v1→v2；kubectl rollout status 观察；kubectl rollout undo
+回滚；服务不中断验证</td>
+</tr>
+<tr>
+<td>K17-6</td>
+<td>实践复盘与 K8s 部署常见问题排查</td>
+<td>CrashLoopBackOff 排查；ImagePullBackOff
+排查；资源不足排查；标签不匹配排查；踩坑复盘</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3 id="贯穿项目阶段-6ctts-工作负载部署">贯穿项目阶段 6：CTTS
+工作负载部署</h3>
+<p><strong>本次课任务</strong>：</p>
+<ol type="1">
+<li>在第 14 次课搭好的 Minikube 集群上，规划 CTTS 三服务（MySQL + 后端 +
+前端）的 Deployment 部署方案。</li>
+<li>编写并部署 MySQL Deployment（1 副本 + 数据卷挂载，环境变量配置 root
+密码）。</li>
+<li>编写并部署 CTTS 后端 Deployment（3 副本，环境变量连接
+MySQL，资源限制 requests/limits）。</li>
+<li>编写并部署 CTTS 前端 Deployment（2 副本，Nginx
+静态服务，资源限制）。</li>
+<li>对后端 Deployment 执行滚动更新（v1→v2），用
+<code>kubectl rollout status</code> 观察，验证后执行
+<code>kubectl rollout undo</code> 回滚。</li>
+<li>排查部署过程中出现的常见问题（CrashLoopBackOff / ImagePullBackOff /
+资源不足 / 标签不匹配）。</li>
+</ol>
+<p><strong>项目背景概述</strong>（详见 <code>教学资料.md</code>
+综合示例）：</p>
+<ul>
+<li>项目名称：多服务容器化部署项目（阶段 6 — 工作负载部署）</li>
+<li>项目架构：CTTS 前端（Vue3+Nginx）+ CTTS 后端（SpringBoot）+ MySQL
+三服务</li>
+<li>本次成果：三个 Deployment 全部
+Running，副本数满足规划，滚动更新与回滚验证通过</li>
+</ul>
+<blockquote>
+<p>📌 本节课是 K8s 部分第 1 次实践课，重点是把第 16 次课学的 Deployment
+理论<strong>综合应用到 CTTS
+三服务</strong>，并完成滚动更新与回滚实操。Service 与外部访问在第 18
+次课解决，本节课用 <code>kubectl port-forward</code> 临时调试。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1实践启动--部署规划讨论开场">互动 1：实践启动 —
+部署规划讨论（开场）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"CTTS 要部署 MySQL + 后端 + 前端三个 Deployment，请分组讨论：①
+各服务副本数设多少？② 资源限制怎么设？③ 用什么标签区分？④
+部署顺序是什么？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>4~5 人一组讨论 5 分钟 → 每组派代表发言 1 分钟 →
+教师板书各组方案</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>副本数：MySQL 1 副本（数据一致性）、后端 3 副本（高可用）、前端 2
+副本；资源：MySQL
+大、后端中、前端小；标签：app=ctts-mysql/backend/frontend；部署顺序：MySQL→后端→前端</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定合理规划，纠正典型错误（如 MySQL 3 副本会导致数据冲突，需用
+StatefulSet，本课用 1
+副本简化）；强调"部署顺序：数据库→后端→前端"是依赖关系决定</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2滚动更新过程观察k17-5-讲解时">互动
+2：滚动更新过程观察（K17-5 讲解时）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>教师演示后端 v1→v2 滚动更新，学生在另一个终端执行
+<code>kubectl get pods -w -l app=ctts-backend</code> 持续观察，记录"新
+Pod 创建→旧 Pod 终止"的节奏</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>教师演示 + 学生同步观察，5 分钟；观察后请 2~3 位学生描述看到的 Pod
+状态变化</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>看到 Pod 数先变 4（3 旧+1 新），再变 3（2 旧+1 新），再变 4（2 旧+2
+新）……直到 3 个全是 v2；理解 maxSurge/maxUnavailable 的实际效果</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调"先启新再停旧"是滚动更新的核心；指出默认
+maxSurge=25%/maxUnavailable=25% 在 3 副本下表现为"每次替换 1 个
+Pod"；引出回滚场景</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-3项目任务复盘--k8s-部署踩坑k17-6-讲解时">互动
+3：项目任务复盘 — K8s 部署踩坑（K17-6 讲解时）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"你在部署 CTTS 三个 Deployment
+时遇到了哪些坑？是怎么解决的？请用'现象→排查命令→根因→解决方案'四步法描述"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>小组讨论 5 分钟收集踩坑 → 每组派代表分享 1 个典型问题 →
+教师归类板书</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>常见踩坑：① Pod CrashLoopBackOff（应用连不上 MySQL / 配置错）；②
+ImagePullBackOff（镜像名错 / imagePullPolicy 错）；③
+Pending（资源不足）；④ Deployment READY 0/3（selector 与 template.labels
+不匹配）；⑤ MySQL 数据未持久化</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定"先 describe 再 logs"的排障习惯；强调 90% 的 K8s 部署问题都能用
+<code>kubectl describe pod</code> + <code>kubectl logs pod</code>
+定位；引出 K17-6 的四大常见问题排查清单</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-4面试题快问快答实践结束前">互动
+4：面试题快问快答（实践结束前）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>教师抛出 4 个面试题，学生举手抢答："① Deployment
+滚动更新时服务会中断吗？为什么？② kubectl rollout undo
+能回滚到任意版本吗？③ MySQL 适合用 Deployment 多副本吗？为什么？④ Pod
+一直 CrashLoopBackOff 怎么排查？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>抢答制，每题 1 分钟，答对加分</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>① 不会中断（默认 RollingUpdate 先启新再停旧，maxUnavailable
+控制最少可用数）；② 能，用 <code>--to-revision=N</code>；③ 不适合（MySQL
+有状态，多副本数据冲突，应用 StatefulSet，本课用 1 副本 Deployment
+简化）；④ describe 看 Events、logs 看应用日志、检查依赖/配置/资源</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强化面试高频考点；指出"有状态应用用 StatefulSet"是延伸知识点（第 22
+次课 PV/PVC 后再深化）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>运维能力 — 声明式部署是云原生核心</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td>Deployment YAML
+是"声明式基础设施代码"（IaC），描述"期望状态"而非"操作动作"；这是云原生运维与传统运维的根本区别；国内华为云
+CCE、阿里云 ACK、腾讯云 TKE 都基于 K8s 声明式 API</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"传统运维是'敲命令操作机器'，云原生运维是'写 YAML
+描述期望状态'。这种转变意味着什么？为什么说声明式运维是未来的方向？"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>让学生理解声明式部署是云原生核心能力，YAML
+即代码（IaC）带来可版本化、可复现、可审计的运维新范式；培养"描述期望状态而非操作动作"的工程思维</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入，不空喊口号。通过"声明式 YAML
+即代码"的真实视角让学生体会云原生运维的能力跃迁。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3 id="随堂练习5-分钟实践结束前进行">随堂练习（5
+分钟，实践结束前进行）</h3>
+<p><strong>操作题（限时完成）</strong>：</p>
+<ol type="1">
+<li>将 CTTS 后端 Deployment 扩容到 5 副本，再缩回 3
+副本，记录命令与输出。</li>
+<li>对后端 Deployment 执行一次镜像更新（v1→v2），用
+<code>kubectl rollout status</code> 观察，再执行
+<code>kubectl rollout undo</code> 回滚，记录全过程。</li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速实操，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>复习</strong>：通读同文件夹
+<code>教学资料.md</code>，重点理解三服务 Deployment YAML
+编写、滚动更新与回滚流程、四大常见问题排查。</li>
+<li><strong>完善项目</strong>：在课堂三服务 Deployment 基础上，为每个
+Deployment 补充 <code>livenessProbe</code> 与
+<code>readinessProbe</code>（提示：参考 K8s
+官方文档），下次课抽查。</li>
+<li><strong>排障练习</strong>：故意把后端 Deployment 的
+<code>selector.matchLabels</code> 改成与
+<code>template.metadata.labels</code> 不匹配，观察现象，用
+<code>kubectl describe</code> 排查，记录排查过程（200 字）。</li>
+<li><strong>思考</strong>：MySQL 用 1 副本 Deployment
+部署有什么风险？为什么生产环境用 StatefulSet？为第 22 次课 PV/PVC
+做铺垫。</li>
+<li><strong>项目准备</strong>：整理三服务 Deployment
+YAML（含完整资源限制、环境变量、标签），提交到项目 Git 仓库，作为阶段 6
+交付物。</li>
+<li><strong>拓展阅读</strong>：阅读 K8s 官方文档"Deployment
+Strategies"，了解 Blue-Green、Canary 等高级发布策略（选做）。</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>编写 K8s Deployment YAML
+部署多服务应用（DevOps/云运维岗位核心能力）</td>
+<td>K17-1 ~ K17-4</td>
+</tr>
+<tr>
+<td>配置资源 requests/limits（云运维岗位高频考点）</td>
+<td>K17-2、K17-3、K17-4</td>
+</tr>
+<tr>
+<td>执行滚动更新与回滚（云运维岗位日常工作）</td>
+<td>K17-5</td>
+</tr>
+<tr>
+<td>排查 Pod 启动失败（CrashLoopBackOff /
+ImagePullBackOff）（面试高频）</td>
+<td>K17-6</td>
+</tr>
+<tr>
+<td>排查 Deployment 副本不就绪问题（selector 不匹配 /
+资源不足）（面试高频）</td>
+<td>K17-6</td>
+</tr>
+<tr>
+<td>设计多服务部署方案（副本数、标签、依赖顺序）（架构设计岗）</td>
+<td>K17-1</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"说一下 Deployment 滚动更新原理""Pod 一直 CrashLoopBackOff
+怎么排查""怎么设计多服务 K8s 部署方案"等，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + CTTS 三服务 Deployment 综合示例 + 滚动更新回滚实操
++ 四大问题排查 + 思维导图 + 复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+<tr>
+<td>衔接上节课</td>
+<td><code>../16 Deployment与ReplicaSet/教学资料.md</code></td>
+<td>Deployment 理论（YAML 结构、滚动更新、扩缩容、标签）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>互动 1：实践启动 — 三服务部署规划讨论 + 教师总结规划方案</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~25 min</td>
+<td>K17-1：实践总览与 CTTS 三服务 Deployment 规划（架构图 + 资源规划 +
+Namespace）</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>25~40 min</td>
+<td>K17-2：MySQL Deployment 部署（编写 YAML + apply + 验证）</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>40~55 min</td>
+<td>K17-3：后端 Deployment 部署（编写 YAML + apply + 验证）</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>55~65 min</td>
+<td>K17-4：前端 Deployment 部署（编写 YAML + apply + 验证）</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>65~75 min</td>
+<td>K17-5：滚动更新与回滚实践（v1→v2 + rollout status + undo + 互动
+2）</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>75~85 min</td>
+<td>K17-6：实践复盘与常见问题排查（互动 3 踩坑分享 + 四大问题清单）</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>85~90 min</td>
+<td>互动 4：面试题快问快答 + 随堂练习布置 + 小结 + 课后任务</td>
+<td>5 min</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

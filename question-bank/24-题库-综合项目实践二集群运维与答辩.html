@@ -1,0 +1,1808 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>综合项目实践二集群运维与答辩</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 24 次课 · 题库</div>
+      <h1>综合项目实践二集群运维与答辩</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 24 次课</span>
+        <span class="hero-chip"><b>主题</b>综合项目实践二集群运维与答辩</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一单项选择题30题">一、单项选择题（30题）</a>
+<ul>
+<li><a href="#24-单选-01-">24-单选-01 ★</a></li>
+<li><a href="#24-单选-02-">24-单选-02 ★</a></li>
+<li><a href="#24-单选-03-">24-单选-03 ★</a></li>
+<li><a href="#24-单选-04-">24-单选-04 ★★</a></li>
+<li><a href="#24-单选-05-">24-单选-05 ★★</a></li>
+<li><a href="#24-单选-06-">24-单选-06 ★</a></li>
+<li><a href="#24-单选-07-">24-单选-07 ★★</a></li>
+<li><a href="#24-单选-08-">24-单选-08 ★</a></li>
+<li><a href="#24-单选-09-">24-单选-09 ★★</a></li>
+<li><a href="#24-单选-10-">24-单选-10 ★</a></li>
+<li><a href="#24-单选-11-">24-单选-11 ★★</a></li>
+<li><a href="#24-单选-12-">24-单选-12 ★★</a></li>
+<li><a href="#24-单选-13-">24-单选-13 ★★</a></li>
+<li><a href="#24-单选-14-">24-单选-14 ★★</a></li>
+<li><a href="#24-单选-15-">24-单选-15 ★★</a></li>
+<li><a href="#24-单选-16-">24-单选-16 ★★★</a></li>
+<li><a href="#24-单选-17-">24-单选-17 ★★</a></li>
+<li><a href="#24-单选-18-">24-单选-18 ★★</a></li>
+<li><a href="#24-单选-19-">24-单选-19 ★★</a></li>
+<li><a href="#24-单选-20-">24-单选-20 ★★</a></li>
+<li><a href="#24-单选-21-">24-单选-21 ★★</a></li>
+<li><a href="#24-单选-22-">24-单选-22 ★★</a></li>
+<li><a href="#24-单选-23-">24-单选-23 ★★</a></li>
+<li><a href="#24-单选-24-">24-单选-24 ★★</a></li>
+<li><a href="#24-单选-25-">24-单选-25 ★★</a></li>
+<li><a href="#24-单选-26-">24-单选-26 ★★</a></li>
+<li><a href="#24-单选-27-">24-单选-27 ★★</a></li>
+<li><a href="#24-单选-28-">24-单选-28 ★★</a></li>
+<li><a href="#24-单选-29-">24-单选-29 ★★★</a></li>
+<li><a href="#24-单选-30-">24-单选-30 ★★★</a></li>
+</ul></li>
+<li><a href="#二多项选择题10题">二、多项选择题（10题）</a>
+<ul>
+<li><a href="#24-多选-01-">24-多选-01 ★</a></li>
+<li><a href="#24-多选-02-">24-多选-02 ★★</a></li>
+<li><a href="#24-多选-03-">24-多选-03 ★★</a></li>
+<li><a href="#24-多选-04-">24-多选-04 ★★</a></li>
+<li><a href="#24-多选-05-">24-多选-05 ★★</a></li>
+<li><a href="#24-多选-06-">24-多选-06 ★★</a></li>
+<li><a href="#24-多选-07-">24-多选-07 ★★</a></li>
+<li><a href="#24-多选-08-">24-多选-08 ★★</a></li>
+<li><a href="#24-多选-09-">24-多选-09 ★★★</a></li>
+<li><a href="#24-多选-10-">24-多选-10 ★★</a></li>
+</ul></li>
+<li><a href="#三判断题20题">三、判断题（20题）</a>
+<ul>
+<li><a href="#24-判断-01-">24-判断-01 ★</a></li>
+<li><a href="#24-判断-02-">24-判断-02 ★</a></li>
+<li><a href="#24-判断-03-">24-判断-03 ★★</a></li>
+<li><a href="#24-判断-04-">24-判断-04 ★</a></li>
+<li><a href="#24-判断-05-">24-判断-05 ★★</a></li>
+<li><a href="#24-判断-06-">24-判断-06 ★★</a></li>
+<li><a href="#24-判断-07-">24-判断-07 ★★</a></li>
+<li><a href="#24-判断-08-">24-判断-08 ★★</a></li>
+<li><a href="#24-判断-09-">24-判断-09 ★★</a></li>
+<li><a href="#24-判断-10-">24-判断-10 ★★</a></li>
+<li><a href="#24-判断-11-">24-判断-11 ★★</a></li>
+<li><a href="#24-判断-12-">24-判断-12 ★★</a></li>
+<li><a href="#24-判断-13-">24-判断-13 ★★</a></li>
+<li><a href="#24-判断-14-">24-判断-14 ★★</a></li>
+<li><a href="#24-判断-15-">24-判断-15 ★★</a></li>
+<li><a href="#24-判断-16-">24-判断-16 ★★★</a></li>
+<li><a href="#24-判断-17-">24-判断-17 ★★</a></li>
+<li><a href="#24-判断-18-">24-判断-18 ★★</a></li>
+<li><a href="#24-判断-19-">24-判断-19 ★★</a></li>
+<li><a href="#24-判断-20-">24-判断-20 ★★★</a></li>
+</ul></li>
+<li><a href="#四填空题10题">四、填空题（10题）</a>
+<ul>
+<li><a href="#24-填空-01-">24-填空-01 ★</a></li>
+<li><a href="#24-填空-02-">24-填空-02 ★</a></li>
+<li><a href="#24-填空-03-">24-填空-03 ★★</a></li>
+<li><a href="#24-填空-04-">24-填空-04 ★★</a></li>
+<li><a href="#24-填空-05-">24-填空-05 ★★</a></li>
+<li><a href="#24-填空-06-">24-填空-06 ★★</a></li>
+<li><a href="#24-填空-07-">24-填空-07 ★★</a></li>
+<li><a href="#24-填空-08-">24-填空-08 ★★</a></li>
+<li><a href="#24-填空-09-">24-填空-09 ★★</a></li>
+<li><a href="#24-填空-10-">24-填空-10 ★★★</a></li>
+</ul></li>
+<li><a href="#五论述简答题4题">五、论述简答题（4题）</a>
+<ul>
+<li><a href="#24-论述-01-">24-论述-01 ★★</a></li>
+<li><a href="#24-论述-02-">24-论述-02 ★★★</a></li>
+<li><a href="#24-论述-03-">24-论述-03 ★★★</a></li>
+<li><a href="#24-论述-04-">24-论述-04 ★★★</a></li>
+</ul></li>
+<li><a href="#六程序阅读补全题2题">六、程序阅读补全题（2题）</a>
+<ul>
+<li><a href="#24-程序阅读-01-">24-程序阅读-01 ★★</a></li>
+<li><a href="#24-程序阅读-02-">24-程序阅读-02 ★★★</a></li>
+</ul></li>
+<li><a href="#七编程接口设计题2题">七、编程接口设计题（2题）</a>
+<ul>
+<li><a href="#24-编程-01-">24-编程-01 ★★</a></li>
+<li><a href="#24-编程-02-">24-编程-02 ★★★</a></li>
+</ul></li>
+<li><a href="#附题库统计表">附：题库统计表</a>
+<ul>
+<li><a href="#题型统计">题型统计</a></li>
+<li><a href="#知识模块覆盖统计">知识模块覆盖统计</a></li>
+<li><a href="#难度分布统计">难度分布统计</a></li>
+<li><a href="#能力维度覆盖">能力维度覆盖</a></li>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 24 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>课程：Docker云容器与管理技术 | 课次：第24次课（收官课）
+题目总数：78题（40选择[30单+10多] + 20判断 + 10填空 + 4论述简答 +
+2程序阅读补全 + 2编程接口设计） 编号规则：24-题型-序号（如24-单选-01）
+难度标识：★（基础）/ ★★（中等）/ ★★★（较难）
+性质：课程收官综合复习题库，覆盖24次课八大模块核心知识点</p>
+</blockquote>
+<hr />
+<h2 id="一单项选择题30题">一、单项选择题（30题）</h2>
+<h3 id="24-单选-01-">24-单选-01 ★</h3>
+<p><strong>题目</strong>：Docker容器的核心技术基础是？ A. 虚拟机技术 B.
+Linux内核的命名空间（Namespace）和控制组（cgroups） C. Java虚拟机 D.
+操作系统快照</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：Docker容器不是虚拟机，而是基于Linux内核的Namespace（实现资源隔离）和cgroups（实现资源限制）技术。Namespace提供PID、网络、挂载、UTS、IPC、用户等隔离，cgroups提供CPU、内存、IO等资源限制。</p>
+<hr />
+<h3 id="24-单选-02-">24-单选-02 ★</h3>
+<p><strong>题目</strong>：以下哪个命令用于查看本地所有Docker镜像？ A.
+docker ps B. docker images C. docker list D. docker show</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：<code>docker images</code>（或<code>docker image ls</code>）用于列出本地所有镜像。<code>docker ps</code>查看运行中的容器，<code>docker ps -a</code>查看所有容器（含停止）。</p>
+<hr />
+<h3 id="24-单选-03-">24-单选-03 ★</h3>
+<p><strong>题目</strong>：Dockerfile中，哪个指令用于设置容器的工作目录？
+A. RUN B. CMD C. WORKDIR D. ENV</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：<code>WORKDIR</code>指令用于设置工作目录，后续的RUN、CMD、ENTRYPOINT、COPY、ADD等指令都会在该目录下执行。如果目录不存在会自动创建。</p>
+<hr />
+<h3 id="24-单选-04-">24-单选-04 ★★</h3>
+<p><strong>题目</strong>：以下Dockerfile指令中，哪个会使镜像层数增加？
+A. FROM B. WORKDIR C. RUN apt-get update &amp;&amp; apt-get install -y
+nginx D. ENV</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：<code>RUN</code>、<code>COPY</code>、<code>ADD</code>指令会创建新的镜像层。<code>WORKDIR</code>、<code>ENV</code>、<code>LABEL</code>等指令只修改镜像的元数据，不会创建新层。合并多个RUN命令可减少层数。</p>
+<hr />
+<h3 id="24-单选-05-">24-单选-05 ★★</h3>
+<p><strong>题目</strong>：多阶段构建的主要优势是？ A. 加快构建速度 B.
+减小最终镜像体积 C. 支持并行构建 D. 自动优化镜像层</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：多阶段构建通过<code>FROM ... AS stage</code>定义多个构建阶段，最终镜像只包含最后阶段的内容，编译工具和中间产物不会进入最终镜像，从而大幅减小镜像体积。</p>
+<hr />
+<h3 id="24-单选-06-">24-单选-06 ★</h3>
+<p><strong>题目</strong>：Docker Compose的配置文件默认名称是？ A.
+compose.yaml B. docker-compose.yml C. compose.yml D.
+docker-compose.yaml</p>
+<p><strong>答案</strong>：B <strong>解析</strong>：Docker
+Compose默认读取<code>docker-compose.yml</code>或<code>docker-compose.yaml</code>。也支持<code>compose.yaml</code>/<code>compose.yml</code>（Compose
+Specification新规范）。</p>
+<hr />
+<h3 id="24-单选-07-">24-单选-07 ★★</h3>
+<p><strong>题目</strong>：以下哪个K8s资源对象是最小的调度单元？ A.
+Deployment B. Service C. Pod D. Container</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：Pod是K8s中最小的调度和部署单元，一个Pod可以包含一个或多个容器（通常一个主容器，可加sidecar容器）。容器不能直接被调度，必须封装在Pod中。</p>
+<hr />
+<h3 id="24-单选-08-">24-单选-08 ★</h3>
+<p><strong>题目</strong>：kubectl命令中，用于查看Pod日志的命令是？ A.
+kubectl describe pod B. kubectl logs C. kubectl get pod D. kubectl
+exec</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：<code>kubectl logs &lt;pod-name&gt;</code>查看Pod日志；<code>kubectl logs -f &lt;pod-name&gt;</code>实时跟踪日志；<code>kubectl logs --previous &lt;pod-name&gt;</code>查看上一个容器（崩溃前）的日志。</p>
+<hr />
+<h3 id="24-单选-09-">24-单选-09 ★★</h3>
+<p><strong>题目</strong>：Service类型为ClusterIP的Service，其访问范围是？
+A. 集群外部 B. 仅集群内部 C. 仅同一命名空间 D. 全互联网</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：ClusterIP类型的Service分配一个集群内部虚拟IP（ClusterIP），只能在集群内部访问。如需外部访问，需使用NodePort、LoadBalancer或Ingress。</p>
+<hr />
+<h3 id="24-单选-10-">24-单选-10 ★</h3>
+<p><strong>题目</strong>：K8s中用于存储敏感信息（如密码、密钥）的资源对象是？
+A. ConfigMap B. Secret C. Volume D. PVC</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：Secret专门用于存储敏感信息，数据以Base64编码存储。ConfigMap用于存储非敏感的配置信息（明文）。</p>
+<hr />
+<h3 id="24-单选-11-">24-单选-11 ★★</h3>
+<p><strong>题目</strong>：Pod状态显示<code>CrashLoopBackOff</code>，以下哪个命令最适合查看崩溃前的日志？
+A. kubectl logs <pod> B. kubectl logs <pod> --previous C. kubectl
+describe pod <pod> D. kubectl get events</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：<code>--previous</code>（简写<code>-p</code>）参数查看上一个容器实例的日志，对于排查CrashLoopBackOff至关重要。<code>kubectl describe</code>查看事件，但日志需要用logs命令。</p>
+<hr />
+<h3 id="24-单选-12-">24-单选-12 ★★</h3>
+<p><strong>题目</strong>：Deployment滚动更新时，默认的maxSurge和maxUnavailable值是？
+A. 0和0 B. 1和1 C. 25%和25% D. 50%和50%</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：Deployment默认滚动更新策略为<code>maxSurge: 25%</code>和<code>maxUnavailable: 25%</code>，即更新过程中最多超出期望副本数25%，最多不可用25%。</p>
+<hr />
+<h3 id="24-单选-13-">24-单选-13 ★★</h3>
+<p><strong>题目</strong>：以下哪个命令用于回滚Deployment到上一个版本？
+A. kubectl rollout undo deployment/<name> B. kubectl rollback
+deployment/<name> C. kubectl undo deployment/<name> D. kubectl rollout
+revert deployment/<name></p>
+<p><strong>答案</strong>：A
+<strong>解析</strong>：<code>kubectl rollout undo deployment/&lt;name&gt;</code>回滚到上一版本；<code>--to-revision=N</code>可回滚到指定版本。K8s没有rollback或revert命令。</p>
+<hr />
+<h3 id="24-单选-14-">24-单选-14 ★★</h3>
+<p><strong>题目</strong>：HPA（水平Pod自动伸缩）默认基于哪个指标进行扩缩容？
+A. 磁盘IO B. 网络流量 C. CPU使用率 D. Pod数量</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：HPA默认基于CPU使用率（也可配置内存、自定义指标）自动调整Pod副本数。前提是集群安装了metrics-server，且Deployment配置了resources.requests.cpu。</p>
+<hr />
+<h3 id="24-单选-15-">24-单选-15 ★★</h3>
+<p><strong>题目</strong>：Pod状态显示<code>ImagePullBackOff</code>，最可能的原因是？
+A. 容器启动命令错误 B. 镜像拉取失败 C. 资源不足 D. 节点NotReady</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：<code>ImagePullBackOff</code>表示镜像拉取失败并退避重试。常见原因：镜像名错误、镜像不存在、私有仓库未配置认证、网络问题。</p>
+<hr />
+<h3 id="24-单选-16-">24-单选-16 ★★★</h3>
+<p><strong>题目</strong>：Pod被OOMKilled，退出码是？ A. 0 B. 1 C. 137 D.
+255</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：OOMKilled时内核发送SIGKILL（信号9）终止进程，退出码为128+9=137。这是判断OOMKilled的关键依据。</p>
+<hr />
+<h3 id="24-单选-17-">24-单选-17 ★★</h3>
+<p><strong>题目</strong>：以下哪个资源对象用于有状态应用（如数据库）？
+A. Deployment B. ReplicaSet C. StatefulSet D. DaemonSet</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：StatefulSet用于管理有状态应用，提供稳定的网络标识（pod-name-0,
+pod-name-1）、稳定的持久化存储、有序的部署和扩缩容。适合数据库、消息队列等。</p>
+<hr />
+<h3 id="24-单选-18-">24-单选-18 ★★</h3>
+<p><strong>题目</strong>：以下哪个资源对象确保每个节点运行一个Pod副本？
+A. Deployment B. StatefulSet C. DaemonSet D. Job</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：DaemonSet确保在每个（或指定）节点上运行一个Pod副本，常用于日志收集（Fluentd）、监控代理（Node
+Exporter）、网络插件（Calico）等。</p>
+<hr />
+<h3 id="24-单选-19-">24-单选-19 ★★</h3>
+<p><strong>题目</strong>：Ingress资源主要提供什么功能？ A. L4负载均衡 B.
+L7（HTTP/HTTPS）路由 C. 服务发现 D. 流量加密</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：Ingress提供L7层（HTTP/HTTPS）负载均衡和路由，支持基于域名、路径的路由规则，支持TLS终止。Service提供L4层负载均衡。</p>
+<hr />
+<h3 id="24-单选-20-">24-单选-20 ★★</h3>
+<p><strong>题目</strong>：以下哪个命令可以查看Service的端点（Endpoints）？
+A. kubectl get svc B. kubectl get endpoints C. kubectl describe
+deployment D. kubectl get pods</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：<code>kubectl get endpoints &lt;svc-name&gt;</code>（简写<code>kubectl get ep</code>）查看Service关联的Pod端点。如果ENDPOINTS为<code>&lt;none&gt;</code>，说明Service没有关联到任何Pod（常见于selector不匹配）。</p>
+<hr />
+<h3 id="24-单选-21-">24-单选-21 ★★</h3>
+<p><strong>题目</strong>：Helm是什么工具？ A. 容器编排工具 B.
+K8s包管理工具 C. 镜像构建工具 D. 监控工具</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：Helm是K8s的包管理工具，类似Linux的yum/apt。通过Chart（预定义的K8s资源模板包）简化应用部署，支持版本管理和仓库。</p>
+<hr />
+<h3 id="24-单选-22-">24-单选-22 ★★</h3>
+<p><strong>题目</strong>：PV和PVC的关系是？ A. PV消费PVC B. PVC消费PV C.
+两者独立 D. PV创建PVC</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：PV（PersistentVolume）是集群管理员声明的存储资源，PVC（PersistentVolumeClaim）是用户对存储的申请。PVC消费PV，K8s根据PVC的请求自动绑定匹配的PV。</p>
+<hr />
+<h3 id="24-单选-23-">24-单选-23 ★★</h3>
+<p><strong>题目</strong>：以下哪个探针用于判断容器是否处于正常运行状态（失败会重启）？
+A. readinessProbe B. livenessProbe C. startupProbe D. lifecycle</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：livenessProbe（存活探针）判断容器是否健康运行，失败会重启容器。readinessProbe（就绪探针）判断容器是否
+ready
+接收流量，失败会从Service端点移除但不重启。startupProbe（启动探针）判断容器是否启动完成。</p>
+<hr />
+<h3 id="24-单选-24-">24-单选-24 ★★</h3>
+<p><strong>题目</strong>：以下哪个命令用于查看节点资源使用情况（CPU/内存）？
+A. kubectl describe node B. kubectl get nodes C. kubectl top nodes D.
+kubectl node info</p>
+<p><strong>答案</strong>：C
+<strong>解析</strong>：<code>kubectl top nodes</code>（<code>kubectl top node</code>）查看节点实时CPU/内存使用情况，需要集群安装metrics-server。<code>kubectl describe node</code>查看节点详情但不含实时使用率。</p>
+<hr />
+<h3 id="24-单选-25-">24-单选-25 ★★</h3>
+<p><strong>题目</strong>：RBAC中，Role和ClusterRole的区别是？ A.
+Role是集群级，ClusterRole是命名空间级 B.
+Role是命名空间级，ClusterRole是集群级 C. 两者完全相同 D.
+Role用于读，ClusterRole用于写</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：Role是命名空间级别的角色，权限只在某个namespace内有效；ClusterRole是集群级别的角色，权限可跨namespace，常用于集群级资源（nodes、PV等）。</p>
+<hr />
+<h3 id="24-单选-26-">24-单选-26 ★★</h3>
+<p><strong>题目</strong>：以下哪个命令用于手动扩缩容Deployment副本数？
+A. kubectl resize deployment <name> --replicas=3 B. kubectl scale
+deployment <name> --replicas=3 C. kubectl expand deployment <name>
+--replicas=3 D. kubectl set deployment <name> --replicas=3</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：<code>kubectl scale deployment/&lt;name&gt; --replicas=N</code>手动调整副本数。这是K8s运维最常用的扩缩容命令。</p>
+<hr />
+<h3 id="24-单选-27-">24-单选-27 ★★</h3>
+<p><strong>题目</strong>：以下哪个是K8s集群的持久化存储后端？ A. etcd B.
+MySQL C. Redis D. SQLite</p>
+<p><strong>答案</strong>：A
+<strong>解析</strong>：etcd是K8s集群的分布式键值存储数据库，保存集群所有状态数据（Pod、Service、ConfigMap等）。etcd的一致性直接影响集群稳定性。</p>
+<hr />
+<h3 id="24-单选-28-">24-单选-28 ★★</h3>
+<p><strong>题目</strong>：NetworkPolicy的作用是？ A. 提供网络服务 B.
+控制Pod间网络流量 C. 分配IP地址 D. DNS解析</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：NetworkPolicy用于控制Pod之间的网络流量，实现网络隔离。可以定义哪些Pod可以访问哪些Pod的哪些端口，类似云平台的安全组。</p>
+<hr />
+<h3 id="24-单选-29-">24-单选-29 ★★★</h3>
+<p><strong>题目</strong>：一个Service的selector为<code>app: web</code>，但Pod标签为<code>app: web-api</code>，会出现什么现象？
+A. Pod正常访问 B. Service的Endpoints为空 C. Pod自动重启 D.
+Service自动删除</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：Service通过selector匹配Pod标签，标签不匹配则Service没有关联到任何Pod，Endpoints为空（<code>&lt;none&gt;</code>），访问Service无响应。需修正selector或Pod标签使其一致。</p>
+<hr />
+<h3 id="24-单选-30-">24-单选-30 ★★★</h3>
+<p><strong>题目</strong>：以下哪种情况会导致Pod一直处于<code>Pending</code>状态？
+A. 容器启动失败 B. 节点资源不足，无法调度 C. 镜像拉取失败 D.
+应用抛出异常</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：Pending状态表示Pod尚未被调度到节点。常见原因：节点资源不足（CPU/内存不满足requests）、节点污点不匹配、节点选择器不匹配、亲和性约束无法满足。容器启动失败、镜像拉取失败是Pod已调度后的状态（ImagePullBackOff/CrashLoopBackOff）。</p>
+<hr />
+<h2 id="二多项选择题10题">二、多项选择题（10题）</h2>
+<h3 id="24-多选-01-">24-多选-01 ★</h3>
+<p><strong>题目</strong>：以下哪些是Docker的核心组件？（多选） A. Docker
+Daemon B. Docker Client C. Docker Registry D. Docker Hub E.
+Kubernetes</p>
+<p><strong>答案</strong>：ABCD
+<strong>解析</strong>：Docker核心组件包括Docker
+Daemon（守护进程）、Docker Client（客户端）、Docker
+Registry（镜像仓库）。Docker
+Hub是公共镜像仓库的实例。Kubernetes是独立的容器编排系统，不属于Docker组件。</p>
+<hr />
+<h3 id="24-多选-02-">24-多选-02 ★★</h3>
+<p><strong>题目</strong>：以下哪些Dockerfile指令会创建新的镜像层？（多选）
+A. FROM B. RUN C. COPY D. ADD E. ENV F. WORKDIR</p>
+<p><strong>答案</strong>：BCD
+<strong>解析</strong>：<code>RUN</code>、<code>COPY</code>、<code>ADD</code>会创建新的镜像层。<code>FROM</code>是基础镜像，<code>ENV</code>、<code>WORKDIR</code>、<code>LABEL</code>等只修改镜像元数据，不创建新层。合并RUN命令可减少层数。</p>
+<hr />
+<h3 id="24-多选-03-">24-多选-03 ★★</h3>
+<p><strong>题目</strong>：K8s中，以下哪些资源对象属于工作负载（Workload）？（多选）
+A. Pod B. Deployment C. Service D. StatefulSet E. DaemonSet F.
+ConfigMap</p>
+<p><strong>答案</strong>：ABDE
+<strong>解析</strong>：工作负载资源包括Pod、Deployment、StatefulSet、DaemonSet、Job、CronJob、ReplicaSet等，用于管理应用的运行。Service属于网络资源，ConfigMap属于配置资源。</p>
+<hr />
+<h3 id="24-多选-04-">24-多选-04 ★★</h3>
+<p><strong>题目</strong>：以下哪些是K8s Service的类型？（多选） A.
+ClusterIP B. NodePort C. LoadBalancer D. ExternalName E. Ingress</p>
+<p><strong>答案</strong>：ABCD
+<strong>解析</strong>：Service的四种类型：ClusterIP（集群内访问）、NodePort（节点端口暴露）、LoadBalancer（云负载均衡）、ExternalName（CNAME别名）。Ingress是独立的资源对象，不属于Service类型。</p>
+<hr />
+<h3 id="24-多选-05-">24-多选-05 ★★</h3>
+<p><strong>题目</strong>：Pod出现CrashLoopBackOff，可能的原因有哪些？（多选）
+A. 容器启动命令错误 B. 应用配置错误导致启动失败 C. 依赖服务未就绪 D.
+存活探针配置过严 E. 节点NotReady F. 镜像名称拼写错误</p>
+<p><strong>答案</strong>：ABCD
+<strong>解析</strong>：CrashLoopBackOff是容器反复崩溃重启。ABCD都会导致容器启动后崩溃。E（节点NotReady）会导致Pod被驱逐或Pending，不是CrashLoopBackOff。F（镜像名错误）会导致ImagePullBackOff。</p>
+<hr />
+<h3 id="24-多选-06-">24-多选-06 ★★</h3>
+<p><strong>题目</strong>：以下哪些命令可用于K8s故障排查？（多选） A.
+kubectl describe pod B. kubectl logs C. kubectl get events D. kubectl
+exec E. kubectl top F. kubectl apply</p>
+<p><strong>答案</strong>：ABCDE
+<strong>解析</strong>：ABCD都是常用排障命令（查看详情/日志/事件/进入容器）。E用于查看资源使用情况。F（kubectl
+apply）是部署命令，不是排障命令。</p>
+<hr />
+<h3 id="24-多选-07-">24-多选-07 ★★</h3>
+<p><strong>题目</strong>：实现K8s应用零停机更新的机制包括？（多选） A.
+滚动更新策略 B. readinessProbe就绪探针 C. maxSurge配置 D.
+maxUnavailable配置 E. 强制删除所有旧Pod</p>
+<p><strong>答案</strong>：ABCD
+<strong>解析</strong>：滚动更新策略配合readinessProbe（确保新Pod
+Ready后才删旧Pod）、maxSurge（控制超出副本数）、maxUnavailable（控制不可用副本数）实现零停机。E会停机，错误。</p>
+<hr />
+<h3 id="24-多选-08-">24-多选-08 ★★</h3>
+<p><strong>题目</strong>：以下哪些是ConfigMap的常见使用方式？（多选） A.
+环境变量注入 B. 命令行参数 C. 卷挂载为文件 D. 数据库密码存储 E.
+应用配置文件</p>
+<p><strong>答案</strong>：ABCE
+<strong>解析</strong>：ConfigMap可通过env/envFrom注入环境变量、作为命令行参数、以Volume形式挂载为文件。用于存储非敏感配置。D（密码）应使用Secret，不应存ConfigMap。</p>
+<hr />
+<h3 id="24-多选-09-">24-多选-09 ★★★</h3>
+<p><strong>题目</strong>：以下哪些情况会导致Service的Endpoints为空？（多选）
+A. Service的selector与Pod标签不匹配 B.
+Pod未Ready（readinessProbe未通过） C.
+Service的targetPort与容器端口不一致 D. Service与Pod不在同一namespace E.
+Service的类型是ClusterIP</p>
+<p><strong>答案</strong>：ABCD
+<strong>解析</strong>：ABCD都会导致Service没有可用端点。A标签不匹配无法关联Pod；B
+Pod未Ready不会加入Endpoints；C端口不一致；D命名空间隔离。E是Service的正常类型，不影响Endpoints。</p>
+<hr />
+<h3 id="24-多选-10-">24-多选-10 ★★</h3>
+<p><strong>题目</strong>：以下哪些是K8s集群运维的日常工作？（多选） A.
+监控集群资源使用 B. 查看Pod日志排查问题 C. 滚动更新与回滚 D.
+扩缩容应对负载变化 E. 定期备份etcd F. 手动登录容器修改配置文件</p>
+<p><strong>答案</strong>：ABCDE
+<strong>解析</strong>：ABCDE都是标准运维工作。F错误——不应手动进入容器修改配置文件，应通过ConfigMap/Secret+滚动更新管理配置，保证配置可追溯、可复现。</p>
+<hr />
+<h2 id="三判断题20题">三、判断题（20题）</h2>
+<h3 id="24-判断-01-">24-判断-01 ★</h3>
+<p><strong>题目</strong>：Docker容器启动比虚拟机快，因为容器共享宿主机内核，不需要启动完整的操作系统。
+A. 正确 B. 错误</p>
+<p><strong>答案</strong>：A
+<strong>解析</strong>：Docker容器基于Linux内核的Namespace和cgroups实现隔离，共享宿主机内核，不需要像虚拟机那样启动完整的操作系统，因此启动速度可达毫秒级。</p>
+<hr />
+<h3 id="24-判断-02-">24-判断-02 ★</h3>
+<p><strong>题目</strong>：Dockerfile中可以有多个CMD指令，只有最后一个生效。
+A. 正确 B. 错误</p>
+<p><strong>答案</strong>：A
+<strong>解析</strong>：Dockerfile中只能有一个CMD指令，如果有多个，只有最后一个生效。CMD提供容器启动默认命令，可被docker
+run参数覆盖。同理ENTRYPOINT也只生效最后一个。</p>
+<hr />
+<h3 id="24-判断-03-">24-判断-03 ★★</h3>
+<p><strong>题目</strong>：Docker镜像的每一层都是只读的，容器运行时的修改会写入可写层。
+A. 正确 B. 错误</p>
+<p><strong>答案</strong>：A
+<strong>解析</strong>：Docker镜像采用分层存储，每层只读。容器启动时在镜像顶部添加一个可写层（容器层），所有修改写入可写层。删除容器后可写层丢失，这也是数据持久化需要Volume的原因。</p>
+<hr />
+<h3 id="24-判断-04-">24-判断-04 ★</h3>
+<p><strong>题目</strong>：K8s中一个Pod只能包含一个容器。 A. 正确 B.
+错误</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：一个Pod可以包含一个或多个容器。多容器Pod常用于sidecar模式（如主容器+日志收集容器）、适配器模式、大使模式。但通常一个Pod只运行一个主容器。</p>
+<hr />
+<h3 id="24-判断-05-">24-判断-05 ★★</h3>
+<p><strong>题目</strong>：Deployment滚动更新时，默认策略是先删旧Pod再建新Pod。
+A. 正确 B. 错误</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：Deployment默认RollingUpdate策略是先建新Pod（受maxSurge控制），新Pod
+Ready后再删旧Pod（受maxUnavailable控制），实现零停机。Recreate策略才是先删后建。</p>
+<hr />
+<h3 id="24-判断-06-">24-判断-06 ★★</h3>
+<p><strong>题目</strong>：kubectl rollout undo可以回滚到任意历史版本。
+A. 正确 B. 错误</p>
+<p><strong>答案</strong>：A
+<strong>解析</strong>：<code>kubectl rollout undo deployment/&lt;name&gt; --to-revision=N</code>可回滚到指定revision版本。默认revision保留10个（可通过revisionHistoryLimit调整）。</p>
+<hr />
+<h3 id="24-判断-07-">24-判断-07 ★★</h3>
+<p><strong>题目</strong>：HPA自动扩缩容不需要任何前置条件，开箱即用。 A.
+正确 B. 错误</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：HPA基于CPU/内存使用率自动伸缩，前提是集群安装metrics-server提供指标数据，且Deployment配置了resources.requests（HPA基于requests计算使用率）。</p>
+<hr />
+<h3 id="24-判断-08-">24-判断-08 ★★</h3>
+<p><strong>题目</strong>：Secret中的数据是加密存储的，安全性等同于明文配置。
+A. 正确 B. 错误</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：Secret的数据是Base64编码（不是加密），base64可逆解码。生产环境建议开启etcd加密静态Secret，或使用外部密钥管理（Vault、云KMS）。</p>
+<hr />
+<h3 id="24-判断-09-">24-判断-09 ★★</h3>
+<p><strong>题目</strong>：StatefulSet适合部署无状态应用，Deployment适合部署有状态应用。
+A. 正确 B. 错误</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：反了。StatefulSet适合有状态应用（数据库等，提供稳定网络标识和存储）；Deployment适合无状态应用（Web服务、API服务等）。</p>
+<hr />
+<h3 id="24-判断-10-">24-判断-10 ★★</h3>
+<p><strong>题目</strong>：Ingress
+Controller需要单独安装，K8s集群默认不包含。 A. 正确 B. 错误</p>
+<p><strong>答案</strong>：A
+<strong>解析</strong>：Ingress资源本身是K8s内置API，但Ingress
+Controller（如nginx-ingress、traefik）需要单独安装部署。没有Controller，Ingress规则不生效。</p>
+<hr />
+<h3 id="24-判断-11-">24-判断-11 ★★</h3>
+<p><strong>题目</strong>：Pod的readinessProbe失败会导致Pod被重启。 A.
+正确 B. 错误</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：readinessProbe失败只会将Pod从Service的Endpoints中移除（不接收流量），不会重启Pod。livenessProbe失败才会重启Pod。</p>
+<hr />
+<h3 id="24-判断-12-">24-判断-12 ★★</h3>
+<p><strong>题目</strong>：kubectl
+scale命令可以立即改变Deployment的副本数。 A. 正确 B. 错误</p>
+<p><strong>答案</strong>：A
+<strong>解析</strong>：<code>kubectl scale deployment/&lt;name&gt; --replicas=N</code>会立即修改Deployment的replicas字段，Controller会立即创建或删除Pod以达到目标副本数。</p>
+<hr />
+<h3 id="24-判断-13-">24-判断-13 ★★</h3>
+<p><strong>题目</strong>：所有K8s资源对象都可以通过kubectl
+apply创建和更新。 A. 正确 B. 错误</p>
+<p><strong>答案</strong>：A <strong>解析</strong>：kubectl
+apply是声明式管理，支持所有K8s资源对象的创建和更新。apply会记录上次配置（last-applied-configuration注解），便于diff和精确管理。</p>
+<hr />
+<h3 id="24-判断-14-">24-判断-14 ★★</h3>
+<p><strong>题目</strong>：PVC和PV是手动绑定的，管理员需要为每个PVC手动创建PV。
+A. 正确 B. 错误</p>
+<p><strong>答案</strong>：B
+<strong>解析</strong>：PV和PVC可以手动绑定（静态供给），也可以通过StorageClass自动动态供给。动态供给时，PVC创建后StorageClass会自动创建PV并绑定。</p>
+<hr />
+<h3 id="24-判断-15-">24-判断-15 ★★</h3>
+<p><strong>题目</strong>：NetworkPolicy默认允许所有Pod间通信，需要显式配置才拒绝。
+A. 正确 B. 错误</p>
+<p><strong>答案</strong>：A
+<strong>解析</strong>：K8s默认网络模型是全开放（所有Pod可互通）。NetworkPolicy是白名单机制，只有配置了NetworkPolicy且匹配的流量才被允许，其余默认拒绝。</p>
+<hr />
+<h3 id="24-判断-16-">24-判断-16 ★★★</h3>
+<p><strong>题目</strong>：Docker
+Compose的volumes和K8s的PersistentVolume概念完全相同。 A. 正确 B.
+错误</p>
+<p><strong>答案</strong>：B <strong>解析</strong>：Docker
+Compose的volumes是简单的卷管理，K8s的PV/PVC是更完善的存储抽象体系，支持动态供给、StorageClass、回收策略、访问模式等。概念类似但实现和功能不同。</p>
+<hr />
+<h3 id="24-判断-17-">24-判断-17 ★★</h3>
+<p><strong>题目</strong>：Pod退出码137表示进程被SIGKILL终止，常见于OOMKilled。
+A. 正确 B. 错误</p>
+<p><strong>答案</strong>：A <strong>解析</strong>：退出码137 = 128 +
+9（SIGKILL信号编号）。OOMKilled时内核发送SIGKILL，退出码137。这是排查OOM的关键依据。</p>
+<hr />
+<h3 id="24-判断-18-">24-判断-18 ★★</h3>
+<p><strong>题目</strong>：Helm
+Chart可以用于多环境部署，通过values.yaml覆盖配置。 A. 正确 B. 错误</p>
+<p><strong>答案</strong>：A
+<strong>解析</strong>：Helm通过values.yaml管理配置，<code>helm install --values=prod.yaml</code>或<code>--set key=value</code>覆盖默认配置，实现一份Chart多环境部署。</p>
+<hr />
+<h3 id="24-判断-19-">24-判断-19 ★★</h3>
+<p><strong>题目</strong>：生产环境可以直接使用kubectl delete
+pod删除Pod来重启服务，没有风险。 A. 正确 B. 错误</p>
+<p><strong>答案</strong>：B <strong>解析</strong>：直接delete
+pod会被Deployment立即重建新Pod，但可能导致瞬时服务中断。生产环境应使用kubectl
+rollout restart或滚动更新，确保零停机。</p>
+<hr />
+<h3 id="24-判断-20-">24-判断-20 ★★★</h3>
+<p><strong>题目</strong>：一个Pod的QoS（服务质量）等级为Guaranteed，意味着其requests和limits的CPU/内存必须完全相等。
+A. 正确 B. 错误</p>
+<p><strong>答案</strong>：A
+<strong>解析</strong>：QoS等级Guaranteed要求每个容器的CPU和内存的requests与limits完全相等。Burstable是requests
+&lt;
+limits（至少一个有requests）。BestEffort是没有设置requests和limits。Guaranteed优先级最高，最后被驱逐。</p>
+<hr />
+<h2 id="四填空题10题">四、填空题（10题）</h2>
+<h3 id="24-填空-01-">24-填空-01 ★</h3>
+<p><strong>题目</strong>：Docker容器是基于Linux内核的______和______技术实现的。</p>
+<p><strong>答案</strong>：Namespace；cgroups
+<strong>解析</strong>：Namespace实现资源隔离（PID、网络、挂载等），cgroups实现资源限制（CPU、内存、IO等）。</p>
+<hr />
+<h3 id="24-填空-02-">24-填空-02 ★</h3>
+<p><strong>题目</strong>：Dockerfile中用于指定基础镜像的指令是______。</p>
+<p><strong>答案</strong>：FROM
+<strong>解析</strong>：FROM指令指定基础镜像，必须是Dockerfile的第一条非注释指令。</p>
+<hr />
+<h3 id="24-填空-03-">24-填空-03 ★★</h3>
+<p><strong>题目</strong>：K8s集群中，最小的调度和部署单元是______。</p>
+<p><strong>答案</strong>：Pod
+<strong>解析</strong>：Pod是K8s最小调度单元，封装一个或多个容器，共享网络和存储命名空间。</p>
+<hr />
+<h3 id="24-填空-04-">24-填空-04 ★★</h3>
+<p><strong>题目</strong>：kubectl查看Pod崩溃前日志的命令参数是______。</p>
+<p><strong>答案</strong>：--previous（或-p）
+<strong>解析</strong>：<code>kubectl logs &lt;pod&gt; --previous</code>查看上一个容器实例的日志，对排查CrashLoopBackOff至关重要。</p>
+<hr />
+<h3 id="24-填空-05-">24-填空-05 ★★</h3>
+<p><strong>题目</strong>：K8s
+Service的四种类型是ClusterIP、NodePort、______和ExternalName。</p>
+<p><strong>答案</strong>：LoadBalancer
+<strong>解析</strong>：LoadBalancer类型在NodePort基础上自动调用云平台创建负载均衡器，常用于云上对外暴露服务。</p>
+<hr />
+<h3 id="24-填空-06-">24-填空-06 ★★</h3>
+<p><strong>题目</strong>：K8s中用于存储敏感信息的资源对象是______，存储非敏感配置的是______。</p>
+<p><strong>答案</strong>：Secret；ConfigMap
+<strong>解析</strong>：Secret存敏感信息（密码、密钥、证书），Base64编码；ConfigMap存非敏感配置（配置文件、环境变量），明文存储。</p>
+<hr />
+<h3 id="24-填空-07-">24-填空-07 ★★</h3>
+<p><strong>题目</strong>：HPA基于______指标自动调整Pod副本数，前提是集群安装了______。</p>
+<p><strong>答案</strong>：CPU使用率；metrics-server
+<strong>解析</strong>：HPA默认基于CPU使用率（也可配置内存、自定义指标），需要metrics-server提供指标数据。</p>
+<hr />
+<h3 id="24-填空-08-">24-填空-08 ★★</h3>
+<p><strong>题目</strong>：Pod被OOMKilled的退出码是______。</p>
+<p><strong>答案</strong>：137 <strong>解析</strong>：137 = 128 +
+9，SIGKILL（信号9）终止进程。OOMKilled时内核发送SIGKILL。</p>
+<hr />
+<h3 id="24-填空-09-">24-填空-09 ★★</h3>
+<p><strong>题目</strong>：K8s回滚Deployment到指定版本的命令是kubectl
+rollout undo deployment/<name> --to-revision=______。</p>
+<p><strong>答案</strong>：N（或版本号，如2）
+<strong>解析</strong>：<code>--to-revision=N</code>指定回滚到revision
+N。可通过<code>kubectl rollout history</code>查看历史版本号。</p>
+<hr />
+<h3 id="24-填空-10-">24-填空-10 ★★★</h3>
+<p><strong>题目</strong>：K8s集群的数据持久化存储后端是______，它是一个分布式的______存储。</p>
+<p><strong>答案</strong>：etcd；键值（key-value）
+<strong>解析</strong>：etcd是K8s集群的状态存储后端，分布式键值数据库，保存集群所有资源对象的状态数据。</p>
+<hr />
+<h2 id="五论述简答题4题">五、论述简答题（4题）</h2>
+<h3 id="24-论述-01-">24-论述-01 ★★</h3>
+<p><strong>题目</strong>：请论述Docker容器与虚拟机的区别，并说明各自适用场景。</p>
+<p><strong>参考答案</strong>：</p>
+<p><strong>一、区别对比</strong></p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Docker容器</th>
+<th>虚拟机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>架构</td>
+<td>共享宿主机内核，用户态隔离</td>
+<td>每个VM有完整操作系统，硬件级虚拟化</td>
+</tr>
+<tr>
+<td>启动速度</td>
+<td>毫秒级</td>
+<td>分钟级</td>
+</tr>
+<tr>
+<td>资源占用</td>
+<td>小（MB级）</td>
+<td>大（GB级）</td>
+</tr>
+<tr>
+<td>隔离性</td>
+<td>较弱（共享内核）</td>
+<td>强（完整隔离）</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>接近原生</td>
+<td>有虚拟化开销</td>
+</tr>
+<tr>
+<td>镜像体积</td>
+<td>小（MB级）</td>
+<td>大（GB级）</td>
+</tr>
+<tr>
+<td>密度</td>
+<td>单机可运行数百容器</td>
+<td>单机数十个VM</td>
+</tr>
+</tbody>
+</table>
+<p><strong>二、Docker容器适用场景</strong></p>
+<ol type="1">
+<li><strong>微服务部署</strong>：每个服务独立容器化，轻量、快速、易扩展</li>
+<li><strong>CI/CD流水线</strong>：构建环境一致，镜像即制品</li>
+<li><strong>开发环境统一</strong>：开发/测试/生产环境一致</li>
+<li><strong>弹性伸缩</strong>：快速启停应对负载变化</li>
+<li><strong>云原生应用</strong>：与K8s配合实现容器编排</li>
+</ol>
+<p><strong>三、虚拟机适用场景</strong></p>
+<ol type="1">
+<li><strong>强隔离需求</strong>：多租户、安全敏感场景</li>
+<li><strong>异构操作系统</strong>：需运行不同OS（Linux+Windows）</li>
+<li><strong>传统应用迁移</strong>：遗留系统不适应容器化</li>
+<li><strong>内核级依赖</strong>：应用依赖特定内核版本或内核模块</li>
+<li><strong>完全资源隔离</strong>：需完全独立的资源分配</li>
+</ol>
+<p><strong>四、总结</strong>
+容器和虚拟机不是替代关系，而是互补。现代云原生架构常采用"VM+容器"模式：VM提供强隔离，容器提供轻量部署。</p>
+<p><strong>评分标准</strong>（满分10分）：</p>
+<ul>
+<li>区别对比全面（4分）：架构/启动/资源/隔离/性能各0.8分</li>
+<li>容器场景合理（3分）：至少3个典型场景</li>
+<li>虚拟机场景合理（2分）：至少3个典型场景</li>
+<li>总结升华（1分）</li>
+</ul>
+<hr />
+<h3 id="24-论述-02-">24-论述-02 ★★★</h3>
+<p><strong>题目</strong>：请论述K8s
+Deployment滚动更新的原理，并说明如何实现零停机更新。</p>
+<p><strong>参考答案</strong>：</p>
+<p><strong>一、滚动更新原理</strong></p>
+<p>Deployment控制器通过ReplicaSet管理Pod副本。当更新Deployment的Pod模板（如镜像版本）时：</p>
+<ol type="1">
+<li><strong>创建新ReplicaSet</strong>：Deployment创建一个新的ReplicaSet（版本+1）</li>
+<li><strong>扩容新RS</strong>：新RS的副本数从0开始增加，按maxSurge控制</li>
+<li><strong>缩容旧RS</strong>：旧RS的副本数减少，按maxUnavailable控制</li>
+<li><strong>交替进行</strong>：扩新RS与缩旧RS交替进行，直到旧RS副本数为0、新RS副本数为期望值</li>
+<li><strong>保留旧RS</strong>：旧RS保留（副本数为0），用于回滚</li>
+</ol>
+<p><strong>二、关键参数</strong></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">strategy</span><span class="kw">:</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> RollingUpdate</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">rollingUpdate</span><span class="kw">:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxSurge</span><span class="kw">:</span><span class="at"> 25%</span><span class="co">        # 超出期望副本数的最大值，默认25%</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxUnavailable</span><span class="kw">:</span><span class="at"> 25%</span><span class="co">  # 不可用副本的最大值，默认25%</span></span></code></pre></div>
+<ul>
+<li>maxSurge：控制新Pod的创建速度</li>
+<li>maxUnavailable：控制旧Pod的删除速度</li>
+<li>maxUnavailable=0 + maxSurge=1可实现严格零停机</li>
+</ul>
+<p><strong>三、零停机更新实现要素</strong></p>
+<ol type="1">
+<li><p><strong>滚动更新策略</strong>：默认RollingUpdate，先建新Pod再删旧Pod</p></li>
+<li><p><strong>readinessProbe就绪探针</strong>：确保新Pod真正Ready后才接收流量</p></li>
+</ol>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">readinessProbe</span><span class="kw">:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /health</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span></code></pre></div>
+<ol start="3" type="1">
+<li><p><strong>合理的maxSurge和maxUnavailable</strong>：</p>
+<ul>
+<li>零停机要求maxUnavailable=0（不允许不可用）</li>
+<li>maxSurge=1或25%（允许临时多出Pod）</li>
+</ul></li>
+<li><p><strong>优雅终止（graceful shutdown）</strong>：</p>
+<ul>
+<li>preStop钩子：让应用处理完已有请求</li>
+<li>terminationGracePeriodSeconds：给应用足够时间优雅退出</li>
+</ul></li>
+</ol>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lifecycle</span><span class="kw">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">preStop</span><span class="kw">:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">exec</span><span class="kw">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">command</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;sh&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-c&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;sleep 10 &amp;&amp; nginx -s quit&quot;</span><span class="kw">]</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">terminationGracePeriodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">30</span></span></code></pre></div>
+<ol start="5" type="1">
+<li><strong>Service端点自动更新</strong>：Pod
+Ready时加入Endpoints，Terminating时移除</li>
+</ol>
+<p><strong>四、完整流程</strong></p>
+<pre><code>更新触发 → 创建新RS → 扩容新Pod(1) → 新Pod Ready → 加入Endpoints
+→ 缩容旧Pod(1) → 旧Pod从Endpoints移除 → preStop钩子 → 优雅退出
+→ 扩容新Pod(2) → ... → 旧RS副本数=0 → 更新完成</code></pre>
+<p><strong>五、验证方法</strong></p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout status deployment/<span class="op">&lt;</span>name<span class="op">&gt;</span>  <span class="co"># 查看更新状态</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get rs                            <span class="co"># 查看新旧RS</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-l</span> app=<span class="op">&lt;</span>name<span class="op">&gt;</span>            <span class="co"># 查看Pod</span></span></code></pre></div>
+<p><strong>评分标准</strong>（满分10分）：</p>
+<ul>
+<li>滚动更新原理解释（3分）：ReplicaSet管理+扩缩交替</li>
+<li>关键参数说明（2分）：maxSurge+maxUnavailable</li>
+<li>零停机要素（4分）：readinessProbe+maxUnavailable=0+优雅终止+Service端点更新</li>
+<li>验证方法（1分）</li>
+</ul>
+<hr />
+<h3 id="24-论述-03-">24-论述-03 ★★★</h3>
+<p><strong>题目</strong>：CTTS项目部署到K8s后，某Pod出现CrashLoopBackOff状态。请详细描述排查思路和解决步骤。</p>
+<p><strong>参考答案</strong>：</p>
+<p><strong>一、现象识别</strong></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> ctts-prod</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># NAME                    READY   STATUS             RESTARTS   AGE</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-web-xxx-yyy        0/1     CrashLoopBackOff   5          3m</span></span></code></pre></div>
+<p>Pod状态为CrashLoopBackOff，RESTARTS持续增加，说明容器反复崩溃重启。</p>
+<p><strong>二、排查思路（四步法）</strong></p>
+<pre><code>现象定位 → 事件查看 → 日志分析 → 根因定位 → 修复验证</code></pre>
+<p><strong>三、详细排查步骤</strong></p>
+<p><strong>步骤1：查看Pod详情与事件</strong></p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pod ctts-web-xxx-yyy <span class="at">-n</span> ctts-prod</span></code></pre></div>
+<p>关注：</p>
+<ul>
+<li>Events部分：查看最近事件（拉取镜像、创建容器、探针检查等）</li>
+<li>Containers.State：当前状态</li>
+<li>Containers.Last State：上次崩溃状态（Exit Code、Reason）</li>
+<li>Restart Count：重启次数</li>
+</ul>
+<p><strong>步骤2：查看当前容器日志</strong></p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs ctts-web-xxx-yyy <span class="at">-n</span> ctts-prod</span></code></pre></div>
+<p>查看应用启动日志，是否有异常堆栈。</p>
+<p><strong>步骤3：查看崩溃前日志（关键！）</strong></p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs ctts-web-xxx-yyy <span class="at">-n</span> ctts-prod <span class="at">--previous</span></span></code></pre></div>
+<p>查看上一个容器实例崩溃前的日志，这是定位根因的关键。</p>
+<p><strong>步骤4：查看Pod事件</strong></p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get events <span class="at">-n</span> ctts-prod <span class="at">--sort-by</span><span class="op">=</span><span class="st">&#39;.lastTimestamp&#39;</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-20</span></span></code></pre></div>
+<p>查看最近集群事件，辅助定位。</p>
+<p><strong>步骤5：必要时进入容器排查</strong></p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> ctts-web-xxx-yyy <span class="at">-n</span> ctts-prod <span class="at">--</span> /bin/sh</span></code></pre></div>
+<p>进入容器检查配置文件、网络连通性、进程状态。</p>
+<p><strong>四、常见根因与解决方案</strong></p>
+<table>
+<thead>
+<tr>
+<th>根因</th>
+<th>判断依据</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>启动命令错误</td>
+<td>Exit Code 127/126，日志提示command not found</td>
+<td>修正Deployment的command/args</td>
+</tr>
+<tr>
+<td>配置文件缺失</td>
+<td>日志提示config not found</td>
+<td>检查ConfigMap挂载，修正volumeMounts</td>
+</tr>
+<tr>
+<td>依赖服务未就绪</td>
+<td>日志提示connection refused（数据库等）</td>
+<td>添加initContainer等待依赖</td>
+</tr>
+<tr>
+<td>应用代码异常</td>
+<td>日志有Java/Python异常堆栈</td>
+<td>修复应用代码，重新构建镜像</td>
+</tr>
+<tr>
+<td>存活探针过严</td>
+<td>Last State Reason: probe failed，但应用实际正常</td>
+<td>调大initialDelaySeconds、failureThreshold</td>
+</tr>
+<tr>
+<td>资源不足OOM</td>
+<td>Exit Code 137，Last State Reason: OOMKilled</td>
+<td>调大resources.limits.memory</td>
+</tr>
+<tr>
+<td>端口冲突</td>
+<td>日志提示address already in use</td>
+<td>修改containerPort或排查端口占用</td>
+</tr>
+</tbody>
+</table>
+<p><strong>五、典型解决示例</strong></p>
+<p>假设排查发现是配置文件路径错误：</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 日志显示：Error: config file /etc/ctts/config.yaml not found</span></span></code></pre></div>
+<p>检查ConfigMap挂载：</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pod ctts-web-xxx-yyy <span class="at">-n</span> ctts-prod <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-A10</span> Volumes</span></code></pre></div>
+<p>发现ConfigMap挂载路径与应用读取路径不一致，修正Deployment：</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">volumeMounts</span><span class="kw">:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> config</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /etc/ctts</span><span class="co">    # 修正为应用读取的路径</span></span></code></pre></div>
+<p>应用更新：</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> deployment.yaml</span></code></pre></div>
+<p>验证：</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout status deployment/ctts-web <span class="at">-n</span> ctts-prod</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> ctts-prod</span></code></pre></div>
+<p><strong>评分标准</strong>（满分10分）：</p>
+<ul>
+<li>现象识别准确（1分）</li>
+<li>排查思路清晰（2分）：四步法或类似方法论</li>
+<li>命令使用正确（3分）：describe/logs --previous/events/exec</li>
+<li>根因分析全面（3分）：至少列举4个常见根因及方案</li>
+<li>验证方法（1分）</li>
+</ul>
+<hr />
+<h3 id="24-论述-04-">24-论述-04 ★★★</h3>
+<p><strong>题目</strong>：请论述"能部署、能运维、能排障才是合格交付"的工程理念，结合CTTS项目说明完整交付应包含哪些要素。</p>
+<p><strong>参考答案</strong>：</p>
+<p><strong>一、工程理念解读</strong></p>
+<p>"能部署、能运维、能排障才是合格交付"体现了云原生工程的<strong>闭环思维</strong>：</p>
+<ol type="1">
+<li><p><strong>能部署</strong>——基础能力</p>
+<ul>
+<li>不仅是"能跑起来"，而是可复现、可移植、可自动化的部署</li>
+<li>交付物：镜像、YAML清单、部署文档</li>
+<li>核心要求：任意环境一键部署，不依赖人工干预</li>
+</ul></li>
+<li><p><strong>能运维</strong>——进阶能力</p>
+<ul>
+<li>不仅是"部署完成"，而是可监控、可更新、可扩缩的运维能力</li>
+<li>交付物：运维手册、监控方案、应急预案</li>
+<li>核心要求：滚动更新、回滚、扩缩容、日志查看等日常操作</li>
+</ul></li>
+<li><p><strong>能排障</strong>——高级能力</p>
+<ul>
+<li>不仅是"运行正常"，而是故障发生时能快速定位、修复、恢复</li>
+<li>交付物：故障排查指南、排障手册、复盘记录</li>
+<li>核心要求：5大典型故障的排查方法论与实操能力</li>
+</ul></li>
+</ol>
+<p>三者构成完整闭环：<strong>部署→运维→排障→优化部署</strong>，缺一不可。</p>
+<p><strong>二、完整交付要素</strong></p>
+<p>结合CTTS项目，完整交付应包含：</p>
+<p><strong>1. 可部署的交付物</strong></p>
+<ul>
+<li><strong>镜像制品</strong>：CTTS各服务的Docker镜像（多阶段构建、镜像优化）</li>
+<li><strong>K8s资源清单</strong>：完整的YAML文件包（Deployment/Service/ConfigMap/Secret/Ingress/PVC等）</li>
+<li><strong>部署文档</strong>：前置条件、部署步骤、验证方法、常见问题</li>
+<li><strong>环境管理</strong>：dev/test/prod多环境配置（Kustomize/Helm）</li>
+</ul>
+<p><strong>2. 可运维的交付物</strong></p>
+<ul>
+<li><strong>运维手册</strong>：日常运维操作规范
+<ul>
+<li>滚动更新流程（kubectl set image + rollout status）</li>
+<li>回滚流程（kubectl rollout undo）</li>
+<li>扩缩容流程（kubectl scale + HPA配置）</li>
+<li>日志查看方法（kubectl logs/exec/describe）</li>
+</ul></li>
+<li><strong>监控方案</strong>：Prometheus +
+Grafana监控指标与告警规则</li>
+<li><strong>备份策略</strong>：配置备份、数据备份、灾难恢复</li>
+</ul>
+<p><strong>3. 可排障的交付物</strong></p>
+<ul>
+<li><strong>故障排查指南</strong>：5大典型故障排查手册
+<ul>
+<li>CrashLoopBackOff排查</li>
+<li>NotReady排查</li>
+<li>Service无端点排查</li>
+<li>ImagePullBackOff排查</li>
+<li>OOMKilled排查</li>
+</ul></li>
+<li><strong>应急预案</strong>：常见故障的应急处理流程</li>
+<li><strong>排障工具链</strong>：kubectl常用命令速查表</li>
+</ul>
+<p><strong>4. 工程化要素</strong></p>
+<ul>
+<li><strong>版本管理</strong>：Git管理YAML与文档，版本可追溯</li>
+<li><strong>CI/CD</strong>：自动化构建与部署流水线</li>
+<li><strong>文档规范</strong>：统一文档模板与编写规范</li>
+<li><strong>评审机制</strong>：代码评审、架构评审、运维评审</li>
+</ul>
+<p><strong>三、工程意义</strong></p>
+<ol type="1">
+<li><strong>降低风险</strong>：完整交付意味着可复现、可回滚、可恢复，降低生产事故风险</li>
+<li><strong>提升效率</strong>：标准化流程减少人工操作，提升部署与运维效率</li>
+<li><strong>团队协作</strong>：清晰交付物便于团队协作与交接</li>
+<li><strong>持续改进</strong>：排障记录形成知识库，持续优化系统</li>
+</ol>
+<p><strong>四、课程思政升华</strong></p>
+<p>作为云原生工程师，应树立"完整交付"的工程责任意识：</p>
+<ul>
+<li><strong>责任担当</strong>：生产环境无小事，每一次部署都要可追溯、可回滚</li>
+<li><strong>工匠精神</strong>：YAML规范、镜像优化、文档严谨，精益求精</li>
+<li><strong>系统思维</strong>：从单容器到多服务到集群运维，全局视角</li>
+<li><strong>终身学习</strong>：云原生技术快速演进，持续学习是必备素质</li>
+</ul>
+<p><strong>评分标准</strong>（满分10分）：</p>
+<ul>
+<li>理念解读到位（3分）：部署/运维/排障三者关系+闭环思维</li>
+<li>交付要素全面（4分）：可部署/可运维/可排障/工程化四类交付物</li>
+<li>工程意义（1分）</li>
+<li>思政升华（2分）：责任/工匠/系统思维/终身学习</li>
+</ul>
+<hr />
+<h2 id="六程序阅读补全题2题">六、程序阅读补全题（2题）</h2>
+<h3 id="24-程序阅读-01-">24-程序阅读-01 ★★</h3>
+<p><strong>题目</strong>：阅读以下Dockerfile，补全缺失部分并回答问题。</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 基础阶段：构建应用</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> maven:3.8-openjdk-11 <span class="kw">AS</span> (1)______</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> pom.xml .</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> dependency:resolve</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> src ./src</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> clean package <span class="at">-DskipTests</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 运行阶段：精简镜像</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> (2)______</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=(3)______</span> /app/target/ctts-api-1.0.0.jar /app/app.jar</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8080</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="kw">ENTRYPOINT</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<p><strong>问题</strong>：</p>
+<ol type="1">
+<li>补全(1)(2)(3)处缺失内容</li>
+<li>这种构建方式叫什么？有什么优势？</li>
+<li>最终镜像中是否包含Maven和源代码？为什么？</li>
+</ol>
+<p><strong>参考答案</strong>：</p>
+<p><strong>1. 补全内容</strong></p>
+<ul>
+<li>(1)
+<code>builder</code>（或任意阶段名称，如<code>build</code>）</li>
+<li>(2)
+<code>openjdk:11-jre-slim</code>（或<code>eclipse-temurin:11-jre</code>等JRE运行时镜像）</li>
+<li>(3) <code>builder</code>（与第一阶段的AS名称一致）</li>
+</ul>
+<p><strong>2. 构建方式与优势</strong></p>
+<ul>
+<li>构建方式：<strong>多阶段构建（Multi-stage Build）</strong></li>
+<li>优势：
+<ul>
+<li>最终镜像只包含运行时所需内容（JRE +
+jar），不含Maven、源代码、编译产物</li>
+<li>镜像体积大幅减小（从~800MB减到~200MB）</li>
+<li>提升安全性（减少攻击面）</li>
+<li>提升部署速度（拉取/推送更快）</li>
+</ul></li>
+</ul>
+<p><strong>3. 最终镜像内容</strong></p>
+<ul>
+<li>最终镜像<strong>不包含</strong>Maven和源代码</li>
+<li>原因：多阶段构建中，只有<code>FROM openjdk:11-jre-slim</code>阶段及之后的指令进入最终镜像。第一阶段（builder）的内容只在构建时使用，通过<code>COPY --from=builder</code>只复制了需要的jar包，Maven和源代码不会进入最终镜像。</li>
+</ul>
+<p><strong>评分标准</strong>（满分10分）：</p>
+<ul>
+<li>补全正确（3分）：每空1分</li>
+<li>构建方式与优势（4分）：名称1分+优势3分</li>
+<li>镜像内容说明（3分）：不含Maven/源码2分+原因1分</li>
+</ul>
+<hr />
+<h3 id="24-程序阅读-02-">24-程序阅读-02 ★★★</h3>
+<p><strong>题目</strong>：阅读以下K8s Deployment
+YAML，补全缺失部分并回答问题。</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Deployment</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> (1)______</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-web:v1</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> (2)______</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 256Mi</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> 500m</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> (3)______</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">(4)______</span><span class="kw">:</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /health</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">30</span></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">readinessProbe</span><span class="kw">:</span></span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /ready</span></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span></code></pre></div>
+<p><strong>问题</strong>：</p>
+<ol type="1">
+<li>补全(1)(2)(3)(4)处缺失内容</li>
+<li>(4)处的探针是什么探针？作用是什么？</li>
+<li>如果(4)处探针检查失败，会发生什么？</li>
+<li>该Pod的QoS等级是什么？为什么？</li>
+</ol>
+<p><strong>参考答案</strong>：</p>
+<p><strong>1. 补全内容</strong></p>
+<ul>
+<li>(1) <code>ctts-web</code>（必须与template中的labels.app一致）</li>
+<li>(2)
+<code>250m</code>（或任意合理CPU值，如100m、500m，需≤limits.cpu）</li>
+<li>(3) <code>512Mi</code>（或任意合理内存值，需≥requests.memory）</li>
+<li>(4) <code>livenessProbe</code>（存活探针）</li>
+</ul>
+<p><strong>2. livenessProbe探针</strong></p>
+<ul>
+<li>名称：存活探针（livenessProbe）</li>
+<li>作用：判断容器是否正常运行。如果检查失败，kubelet会重启该容器。</li>
+<li>配置说明：
+<ul>
+<li>httpGet：HTTP健康检查，访问/health路径，端口8080</li>
+<li>initialDelaySeconds:
+30：容器启动30秒后开始检查（等应用启动完成）</li>
+<li>periodSeconds: 10：每10秒检查一次</li>
+</ul></li>
+</ul>
+<p><strong>3. 探针检查失败的后果</strong></p>
+<ul>
+<li>livenessProbe失败：kubelet会重启容器（不是删除Pod，是重启容器）</li>
+<li>连续失败达到failureThreshold次后触发重启</li>
+<li>Pod的RESTARTS计数增加</li>
+<li>如果反复崩溃，可能进入CrashLoopBackOff状态</li>
+</ul>
+<p><strong>4. QoS等级</strong></p>
+<ul>
+<li>QoS等级：<strong>Burstable</strong></li>
+<li>原因：requests（cpu:250m, memory:256Mi）小于limits（cpu:500m,
+memory:512Mi），不满足Guaranteed（要求requests=limits）的条件，但设置了requests，所以是Burstable。</li>
+<li>补充：
+<ul>
+<li>Guaranteed：requests = limits（CPU和内存都相等）</li>
+<li>Burstable：至少有一个resources设置了requests，且requests &lt;
+limits</li>
+<li>BestEffort：没有设置任何resources</li>
+</ul></li>
+</ul>
+<p><strong>评分标准</strong>（满分10分）：</p>
+<ul>
+<li>补全正确（4分）：每空1分</li>
+<li>探针说明（2分）：名称+作用</li>
+<li>失败后果（2分）：重启容器+RESTARTS增加</li>
+<li>QoS等级与原因（2分）：Burstable+requests&lt;limits</li>
+</ul>
+<hr />
+<h2 id="七编程接口设计题2题">七、编程接口设计题（2题）</h2>
+<h3 id="24-编程-01-">24-编程-01 ★★</h3>
+<p><strong>题目</strong>：为CTTS项目的Web服务编写完整的K8s资源清单YAML，要求：</p>
+<ol type="1">
+<li>Deployment：3副本，资源限制，存活与就绪探针，滚动更新策略</li>
+<li>Service：ClusterIP类型，暴露8080端口</li>
+<li>ConfigMap：管理应用配置</li>
+<li>部署到ctts-prod命名空间</li>
+</ol>
+<p><strong>参考答案</strong>：</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 命名空间</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Namespace</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co"># ConfigMap 配置</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> ConfigMap</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web-config</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span><span class="kw">:</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="fu">  application.yaml</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    server:</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>      port: 8080</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    spring:</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>      datasource:</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>        url: jdbc:mysql://mysql-service:3306/ctts</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>        username: ctts_user</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>    logging:</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>      level:</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>        root: INFO</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">LOG_LEVEL</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;INFO&quot;</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">APP_ENV</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;production&quot;</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Deployment</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Deployment</span></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">version</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">revisionHistoryLimit</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">strategy</span><span class="kw">:</span></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> RollingUpdate</span></span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">rollingUpdate</span><span class="kw">:</span></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxSurge</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxUnavailable</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">version</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-web:v1</span></span>
+<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">imagePullPolicy</span><span class="kw">:</span><span class="at"> IfNotPresent</span></span>
+<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">name</span><span class="kw">:</span><span class="at"> http</span></span>
+<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> LOG_LEVEL</span></span>
+<span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">valueFrom</span><span class="kw">:</span></span>
+<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">configMapKeyRef</span><span class="kw">:</span></span>
+<span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web-config</span></span>
+<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">key</span><span class="kw">:</span><span class="at"> LOG_LEVEL</span></span>
+<span id="cb20-69"><a href="#cb20-69" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> APP_ENV</span></span>
+<span id="cb20-70"><a href="#cb20-70" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">valueFrom</span><span class="kw">:</span></span>
+<span id="cb20-71"><a href="#cb20-71" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">configMapKeyRef</span><span class="kw">:</span></span>
+<span id="cb20-72"><a href="#cb20-72" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web-config</span></span>
+<span id="cb20-73"><a href="#cb20-73" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">key</span><span class="kw">:</span><span class="at"> APP_ENV</span></span>
+<span id="cb20-74"><a href="#cb20-74" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">envFrom</span><span class="kw">:</span></span>
+<span id="cb20-75"><a href="#cb20-75" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">configMapRef</span><span class="kw">:</span></span>
+<span id="cb20-76"><a href="#cb20-76" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web-config</span></span>
+<span id="cb20-77"><a href="#cb20-77" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb20-78"><a href="#cb20-78" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb20-79"><a href="#cb20-79" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> 250m</span></span>
+<span id="cb20-80"><a href="#cb20-80" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 256Mi</span></span>
+<span id="cb20-81"><a href="#cb20-81" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb20-82"><a href="#cb20-82" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> 500m</span></span>
+<span id="cb20-83"><a href="#cb20-83" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 512Mi</span></span>
+<span id="cb20-84"><a href="#cb20-84" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">livenessProbe</span><span class="kw">:</span></span>
+<span id="cb20-85"><a href="#cb20-85" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb20-86"><a href="#cb20-86" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /actuator/health</span></span>
+<span id="cb20-87"><a href="#cb20-87" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb20-88"><a href="#cb20-88" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">60</span></span>
+<span id="cb20-89"><a href="#cb20-89" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb20-90"><a href="#cb20-90" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">failureThreshold</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb20-91"><a href="#cb20-91" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">readinessProbe</span><span class="kw">:</span></span>
+<span id="cb20-92"><a href="#cb20-92" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb20-93"><a href="#cb20-93" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /actuator/health</span></span>
+<span id="cb20-94"><a href="#cb20-94" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb20-95"><a href="#cb20-95" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
+<span id="cb20-96"><a href="#cb20-96" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb20-97"><a href="#cb20-97" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">failureThreshold</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb20-98"><a href="#cb20-98" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">volumeMounts</span><span class="kw">:</span></span>
+<span id="cb20-99"><a href="#cb20-99" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> config-volume</span></span>
+<span id="cb20-100"><a href="#cb20-100" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /app/config</span></span>
+<span id="cb20-101"><a href="#cb20-101" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">lifecycle</span><span class="kw">:</span></span>
+<span id="cb20-102"><a href="#cb20-102" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">preStop</span><span class="kw">:</span></span>
+<span id="cb20-103"><a href="#cb20-103" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">exec</span><span class="kw">:</span></span>
+<span id="cb20-104"><a href="#cb20-104" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">command</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;sh&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-c&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;sleep 10&quot;</span><span class="kw">]</span></span>
+<span id="cb20-105"><a href="#cb20-105" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb20-106"><a href="#cb20-106" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> config-volume</span></span>
+<span id="cb20-107"><a href="#cb20-107" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">configMap</span><span class="kw">:</span></span>
+<span id="cb20-108"><a href="#cb20-108" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web-config</span></span>
+<span id="cb20-109"><a href="#cb20-109" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">terminationGracePeriodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">30</span></span>
+<span id="cb20-110"><a href="#cb20-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-111"><a href="#cb20-111" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb20-112"><a href="#cb20-112" aria-hidden="true" tabindex="-1"></a><span class="co"># Service</span></span>
+<span id="cb20-113"><a href="#cb20-113" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb20-114"><a href="#cb20-114" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Service</span></span>
+<span id="cb20-115"><a href="#cb20-115" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb20-116"><a href="#cb20-116" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web-service</span></span>
+<span id="cb20-117"><a href="#cb20-117" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb20-118"><a href="#cb20-118" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb20-119"><a href="#cb20-119" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb20-120"><a href="#cb20-120" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb20-121"><a href="#cb20-121" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> ClusterIP</span></span>
+<span id="cb20-122"><a href="#cb20-122" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb20-123"><a href="#cb20-123" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-web</span></span>
+<span id="cb20-124"><a href="#cb20-124" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb20-125"><a href="#cb20-125" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> http</span></span>
+<span id="cb20-126"><a href="#cb20-126" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb20-127"><a href="#cb20-127" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">targetPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb20-128"><a href="#cb20-128" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">protocol</span><span class="kw">:</span><span class="at"> TCP</span></span></code></pre></div>
+<p><strong>评分标准</strong>（满分15分）：</p>
+<ul>
+<li>Namespace与ConfigMap（3分）：命名空间1分+ConfigMap配置2分</li>
+<li>Deployment基本配置（3分）：replicas+selector+labels</li>
+<li>资源限制与探针（3分）：resources+livenessProbe+readinessProbe</li>
+<li>滚动更新策略（2分）：maxSurge+maxUnavailable=0（零停机）</li>
+<li>Service配置（2分）：type+selector+ports</li>
+<li>规范性（2分）：命名规范+注释+volume挂载+生命周期钩子</li>
+</ul>
+<hr />
+<h3 id="24-编程-02-">24-编程-02 ★★★</h3>
+<p><strong>题目</strong>：为CTTS项目设计完整的K8s部署方案，编写以下资源清单：</p>
+<ol type="1">
+<li>MySQL StatefulSet（含PVC、Service、ConfigMap）</li>
+<li>CTTS-api Deployment（连接MySQL）</li>
+<li>HPA自动伸缩配置</li>
+<li>Ingress路由配置</li>
+</ol>
+<p>要求体现生产级最佳实践。</p>
+<p><strong>参考答案</strong>：</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ============ MySQL StatefulSet ============</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># MySQL配置</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> ConfigMap</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-config</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span><span class="kw">:</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="fu">  my.cnf</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    [mysqld]</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    character-set-server=utf8mb4</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    collation-server=utf8mb4_unicode_ci</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    max_connections=200</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    innodb_buffer_pool_size=256M</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="co"># MySQL密码Secret</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Secret</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-secret</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="fu">type</span><span class="kw">:</span><span class="at"> Opaque</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span><span class="kw">:</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mysql-root-password</span><span class="kw">:</span><span class="at"> Y3R0c19yb290X3Bhc3M=</span><span class="co">    # base64</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mysql-password</span><span class="kw">:</span><span class="at"> Y3R0c191c2VyX3Bhc3M=</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a><span class="co"># MySQL Headless Service（StatefulSet要求）</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Service</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-service</span></span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">clusterIP</span><span class="kw">:</span><span class="at"> None</span><span class="co">    # Headless</span></span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">3306</span></span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a><span class="co"># MySQL StatefulSet</span></span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> StatefulSet</span></span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">serviceName</span><span class="kw">:</span><span class="at"> mysql-service</span></span>
+<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> mysql:8.0</span></span>
+<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">3306</span></span>
+<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb21-69"><a href="#cb21-69" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> MYSQL_ROOT_PASSWORD</span></span>
+<span id="cb21-70"><a href="#cb21-70" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">valueFrom</span><span class="kw">:</span></span>
+<span id="cb21-71"><a href="#cb21-71" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">secretKeyRef</span><span class="kw">:</span></span>
+<span id="cb21-72"><a href="#cb21-72" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-secret</span></span>
+<span id="cb21-73"><a href="#cb21-73" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">key</span><span class="kw">:</span><span class="at"> mysql-root-password</span></span>
+<span id="cb21-74"><a href="#cb21-74" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> MYSQL_DATABASE</span></span>
+<span id="cb21-75"><a href="#cb21-75" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb21-76"><a href="#cb21-76" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> MYSQL_USER</span></span>
+<span id="cb21-77"><a href="#cb21-77" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> ctts_user</span></span>
+<span id="cb21-78"><a href="#cb21-78" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> MYSQL_PASSWORD</span></span>
+<span id="cb21-79"><a href="#cb21-79" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">valueFrom</span><span class="kw">:</span></span>
+<span id="cb21-80"><a href="#cb21-80" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">secretKeyRef</span><span class="kw">:</span></span>
+<span id="cb21-81"><a href="#cb21-81" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-secret</span></span>
+<span id="cb21-82"><a href="#cb21-82" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">key</span><span class="kw">:</span><span class="at"> mysql-password</span></span>
+<span id="cb21-83"><a href="#cb21-83" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb21-84"><a href="#cb21-84" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb21-85"><a href="#cb21-85" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> 250m</span></span>
+<span id="cb21-86"><a href="#cb21-86" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 512Mi</span></span>
+<span id="cb21-87"><a href="#cb21-87" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb21-88"><a href="#cb21-88" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> 1000m</span></span>
+<span id="cb21-89"><a href="#cb21-89" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 1Gi</span></span>
+<span id="cb21-90"><a href="#cb21-90" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">volumeMounts</span><span class="kw">:</span></span>
+<span id="cb21-91"><a href="#cb21-91" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-data</span></span>
+<span id="cb21-92"><a href="#cb21-92" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /var/lib/mysql</span></span>
+<span id="cb21-93"><a href="#cb21-93" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-config</span></span>
+<span id="cb21-94"><a href="#cb21-94" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /etc/mysql/conf.d</span></span>
+<span id="cb21-95"><a href="#cb21-95" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">livenessProbe</span><span class="kw">:</span></span>
+<span id="cb21-96"><a href="#cb21-96" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">exec</span><span class="kw">:</span></span>
+<span id="cb21-97"><a href="#cb21-97" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">command</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;mysqladmin&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;ping&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-h&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;localhost&quot;</span><span class="kw">]</span></span>
+<span id="cb21-98"><a href="#cb21-98" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">30</span></span>
+<span id="cb21-99"><a href="#cb21-99" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb21-100"><a href="#cb21-100" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">readinessProbe</span><span class="kw">:</span></span>
+<span id="cb21-101"><a href="#cb21-101" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">exec</span><span class="kw">:</span></span>
+<span id="cb21-102"><a href="#cb21-102" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">command</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;mysql&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-h&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;localhost&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-e&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;SELECT 1&quot;</span><span class="kw">]</span></span>
+<span id="cb21-103"><a href="#cb21-103" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb21-104"><a href="#cb21-104" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb21-105"><a href="#cb21-105" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb21-106"><a href="#cb21-106" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-config</span></span>
+<span id="cb21-107"><a href="#cb21-107" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">configMap</span><span class="kw">:</span></span>
+<span id="cb21-108"><a href="#cb21-108" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-config</span></span>
+<span id="cb21-109"><a href="#cb21-109" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">volumeClaimTemplates</span><span class="kw">:</span></span>
+<span id="cb21-110"><a href="#cb21-110" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb21-111"><a href="#cb21-111" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-data</span></span>
+<span id="cb21-112"><a href="#cb21-112" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb21-113"><a href="#cb21-113" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">accessModes</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;ReadWriteOnce&quot;</span><span class="kw">]</span></span>
+<span id="cb21-114"><a href="#cb21-114" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">storageClassName</span><span class="kw">:</span><span class="at"> standard</span></span>
+<span id="cb21-115"><a href="#cb21-115" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb21-116"><a href="#cb21-116" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb21-117"><a href="#cb21-117" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">storage</span><span class="kw">:</span><span class="at"> 10Gi</span></span>
+<span id="cb21-118"><a href="#cb21-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-119"><a href="#cb21-119" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb21-120"><a href="#cb21-120" aria-hidden="true" tabindex="-1"></a><span class="co"># ============ CTTS-api Deployment ============</span></span>
+<span id="cb21-121"><a href="#cb21-121" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb21-122"><a href="#cb21-122" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Deployment</span></span>
+<span id="cb21-123"><a href="#cb21-123" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb21-124"><a href="#cb21-124" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-api</span></span>
+<span id="cb21-125"><a href="#cb21-125" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb21-126"><a href="#cb21-126" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb21-127"><a href="#cb21-127" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-api</span></span>
+<span id="cb21-128"><a href="#cb21-128" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb21-129"><a href="#cb21-129" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb21-130"><a href="#cb21-130" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">strategy</span><span class="kw">:</span></span>
+<span id="cb21-131"><a href="#cb21-131" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> RollingUpdate</span></span>
+<span id="cb21-132"><a href="#cb21-132" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">rollingUpdate</span><span class="kw">:</span></span>
+<span id="cb21-133"><a href="#cb21-133" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxSurge</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb21-134"><a href="#cb21-134" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxUnavailable</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span>
+<span id="cb21-135"><a href="#cb21-135" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb21-136"><a href="#cb21-136" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb21-137"><a href="#cb21-137" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-api</span></span>
+<span id="cb21-138"><a href="#cb21-138" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb21-139"><a href="#cb21-139" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb21-140"><a href="#cb21-140" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb21-141"><a href="#cb21-141" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-api</span></span>
+<span id="cb21-142"><a href="#cb21-142" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb21-143"><a href="#cb21-143" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">initContainers</span><span class="kw">:</span></span>
+<span id="cb21-144"><a href="#cb21-144" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> wait-mysql</span></span>
+<span id="cb21-145"><a href="#cb21-145" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> busybox</span></span>
+<span id="cb21-146"><a href="#cb21-146" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">command</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&#39;sh&#39;</span><span class="kw">,</span><span class="at"> </span><span class="st">&#39;-c&#39;</span><span class="kw">,</span><span class="at"> </span><span class="st">&#39;until nslookup mysql-service; do echo waiting for mysql; sleep 2; done&#39;</span><span class="kw">]</span></span>
+<span id="cb21-147"><a href="#cb21-147" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb21-148"><a href="#cb21-148" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-api</span></span>
+<span id="cb21-149"><a href="#cb21-149" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-api:v1</span></span>
+<span id="cb21-150"><a href="#cb21-150" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb21-151"><a href="#cb21-151" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb21-152"><a href="#cb21-152" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb21-153"><a href="#cb21-153" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> SPRING_DATASOURCE_URL</span></span>
+<span id="cb21-154"><a href="#cb21-154" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> jdbc:mysql://mysql-service:3306/ctts</span></span>
+<span id="cb21-155"><a href="#cb21-155" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> SPRING_DATASOURCE_USERNAME</span></span>
+<span id="cb21-156"><a href="#cb21-156" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> ctts_user</span></span>
+<span id="cb21-157"><a href="#cb21-157" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> SPRING_DATASOURCE_PASSWORD</span></span>
+<span id="cb21-158"><a href="#cb21-158" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">valueFrom</span><span class="kw">:</span></span>
+<span id="cb21-159"><a href="#cb21-159" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">secretKeyRef</span><span class="kw">:</span></span>
+<span id="cb21-160"><a href="#cb21-160" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-secret</span></span>
+<span id="cb21-161"><a href="#cb21-161" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">key</span><span class="kw">:</span><span class="at"> mysql-password</span></span>
+<span id="cb21-162"><a href="#cb21-162" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> JAVA_OPTS</span></span>
+<span id="cb21-163"><a href="#cb21-163" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">value</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0&quot;</span></span>
+<span id="cb21-164"><a href="#cb21-164" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb21-165"><a href="#cb21-165" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb21-166"><a href="#cb21-166" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> 250m</span></span>
+<span id="cb21-167"><a href="#cb21-167" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 384Mi</span></span>
+<span id="cb21-168"><a href="#cb21-168" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb21-169"><a href="#cb21-169" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> 500m</span></span>
+<span id="cb21-170"><a href="#cb21-170" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 768Mi</span></span>
+<span id="cb21-171"><a href="#cb21-171" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">livenessProbe</span><span class="kw">:</span></span>
+<span id="cb21-172"><a href="#cb21-172" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb21-173"><a href="#cb21-173" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /actuator/health</span></span>
+<span id="cb21-174"><a href="#cb21-174" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb21-175"><a href="#cb21-175" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">60</span></span>
+<span id="cb21-176"><a href="#cb21-176" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb21-177"><a href="#cb21-177" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">readinessProbe</span><span class="kw">:</span></span>
+<span id="cb21-178"><a href="#cb21-178" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb21-179"><a href="#cb21-179" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /actuator/health</span></span>
+<span id="cb21-180"><a href="#cb21-180" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb21-181"><a href="#cb21-181" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
+<span id="cb21-182"><a href="#cb21-182" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb21-183"><a href="#cb21-183" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">lifecycle</span><span class="kw">:</span></span>
+<span id="cb21-184"><a href="#cb21-184" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">preStop</span><span class="kw">:</span></span>
+<span id="cb21-185"><a href="#cb21-185" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">exec</span><span class="kw">:</span></span>
+<span id="cb21-186"><a href="#cb21-186" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">command</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;sh&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-c&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;sleep 10&quot;</span><span class="kw">]</span></span>
+<span id="cb21-187"><a href="#cb21-187" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">terminationGracePeriodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">30</span></span>
+<span id="cb21-188"><a href="#cb21-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-189"><a href="#cb21-189" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb21-190"><a href="#cb21-190" aria-hidden="true" tabindex="-1"></a><span class="co"># CTTS-api Service</span></span>
+<span id="cb21-191"><a href="#cb21-191" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb21-192"><a href="#cb21-192" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Service</span></span>
+<span id="cb21-193"><a href="#cb21-193" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb21-194"><a href="#cb21-194" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-api-service</span></span>
+<span id="cb21-195"><a href="#cb21-195" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb21-196"><a href="#cb21-196" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb21-197"><a href="#cb21-197" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> ClusterIP</span></span>
+<span id="cb21-198"><a href="#cb21-198" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb21-199"><a href="#cb21-199" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-api</span></span>
+<span id="cb21-200"><a href="#cb21-200" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb21-201"><a href="#cb21-201" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb21-202"><a href="#cb21-202" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">targetPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb21-203"><a href="#cb21-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-204"><a href="#cb21-204" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb21-205"><a href="#cb21-205" aria-hidden="true" tabindex="-1"></a><span class="co"># ============ HPA 自动伸缩 ============</span></span>
+<span id="cb21-206"><a href="#cb21-206" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> autoscaling/v2</span></span>
+<span id="cb21-207"><a href="#cb21-207" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> HorizontalPodAutoscaler</span></span>
+<span id="cb21-208"><a href="#cb21-208" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb21-209"><a href="#cb21-209" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-api-hpa</span></span>
+<span id="cb21-210"><a href="#cb21-210" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb21-211"><a href="#cb21-211" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb21-212"><a href="#cb21-212" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">scaleTargetRef</span><span class="kw">:</span></span>
+<span id="cb21-213"><a href="#cb21-213" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb21-214"><a href="#cb21-214" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">kind</span><span class="kw">:</span><span class="at"> Deployment</span></span>
+<span id="cb21-215"><a href="#cb21-215" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-api</span></span>
+<span id="cb21-216"><a href="#cb21-216" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">minReplicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb21-217"><a href="#cb21-217" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">maxReplicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb21-218"><a href="#cb21-218" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">metrics</span><span class="kw">:</span></span>
+<span id="cb21-219"><a href="#cb21-219" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> Resource</span></span>
+<span id="cb21-220"><a href="#cb21-220" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">resource</span><span class="kw">:</span></span>
+<span id="cb21-221"><a href="#cb21-221" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">name</span><span class="kw">:</span><span class="at"> cpu</span></span>
+<span id="cb21-222"><a href="#cb21-222" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">target</span><span class="kw">:</span></span>
+<span id="cb21-223"><a href="#cb21-223" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">type</span><span class="kw">:</span><span class="at"> Utilization</span></span>
+<span id="cb21-224"><a href="#cb21-224" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">averageUtilization</span><span class="kw">:</span><span class="at"> </span><span class="dv">70</span></span>
+<span id="cb21-225"><a href="#cb21-225" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> Resource</span></span>
+<span id="cb21-226"><a href="#cb21-226" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">resource</span><span class="kw">:</span></span>
+<span id="cb21-227"><a href="#cb21-227" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">name</span><span class="kw">:</span><span class="at"> memory</span></span>
+<span id="cb21-228"><a href="#cb21-228" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">target</span><span class="kw">:</span></span>
+<span id="cb21-229"><a href="#cb21-229" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">type</span><span class="kw">:</span><span class="at"> Utilization</span></span>
+<span id="cb21-230"><a href="#cb21-230" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">averageUtilization</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb21-231"><a href="#cb21-231" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">behavior</span><span class="kw">:</span></span>
+<span id="cb21-232"><a href="#cb21-232" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">scaleUp</span><span class="kw">:</span></span>
+<span id="cb21-233"><a href="#cb21-233" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">stabilizationWindowSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">60</span></span>
+<span id="cb21-234"><a href="#cb21-234" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">policies</span><span class="kw">:</span></span>
+<span id="cb21-235"><a href="#cb21-235" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> Percent</span></span>
+<span id="cb21-236"><a href="#cb21-236" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">value</span><span class="kw">:</span><span class="at"> </span><span class="dv">100</span></span>
+<span id="cb21-237"><a href="#cb21-237" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
+<span id="cb21-238"><a href="#cb21-238" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">scaleDown</span><span class="kw">:</span></span>
+<span id="cb21-239"><a href="#cb21-239" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">stabilizationWindowSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">300</span></span>
+<span id="cb21-240"><a href="#cb21-240" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">policies</span><span class="kw">:</span></span>
+<span id="cb21-241"><a href="#cb21-241" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> Percent</span></span>
+<span id="cb21-242"><a href="#cb21-242" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">value</span><span class="kw">:</span><span class="at"> </span><span class="dv">50</span></span>
+<span id="cb21-243"><a href="#cb21-243" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">60</span></span>
+<span id="cb21-244"><a href="#cb21-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-245"><a href="#cb21-245" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb21-246"><a href="#cb21-246" aria-hidden="true" tabindex="-1"></a><span class="co"># ============ Ingress 路由 ============</span></span>
+<span id="cb21-247"><a href="#cb21-247" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
+<span id="cb21-248"><a href="#cb21-248" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Ingress</span></span>
+<span id="cb21-249"><a href="#cb21-249" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb21-250"><a href="#cb21-250" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-ingress</span></span>
+<span id="cb21-251"><a href="#cb21-251" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> ctts-prod</span></span>
+<span id="cb21-252"><a href="#cb21-252" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">annotations</span><span class="kw">:</span></span>
+<span id="cb21-253"><a href="#cb21-253" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nginx.ingress.kubernetes.io/rewrite-target</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb21-254"><a href="#cb21-254" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nginx.ingress.kubernetes.io/ssl-redirect</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;true&quot;</span></span>
+<span id="cb21-255"><a href="#cb21-255" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb21-256"><a href="#cb21-256" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ingressClassName</span><span class="kw">:</span><span class="at"> nginx</span></span>
+<span id="cb21-257"><a href="#cb21-257" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">tls</span><span class="kw">:</span></span>
+<span id="cb21-258"><a href="#cb21-258" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb21-259"><a href="#cb21-259" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> ctts.example.com</span></span>
+<span id="cb21-260"><a href="#cb21-260" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">secretName</span><span class="kw">:</span><span class="at"> ctts-tls</span></span>
+<span id="cb21-261"><a href="#cb21-261" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb21-262"><a href="#cb21-262" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> ctts.example.com</span></span>
+<span id="cb21-263"><a href="#cb21-263" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb21-264"><a href="#cb21-264" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb21-265"><a href="#cb21-265" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /api</span></span>
+<span id="cb21-266"><a href="#cb21-266" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb21-267"><a href="#cb21-267" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb21-268"><a href="#cb21-268" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb21-269"><a href="#cb21-269" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-api-service</span></span>
+<span id="cb21-270"><a href="#cb21-270" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb21-271"><a href="#cb21-271" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb21-272"><a href="#cb21-272" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb21-273"><a href="#cb21-273" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb21-274"><a href="#cb21-274" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb21-275"><a href="#cb21-275" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb21-276"><a href="#cb21-276" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-web-service</span></span>
+<span id="cb21-277"><a href="#cb21-277" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb21-278"><a href="#cb21-278" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
+<p><strong>设计要点说明</strong>：</p>
+<ol type="1">
+<li><p><strong>MySQL StatefulSet</strong>：</p>
+<ul>
+<li>使用StatefulSet保证稳定网络标识（mysql-0.mysql-service）</li>
+<li>Headless Service配合StatefulSet</li>
+<li>volumeClaimTemplates实现存储自动供给</li>
+<li>Secret管理密码</li>
+<li>ConfigMap管理MySQL配置</li>
+<li>探针检查数据库健康</li>
+</ul></li>
+<li><p><strong>CTTS-api Deployment</strong>：</p>
+<ul>
+<li>initContainer等待MySQL就绪（解决启动依赖）</li>
+<li>Java应用配置UseContainerSupport（容器感知JVM）</li>
+<li>资源限制避免OOM</li>
+<li>滚动更新maxUnavailable=0实现零停机</li>
+<li>preStop钩子优雅退出</li>
+</ul></li>
+<li><p><strong>HPA自动伸缩</strong>：</p>
+<ul>
+<li>基于CPU和内存双指标</li>
+<li>scaleDown稳定窗口300秒（避免频繁缩容）</li>
+<li>scaleUp快速扩容（100%/15秒）</li>
+</ul></li>
+<li><p><strong>Ingress路由</strong>：</p>
+<ul>
+<li>基于路径路由（/api→api服务，/→web服务）</li>
+<li>TLS加密</li>
+<li>ingressClassName指定Controller</li>
+</ul></li>
+</ol>
+<p><strong>评分标准</strong>（满分15分）：</p>
+<ul>
+<li>MySQL StatefulSet（5分）：
+<ul>
+<li>StatefulSet+Headless Service+PVC+Secret+ConfigMap各1分</li>
+</ul></li>
+<li>CTTS-api Deployment（4分）：
+<ul>
+<li>initContainer依赖处理1分+资源限制1分+探针1分+滚动更新1分</li>
+</ul></li>
+<li>HPA配置（3分）：指标+minReplicas/maxReplicas+behavior</li>
+<li>Ingress配置（2分）：路由规则+TLS</li>
+<li>最佳实践（1分）：命名规范+注释+Java容器感知等</li>
+</ul>
+<hr />
+<h2 id="附题库统计表">附：题库统计表</h2>
+<h3 id="题型统计">题型统计</h3>
+<table>
+<thead>
+<tr>
+<th>题型</th>
+<th>题量</th>
+<th>分值（参考）</th>
+<th>总分</th>
+<th>难度分布</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单项选择题</td>
+<td>30</td>
+<td>2分/题</td>
+<td>60分</td>
+<td>★:8 / ★★:16 / ★★★:6</td>
+</tr>
+<tr>
+<td>多项选择题</td>
+<td>10</td>
+<td>3分/题</td>
+<td>30分</td>
+<td>★:1 / ★★:7 / ★★★:2</td>
+</tr>
+<tr>
+<td>判断题</td>
+<td>20</td>
+<td>1分/题</td>
+<td>20分</td>
+<td>★:2 / ★★:14 / ★★★:4</td>
+</tr>
+<tr>
+<td>填空题</td>
+<td>10</td>
+<td>2分/题</td>
+<td>20分</td>
+<td>★:2 / ★★:7 / ★★★:1</td>
+</tr>
+<tr>
+<td>论述简答题</td>
+<td>4</td>
+<td>10分/题</td>
+<td>40分</td>
+<td>★★:1 / ★★★:3</td>
+</tr>
+<tr>
+<td>程序阅读补全</td>
+<td>2</td>
+<td>10分/题</td>
+<td>20分</td>
+<td>★★:1 / ★★★:1</td>
+</tr>
+<tr>
+<td>编程接口设计</td>
+<td>2</td>
+<td>15分/题</td>
+<td>30分</td>
+<td>★★:1 / ★★★:1</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td><strong>78</strong></td>
+<td>—</td>
+<td><strong>220分</strong></td>
+<td>★:13 / ★★:49 / ★★★:18</td>
+</tr>
+</tbody>
+</table>
+<h3 id="知识模块覆盖统计">知识模块覆盖统计</h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>题量</th>
+<th>覆盖题号（示例）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M1 容器基础</td>
+<td>6</td>
+<td>单选01/02、判断01、填空01、多选01</td>
+</tr>
+<tr>
+<td>M2 镜像管理</td>
+<td>8</td>
+<td>单选03/04/05、判断02/03、多选02、填空02、程序阅读01</td>
+</tr>
+<tr>
+<td>M3 容器编排</td>
+<td>4</td>
+<td>单选06、判断01、多选03</td>
+</tr>
+<tr>
+<td>M4 容器存储</td>
+<td>4</td>
+<td>判断03、填空02、多选08</td>
+</tr>
+<tr>
+<td>M5 K8s基础</td>
+<td>18</td>
+<td>单选07/08/09/10、判断04、填空03/05/06、多选03/04/08</td>
+</tr>
+<tr>
+<td>M6 K8s进阶</td>
+<td>12</td>
+<td>单选17/18/21/22、判断09/14、填空10、多选03</td>
+</tr>
+<tr>
+<td>M7 K8s高级</td>
+<td>14</td>
+<td>单选11/19/24/25/28、判断10/11/15/17、填空07、多选06</td>
+</tr>
+<tr>
+<td>M8 综合实践</td>
+<td>12</td>
+<td>单选12/13/14/15/16/20/26/30、判断05/06/07、填空04/08/09、论述01/02/03/04、程序阅读02、编程01/02</td>
+</tr>
+</tbody>
+</table>
+<h3 id="难度分布统计">难度分布统计</h3>
+<table>
+<thead>
+<tr>
+<th>难度</th>
+<th>题量</th>
+<th>占比</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>★ 基础</td>
+<td>13</td>
+<td>16.7%</td>
+<td>核心概念与基本操作</td>
+</tr>
+<tr>
+<td>★★ 中等</td>
+<td>49</td>
+<td>62.8%</td>
+<td>原理理解与综合应用</td>
+</tr>
+<tr>
+<td>★★★ 较难</td>
+<td>16</td>
+<td>20.5%</td>
+<td>深度分析与工程实践</td>
+</tr>
+</tbody>
+</table>
+<h3 id="能力维度覆盖">能力维度覆盖</h3>
+<table>
+<thead>
+<tr>
+<th>能力维度</th>
+<th>题量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>记忆理解</td>
+<td>28</td>
+<td>概念、命令、原理的记忆与理解</td>
+</tr>
+<tr>
+<td>应用操作</td>
+<td>22</td>
+<td>命令使用、YAML编写、操作流程</td>
+</tr>
+<tr>
+<td>分析判断</td>
+<td>16</td>
+<td>故障分析、方案判断、问题定位</td>
+</tr>
+<tr>
+<td>综合设计</td>
+<td>12</td>
+<td>架构设计、方案设计、工程实践</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>本题库作为《Docker云容器与管理技术》课程收官综合复习题库，覆盖24次课八大模块核心知识点，涵盖基础概念、原理理解、操作应用、故障排查、工程设计等多个维度，可作为期末考试、课程考核、自学自测的参考资料。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

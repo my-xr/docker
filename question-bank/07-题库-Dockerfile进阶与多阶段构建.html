@@ -1,0 +1,1182 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dockerfile进阶与多阶段构建</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 07 次课 · 题库</div>
+      <h1>Dockerfile进阶与多阶段构建</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 07 次课</span>
+        <span class="hero-chip"><b>主题</b>Dockerfile进阶与多阶段构建</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 07 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>07-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>07-选择-001</strong>（★ 知识点：K7-1 ENV 与 ARG） 关于
+<code>ENV</code> 和 <code>ARG</code> 指令，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>两者在容器运行时都可用</span></li><li><span class="option-label">B</span><span><code>ENV</code>
+仅在构建阶段生效，<code>ARG</code> 在构建和运行时都生效</span></li><li><span class="option-label">C</span><span><code>ARG</code> 仅在构建阶段生效，<code>ENV</code> 在构建和运行时都生效</span></li><li><span class="option-label">D</span><span>两者都不进入镜像元数据</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：ARG
+仅在构建阶段生效，运行时容器内不可见；ENV
+在构建和运行时都生效，并持久化到镜像元数据（docker inspect
+可见）。A、B、D 均错误。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-002</strong>（★ 知识点：K7-1 ENV 指令） 在 Dockerfile
+中使用 <code>ENV JAVA_HOME=/usr/lib/jvm/java-17</code>
+后，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>该变量仅在 RUN 指令中可用，CMD 中不可用</span></li><li><span class="option-label">B</span><span>该变量在构建阶段和容器运行时都可用</span></li><li><span class="option-label">C</span><span>该变量只能用
+<code>docker build --build-arg</code> 覆盖</span></li><li><span class="option-label">D</span><span>该变量不会出现在
+<code>docker inspect</code> 输出中</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：ENV
+设置的环境变量在构建阶段和容器运行时都可用，并持久化到镜像元数据（docker
+inspect 可见）。A 错，CMD 中也可用；C 错，ENV 用
+<code>docker run -e</code> 在运行时覆盖；D 错，ENV 进入镜像元数据。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-003</strong>（★★ 知识点：K7-1 ARG 指令） 关于
+<code>ARG</code> 指令，下列说法错误的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>ARG
+定义的变量仅在构建阶段生效</span></li><li><span class="option-label">B</span><span>ARG 可以用
+<code>docker build --build-arg</code> 覆盖</span></li><li><span class="option-label">C</span><span>ARG 的值会出现在
+<code>docker history</code> 中</span></li><li><span class="option-label">D</span><span>ARG 适合传递数据库密码等敏感信息</span></li></ul></div><blockquote>
+<p><strong>答案：D</strong> <strong>解析</strong>：ARG 的值会出现在
+docker history
+中，<strong>不适合传敏感信息</strong>（密码、token、私钥等），敏感信息应在运行时通过
+<code>-e</code> 或 Secret 注入。A、B、C 描述都正确。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-004</strong>（★★ 知识点：K7-1 ARG 全局） 在
+Dockerfile 中，要让 <code>FROM</code>
+指令使用一个可参数化的版本号，应该使用？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>在 FROM 之前用 ENV 定义变量</span></li><li><span class="option-label">B</span><span>在 FROM 之前用 ARG 定义变量（全局 ARG）</span></li><li><span class="option-label">C</span><span>在 FROM 之后用 ARG
+定义变量</span></li><li><span class="option-label">D</span><span>直接写死版本号，无法参数化</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：FROM 之前只能用
+ARG（称为全局 ARG），用于参数化基础镜像版本，如
+<code>ARG JAVA_VERSION=17</code> 然后
+<code>FROM openjdk:${JAVA_VERSION}</code>。A 错，ENV 不能在 FROM 之前；C
+错，FROM 之后的 ARG 不能反向影响 FROM；D 错，可以用全局 ARG 参数化。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-005</strong>（★ 知识点：K7-2 EXPOSE 指令） 关于
+<code>EXPOSE 8080</code> 指令，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>它会自动把容器的
+8080 端口映射到宿主机</span></li><li><span class="option-label">B</span><span>它只是声明端口，不自动映射，需用
+<code>-p</code> 或 <code>-P</code> 真正映射</span></li><li><span class="option-label">C</span><span>它和
+<code>docker run -p 8080:8080</code> 完全等价</span></li><li><span class="option-label">D</span><span>它只能声明一个端口</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：EXPOSE
+是声明性指令，只声明容器会监听该端口，不会自动映射到宿主机。要用
+<code>-p 宿主端口:容器端口</code> 显式映射，或 <code>-P</code>
+自动映射所有 EXPOSE 声明的端口到随机高位端口。A、C 错；D
+错，可一次声明多个端口如 <code>EXPOSE 80 443</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-006</strong>（★★ 知识点：K7-2 VOLUME 指令） 关于
+<code>VOLUME ["/var/lib/mysql"]</code> 指令，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>它会自动把宿主机的 /var/lib/mysql 挂载到容器</span></li><li><span class="option-label">B</span><span>它会强制要求运行时用
+<code>-v</code> 显式挂载，否则容器无法启动</span></li><li><span class="option-label">C</span><span>它声明该路径为数据卷，运行时不写 <code>-v</code> 时 Docker
+会自动挂一个匿名卷</span></li><li><span class="option-label">D</span><span>它只能在 Dockerfile 中使用，不能在
+<code>docker run</code> 中挂载该路径</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：VOLUME
+声明该路径为数据卷，运行时若用户没写 <code>-v</code>，Docker 会自动在
+/var/lib/docker/volumes/ 下创建匿名卷挂载到该路径。A 错，宿主路径由 -v
+指定；B 错，不写 -v 也能启动（自动挂匿名卷）；D 错，docker run -v
+仍然可用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-007</strong>（★ 知识点：K7-3 CMD 指令） 关于 CMD
+指令，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>一个 Dockerfile 可以有多个 CMD，全部生效</span></li><li><span class="option-label">B</span><span>CMD 指定的命令在构建阶段执行</span></li><li><span class="option-label">C</span><span>CMD 可以被 <code>docker run</code>
+后的参数覆盖</span></li><li><span class="option-label">D</span><span>CMD 必须用 exec 形式，不能用 shell 形式</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：CMD
+是容器默认启动命令，可以被 docker run 后参数完全覆盖。A 错，多个 CMD
+只有最后一个生效；B 错，CMD 在容器启动时执行，不在构建阶段；D 错，CMD 有
+shell 和 exec 两种形式，推荐 exec 但不是必须。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-008</strong>（★★ 知识点：K7-3 CMD 形式） 下列 CMD
+写法中，能正确接收 SIGTERM 信号（优雅退出）的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>CMD java -jar app.jar</code></span></li><li><span class="option-label">B</span><span><code>CMD "java -jar app.jar"</code></span></li><li><span class="option-label">C</span><span><code>CMD ["java", "-jar", "app.jar"]</code></span></li><li><span class="option-label">D</span><span><code>CMD [java, -jar, app.jar]</code></span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：exec 形式
+<code>CMD ["java","-jar","app.jar"]</code> 让 java 直接作为 PID 1
+进程，能接收 SIGTERM 信号优雅退出。A 是 shell 形式，PID 1 是
+/bin/sh，不转发信号；B 不是合法形式；D 不是合法
+JSON（字符串没引号）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-009</strong>（★ 知识点：K7-3 CMD 覆盖） 某 Dockerfile
+中有 <code>CMD ["java","-jar","app.jar"]</code>，执行
+<code>docker run myapp bash</code> 后，实际执行的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>java -jar app.jar bash</code></span></li><li><span class="option-label">B</span><span><code>bash</code>（CMD
+被完全替换）</span></li><li><span class="option-label">C</span><span><code>java -jar app.jar</code>（CMD 不被覆盖）</span></li><li><span class="option-label">D</span><span>报错，无法运行</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：CMD 可以被 docker run
+后参数完全覆盖。<code>docker run myapp bash</code> 中的 bash 会替换掉
+CMD，实际执行 bash。A 错（那是 ENTRYPOINT 的行为）；C 错（CMD
+会被覆盖）；D 错（能正常运行 bash）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-010</strong>（★ 知识点：K7-4 ENTRYPOINT 指令） 关于
+ENTRYPOINT 指令，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>ENTRYPOINT 会被
+<code>docker run</code> 后的参数完全覆盖</span></li><li><span class="option-label">B</span><span>ENTRYPOINT 不会被
+<code>docker run</code> 后的参数覆盖，参数会作为追加参数传入</span></li><li><span class="option-label">C</span><span>ENTRYPOINT 不能与 CMD 同时使用</span></li><li><span class="option-label">D</span><span>ENTRYPOINT 必须用 shell 形式</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：ENTRYPOINT
+是入口点程序，docker run 后的参数会作为追加参数传入
+ENTRYPOINT，不会覆盖它（除非用 <code>--entrypoint</code> 显式覆盖）。A
+错；C 错，推荐与 CMD 组合使用；D 错，推荐 exec 形式。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-011</strong>（★★ 知识点：K7-4 组合模式） 某
+Dockerfile 有：</p>
+<pre><code>ENTRYPOINT [&quot;java&quot;,&quot;-jar&quot;,&quot;/app/app.jar&quot;]
+CMD [&quot;--spring.profiles.active=prod&quot;]</code></pre>
+<p>执行 <code>docker run myapp --spring.profiles.active=dev</code>
+后，实际执行？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>java -jar /app/app.jar --spring.profiles.active=prod</code></span></li><li><span class="option-label">B</span><span><code>java -jar /app/app.jar --spring.profiles.active=dev</code></span></li><li><span class="option-label">C</span><span><code>java -jar /app/app.jar --spring.profiles.active=prod --spring.profiles.active=dev</code></span></li><li><span class="option-label">D</span><span><code>--spring.profiles.active=dev</code>（ENTRYPOINT 被覆盖）</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：ENTRYPOINT
+固定不变，CMD 部分被 docker run 参数替换。实际执行
+<code>java -jar /app/app.jar --spring.profiles.active=dev</code>。A
+是默认运行（不传参数）的情况；C 是误以为追加；D 是误以为 ENTRYPOINT
+被覆盖。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-012</strong>（★★ 知识点：K7-4 覆盖 ENTRYPOINT） 要用
+<code>docker run</code> 完全覆盖镜像的 ENTRYPOINT，应该使用哪个参数？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>--entrypoint</code></span></li><li><span class="option-label">B</span><span><code>-e</code></span></li><li><span class="option-label">C</span><span><code>--build-arg</code></span></li><li><span class="option-label">D</span><span><code>--cmd</code></span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>docker run --entrypoint &lt;新命令&gt;</code>
+可以覆盖镜像的 ENTRYPOINT。B 是设置环境变量；C 是构建时参数；D
+不存在该参数。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-013</strong>（★ 知识点：K7-5 多阶段构建）
+关于多阶段构建，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>每个 FROM
+开启一个新阶段，最终镜像包含所有阶段</span></li><li><span class="option-label">B</span><span>最终镜像只保留最后一个阶段，前面阶段的镜像层不会进入最终镜像</span></li><li><span class="option-label">C</span><span>多阶段构建需要写多个 Dockerfile</span></li><li><span class="option-label">D</span><span>多阶段构建不能跨阶段拷贝文件</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：多阶段构建中，最终镜像只保留最后一个 FROM
+之后的阶段，前面阶段通过 <code>COPY --from=&lt;阶段名&gt;</code>
+拷贝产物，但其镜像层不进入最终镜像。A 错；C 错，一个 Dockerfile
+完成全流程；D 错，COPY --from 可以跨阶段拷贝。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-014</strong>（★★ 知识点：K7-5 阶段命名）
+在多阶段构建中，给阶段命名使用的语法是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>FROM maven:3.8 AS builder</code></span></li><li><span class="option-label">B</span><span><code>FROM maven:3.8 NAME builder</code></span></li><li><span class="option-label">C</span><span><code>FROM maven:3.8 --name builder</code></span></li><li><span class="option-label">D</span><span><code>FROM maven:3.8 -&gt; builder</code></span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：使用
+<code>FROM &lt;image&gt; AS &lt;name&gt;</code> 给阶段命名，然后用
+<code>COPY --from=&lt;name&gt;</code> 引用。B、C、D 都不是合法语法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-015</strong>（★★ 知识点：K7-5 跨阶段拷贝）
+多阶段构建中，从名为 <code>builder</code> 的阶段拷贝
+<code>/build/target/app.jar</code> 到当前阶段
+<code>/app/app.jar</code>，正确的写法是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>COPY /build/target/app.jar /app/app.jar --from=builder</code></span></li><li><span class="option-label">B</span><span><code>COPY --from=builder /build/target/app.jar /app/app.jar</code></span></li><li><span class="option-label">C</span><span><code>COPY --stage=builder /build/target/app.jar /app/app.jar</code></span></li><li><span class="option-label">D</span><span><code>COPY from=builder /build/target/app.jar /app/app.jar</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：跨阶段拷贝使用
+<code>COPY --from=&lt;阶段名&gt; &lt;源路径&gt; &lt;目标路径&gt;</code>。A
+选项 --from 应在前面；C、D 不是合法语法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-016</strong>（★★ 知识点：K7-5 多阶段价值）
+多阶段构建的核心价值不包括？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>减小镜像体积</span></li><li><span class="option-label">B</span><span>提升镜像安全性（攻击面减小）</span></li><li><span class="option-label">C</span><span>自动加速 Maven/npm 依赖下载</span></li><li><span class="option-label">D</span><span>把构建工具与运行环境解耦</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：多阶段构建的价值是减小体积、提升安全性、解耦构建与运行，但不会"自动加速依赖下载"（依赖下载速度由网络和镜像源决定，层缓存才能避免重复下载）。A、B、D
+都是真实价值。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-017</strong>（★★ 知识点：K7-6 基础镜像）
+下列基础镜像中，体积最小（最精简）的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>ubuntu:22.04</code></span></li><li><span class="option-label">B</span><span><code>debian:bookworm-slim</code></span></li><li><span class="option-label">C</span><span><code>alpine:3.18</code></span></li><li><span class="option-label">D</span><span><code>eclipse-temurin:17-jre</code></span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：alpine:3.18 约
+7MB，是最精简的；debian-slim 约 74MB；ubuntu 约
+77MB；eclipse-temurin:17-jre 约 260MB（含 JRE）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-018</strong>（★★ 知识点：K7-6 alpine 注意事项） 关于
+alpine 基础镜像，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>alpine 使用
+glibc，与所有应用完全兼容</span></li><li><span class="option-label">B</span><span>alpine 使用 musl libc，部分依赖 glibc
+的应用可能有兼容性问题</span></li><li><span class="option-label">C</span><span>alpine 不能用于 Java 应用</span></li><li><span class="option-label">D</span><span>alpine 必须搭配
+JDK 使用</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：alpine 使用 musl
+libc（非 glibc），部分依赖 glibc 的原生库可能有兼容性问题。Java
+应用要用专门的 alpine 版本（如
+<code>eclipse-temurin:17-jre-alpine</code>）。A 错；C 错，可以用专门
+alpine 版 JDK；D 错，搭配 JRE 即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-019</strong>（★★ 知识点：K7-6 合并 RUN）
+下列哪种写法能真正减小镜像体积（让 apt cache 不占空间）？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>RUN apt-get update</code> 然后
+<code>RUN apt-get install -y curl</code> 然后
+<code>RUN rm -rf /var/lib/apt/lists/*</code></span></li><li><span class="option-label">B</span><span><code>RUN apt-get update &amp;&amp; apt-get install -y curl &amp;&amp; rm -rf /var/lib/apt/lists/*</code></span></li><li><span class="option-label">C</span><span><code>RUN apt-get update</code> 和
+<code>RUN apt-get install -y curl</code> 和
+<code>RUN apt-get clean</code></span></li><li><span class="option-label">D</span><span>用 ENTRYPOINT 删除 apt cache</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：镜像层只追加不删除，装和删必须在同一层（用
+&amp;&amp; 连接）才能真正减小体积。A、C 是分多层，装的那层仍占空间；D
+不合法（ENTRYPOINT 是运行时指令）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-020</strong>（★★ 知识点：K7-6 层缓存顺序） 在 Java
+项目 Dockerfile 中，为提升层缓存命中率，正确的 COPY 顺序是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>先 COPY
+源码，再 COPY pom.xml，最后 RUN mvn package</span></li><li><span class="option-label">B</span><span>先 COPY pom.xml，RUN
+下载依赖，再 COPY 源码，最后 RUN 编译</span></li><li><span class="option-label">C</span><span>先 COPY 所有文件，再 RUN
+一次完成下载和编译</span></li><li><span class="option-label">D</span><span>顺序不重要，Docker 会自动优化</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：层缓存按顺序生效，少变的放前。pom.xml 变化少，先
+COPY 它并下载依赖（缓存稳定）；src
+经常变，放后面，让源码变化时只重跑编译，不重下依赖。A、C
+顺序导致源码变化时全部失效；D 错，顺序很重要。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-021</strong>（★ 知识点：K7-6 .dockerignore）
+<code>.dockerignore</code> 文件的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>决定哪些文件不进入版本控制</span></li><li><span class="option-label">B</span><span>决定哪些文件不进入构建上下文（不发送给 Docker 守护进程）</span></li><li><span class="option-label">C</span><span>决定哪些文件不进入镜像</span></li><li><span class="option-label">D</span><span>决定哪些文件被 COPY 指令忽略</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：.dockerignore
+列出哪些文件不进入构建上下文（不发送给守护进程），影响的是构建上下文传输阶段。A
+是 .gitignore 的作用；C、D 错，COPY
+仍可手动指定要拷贝的文件，.dockerignore 影响的是上下文范围。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-022</strong>（★★ 知识点：K7-6 .dockerignore 价值）
+下列哪一项不是 <code>.dockerignore</code> 的价值？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>减小构建上下文，加快构建</span></li><li><span class="option-label">B</span><span>防止敏感信息（如 .env、密钥）进入镜像</span></li><li><span class="option-label">C</span><span>提升层缓存命中率</span></li><li><span class="option-label">D</span><span>自动减小镜像体积（删除镜像内文件）</span></li></ul></div><blockquote>
+<p><strong>答案：D</strong> <strong>解析</strong>：.dockerignore
+影响的是"构建上下文"（发送给守护进程的文件集合），不直接减小已构建镜像的体积（COPY
+仍按 Dockerfile 指令执行）。A、B、C 都是 .dockerignore 的真实价值；D
+错，它减小的是上下文不是镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-023</strong>（★★ 知识点：K7-1/K7-3 ENV 与 CMD 配合）
+在 Dockerfile 中：</p>
+<pre><code>ENV APP_JAR=/app/app.jar
+CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;$APP_JAR&quot;]</code></pre>
+<p>执行后会怎样？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器启动时执行 <code>java -jar /app/app.jar</code></span></li><li><span class="option-label">B</span><span>容器启动时执行 <code>java -jar $APP_JAR</code>（变量未展开，报错）</span></li><li><span class="option-label">C</span><span>容器启动时执行 <code>java</code></span></li><li><span class="option-label">D</span><span>报错，CMD 不能用变量</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：CMD 的 exec
+形式（JSON
+数组）<strong>不会自动展开环境变量</strong>，<code>$APP_JAR</code>
+会被当作字面字符串传给 java，导致 java 找不到 <code>$APP_JAR</code>
+文件。要展开变量，需用 shell 形式或
+<code>["sh","-c","java -jar $APP_JAR"]</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-024</strong>（★★ 知识点：K7-3 RUN vs CMD） 关于 RUN
+和 CMD 的区别，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>都是构建时执行</span></li><li><span class="option-label">B</span><span>都是运行时执行</span></li><li><span class="option-label">C</span><span>RUN 构建时执行并产生层，CMD 运行时执行不产生层</span></li><li><span class="option-label">D</span><span>RUN 运行时执行，CMD
+构建时执行</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：RUN
+在构建阶段执行，每条 RUN 产生一个镜像层；CMD
+在容器启动时执行，不产生镜像层，只是指定默认启动命令。A、B、D 都错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-025</strong>（★★ 知识点：K7-4 shell 形式 ENTRYPOINT）
+某 Dockerfile 有 <code>ENTRYPOINT java -jar app.jar</code>（shell
+形式）和 <code>CMD ["--debug"]</code>（exec 形式），实际执行？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>java -jar app.jar --debug</code></span></li><li><span class="option-label">B</span><span><code>java -jar app.jar</code>（CMD 被忽略）</span></li><li><span class="option-label">C</span><span><code>--debug</code>（ENTRYPOINT 被忽略）</span></li><li><span class="option-label">D</span><span>报错</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：ENTRYPOINT 用 shell
+形式时，会以 <code>/bin/sh -c "java -jar app.jar"</code>
+执行，<strong>CMD 会被忽略</strong>，不会被作为参数传入。这是 shell 形式
+ENTRYPOINT 的一个陷阱。推荐用 exec 形式。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-026</strong>（★★★ 知识点：K7-5 多阶段综合） 某 Java
+项目多阶段构建 Dockerfile：</p>
+<pre><code>FROM maven:3.8 AS builder
+COPY src /build/src
+COPY pom.xml /build/
+RUN mvn package -DskipTests
+
+FROM openjdk:17-slim
+COPY --from=builder /build/target/app.jar /app/app.jar
+CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;/app/app.jar&quot;]</code></pre>
+<p>下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>最终镜像包含 Maven 和 JDK</span></li><li><span class="option-label">B</span><span>最终镜像只包含
+OpenJDK 17 slim 和 app.jar</span></li><li><span class="option-label">C</span><span>最终镜像包含源码</span></li><li><span class="option-label">D</span><span>最终镜像大小约为
+600MB+</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：多阶段构建最终镜像只保留最后一个 FROM
+之后的阶段。最终镜像基于 <code>openjdk:17-slim</code>，只拷贝了 builder
+阶段的 app.jar，不包含 Maven、JDK 完整版（openjdk:17-slim 只有 JRE/JDK
+部分）、源码。A、C、D 错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-027</strong>（★★ 知识点：K7-6 .dockerignore 内容）
+下列哪一项<strong>不</strong>应该写入 <code>.dockerignore</code>？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>.git</code> 目录</span></li><li><span class="option-label">B</span><span><code>target</code> 目录（旧构建产物）</span></li><li><span class="option-label">C</span><span><code>pom.xml</code>（项目对象模型）</span></li><li><span class="option-label">D</span><span><code>.env</code>（环境变量配置文件）</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：pom.xml 是 Maven
+构建必需的文件，必须包含在构建上下文中。.git、target、.env
+都应该排除（前两者无关，.env 含敏感信息）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-028</strong>（★ 知识点：K7-2 EXPOSE 与 -P 配合）
+<code>docker run -P</code>（大写 P）的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>把容器的 80
+端口映射到宿主机 80</span></li><li><span class="option-label">B</span><span>自动把 Dockerfile 中 EXPOSE
+声明的端口映射到宿主机随机高位端口</span></li><li><span class="option-label">C</span><span>不做任何端口映射</span></li><li><span class="option-label">D</span><span>把宿主机 8080
+映射到容器 8080</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>-P</code>（大写）自动把 EXPOSE
+声明的所有端口映射到宿主机随机高位端口（49152-65535）。<code>-p</code>（小写）才是显式映射指定端口，如
+<code>-p 8080:8080</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-029</strong>（★★★ 知识点：K7-5 阶段引用）
+多阶段构建中，下列哪种方式可以引用前面的阶段？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>COPY --stage=builder ...</code></span></li><li><span class="option-label">B</span><span><code>COPY --from=builder ...</code>（builder 是阶段名）</span></li><li><span class="option-label">C</span><span><code>COPY from=0 ...</code>（0 是阶段序号）</span></li><li><span class="option-label">D</span><span><code>COPY --previous ...</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：用
+<code>COPY --from=&lt;阶段名&gt;</code> 跨阶段拷贝，阶段名通过
+<code>FROM ... AS &lt;name&gt;</code> 命名。也可以用
+<code>COPY --from=0</code>（阶段序号，从 0
+开始），但可读性差，不推荐。A、C、D 不是合法语法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-030</strong>（★★ 知识点：K7-6 非 root 用户） 在
+Dockerfile 中创建非 root 用户运行应用，正确的方式是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>USER nobody</code>（直接使用现成的 nobody 用户）</span></li><li><span class="option-label">B</span><span><code>RUN useradd appuser &amp;&amp; USER appuser</code>（创建并切换）</span></li><li><span class="option-label">C</span><span><code>ENV USER=appuser</code></span></li><li><span class="option-label">D</span><span><code>CMD ["--user","appuser"]</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：用
+<code>RUN useradd</code> 创建用户，然后用 <code>USER appuser</code>
+切换到该用户运行后续指令和容器。A 也对（用现成的
+nobody），但通常推荐创建专用用户；C 错，ENV 不会切换用户；D 错，CMD
+不能切换用户。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>07-选择-031</strong>（★★ 知识点：K7-1 ENV vs ARG） 关于 ENV
+和 ARG，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>ENV 在构建和运行时都可用</span></li><li><span class="option-label">B</span><span>ARG
+仅在构建阶段生效</span></li><li><span class="option-label">C</span><span>ENV 的值会出现在 docker history 中</span></li><li><span class="option-label">D</span><span>ARG
+适合传递非敏感的构建参数 E. ARG 可以用 --build-arg 覆盖</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong> <strong>解析</strong>：ENV
+在构建和运行时都可用（A）；ARG 仅构建时生效（B）；ARG
+适合传非敏感构建参数（D），可用 --build-arg 覆盖（E）。C
+错，<strong>ARG</strong> 的值会出现在 docker history（不是 ENV，ENV
+在元数据中）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-032</strong>（★★ 知识点：K7-3 CMD 形式） 关于 CMD 的
+exec 形式
+<code>CMD ["java","-jar","app.jar"]</code>，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>java 进程会成为 PID 1</span></li><li><span class="option-label">B</span><span>能正确接收 SIGTERM 信号</span></li><li><span class="option-label">C</span><span>环境变量会自动展开</span></li><li><span class="option-label">D</span><span>是生产推荐写法 E. docker stop 时能优雅退出</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong> <strong>解析</strong>：exec 形式让
+java 直接作为 PID 1（A），能接收 SIGTERM
+信号（B），是生产推荐写法（D），docker stop 能优雅退出（E）。C 错，exec
+形式<strong>不会</strong>自动展开环境变量（要用 shell 形式或 sh -c
+包装）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-033</strong>（★★ 知识点：K7-4 ENTRYPOINT） 关于
+ENTRYPOINT 指令，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>ENTRYPOINT 不会被 docker
+run 后参数覆盖（参数作为追加参数传入）</span></li><li><span class="option-label">B</span><span>推荐用 exec 形式
+<code>ENTRYPOINT ["java","-jar","app.jar"]</code></span></li><li><span class="option-label">C</span><span>ENTRYPOINT 可以与
+CMD 组合使用</span></li><li><span class="option-label">D</span><span><code>docker run --entrypoint</code> 可以覆盖 ENTRYPOINT
+E. ENTRYPOINT 用 shell 形式时 CMD 会被忽略</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：A、B、C、D、E 全部正确。ENTRYPOINT
+不被覆盖（A）；推荐 exec 形式（B）；可与 CMD 组合（C）；--entrypoint
+可覆盖（D）；shell 形式 ENTRYPOINT 会忽略 CMD（E）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-034</strong>（★★ 知识点：K7-5 多阶段构建）
+多阶段构建的优势包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>减小最终镜像体积</span></li><li><span class="option-label">B</span><span>提升镜像安全性（攻击面减小）</span></li><li><span class="option-label">C</span><span>把构建工具与运行环境解耦</span></li><li><span class="option-label">D</span><span>一个
+Dockerfile 完成全流程（无需多脚本） E. 自动加速每次构建（无需缓存）</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：多阶段构建减小体积（A）、提升安全（B）、解耦构建与运行（C）、一个
+Dockerfile 完成（D）。E 错，多阶段本身不"自动加速"，加速靠层缓存与
+.dockerignore。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-035</strong>（★★ 知识点：K7-6 镜像优化）
+镜像优化的常见手段包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>选择精简基础镜像（alpine/slim）</span></li><li><span class="option-label">B</span><span>多阶段构建</span></li><li><span class="option-label">C</span><span>合并 RUN 减少层数</span></li><li><span class="option-label">D</span><span>写 .dockerignore E.
+把所有依赖都打包进镜像</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：精简基础镜像（A）、多阶段构建（B）、合并
+RUN（C）、.dockerignore（D）都是常见优化手段。E
+错，应该只打包运行时必需的依赖，构建依赖应丢弃。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-036</strong>（★★ 知识点：K7-6 .dockerignore）
+下列哪些文件应该写入 <code>.dockerignore</code>？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>.git</code> 目录</span></li><li><span class="option-label">B</span><span><code>node_modules</code> 目录</span></li><li><span class="option-label">C</span><span><code>target</code> 旧构建产物</span></li><li><span class="option-label">D</span><span><code>.env</code>
+环境变量配置（含密码） E. <code>pom.xml</code> 项目配置</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：.git（A）、node_modules（B）、target（C）、.env（D，含敏感信息）都应排除。E
+错，pom.xml 是 Maven 构建必需，不能排除。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-037</strong>（★★ 知识点：K7-3/K7-4 形式对比） 关于
+shell 形式和 exec 形式，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>exec
+形式的进程直接是 PID 1</span></li><li><span class="option-label">B</span><span>shell 形式通过 <code>/bin/sh -c</code> 执行</span></li><li><span class="option-label">C</span><span>shell 形式能正确接收 SIGTERM</span></li><li><span class="option-label">D</span><span>exec 形式不会自动展开环境变量 E.
+生产推荐 exec 形式</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong> <strong>解析</strong>：exec
+形式进程是 PID 1（A）；shell 形式通过 /bin/sh -c 执行（B）；exec
+形式不展开变量（D）；推荐 exec 形式（E）。C 错，shell 形式 PID 1 是
+sh，不转发信号给子进程。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-038</strong>（★★ 知识点：K7-2 声明性指令） 关于
+EXPOSE 和 VOLUME，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>都是声明性指令</span></li><li><span class="option-label">B</span><span>EXPOSE
+不自动映射端口，需 -p 或 -P</span></li><li><span class="option-label">C</span><span>VOLUME 声明的路径运行时不写 -v
+会自动挂匿名卷</span></li><li><span class="option-label">D</span><span>EXPOSE 可以声明多个端口 E. VOLUME
+路径下构建阶段写入的数据会持久化</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：EXPOSE 和
+VOLUME 都是声明性指令（A）；EXPOSE 不自动映射（B）；VOLUME 不挂 -v
+自动挂匿名卷（C）；EXPOSE 可声明多个端口（D）。E 错，VOLUME
+在<strong>运行时</strong>生效，构建阶段 RUN
+写入该路径的数据会被运行时挂载的卷覆盖。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-039</strong>（★★ 知识点：K7-5 多阶段构建层缓存） 在
+Java 多阶段构建中，为提升缓存命中率，下列做法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>先
+COPY pom.xml，再 RUN 下载依赖，最后 COPY src 编译</span></li><li><span class="option-label">B</span><span>把源码变化前的所有步骤放前面</span></li><li><span class="option-label">C</span><span>把源码 COPY 放在最后</span></li><li><span class="option-label">D</span><span>把 mvn package
+放在 COPY src 之前 E. 把不变的指令放在前面</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：先 COPY pom
+下依赖再 COPY src 编译（A）；源码变化前的步骤放前（B）；源码 COPY
+放最后（C）；不变指令放前（E）。D 错，mvn package 必须在 COPY src
+之后（否则没源码可编译）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-选择-040</strong>（★★★ 知识点：K7-6 综合优化） 某 Java
+后端镜像优化前 680MB，下列优化措施中能有效减小体积的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>改用
+alpine 基础镜像</span></li><li><span class="option-label">B</span><span>多阶段构建，丢弃 Maven/JDK</span></li><li><span class="option-label">C</span><span>合并 RUN，apt cache
+同层清理</span></li><li><span class="option-label">D</span><span>写 .dockerignore 排除 .git/node_modules E. 把 ENTRYPOINT
+改为 exec 形式</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：alpine
+基础镜像（A）、多阶段丢弃构建工具（B）、合并
+RUN（C）、.dockerignore（D，减小上下文，间接减小体积）都能减小镜像。E
+错，ENTRYPOINT 改 exec 形式是修信号问题，不直接减小体积。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>07-判断-001</strong>（★ 知识点：K7-1 ENV 持久化）
+<code>ENV</code> 设置的环境变量在容器运行时仍然可用。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：ENV
+在构建阶段和运行时都可用，并持久化到镜像元数据。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-002</strong>（★ 知识点：K7-1 ARG 作用范围）
+<code>ARG</code> 定义的变量在容器运行时也能通过 <code>echo $VAR</code>
+读到。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：ARG
+仅在构建阶段生效，运行时容器内不可见。运行时要用 ENV。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-003</strong>（★★ 知识点：K7-1 敏感信息） 可以用
+<code>ARG</code> 传递数据库密码等敏感信息，因为 ARG
+不会进入镜像元数据。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：ARG
+虽不进入镜像元数据，但其值会出现在 <code>docker history</code>
+中，仍会泄露。敏感信息应在运行时通过 <code>-e</code> 或 Secret
+注入。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-004</strong>（★ 知识点：K7-2 EXPOSE 自动映射）
+<code>EXPOSE 8080</code> 指令会自动把容器的 8080 端口映射到宿主机。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：EXPOSE
+只是声明，不自动映射。要真正访问，需用 <code>-p 宿主端口:容器端口</code>
+或 <code>-P</code> 自动映射。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-005</strong>（★ 知识点：K7-2 VOLUME 自动挂载）
+<code>VOLUME ["/data"]</code> 声明后，运行时不写 <code>-v</code>
+也会自动挂载一个匿名卷到 /data。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：VOLUME
+声明的路径，运行时不写 -v 时 Docker 会自动创建匿名卷挂载。但生产推荐显式
+-v 具名卷便于管理。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-006</strong>（★ 知识点：K7-3 CMD 覆盖）
+<code>CMD</code> 指定的命令可以被 <code>docker run</code>
+后的参数完全覆盖。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：这是 CMD 与
+ENTRYPOINT 的核心区别。CMD 是默认命令，可被 docker run 参数替换。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-007</strong>（★★ 知识点：K7-3 exec 形式信号）
+<code>CMD ["java","-jar","app.jar"]</code> 能让 java 进程正确接收
+SIGTERM 信号。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：exec 形式让
+java 直接作为 PID 1 进程，能接收 SIGTERM，docker stop 时优雅退出。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-008</strong>（★ 知识点：K7-3 多个 CMD） 一个
+Dockerfile 中可以写多个 CMD，全部生效。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：多个 CMD
+只有最后一个生效，前面的会被覆盖。规范是一个 Dockerfile 只写一个
+CMD。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-009</strong>（★★ 知识点：K7-4 ENTRYPOINT 覆盖）
+<code>ENTRYPOINT</code> 不会被 <code>docker run</code>
+后的参数覆盖，参数会作为追加参数传入。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：这是
+ENTRYPOINT 与 CMD 的核心区别。ENTRYPOINT 是入口点程序，docker run
+参数追加到它后面。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-010</strong>（★★ 知识点：K7-4 组合模式） ENTRYPOINT +
+CMD 组合模式下，CMD 给的是默认参数，可被 <code>docker run</code>
+参数覆盖，ENTRYPOINT 不变。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：这是生产推荐的组合模式。ENTRYPOINT
+固定可执行程序，CMD 给默认参数，docker run 参数替换 CMD 部分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-011</strong>（★ 知识点：K7-5 多阶段最终镜像）
+多阶段构建的最终镜像包含所有阶段的镜像层。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：最终镜像只保留最后一个 FROM
+之后的阶段，前面阶段的镜像层不会进入最终镜像（这是多阶段减小体积的原理）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-012</strong>（★★ 知识点：K7-5 跨阶段拷贝）
+多阶段构建中，可以用 <code>COPY --from=&lt;阶段名&gt;</code>
+跨阶段拷贝文件。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：COPY --from
+是多阶段构建的核心语法，用于从前面阶段拷贝构建产物到后面阶段。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-013</strong>（★★ 知识点：K7-6 alpine 兼容性） alpine
+镜像使用 glibc，与所有 Linux 应用完全兼容。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：alpine 使用
+musl libc（非 glibc），部分依赖 glibc 的应用可能有兼容性问题。Java
+要用专门 alpine 版本（如 eclipse-temurin:17-jre-alpine）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-014</strong>（★★ 知识点：K7-6 合并 RUN）
+<code>RUN apt install -y curl</code> 和
+<code>RUN rm -rf /var/lib/apt/lists/*</code>
+分两步写，能让镜像减小。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：镜像层只追加不删除。装和删分两层时，装的那层仍占空间。要用
+<code>&amp;&amp;</code> 连接成一条 RUN，在同层清理才能真正减小。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-015</strong>（★ 知识点：K7-6 .dockerignore 作用）
+<code>.dockerignore</code> 决定哪些文件不进入构建上下文（不发送给 Docker
+守护进程）。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：.dockerignore
+影响构建上下文传输阶段，排除的文件不会发送给守护进程。注意它和
+.gitignore 不同。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-016</strong>（★★ 知识点：K7-6 层缓存） Docker
+构建时某层失效，则其后所有层都失效。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：层缓存按顺序生效，某层失效后其后续所有层都需重新构建。所以少变的放前面，多变的放后面。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-017</strong>（★★ 知识点：K7-1 ARG 与 ENV 协作）
+可以先 <code>ARG APP_VERSION=1.0.0</code>，再
+<code>ENV APP_VERSION=${APP_VERSION}</code>，把构建参数变成运行时环境变量。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：这是常见模式：ARG 接收构建参数，ENV
+固化到运行时。这样既能在构建时用 --build-arg
+覆盖，又能在运行时通过环境变量访问。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-018</strong>（★★ 知识点：K7-3 exec 形式变量）
+<code>CMD ["java","-jar","$APP_HOME/app.jar"]</code> 能正确展开
+<code>$APP_HOME</code> 环境变量。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：CMD 的 exec
+形式（JSON 数组）不会自动展开环境变量。要展开变量需用 shell 形式或
+<code>["sh","-c","java -jar $APP_HOME/app.jar"]</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-019</strong>（★★ 知识点：K7-6 非 root 用户）
+生产镜像推荐用非 root 用户运行应用，提升安全性。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：用 USER
+指令切换到非 root 用户运行容器，能减小攻击面，是镜像安全加固的标配。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-判断-020</strong>（★★ 知识点：K7-5 多阶段减少体积） CTTS
+后端镜像从单阶段 680MB 优化到多阶段 180MB，减少约 73%。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：(680-180)/680
+≈ 73.5%。多阶段构建 + alpine 基础镜像是减小体积的核心手段。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>07-填空-001</strong>（★ 知识点：K7-1 ARG vs ENV） 在
+Dockerfile 中，<code>______</code>
+指令定义的变量仅在构建阶段生效；<code>______</code>
+指令设置的环境变量在构建阶段和容器运行时都可用。</p><blockquote>
+<p><strong>答案：ARG；ENV</strong> <strong>解析</strong>：ARG
+仅构建时生效，运行时不可见；ENV
+在构建和运行时都可用，并持久化到镜像元数据。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-填空-002</strong>（★ 知识点：K7-2 EXPOSE）
+<code>EXPOSE 8080</code> 是一个 ______
+指令，只是声明端口，不自动映射。要真正访问，需用 <code>docker run</code>
+的 ______ 参数显式映射。</p><blockquote>
+<p><strong>答案：声明性（或 声明性/文档化）；-p（或 -P）</strong>
+<strong>解析</strong>：EXPOSE 是声明性指令，需配合 -p（显式映射）或
+-P（自动映射）才能真正访问。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-填空-003</strong>（★ 知识点：K7-3 CMD 形式）
+<code>CMD ["java","-jar","app.jar"]</code> 是 ______
+形式，推荐生产使用；<code>CMD java -jar app.jar</code> 是 ______
+形式，存在信号传递问题。</p><blockquote>
+<p><strong>答案：exec；shell</strong> <strong>解析</strong>：exec
+形式（JSON 数组）让进程成为 PID 1，能接收信号；shell 形式通过 /bin/sh -c
+执行，PID 1 是 sh，不转发信号。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-填空-004</strong>（★★ 知识点：K7-4 ENTRYPOINT 组合）
+生产推荐的 ENTRYPOINT + CMD 组合模式中，______ 固定可执行程序，______
+给默认参数（可被 docker run 参数覆盖）。</p><blockquote>
+<p><strong>答案：ENTRYPOINT；CMD</strong>
+<strong>解析</strong>：ENTRYPOINT 固定入口程序（不被覆盖），CMD
+给默认参数（可被覆盖）。docker run 参数替换 CMD 部分，追加到 ENTRYPOINT
+后。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-填空-005</strong>（★ 知识点：K7-5 多阶段语法）
+多阶段构建中，用 <code>FROM &lt;image&gt; ______ &lt;name&gt;</code>
+给阶段命名，然后用 <code>______ =&lt;name&gt;</code>
+跨阶段拷贝文件。</p><blockquote>
+<p><strong>答案：AS；COPY --from</strong>
+<strong>解析</strong>：<code>FROM ... AS &lt;name&gt;</code>
+命名阶段，<code>COPY --from=&lt;name&gt;</code> 跨阶段拷贝。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-填空-006</strong>（★★ 知识点：K7-6 基础镜像选择） Java
+应用优化的常用基础镜像中，体积最小的是基于 alpine 的 <code>______</code>
+系列，比基于 Ubuntu 的镜像小很多。</p><blockquote>
+<p><strong>答案：eclipse-temurin:17-jre-alpine（或
+openjdk:17-jre-alpine）</strong> <strong>解析</strong>：alpine 版本的
+JRE 镜像约 85MB，比基于 Ubuntu 的（260MB+）小很多。注意 alpine 用 musl
+libc。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-填空-007</strong>（★ 知识点：K7-6 合并 RUN）
+为减小镜像体积，多条 apt 命令应该用 ______ 连接成一条
+RUN，并在同一层内清理 apt cache。</p><blockquote>
+<p><strong>答案：&amp;&amp;（或 逻辑与）</strong>
+<strong>解析</strong>：用 &amp;&amp;
+连接让装和删在同一层，才能真正减小体积。如
+<code>RUN apt update &amp;&amp; apt install -y curl &amp;&amp; rm -rf /var/lib/apt/lists/*</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-填空-008</strong>（★★ 知识点：K7-6 .dockerignore 位置）
+<code>.dockerignore</code> 文件应放在 ______ 目录，与 Dockerfile
+同级。</p><blockquote>
+<p><strong>答案：构建上下文根（或 构建上下文 / build context
+根目录）</strong> <strong>解析</strong>：.dockerignore
+放在构建上下文根目录（即 docker build 命令中 <code>.</code>
+指向的目录），与 Dockerfile 同级。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-填空-009</strong>（★ 知识点：K7-3 RUN vs CMD） Dockerfile
+中，<code>______</code>
+指令在构建阶段执行并产生镜像层；<code>______</code>
+指令在容器启动时执行，指定默认启动命令。</p><blockquote>
+<p><strong>答案：RUN；CMD</strong> <strong>解析</strong>：RUN
+构建时执行产生层；CMD 运行时执行不产生层，指定默认启动命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-填空-010</strong>（★★ 知识点：K7-4 覆盖 ENTRYPOINT） 要用
+<code>docker run</code> 完全覆盖镜像的 ENTRYPOINT，应使用 ______
+参数。</p><blockquote>
+<p><strong>答案：--entrypoint</strong>
+<strong>解析</strong>：<code>docker run --entrypoint &lt;新命令&gt;</code>
+可以覆盖镜像的 ENTRYPOINT。普通的 docker run 参数只会作为追加参数传入
+ENTRYPOINT。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>07-论述-001</strong>（★★ 知识点：K7-3/K7-4 CMD vs
+ENTRYPOINT，10 分）
+请从作用、形式（shell/exec）、是否被覆盖、组合模式四个方面，对比 CMD 与
+ENTRYPOINT 的区别，并说明生产镜像为什么推荐 ENTRYPOINT + CMD
+组合模式。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>作用</strong>（2 分）：</p>
+<ul>
+<li>CMD：指定容器默认启动命令。</li>
+<li>ENTRYPOINT：指定容器入口点程序。</li>
+</ul></li>
+<li><p><strong>形式（shell 与 exec）</strong>（2 分）：</p>
+<ul>
+<li>都有 shell 形式（<code>CMD java -jar app.jar</code>）和 exec
+形式（<code>CMD ["java","-jar","app.jar"]</code>）。</li>
+<li>exec 形式让进程成为 PID 1，能正确接收 SIGTERM
+信号优雅退出，是生产推荐。</li>
+<li>shell 形式通过 <code>/bin/sh -c</code> 执行，PID 1 是
+sh，不转发信号给子进程。</li>
+</ul></li>
+<li><p><strong>是否被覆盖</strong>（2 分）：</p>
+<ul>
+<li>CMD 可被 <code>docker run</code> 后参数完全覆盖。</li>
+<li>ENTRYPOINT 不会被覆盖，docker run 后参数会作为追加参数传入
+ENTRYPOINT。</li>
+<li>要覆盖 ENTRYPOINT 需用 <code>--entrypoint</code> 参数。</li>
+</ul></li>
+<li><p><strong>组合模式</strong>（2 分）：</p>
+<ul>
+<li>ENTRYPOINT + CMD 组合：ENTRYPOINT 固定可执行程序，CMD
+给默认参数。</li>
+<li><code>docker run myapp</code> 使用 CMD
+默认参数；<code>docker run myapp &lt;新参数&gt;</code> 替换 CMD
+部分，ENTRYPOINT 不变。</li>
+<li>例如 <code>ENTRYPOINT ["java","-jar","app.jar"]</code> +
+<code>CMD ["--spring.profiles.active=prod"]</code>，运行
+<code>docker run myapp --spring.profiles.active=dev</code> 实际执行
+<code>java -jar app.jar --spring.profiles.active=dev</code>。</li>
+</ul></li>
+<li><p><strong>生产推荐组合模式的原因</strong>（2 分）：</p>
+<ul>
+<li>① 保证入口固定：使用者不会因为传错命令导致容器跑错程序。</li>
+<li>② 参数可变：默认参数可覆盖（如切换
+profile），适合不同环境部署同一镜像。</li>
+<li>③ 既规范又灵活：是云原生镜像的事实标准。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：每个方面 2
+分；要点完整给满分；只列项不解释每个给 1 分；组合模式示例正确给 1
+分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-论述-002</strong>（★★ 知识点：K7-5/K7-6
+多阶段构建与优化，8 分） 请描述多阶段构建的原理，并以 CTTS
+后端（Java/Maven 项目）为例，说明多阶段构建如何把镜像从 680MB 优化到
+180MB。给出 Dockerfile 关键结构（不必完整）。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>多阶段构建原理</strong>（3 分）：</p>
+<ul>
+<li>一个 Dockerfile 可以有多个 <code>FROM</code>，每个 FROM
+开启一个新阶段（可用 <code>AS &lt;name&gt;</code> 命名）。（1 分）</li>
+<li>最终镜像只保留最后一个 FROM
+之后的阶段，前面阶段的镜像层不进入最终镜像。（1 分）</li>
+<li>后面阶段可以用 <code>COPY --from=&lt;阶段名&gt;</code>
+从前面阶段拷贝文件（如构建产物）。（1 分）</li>
+</ul></li>
+<li><p><strong>CTTS 后端优化示例</strong>（3 分）：</p>
+<ul>
+<li>单阶段（680MB）：基于 <code>maven:3.8-openjdk-17</code>，包含 Maven
++ JDK + 源码 + jar，全部进入最终镜像。（1 分）</li>
+<li>多阶段（180MB）：
+<ul>
+<li>阶段1
+builder：<code>FROM maven:3.8-openjdk-17 AS builder</code>，COPY
+源码，RUN mvn package 产出 jar。（1 分）</li>
+<li>阶段2 runtime：<code>FROM eclipse-temurin:17-jre-alpine</code>，COPY
+--from=builder 拷贝 jar，运行 java -jar。（1 分）</li>
+</ul></li>
+<li>体积从 680MB → 180MB，减少约 73%。</li>
+</ul></li>
+<li><p><strong>Dockerfile 关键结构</strong>（2 分）：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> maven:3.8-openjdk-17 <span class="kw">AS</span> builder</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> pom.xml .</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> dependency:go-offline</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> src ./src</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> clean package <span class="at">-DskipTests</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre-alpine</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> /build/target/*.jar /app/app.jar</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>,<span class="st">&quot;-jar&quot;</span>,<span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
+<p>关键点：FROM...AS 命名、COPY --from 跨阶段拷贝、运行阶段用 jre-alpine
+精简镜像。（2 分）</p></li>
+</ol>
+<p><strong>评分要点</strong>：原理、示例、Dockerfile
+三部分分别给分；Dockerfile 不要求完全一致，关键语法正确即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-论述-003</strong>（★★ 知识点：K7-6 镜像优化三板斧，8 分）
+请列举镜像优化的"三板斧"以及至少 3
+条额外加固措施，并说明每条的作用。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>三板斧</strong>（6 分，每条 2 分）：</p>
+<ul>
+<li><strong>精简基础镜像</strong>（2 分）：选择 alpine / slim /
+distroless 等精简基础镜像。作用：减小基础层体积（如 ubuntu 77MB → alpine
+7MB）。</li>
+<li><strong>多阶段构建</strong>（2
+分）：构建阶段用重型镜像（含编译器），运行阶段只 COPY
+产物到精简镜像。作用：丢弃构建工具、源码、中间产物，大幅减小体积。</li>
+<li><strong>合并 RUN + 同层清理</strong>（2 分）：把装和清理用
+&amp;&amp; 连接成一条 RUN，在同一层内删除
+cache。作用：避免"装的层仍占空间"，真正减小体积。</li>
+</ul></li>
+<li><p><strong>额外加固措施</strong>（2 分，至少 3 条，每条 0.5~1
+分，最多 2 分）：</p>
+<ul>
+<li><strong>.dockerignore</strong>：排除 .git/node_modules/target/.env
+等无关文件，减小构建上下文，提升缓存命中率，防止敏感信息进入镜像。</li>
+<li><strong>层缓存优化顺序</strong>：少变的放前面（pom.xml +
+下依赖），多变的放后面（COPY src），提升缓存命中率，加速构建。</li>
+<li><strong>非 root 用户运行</strong>：创建专用用户，用 USER
+指令切换，减小攻击面。</li>
+<li><strong>时区设置</strong>：装 tzdata，设置
+Asia/Shanghai，避免容器时间是 UTC。</li>
+<li><strong>HEALTHCHECK 健康检查</strong>：让 Docker
+自动监控容器健康状态，便于编排系统（如 K8s）决策。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三板斧必须列出（每条 2 分）；加固措施答出
+3 条及以上给 2 分，少一条扣 0.5 分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>07-论述-004</strong>（★★ 知识点：K7-1/K7-2
+声明性指令与参数化，8 分） 请解释 ENV、ARG、EXPOSE、VOLUME
+四个指令的"声明性"或"参数化"特征，并说明它们各自的典型用途。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>ENV</strong>（2 分）：</p>
+<ul>
+<li>特征：设置环境变量，在构建阶段和运行时都生效，持久化到镜像元数据。</li>
+<li>典型用途：设置 JAVA_HOME、APP_PORT、SPRING_PROFILES_ACTIVE、PATH
+追加等运行时配置。</li>
+<li>可用 <code>docker run -e</code> 在运行时覆盖（不修改镜像）。</li>
+</ul></li>
+<li><p><strong>ARG</strong>（2 分）：</p>
+<ul>
+<li>特征：定义构建时参数，仅在构建阶段生效，不进入运行时容器。</li>
+<li>典型用途：参数化基础镜像版本（如 <code>ARG JAVA_VERSION=17</code> +
+<code>FROM openjdk:${JAVA_VERSION}</code>）、构建版本号、构建开关。</li>
+<li>可用 <code>docker build --build-arg</code> 覆盖。</li>
+<li>注意：不要用 ARG 传敏感信息（值会出现在 docker history）。</li>
+</ul></li>
+<li><p><strong>EXPOSE</strong>（2 分）：</p>
+<ul>
+<li>特征：声明性指令，声明容器监听的端口，本身不自动映射。</li>
+<li>典型用途：声明应用端口（如 EXPOSE 8080），配合 <code>-p</code> 或
+<code>-P</code> 真正映射；让镜像自带"使用说明"。</li>
+<li>在 <code>docker inspect</code>
+中可见，便于使用者了解镜像的网络需求。</li>
+</ul></li>
+<li><p><strong>VOLUME</strong>（2 分）：</p>
+<ul>
+<li>特征：声明数据卷路径，运行时不写 -v 时 Docker 自动挂匿名卷。</li>
+<li>典型用途：声明需要持久化的路径（如 MySQL 的 /var/lib/mysql、应用的
+/app/logs），保证容器删除后数据不丢。</li>
+<li>生产推荐显式 -v 具名卷便于管理、备份、迁移。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：每个指令 2 分（特征 1 分 + 典型用途 1
+分）；4 个都答对给满分；只列特征不举例每个扣 0.5 分。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>07-阅读-001</strong>（★★ 知识点：K7-5 多阶段构建补全，12 分）
+阅读以下 CTTS 后端多阶段构建 Dockerfile，补全缺失部分（每空 2 分，共 12
+分）。</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 阶段 1：构建阶段（命名为 builder）</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> (a)________ <span class="kw">AS</span> (b)________</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /build</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 先拷贝 pom.xml 单独下载依赖（利用层缓存）</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> (c)________ .</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> dependency:go-offline</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 再拷贝源码编译打包</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> src ./src</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> clean package <span class="at">-DskipTests</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 阶段 2：运行阶段（最终镜像）</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> (d)________</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 从 builder 阶段拷贝构建产物</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> (e)________ /build/target/*.jar /app/app.jar</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 设置运行时环境变量</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> SPRING_PROFILES_ACTIVE=prod</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8080</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co"># 入口点 + 默认参数（组合模式）</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>(f)________ [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;--spring.profiles.active=prod&quot;</span>]</span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) maven:3.8-openjdk-17（或 maven:3.8
+等含 Maven+JDK 的镜像） (b) builder (c) pom.xml (d)
+eclipse-temurin:17-jre-alpine（或 openjdk:17-jre-alpine 等精简 JRE
+镜像） (e) --from=builder (f) ENTRYPOINT</p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) 构建阶段需要 Maven 和 JDK，用 maven:3.8-openjdk-17 镜像。</li>
+<li>(b) 用 AS builder 给阶段命名，便于后面 COPY --from=builder
+引用。</li>
+<li>(c) 先 COPY pom.xml 单独下依赖，利用层缓存。</li>
+<li>(d) 运行阶段用精简 JRE 镜像（alpine 版本约 85MB）。</li>
+<li>(e) COPY --from=builder 从前面阶段拷贝文件。</li>
+<li>(f) 用 ENTRYPOINT 固定入口程序，配合 CMD
+给默认参数（组合模式）。</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。镜像名写其他合理版本（如
+maven:3.8、openjdk:17-jre-slim）同样给分；专有名词拼写错误不扣分（如
+eclipse-temurin 拼错）。</p>
+</blockquote>
+<hr />
+<p><strong>07-阅读-002</strong>（★★ 知识点：K7-1/K7-3/K7-4 综合补全，12
+分） 阅读以下参数化 CTTS 后端 Dockerfile，补全缺失部分（每空 2 分，共 12
+分）。</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 全局 ARG：参数化基础镜像版本</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ARG</span> (a)________=17</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:${JAVA_VERSION}-jre-alpine</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 阶段内 ARG：构建版本号</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ARG</span> APP_VERSION=1.0.0</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 把构建参数变成运行时环境变量</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> (b)________=${APP_VERSION} <span class="op">\</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    APP_HOME=/app <span class="op">\</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    APP_PORT=8080</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> ${APP_HOME}</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> app.jar ${APP_HOME}/app.jar</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 声明端口（不自动映射）</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>(c)________ 8080</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 声明数据卷路径（运行时自动挂匿名卷）</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>(d)________ [<span class="st">&quot;/app/logs&quot;</span>]</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 入口点：固定执行 java -jar</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="kw">ENTRYPOINT</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 默认参数：默认使用 prod profile</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [(e)________]</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 健康检查</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="kw">HEALTHCHECK</span> <span class="op">--interval=30s</span> <span class="op">--timeout=3s</span> \</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">CMD</span> <span class="ex">curl</span> <span class="at">-f</span> http://localhost:<span class="va">${</span><span class="er">(f)________</span><span class="va">}</span>/actuator/health <span class="kw">||</span> <span class="bu">exit</span> 1</span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) JAVA_VERSION (b) APP_VERSION (c)
+EXPOSE (d) VOLUME (e) "--spring.profiles.active=prod" (f) APP_PORT</p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) 全局 ARG 必须在 FROM 之前声明，参数化 JAVA_VERSION。</li>
+<li>(b) 把 ARG APP_VERSION 通过 ENV 固化到运行时（这样运行时也能读到
+APP_VERSION）。</li>
+<li>(c) EXPOSE 是声明端口的指令。</li>
+<li>(d) VOLUME 是声明数据卷的指令。</li>
+<li>(e) CMD 的 exec 形式是 JSON
+数组，字符串元素要用双引号："--spring.profiles.active=prod"。</li>
+<li>(f) HEALTHCHECK 中要用环境变量 APP_PORT，但 exec
+形式不展开变量，这里用 shell 形式（CMD curl ...）能展开。</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12 分。(e) 必须是合法 JSON
+字符串（带双引号）才给满分；(f) 写 APP_PORT 或 ${APP_PORT}
+都给分（HEALTHCHECK 的 CMD 是 shell 形式，两种写法都可行）。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>07-编程-001</strong>（★★ 知识点：K7-3/K7-4 CMD 与
+ENTRYPOINT，15 分） <strong>镜像启动命令设计</strong>：请为 CTTS 后端
+SpringBoot 镜像设计启动命令，满足以下需求：</p>
+<ol type="1">
+<li>容器启动时执行 <code>java -jar /app/app.jar</code>（4 分）</li>
+<li>默认使用 <code>--spring.profiles.active=prod</code> profile（3
+分）</li>
+<li>运行时可通过 <code>docker run</code> 参数切换为 dev profile（3
+分）</li>
+<li>必须正确处理 SIGTERM 信号（即用 exec 形式）（3 分）</li>
+<li>给出 <code>docker run</code> 默认运行和切换 dev 的命令示例（2
+分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<p><strong>Dockerfile 启动指令</strong>（10 分）：</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># exec 形式 ENTRYPOINT：固定执行 java -jar，让 java 成为 PID 1，正确接收 SIGTERM</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ENTRYPOINT</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># exec 形式 CMD：给默认参数 prod profile，可被 docker run 参数覆盖</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;--spring.profiles.active=prod&quot;</span>]</span></code></pre></div>
+<p>评分：</p>
+<ul>
+<li>用 ENTRYPOINT 固定 java -jar /app/app.jar：4 分（不用 ENTRYPOINT
+而用 CMD 单独实现"固定入口"扣 2 分）</li>
+<li>用 CMD 给默认参数 --spring.profiles.active=prod：3 分</li>
+<li>设计上支持运行时切换 dev（即 CMD 可被覆盖）：3 分</li>
+</ul>
+<p><strong>exec 形式</strong>（3 分）：</p>
+<ul>
+<li>必须用 JSON
+数组形式（<code>["java","-jar","/app/app.jar"]</code>）：3 分</li>
+<li>用 shell 形式（<code>java -jar app.jar</code>）扣 3
+分（不能正确处理信号）</li>
+</ul>
+<p><strong>运行示例</strong>（2 分）：</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 默认运行（使用 prod profile）</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">-p</span> 8080:8080 ctts-backend:v1</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：java -jar /app/app.jar --spring.profiles.active=prod</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 切换为 dev profile（CMD 被覆盖，ENTRYPOINT 不变）</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">-p</span> 8080:8080 ctts-backend:v1 <span class="at">--spring.profiles.active</span><span class="op">=</span>dev</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：java -jar /app/app.jar --spring.profiles.active=dev</span></span></code></pre></div>
+<p>评分：</p>
+<ul>
+<li>默认运行命令正确：1 分</li>
+<li>切换 dev 命令正确（参数追加在镜像名后）：1 分</li>
+</ul>
+<p><strong>评分要点</strong>：方案合理即可，不要求与答案完全一致；如用
+ENV SPRING_PROFILES_ACTIVE + CMD
+[<code>--spring.profiles.active=${SPRING_PROFILES_ACTIVE}</code>]，由于
+exec 形式不展开变量，扣 2 分。</p>
+</blockquote>
+<hr />
+<p><strong>07-编程-002</strong>（★★★ 知识点：K7-5/K7-6
+多阶段构建与优化综合，20 分） <strong>CTTS
+后端镜像完整优化</strong>：请为 CTTS 后端（Java/Maven
+项目）编写一份完整优化的 Dockerfile，并配套 .dockerignore
+文件。要求：</p>
+<ol type="1">
+<li><strong>多阶段构建</strong>：阶段1 用
+<code>maven:3.8-openjdk-17</code> 编译打包，阶段2 用
+<code>eclipse-temurin:17-jre-alpine</code> 运行（4 分）</li>
+<li><strong>层缓存优化</strong>：先 COPY pom.xml 下依赖，再 COPY src
+编译（3 分）</li>
+<li><strong>合并 RUN</strong>：在运行阶段安装 curl 和
+tzdata（用于健康检查和时区），合并成一条 RUN 并在同层清理（3 分）</li>
+<li><strong>非 root 用户</strong>：创建 appuser 用户运行（2 分）</li>
+<li><strong>声明性指令</strong>：EXPOSE 8080 + VOLUME ["/app/logs"]（2
+分）</li>
+<li><strong>环境变量</strong>：ENV 设置 SPRING_PROFILES_ACTIVE=prod 和
+JAVA_OPTS（2 分）</li>
+<li><strong>ENTRYPOINT + CMD 组合</strong>：固定 java -jar，默认参数
+--spring.profiles.active=prod（2 分）</li>
+<li><strong>HEALTHCHECK</strong>：用 curl 检查 /actuator/health（2
+分）</li>
+<li><strong>.dockerignore</strong>：至少 10 条规则（2 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<p><strong>Dockerfile</strong>（18 分）：</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 阶段 1：构建阶段（builder）</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> maven:3.8-openjdk-17 <span class="kw">AS</span> builder          <span class="co"># 1分：多阶段 + 命名</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /build</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 层缓存优化：先 pom 后 src</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> pom.xml .                                 <span class="co"># 2分：层缓存优化</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> dependency:go-offline</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> src ./src</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> clean package <span class="at">-DskipTests</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 阶段 2：运行阶段（最终镜像）</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> eclipse-temurin:17-jre-alpine              <span class="co"># 1分：alpine 精简基础</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 合并 RUN：安装 curl + tzdata，设时区，同层清理</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apk</span> add <span class="at">--no-cache</span> curl tzdata <span class="dt">\ </span>           <span class="co"># 2分：合并 RUN + 同层清理</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    &amp;&amp; cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime <span class="op">\</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    &amp;&amp; echo <span class="st">&quot;Asia/Shanghai&quot;</span> &gt; /etc/timezone <span class="op">\</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    &amp;&amp; apk del tzdata</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 跨阶段拷贝产物</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> /build/target/*.jar /app/app.jar</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 非 root 用户</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">addgroup</span> <span class="at">-S</span> appgroup <span class="kw">&amp;&amp;</span> <span class="ex">adduser</span> <span class="at">-S</span> appuser <span class="at">-G</span> appgroup   <span class="co"># 2分：非 root 用户</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> appuser</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="co"># 声明性指令</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8080                                    <span class="co"># 1分：EXPOSE</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="kw">VOLUME</span> [<span class="st">&quot;/app/logs&quot;</span>]                           <span class="co"># 1分：VOLUME</span></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="co"># 环境变量</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> SPRING_PROFILES_ACTIVE=prod \               <span class="co"># 2分：ENV 设置</span></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>    JAVA_OPTS=<span class="st">&quot;-Xms256m -Xmx512m&quot;</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="co"># ENTRYPOINT + CMD 组合</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a><span class="kw">ENTRYPOINT</span> [<span class="st">&quot;sh&quot;</span>,<span class="st">&quot;-c&quot;</span>,<span class="st">&quot;java $JAVA_OPTS -jar /app/app.jar&quot;</span>]   <span class="co"># 2分：组合模式</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;--spring.profiles.active=prod&quot;</span>]</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a><span class="co"># 健康检查</span></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="kw">HEALTHCHECK</span> <span class="op">--interval=30s</span> <span class="op">--timeout=3s</span> <span class="op">--retries=3</span> \        <span class="co"># 2分：HEALTHCHECK</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>  <span class="kw">CMD</span> <span class="ex">curl</span> <span class="at">-f</span> http://localhost:8080/actuator/health <span class="kw">||</span> <span class="bu">exit</span> 1</span></code></pre></div>
+<p><strong>.dockerignore</strong>（2 分，至少 10 条，每少 1 条扣 0.2
+分）：</p>
+<pre class="text"><code>.git
+.gitignore
+target/
+build/
+node_modules/
+.idea/
+.vscode/
+*.log
+logs/
+.env
+.env.local
+*.pem
+*.key
+Dockerfile*
+docker-compose*.yml
+*.md
+docs/
+.DS_Store</code></pre>
+<p><strong>评分要点</strong>：</p>
+<ul>
+<li>9 个要求点按分值给分，全部完成给满分。</li>
+<li>多阶段语法正确但漏命名（如不用 AS builder）扣 1 分。</li>
+<li>层缓存顺序颠倒（先 src 后 pom）扣 2 分。</li>
+<li>RUN 没合并（装 + 清分两层）扣 2 分。</li>
+<li>用 root 用户运行扣 2 分。</li>
+<li>缺 EXPOSE 或 VOLUME 各扣 1 分。</li>
+<li>ENV 缺 SPRING_PROFILES_ACTIVE 或 JAVA_OPTS 各扣 1 分。</li>
+<li>用 shell 形式 ENTRYPOINT（<code>ENTRYPOINT java -jar ...</code>）扣
+1 分（信号问题）。</li>
+<li>缺 HEALTHCHECK 扣 2 分。</li>
+<li>.dockerignore 少于 10 条扣分，每少 1 条扣 0.2 分。</li>
+</ul>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

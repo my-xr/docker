@@ -1,0 +1,589 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docker网络</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 09 次课 · 教学设计</div>
+      <h1>Docker网络</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 09 次课</span>
+        <span class="hero-chip"><b>主题</b>Docker网络</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1痛点引入讲解-k9-2-后">互动 1：痛点引入（讲解 K9-2 后）</a></li>
+<li><a href="#互动-2三人网络对比辨析讲解-k9-3-后">互动 2：三人网络对比辨析（讲解 K9-3 后）</a></li>
+<li><a href="#互动-3两人一组讲解-docker-网络通信流程讲解-k9-5-后">互动 3：两人一组讲解 Docker 网络通信流程（讲解 K9-5 后）</a></li>
+<li><a href="#互动-4ctts-网络方案设计讲解-k9-6-时">互动 4：CTTS 网络方案设计（讲解 K9-6 时）</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+<li><a href="#随堂练习5-分钟讲解结束前进行">随堂练习（5 分钟，讲解结束前进行）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 09 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M4 Compose 与网络存储 ｜ 课程：《Docker 云容器与管理技术》
+配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 9 次课（全课程 24 次之第 9）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>理论课</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M4 Compose 与网络存储</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>Docker 网络模型；bridge/host/none；自定义网络；容器间通信</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>Docker 安装与基本命令（第 2 次课）、镜像与容器管理（第 3~5
+次课）、Dockerfile 编写（第 6~8
+次课）、计算机网络基础（IP/端口/DNS）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>理解 Docker
+网络子系统的定位，明确"为什么容器需要网络"以及容器网络要解决的核心问题（隔离、互通、外部访问）。</li>
+<li>掌握 Docker 三种内置网络驱动 bridge、host、none
+的原理、特点与适用场景。</li>
+<li>理解默认 bridge 网络（docker0 网桥）的工作原理及其局限（无容器名 DNS
+解析）。</li>
+<li>掌握自定义网络（custom bridge）的创建方法及其相对默认 bridge
+的两大优势：容器名 DNS 解析、更好的网络隔离。</li>
+<li>掌握容器间通信的实现方式：通过容器名互访、<code>docker network connect</code>
+跨网络通信、<code>--network</code> 指定网络运行容器。</li>
+<li>巩固 <code>-p</code> 端口映射原理，能够为 CTTS 前后端 + MySQL
+三服务设计完整的网络通信方案。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能够使用
+<code>docker network ls / inspect / create / connect / disconnect</code>
+命令管理 Docker 网络。</li>
+<li>能够根据应用场景选择合适的网络驱动（bridge / host / none）。</li>
+<li>能够创建自定义 bridge 网络并通过容器名实现容器间 DNS 互访。</li>
+<li>能够为 CTTS 三服务（前端 Nginx + 后端 SpringBoot +
+MySQL）设计并实现容器网络通信方案。</li>
+<li>能够使用 <code>docker network inspect</code>
+排查容器网络连通性问题。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>树立"网络安全"意识——容器网络隔离是纵深防御的第一道防线，理解"默认隔离、按需放通"的工程原则。</li>
+<li>培养"最小暴露面"思维——对外只暴露必要端口（如前端
+80），数据库容器不应直接对宿主机暴露端口。</li>
+<li>建立"系统思维"——从前端到后端到数据库的整条调用链上，网络配置环环相扣。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K9-1</td>
+<td>Docker 网络模型概述</td>
+<td>为什么需要容器网络；容器网络解决的三大问题（隔离、互通、外部访问）；Docker
+网络子系统与 libnetwork</td>
+</tr>
+<tr>
+<td>K9-2</td>
+<td>bridge 网络</td>
+<td>默认网络驱动；docker0 网桥；bridge 网络原理（veth pair + iptables
+NAT）；默认 bridge 的局限（无 DNS、隔离弱）</td>
+</tr>
+<tr>
+<td>K9-3</td>
+<td>host 与 none 网络</td>
+<td>host 共享宿主网络栈（无隔离、性能高、端口冲突）；none
+无网络（完全隔离、安全沙箱）；适用场景与限制</td>
+</tr>
+<tr>
+<td>K9-4</td>
+<td>自定义网络</td>
+<td><code>docker network create</code>；自定义 bridge 的两大优势（容器名
+DNS 解析、更好隔离）；自定义网络与默认 bridge 的对比</td>
+</tr>
+<tr>
+<td>K9-5</td>
+<td>容器间通信</td>
+<td>通过容器名互访（DNS）；<code>docker network connect</code>
+把容器接入第二个网络；<code>--network</code>
+指定网络运行容器；跨网络通信原理</td>
+</tr>
+<tr>
+<td>K9-6</td>
+<td>端口映射回顾与 CTTS 网络设计</td>
+<td><code>-p</code> 端口映射原理回顾（宿主机端口→容器端口）；CTTS
+前端/后端/MySQL 三服务网络通信方案设计；安全暴露原则</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3
+id="贯穿项目阶段任务ctts-三服务网络通信方案设计">贯穿项目阶段任务：CTTS
+三服务网络通信方案设计</h3>
+<p><strong>本次课任务</strong>：</p>
+<ol type="1">
+<li>教师演示在默认 bridge 网络下，两个容器只能通过 IP
+互访，无法通过容器名互访（痛点引入）。</li>
+<li>教师演示创建自定义 bridge 网络
+<code>ctts-net</code>，将两个容器加入该网络后，可通过容器名直接互访（方案验证）。</li>
+<li>学生分组（每组 4~5 人），讨论并为 CTTS 三服务设计网络通信方案：
+<ul>
+<li>MySQL 容器：是否需要对外暴露端口？应接入哪个网络？</li>
+<li>后端容器：如何通过容器名访问 MySQL？是否需要对外暴露端口？</li>
+<li>前端容器：如何对外暴露？如何通过容器名访问后端 API？</li>
+</ul></li>
+<li>每组用 5 分钟画一张 CTTS
+三服务网络拓扑图，标出网络名、容器名、端口映射、容器间调用关系。</li>
+<li>教师投影标准方案并点评，引出"默认隔离、按需放通"的安全设计原则。</li>
+</ol>
+<p><strong>项目背景对接</strong>（详见 <code>教学资料.md</code>
+综合示例）：</p>
+<ul>
+<li>项目名称：多服务容器化部署项目（CTTS）</li>
+<li>三服务：CTTS-Frontend（Vue3+Nginx）+ CTTS-Backend（SpringBoot）+
+MySQL 8.0</li>
+<li>本次课聚焦：三服务在同一台宿主机上的容器网络通信方案设计（为第 11
+次课 Compose 编排做铺垫）</li>
+</ul>
+<blockquote>
+<p>📌 本节课聚焦网络设计与命令演示，不敲 Dockerfile（第 6~8
+次课已学）。三服务完整编排将在第 11 次课 Compose 完成。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1痛点引入讲解-k9-2-后">互动 1：痛点引入（讲解 K9-2
+后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"在默认 bridge 网络下，容器 A 想通过容器名访问容器 B，结果报错
+<code>Name or service not known</code>。为什么？怎么办？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>教师现场演示报错（已备好两个容器） → 学生观察 → 自由发言</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>提到"默认 bridge 没有DNS""只能用 IP 访问""IP 会变不好记""要自己写
+/etc/hosts"等</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定观察，引出默认 bridge 的两大局限：无容器名 DNS
+解析、隔离弱；引出 K9-4 自定义网络</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2三人网络对比辨析讲解-k9-3-后">互动
+2：三人网络对比辨析（讲解 K9-3 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>给出 4
+个场景（①生产数据库容器需要完全隔离做安全沙箱、②调试网络抓包工具需要看宿主机所有流量、③Web
+前端服务对用户暴露 80 端口、④后端 API
+容器需要被前端按名访问），判断分别该用 host / none / bridge / 自定义
+bridge 哪种网络</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>全班举手投票，少数派陈述理由</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能区分"完全隔离用 none""抓宿主流量用 host""普通服务用
+bridge""需要按名访问用自定义 bridge"；个别学生可能混淆 host 和
+bridge</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调"按需选型"——多数场景用自定义 bridge；host
+仅在调试或对网络性能极致敏感时用；none 仅用于完全隔离场景</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-3两人一组讲解-docker-网络通信流程讲解-k9-5-后">互动
+3：两人一组讲解 Docker 网络通信流程（讲解 K9-5 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>两人一组，A 同学讲解"前端容器如何通过容器名访问后端容器 API"，B
+同学讲解"后端容器如何通过容器名访问 MySQL"，互相提问，教师抽查 2~3
+组上台讲解</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>小组配对 5 分钟讨论 → 互相讲解 3 分钟 → 教师随机抽查 2~3
+组上台（每组 2 分钟）</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>A：前端容器 <code>curl http://ctts-backend:8080/api/xxx</code>
+能通，因为同在 <code>ctts-net</code> 自定义 bridge 网络，Docker 内嵌 DNS
+解析容器名 → 容器 IP。B：后端容器
+<code>mysql -h ctts-mysql -u root -p</code> 能通，同理 DNS
+解析。能画出"前端→后端→MySQL"调用链与网络归属</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>重点纠正三类错误：①误认为容器名互访需要写 /etc/hosts（自定义 bridge
+内置 DNS）；②误认为跨网络也能按容器名访问（必须同网络或 docker network
+connect）；③误认为 host 网络也能按容器名访问（host 模式无
+DNS）。强调"同自定义网络 + 容器名"是容器间通信的推荐模式</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-4ctts-网络方案设计讲解-k9-6-时">互动 4：CTTS
+网络方案设计（讲解 K9-6 时）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>分组为 CTTS 三服务设计网络通信方案：画出网络拓扑图，标出 ①
+使用哪种网络驱动 ② 三个容器分别接入哪些网络 ③ 哪些端口需要对外映射 ④
+容器间如何互访</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>小组讨论 8 分钟 → 每组派代表在白板画图 2 分钟 →
+教师投影标准方案对比讲解</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能给出"自定义 bridge 网络 <code>ctts-net</code>，三容器都接入；前端
+-p 80:80 对外暴露；后端 -p 8080:8080
+暴露（或仅对前端通过容器名访问不暴露）；MySQL
+不对外暴露端口，仅同网络内按容器名访问"的设计</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调"最小暴露面"——MySQL
+不应对外暴露端口；后端可以选择只对前端通过容器名访问而不对宿主机暴露；只有前端必须对外暴露
+80。引出网络安全思政点</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>网络安全——容器网络隔离是纵深防御的第一道防线</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td>Docker 默认对每个容器分配独立网络命名空间（network
+namespace），容器之间默认隔离；通过自定义网络按需放通通信；通过 none
+网络实现完全隔离的安全沙箱；通过"最小暴露面"原则（MySQL
+不对外暴露端口）降低攻击面</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"如果把 MySQL 容器的 3306 端口直接 <code>-p 3306:3306</code>
+暴露到宿主机公网，会有什么风险？为什么生产环境应该让 MySQL
+只在同网络内被后端按名访问？"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>树立"默认隔离、按需放通"的网络安全意识；理解"最小暴露面"原则；把网络安全从"运维事后补救"前移到"架构设计阶段就考虑"</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入，不空喊口号。通过"MySQL 不该对公网暴露
+3306"这一具体设计决策，让学生体会"网络安全是设计出来的，不是补丁打出来的"。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3 id="随堂练习5-分钟讲解结束前进行">随堂练习（5
+分钟，讲解结束前进行）</h3>
+<p><strong>判断题（口头快速作答）</strong>：</p>
+<ol type="1">
+<li>默认 bridge 网络支持通过容器名互访。（✗）</li>
+<li>自定义 bridge 网络支持通过容器名互访，因为 Docker 内嵌了 DNS
+服务。（✓）</li>
+<li>host
+网络模式下容器与宿主机共享网络栈，容器端口即宿主机端口。（✓）</li>
+<li>none 网络模式下容器没有任何网络接口，无法进行任何网络通信。（✗，有
+lo 回环接口）</li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速互动，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>阅读</strong>：通读同文件夹
+<code>教学资料.md</code>，重点理解 bridge/host/none
+三种网络的对比、自定义网络的两大优势、容器间通信的两种方式。</li>
+<li><strong>命令实操</strong>：在实验环境中按 <code>教学资料.md</code>
+中的命令序列操作一遍：①查看默认网络 ②运行两个容器到默认 bridge，验证只能
+IP 互访 ③创建自定义网络 <code>ctts-net</code> ④运行两个容器到
+<code>ctts-net</code>，验证容器名互访 ⑤用
+<code>docker network connect</code> 把容器接入第二个网络。</li>
+<li><strong>画图</strong>：手绘 CTTS
+三服务网络拓扑图（含网络名、容器名、端口映射、调用关系），下次课带到课堂。</li>
+<li><strong>思考</strong>：用 200 字回答"为什么生产环境不建议把 MySQL
+容器的 3306 端口直接映射到宿主机公网？"，下次课抽查。</li>
+<li><strong>项目准备</strong>：每组按 CTTS
+三服务网络设计方案，提前准备好三个容器的启动命令序列（下次课数据卷课会用到）。</li>
+<li><strong>拓展阅读</strong>：访问 Docker 官方文档
+<code>docs.docker.com/network/</code> 了解 macvlan、ipvlan
+等高级网络驱动（选做）。</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker
+三种网络模式（bridge/host/none）的区别与选型（面试高频基础题）</td>
+<td>K9-2、K9-3</td>
+</tr>
+<tr>
+<td>自定义网络与默认 bridge 的区别（容器名 DNS 解析）</td>
+<td>K9-4</td>
+</tr>
+<tr>
+<td>容器间如何通信（同网络按容器名、跨网络 docker network connect）</td>
+<td>K9-5</td>
+</tr>
+<tr>
+<td>端口映射 <code>-p</code> 原理与生产环境端口暴露规范</td>
+<td>K9-6</td>
+</tr>
+<tr>
+<td>多服务容器化网络方案设计能力（DevOps/云运维岗位核心）</td>
+<td>K9-6</td>
+</tr>
+<tr>
+<td>网络连通性排查（docker network inspect / ping / curl）</td>
+<td>K9-5</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"说一下 Docker 的网络模式""为什么自定义 bridge
+能按容器名访问""生产环境怎么设计 MySQL
+容器的网络"等，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + CTTS 三服务网络方案 + 思维导图 + 复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>课前 5 分钟痛点引入 + 课程介绍</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~25 min</td>
+<td>知识点 K9-1、K9-2：Docker 网络模型 + bridge 网络 + 默认 bridge
+局限演示</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>25~45 min</td>
+<td>知识点 K9-3：host 与 none 网络 + 三人网络对比互动</td>
+<td>20 min</td>
+</tr>
+<tr>
+<td>45~65 min</td>
+<td>知识点 K9-4、K9-5：自定义网络 + 容器间通信 + 两人一组讲解互动</td>
+<td>20 min</td>
+</tr>
+<tr>
+<td>65~80 min</td>
+<td>知识点 K9-6：端口映射回顾 + CTTS 三服务网络方案设计互动</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>80~85 min</td>
+<td>随堂练习</td>
+<td>5 min</td>
+</tr>
+<tr>
+<td>85~90 min</td>
+<td>小结 + 课后任务布置</td>
+<td>5 min</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,563 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docker数据卷与持久化</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 10 次课 · 教学设计</div>
+      <h1>Docker数据卷与持久化</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 10 次课</span>
+        <span class="hero-chip"><b>主题</b>Docker数据卷与持久化</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1开场问题导入课前-5-分钟">互动 1：开场问题导入（课前 5 分钟）</a></li>
+<li><a href="#互动-2代码找错数据未持久化导致丢失的反例讲解-k10-2-后">互动 2：代码找错——数据未持久化导致丢失的反例（讲解 K10-2 后）</a></li>
+<li><a href="#互动-3volume-vs-bind-mount-辨析讲解-k10-3-后">互动 3：Volume vs Bind Mount 辨析（讲解 K10-3 后）</a></li>
+<li><a href="#互动-4数据备份方案设计讲解-k10-5-后">互动 4：数据备份方案设计（讲解 K10-5 后）</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+<li><a href="#随堂练习5-分钟讲解结束前进行">随堂练习（5 分钟，讲解结束前进行）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 10 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M4 Compose 与网络存储 ｜ 课程：《Docker 云容器与管理技术》
+配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 10 次课（全课程 24 次之第 10）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>理论课</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M4 Compose 与网络存储</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>Docker 数据卷与持久化</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>Docker 安装与基础命令、镜像管理、容器管理、Docker 网络基础</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>理解容器可写层的问题，明确数据持久化的必要性与典型场景。</li>
+<li>掌握数据卷（Volume）的概念、存储位置与挂载方式（<code>-v</code> /
+<code>--mount</code>）。</li>
+<li>掌握绑定挂载（Bind Mount）的概念、路径映射与适用场景。</li>
+<li>理解 Volume 与 Bind Mount
+的差异，能够根据场景选择合适的持久化方案。</li>
+<li>掌握数据卷管理命令（<code>docker volume create/ls/inspect/rm/prune</code>），区分命名卷与匿名卷。</li>
+<li>掌握数据卷共享（<code>--volumes-from</code>）与数据备份、恢复的完整方案。</li>
+<li>掌握 MySQL 容器数据持久化配置方法，能够验证数据持久化的有效性。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能够用准确的语言说明"为什么不能把数据存容器里"，并描述持久化的必要性。</li>
+<li>能够为 MySQL、Nginx 等常见服务配置数据卷，实现数据持久化。</li>
+<li>能够使用 <code>docker volume</code>
+系列命令管理数据卷生命周期。</li>
+<li>能够使用绑定挂载将宿主目录映射到容器，实现开发环境的热加载。</li>
+<li>能够使用临时容器对数据卷进行备份与恢复操作。</li>
+<li>能够通过"删除容器→重建容器→验证数据还在"的流程验证持久化配置是否生效。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>树立"数据安全"意识——持久化是数据安全的底线，无持久化无生产。</li>
+<li>培养"工程规范"意识——数据与计算分离是云原生架构的基本原则。</li>
+<li>建立"故障思维"——设计时要预想容器删除、迁移、升级场景下的数据保障。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K10-1</td>
+<td>数据持久化需求</td>
+<td>容器可写层的问题；容器删除数据丢失；为什么不能把数据存容器里；持久化的必要性</td>
+</tr>
+<tr>
+<td>K10-2</td>
+<td>数据卷 Volume</td>
+<td>docker volume 由 Docker 管理存储在 /var/lib/docker/volumes；-v 或
+--mount 挂载；volume 的优势</td>
+</tr>
+<tr>
+<td>K10-3</td>
+<td>绑定挂载 Bind Mount</td>
+<td>-v 宿主绝对路径:容器路径；直接映射宿主目录；bind mount vs volume
+对比与选择建议</td>
+</tr>
+<tr>
+<td>K10-4</td>
+<td>数据卷管理命令</td>
+<td>docker volume create/ls/inspect/rm/prune；命名卷 vs 匿名卷</td>
+</tr>
+<tr>
+<td>K10-5</td>
+<td>数据卷共享与备份</td>
+<td>--volumes-from
+共享卷；数据备份方案（临时容器挂载卷打包备份）；数据恢复方案</td>
+</tr>
+<tr>
+<td>K10-6</td>
+<td>MySQL 数据持久化实践</td>
+<td>CTTS 数据库持久化配置：docker run -v mysql_data:/var/lib/mysql
+mysql:8.0；验证数据持久化</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3
+id="贯穿项目任务mysql-容器数据持久化配置ctts-项目数据库持久化">贯穿项目任务：MySQL
+容器数据持久化配置（CTTS 项目数据库持久化）</h3>
+<p><strong>本次课任务</strong>：</p>
+<ol type="1">
+<li>教师提出问题场景：CTTS 项目的 MySQL 容器昨天运行得好好的，今天
+<code>docker rm</code>
+重建后，数据库里的用户表、课程表全没了——为什么会这样？</li>
+<li>学生分析问题根因：数据写在了容器的可写层，容器删除后可写层随之消失。</li>
+<li>教师引出解决方案：使用数据卷把 MySQL 数据目录
+<code>/var/lib/mysql</code> 持久化到 Docker 管理的卷中。</li>
+<li>学生完成 MySQL 持久化配置：创建命名卷 <code>mysql_data</code> → 启动
+MySQL 容器挂载卷 → 写入测试数据 → 删除容器 → 重建容器挂载同一卷 →
+验证数据还在。</li>
+<li>教师演示数据备份方案：用临时容器挂载 <code>mysql_data</code>
+卷，打包成 tar 文件备份到宿主机。</li>
+</ol>
+<p><strong>项目背景概述</strong>（详见 <code>教学资料.md</code>
+综合示例）：</p>
+<ul>
+<li>项目名称：多服务容器化部署项目</li>
+<li>本次任务定位：为 CTTS 项目的 MySQL
+服务配置数据持久化，确保容器重建、升级、迁移时数据库不丢失。</li>
+<li>与后续课程衔接：本次课的 <code>mysql_data</code> 卷将在第 11 次课
+Compose 编排中通过 <code>volumes:</code> 声明，在第 22 次课 K8s 中通过
+PV/PVC 演进为集群级持久化存储。</li>
+</ul>
+<blockquote>
+<p>📌 本节课是 CTTS
+项目数据库走向"生产可用"的关键一步——没有持久化的数据库不能上生产。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1开场问题导入课前-5-分钟">互动 1：开场问题导入（课前 5
+分钟）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"小明同学昨天用 <code>docker run mysql:8.0</code> 跑了一个 MySQL
+容器，往里录入了 100
+条用户数据。今天他发现容器配置不对，<code>docker rm</code>
+删掉容器后用同样的命令重新跑了一个，结果发现数据库空空如也——100
+条数据全没了。请问数据去哪了？为什么？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>自由发言，教师板书关键词，不评判对错</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>提到"数据在容器里""容器删了数据也删了""数据没保存""应该存到别的地方""要挂载磁盘"等关键词</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定合理认知，引出"容器可写层"概念——容器运行时所有写入都存在可写层，容器删除可写层随之消失。这正是数据持久化的必要性，引出
+K10-1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2代码找错数据未持久化导致丢失的反例讲解-k10-2-后">互动
+2：代码找错——数据未持久化导致丢失的反例（讲解 K10-2 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>给出一段有问题的部署脚本，让学生找出持久化方面的错误：<br><code>docker run -d --name ctts-mysql -e MYSQL_ROOT_PASSWORD=123456 mysql:8.0</code><br>问：这条命令在生产环境运行会有什么风险？如何修复？</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>两人一组讨论 3 分钟 → 每组派代表指出问题并给出修复命令 →
+教师汇总</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能指出"没有挂载数据卷""数据写在容器里，容器删了就没了"；修复命令应包含
+<code>-v mysql_data:/var/lib/mysql</code> 或
+<code>--mount type=volume,source=mysql_data,target=/var/lib/mysql</code></td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调生产环境 MySQL 必须配置持久化；进一步引导思考：除了
+<code>/var/lib/mysql</code> 数据目录，MySQL 还有哪些路径需要持久化（如
+<code>/etc/mysql/conf.d</code> 配置目录）？为 K10-3 绑定挂载埋伏笔</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-3volume-vs-bind-mount-辨析讲解-k10-3-后">互动 3：Volume vs
+Bind Mount 辨析（讲解 K10-3 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>给出 4 个场景（① 生产环境 MySQL 数据持久化 ② 开发环境 Vue3
+代码热更新 ③ 团队共享配置文件 ④ CI/CD
+流水线构建产物输出），判断哪些更适合用 Volume、哪些更适合用 Bind
+Mount</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>全班举手投票，少数派陈述理由</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能区分"生产数据用 Volume（Docker 管理、可移植）""开发热加载用 Bind
+Mount（直接映射宿主目录）"；对部分场景可能有分歧</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>强调选择原则：生产环境优先 Volume（可移植、可备份、Docker
+管理）；开发环境需要热加载时用 Bind Mount；不要在生产环境用 Bind Mount
+暴露宿主路径，有安全风险</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-4数据备份方案设计讲解-k10-5-后">互动
+4：数据备份方案设计（讲解 K10-5 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>提出问题："<code>mysql_data</code>
+卷里的数据很重要，要做异地备份。但卷是 Docker 管理的，存在
+<code>/var/lib/docker/volumes/</code>
+下，普通用户没法直接访问。怎么把卷里的数据备份出来？"让学生设计备份方案</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>个人思考 2 分钟 → 同桌讨论 2 分钟 → 教师投影标准方案讲解</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能想到"用一个临时容器挂载这个卷，再打包拷出来"；具体命令可能写不全</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定思路，给出标准命令：<code>docker run --rm -v mysql_data:/data -v $(pwd):/backup alpine tar cvf /backup/mysql_data.tar /data</code>。强调"临时容器+卷挂载+打包"是数据卷备份的经典模式，可迁移到任何卷备份场景</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>数据安全——持久化是数据安全的底线</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td>容器可写层随容器删除而消失，生产环境数据库、配置、日志等必须持久化；数据卷是
+Docker 提供的持久化机制，是数据安全的第一道防线；后续 K8s 的
+PV/PVC、企业级备份方案都是在此基础上的演进</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"如果一个电商平台的所有订单数据都存在容器可写层里，容器重启后数据全丢，会造成什么后果？作为工程师，我们怎么从架构上保证数据不丢？"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>树立数据安全意识，理解"持久化是数据安全的底线"；培养工程责任意识——一行
+<code>-v</code>
+参数的缺失可能导致生产事故；建立"数据与计算分离"的云原生架构思维</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入，不空喊口号。通过"容器删除数据丢失"的真实反例让学生体会持久化的必要性。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3 id="随堂练习5-分钟讲解结束前进行">随堂练习（5
+分钟，讲解结束前进行）</h3>
+<p><strong>判断题（口头快速作答）</strong>：</p>
+<ol type="1">
+<li>容器的可写层在容器删除后仍然保留。（✗）</li>
+<li>数据卷由 Docker 管理，存储在 <code>/var/lib/docker/volumes</code>
+目录下。（✓）</li>
+<li>绑定挂载需要使用宿主机的绝对路径。（✓）</li>
+<li><code>--volumes-from</code> 可以实现容器之间共享数据卷。（✓）</li>
+<li>生产环境推荐使用绑定挂载来持久化 MySQL 数据。（✗）</li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速互动，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>阅读</strong>：通读同文件夹
+<code>教学资料.md</code>，重点理解 Volume vs Bind Mount
+的对比、数据卷管理命令、数据备份方案。</li>
+<li><strong>实操</strong>：在本地 Docker 环境完成 MySQL
+数据持久化配置全流程（创建卷→启动容器→写入数据→删除容器→重建容器→验证数据），截图下次课提交。</li>
+<li><strong>思考</strong>：用 200 字描述"Volume 和 Bind Mount
+的区别及各自适用场景"，下次课抽查。</li>
+<li><strong>项目准备</strong>：为 CTTS 项目的 MySQL
+服务编写一份持久化配置说明（1
+页），包含卷名、挂载路径、备份命令、恢复命令，为第 11 次课 Compose
+编排做准备。</li>
+<li><strong>拓展练习（选做）</strong>：尝试用
+<code>--volumes-from</code>
+实现两个容器共享同一个数据卷，并验证写入的数据在两个容器中都能读到。</li>
+<li><strong>拓展阅读</strong>：阅读 Docker 官方文档关于
+<code>tmpfs</code>
+挂载的内容（docs.docker.com/storage/tmpfs/），了解第三种挂载方式，对比三种挂载的差异。</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>理解容器可写层与数据持久化必要性（面试高频基础题）</td>
+<td>K10-1</td>
+</tr>
+<tr>
+<td>数据卷与绑定挂载的区别与选择（面试常考对比题）</td>
+<td>K10-2、K10-3</td>
+</tr>
+<tr>
+<td>docker volume 系列命令操作（DevOps 岗位必备）</td>
+<td>K10-4</td>
+</tr>
+<tr>
+<td>数据卷的备份与恢复方案（云运维岗位实战题）</td>
+<td>K10-5</td>
+</tr>
+<tr>
+<td>MySQL 容器持久化配置（生产环境常见任务）</td>
+<td>K10-6</td>
+</tr>
+<tr>
+<td>--volumes-from 共享卷（面试考点）</td>
+<td>K10-5</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"容器删除后数据会丢吗""volume 和 bind mount
+区别""怎么做数据卷备份"等，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + MySQL 持久化综合示例 + 思维导图 + 复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>课前 5 分钟讨论（容器删数据丢反例）+ 课程导入</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~25 min</td>
+<td>知识点 K10-1、K10-2：持久化需求 + 数据卷 Volume</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>25~40 min</td>
+<td>知识点 K10-3：绑定挂载 Bind Mount + Volume vs Bind Mount
+辨析互动</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>40~55 min</td>
+<td>知识点 K10-4：数据卷管理命令（create/ls/inspect/rm/prune）</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>55~70 min</td>
+<td>知识点 K10-5：数据卷共享与备份 + 备份方案设计互动</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>70~85 min</td>
+<td>知识点 K10-6：MySQL 数据持久化实践 + 代码找错互动</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>85~90 min</td>
+<td>随堂练习 + 小结 + 课后任务布置</td>
+<td>5 min</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

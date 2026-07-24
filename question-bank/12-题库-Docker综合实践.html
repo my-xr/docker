@@ -1,0 +1,1137 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docker综合实践</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 12 次课 · 题库</div>
+      <h1>Docker综合实践</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 12 次课</span>
+        <span class="hero-chip"><b>主题</b>Docker综合实践</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 12 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>12-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>12-选择-001</strong>（★ 知识点：K12-1 项目架构） CTTS
+三服务的正确依赖顺序是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>frontend → backend → mysql</span></li><li><span class="option-label">B</span><span>mysql →
+backend → frontend</span></li><li><span class="option-label">C</span><span>backend → mysql → frontend</span></li><li><span class="option-label">D</span><span>mysql → frontend →
+backend</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：CTTS
+三服务的依赖顺序为：mysql（数据库，最先启动）→ backend（依赖数据库）→
+frontend（依赖后端 API）。前端调后端、后端连数据库，故 mysql
+必须先就绪。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-002</strong>（★ 知识点：K12-2 MySQL 容器化） MySQL
+容器的初始化 SQL 脚本应挂载到容器内的哪个目录？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>/var/lib/mysql</span></li><li><span class="option-label">B</span><span>/etc/mysql/conf.d</span></li><li><span class="option-label">C</span><span>/docker-entrypoint-initdb.d</span></li><li><span class="option-label">D</span><span>/usr/local/mysql/init</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：MySQL
+官方镜像启动时会扫描 <code>/docker-entrypoint-initdb.d/</code>
+目录，按文件名顺序执行其中的 .sql 或 .sh
+文件，仅在首次启动（数据目录为空）时执行。A 是数据目录，B 是配置目录，D
+不存在。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-003</strong>（★ 知识点：K12-2 init.sql 执行时机）
+关于 MySQL 容器的 init.sql，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>每次容器启动都会执行</span></li><li><span class="option-label">B</span><span>仅在首次启动（数据目录为空）时执行</span></li><li><span class="option-label">C</span><span>仅在容器停止时执行</span></li><li><span class="option-label">D</span><span>需要手动
+docker exec 执行</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：init.sql 仅在 MySQL
+首次启动（<code>/var/lib/mysql</code>
+为空）时执行。若数据卷已有数据，再次启动会跳过初始化。修改 init.sql 后需
+<code>docker compose down -v</code> 删卷才能重新执行。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-004</strong>（★ 知识点：K12-2 MySQL 环境变量） 设置
+MySQL root 用户密码的环境变量是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>MYSQL_PASSWORD</span></li><li><span class="option-label">B</span><span>MYSQL_ROOT_PASSWORD</span></li><li><span class="option-label">C</span><span>MYSQL_ROOT_USER</span></li><li><span class="option-label">D</span><span>ROOT_PASSWORD</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>MYSQL_ROOT_PASSWORD</code> 设置 root
+密码（必需），<code>MYSQL_USER</code>/<code>MYSQL_PASSWORD</code>
+创建普通用户，<code>MYSQL_DATABASE</code> 创建初始数据库。A
+是普通用户密码，C/D 不存在。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-005</strong>（★ 知识点：K12-2 数据卷） MySQL
+容器化时，数据持久化应挂载哪个容器路径？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>/etc/mysql</span></li><li><span class="option-label">B</span><span>/var/lib/mysql</span></li><li><span class="option-label">C</span><span>/usr/local/mysql</span></li><li><span class="option-label">D</span><span>/data/mysql</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：MySQL
+数据文件默认存储在
+<code>/var/lib/mysql</code>，用具名卷挂载此路径可持久化数据。A
+是配置目录，C/D 不是 MySQL 默认路径。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-006</strong>（★★ 知识点：K12-3 多阶段构建） 后端
+Dockerfile 多阶段构建中，第一阶段（builder）使用的基础镜像是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>openjdk:17</span></li><li><span class="option-label">B</span><span>eclipse-temurin:17-jre</span></li><li><span class="option-label">C</span><span>maven:3.9-eclipse-temurin-17</span></li><li><span class="option-label">D</span><span>nginx:alpine</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：第一阶段需要 Maven
+打包，故用 <code>maven:3.9-eclipse-temurin-17</code>（含 Maven +
+JDK17）。第二阶段用 <code>eclipse-temurin:17-jre</code>（只含 JRE）运行
+jar。A 不是推荐镜像，B 是运行阶段镜像，D 是前端镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-007</strong>（★ 知识点：K12-3 多阶段构建价值） 后端
+Dockerfile 采用多阶段构建的核心价值是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>加快 Maven 打包速度</span></li><li><span class="option-label">B</span><span>减小最终镜像体积</span></li><li><span class="option-label">C</span><span>增加镜像层数</span></li><li><span class="option-label">D</span><span>简化 Dockerfile 语法</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：多阶段构建把"构建工具（Maven+JDK）"与"运行时（JRE）"分离，最终镜像只含
+JRE + jar，体积从约 800MB 减到约 320MB。A 不是核心价值，C
+是副作用（不利），D 不正确。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-008</strong>（★ 知识点：K12-3 Dockerfile 缓存优化）
+后端 Dockerfile 中先 <code>COPY pom.xml</code> 再 <code>COPY src/</code>
+的目的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>减少镜像层数</span></li><li><span class="option-label">B</span><span>利用 Docker 层缓存，加速重复构建</span></li><li><span class="option-label">C</span><span>避免源码泄露</span></li><li><span class="option-label">D</span><span>让 Maven 能找到 pom.xml</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：先把 pom.xml 单独
+COPY 并 <code>mvn dependency:go-offline</code>
+下载依赖（缓存层）。pom.xml 不变时这一层命中缓存，后续只重新 COPY src/
+并打包，大幅加速重复构建。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-009</strong>（★★ 知识点：K12-3 ENTRYPOINT） 后端
+Dockerfile 用 <code>ENTRYPOINT ["java", "-jar", "/app/app.jar"]</code>
+而不是 <code>CMD</code> 的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>CMD 不能执行 java</span></li><li><span class="option-label">B</span><span>ENTRYPOINT
+不会被 docker run 后的参数覆盖，更固定</span></li><li><span class="option-label">C</span><span>ENTRYPOINT 比 CMD 速度快</span></li><li><span class="option-label">D</span><span>CMD 已被废弃</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：ENTRYPOINT
+的启动命令不会被 <code>docker run &lt;镜像&gt; &lt;参数&gt;</code>
+的参数覆盖，适合"容器就是跑这个命令"的场景。CMD 可以被覆盖。A 错，CMD
+也能执行 java；C 错，性能无差异；D 错，CMD 仍在使用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-010</strong>（★ 知识点：K12-4 前端多阶段） 前端
+Dockerfile 多阶段构建中，第二阶段（runtime）使用的基础镜像是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>node:20-alpine</span></li><li><span class="option-label">B</span><span>nginx:alpine</span></li><li><span class="option-label">C</span><span>httpd:alpine</span></li><li><span class="option-label">D</span><span>caddy:alpine</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：前端第二阶段用
+<code>nginx:alpine</code> 托管 dist/ 静态文件。A 是第一阶段构建镜像，C/D
+是其他 Web 服务器（不是本课方案）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-011</strong>（★★ 知识点：K12-4 Nginx 反代） 前端
+Nginx 反向代理 <code>/api/</code> 到
+<code>http://backend:8080/</code>，proxy_pass 末尾的 <code>/</code>
+作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>表示路径分隔符，无实际意义</span></li><li><span class="option-label">B</span><span>去掉 <code>/api</code>
+前缀，把 <code>/api/users</code> 转发为 <code>/users</code></span></li><li><span class="option-label">C</span><span>保留
+<code>/api</code> 前缀，把 <code>/api/users</code> 转发为
+<code>/api/users</code></span></li><li><span class="option-label">D</span><span>让 Nginx 缓存响应</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>proxy_pass http://backend:8080/;</code>
+末尾有 <code>/</code> 表示替换 location
+匹配的部分：<code>/api/users</code> → <code>/users</code>（去掉
+<code>/api</code>）。末尾无 <code>/</code>
+则保留完整路径：<code>/api/users</code> → <code>/api/users</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-012</strong>（★ 知识点：K12-4 SPA fallback） 前端
+Nginx 配置中 <code>try_files $uri $uri/ /index.html;</code> 的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>压缩静态文件</span></li><li><span class="option-label">B</span><span>实现 SPA 路由 fallback，让 Vue Router 处理前端路由</span></li><li><span class="option-label">C</span><span>缓存 index.html</span></li><li><span class="option-label">D</span><span>重定向到首页</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>try_files</code>
+让所有找不到的文件路径都返回 index.html，由 Vue Router
+在前端处理路由（如 /users、/courses/123）。否则刷新 Vue Router 路由会
+404。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-013</strong>（★★ 知识点：K12-4 跨域解决） 前端 Nginx
+反向代理如何解决跨域问题？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>后端配置 CORS</span></li><li><span class="option-label">B</span><span>让浏览器只与前端 Nginx
+通信，由 Nginx 与后端通信</span></li><li><span class="option-label">C</span><span>关闭浏览器同源策略</span></li><li><span class="option-label">D</span><span>用 HTTPS 代替
+HTTP</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：浏览器访问前端
+Nginx（80 端口），调 <code>/api/users</code> 也是 80 端口（同源），由
+Nginx 内部转发到 backend:8080。浏览器只与前端通信，避免跨域。A
+是另一种方案但复杂，C 不可行，D 与跨域无关。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-014</strong>（★ 知识点：K12-5 depends_on） 关于
+docker-compose.yml 中 backend 服务的
+<code>depends_on: mysql: condition: service_healthy</code>，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>等 mysql 容器启动后立即启动 backend</span></li><li><span class="option-label">B</span><span>等 mysql 健康检查通过后才启动
+backend</span></li><li><span class="option-label">C</span><span>等 backend 健康后才启动 mysql</span></li><li><span class="option-label">D</span><span>等 mysql 停止后才启动
+backend</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>condition: service_healthy</code>
+表示等依赖服务的 healthcheck 通过后才启动。这能避免 backend 启动时 MySQL
+还未就绪导致连接失败。A 是默认的 <code>service_started</code> 行为，C/D
+逻辑错误。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-015</strong>（★★ 知识点：K12-5 depends_on 局限）
+<code>depends_on: - mysql</code>（不带 condition）与
+<code>depends_on: mysql: condition: service_healthy</code> 的区别是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>没有区别</span></li><li><span class="option-label">B</span><span>前者只控制启动顺序，不保证 mysql 就绪；后者等 mysql
+健康检查通过</span></li><li><span class="option-label">C</span><span>前者等 mysql 健康检查通过；后者只控制启动顺序</span></li><li><span class="option-label">D</span><span>前者用于生产，后者用于开发</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：默认
+<code>depends_on: - mysql</code> 等价于
+<code>service_started</code>，只等容器启动不等服务就绪。<code>service_healthy</code>
+会等 healthcheck 通过，确保服务真正可用。生产环境应该用
+<code>service_healthy</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-016</strong>（★ 知识点：K12-5 healthcheck） MySQL
+容器 healthcheck 的 test 命令应该用什么？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>ping localhost</span></li><li><span class="option-label">B</span><span>curl
+http://localhost:3306</span></li><li><span class="option-label">C</span><span>mysqladmin ping -h localhost -uroot -p密码</span></li><li><span class="option-label">D</span><span>mysql -e "SELECT 1"</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：MySQL 健康检查推荐用
+<code>mysqladmin ping</code>，它能准确反映 MySQL 服务是否就绪。A
+检测的是网络，B 不能用 curl 检测 MySQL 端口，D 需要交互式认证不便于
+healthcheck。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-017</strong>（★ 知识点：K12-5 一键部署） CTTS
+三服务一键构建并启动的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker compose up</span></li><li><span class="option-label">B</span><span>docker compose up
+-d --build</span></li><li><span class="option-label">C</span><span>docker compose start</span></li><li><span class="option-label">D</span><span>docker run -d ctts</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker compose up -d --build</code>
+后台启动并强制重新构建镜像。A 是前台启动（会阻塞终端），C
+只启动已停止的容器不重建镜像，D 是单容器命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-018</strong>（★ 知识点：K12-5 停止与清理）
+<code>docker compose down</code> 默认会删除哪些资源？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器 + 网络 +
+数据卷</span></li><li><span class="option-label">B</span><span>容器 + 网络，保留数据卷</span></li><li><span class="option-label">C</span><span>仅容器</span></li><li><span class="option-label">D</span><span>容器 + 网络 + 镜像</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker compose down</code>
+默认删除容器和网络，<strong>保留数据卷</strong>（保护数据）。要删卷需加
+<code>-v</code>：<code>docker compose down -v</code>。要删镜像加
+<code>--rmi all</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-019</strong>（★★ 知识点：K12-5 修改文件后生效）
+修改了 docker-compose.yml 后，应该用哪个命令让修改生效？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker
+compose restart</span></li><li><span class="option-label">B</span><span>docker compose start</span></li><li><span class="option-label">C</span><span>docker compose up -d</span></li><li><span class="option-label">D</span><span>docker compose down</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：<code>up -d</code>
+是声明式对齐，会对比当前状态与
+YAML，重建有变化的服务。<code>restart</code>/<code>start</code>
+不会重建容器，修改不生效。<code>down</code> 只是停止清理。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-020</strong>（★★ 知识点：K12-5 修改 Dockerfile 后）
+修改了 backend/Dockerfile 后，如何让修改生效？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker compose up -d</span></li><li><span class="option-label">B</span><span>docker compose up -d --build</span></li><li><span class="option-label">C</span><span>docker compose restart backend</span></li><li><span class="option-label">D</span><span>docker compose start backend</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：修改 Dockerfile
+后必须重新构建镜像，<code>--build</code> 强制重建。<code>up -d</code>
+不带 <code>--build</code>
+会复用旧镜像，<code>restart</code>/<code>start</code>
+只重启容器不重建镜像。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-021</strong>（★ 知识点：K12-5 网络） CTTS
+三服务能通过服务名互访，是因为它们？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>都暴露了端口</span></li><li><span class="option-label">B</span><span>都接入同一个自定义 bridge 网络</span></li><li><span class="option-label">C</span><span>都用 same host 网络</span></li><li><span class="option-label">D</span><span>都在同一个容器内</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：自定义 bridge
+网络提供 DNS 解析，同网络内的容器可以用服务名互相访问。A
+端口映射是宿主机访问用的，C 本课不用 host 网络，D
+三服务是三个独立容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-022</strong>（★★ 知识点：K12-6 排障） 后端启动报
+<code>Communications link failure</code>，最可能的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>后端代码有
+bug</span></li><li><span class="option-label">B</span><span>MySQL 还没就绪，后端就启动了</span></li><li><span class="option-label">C</span><span>前端 Nginx 配置错误</span></li><li><span class="option-label">D</span><span>端口 80
+被占用</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>Communications link failure</code> 是
+SpringBoot 连不上 MySQL 的典型错误。最常见原因是 <code>depends_on</code>
+没用 <code>service_healthy</code>，MySQL 还在初始化时后端就启动了。A/C/D
+与此错误无关。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-023</strong>（★★ 知识点：K12-6 排障） 前端访问
+<code>/api/users</code> 返回 502 Bad Gateway，最可能的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>前端代码有 bug</span></li><li><span class="option-label">B</span><span>backend 容器未启动或 nginx.conf 的 proxy_pass 写错</span></li><li><span class="option-label">C</span><span>MySQL 数据库连不上</span></li><li><span class="option-label">D</span><span>浏览器缓存问题</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：502 Bad Gateway 表示
+Nginx 反代时连不上后端。可能是 backend 容器没启动，或 nginx.conf 的
+<code>proxy_pass</code> 地址写错（如写成 localhost 而非 backend）。A/C/D
+不会导致 502。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-024</strong>（★★ 知识点：K12-6 跨域排障）
+浏览器访问前端页面白屏，控制台报 CORS 错误，最可能的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>前端代码直接调 http://localhost:8080/api/users（不同端口）</span></li><li><span class="option-label">B</span><span>Nginx
+配置错误</span></li><li><span class="option-label">C</span><span>后端 API 返回 500</span></li><li><span class="option-label">D</span><span>网络不通</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：浏览器认为
+80（前端）和
+8080（后端）是不同源，触发跨域限制。解决方案是前端代码改调相对路径
+<code>/api/users</code>，让 Nginx 反代处理。B/C/D 与 CORS 错误无关。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-025</strong>（★★ 知识点：K12-6 init.sql 不生效）
+修改了 init.sql 后重新
+<code>docker compose up -d</code>，发现数据库没变化，原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>init.sql 语法错误</span></li><li><span class="option-label">B</span><span>init.sql 只在首次启动执行，数据卷已有数据，跳过执行</span></li><li><span class="option-label">C</span><span>MySQL 容器没启动</span></li><li><span class="option-label">D</span><span>init.sql 挂载路径错误</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：init.sql 仅在 MySQL
+首次启动（数据目录为空）时执行。<code>docker compose up -d</code>
+默认保留数据卷，卷中已有数据，MySQL 跳过初始化。要让修改生效需
+<code>docker compose down -v</code> 删卷后重启。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-026</strong>（★ 知识点：K12-6 排障方法） Docker
+部署排障的"三步法"正确顺序是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>进容器 → 看日志 → 看状态</span></li><li><span class="option-label">B</span><span>看日志 →
+进容器 → 看状态</span></li><li><span class="option-label">C</span><span>看状态 → 看日志 → 进容器</span></li><li><span class="option-label">D</span><span>看状态 → 进容器 →
+看日志</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：排障三步法：①<code>docker compose ps</code>
+看哪个服务异常 ②<code>docker compose logs &lt;服务名&gt;</code>
+看错误信息 ③<code>docker compose exec &lt;服务名&gt; sh</code>
+进容器检查环境。从外到内、从粗到细。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-027</strong>（★★ 知识点：K12-3 JVM 容器支持） 后端
+Dockerfile 的 ENTRYPOINT 中 <code>-XX:+UseContainerSupport</code>
+的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>让 JVM 支持容器化部署</span></li><li><span class="option-label">B</span><span>让 JVM 感知容器内存限制，避免 OOM</span></li><li><span class="option-label">C</span><span>加速 JVM 启动</span></li><li><span class="option-label">D</span><span>让 JVM 支持 Docker 网络</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>-XX:+UseContainerSupport</code> 让 JVM
+感知容器的 cgroup 内存限制，按容器内存（而非宿主机内存）计算堆大小，避免
+OOM。JDK 17 默认开启，显式加上更安全。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-028</strong>（★ 知识点：K12-5 重启策略）
+生产环境推荐的 Docker 容器重启策略是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>no</span></li><li><span class="option-label">B</span><span>always</span></li><li><span class="option-label">C</span><span>on-failure</span></li><li><span class="option-label">D</span><span>unless-stopped</span></li></ul></div><blockquote>
+<p><strong>答案：D</strong>
+<strong>解析</strong>：<code>unless-stopped</code> 除非手动
+stop，否则总是重启；宿主机重启后也会自启（除非之前手动停过）。<code>always</code>
+类似但行为略有差异。生产推荐 <code>unless-stopped</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-029</strong>（★★ 知识点：K12-5 配置注入） 后端
+Dockerfile 中不写死数据库配置，而是用 <code>${MYSQL_HOST:mysql}</code>
+形式的好处是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>加快启动速度</span></li><li><span class="option-label">B</span><span>同一镜像可连不同环境的数据库，由环境变量注入</span></li><li><span class="option-label">C</span><span>减小镜像体积</span></li><li><span class="option-label">D</span><span>避免
+MySQL 连接</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：用环境变量注入配置，同一个镜像可在开发/测试/生产环境复用，只需改
+docker-compose.yml 的 environment。这是 12-Factor App
+的"配置分离"原则。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-030</strong>（★★ 知识点：K12-6 Docker 部分总结）
+Docker 部分学完后，下一步 Kubernetes 要解决的核心问题是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>怎么编写
+Dockerfile</span></li><li><span class="option-label">B</span><span>怎么在多台机器上调度管理成百上千个容器，支持高可用与弹性</span></li><li><span class="option-label">C</span><span>怎么用 Docker Compose 编排多服务</span></li><li><span class="option-label">D</span><span>怎么用 Docker 安装 MySQL</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Docker
+解决"单机容器化"，Compose 解决"单机多容器编排"，K8s
+解决"集群容器调度与高可用"。A/C 是 Docker 部分已学内容，D
+是基础操作。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>12-选择-031</strong>（★★ 知识点：K12-2 MySQL 容器化） MySQL
+容器化需要配置的内容包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>环境变量（MYSQL_ROOT_PASSWORD 等）</span></li><li><span class="option-label">B</span><span>数据卷持久化 /var/lib/mysql</span></li><li><span class="option-label">C</span><span>init.sql 挂载到
+/docker-entrypoint-initdb.d/</span></li><li><span class="option-label">D</span><span>healthcheck 健康检查 E. 反向代理配置</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：MySQL
+容器化需要：A 配置密码与数据库、B 持久化数据、C 自动建表、D
+健康检查供其他服务依赖。E 反向代理是前端 Nginx 的配置，与 MySQL
+无关。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-032</strong>（★★ 知识点：K12-3 多阶段构建） 后端
+Dockerfile 多阶段构建的好处包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>减小最终镜像体积</span></li><li><span class="option-label">B</span><span>最终镜像不包含构建工具（Maven/编译器）</span></li><li><span class="option-label">C</span><span>加快镜像拉取与推送</span></li><li><span class="option-label">D</span><span>减少攻击面，提升安全性 E. 让 Dockerfile 语法更简洁</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：多阶段构建把构建工具与运行时分离，A/B/C/D
+都是好处。E 错，多阶段反而让 Dockerfile 更长（多一段
+FROM），不是为了简化语法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-033</strong>（★★ 知识点：K12-4 前端 Nginx） 前端
+Nginx 配置的核心功能包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>静态资源托管（root 指令）</span></li><li><span class="option-label">B</span><span>SPA
+路由 fallback（try_files）</span></li><li><span class="option-label">C</span><span>反向代理后端 API（location /api/ +
+proxy_pass）</span></li><li><span class="option-label">D</span><span>gzip 压缩 E. 数据库连接池</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：前端 Nginx
+负责：A 托管 dist 静态文件、B 处理 Vue Router 路由、C 反代后端 API、D
+压缩响应。E 数据库连接池是后端的事，Nginx 不连数据库。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-034</strong>（★★ 知识点：K12-5 Compose 编排） 完整的
+docker-compose.yml 应包含哪些顶层段？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>services</span></li><li><span class="option-label">B</span><span>networks</span></li><li><span class="option-label">C</span><span>volumes</span></li><li><span class="option-label">D</span><span>images E. version（v2 可省）</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：Compose
+顶层段：services（必需）、networks（可选）、volumes（可选）、version（v2
+可省）。D 错，images 不是顶层段，镜像在 services 下用 image
+字段指定。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-035</strong>（★★ 知识点：K12-5 depends_on） 关于
+docker-compose.yml 中的 depends_on，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>depends_on 控制启动顺序</span></li><li><span class="option-label">B</span><span>depends_on 默认 condition 是 service_started</span></li><li><span class="option-label">C</span><span>condition: service_healthy 表示等依赖服务健康检查通过</span></li><li><span class="option-label">D</span><span>depends_on
+能保证依赖服务完全就绪 E. depends_on 可以跨 Compose 项目使用</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong> <strong>解析</strong>：A/B/C 正确。D
+错，默认 depends_on 只控制启动顺序不保证就绪，需配合 service_healthy。E
+错，depends_on 只能在同一 Compose 文件内引用服务。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-036</strong>（★★ 知识点：K12-6 常见问题） CTTS
+部署中可能导致"后端连不上 MySQL"的原因有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>depends_on 没用
+service_healthy</span></li><li><span class="option-label">B</span><span>MYSQL_HOST 环境变量写成 localhost</span></li><li><span class="option-label">C</span><span>MySQL 密码错误</span></li><li><span class="option-label">D</span><span>backend 不在 ctts-net 网络 E. 前端 Nginx 配置错误</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A/B/C/D
+都会导致后端连不上 MySQL。A 后端启动太早，B 容器内 localhost 指自己，C
+认证失败，D 网络不通。E 与数据库连接无关。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-037</strong>（★★ 知识点：K12-6 排障命令） Docker
+部署排障时常用的命令有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>docker compose ps</span></li><li><span class="option-label">B</span><span>docker compose
+logs &lt;服务名&gt;</span></li><li><span class="option-label">C</span><span>docker compose exec &lt;服务名&gt; sh</span></li><li><span class="option-label">D</span><span>docker
+compose down -v E. docker compose up -d --build</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：A 看状态、B
+看日志、C 进容器、E 重建镜像都是排障与修复命令。D
+是删数据操作，慎用，不属于常规排障命令（仅在确认要重置数据时使用）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-038</strong>（★★ 知识点：K12-3 后端 Dockerfile） 后端
+Dockerfile 多阶段构建中，第一阶段（builder）产出的内容有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Maven 工具</span></li><li><span class="option-label">B</span><span>JDK 17</span></li><li><span class="option-label">C</span><span>target/ctts-backend-1.0.0.jar</span></li><li><span class="option-label">D</span><span>源码文件 E.
+node_modules</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：builder
+阶段基于 maven 镜像，含 Maven（A）+ JDK（B），COPY 源码（D）并打包产出
+jar（C）。E 是前端 Node 项目的目录，与后端无关。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-039</strong>（★★ 知识点：K12-5 网络与卷） 关于 CTTS
+三服务的网络与存储设计，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>三服务都接入
+ctts-net 自定义 bridge 网络</span></li><li><span class="option-label">B</span><span>mysql 数据用具名卷 mysql-data 持久化</span></li><li><span class="option-label">C</span><span>init.sql 用绑定挂载到 /docker-entrypoint-initdb.d/</span></li><li><span class="option-label">D</span><span>frontend
+用具名卷存储 Nginx 配置 E. 同网络内的服务可通过服务名互访</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong> <strong>解析</strong>：A/B/C/E
+都正确。D 错，Nginx 配置在构建时 COPY 进镜像，不用卷挂载；只有 MySQL
+数据用具名卷。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-选择-040</strong>（★★★ 知识点：K12-6 Docker 部分总结）
+Docker 部分（前 12 次课）已经掌握的能力包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器化思想与
+Docker 安装</span></li><li><span class="option-label">B</span><span>镜像与容器管理</span></li><li><span class="option-label">C</span><span>Dockerfile 编写与多阶段构建</span></li><li><span class="option-label">D</span><span>Docker
+网络与数据卷 E. Docker Compose 多服务编排与一键部署</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong> <strong>解析</strong>：前 12
+次课覆盖了 Docker
+全部核心能力：A（M1）、B（M2）、C（M3）、D+E（M4）。本节（第 12
+次）是综合实践，把这些能力串联成交付能力。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>12-判断-001</strong>（★ 知识点：K12-1 架构） CTTS
+三服务的依赖顺序是 mysql → backend → frontend。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：mysql
+最先启动，backend 依赖 mysql，frontend 依赖 backend。这是 CTTS
+的标准部署顺序。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-002</strong>（★ 知识点：K12-2 init.sql） MySQL 容器的
+init.sql 每次启动都会自动执行。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：init.sql 仅在
+MySQL
+首次启动（数据目录为空）时执行。数据卷已有数据时跳过初始化，避免覆盖现有数据。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-003</strong>（★ 知识点：K12-2 数据卷） MySQL
+容器化时应该用绑定挂载（bind mount）存数据，而不是具名卷。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：应该用具名卷存 MySQL 数据，由 Docker
+管理权限和性能。绑定挂载用于配置文件/SQL
+脚本，存数据库数据会有权限和性能问题。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-004</strong>（★ 知识点：K12-3 多阶段构建） 后端
+Dockerfile 多阶段构建能减小最终镜像体积约 60%。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：单阶段（maven
+镜像）约 800MB，多阶段（jre 镜像）约 320MB，减小约
+60%。这是多阶段构建的核心价值。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-005</strong>（★ 知识点：K12-3 缓存优化） 后端
+Dockerfile 先 COPY pom.xml 再 COPY src/
+是为了利用层缓存加速重复构建。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：pom.xml
+不变时，依赖下载层命中缓存，只需重新 COPY src/ 并打包。这是 Dockerfile
+缓存优化的经典模式。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-006</strong>（★★ 知识点：K12-3 ENTRYPOINT） 后端
+Dockerfile 应该用 CMD 而不是 ENTRYPOINT 启动 java -jar。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：应该用
+ENTRYPOINT，因为它不会被
+<code>docker run &lt;镜像&gt; &lt;参数&gt;</code>
+覆盖，适合"容器就是跑这个 jar"的场景。CMD 可以被覆盖，不够固定。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-007</strong>（★ 知识点：K12-4 前端多阶段） 前端
+Dockerfile 第二阶段用 nginx:alpine 托管 dist/ 静态文件。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：前端多阶段：第一阶段 node 镜像构建
+dist/，第二阶段 nginx 镜像托管。nginx:alpine 轻量高效。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-008</strong>（★★ 知识点：K12-4 反代） 前端 Nginx
+反向代理 <code>/api/</code> 到 <code>http://backend:8080/</code>
+可以避免浏览器跨域问题。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：浏览器只与前端 Nginx（80 端口）通信，调
+<code>/api/</code> 也是 80 端口（同源）。Nginx 内部转发到
+backend:8080，避免跨域。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-009</strong>（★ 知识点：K12-4 SPA fallback） 前端
+Nginx 配置 <code>try_files $uri $uri/ /index.html;</code> 是为了实现 SPA
+路由 fallback。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：让所有找不到的路径都返回 index.html，由 Vue
+Router 在前端处理路由。否则刷新 Vue Router 路由会 404。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-010</strong>（★★ 知识点：K12-4 npm ci） 前端
+Dockerfile 中应该用 <code>npm install</code> 而不是 <code>npm ci</code>
+安装依赖。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：应该用
+<code>npm ci</code>，它基于 package-lock.json
+安装，确保版本一致、构建可复现，速度也更快。<code>npm install</code>
+可能更新 lock 文件，不适合 CI/CD。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-011</strong>（★★ 知识点：K12-5 depends_on）
+<code>depends_on: - mysql</code> 能保证 mysql 服务完全就绪后再启动
+backend。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：默认
+<code>depends_on</code>
+只控制启动顺序（service_started），不保证服务就绪。要等就绪必须用
+<code>condition: service_healthy</code> 配合 healthcheck。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-012</strong>（★ 知识点：K12-5 healthcheck） MySQL
+容器的 healthcheck 应该用
+<code>mysqladmin ping -h localhost -uroot -p密码</code> 命令。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>mysqladmin ping</code> 能准确检测 MySQL
+服务是否就绪。需要带用户名和密码，否则会因权限失败。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-013</strong>（★ 知识点：K12-5 一键部署）
+<code>docker compose up -d --build</code> 中的 <code>--build</code>
+表示启动前强制重新构建镜像。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>--build</code> 强制重新构建所有
+<code>build:</code> 指定的镜像。修改 Dockerfile 后必须加
+<code>--build</code> 才能让修改生效。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-014</strong>（★ 知识点：K12-5 清理）
+<code>docker compose down</code>
+默认会删除具名数据卷，数据库数据会丢失。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>docker compose down</code>
+默认<strong>保留</strong>具名卷，保护数据。要删卷需加
+<code>-v</code>：<code>docker compose down -v</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-015</strong>（★★ 知识点：K12-5 修改生效） 修改了
+docker-compose.yml 后应该用 <code>docker compose restart</code>
+让修改生效。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>restart</code> 只重启容器，不重建。修改
+YAML 后应该用 <code>docker compose up -d</code>，Compose
+会对比状态重建有变化的服务。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-016</strong>（★★ 知识点：K12-6 排障） 后端启动报
+<code>Communications link failure</code> 最可能的原因是 MySQL
+还没就绪。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：这是
+SpringBoot 连不上 MySQL 的典型错误。最常见原因是 depends_on 没用
+service_healthy，MySQL 初始化时后端就启动了。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-017</strong>（★★ 知识点：K12-6 跨域排障）
+浏览器跨域问题可以通过后端配置 CORS 解决，但推荐用 Nginx 反向代理。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：后端配 CORS
+能解决跨域，但复杂且降低安全性。推荐用 Nginx 反代，让前端调相对路径
+<code>/api/</code>，避免跨域。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-018</strong>（★ 知识点：K12-6 端口冲突）
+<code>docker compose up -d</code> 报端口占用错误时，可以通过修改
+docker-compose.yml 的端口映射解决。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：可以把
+<code>"80:80"</code> 改成 <code>"8081:80"</code>
+等其他端口，避免与宿主机占用端口冲突。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-019</strong>（★★ 知识点：K12-5 配置分离） 后端
+Dockerfile 应该把数据库密码硬编码在 application.yml
+里，而不是用环境变量。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：应该用
+<code>${MYSQL_PASSWORD:默认值}</code>
+形式，由环境变量注入。硬编码会导致镜像只能用于一个环境，且密码泄露风险。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-判断-020</strong>（★ 知识点：K12-6 Docker 总结） Docker
+部分学完后，下一步 K8s 要解决的是集群调度与高可用问题。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Docker
+解决单机容器化，Compose 解决单机多容器编排，K8s
+解决集群容器调度、高可用、弹性扩缩容。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>12-填空-001</strong>（★ 知识点：K12-2 init 目录） MySQL
+容器的初始化 SQL 脚本应挂载到容器内的 ________ 目录。</p><blockquote>
+<p><strong>答案：/docker-entrypoint-initdb.d</strong>
+<strong>解析</strong>：MySQL 官方镜像启动时扫描此目录，按文件名顺序执行
+.sql/.sh 文件，仅在首次启动时执行。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-填空-002</strong>（★ 知识点：K12-2 环境变量） 设置 MySQL
+root 用户密码的环境变量是 ________。</p><blockquote>
+<p><strong>答案：MYSQL_ROOT_PASSWORD</strong>
+<strong>解析</strong>：必需环境变量，不设会导致 MySQL
+启动失败。MYSQL_USER/MYSQL_PASSWORD 是普通用户，MYSQL_DATABASE
+是初始数据库。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-填空-003</strong>（★ 知识点：K12-3 多阶段构建） 后端
+Dockerfile 多阶段构建的第一阶段用 ________ 镜像负责 Maven 打包。</p><blockquote>
+<p><strong>答案：maven:3.9-eclipse-temurin-17</strong>
+<strong>解析</strong>：含 Maven 3.9 + JDK 17，负责把源码打包成
+jar。第二阶段用 eclipse-temurin:17-jre 运行 jar。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-填空-004</strong>（★ 知识点：K12-4 前端镜像） 前端
+Dockerfile 多阶段构建的第二阶段用 ________ 镜像托管静态文件。</p><blockquote>
+<p><strong>答案：nginx:alpine</strong> <strong>解析</strong>：Nginx 托管
+dist/ 静态文件，配置 nginx.conf 实现静态托管 + SPA fallback +
+反向代理。alpine 版本轻量（约 50MB）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-填空-005</strong>（★★ 知识点：K12-4 SPA fallback） 前端
+Nginx 实现 SPA 路由 fallback 的指令是 ________。</p><blockquote>
+<p><strong>答案：try_files $uri $uri/ /index.html</strong>
+<strong>解析</strong>：让所有找不到的路径都返回 index.html，由 Vue
+Router 在前端处理路由。否则刷新 Vue Router 路由会 404。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-填空-006</strong>（★★ 知识点：K12-5 depends_on）
+docker-compose.yml 中等依赖服务健康检查通过才启动的 condition 值是
+________。</p><blockquote>
+<p><strong>答案：service_healthy</strong>
+<strong>解析</strong>：<code>depends_on: &lt;服务&gt;: condition: service_healthy</code>
+表示等依赖服务的 healthcheck 通过后才启动。默认是
+service_started（只等启动）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-填空-007</strong>（★ 知识点：K12-5 一键部署） CTTS
+三服务一键构建并后台启动的命令是 ________。</p><blockquote>
+<p><strong>答案：docker compose up -d --build</strong>
+<strong>解析</strong>：<code>up -d</code> 后台启动，<code>--build</code>
+强制重新构建镜像。这是修改 Dockerfile 后启动的标准命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-填空-008</strong>（★ 知识点：K12-5 清理） 彻底清理 CTTS
+部署（包括删除数据卷）的命令是 ________。</p><blockquote>
+<p><strong>答案：docker compose down -v</strong>
+<strong>解析</strong>：<code>down</code>
+停止并删除容器与网络，<code>-v</code>
+同时删除具名卷。慎用，数据会丢失。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-填空-009</strong>（★★ 知识点：K12-6 排障） Docker
+部署排障三步法的顺序是：看状态 → ________ → 进容器。</p><blockquote>
+<p><strong>答案：看日志</strong>
+<strong>解析</strong>：①<code>docker compose ps</code> 看状态
+②<code>docker compose logs &lt;服务名&gt;</code> 看日志
+③<code>docker compose exec &lt;服务名&gt; sh</code>
+进容器。从外到内排查。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-填空-010</strong>（★ 知识点：K12-6 Docker 总结） Docker
+解决单机容器化，Compose 解决单机多容器编排，________
+解决集群容器调度与高可用。</p><blockquote>
+<p><strong>答案：Kubernetes（或 K8s）</strong>
+<strong>解析</strong>：Docker 装箱，Compose 单机编排，K8s
+集群调度。三者是云原生技术栈的递进层次。本课程后 12 次课学 K8s。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>12-论述-001</strong>（★★ 知识点：K12-3 多阶段构建，10 分）
+请说明后端 Dockerfile
+为什么要用多阶段构建，并描述两个阶段分别用什么基础镜像、做什么工作、最终镜像包含什么。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>为什么用多阶段构建</strong>（3 分）：</p>
+<ul>
+<li>单阶段构建（直接用 maven 镜像）会让最终镜像包含 Maven + JDK + 源码 +
+target，体积约 800MB（1 分）</li>
+<li>多阶段构建把"构建工具"与"运行时"分离，最终镜像只含运行所必需内容（1
+分）</li>
+<li>减小镜像体积约 60%，加快拉取推送、减少攻击面、提升安全性（1
+分）</li>
+</ul></li>
+<li><p><strong>第一阶段（builder）</strong>（3 分）：</p>
+<ul>
+<li>基础镜像：<code>maven:3.9-eclipse-temurin-17</code>（含 Maven 3.9 +
+JDK 17）（1 分）</li>
+<li>操作：先 COPY pom.xml 下载依赖（缓存层），再 COPY src/ 执行
+<code>mvn clean package -DskipTests</code>（1 分）</li>
+<li>产出：target/ctts-backend-1.0.0.jar（1 分）</li>
+</ul></li>
+<li><p><strong>第二阶段（runtime）</strong>（3 分）：</p>
+<ul>
+<li>基础镜像：<code>eclipse-temurin:17-jre</code>（只含 JRE 17，无
+Maven、无编译器）（1 分）</li>
+<li>操作：<code>COPY --from=builder</code> 复制 jar，EXPOSE
+8080，ENTRYPOINT java -jar（1 分）</li>
+<li>最终镜像包含：JRE + jar，约 320MB（1 分）</li>
+</ul></li>
+<li><p><strong>缓存优化技巧</strong>（1 分）：</p>
+<ul>
+<li>先 COPY pom.xml 再 COPY src/，pom.xml
+不变时依赖层命中缓存，加速重复构建</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：每个部分独立给分；基础镜像名字拼写错误不扣分（意思对即可）；要点完整给满分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-论述-002</strong>（★★ 知识点：K12-4 Nginx 反代，8 分）
+请说明前端 Nginx 反向代理如何解决跨域问题，并写出完整的 nginx.conf
+中关于 <code>/api/</code> 反代的配置片段，解释 proxy_pass 末尾
+<code>/</code> 的作用。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>跨域问题成因</strong>（2 分）：</p>
+<ul>
+<li>浏览器访问前端 <code>http://localhost/</code>（80
+端口），前端代码直接调
+<code>http://localhost:8080/api/users</code>（8080 端口）（1 分）</li>
+<li>浏览器认为 80 和 8080 是不同源，触发 CORS 限制，请求被拦截（1
+分）</li>
+</ul></li>
+<li><p><strong>Nginx 反代解决原理</strong>（2 分）：</p>
+<ul>
+<li>前端代码改调相对路径 <code>/api/users</code>，仍访问 80
+端口（同源，无跨域）（1 分）</li>
+<li>Nginx 把 <code>/api/</code> 请求内部转发到
+<code>backend:8080</code>，浏览器只与前端 Nginx 通信（1 分）</li>
+</ul></li>
+<li><p><strong>nginx.conf 配置片段</strong>（2 分）：</p>
+<pre class="nginx"><code>location /api/ {
+    proxy_pass http://backend:8080/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+}</code></pre>
+<p>（写出 location + proxy_pass 给 1 分，写出 proxy_set_header 给 1
+分）</p></li>
+<li><p><strong>proxy_pass 末尾 <code>/</code> 的作用</strong>（2
+分）：</p>
+<ul>
+<li>末尾有 <code>/</code> 表示替换 location
+匹配的部分：<code>/api/users</code> → <code>/users</code>（去掉
+<code>/api</code> 前缀）（1 分）</li>
+<li>末尾无 <code>/</code> 则保留完整路径：<code>/api/users</code> →
+<code>/api/users</code>（1 分）</li>
+<li>根据后端接口设计选择，本课用末尾 <code>/</code> 让后端接口去掉
+<code>/api</code> 前缀</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：每部分独立给分；配置片段不要求字字一致，关键指令正确即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-论述-003</strong>（★★ 知识点：K12-5 depends_on 与
+healthcheck，10 分） 请说明 <code>depends_on: - mysql</code> 与
+<code>depends_on: mysql: condition: service_healthy</code>
+的区别，并说明为什么 CTTS 部署中 backend 要用
+<code>service_healthy</code>，而 frontend 用默认
+<code>service_started</code> 即可。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>两种 depends_on 的区别</strong>（4 分）：</p>
+<ul>
+<li><code>depends_on: - mysql</code>（默认）：等价于
+<code>service_started</code>，只等 mysql 容器启动，不等服务就绪（2
+分）</li>
+<li><code>depends_on: mysql: condition: service_healthy</code>：等 mysql
+的 healthcheck 通过后才启动，确保服务真正可用（2 分）</li>
+</ul></li>
+<li><p><strong>为什么 backend 要用 service_healthy</strong>（3
+分）：</p>
+<ul>
+<li>SpringBoot 启动时会建立数据库连接池（HikariCP），如果 MySQL
+未就绪会启动失败或反复重试（1 分）</li>
+<li>MySQL 容器启动 ≠ MySQL 服务能接受连接，初始化需要 10~30 秒（1
+分）</li>
+<li>等 MySQL 真正就绪后再启动 backend，能避免启动期连接失败（1 分）</li>
+</ul></li>
+<li><p><strong>为什么 frontend 用默认 service_started</strong>（3
+分）：</p>
+<ul>
+<li>前端是 Nginx 托管的静态资源，能独立启动，不依赖后端启动（1 分）</li>
+<li>前端调后端是运行时行为（用户点按钮时才发请求），不是启动时依赖（1
+分）</li>
+<li>即使后端没启动，前端页面也能打开（只是请求会失败），所以用默认
+service_started 即可（1 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：每部分独立给分；要点完整给满分；意思对即可，不要求字字一致。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>12-论述-004</strong>（★★★ 知识点：K12-6 综合排障，10 分）
+某同学部署 CTTS 时遇到以下问题：<code>docker compose up -d</code>
+后，<code>docker compose ps</code> 显示 mysql 状态
+<code>(healthy)</code>，但 backend 状态是
+<code>Exited (1)</code>，frontend 状态
+<code>Up</code>。请描述你的排障步骤，并列出至少 3
+种可能的原因及对应解决方案。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>排障步骤</strong>（3 分，按三步法）：</p>
+<ul>
+<li>第一步：<code>docker compose ps</code> 确认哪个服务异常（已知
+backend Exited）（1 分）</li>
+<li>第二步：<code>docker compose logs backend</code> 查看 backend
+启动日志的错误信息（1 分）</li>
+<li>第三步：根据日志定位原因，必要时
+<code>docker compose exec mysql ...</code> 或
+<code>docker compose exec frontend ...</code> 交叉验证（1 分）</li>
+</ul></li>
+<li><p><strong>可能原因与解决方案</strong>（7 分，每种 2~3 分，列出 3
+种即满分）：</p>
+<p><strong>原因 1：depends_on 没用 service_healthy</strong>（3 分）</p>
+<ul>
+<li>现象：日志报 <code>Communications link failure</code> /
+<code>Connection refused</code>（1 分）</li>
+<li>原因：backend 启动时 MySQL 还在初始化，未就绪（1 分）</li>
+<li>解决：把 <code>depends_on: - mysql</code> 改为
+<code>depends_on: mysql: condition: service_healthy</code>（1 分）</li>
+</ul>
+<p><strong>原因 2：MYSQL_HOST 环境变量写错</strong>（2 分）</p>
+<ul>
+<li>现象：日志报 <code>Unknown host</code> 或连不上数据库（1 分）</li>
+<li>原因：MYSQL_HOST 写成 <code>localhost</code>（容器内 localhost
+指自己）（0.5 分）</li>
+<li>解决：改成 <code>mysql</code>（服务名）（0.5 分）</li>
+</ul>
+<p><strong>原因 3：MySQL 密码错误</strong>（2 分）</p>
+<ul>
+<li>现象：日志报 <code>Access denied for user</code>（1 分）</li>
+<li>原因：backend 的 MYSQL_PASSWORD 与 mysql 的 MYSQL_PASSWORD
+不一致（0.5 分）</li>
+<li>解决：检查 docker-compose.yml 中两个服务的密码环境变量是否一致（0.5
+分）</li>
+</ul>
+<p><strong>原因 4：网络配置错误</strong>（2 分）</p>
+<ul>
+<li>现象：backend 不在 ctts-net 网络，无法解析 mysql 服务名（1 分）</li>
+<li>原因：backend 服务的 networks 字段漏写或写错（0.5 分）</li>
+<li>解决：确保 backend 接入 ctts-net 网络（0.5 分）</li>
+</ul>
+<p><strong>原因 5：jar 包路径或名字错误</strong>（2 分）</p>
+<ul>
+<li>现象：日志报 <code>Unable to access jarfile /app/app.jar</code>（1
+分）</li>
+<li>原因：Dockerfile 的 COPY 路径与 pom.xml 的 finalName 不一致（0.5
+分）</li>
+<li>解决：检查 Dockerfile 的 COPY --from=builder 路径与实际 jar
+名一致（0.5 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：排障步骤必须按"看状态→看日志→进容器"三步法；原因至少列
+3 种，每种要含"现象+原因+解决"；答出任意 3 种合理原因即满分。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>12-阅读-001</strong>（★★ 知识点：K12-3 后端 Dockerfile
+补全，12 分） 阅读以下不完整的后端多阶段 Dockerfile，补全缺失部分（每空
+2 分，共 12 分）。</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ───────── 阶段 1：Maven 打包阶段 ─────────</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> (a)________ <span class="kw">AS</span> builder</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 先复制 pom.xml 下载依赖（利用缓存）</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> (b)________ .</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> dependency:go-offline <span class="at">-B</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 再复制源码，打包</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> (c)________ ./src</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">mvn</span> clean package <span class="at">-DskipTests</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># ───────── 阶段 2：JRE 运行阶段 ─────────</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> (d)________</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 从 builder 阶段复制 jar</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> <span class="op">--from=(e)________</span> /app/target/ctts-backend-1.0.0.jar /app/app.jar</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8080</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="kw">ENV</span> TZ=Asia/Shanghai</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="kw">ENTRYPOINT</span> <span class="kw">(</span><span class="ex">f</span><span class="kw">)</span><span class="ex">________</span></span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a)
+<code>maven:3.9-eclipse-temurin-17</code> (b) <code>pom.xml</code> (c)
+<code>src/</code>（或 <code>src</code>） (d)
+<code>eclipse-temurin:17-jre</code> (e) <code>builder</code> (f)
+<code>["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-jar", "/app/app.jar"]</code>（或简化为
+<code>["java", "-jar", "/app/app.jar"]</code>）</p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) 第一阶段需要 Maven 打包，用 maven 镜像</li>
+<li>(b)(c) 先 COPY pom.xml（缓存依赖层），再 COPY src/（源码）</li>
+<li>(d) 第二阶段只需运行 jar，用 jre 镜像</li>
+<li>(e) <code>COPY --from=builder</code> 引用第一阶段，builder 是 AS
+指定的别名</li>
+<li>(f) ENTRYPOINT 用 exec 形式（JSON 数组）启动 java -jar</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。意思对即可，镜像名拼写错误不扣分（如 eclipse-temurin 拼成
+eclipse_temurin）；(f) 答出 <code>java -jar /app/app.jar</code>
+即可给满分，JVM 参数不强制要求。</p>
+</blockquote>
+<hr />
+<p><strong>12-阅读-002</strong>（★★ 知识点：K12-5 docker-compose.yml
+补全，12 分） 阅读以下不完整的 docker-compose.yml，补全缺失部分（每空 2
+分，共 12 分）。</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mysql</span><span class="kw">:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> mysql:8.0</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">(a)________</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;123456&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_DATABASE</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> mysql-data:/var/lib/mysql</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ./init.sql:/(b)________/init.sql:ro</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">healthcheck</span><span class="kw">:</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">test</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;CMD&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;mysqladmin&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;ping&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-h&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;localhost&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-uroot&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-p123456&quot;</span><span class="kw">]</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">interval</span><span class="kw">:</span><span class="at"> 10s</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">timeout</span><span class="kw">:</span><span class="at"> 5s</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">retries</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">(c)________</span><span class="kw">:</span><span class="at"> 30s</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">build</span><span class="kw">:</span><span class="at"> ./backend</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-backend:v1</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_HOST</span><span class="kw">:</span><span class="at"> (d)________</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;ctts123&quot;</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">mysql</span><span class="kw">:</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">condition</span><span class="kw">:</span><span class="at"> (e)________</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ctts-net</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ctts-net</span><span class="kw">:</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> (f)________</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mysql-data</span><span class="kw">:</span></span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) <code>MYSQL_ROOT_PASSWORD</code> (b)
+<code>docker-entrypoint-initdb.d</code> (c) <code>start_period</code>
+(d) <code>mysql</code> (e) <code>service_healthy</code> (f)
+<code>bridge</code></p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) 设置 root 密码的环境变量是 MYSQL_ROOT_PASSWORD</li>
+<li>(b) init.sql 挂载到 /docker-entrypoint-initdb.d/ 目录</li>
+<li>(c) healthcheck 的启动宽限期字段是 start_period</li>
+<li>(d) backend 连 MySQL 用服务名 mysql（不是 localhost）</li>
+<li>(e) 等 MySQL 健康检查通过用 service_healthy</li>
+<li>(f) 自定义网络默认用 bridge 驱动</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12 分。意思对即可；(b)
+拼写错误（如 docker-entrypoint-initdb）不扣分； 大小写错误不扣分。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>12-编程-001</strong>（★★ 知识点：K12-2 init.sql 编写，15 分）
+<strong>CTTS 数据库初始化脚本编写</strong>：请为 CTTS 项目编写一个完整的
+init.sql 脚本，要求：</p>
+<ol type="1">
+<li>创建学生表 <code>student</code>（id, student_no, name, gender,
+create_time），id 自增主键，student_no 唯一（5 分）</li>
+<li>创建课程表 <code>course</code>（id, name, credit, teacher,
+create_time），id 自增主键（4 分）</li>
+<li>插入至少 3 条学生数据和 3 条课程数据（4 分）</li>
+<li>添加适当注释与字符集设置（2 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- CTTS 数据库初始化脚本</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">USE</span> ctts;</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- 1. 学生表（5 分）</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> `student` (</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  `id` BIGINT <span class="kw">NOT</span> <span class="kw">NULL</span> AUTO_INCREMENT <span class="kw">COMMENT</span> <span class="st">&#39;学生ID&#39;</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  `student_no` <span class="dt">VARCHAR</span>(<span class="dv">20</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">COMMENT</span> <span class="st">&#39;学号&#39;</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  `name` <span class="dt">VARCHAR</span>(<span class="dv">50</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">COMMENT</span> <span class="st">&#39;姓名&#39;</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  `gender` <span class="dt">VARCHAR</span>(<span class="dv">10</span>) <span class="kw">DEFAULT</span> <span class="kw">NULL</span> <span class="kw">COMMENT</span> <span class="st">&#39;性别：MALE/FEMALE&#39;</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  `create_time` DATETIME <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span> <span class="kw">COMMENT</span> <span class="st">&#39;创建时间&#39;</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">PRIMARY</span> <span class="kw">KEY</span> (`id`),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">UNIQUE</span> <span class="kw">KEY</span> `uk_student_no` (`student_no`)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>) ENGINE<span class="op">=</span>InnoDB <span class="kw">DEFAULT</span> CHARSET<span class="op">=</span>utf8mb4 <span class="kw">COMMENT</span><span class="op">=</span><span class="st">&#39;学生表&#39;</span>;</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">-- 2. 课程表（4 分）</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> `course` (</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  `id` BIGINT <span class="kw">NOT</span> <span class="kw">NULL</span> AUTO_INCREMENT <span class="kw">COMMENT</span> <span class="st">&#39;课程ID&#39;</span>,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  `name` <span class="dt">VARCHAR</span>(<span class="dv">100</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">COMMENT</span> <span class="st">&#39;课程名称&#39;</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  `credit` <span class="dt">DECIMAL</span>(<span class="dv">3</span>,<span class="dv">1</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="fl">2.0</span> <span class="kw">COMMENT</span> <span class="st">&#39;学分&#39;</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  `teacher` <span class="dt">VARCHAR</span>(<span class="dv">50</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">COMMENT</span> <span class="st">&#39;授课教师&#39;</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  `create_time` DATETIME <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span> <span class="kw">COMMENT</span> <span class="st">&#39;创建时间&#39;</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="kw">PRIMARY</span> <span class="kw">KEY</span> (`id`)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>) ENGINE<span class="op">=</span>InnoDB <span class="kw">DEFAULT</span> CHARSET<span class="op">=</span>utf8mb4 <span class="kw">COMMENT</span><span class="op">=</span><span class="st">&#39;课程表&#39;</span>;</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">-- 3. 初始数据（4 分）</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> `student` (`student_no`, `name`, `gender`) <span class="kw">VALUES</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  (<span class="st">&#39;2024001&#39;</span>, <span class="st">&#39;张三&#39;</span>, <span class="st">&#39;MALE&#39;</span>),</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  (<span class="st">&#39;2024002&#39;</span>, <span class="st">&#39;李四&#39;</span>, <span class="st">&#39;MALE&#39;</span>),</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  (<span class="st">&#39;2024003&#39;</span>, <span class="st">&#39;王五&#39;</span>, <span class="st">&#39;FEMALE&#39;</span>);</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> `course` (`name`, `credit`, `teacher`) <span class="kw">VALUES</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  (<span class="st">&#39;Docker 云容器与管理技术&#39;</span>, <span class="fl">3.0</span>, <span class="st">&#39;王老师&#39;</span>),</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  (<span class="st">&#39;JavaWeb 开发&#39;</span>, <span class="fl">4.0</span>, <span class="st">&#39;李老师&#39;</span>),</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  (<span class="st">&#39;Vue3 前端工程化&#39;</span>, <span class="fl">3.0</span>, <span class="st">&#39;张老师&#39;</span>);</span></code></pre></div>
+<p><strong>评分要点</strong>：</p>
+<ul>
+<li>表结构正确（字段、类型、主键、唯一键、注释）：5 分（student
+表）</li>
+<li>表结构正确：4 分（course 表）</li>
+<li>INSERT 语句正确（至少 3 条学生 + 3 条课程）：4 分</li>
+<li>字符集设置（CHARSET=utf8mb4）与注释：2 分</li>
+<li>语法错误酌情扣分；表名/字段名合理替代不扣分</li>
+</ul>
+</blockquote>
+<hr />
+<p><strong>12-编程-002</strong>（★★★ 知识点：K12-5 完整
+docker-compose.yml，20 分） <strong>完整 docker-compose.yml
+编写</strong>：请为 CTTS 项目编写完整的 docker-compose.yml，要求：</p>
+<ol type="1">
+<li>编排三个服务：mysql（mysql:8.0）、backend（构建
+./backend）、frontend（构建 ./frontend）（6 分）</li>
+<li>mysql 配置：环境变量（root 密码 123456、数据库 ctts）、数据卷
+mysql-data 持久化、init.sql 绑定挂载、healthcheck（4 分）</li>
+<li>backend 配置：环境变量（MYSQL_HOST=mysql 等）、端口 8080、depends_on
+mysql 的 service_healthy（3 分）</li>
+<li>frontend 配置：端口 80、depends_on backend（2 分）</li>
+<li>自定义网络 ctts-net（bridge 驱动），所有服务接入（3 分）</li>
+<li>具名卷 mysql-data 声明（2 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mysql</span><span class="kw">:</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> mysql:8.0</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">container_name</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> unless-stopped</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_ROOT_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;123456&quot;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_DATABASE</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_USER</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;ctts123&quot;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">TZ</span><span class="kw">:</span><span class="at"> Asia/Shanghai</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;3306:3306&quot;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> mysql-data:/var/lib/mysql</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ctts-net</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">healthcheck</span><span class="kw">:</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">test</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;CMD&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;mysqladmin&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;ping&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-h&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;localhost&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-uroot&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-p123456&quot;</span><span class="kw">]</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">interval</span><span class="kw">:</span><span class="at"> 10s</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">timeout</span><span class="kw">:</span><span class="at"> 5s</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">retries</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">start_period</span><span class="kw">:</span><span class="at"> 30s</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">build</span><span class="kw">:</span><span class="at"> ./backend</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-backend:v1</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">container_name</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> unless-stopped</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_HOST</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_PORT</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;3306&quot;</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_USER</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;ctts123&quot;</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_DATABASE</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8080:8080&quot;</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ctts-net</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">mysql</span><span class="kw">:</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">condition</span><span class="kw">:</span><span class="at"> service_healthy</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">frontend</span><span class="kw">:</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">build</span><span class="kw">:</span><span class="at"> ./frontend</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-frontend:v1</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">container_name</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> unless-stopped</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;80:80&quot;</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ctts-net</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> backend</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ctts-net</span><span class="kw">:</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> bridge</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mysql-data</span><span class="kw">:</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> local</span></span></code></pre></div>
+<p><strong>评分要点</strong>：</p>
+<ul>
+<li>三服务定义正确（services 下 mysql/backend/frontend）：6 分（每服务 2
+分）</li>
+<li>mysql 完整配置（环境变量+卷+healthcheck）：4 分（缺一项扣 1
+分）</li>
+<li>backend 配置（环境变量+端口+service_healthy）：3 分（service_healthy
+写错扣 1 分）</li>
+<li>frontend 配置（端口+depends_on）：2 分</li>
+<li>自定义网络 ctts-net + 三服务接入：3 分（缺接入扣 1 分）</li>
+<li>具名卷 mysql-data 声明：2 分</li>
+<li>YAML 缩进错误酌情扣分；端口/密码值合理替代不扣分；缺少
+restart/container_name 等次要字段不扣分</li>
+</ul>
+</blockquote>
+<hr />
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

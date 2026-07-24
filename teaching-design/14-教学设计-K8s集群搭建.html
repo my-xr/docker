@@ -1,0 +1,593 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>K8s集群搭建</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 14 次课 · 教学设计</div>
+      <h1>K8s集群搭建</h1>
+      <p>面向教师授课组织、课堂流程、知识点拆解与评价设计 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 14 次课</span>
+        <span class="hero-chip"><b>主题</b>K8s集群搭建</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一课程信息">一、课程信息</a>
+<ul>
+</ul></li>
+<li><a href="#二教学目标">二、教学目标</a>
+<ul>
+<li><a href="#知识目标">知识目标</a></li>
+<li><a href="#能力目标">能力目标</a></li>
+<li><a href="#素质目标课程思政">素质目标（课程思政）</a></li>
+</ul></li>
+<li><a href="#三主要知识点纲要">三、主要知识点纲要</a>
+<ul>
+</ul></li>
+<li><a href="#四项目任务或案例任务">四、项目任务或案例任务</a>
+<ul>
+<li><a href="#贯穿项目阶段-4k8s-集群搭建">贯穿项目阶段 4：K8s 集群搭建</a></li>
+</ul></li>
+<li><a href="#五课堂互动设计">五、课堂互动设计</a>
+<ul>
+<li><a href="#互动-1课前-5-分钟讨论开场导入">互动 1：课前 5 分钟讨论（开场导入）</a></li>
+<li><a href="#互动-2实操演示学生同步搭建集群讲解-k14-2k14-3-后">互动 2：实操演示——学生同步搭建集群（讲解 K14-2、K14-3 后）</a></li>
+<li><a href="#互动-3kubeadm-流程梳理讲解-k14-4-后">互动 3：kubeadm 流程梳理（讲解 K14-4 后）</a></li>
+<li><a href="#互动-4ctts-集群资源规划讨论讲解-k14-6-时">互动 4：CTTS 集群资源规划讨论（讲解 K14-6 时）</a></li>
+</ul></li>
+<li><a href="#六课程思政融入点">六、课程思政融入点</a>
+<ul>
+</ul></li>
+<li><a href="#七课堂练习或随堂测验">七、课堂练习或随堂测验</a>
+<ul>
+<li><a href="#随堂练习5-分钟讲解结束前进行">随堂练习（5 分钟，讲解结束前进行）</a></li>
+</ul></li>
+<li><a href="#八课后任务">八、课后任务</a>
+<ul>
+</ul></li>
+<li><a href="#九对应岗位能力或面试考点">九、对应岗位能力或面试考点</a>
+<ul>
+</ul></li>
+<li><a href="#十教学资料与题库索引">十、教学资料与题库索引</a>
+<ul>
+</ul></li>
+<li><a href="#附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 14 次课 <span>｜</span> <strong>文档：</strong>教学设计</p>
+<blockquote>
+<p>所属模块：M5 K8s 认知与集群搭建 ｜ 课程：《Docker 云容器与管理技术》
+配套资料：见同文件夹内
+<code>教学资料.md</code>（学生复习资料）、<code>题库.md</code>（78
+题考试题库）</p>
+</blockquote>
+<hr />
+<h2 id="一课程信息">一、课程信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次序</td>
+<td>第 14 次课（全课程 24 次之第 14，K8s 部分第 2 次）</td>
+</tr>
+<tr>
+<td>学时</td>
+<td>2 学时（90 分钟）</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>理论课</td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>M5 K8s 认知与集群搭建</td>
+</tr>
+<tr>
+<td>教学主题</td>
+<td>Minikube 单机集群；kubeadm 多节点集群；kubectl 配置</td>
+</tr>
+<tr>
+<td>先修基础</td>
+<td>Docker 容器化基础（前 12 次课）、K8s 认知与架构（第 13 次课）、Linux
+基础、计算机网络基础</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二教学目标">二、教学目标</h2>
+<h3 id="知识目标">知识目标</h3>
+<ol type="1">
+<li>理解 K8s 集群搭建的常见方案（Minikube / kubeadm / Kind / 云托管
+K8s），能根据场景选择合适方案。</li>
+<li>掌握 Minikube
+的安装前提条件、安装命令、启动停止命令，理解单机学习集群的特点与局限。</li>
+<li>掌握 kubectl 的安装方法、kubeconfig 配置文件结构与作用，能通过
+kubectl 连接并验证集群。</li>
+<li>掌握 kubeadm 多节点集群的搭建流程（1 master + N
+worker）：前置条件配置、kubeadm init、kubeadm join、kubectl 配置。</li>
+<li>掌握集群验证与基本操作命令：kubectl get nodes/pods/services、kubectl
+cluster-info、kubectl describe node、minikube dashboard。</li>
+<li>明确 CTTS 项目 K8s
+部署的集群环境准备：资源规划、镜像准备与推送策略。</li>
+</ol>
+<h3 id="能力目标">能力目标</h3>
+<ol type="1">
+<li>能够在自己的机器上独立搭建一套可用的 Minikube 单机 K8s 集群。</li>
+<li>能够安装配置 kubectl，并通过 kubeconfig 连接到 K8s 集群。</li>
+<li>能够使用 kubectl get / cluster-info / describe
+等命令验证集群状态、排查节点异常。</li>
+<li>能够梳理 kubeadm 多节点集群搭建的完整步骤，理解每一步的作用。</li>
+<li>能够为 CTTS 三服务 K8s 部署规划集群资源与镜像准备清单。</li>
+</ol>
+<h3 id="素质目标课程思政">素质目标（课程思政）</h3>
+<ol type="1">
+<li>树立"实践出真知"意识——亲手搭建集群才能真正理解 K8s
+架构，纸上谈兵学不会云原生。</li>
+<li>培养"工程规范"意识——集群搭建每一步都有标准流程，环境配置不规范的集群迟早出问题。</li>
+<li>建立"系统思维"——从单机 Minikube 到多节点
+kubeadm，从学习到生产的演进视角。</li>
+</ol>
+<hr />
+<h2 id="三主要知识点纲要">三、主要知识点纲要</h2>
+<blockquote>
+<p>详细讲解内容见同文件夹 <code>教学资料.md</code>，此处为纲要。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K14-1</td>
+<td>集群搭建方案概览</td>
+<td>Minikube 单机学习用；kubeadm 多节点生产用；Kind/云托管 K8s
+简介与选型建议</td>
+</tr>
+<tr>
+<td>K14-2</td>
+<td>Minikube 安装与启动</td>
+<td>安装前提条件（Docker/虚拟化）；Minikube
+安装命令；<code>minikube start</code>
+启动集群；<code>minikube status</code>/<code>dashboard</code>/<code>stop</code>；单机集群特点</td>
+</tr>
+<tr>
+<td>K14-3</td>
+<td>kubectl 安装与配置</td>
+<td>kubectl 安装命令；kubeconfig 配置文件结构与作用；kubectl
+连接集群验证；<code>kubectl get nodes</code>/<code>cluster-info</code>
+验证</td>
+</tr>
+<tr>
+<td>K14-4</td>
+<td>kubeadm 多节点集群搭建</td>
+<td>多节点架构规划（1 master + N worker）；前置条件（关
+swap/防火墙/SELinux）；<code>kubeadm init</code> 初始化
+master；<code>kubeadm join</code> 加入 worker；kubectl 配置</td>
+</tr>
+<tr>
+<td>K14-5</td>
+<td>集群验证与基本操作</td>
+<td><code>kubectl get nodes</code>/<code>pods</code>/<code>services</code>
+查看资源；<code>kubectl cluster-info</code>
+集群信息；<code>kubectl describe node</code> 节点详情；Minikube
+dashboard 可视化</td>
+</tr>
+<tr>
+<td>K14-6</td>
+<td>CTTS 项目集群准备</td>
+<td>为 CTTS 三服务 K8s
+部署准备集群环境；集群资源规划；镜像准备与推送策略</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四项目任务或案例任务">四、项目任务或案例任务</h2>
+<h3 id="贯穿项目阶段-4k8s-集群搭建">贯穿项目阶段 4：K8s 集群搭建</h3>
+<p><strong>本次课任务</strong>：</p>
+<ol type="1">
+<li>教师演示 Minikube
+单机集群的完整搭建流程（安装→启动→验证→dashboard）。</li>
+<li>学生同步在自己的机器上搭建一套可用的 Minikube 集群。</li>
+<li>每位学生通过 kubectl 验证集群就绪状态，并提交
+<code>kubectl get nodes</code> 截图。</li>
+<li>教师演示 kubeadm
+多节点集群的关键步骤（init/join），学生梳理流程图（不强求实操，多节点需要多台机器）。</li>
+<li>师生共同梳理 CTTS 三服务 K8s 部署的集群资源规划与镜像准备清单。</li>
+</ol>
+<p><strong>项目背景衔接</strong>（详见 <code>教学资料.md</code>
+综合示例）：</p>
+<ul>
+<li>项目名称：多服务容器化部署项目（CTTS）</li>
+<li>项目阶段：阶段 5（M5 模块）—— 搭建 K8s 集群</li>
+<li>当前状态：前 12 次课已完成 CTTS 三服务的 Docker 化与 Compose
+编排，第 13 次课已建立 K8s 架构认知</li>
+<li>本次目标：让 CTTS 拥有一套可用的 K8s 集群环境，为第 15~23 次课部署
+Pod/Deployment/Service 做好底座</li>
+<li>后续衔接：第 15 次课在本次搭建的集群上编写 Pod YAML 部署 CTTS
+后端</li>
+</ul>
+<blockquote>
+<p>📌 本节课是 K8s 部分从"认知"到"实操"的转折点。第 13
+次课讲架构，本节课动手搭集群，第 15 次课开始部署应用。集群不搭好，后续
+10 次课都没法练。</p>
+</blockquote>
+<hr />
+<h2 id="五课堂互动设计">五、课堂互动设计</h2>
+<h3 id="互动-1课前-5-分钟讨论开场导入">互动 1：课前 5
+分钟讨论（开场导入）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动问题</td>
+<td>"上节课我们学了 K8s 的架构——Master 四大组件、Node
+三大组件。但理论再清楚，没搭过集群就像没摸过方向盘。你觉得搭建一套 K8s
+集群，最大的难点会在哪里？"</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>自由发言，教师板书关键词，不评判对错</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>提到"组件多""命令复杂""网络配置""前置条件""多机器准备""镜像拉取慢""版本兼容"等关键词</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>肯定合理认知，引出"实践出真知"——本节课就动手搭一套。难点确实存在，但分步骤来并不难：先搭单机
+Minikube（学习用），再了解 kubeadm 多节点（生产用）。引出 K14-1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-2实操演示学生同步搭建集群讲解-k14-2k14-3-后">互动
+2：实操演示——学生同步搭建集群（讲解 K14-2、K14-3 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>教师在投影上逐步演示 Minikube
+安装与启动，学生在自己机器上同步操作，最终每人都跑起一套 Minikube
+集群</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>教师演示一步 → 学生跟做一步 → 等待确认大部分成功 → 进入下一步。分 5
+步：①检查 Docker/虚拟化 ②安装 Minikube ③<code>minikube start</code>
+④安装 kubectl ⑤<code>kubectl get nodes</code> 验证</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>学生机器上 <code>kubectl get nodes</code> 输出 Ready
+节点；<code>minikube status</code> 显示 host/kubelet/apiserver
+Running</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>巡视辅导常见问题：Minikube 启动卡在拉镜像（建议配
+<code>--image-mirror-country=cn</code>）、kubectl 找不到
+kubeconfig（检查 <code>~/.kube/config</code>）、节点
+NotReady（等组件启动）。强调"集群搭起来"是后续 10 次课的基础</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-3kubeadm-流程梳理讲解-k14-4-后">互动 3：kubeadm
+流程梳理（讲解 K14-4 后）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>教师讲解 kubeadm 多节点搭建流程后，请学生在纸上画出 kubeadm
+init/join 的流程图，标出 master 与 worker 节点各自的命令与产出</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>个人独立完成 3 分钟 → 同桌互查 1 分钟 → 教师投影标准流程图讲解</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>能画出"前置条件 → master:kubeadm init 生成 join 命令 →
+worker:kubeadm join 加入 → kubectl 配置"主流程；可能漏掉前置条件（关
+swap/防火墙/SELinux）</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>纠正常见错误（如把 join 命令在 master 上执行、忘记拷贝
+kubeconfig）；强调前置条件是"踩坑重灾区"，生产环境 80%
+的搭建失败都源于前置条件没配好</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互动-4ctts-集群资源规划讨论讲解-k14-6-时">互动 4：CTTS
+集群资源规划讨论（讲解 K14-6 时）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互动任务</td>
+<td>分组讨论：把 CTTS 三服务（前端 2 副本 + 后端 3 副本 + MySQL 1
+副本）部署到 K8s，需要规划多少集群资源？镜像要怎么准备？</td>
+</tr>
+<tr>
+<td>组织方式</td>
+<td>小组讨论 5 分钟 → 每组派代表发言 1 分钟 → 教师汇总</td>
+</tr>
+<tr>
+<td>预期学生输出</td>
+<td>资源：6 个 Pod，按每 Pod 0.5 核 512MB 估，至少 3 核 3G；镜像：MySQL
+用官方，前后端用第 8 次课构建的镜像推到仓库；MySQL 需要持久化存储</td>
+</tr>
+<tr>
+<td>教师点评要点</td>
+<td>引导发现：Minikube 单机够学习用，但生产要 kubeadm
+多节点；镜像准备要考虑仓库（Docker Hub/内网 Harbor）；MySQL
+数据持久化要用 PV/PVC（第 22 次课）。为后续课程埋伏笔</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六课程思政融入点">六、课程思政融入点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>融入点</td>
+<td>实践出真知——亲手搭建才能理解架构</td>
+</tr>
+<tr>
+<td>技术关联</td>
+<td>K8s 架构（第 13 次课）讲得再清楚，不亲手搭一套集群，就无法体会"API
+Server 是入口""etcd 存状态""kubelet
+调容器"这些抽象概念的真实含义。Minikube 让单机学习成为可能，kubeadm
+让生产搭建有标准路径</td>
+</tr>
+<tr>
+<td>引导问题</td>
+<td>"看再多架构图，不如自己跑一遍
+<code>minikube start</code>。云原生是工程实践性极强的领域，企业招聘
+DevOps
+工程师，面试官更看重你'搭过几套集群''踩过哪些坑'，而不是你能背多少组件名。这次课每人必须把集群跑起来。"</td>
+</tr>
+<tr>
+<td>预期价值目标</td>
+<td>树立实践出真知意识，破除对 K8s
+的"理论畏惧"，养成动手验证的学习习惯；理解工程规范的价值——按标准流程搭建才能产出可靠集群</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>思政自然融入，不空喊口号。通过"亲手搭一套"的真实体验让学生体会"纸上得来终觉浅，绝知此事要躬行"。</p>
+</blockquote>
+<hr />
+<h2 id="七课堂练习或随堂测验">七、课堂练习或随堂测验</h2>
+<h3 id="随堂练习5-分钟讲解结束前进行">随堂练习（5
+分钟，讲解结束前进行）</h3>
+<p><strong>判断题（口头快速作答）</strong>：</p>
+<ol type="1">
+<li>Minikube 适合生产环境部署，可以承载真实业务流量。（✗）</li>
+<li><code>kubectl get nodes</code> 显示节点状态为
+Ready，表示该节点可以接受调度 Pod。（✓）</li>
+<li>使用 kubeadm 搭建多节点集群时，必须先关闭 swap 分区。（✓）</li>
+<li><code>kubeadm join</code> 命令需要在 master 节点上执行，让 master
+加入 worker。（✗）</li>
+<li>kubeconfig 文件包含了集群连接信息和认证信息，kubectl
+通过它连接集群。（✓）</li>
+</ol>
+<blockquote>
+<p>详细题目与解析见
+<code>题库.md</code>。此处仅作课堂快速互动，不计分。</p>
+</blockquote>
+<hr />
+<h2 id="八课后任务">八、课后任务</h2>
+<ol type="1">
+<li><strong>实操巩固</strong>：在自己的机器上重新搭建一套 Minikube
+集群（不参考课件），记录每步命令与输出，下次课抽查。</li>
+<li><strong>验证练习</strong>：完成下列 kubectl
+命令练习并截图：<code>kubectl get nodes -o wide</code>、<code>kubectl cluster-info</code>、<code>kubectl describe node minikube</code>、<code>kubectl get pods -A</code>、<code>kubectl get services -A</code>。</li>
+<li><strong>流程梳理</strong>：手绘 kubeadm
+多节点集群搭建流程图（含前置条件、init、join、kubectl
+配置），下次课带到课堂。</li>
+<li><strong>项目准备</strong>：为 CTTS 三服务 K8s
+部署写一份《集群环境准备清单》（1
+页），包含：集群资源规划（CPU/内存/节点数）、镜像准备清单（镜像名+版本+来源）、镜像仓库选型（Docker
+Hub / Harbor）。</li>
+<li><strong>拓展阅读（选做）</strong>：访问 Minikube
+官方文档（minikube.sigs.k8s.io）了解 <code>minikube addons list</code>
+可启用的插件，尝试启用 metrics-server 插件。</li>
+<li><strong>思考题</strong>：Minikube、kubeadm、Kind
+三种方案各自的适用场景是什么？如果你要为公司搭建一套测试环境
+K8s，会选哪种？为什么？</li>
+</ol>
+<hr />
+<h2 id="九对应岗位能力或面试考点">九、对应岗位能力或面试考点</h2>
+<table>
+<thead>
+<tr>
+<th>岗位能力/面试考点</th>
+<th>本次课对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>能独立搭建 K8s 集群（Minikube / kubeadm）</td>
+<td>K14-2、K14-4</td>
+</tr>
+<tr>
+<td>熟练使用 kubectl 命令操作集群</td>
+<td>K14-3、K14-5</td>
+</tr>
+<tr>
+<td>理解 kubeconfig 配置与集群连接原理</td>
+<td>K14-3</td>
+</tr>
+<tr>
+<td>排查集群搭建常见问题（节点 NotReady、镜像拉取失败等）</td>
+<td>K14-2、K14-5</td>
+</tr>
+<tr>
+<td>K8s 集群方案选型（学习/测试/生产）</td>
+<td>K14-1</td>
+</tr>
+<tr>
+<td>为应用部署准备集群环境与镜像</td>
+<td>K14-6</td>
+</tr>
+<tr>
+<td>面试高频："说一下 kubeadm init 的流程""kubectl 怎么连接集群""节点
+NotReady 怎么排查"</td>
+<td>K14-3、K14-4、K14-5</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试常考"kubeadm 搭建集群的步骤""kubectl 连接集群的原理""节点
+NotReady 怎么排查""Minikube 和 kubeadm 区别"等，均属本次课范围。</p>
+</blockquote>
+<hr />
+<h2 id="十教学资料与题库索引">十、教学资料与题库索引</h2>
+<table>
+<thead>
+<tr>
+<th>资料类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学生复习资料</td>
+<td><code>教学资料.md</code>（同文件夹）</td>
+<td>6 个知识点详解 + CTTS 集群准备综合示例 + 思维导图 + 复习思考题</td>
+</tr>
+<tr>
+<td>考试题库</td>
+<td><code>题库.md</code>（同文件夹）</td>
+<td>78 题（40 选择 + 20 判断 + 10 填空 + 4 论述简答 + 2 程序阅读补全 + 2
+编程接口设计），含答案解析与评分标准</td>
+</tr>
+<tr>
+<td>课程总览</td>
+<td><code>../00 课程设计总览.md</code></td>
+<td>课程整体框架与 24 次课进度</td>
+</tr>
+<tr>
+<td>上节衔接</td>
+<td><code>../13 Kubernetes认知与架构/教学资料.md</code></td>
+<td>K8s 架构知识（Master/Node 组件）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附课堂时间分配建议90-分钟">附：课堂时间分配建议（90 分钟）</h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0~10 min</td>
+<td>课前 5 分钟讨论 + 上节回顾（K8s 架构）</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>10~25 min</td>
+<td>知识点 K14-1：集群搭建方案概览 + 选型建议</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>25~55 min</td>
+<td>知识点 K14-2、K14-3：Minikube 安装启动 + kubectl 配置 +
+实操演示（学生同步搭建）</td>
+<td>30 min</td>
+</tr>
+<tr>
+<td>55~70 min</td>
+<td>知识点 K14-4：kubeadm 多节点集群搭建（前置条件/init/join）+
+流程梳理互动</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>70~80 min</td>
+<td>知识点 K14-5：集群验证与基本操作（kubectl
+get/describe/dashboard）</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>80~85 min</td>
+<td>知识点 K14-6：CTTS 项目集群准备 + 资源规划讨论</td>
+<td>5 min</td>
+</tr>
+<tr>
+<td>85~90 min</td>
+<td>随堂练习 + 小结 + 课后任务布置</td>
+<td>5 min</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

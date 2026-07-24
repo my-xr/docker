@@ -1,0 +1,1004 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docker网络</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 09 次课 · 题库</div>
+      <h1>Docker网络</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 09 次课</span>
+        <span class="hero-chip"><b>主题</b>Docker网络</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 09 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>09-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>09-选择-001</strong>（★ 知识点：K9-1 网络子系统职责） Docker
+网络子系统不负责解决下列哪项问题？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器之间的网络隔离</span></li><li><span class="option-label">B</span><span>容器之间的相互通信</span></li><li><span class="option-label">C</span><span>容器内文件系统的分层存储</span></li><li><span class="option-label">D</span><span>外部用户访问容器内服务</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Docker
+网络子系统负责隔离、互通、外部访问三大职责。文件系统分层存储是镜像/容器存储子系统（UnionFS）的职责，与网络无关。A、B、D
+都是网络子系统的职责。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-002</strong>（★ 知识点：K9-1 默认网络） Docker
+安装完成后默认会自动创建几个网络？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>1 个</span></li><li><span class="option-label">B</span><span>2 个</span></li><li><span class="option-label">C</span><span>3 个</span></li><li><span class="option-label">D</span><span>5 个</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Docker 安装后默认创建
+3 个网络：bridge（默认驱动）、host、none。macvlan 和 ipvlan
+需要用户手动创建。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-003</strong>（★ 知识点：K9-1 默认网络驱动） 不指定
+<code>--network</code> 参数启动容器时，容器默认加入的网络驱动是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>host</span></li><li><span class="option-label">B</span><span>none</span></li><li><span class="option-label">C</span><span>bridge</span></li><li><span class="option-label">D</span><span>macvlan</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：不指定
+<code>--network</code> 时，容器默认加入默认 bridge 网络（名为
+<code>bridge</code>，对应网桥 docker0）。host 和 none 必须显式指定
+<code>--network host</code> / <code>--network none</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-004</strong>（★ 知识点：K9-2 docker0 网桥） 默认
+bridge 网络对应的虚拟网桥设备名是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>br0</span></li><li><span class="option-label">B</span><span>eth0</span></li><li><span class="option-label">C</span><span>docker0</span></li><li><span class="option-label">D</span><span>veth0</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：默认 bridge
+网络在宿主机上对应的虚拟网桥设备名为 docker0，默认 IP 通常是
+172.17.0.1/16。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-005</strong>（★ 知识点：K9-2 默认 bridge 局限）
+关于默认 bridge 网络，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>支持通过容器名互访</span></li><li><span class="option-label">B</span><span>内置
+DNS 服务自动解析容器名</span></li><li><span class="option-label">C</span><span>只能通过 IP 进行容器间通信，无容器名 DNS 解析</span></li><li><span class="option-label">D</span><span>容器端口默认对宿主机外部开放</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：默认 bridge 没有 DNS
+解析服务，同网络容器只能通过 IP 互访。A、B 错；D 错，容器端口默认只在
+bridge 内可达，外部访问必须 <code>-p</code> 映射。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-006</strong>（★ 知识点：K9-2 bridge 互通） 在默认
+bridge 网络中，两个容器之间如何通信？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>只能通过容器名通信</span></li><li><span class="option-label">B</span><span>只能通过容器 IP 通信</span></li><li><span class="option-label">C</span><span>通过宿主机端口映射通信</span></li><li><span class="option-label">D</span><span>无法通信</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：默认 bridge 没有内嵌
+DNS，容器之间只能通过 IP 互访。由于容器 IP
+是动态分配的（重启可能变），用 IP 不可靠，这正是默认 bridge 的局限。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-007</strong>（★ 知识点：K9-3 host 网络） 关于 host
+网络模式，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器有独立的网络命名空间</span></li><li><span class="option-label">B</span><span>容器直接共享宿主机的网络栈</span></li><li><span class="option-label">C</span><span>容器端口需要 <code>-p</code>
+映射才能被外部访问</span></li><li><span class="option-label">D</span><span>容器之间可以通过容器名互访</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：host
+模式下容器直接共享宿主机网络栈，没有独立网络命名空间。A 错；C 错，host
+模式下容器端口即宿主机端口，<code>-p</code> 会被忽略；D 错，host
+模式没有 Docker DNS。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-008</strong>（★ 知识点：K9-3 none 网络） none
+网络模式下，容器拥有哪种网络接口？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>只有 eth0</span></li><li><span class="option-label">B</span><span>只有 lo（本地回环）</span></li><li><span class="option-label">C</span><span>eth0 和 lo 都有</span></li><li><span class="option-label">D</span><span>没有任何网络接口</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：none
+网络的容器拥有独立的网络命名空间，但只有 lo（回环接口，127.0.0.1），没有
+eth0，无法访问任何外部地址，也无法被外部访问。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-009</strong>（★ 知识点：K9-3 host 适用场景）
+下列场景中，最适合使用 host 网络模式的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>生产环境的 Web
+服务对外提供服务</span></li><li><span class="option-label">B</span><span>数据库容器需要被多个应用访问</span></li><li><span class="option-label">C</span><span>网络调试工具需要抓取宿主机所有流量</span></li><li><span class="option-label">D</span><span>安全沙箱中运行不可信代码</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：host
+模式共享宿主网络栈，适合网络调试、抓包或对性能极致敏感的场景。A、B
+应该用 bridge；D 应该用 none（完全隔离）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-010</strong>（★ 知识点：K9-3 none 适用场景）
+下列场景中，最适合使用 none 网络模式的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>微服务快速弹性扩容</span></li><li><span class="option-label">B</span><span>分析不可信文件的安全沙箱</span></li><li><span class="option-label">C</span><span>前端 Web 服务对用户暴露</span></li><li><span class="option-label">D</span><span>数据库服务被后端按名访问</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：none
+模式完全无网络（仅有
+lo），适合安全沙箱、离线计算、断网测试等场景。A、C、D 都需要网络，应该用
+bridge。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-011</strong>（★ 知识点：K9-4 自定义网络命令）
+创建自定义 bridge 网络的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker network add mynet</code></span></li><li><span class="option-label">B</span><span><code>docker network create mynet</code></span></li><li><span class="option-label">C</span><span><code>docker create network mynet</code></span></li><li><span class="option-label">D</span><span><code>docker bridge create mynet</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：创建自定义网络的命令是
+<code>docker network create &lt;网络名&gt;</code>。不指定
+<code>--driver</code> 时默认创建 bridge 驱动。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-012</strong>（★ 知识点：K9-4 自定义网络优势）
+相对默认 bridge，自定义 bridge 网络的主要优势是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>启动速度更快</span></li><li><span class="option-label">B</span><span>支持容器名 DNS 解析</span></li><li><span class="option-label">C</span><span>容器端口默认对外暴露</span></li><li><span class="option-label">D</span><span>不需要 <code>-p</code>
+端口映射</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：自定义 bridge 内嵌
+DNS
+服务（127.0.0.11），支持容器名互访；同时可按业务创建多个网络实现隔离。A
+错，启动速度与网络类型无关；C 错，自定义 bridge
+端口也默认不对宿主机暴露；D 错，外部访问仍需 <code>-p</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-013</strong>（★ 知识点：K9-4 指定网络）
+启动容器时指定加入自定义网络的参数是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>--net mynet</code></span></li><li><span class="option-label">B</span><span><code>--network mynet</code></span></li><li><span class="option-label">C</span><span><code>--custom-network mynet</code></span></li><li><span class="option-label">D</span><span><code>--bridge mynet</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker run --network &lt;网络名&gt;</code>
+指定容器初始加入的网络。<code>--net</code> 是 <code>--network</code>
+的简写形式（也合法），但完整写法是 <code>--network</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-014</strong>（★ 知识点：K9-4 内嵌 DNS） 自定义 bridge
+网络中，Docker 内嵌 DNS 服务的 IP 地址是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>127.0.0.1</span></li><li><span class="option-label">B</span><span>127.0.0.11</span></li><li><span class="option-label">C</span><span>172.17.0.1</span></li><li><span class="option-label">D</span><span>8.8.8.8</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：自定义 bridge 网络中
+Docker 内嵌 DNS 服务监听在 127.0.0.11，自动为该网络内容器注册
+<code>&lt;容器名&gt; → IP</code> 的解析记录。可通过
+<code>cat /etc/resolv.conf</code> 查看。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-015</strong>（★ 知识点：K9-5 容器间通信） 同一自定义
+bridge 网络内的两个容器，如何相互访问？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>必须用容器 IP</span></li><li><span class="option-label">B</span><span>必须用
+<code>-p</code> 端口映射</span></li><li><span class="option-label">C</span><span>通过容器名直接访问</span></li><li><span class="option-label">D</span><span>通过宿主机
+localhost</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：同一自定义 bridge
+网络内的容器，通过 Docker 内嵌 DNS 用容器名互访。A 错，IP 不可靠；B
+错，<code>-p</code> 只用于外部访问；D 错，跨容器不能用 localhost。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-016</strong>（★ 知识点：K9-5 跨网络通信）
+把已运行的容器追加接入第二个网络的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker network add</code></span></li><li><span class="option-label">B</span><span><code>docker network connect</code></span></li><li><span class="option-label">C</span><span><code>docker network attach</code></span></li><li><span class="option-label">D</span><span><code>docker container join</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker network connect &lt;网络名&gt; &lt;容器名&gt;</code>
+把容器追加接入到目标网络，容器会获得该网络中的一个
+IP，并能按容器名访问该网络内的容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-017</strong>（★ 知识点：K9-5 跨网络隔离）
+关于跨网络容器通信，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>任何网络的容器都能通过容器名互访</span></li><li><span class="option-label">B</span><span>跨网络容器默认隔离，需
+<code>docker network connect</code> 才能按名访问</span></li><li><span class="option-label">C</span><span>跨网络容器只要 IP
+通就能用容器名互访</span></li><li><span class="option-label">D</span><span>host 网络的容器能访问所有自定义网络容器</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Docker DNS
+按网络隔离，每个网络有自己的 DNS 视图。跨网络默认隔离，必须用
+<code>docker network connect</code>
+把容器接入目标网络才能按容器名访问。A、C、D 都错。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-018</strong>（★ 知识点：K9-6 端口映射方向）
+<code>docker run -p 8080:80 nginx</code> 命令中端口映射的方向是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器 8080 → 宿主机 80</span></li><li><span class="option-label">B</span><span>宿主机 8080 → 容器 80</span></li><li><span class="option-label">C</span><span>容器 80 → 宿主机 8080</span></li><li><span class="option-label">D</span><span>宿主机 80 → 容器 8080</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>-p 宿主机端口:容器端口</code>，即把宿主机
+8080 端口的流量转发到容器 80 端口。外部访问
+<code>http://宿主机IP:8080</code> 实际访问的是容器内的 80 端口服务。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-019</strong>（★ 知识点：K9-6 同网络通信端口）
+同一自定义 bridge 网络内的容器 A 访问容器 B 的 8080
+端口，正确的访问方式是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>curl http://容器B的IP:8080</code>（必须用 IP）</span></li><li><span class="option-label">B</span><span><code>curl http://宿主机IP:8080</code></span></li><li><span class="option-label">C</span><span><code>curl http://容器B名称:8080</code></span></li><li><span class="option-label">D</span><span><code>curl http://localhost:8080</code></span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：同自定义网络内容器通过容器名 +
+容器内端口直接访问，不需要 <code>-p</code> 映射，也不需要 IP。A
+可行但不可靠（IP 会变）；B、D 错，跨容器不能用宿主机或 localhost。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-020</strong>（★ 知识点：K9-6 端口映射作用）
+<code>-p</code> 端口映射的主要作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>让同网络容器互相通信</span></li><li><span class="option-label">B</span><span>让宿主机外部能访问容器内服务</span></li><li><span class="option-label">C</span><span>让容器访问外网</span></li><li><span class="option-label">D</span><span>加快容器启动速度</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>-p</code>
+把宿主机端口流量转发到容器端口，让宿主机外部用户能访问容器内服务。A
+错，同网络通信不需要 <code>-p</code>；C 错，容器访问外网靠 iptables NAT
+自动处理；D 错，与启动速度无关。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-021</strong>（★★ 知识点：K9-2 bridge 原理） bridge
+网络中，容器与虚拟网桥之间连接使用的虚拟网络设备是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>veth
+pair（虚拟以太网卡对）</span></li><li><span class="option-label">B</span><span>tap 设备</span></li><li><span class="option-label">C</span><span>vxlan 隧道</span></li><li><span class="option-label">D</span><span>物理网卡</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：bridge 网络通过 veth
+pair（一对虚拟以太网卡）连接容器与网桥：一端在容器内（eth0），另一端插到宿主机的
+docker0 网桥上，两端通过内核连通。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-022</strong>（★★ 知识点：K9-2 容器访问外网） bridge
+网络中的容器能访问外网，依靠的技术是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Docker 内嵌 DNS</span></li><li><span class="option-label">B</span><span>iptables
+MASQUERADE（源地址转换）</span></li><li><span class="option-label">C</span><span>veth pair 虚拟网卡</span></li><li><span class="option-label">D</span><span><code>-p</code>
+端口映射</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：容器出向流量经过
+iptables MASQUERADE 规则做源地址转换（容器 IP → 宿主机
+IP），让容器能访问外网。DNS 只负责域名解析；veth pair
+只负责容器到网桥的连接；<code>-p</code> 只用于外部访问容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-023</strong>（★★ 知识点：K9-3 host 端口冲突） 在 host
+网络模式下启动两个容器都监听 80 端口，会发生什么？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>两个容器共享 80
+端口</span></li><li><span class="option-label">B</span><span>第二个容器启动失败，端口被占用</span></li><li><span class="option-label">C</span><span>Docker 自动分配不同端口</span></li><li><span class="option-label">D</span><span>两个容器都正常工作</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：host
+模式下容器直接用宿主机端口，两个容器都监听 80 会冲突，第二个启动失败报
+<code>bind: address already in use</code>。这是 host
+模式的主要局限之一。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-024</strong>（★★ 知识点：K9-3 host 模式 -p） 在 host
+网络模式下使用 <code>-p 80:80</code> 参数，会发生什么？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>端口映射正常生效</span></li><li><span class="option-label">B</span><span><code>-p</code> 被忽略并告警</span></li><li><span class="option-label">C</span><span>容器启动失败</span></li><li><span class="option-label">D</span><span>端口冲突</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：host
+模式下容器端口已经是宿主机端口，<code>-p</code> 没有意义会被忽略，并提示
+<code>WARNING: Published ports are discarded when using host network mode</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-025</strong>（★★ 知识点：K9-4 自定义网络子网）
+创建自定义网络时指定子网和网关的正确命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker network create --subnet 172.20.0.0/16 --gateway 172.20.0.1 mynet</code></span></li><li><span class="option-label">B</span><span><code>docker network create --ip 172.20.0.0/16 --gw 172.20.0.1 mynet</code></span></li><li><span class="option-label">C</span><span><code>docker network create --cidr 172.20.0.0/16 --router 172.20.0.1 mynet</code></span></li><li><span class="option-label">D</span><span><code>docker network create -subnet 172.20.0.0/16 -gateway 172.20.0.1 mynet</code></span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>docker network create --subnet &lt;CIDR&gt; --gateway &lt;IP&gt; &lt;网络名&gt;</code>
+指定子网和网关。不指定时 Docker 自动分配。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-026</strong>（★★ 知识点：K9-4 删除网络）
+删除自定义网络 <code>mynet</code> 的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker network delete mynet</code></span></li><li><span class="option-label">B</span><span><code>docker network rm mynet</code></span></li><li><span class="option-label">C</span><span><code>docker network remove mynet</code></span></li><li><span class="option-label">D</span><span><code>docker rm network mynet</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker network rm &lt;网络名&gt;</code>
+删除自定义网络。注意：网络内若有活跃容器，删除会报错
+<code>network has active endpoints</code>，需先断开或删除容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-027</strong>（★★ 知识点：K9-4 删除网络限制）
+删除自定义网络时，若网络内仍有活跃容器，会发生什么？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>网络和容器一起被删除</span></li><li><span class="option-label">B</span><span>报错
+<code>network has active endpoints</code>，删除失败</span></li><li><span class="option-label">C</span><span>容器被自动断开，网络被删除</span></li><li><span class="option-label">D</span><span>网络被强制删除，容器不受影响</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Docker
+不允许删除仍有活跃容器的网络，会报
+<code>network has active endpoints</code>。必须先停止并删除容器，或用
+<code>docker network disconnect</code> 断开所有容器，才能删除网络。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-028</strong>（★★ 知识点：K9-5 容器名解析） 自定义
+bridge 网络内容器名 <code>ctts-backend</code> 被解析为容器
+IP，解析过程由谁完成？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>宿主机 /etc/resolv.conf 中的 DNS</span></li><li><span class="option-label">B</span><span>公网 DNS
+服务器</span></li><li><span class="option-label">C</span><span>Docker 内嵌 DNS 服务（127.0.0.11）</span></li><li><span class="option-label">D</span><span>容器内 /etc/hosts
+文件</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：自定义 bridge 网络中
+Docker 内嵌 DNS 服务（127.0.0.11）负责容器名→IP 的解析。容器内
+/etc/resolv.conf 自动指向 127.0.0.11。A、B、D 都不是。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-029</strong>（★★ 知识点：K9-5 connect 影响） 执行
+<code>docker network connect net2 containerA</code>
+后，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>containerA 与原网络断开，只接入 net2</span></li><li><span class="option-label">B</span><span>containerA 同时存在于原网络和 net2 中</span></li><li><span class="option-label">C</span><span>containerA 重启后才会接入 net2</span></li><li><span class="option-label">D</span><span>containerA 的 IP 地址被改变</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker network connect</code>
+是追加接入，不断开原网络。容器会同时存在于原网络和 net2 中，获得 net2
+中的一个 IP，原有 IP 保持不变。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-030</strong>（★★ 知识点：K9-6 CTTS 网络设计） 在 CTTS
+三服务网络方案中，MySQL 容器为什么不对宿主机暴露 3306 端口？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>因为后端无法通过容器名连接 MySQL</span></li><li><span class="option-label">B</span><span>因为 MySQL 不需要被后端访问</span></li><li><span class="option-label">C</span><span>遵循最小暴露面原则，避免数据库被公网爆破或漏洞利用</span></li><li><span class="option-label">D</span><span>因为 3306
+端口被宿主机占用</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：MySQL
+容器不对宿主机暴露 3306
+是网络安全设计——最小暴露面原则。后端在同自定义网络内通过容器名
+<code>ctts-mysql</code> 访问即可，无需 <code>-p</code> 映射。公网暴露
+3306 会被扫描爆破，存在严重安全风险。A、B、D 都错。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>09-选择-031</strong>（★★ 知识点：K9-1 内置网络驱动） 下列属于
+Docker 内置网络驱动的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>bridge</span></li><li><span class="option-label">B</span><span>host</span></li><li><span class="option-label">C</span><span>none</span></li><li><span class="option-label">D</span><span>macvlan
+E. vmware</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：Docker
+内置网络驱动包括 bridge、host、none、macvlan、ipvlan（还有 Swarm
+集群用的 overlay）。E 错，vmware 是虚拟机技术，不是 Docker
+网络驱动。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-032</strong>（★★ 知识点：K9-1 网络子系统职责） Docker
+网络子系统负责解决的核心问题包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器之间的网络隔离</span></li><li><span class="option-label">B</span><span>容器之间的相互通信</span></li><li><span class="option-label">C</span><span>外部用户访问容器内服务</span></li><li><span class="option-label">D</span><span>容器镜像的分层存储 E.
+容器内进程的 CPU 调度</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong>
+<strong>解析</strong>：网络子系统三大职责：隔离、互通、外部访问。D
+是存储子系统（UnionFS）的职责；E 是操作系统进程调度的职责。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-033</strong>（★★ 知识点：K9-2 默认 bridge 局限） 默认
+bridge 网络的局限包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>没有容器名 DNS 解析</span></li><li><span class="option-label">B</span><span>所有容器在同一网络，无法按业务隔离</span></li><li><span class="option-label">C</span><span>容器 IP 动态变化，用 IP 互访不可靠</span></li><li><span class="option-label">D</span><span>容器无法访问外网 E. 不支持端口映射</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong> <strong>解析</strong>：默认 bridge 无
+DNS（A）、隔离弱（B）、IP 动态（C）。D 错，bridge
+容器能访问外网（iptables MASQUERADE）；E 错，默认 bridge 支持
+<code>-p</code> 端口映射。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-034</strong>（★★ 知识点：K9-3 三种驱动对比） 下列关于
+bridge、host、none 三种网络驱动的对比，正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>bridge
+有独立网络命名空间，host 没有</span></li><li><span class="option-label">B</span><span>none 完全无网络接口（包括 lo 也没有）</span></li><li><span class="option-label">C</span><span>host 性能最好但无隔离</span></li><li><span class="option-label">D</span><span>bridge 支持端口映射，host 不需要
+<code>-p</code> E. none 适合安全沙箱场景</span></li></ul></div><blockquote>
+<p><strong>答案：A、C、D、E</strong> <strong>解析</strong>：A 对，bridge
+有独立命名空间，host 共享宿主栈；C 对，host 无 NAT 性能最好但失去隔离；D
+对，bridge 用 <code>-p</code>，host 不需要；E 对，none
+完全隔离适合安全沙箱。B 错，none 有 lo 回环接口（127.0.0.1）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-035</strong>（★★ 知识点：K9-4 自定义 bridge 优势）
+相对默认 bridge，自定义 bridge 网络的优势包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>内置 DNS
+支持容器名互访</span></li><li><span class="option-label">B</span><span>可按业务创建多个网络实现隔离</span></li><li><span class="option-label">C</span><span>容器 IP 永远不变</span></li><li><span class="option-label">D</span><span>不需要 <code>-p</code> 端口映射即可外部访问 E. 是 Docker
+官方推荐的生产网络模式</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、E</strong> <strong>解析</strong>：自定义 bridge
+两大优势：DNS 容器名解析（A）、网络隔离（B）；Docker
+官方推荐生产用自定义 bridge（E）。C 错，IP
+仍可能变化，但用容器名可避免依赖 IP；D 错，外部访问仍需
+<code>-p</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-036</strong>（★★ 知识点：K9-5 容器间通信方式）
+实现容器间通信的方式包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>同一自定义 bridge
+网络内通过容器名互访</span></li><li><span class="option-label">B</span><span>同一默认 bridge 网络内通过容器 IP 互访</span></li><li><span class="option-label">C</span><span>跨网络用 <code>docker network connect</code> 接入目标网络</span></li><li><span class="option-label">D</span><span>通过宿主机
+localhost 跨容器访问 E. 通过 <code>-p</code> 端口映射让容器间互通</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong> <strong>解析</strong>：A、B、C
+都是容器间通信的合法方式。D 错，跨容器不能用 localhost（localhost
+是容器自己）；E 错，<code>-p</code>
+是给宿主机外部访问用的，不是容器间通信用的。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-037</strong>（★★ 知识点：K9-6 端口映射格式） 下列
+<code>-p</code> 端口映射格式正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>-p 80:80</code></span></li><li><span class="option-label">B</span><span><code>-p 8080:80</code></span></li><li><span class="option-label">C</span><span><code>-p 127.0.0.1:3306:3306</code></span></li><li><span class="option-label">D</span><span><code>-p 80</code> E. <code>-p :80:80</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都是合法格式。A 宿主机 80→容器 80；B 宿主机 8080→容器 80；C 仅宿主机
+localhost:3306→容器 3306；D 宿主机随机端口→容器 80（不推荐生产）。E
+格式错误。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-038</strong>（★★ 知识点：K9-6 CTTS 网络设计） 关于
+CTTS 三服务（前端/后端/MySQL）的网络方案设计，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>三服务应接入同一自定义 bridge 网络以支持容器名互访</span></li><li><span class="option-label">B</span><span>前端容器应
+<code>-p 80:80</code> 对外暴露给用户访问</span></li><li><span class="option-label">C</span><span>MySQL 容器应
+<code>-p 3306:3306</code> 对外暴露方便调试</span></li><li><span class="option-label">D</span><span>后端容器不需要
+<code>-p 8080:8080</code> 对外暴露，前端按容器名访问即可 E. 后端通过
+<code>jdbc:mysql://ctts-mysql:3306/ctts</code> 连接 MySQL</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong> <strong>解析</strong>：A、B、D、E
+都符合 CTTS 网络设计最佳实践。C 错，MySQL 不应对外暴露
+3306（最小暴露面原则），后端在同网络内按容器名访问即可。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-039</strong>（★★ 知识点：K9-3 host 模式特征） 关于
+host 网络模式，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器与宿主机共享网络栈</span></li><li><span class="option-label">B</span><span>容器端口即宿主机端口</span></li><li><span class="option-label">C</span><span>多个容器监听同一端口会冲突</span></li><li><span class="option-label">D</span><span>性能比 bridge
+好（无 NAT 开销） E. 适合生产环境大规模部署</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：host
+模式共享宿主网络栈（A）、端口即宿主端口（B）、端口冲突（C）、无 NAT
+性能好（D）。E 错，host
+失去隔离、端口冲突风险高，不适合生产大规模部署，仅用于调试或性能极致场景。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-选择-040</strong>（★★ 知识点：K9-5 docker network 命令）
+下列 <code>docker network</code> 子命令中存在的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker network ls</code></span></li><li><span class="option-label">B</span><span><code>docker network create</code></span></li><li><span class="option-label">C</span><span><code>docker network inspect</code></span></li><li><span class="option-label">D</span><span><code>docker network connect</code> E.
+<code>docker network attach</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：Docker
+网络子命令包括
+ls（列出）、create（创建）、rm（删除）、inspect（查看详情）、connect（接入）、disconnect（断开）、prune（清理无用网络）。E
+错，没有 attach 子命令，追加接入用 connect。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>09-判断-001</strong>（★ 知识点：K9-1 默认网络） Docker
+安装后会自动创建 bridge、host、none 三个默认网络。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Docker
+安装完成后默认创建 3 个网络：bridge（默认驱动）、host、none。可用
+<code>docker network ls</code> 查看。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-002</strong>（★ 知识点：K9-2 默认 bridge DNS） 默认
+bridge 网络支持通过容器名互访，因为 Docker 内嵌了 DNS 服务。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：默认 bridge
+没有内嵌 DNS 服务，容器只能通过 IP 互访。自定义 bridge 才有内嵌
+DNS（127.0.0.11）支持容器名互访。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-003</strong>（★ 知识点：K9-3 host 网络） host
+网络模式下容器与宿主机共享网络栈，容器端口即宿主机端口。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：host
+模式下容器直接使用宿主机的网络命名空间，没有独立网卡、IP、端口空间，容器端口就是宿主机端口。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-004</strong>（★ 知识点：K9-3 none 网络） none
+网络模式下容器没有任何网络接口，连 lo 回环都没有。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：none
+网络的容器有独立的网络命名空间，且有 lo（本地回环，127.0.0.1），只是没有
+eth0，无法访问外部地址。说"没有任何网络接口"是错的。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-005</strong>（★ 知识点：K9-4 自定义网络优势） 自定义
+bridge 网络相对默认 bridge 的主要优势之一是支持容器名 DNS 解析。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：自定义 bridge
+内嵌 DNS 服务（127.0.0.11），自动注册容器名→IP
+的解析记录，支持容器名互访，这是相对默认 bridge 的核心优势之一。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-006</strong>（★ 知识点：K9-4 自定义网络创建）
+创建自定义 bridge 网络的命令是
+<code>docker network create &lt;网络名&gt;</code>。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>docker network create &lt;网络名&gt;</code>
+创建自定义 bridge 网络（默认驱动为 bridge）。可用
+<code>--driver bridge</code> 显式指定。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-007</strong>（★ 知识点：K9-5 同网络通信） 同一自定义
+bridge 网络内的容器之间通信也需要使用 <code>-p</code> 端口映射。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：同自定义网络内容器通过容器名 +
+容器内端口直接访问，不需要 <code>-p</code> 端口映射。<code>-p</code>
+只用于宿主机外部访问容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-008</strong>（★ 知识点：K9-5 跨网络通信）
+跨网络的容器默认隔离，需要使用 <code>docker network connect</code>
+才能按容器名互访。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Docker DNS
+按网络隔离，跨网络默认无法按容器名互访。必须用
+<code>docker network connect &lt;目标网络&gt; &lt;容器名&gt;</code>
+把容器追加接入目标网络。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-009</strong>（★ 知识点：K9-6 端口映射方向）
+<code>-p 8080:80</code> 表示把容器的 8080 端口映射到宿主机的 80
+端口。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：方向反了。<code>-p 宿主机端口:容器端口</code>，<code>-p 8080:80</code>
+表示把宿主机 8080 端口的流量转发到容器 80 端口，即外部访问
+<code>宿主机:8080</code> 实际访问容器内 80。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-010</strong>（★ 知识点：K9-6 CTTS 设计） 在 CTTS
+三服务网络方案中，MySQL 容器应该用 <code>-p 3306:3306</code>
+对外暴露端口，方便外部直接连接。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：MySQL
+容器不应该对外暴露
+3306（最小暴露面原则）。后端在同自定义网络内通过容器名
+<code>ctts-mysql</code> 访问即可。公网暴露 3306
+会被扫描爆破，存在严重安全风险。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-011</strong>（★★ 知识点：K9-2 bridge IP 动态） 容器的
+IP 地址在容器重启后可能发生变化，因此默认 bridge 用 IP 互访不可靠。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：容器 IP 由
+Docker 动态分配，重启后可能变化。默认 bridge 只能用 IP
+互访，所以不可靠——这是自定义 bridge + 容器名 DNS 的核心动机。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-012</strong>（★★ 知识点：K9-2 docker0） 默认 bridge
+网络对应的虚拟网桥设备名是 docker0，默认 IP 通常是 172.17.0.1。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：默认 bridge
+网络在宿主机上对应网桥设备 docker0，默认子网通常是 172.17.0.0/16，网关
+172.17.0.1。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-013</strong>（★★ 知识点：K9-3 host 适用场景） host
+网络模式适合生产环境大规模部署 Web 服务。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：host
+模式失去网络隔离、端口冲突风险高，不适合生产大规模部署。仅用于调试、抓包或对性能极致敏感的小规模场景。生产推荐自定义
+bridge。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-014</strong>（★★ 知识点：K9-4 删除网络）
+可以直接删除仍有活跃容器的自定义网络，Docker 会自动断开容器。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Docker
+不允许删除仍有活跃容器的网络，会报错
+<code>network has active endpoints</code>。必须先停止并删除容器，或用
+<code>docker network disconnect</code> 断开所有容器，才能删除网络。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-015</strong>（★★ 知识点：K9-4 内嵌 DNS） 自定义
+bridge 网络中 Docker 内嵌 DNS 服务的 IP 是 127.0.0.11。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：自定义 bridge
+网络中 Docker 内嵌 DNS 服务监听在 127.0.0.11，容器内 /etc/resolv.conf
+自动指向该地址，负责容器名→IP 的解析。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-016</strong>（★★ 知识点：K9-5 connect 行为）
+<code>docker network connect</code>
+会断开容器与原网络的连接，把容器迁移到新网络。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>docker network connect</code>
+是追加接入，不断开原网络。容器会同时存在于原网络和新网络中，获得新网络的一个
+IP，原有 IP 保持不变。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-017</strong>（★★ 知识点：K9-5 容器名互访） 同一自定义
+bridge 网络内，前端容器可以用 <code>curl http://ctts-backend:8080</code>
+访问后端容器。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：自定义 bridge
+内嵌 DNS 自动解析容器名，前端容器可以直接用容器名
+<code>ctts-backend</code> 访问后端的 8080 端口，无需 IP 和
+<code>-p</code> 映射。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-018</strong>（★★ 知识点：K9-6 端口映射作用）
+<code>-p</code>
+端口映射既用于宿主机外部访问容器，也用于同网络容器间通信。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：<code>-p</code>
+只用于宿主机外部访问容器。同网络容器间通过容器名 +
+容器内端口直接访问，不需要 <code>-p</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-019</strong>（★★ 知识点：K9-3 host 模式 -p） host
+网络模式下使用 <code>-p 80:80</code> 参数会被 Docker
+正常处理，端口映射生效。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：host
+模式下容器端口已经是宿主机端口，<code>-p</code> 会被忽略并告警
+<code>WARNING: Published ports are discarded when using host network mode</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-判断-020</strong>（★★ 知识点：K9-6 最小暴露面）
+生产环境应遵循"最小暴露面"原则，只对外暴露必要端口（如前端
+80），数据库等内部服务不应直接对公网暴露。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：最小暴露面是网络安全的基本原则——只暴露必须对外提供服务的端口（如前端
+80/443），数据库、缓存等内部服务应仅在同网络内被应用按容器名访问，不对公网暴露，降低攻击面。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>09-填空-001</strong>（★ 知识点：K9-1 默认网络） Docker
+安装后默认创建的三个网络是 bridge、________ 和 none。</p><blockquote>
+<p><strong>答案：host</strong> <strong>解析</strong>：Docker
+安装后自动创建 3
+个网络：bridge（默认驱动）、host（共享宿主栈）、none（无网络）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-填空-002</strong>（★ 知识点：K9-2 默认网桥） 默认 bridge
+网络在宿主机上对应的虚拟网桥设备名是 ________。</p><blockquote>
+<p><strong>答案：docker0</strong> <strong>解析</strong>：默认 bridge
+网络对应宿主机上的 docker0 网桥设备，默认 IP 通常是 172.17.0.1/16。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-填空-003</strong>（★ 知识点：K9-4 创建网络命令）
+创建自定义 bridge 网络的命令是
+<code>docker network ________ &lt;网络名&gt;</code>。</p><blockquote>
+<p><strong>答案：create</strong>
+<strong>解析</strong>：<code>docker network create &lt;网络名&gt;</code>
+创建自定义 bridge 网络。不指定 <code>--driver</code> 时默认 bridge
+驱动。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-填空-004</strong>（★ 知识点：K9-4 内嵌 DNS） 自定义 bridge
+网络中 Docker 内嵌 DNS 服务的 IP 地址是 ________。</p><blockquote>
+<p><strong>答案：127.0.0.11</strong> <strong>解析</strong>：自定义
+bridge 网络中 Docker 内嵌 DNS 服务监听 127.0.0.11，负责容器名→IP
+的解析。容器内 /etc/resolv.conf 自动指向该地址。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-填空-005</strong>（★ 知识点：K9-5 跨网络通信）
+把已运行的容器追加接入第二个网络的命令是
+<code>docker network ________ &lt;网络名&gt; &lt;容器名&gt;</code>。</p><blockquote>
+<p><strong>答案：connect</strong>
+<strong>解析</strong>：<code>docker network connect &lt;网络名&gt; &lt;容器名&gt;</code>
+把容器追加接入目标网络，容器会获得该网络中的一个
+IP，并能按容器名访问该网络内的容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-填空-006</strong>（★ 知识点：K9-6 端口映射格式）
+<code>docker run -p 8080:80 nginx</code> 中，<code>8080</code> 是
+________ 端口，<code>80</code> 是容器端口。</p><blockquote>
+<p><strong>答案：宿主机</strong>
+<strong>解析</strong>：<code>-p 宿主机端口:容器端口</code>，<code>8080</code>
+是宿主机端口，<code>80</code> 是容器端口。外部访问
+<code>宿主机:8080</code> 流量被转发到容器 80。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-填空-007</strong>（★★ 知识点：K9-5 容器名互访） 同一自定义
+bridge 网络内，前端容器访问后端容器的 API 通常写作
+<code>http://________:8080</code>（用后端容器名）。</p><blockquote>
+<p><strong>答案：ctts-backend（或 后端容器名）</strong>
+<strong>解析</strong>：自定义 bridge 内嵌 DNS
+自动解析容器名，前端容器直接用后端容器名（如 ctts-backend）访问，无需 IP
+和 <code>-p</code> 映射。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-填空-008</strong>（★★ 知识点：K9-3 none 网络接口） none
+网络模式下，容器只有
+________（本地回环）接口，无法访问任何外部地址。</p><blockquote>
+<p><strong>答案：lo（或 回环 / loopback）</strong>
+<strong>解析</strong>：none 网络的容器有独立的 network namespace，但只有
+lo 回环接口（127.0.0.1），没有
+eth0，无法访问任何外部地址，也无法被外部访问。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-填空-009</strong>（★★ 知识点：K9-2 容器访问外网机制）
+bridge 网络中容器能访问外网，依靠 iptables 的 ________
+规则做源地址转换。</p><blockquote>
+<p><strong>答案：MASQUERADE（或 SNAT / 源地址转换）</strong>
+<strong>解析</strong>：容器出向流量经过 iptables MASQUERADE
+规则做源地址转换（容器 IP → 宿主机 IP），让容器能访问外网。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-填空-010</strong>（★★ 知识点：K9-6 CTTS 网络设计） CTTS
+三服务网络方案中，三服务应接入同一 ________ bridge
+网络以支持容器名互访。</p><blockquote>
+<p><strong>答案：自定义</strong> <strong>解析</strong>：CTTS
+三服务应接入同一自定义 bridge 网络（如 ctts-net），通过 Docker 内嵌 DNS
+实现按容器名互访。默认 bridge 无 DNS，不推荐。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>09-论述-001</strong>（★★ 知识点：K9-2/K9-3 三种网络对比，10
+分） 请从网络隔离、容器
+IP、端口冲突、外部访问、容器间通信、性能、典型场景七个方面，对比
+bridge、host、none 三种网络驱动。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>网络隔离</strong>（1.5 分）：bridge 有独立网络命名空间；host
+共享宿主机网络栈，无独立命名空间；none 有独立命名空间但无网络接口（除
+lo）。</li>
+<li><strong>容器 IP</strong>（1 分）：bridge 有自己的 IP（如
+172.17.0.x）；host 用宿主机 IP；none 仅 127.0.0.1。</li>
+<li><strong>端口冲突</strong>（1 分）：bridge
+不会冲突（容器端口独立）；host 会冲突（容器端口即宿主端口）；none
+不会（无网络）。</li>
+<li><strong>外部访问</strong>（1.5 分）：bridge 需要 <code>-p</code>
+端口映射；host 直接访问（容器端口即宿主端口）；none 无法访问。</li>
+<li><strong>容器间通信</strong>（1.5 分）：bridge 同网络内可通过
+IP/容器名（自定义 bridge）互访；host 通过 localhost+端口；none
+无法通信。</li>
+<li><strong>性能</strong>（1 分）：bridge 有 NAT 开销略低；host 无 NAT
+性能最好；none N/A。</li>
+<li><strong>典型场景</strong>（2.5 分）：bridge
+适合普通应用容器（Web、API、DB），自定义 bridge 是生产推荐；host
+适合调试、抓包或性能极致场景；none 适合安全沙箱、离线计算。</li>
+</ol>
+<p><strong>评分要点</strong>：每个方面独立给分；要点齐全即可满分；意思对即可，不要求字句完全一致。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-论述-002</strong>（★★ 知识点：K9-2/K9-4 默认 vs 自定义
+bridge，8 分） 请说明默认 bridge 网络与自定义 bridge
+网络的主要区别，并解释为什么 Docker 官方推荐生产环境使用自定义
+bridge。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>默认 bridge 与自定义 bridge 的区别</strong>（5 分）：
+<ul>
+<li><strong>创建方式</strong>（1 分）：默认 bridge 由 Docker
+安装时自动创建（名为 bridge，对应 docker0）；自定义 bridge 由用户用
+<code>docker network create</code> 手动创建。</li>
+<li><strong>容器名 DNS 解析</strong>（2 分）：默认 bridge 没有内嵌
+DNS，容器只能用 IP 互访（IP 动态变化不可靠）；自定义 bridge 内嵌
+DNS（127.0.0.11），支持容器名互访。</li>
+<li><strong>网络隔离</strong>（1 分）：默认 bridge
+所有容器在同一网络无法按业务隔离；自定义 bridge
+可按业务创建多个网络实现隔离。</li>
+<li><strong>自动加入</strong>（1 分）：不指定 <code>--network</code>
+时容器默认加入默认 bridge；自定义 bridge 必须显式 <code>--network</code>
+指定。</li>
+</ul></li>
+<li><strong>为什么推荐自定义 bridge</strong>（3 分）：
+<ul>
+<li>容器名 DNS 解析让容器间通信不依赖动态 IP，更可靠（1 分）。</li>
+<li>可按业务创建多个网络实现网络隔离，安全性更好（1 分）。</li>
+<li>默认 bridge 是早期兼容性设计，自定义 bridge 是新设计，功能更完善（1
+分）。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：区别和推荐理由分开给分；要点齐全即可满分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-论述-003</strong>（★★ 知识点：K9-5 容器间通信方式，8 分）
+请描述 Docker
+容器间通信的两种主要方式，并说明各自的使用场景与命令示例。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>方式 1：同自定义网络按容器名通信</strong>（4 分）：
+<ul>
+<li>原理（1.5 分）：同一自定义 bridge 网络内的容器，通过 Docker 内嵌
+DNS（127.0.0.11）自动解析容器名→IP，直接用容器名互访。</li>
+<li>使用场景（1
+分）：同一应用内的多个服务（如前端+后端+数据库）需要相互通信。</li>
+<li>命令示例（1.5 分）：<code>docker network create ctts-net</code> →
+<code>docker run --name backend --network ctts-net ...</code> →
+<code>docker run --name frontend --network ctts-net ...</code> → 前端用
+<code>curl http://backend:8080</code> 访问后端。</li>
+</ul></li>
+<li><strong>方式 2：跨网络通信（docker network connect）</strong>（4
+分）：
+<ul>
+<li>原理（1.5 分）：把已运行的容器追加接入到目标网络，容器获得目标网络的
+IP，并能按容器名访问该网络内的容器。</li>
+<li>使用场景（1
+分）：容器需要访问另一个网络中的容器（如监控容器需要访问业务网络中的多个服务）。</li>
+<li>命令示例（1.5
+分）：<code>docker network connect ctts-net prometheus</code> 把
+prometheus 容器接入 ctts-net，之后 prometheus 能 ping 通 ctts-net 中的
+backend、frontend 等容器。</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：两种方式各自独立给分；原理、场景、命令示例三要素齐全即可满分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>09-论述-004</strong>（★★ 知识点：K9-6 CTTS 网络方案设计，10
+分） 请为 CTTS 三服务（前端 Vue3+Nginx + 后端 SpringBoot +
+MySQL）设计完整的容器网络通信方案，要求说明：①使用哪种网络驱动及原因；②三个容器分别接入哪些网络；③哪些端口需要对外映射；④容器间如何互访；⑤从网络安全角度说明设计原则。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>网络驱动选型</strong>（2 分）：选择自定义 bridge 网络（如
+<code>ctts-net</code>）。原因：bridge 兼顾隔离与互通；自定义 bridge 内置
+DNS 支持容器名互访，避免依赖动态 IP；可按业务隔离。host 失去隔离、none
+无法通信都不适合。</li>
+<li><strong>三容器网络接入</strong>（2 分）：三个容器都接入同一自定义
+bridge 网络 <code>ctts-net</code>。前端 ctts-frontend、后端
+ctts-backend、MySQL ctts-mysql 都用 <code>--network ctts-net</code>
+加入。</li>
+<li><strong>端口对外映射</strong>（2 分）：仅前端 <code>-p 80:80</code>
+对外暴露 80 端口供用户访问；后端不 <code>-p</code>
+暴露（前端通过容器名访问）；MySQL 不 <code>-p</code>
+暴露（后端通过容器名访问）。</li>
+<li><strong>容器间互访方式</strong>（2 分）：前端通过
+<code>http://ctts-backend:8080</code> 访问后端 API（Nginx
+反向代理）；后端通过 <code>jdbc:mysql://ctts-mysql:3306/ctts</code> 连接
+MySQL。均通过 Docker 内嵌 DNS 解析容器名。</li>
+<li><strong>网络安全设计原则</strong>（2
+分）：遵循"最小暴露面"原则，只对外暴露必要端口（前端 80）；MySQL
+不对公网暴露
+3306（防止暴力破解、漏洞利用、数据泄露）；后端不对宿主机暴露
+8080；通过自定义 bridge 实现"默认隔离、按需放通"。</li>
+</ol>
+<p><strong>评分要点</strong>：五个要点各自独立给分；方案合理即可，不要求与答案完全一致；技术选型合理替代同样给分。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>09-阅读-001</strong>（★★ 知识点：K9-4/K9-5
+自定义网络与容器通信，12 分）
+阅读以下自定义网络与容器通信的操作流程，补全缺失部分（每空 2 分，共 12
+分）。</p>
+<pre class="text"><code>操作流程：
+1. 创建自定义网络
+   docker network (a)________ ctts-net
+
+2. 启动后端容器，加入 ctts-net
+   docker run -d --name ctts-backend (b)________ ctts-net nginx:alpine
+
+3. 启动前端容器，加入同一网络
+   docker run -d --name ctts-frontend --network ctts-net busybox sleep 3600
+
+4. 前端容器用容器名访问后端（成功）
+   docker exec -it ctts-frontend wget -qO- http://(c)________:80
+
+5. 查看前端容器的 DNS 配置
+   docker exec -it ctts-frontend cat /etc/resolv.conf
+   输出：nameserver (d)________
+
+6. 创建第二个网络 monitor-net
+   docker network create monitor-net
+
+7. 启动监控容器在 monitor-net 中
+   docker run -d --name prometheus --network monitor-net busybox sleep 3600
+
+8. prometheus 当前 (e)________（能/不能）按容器名访问 ctts-backend
+
+9. 把 prometheus 追加接入 ctts-net
+   docker network (f)________ ctts-net prometheus
+
+10. 接入后，prometheus 能按容器名访问 ctts-backend</code></pre>
+<blockquote>
+<p><strong>参考答案</strong>： (a) create (b) --network (c) ctts-backend
+(d) 127.0.0.11 (e) 不能 (f) connect</p>
+<p><strong>解析</strong>：(a) 创建网络用 create；(b) 指定网络用
+--network；(c) 自定义网络支持容器名互访，用后端容器名 ctts-backend；(d)
+Docker 内嵌 DNS 在 127.0.0.11；(e) 跨网络默认隔离，prometheus 在
+monitor-net 中无法访问 ctts-net 的容器；(f) 追加接入用 connect。</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。意思对即可，专有名词拼写错误不扣分（如 connect 写成 Connect）。</p>
+</blockquote>
+<hr />
+<p><strong>09-阅读-002</strong>（★★ 知识点：K9-6 CTTS 网络方案落地，12
+分） 阅读以下 CTTS 三服务网络方案落地命令，补全缺失部分（每空 2 分，共
+12 分）。</p>
+<pre class="text"><code>方案要求：
+  - 三服务接入同一自定义 bridge 网络 ctts-net
+  - 仅前端对外暴露 80 端口
+  - MySQL 和后端不对宿主机暴露端口
+  - 后端通过容器名连接 MySQL
+
+落地命令：
+1. 创建自定义网络
+   docker network create (a)________
+
+2. 启动 MySQL 容器（不对宿主机暴露端口）
+   docker run -d --name (b)________ --network ctts-net \
+     -e MYSQL_ROOT_PASSWORD=ctts@2026 -e MYSQL_DATABASE=ctts mysql:8.0
+
+3. 启动后端容器（不对宿主机暴露端口），通过容器名连接 MySQL
+   docker run -d --name ctts-backend --network (c)________ \
+     -e SPRING_DATASOURCE_URL=&quot;jdbc:mysql://(d)________:3306/ctts&quot; \
+     -e SPRING_DATASOURCE_PASSWORD=ctts@2026 \
+     openjdk:17-slim
+
+4. 启动前端容器（仅前端对外暴露 80）
+   docker run -d --name ctts-frontend --network ctts-net \
+     (e)________ nginx:alpine
+
+5. 验证外部能访问前端
+   curl http://localhost:(f)________
+
+6. 验证外部无法直接访问 MySQL（符合安全设计）
+   curl telnet://localhost:3306 → 拒绝</code></pre>
+<blockquote>
+<p><strong>参考答案</strong>： (a) ctts-net (b) ctts-mysql (c) ctts-net
+(d) ctts-mysql (e) -p 80:80 (f) 80</p>
+<p><strong>解析</strong>：(a) 创建 ctts-net 网络；(b) MySQL 容器命名为
+ctts-mysql；(c) 后端也加入 ctts-net；(d) JDBC URL 用容器名
+ctts-mysql；(e) 前端对外暴露 80 端口用 -p 80:80；(f) 外部通过宿主机 80
+端口访问前端。</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。意思对即可，命令参数顺序不影响评分。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>09-编程-001</strong>（★★ 知识点：K9-4/K9-5
+自定义网络与容器通信，15 分）
+<strong>容器网络通信方案设计与落地</strong>：某团队需要在一台宿主机上部署两个容器：一个
+Nginx Web 服务（容器名 <code>web</code>）和一个 Alpine 测试容器（容器名
+<code>client</code>），要求 <code>client</code> 能通过容器名访问
+<code>web</code> 的 80 端口。请设计完整方案，要求包含：</p>
+<ol type="1">
+<li>网络驱动选型与理由（3 分）</li>
+<li>创建自定义网络的完整命令（2 分）</li>
+<li>启动两个容器的完整命令（含网络指定、端口映射设计）（6 分）</li>
+<li>在 client 容器内验证能通过容器名访问 web 的命令（2 分）</li>
+<li>验证宿主机外部能访问 web 服务的命令（2 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<p><strong>1. 网络驱动选型与理由（3 分）</strong>： 选择自定义 bridge
+网络。理由：①bridge 兼顾隔离与互通；②自定义 bridge 内置 DNS 支持 client
+通过容器名 <code>web</code> 访问，不依赖动态 IP；③bridge
+支持端口映射让宿主机外部访问 web。</p>
+<p><strong>2. 创建自定义网络（2 分）</strong>：</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> network create app-net</span></code></pre></div>
+<p><strong>3. 启动两个容器的完整命令（6 分，每个3分）</strong>：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 启动 web 容器，加入 app-net，对外暴露 80 端口</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> web <span class="at">--network</span> app-net <span class="at">-p</span> 80:80 nginx:alpine</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 启动 client 容器，加入同一 app-net（不对宿主机暴露端口）</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> client <span class="at">--network</span> app-net alpine sleep 3600</span></code></pre></div>
+<p><strong>4. client 内验证容器名访问 web（2 分）</strong>：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> client wget <span class="at">-qO-</span> <span class="at">-S</span> http://web:80 <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-5</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 或</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> client ping <span class="at">-c</span> 2 web</span></code></pre></div>
+<p>预期：能解析 web 容器名并访问 80 端口，返回 HTTP 200。</p>
+<p><strong>5. 宿主机外部访问验证（2 分）</strong>：</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-I</span> http://localhost:80</span></code></pre></div>
+<p>预期：返回 HTTP/1.1 200 OK。</p>
+<p><strong>评分要点</strong>：各小题独立给分；命令合理即可，网络名可以是任意合法名；选型理由答出"自定义
+bridge + DNS 容器名解析"即可。</p>
+</blockquote>
+<hr />
+<p><strong>09-编程-002</strong>（★★★ 知识点：K9-6 CTTS
+网络方案综合设计，20 分） <strong>CTTS
+三服务容器网络方案综合设计</strong>：请为 CTTS 项目（前端 Vue3+Nginx +
+后端 SpringBoot + MySQL
+8.0）设计完整的容器网络通信方案并给出落地命令。要求：</p>
+<ol type="1">
+<li>设计网络拓扑（画出 ASCII 拓扑图，标出网络名、容器名、IP
+段、端口映射、调用关系）（6 分）</li>
+<li>给出创建网络的完整命令（2 分）</li>
+<li>给出三个容器的启动命令（含网络指定、环境变量、端口映射）（9
+分，每个容器 3 分）</li>
+<li>说明从网络安全角度，本方案遵循了哪些设计原则（3 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<p><strong>1. 网络拓扑图（6 分）</strong>：</p>
+<pre><code>         外部用户
+            │
+            │ http://宿主机IP:80
+            ▼
+┌────────────────────────────────────────────┐
+│              宿主机                        │
+│  iptables: 宿主机:80 → 172.20.0.4:80      │
+│  ┌──────────────────────────────────────┐  │
+│  │    自定义 bridge: ctts-net           │  │
+│  │    子网: 172.20.0.0/16               │  │
+│  │    DNS: 127.0.0.11                   │  │
+│  │                                      │  │
+│  │  ┌──────────┐  ┌──────────┐  ┌─────────┐
+│  │  │ frontend │─▶│ backend  │─▶│  mysql  │
+│  │  │  Nginx   │  │SpringBoot│  │  MySQL  │
+│  │  │172.20.0.4│  │172.20.0.3│  │172.20.0.2│
+│  │  │ :80      │  │ :8080    │  │ :3306   │
+│  │  │-p 80:80  │  │ 不暴露    │  │ 不暴露  │
+│  │  └──────────┘  └──────────┘  └─────────┘
+│  │                                      │  │
+│  │  按容器名互访：                       │  │
+│  │  frontend → http://ctts-backend:8080 │  │
+│  │  backend  → jdbc:mysql://ctts-mysql  │  │
+│  └──────────────────────────────────────┘  │
+└────────────────────────────────────────────┘</code></pre>
+<p>评分：网络名、容器名、IP 段、端口映射、调用关系各 1 分；拓扑结构合理
+1 分。</p>
+<p><strong>2. 创建网络命令（2 分）</strong>：</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> network create ctts-net</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 或指定子网：</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> network create <span class="at">--subnet</span> 172.20.0.0/16 <span class="at">--gateway</span> 172.20.0.1 ctts-net</span></code></pre></div>
+<p><strong>3. 三个容器启动命令（9 分，每个 3 分）</strong>：</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MySQL 容器（不对宿主机暴露端口）</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> ctts-mysql <span class="dt">\</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--network</span> ctts-net <span class="dt">\</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_ROOT_PASSWORD=ctts@2026 <span class="dt">\</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> MYSQL_DATABASE=ctts <span class="dt">\</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  mysql:8.0</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 后端容器（不对宿主机暴露端口，通过容器名连 MySQL）</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> ctts-backend <span class="dt">\</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">--network</span> ctts-net <span class="dt">\</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> SPRING_DATASOURCE_URL=<span class="st">&quot;jdbc:mysql://ctts-mysql:3306/ctts&quot;</span> <span class="dt">\</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> SPRING_DATASOURCE_USERNAME=root <span class="dt">\</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> SPRING_DATASOURCE_PASSWORD=ctts@2026 <span class="dt">\</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  ctts-backend:v1</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 前端容器（仅前端对外暴露 80）</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> ctts-frontend <span class="dt">\</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">--network</span> ctts-net <span class="dt">\</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 80:80 <span class="dt">\</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  ctts-frontend:v1</span></code></pre></div>
+<p>评分：每个容器命令 3 分，需包含 <code>--network ctts-net</code>（1
+分）+ 端口映射设计正确（1 分）+ 关键环境变量/参数（1 分）。</p>
+<p><strong>4. 网络安全设计原则（3 分）</strong>：</p>
+<ul>
+<li><strong>最小暴露面</strong>：仅前端 80 端口对外暴露，后端 8080 和
+MySQL 3306 不对宿主机暴露（1 分）。</li>
+<li><strong>默认隔离、按需放通</strong>：三服务在自定义 bridge
+内互通，跨网络默认隔离；MySQL 仅被后端按容器名访问，外部无法直接连接（1
+分）。</li>
+<li><strong>配置用容器名而非 IP</strong>：避免动态 IP
+变化导致连接失败，同时不暴露内部网络拓扑（1 分）。</li>
+</ul>
+<p><strong>评分要点</strong>：各部分独立给分；方案合理即可，技术选型合理替代同样给分；拓扑图要素齐全即可，不要求
+ASCII 美观。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

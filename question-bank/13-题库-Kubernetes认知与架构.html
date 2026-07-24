@@ -1,0 +1,968 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kubernetes认知与架构</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 13 次课 · 题库</div>
+      <h1>Kubernetes认知与架构</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 13 次课</span>
+        <span class="hero-chip"><b>主题</b>Kubernetes认知与架构</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 13 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>13-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>13-选择-001</strong>（★ 知识点：K13-1 K8s 定义）
+Kubernetes（K8s）是一个开源的 ________ 平台。</p><div class="option-list"><ul><li><span class="option-label">A</span><span>虚拟机管理</span></li><li><span class="option-label">B</span><span>容器编排</span></li><li><span class="option-label">C</span><span>数据库</span></li><li><span class="option-label">D</span><span>操作系统</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：K8s
+是开源的容器编排平台，用于自动化部署、扩展和管理容器化应用。A 错，K8s
+不管理虚拟机；C 错，K8s 不是数据库；D 错，K8s
+不是操作系统（虽常被称为"云原生操作系统"，但这是比喻）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-002</strong>（★ 知识点：K13-1 K8s 名称由来）
+Kubernetes 简称为 K8s，原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>它有 8 个核心组件</span></li><li><span class="option-label">B</span><span>K 和 s 之间有 8
+个字母</span></li><li><span class="option-label">C</span><span>它是第 8 代容器编排工具</span></li><li><span class="option-label">D</span><span>它支持最多 8 个节点</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：K8s 是 Kubernetes
+的缩写，因为首字母 K 与末字母 s 之间有 8 个字母（ubernete），故称
+K8s。与组件数、版本、节点数无关。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-003</strong>（★ 知识点：K13-1 容器编排概念）
+"容器编排"主要解决的问题是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>如何把应用打包成容器镜像</span></li><li><span class="option-label">B</span><span>如何在集群中自动化调度、扩缩容、故障恢复容器</span></li><li><span class="option-label">C</span><span>如何编写 Dockerfile</span></li><li><span class="option-label">D</span><span>如何在单机上运行多个容器</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：容器编排解决集群中容器的自动化调度、扩缩容、故障恢复、滚动更新等问题。A
+是 Docker 化（Dockerfile）；C 是镜像构建；D
+是单机编排（Compose），不属于"编排"的核心范畴。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-004</strong>（★ 知识点：K13-1 K8s 起源） Kubernetes
+最初是基于哪家公司的内部系统经验开源的？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Microsoft 的 Azure</span></li><li><span class="option-label">B</span><span>Amazon
+的 AWS</span></li><li><span class="option-label">C</span><span>Google 的 Borg</span></li><li><span class="option-label">D</span><span>阿里巴巴的飞天</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：K8s 最初由 Google
+基于内部 Borg 系统的设计经验开源，2014 年捐给 CNCF。Borg 是 Google
+内部的集群管理系统。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-005</strong>（★ 知识点：K13-1 Compose 局限）
+下列哪一项不属于 Docker Compose 的局限性？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>只能在单台机器上编排容器</span></li><li><span class="option-label">B</span><span>容器故障不能自动重启</span></li><li><span class="option-label">C</span><span>不能根据负载自动扩缩容</span></li><li><span class="option-label">D</span><span>不支持 YAML
+描述服务</span></li></ul></div><blockquote>
+<p><strong>答案：D</strong> <strong>解析</strong>：Compose 完全支持用
+YAML（docker-compose.yml）描述服务，这是它的核心特性。A、B、C 都是
+Compose 的真实局限（单机、无自愈、无弹性）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-006</strong>（★ 知识点：K13-1 K8s 核心） K8s
+的核心价值不包括下列哪一项？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>多机调度</span></li><li><span class="option-label">B</span><span>自动自愈</span></li><li><span class="option-label">C</span><span>弹性扩缩容</span></li><li><span class="option-label">D</span><span>取代 Docker 镜像构建</span></li></ul></div><blockquote>
+<p><strong>答案：D</strong> <strong>解析</strong>：K8s
+的核心价值是多机调度、自愈、弹性扩缩容、滚动更新。K8s 不取代 Docker
+镜像构建，镜像构建仍然用 Docker（或其他工具）。A、B、C 都是 K8s
+的真实价值。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-007</strong>（★ 知识点：K13-2 K8s vs Compose） 关于
+Docker Compose 与 Kubernetes 的对比，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Compose
+支持集群级编排，K8s 只支持单机</span></li><li><span class="option-label">B</span><span>Compose 是单机编排，K8s 是集群编排</span></li><li><span class="option-label">C</span><span>二者功能完全相同，只是厂商不同</span></li><li><span class="option-label">D</span><span>K8s 是 Compose 的升级版，用法一样</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Compose
+是单机多容器编排，K8s 是集群级容器编排。A 错，反了；C
+错，二者模型不同；D 错，K8s 不是 Compose 升级版，模型不同（声明式 vs
+命令式）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-008</strong>（★ 知识点：K13-2 适用场景）
+下列场景中，最适合使用 Kubernetes 而非 Docker Compose 的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>本地开发联调前后端</span></li><li><span class="option-label">B</span><span>CI 流水线测试环境</span></li><li><span class="option-label">C</span><span>企业级电商大促，需要多副本与故障自动迁移</span></li><li><span class="option-label">D</span><span>个人博客部署</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：企业级电商大促需要多副本、自愈、弹性扩缩容、高可用，是
+K8s 的典型场景。A、B、D 都是单机够用，Compose 足够。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-009</strong>（★ 知识点：K13-2 K8s 优势） K8s
+实现滚动更新与回滚的核心资源是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod</span></li><li><span class="option-label">B</span><span>Deployment</span></li><li><span class="option-label">C</span><span>ConfigMap</span></li><li><span class="option-label">D</span><span>Namespace</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Deployment
+资源原生支持滚动更新（rolling update）与回滚（rollout
+undo），实现零停机升级。Pod 是最小调度单元，ConfigMap 是配置，Namespace
+是隔离。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-010</strong>（★ 知识点：K13-3 K8s 架构） Kubernetes
+采用的架构模式是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>单体架构</span></li><li><span class="option-label">B</span><span>P2P 对等架构</span></li><li><span class="option-label">C</span><span>Master-Node（控制平面-工作节点）架构</span></li><li><span class="option-label">D</span><span>主从复制架构</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：K8s 采用 Master-Node
+架构（控制平面 Control Plane 与工作节点 Worker Node），Master
+负责管理决策，Node 负责执行业务。其他选项都不对。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-011</strong>（★ 知识点：K13-3 Master 职责） 关于 K8s
+Master（控制平面），下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Master 负责运行业务容器</span></li><li><span class="option-label">B</span><span>Master 是集群的"大脑"，负责管理与决策</span></li><li><span class="option-label">C</span><span>Master 不需要任何组件</span></li><li><span class="option-label">D</span><span>Master
+必须部署在多台机器上</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Master
+是集群"大脑"，负责管理集群状态、调度决策、故障检测。A 错，业务容器跑在
+Node 上；C 错，Master 有四大核心组件；D 错，学习环境可单
+Master，生产才需多 Master 高可用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-012</strong>（★ 知识点：K13-3 Node 职责） 关于 K8s
+Node（工作节点），下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Node 负责集群管理决策</span></li><li><span class="option-label">B</span><span>Node
+不需要安装任何 K8s 组件</span></li><li><span class="option-label">C</span><span>Node 负责实际运行业务 Pod</span></li><li><span class="option-label">D</span><span>一个集群只能有一个 Node</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Node
+是"手脚"，负责实际运行业务 Pod。A 错，那是 Master 的职责；B 错，Node
+需装 kubelet/kube-proxy/container-runtime；D 错，一个集群通常有多个
+Node。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-013</strong>（★ 知识点：K13-4 API Server） K8s
+集群中，所有组件与用户访问的"统一入口"是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>etcd</span></li><li><span class="option-label">B</span><span>kube-apiserver</span></li><li><span class="option-label">C</span><span>scheduler</span></li><li><span class="option-label">D</span><span>kubelet</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：API
+Server（kube-apiserver）是集群唯一入口，所有组件与用户都通过它通信，它是唯一能直接读写
+etcd 的组件。其他组件都通过 API Server 间接操作 etcd。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-014</strong>（★ 知识点：K13-4 etcd） K8s
+集群中，保存集群所有状态数据的组件是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>etcd</span></li><li><span class="option-label">B</span><span>scheduler</span></li><li><span class="option-label">C</span><span>controller-manager</span></li><li><span class="option-label">D</span><span>kube-proxy</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：etcd
+是分布式键值（KV）存储，保存集群所有状态数据（Pod/Service/Deployment
+等），是 K8s 的"真相之源"。其他选项都不是存储组件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-015</strong>（★ 知识点：K13-4 etcd 类型） etcd
+是哪种类型的存储系统？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>关系型数据库</span></li><li><span class="option-label">B</span><span>文档数据库</span></li><li><span class="option-label">C</span><span>分布式键值（KV）存储</span></li><li><span class="option-label">D</span><span>文件系统</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：etcd
+是分布式键值（KV）存储数据库，使用 Raft
+协议保证一致性，不是关系型数据库（如 MySQL）也不是文档数据库（如
+MongoDB）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-016</strong>（★ 知识点：K13-4 scheduler） K8s
+中，负责决定新 Pod 运行在哪个 Node 上的组件是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>API Server</span></li><li><span class="option-label">B</span><span>etcd</span></li><li><span class="option-label">C</span><span>kube-scheduler</span></li><li><span class="option-label">D</span><span>kubelet</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：kube-scheduler（调度器）监听未调度的
+Pod，根据资源、亲和性等规则选择最合适的 Node。注意：scheduler
+只"决定"跑哪，真正启动容器的是目标 Node 上的 kubelet。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-017</strong>（★ 知识点：K13-4 controller-manager）
+K8s 中，运行多种控制器、持续让"实际状态"趋近"期望状态"的组件是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>API
+Server</span></li><li><span class="option-label">B</span><span>scheduler</span></li><li><span class="option-label">C</span><span>kube-controller-manager</span></li><li><span class="option-label">D</span><span>kube-proxy</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：controller-manager
+是控制器的集合（Deployment/ReplicaSet/Node/Endpoint
+等），每个控制器持续做"调和循环"（reconcile
+loop），让实际状态趋近期望状态。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-018</strong>（★ 知识点：K13-5 kubelet） 关于
+kubelet，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubelet 运行在 Master 上，负责调度</span></li><li><span class="option-label">B</span><span>kubelet 是 Node 上的节点代理，管理 Pod 生命周期</span></li><li><span class="option-label">C</span><span>kubelet 直接管理 etcd</span></li><li><span class="option-label">D</span><span>kubelet 不与 API Server 通信</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kubelet 跑在每个 Node
+上的节点代理，管理本节点 Pod 生命周期，与 API Server 通信。A 错，kubelet
+在 Node 上；C 错，只有 API Server 直接访问 etcd；D 错，kubelet 通过 API
+Server 上报状态。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-019</strong>（★ 知识点：K13-5 kube-proxy） kube-proxy
+的主要职责是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>调度 Pod 到 Node</span></li><li><span class="option-label">B</span><span>维护 Service
+的网络规则，实现服务发现与负载均衡</span></li><li><span class="option-label">C</span><span>拉取镜像并启动容器</span></li><li><span class="option-label">D</span><span>保存集群状态</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：kube-proxy 维护
+Service 的网络规则（iptables/ipvs），让访问 Service VIP 的流量路由到后端
+Pod，实现服务发现与负载均衡。A 是 scheduler；C 是 container-runtime；D
+是 etcd。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-020</strong>（★ 知识点：K13-5 容器运行时） K8s
+通过哪个接口标准支持多种容器运行时（如 containerd、CRI-O）？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>CNI</span></li><li><span class="option-label">B</span><span>CRI</span></li><li><span class="option-label">C</span><span>CSI</span></li><li><span class="option-label">D</span><span>OCI</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：CRI（Container
+Runtime Interface）是容器运行时接口，让 K8s 支持 containerd、CRI-O
+等多种运行时。CNI 是网络接口，CSI 是存储接口，OCI
+是镜像/运行时标准（不是 K8s 接口）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-021</strong>（★ 知识点：K13-5 K8s 1.24 变化） K8s
+1.24 版本起移除了 ________，不再直接支持 Docker Engine 作为容器运行时。</p><div class="option-list"><ul><li><span class="option-label">A</span><span>CRI</span></li><li><span class="option-label">B</span><span>dockershim</span></li><li><span class="option-label">C</span><span>containerd</span></li><li><span class="option-label">D</span><span>CNI</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：K8s 1.24 移除了
+dockershim（用于适配 Docker Engine 的桥接层），不再原生支持 Docker
+Engine。但 Docker 构建的镜像（OCI 格式）仍能在 containerd 上运行。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-022</strong>（★ 知识点：K13-6 Pod 概念） K8s
+中最小的调度单元是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器</span></li><li><span class="option-label">B</span><span>Pod</span></li><li><span class="option-label">C</span><span>Deployment</span></li><li><span class="option-label">D</span><span>Node</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Pod 是 K8s
+最小调度单元，包含一个或多个紧密协作的容器。K8s 不直接管容器，管的是
+Pod。容器在 Pod 内。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-023</strong>（★ 知识点：K13-6 Deployment 概念） 关于
+Deployment，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Deployment 直接运行容器</span></li><li><span class="option-label">B</span><span>Deployment
+管理 Pod 副本，支持滚动更新与回滚</span></li><li><span class="option-label">C</span><span>Deployment 是 K8s 的存储资源</span></li><li><span class="option-label">D</span><span>Deployment 必须配合 Ingress 使用</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Deployment 管理 Pod
+副本（通过 ReplicaSet），支持滚动更新与回滚。A 错，Deployment 管的是
+Pod，不直接运行容器；C 错，Deployment 是工作负载资源；D 错，Deployment
+不必配 Ingress。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-024</strong>（★ 知识点：K13-6 Service 概念） K8s
+中，为一组 Pod 提供稳定访问入口（IP+DNS）和负载均衡的资源是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod</span></li><li><span class="option-label">B</span><span>Deployment</span></li><li><span class="option-label">C</span><span>Service</span></li><li><span class="option-label">D</span><span>ConfigMap</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Service 为一组 Pod
+提供稳定的访问入口（ClusterIP/NodePort/LoadBalancer）和负载均衡。Pod
+是最小调度单元，Deployment 管副本，ConfigMap 存配置。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-025</strong>（★ 知识点：K13-6 Ingress 概念） K8s
+中，提供七层（HTTP/HTTPS）路由的资源是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Service</span></li><li><span class="option-label">B</span><span>Ingress</span></li><li><span class="option-label">C</span><span>kube-proxy</span></li><li><span class="option-label">D</span><span>Deployment</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Ingress
+提供七层路由（基于域名/路径），把外部请求路由到 Service。Service
+只做四层（TCP/UDP），kube-proxy 是 Node 上的网络代理组件，不是资源。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-026</strong>（★ 知识点：K13-6 ConfigMap/Secret） 关于
+ConfigMap 和 Secret，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>ConfigMap 存敏感信息，Secret
+存非敏感配置</span></li><li><span class="option-label">B</span><span>ConfigMap 存非敏感配置，Secret 存敏感信息</span></li><li><span class="option-label">C</span><span>二者完全相同</span></li><li><span class="option-label">D</span><span>ConfigMap 是加密的</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：ConfigMap
+存储非敏感配置（key-value），Secret 存储敏感信息（密码/密钥，base64
+编码）。注意：Secret 是 base64 编码（不是加密），生产需配合 RBAC
+限制访问。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-027</strong>（★ 知识点：K13-6 PV/PVC） K8s
+中，表示"用户对持久化存储的申请"的资源是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>PV</span></li><li><span class="option-label">B</span><span>PVC</span></li><li><span class="option-label">C</span><span>StorageClass</span></li><li><span class="option-label">D</span><span>Pod</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：PVC（PersistentVolumeClaim）是用户对存储的申请（如"我要
+10G 硬盘"）。PV（PersistentVolume）是集群级存储资源，StorageClass
+是动态创建 PV 的模板。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-028</strong>（★ 知识点：K13-6 Namespace 概念） K8s
+中，用于在集群内做资源隔离的虚拟集群概念是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod</span></li><li><span class="option-label">B</span><span>Deployment</span></li><li><span class="option-label">C</span><span>Namespace</span></li><li><span class="option-label">D</span><span>Node</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Namespace
+是集群内的虚拟集群，用于资源隔离（如 dev/test/prod 环境隔离）。不同
+Namespace 的资源相互隔离。Pod、Deployment、Node 都不是隔离概念。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-029</strong>（★★ 知识点：K13-4 API Server 唯一性）
+K8s 集群中，能够直接读写 etcd 的组件是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubelet</span></li><li><span class="option-label">B</span><span>scheduler</span></li><li><span class="option-label">C</span><span>kube-apiserver</span></li><li><span class="option-label">D</span><span>controller-manager</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：只有 API Server
+能直接读写 etcd，其他组件（scheduler、controller-manager、kubelet
+等）都通过 API Server 间接操作 etcd。这是 K8s 的安全与解耦设计。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-030</strong>（★★ 知识点：K13-3 Master 故障） 当 K8s
+Master（控制平面）发生故障时，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>所有业务 Pod
+立即停止运行</span></li><li><span class="option-label">B</span><span>已运行的 Pod 仍可在 Node 上继续工作，但不能创建新资源</span></li><li><span class="option-label">C</span><span>集群完全崩溃，无法恢复</span></li><li><span class="option-label">D</span><span>Node 也会自动关机</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Master 挂了，已运行的
+Pod 仍由 Node 上的 kubelet
+维持运行，业务不中断；但不能做新操作（创建/删除/扩缩容）。生产环境用多
+Master 高可用避免单点故障。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>13-选择-031</strong>（★★ 知识点：K13-1 Compose 局限） Docker
+Compose 相比 Kubernetes 的局限性包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>只能在单台机器上编排容器</span></li><li><span class="option-label">B</span><span>容器故障后不能自动迁移到其他节点</span></li><li><span class="option-label">C</span><span>不支持根据负载自动扩缩容</span></li><li><span class="option-label">D</span><span>不支持原生滚动更新 E. 不能用 YAML
+描述服务</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A
+单机局限、B 无自愈、C 无弹性、D 无滚动更新都是 Compose 的局限。E
+错，Compose 完全支持 YAML（docker-compose.yml）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-032</strong>（★★ 知识点：K13-1 容器编排职责）
+下列属于"容器编排"系统职责的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>决定容器跑在哪个节点</span></li><li><span class="option-label">B</span><span>容器故障时自动重启或迁移</span></li><li><span class="option-label">C</span><span>根据负载自动扩缩容</span></li><li><span class="option-label">D</span><span>把应用打包成镜像 E.
+滚动更新与回滚</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、E</strong>
+<strong>解析</strong>：容器编排负责调度（A）、自愈（B）、弹性（C）、滚动更新（E）。D
+是 Dockerfile 的工作（容器化），不属于编排职责。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-033</strong>（★★ 知识点：K13-3 Master 组件） K8s
+Master（控制平面）的核心组件包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kube-apiserver</span></li><li><span class="option-label">B</span><span>etcd</span></li><li><span class="option-label">C</span><span>kube-scheduler</span></li><li><span class="option-label">D</span><span>kube-controller-manager E. kubelet</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：Master
+四大组件：API Server、etcd、scheduler、controller-manager。E 错，kubelet
+跑在 Node 上，是 Node 组件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-034</strong>（★★ 知识点：K13-5 Node 组件） K8s
+Node（工作节点）的核心组件包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>kubelet</span></li><li><span class="option-label">B</span><span>kube-proxy</span></li><li><span class="option-label">C</span><span>container-runtime</span></li><li><span class="option-label">D</span><span>etcd E. scheduler</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong> <strong>解析</strong>：Node
+三大组件：kubelet、kube-proxy、container-runtime。D、E 是 Master
+组件，不在 Node 上。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-035</strong>（★★ 知识点：K13-2 K8s vs Compose） 与
+Docker Compose 相比，Kubernetes 的优势包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>支持多节点集群调度</span></li><li><span class="option-label">B</span><span>容器故障自动自愈与迁移</span></li><li><span class="option-label">C</span><span>根据负载自动扩缩容</span></li><li><span class="option-label">D</span><span>原生支持滚动更新与回滚 E. 不需要学习 YAML</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A
+多机调度、B 自愈、C 弹性、D 滚动更新都是 K8s 的优势。E 错，K8s 大量使用
+YAML（比 Compose 更复杂）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-036</strong>（★★ 知识点：K13-2 适用场景）
+下列场景中，适合使用 Kubernetes 的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>企业级应用生产部署（用户上万）</span></li><li><span class="option-label">B</span><span>微服务架构（几十个服务）</span></li><li><span class="option-label">C</span><span>跨地域多机房部署</span></li><li><span class="option-label">D</span><span>金融系统高可用部署 E. 个人本地开发联调</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：A、B、C、D
+都需要集群调度、高可用、弹性扩缩容，适合 K8s。E 错，本地开发联调用
+Compose 更简单。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-037</strong>（★★ 知识点：K13-4 controller-manager）
+下列属于 kube-controller-manager 内置控制器的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Deployment
+Controller</span></li><li><span class="option-label">B</span><span>ReplicaSet Controller</span></li><li><span class="option-label">C</span><span>Node Controller</span></li><li><span class="option-label">D</span><span>Endpoint
+Controller E. CNI Controller</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：controller-manager
+内置多种控制器：Deployment、ReplicaSet、Node、Endpoint 等。E 错，CNI
+是网络插件接口，不是控制器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-038</strong>（★★ 知识点：K13-5 容器运行时）
+下列可以作为 K8s 容器运行时的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>containerd</span></li><li><span class="option-label">B</span><span>CRI-O</span></li><li><span class="option-label">C</span><span>VMware ESXi</span></li><li><span class="option-label">D</span><span>Docker（通过 containerd 兼容） E. KubeVirt</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D</strong>
+<strong>解析</strong>：containerd、CRI-O、Docker（通过 containerd
+兼容）都支持 CRI 接口，可作为 K8s 运行时。C 错，ESXi 是虚拟机平台；E
+错，KubeVirt 是 K8s 跑虚拟机的扩展，不是容器运行时。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-039</strong>（★★ 知识点：K13-6 核心资源） 下列属于
+K8s 核心资源的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod</span></li><li><span class="option-label">B</span><span>Deployment</span></li><li><span class="option-label">C</span><span>Service</span></li><li><span class="option-label">D</span><span>ConfigMap
+E. Dockerfile</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：Pod、Deployment、Service、ConfigMap 都是 K8s
+核心资源。E 错，Dockerfile 是 Docker 镜像构建文件，不是 K8s 资源。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-选择-040</strong>（★★ 知识点：K13-6 资源用途） 下列 K8s
+资源与用途的对应，正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>Pod —— 最小调度单元</span></li><li><span class="option-label">B</span><span>Service
+—— 提供稳定访问入口与负载均衡</span></li><li><span class="option-label">C</span><span>ConfigMap —— 存储敏感密码</span></li><li><span class="option-label">D</span><span>PVC ——
+持久化存储申请 E. Ingress —— 七层路由</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong> <strong>解析</strong>：A、B、D、E
+都正确。C 错，敏感密码应该用 Secret，ConfigMap 存非敏感配置。</p>
+</blockquote></section>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>13-判断-001</strong>（★ 知识点：K13-1 K8s 定义）
+Kubernetes（K8s）是一个开源的容器编排平台，用于自动化部署、扩展和管理容器化应用。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：这是 K8s
+的标准定义。K8s 是 CNCF
+托管的开源容器编排平台，解决集群中容器的自动化管理问题。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-002</strong>（★ 知识点：K13-1 Compose 局限） Docker
+Compose 可以跨多台机器调度容器，实现集群级编排。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Compose
+只能在单台机器上编排容器，不能跨机器调度。集群级编排需要 K8s。这是
+Compose 的核心局限之一。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-003</strong>（★ 知识点：K13-1 K8s 与 Docker 关系）
+K8s 是 Docker 的升级版，目的是取代 Docker。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：K8s 不是
+Docker 的升级版，二者定位不同。Docker 负责容器化（装箱），K8s
+负责容器编排（调度），K8s 建立在容器之上，不取代 Docker。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-004</strong>（★ 知识点：K13-2 选型原则）
+本地开发联调场景应该使用 Kubernetes 而非 Docker Compose。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：本地开发联调用 Compose
+更简单、启动快、单机够用。K8s 运维成本高，过度设计。选型要看场景。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-005</strong>（★ 知识点：K13-3 K8s 架构） Kubernetes
+采用 Master-Node 架构，Master 负责管理决策，Node 负责运行业务 Pod。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：K8s 是
+Master-Node 架构（控制平面-工作节点）。Master 是"大脑"，Node
+是"手脚"，分工明确。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-006</strong>（★ 知识点：K13-4 API Server） K8s 的 API
+Server 是集群的统一入口，所有组件都通过它通信。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：API Server
+是唯一入口，所有组件（scheduler、controller-manager、kubelet 等）都通过
+API Server 通信，这是 K8s 的解耦设计。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-007</strong>（★ 知识点：K13-4 etcd） etcd 是 K8s
+的键值存储数据库，保存集群的所有状态数据。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：etcd
+是分布式键值（KV）存储，是 K8s
+的"真相之源"，保存集群所有状态数据（Pod/Service/Deployment 等）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-008</strong>（★ 知识点：K13-4 scheduler 职责）
+kube-scheduler 负责启动容器进程。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：scheduler
+只"决定"Pod 跑在哪个 Node，真正启动容器的是目标 Node 上的 kubelet 调用
+container-runtime。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-009</strong>（★ 知识点：K13-5 kubelet 位置） kubelet
+运行在 Master 上，负责调度 Pod 到合适的 Node。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：kubelet
+跑在每个 Node 上，是节点代理，管理本节点 Pod 生命周期。调度是 scheduler
+的职责，不是 kubelet。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-010</strong>（★ 知识点：K13-5 kube-proxy 职责）
+kube-proxy 维护 Service 的网络规则，实现服务发现与负载均衡。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：kube-proxy
+跑在每个 Node 上，监听 Service 与 Endpoints 变化，配置 iptables/ipvs
+规则，实现 Service 流量路由到后端 Pod。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-011</strong>（★ 知识点：K13-5 容器运行时） K8s 1.24
+起移除 dockershim 后，不能再使用 Docker 构建的镜像。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：K8s 1.24 移除
+dockershim 只是不再原生支持 Docker Engine 作为运行时，但 Docker
+构建的镜像（OCI 格式）仍能在 containerd 上正常运行。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-012</strong>（★ 知识点：K13-6 Pod 概念） Pod 是 K8s
+最小的调度单元，包含一个或多个紧密协作的容器。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：K8s
+不直接管容器，管的是 Pod。Pod 是最小调度单元，可包含 1~N
+个共享网络与存储的容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-013</strong>（★ 知识点：K13-6 Deployment 概念）
+Deployment 直接运行容器，不需要 Pod。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Deployment
+管理 Pod（通过 ReplicaSet），Pod 内才是容器。Deployment
+不直接运行容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-014</strong>（★ 知识点：K13-6 Service 概念） K8s 的
+Service 提供稳定的访问入口（IP+DNS），即使后端 Pod 变化，Service 的 IP
+不变。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Service
+为一组 Pod 提供稳定访问入口，Pod 创建销毁 IP 变化，但 Service 的
+ClusterIP 不变，实现解耦。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-015</strong>（★ 知识点：K13-6 Secret 加密） K8s 的
+Secret 是加密存储的，任何用户都能直接读取明文。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Secret 是
+base64 编码（不是加密），需配合 RBAC 限制访问。base64
+可解码，生产环境敏感数据建议用外部密钥管理（如 Vault）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-016</strong>（★★ 知识点：K13-4 controller-manager
+机制） controller-manager 中的控制器通过"调和循环"（reconcile
+loop）持续让实际状态趋近期望状态。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：K8s
+声明式模型的核心是 reconcile loop：观察实际状态 → 对比期望状态 →
+不一致就操作。controller-manager 持续做这个循环。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-017</strong>（★ 知识点：K13-3 Master 故障影响）
+Master 节点发生故障后，集群中已运行的 Pod 会立即停止。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Master
+挂了，已运行的 Pod 由 Node 上的 kubelet
+维持，仍正常工作。只是不能做新操作（创建/删除/扩缩容）。生产用多 Master
+高可用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-018</strong>（★★ 知识点：K13-4 组件通信方式） K8s
+各组件之间（如 scheduler 与
+controller-manager）直接互相调用，效率更高。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：K8s
+组件之间不直接调用，所有通信都经过 API
+Server。这是解耦设计，便于安全控制（认证授权）和横向扩展。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-019</strong>（★ 知识点：K13-2 Compose 价值） 学习 K8s
+后应该完全抛弃 Docker Compose，所有场景都用 K8s。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Compose
+在本地开发、CI 测试、小规模部署场景仍是首选。K8s
+运维成本高，过度设计是问题。技术选型要看场景。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-判断-020</strong>（★ 知识点：K13-6 Ingress 职责） Ingress
+是 K8s 的七层路由资源，基于域名和路径把请求转发到不同 Service。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Ingress 提供
+HTTP/HTTPS 七层路由，根据 host/path 把请求路由到后端 Service。Service
+只做四层，Ingress 补七层能力。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>13-填空-001</strong>（★ 知识点：K13-1 K8s 定义）
+Kubernetes（K8s）是一个开源的 ________
+平台，用于自动化部署、扩展和管理容器化应用。</p><blockquote>
+<p><strong>答案：容器编排</strong> <strong>解析</strong>：K8s
+是开源的容器编排平台，解决集群中容器的调度、自愈、弹性、滚动更新等问题。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-填空-002</strong>（★ 知识点：K13-3 K8s 架构） Kubernetes
+采用 ________ 架构，由控制平面（Master）和工作节点（Node）组成。</p><blockquote>
+<p><strong>答案：Master-Node（或 主从 / 控制平面-工作节点）</strong>
+<strong>解析</strong>：K8s 采用 Master-Node 架构，Master
+负责管理决策，Node 负责执行业务。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-填空-003</strong>（★ 知识点：K13-4 API Server） K8s
+集群中，________ 是统一入口，所有组件与用户都通过它通信。</p><blockquote>
+<p><strong>答案：API Server（或 kube-apiserver）</strong>
+<strong>解析</strong>：API Server
+是集群唯一入口，认证授权后才能操作，是唯一能直接读写 etcd 的组件。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-填空-004</strong>（★ 知识点：K13-4 etcd） K8s
+集群的所有状态数据保存在 ________ 这个分布式键值存储中。</p><blockquote>
+<p><strong>答案：etcd</strong> <strong>解析</strong>：etcd
+是分布式键值（KV）存储，是 K8s 的"真相之源"，保存集群所有状态。使用 Raft
+协议保证一致性。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-填空-005</strong>（★ 知识点：K13-4 scheduler） K8s
+中，________ 负责决定新 Pod 运行在哪个 Node 上。</p><blockquote>
+<p><strong>答案：kube-scheduler（或 scheduler / 调度器）</strong>
+<strong>解析</strong>：scheduler 监听未调度的
+Pod，根据资源、亲和性等规则选择最合适的
+Node。注意：它只决策，不执行。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-填空-006</strong>（★ 知识点：K13-5 kubelet） K8s Node 上的
+________ 是节点代理，负责管理本节点 Pod 的生命周期。</p><blockquote>
+<p><strong>答案：kubelet</strong> <strong>解析</strong>：kubelet
+跑在每个 Node 上，监听 API Server，调用 container-runtime
+启停容器，上报状态。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-填空-007</strong>（★ 知识点：K13-5 kube-proxy） K8s Node
+上的 ________ 负责维护 Service 的网络规则，实现服务发现与负载均衡。</p><blockquote>
+<p><strong>答案：kube-proxy</strong> <strong>解析</strong>：kube-proxy
+跑在每个 Node 上，通过 iptables/ipvs 规则把访问 Service VIP
+的流量路由到后端 Pod。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-填空-008</strong>（★ 知识点：K13-6 Pod） K8s
+中最小的调度单元是 ________，它包含一个或多个紧密协作的容器。</p><blockquote>
+<p><strong>答案：Pod</strong> <strong>解析</strong>：K8s
+不直接管容器，管的是 Pod。Pod 是最小调度单元，可包含 1~N
+个共享网络与存储的容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-填空-009</strong>（★ 知识点：K13-6 Service） K8s
+中，________ 资源为一组 Pod 提供稳定的访问入口（IP+DNS）和负载均衡。</p><blockquote>
+<p><strong>答案：Service</strong> <strong>解析</strong>：Service 提供
+ClusterIP/NodePort/LoadBalancer 等类型，Pod 变化时 Service IP
+不变，实现解耦。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-填空-010</strong>（★★ 知识点：K13-5 容器运行时接口） K8s
+通过 ________ 接口标准支持 containerd、CRI-O 等多种容器运行时。</p><blockquote>
+<p><strong>答案：CRI（或 Container Runtime Interface）</strong>
+<strong>解析</strong>：CRI 是 Container Runtime Interface，让 K8s
+解耦容器运行时，支持 containerd、CRI-O 等多种运行时。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>13-论述-001</strong>（★★ 知识点：K13-1/K13-2 Compose 局限与
+K8s 价值，10 分） 请阐述 Docker Compose 的四大局限性，并说明 Kubernetes
+是如何分别解决这些问题的。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>单机局限</strong>（2 分）：Compose
+只能在单台机器上编排容器，不能跨机器调度。K8s 管理多节点集群，Pod 可由
+scheduler 自动调度到任意合适的 Node，实现跨机部署。</li>
+<li><strong>无自愈</strong>（2 分）：Compose
+的容器挂了不会自动迁移到其他节点（机器挂了完全没救）。K8s 的
+controller-manager 持续监控 Pod 状态，Pod 挂了自动重建，Node
+挂了自动迁移 Pod 到其他节点。</li>
+<li><strong>无弹性</strong>（2 分）：Compose
+不能根据负载自动扩缩容，副本数写死在 yml 里。K8s 的
+HPA（HorizontalPodAutoscaler）根据 CPU/内存等指标自动扩缩容。</li>
+<li><strong>无滚动更新</strong>（2 分）：Compose
+更新镜像要手动停旧启新，会中断服务。K8s 的 Deployment
+原生支持滚动更新（逐步替换 Pod）与回滚（rollout
+undo），实现零停机。</li>
+<li><strong>总结</strong>（2 分）：Compose
+适合单机小规模场景（开发/测试），K8s
+适合集群大规模生产场景，二者不是替代关系，而是规模递进。</li>
+</ol>
+<p><strong>评分要点</strong>：每个局限 2 分（说明局限 1 分 + K8s
+解决方案 1 分）；总结 2 分；要点完整给满分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-论述-002</strong>（★★ 知识点：K13-3/K13-4/K13-5 K8s
+架构，10 分） 请描述 K8s 的整体架构，说明 Master 和 Node
+各包含哪些核心组件及其职责，并描述一次
+<code>kubectl create deployment</code>（期望 3
+副本）在集群中的完整数据流。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>整体架构</strong>（2 分）：K8s 采用 Master-Node
+架构，Master（控制平面）负责管理决策，Node（工作节点）负责执行业务
+Pod。Master 挂了业务不中断（但无法变更），生产用多 Master 高可用。</li>
+<li><strong>Master 四大组件职责</strong>（3 分）：
+<ul>
+<li>API Server：集群统一入口，认证授权，唯一能直接读写 etcd（1 分）</li>
+<li>etcd：分布式键值存储，保存集群所有状态（0.5 分）</li>
+<li>scheduler：调度器，决定 Pod 跑哪个 Node（0.5 分）</li>
+<li>controller-manager：控制器集合，维持期望状态（reconcile loop）（1
+分）</li>
+</ul></li>
+<li><strong>Node 三大组件职责</strong>（2 分）：
+<ul>
+<li>kubelet：节点代理，管理 Pod 生命周期，调用容器运行时（1 分）</li>
+<li>kube-proxy：网络代理，维护 Service 流量规则（0.5 分）</li>
+<li>container-runtime：容器运行时（如 containerd），真正跑容器（0.5
+分）</li>
+</ul></li>
+<li><strong><code>kubectl create deployment</code> 数据流</strong>（3
+分）：
+<ul>
+<li>kubectl 把请求发给 API Server（0.5 分）</li>
+<li>API Server 认证授权后写入 etcd（0.5 分）</li>
+<li>controller-manager 监听到新 Deployment，创建 ReplicaSet，创建 3 个
+Pod（0.5 分）</li>
+<li>scheduler 监听到未调度的 Pod，决策 Pod 跑哪个 Node，绑定信息写回
+etcd（0.5 分）</li>
+<li>目标 Node 的 kubelet 监听到自己被分了 Pod，调用 container-runtime
+拉镜像启容器，上报状态（1 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：四部分独立给分；数据流顺序正确即可；专有名词拼写错误不扣分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-论述-003</strong>（★★ 知识点：K13-2 K8s vs Compose，8 分）
+请从规模、调度方式、自愈、弹性、滚动更新、服务发现六个维度，对比 Docker
+Compose 与 Kubernetes，并说明在什么情况下应该选择 K8s 而非 Compose。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>六个维度对比</strong>（6 分，每个 1 分）：
+<ul>
+<li><strong>规模</strong>：Compose 单机；K8s 集群（多节点）</li>
+<li><strong>调度方式</strong>：Compose 不调度（写死在执行机器）；K8s
+自动调度（scheduler 决策）</li>
+<li><strong>自愈</strong>：Compose 仅 restart
+重启容器，机器挂了没救；K8s 控制器自动重建 Pod，节点挂了自动迁移</li>
+<li><strong>弹性</strong>：Compose 不支持自动扩缩容；K8s HPA 根据
+CPU/内存自动扩缩容</li>
+<li><strong>滚动更新</strong>：Compose 不支持（需手动停旧启新）；K8s
+Deployment 原生支持滚动更新与回滚</li>
+<li><strong>服务发现</strong>：Compose 通过容器名 + 自定义网络；K8s 通过
+Service + CoreDNS 自动发现</li>
+</ul></li>
+<li><strong>选型原则</strong>（2 分）：
+<ul>
+<li>机器数 ≥ 2 且需要高可用 → K8s</li>
+<li>容器数 ≥ 10 且需要弹性 → K8s</li>
+<li>生产环境、大规模、微服务架构 → K8s</li>
+<li>本地开发、CI 测试、小规模部署 → Compose</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：每个维度 1 分（要点对即可）；选型原则 2
+分（答出 2 条以上给满分）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>13-论述-004</strong>（★★ 知识点：K13-6 核心概念与 CTTS
+项目，8 分） 请简述 K8s
+的核心资源（Pod、Deployment、Service、ConfigMap、Secret、PV/PVC、Ingress、Namespace）各自的概念，并说明在
+CTTS 项目（前端 Vue3 + 后端 SpringBoot + MySQL）的 K8s
+部署中，每个资源分别承担什么角色。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><strong>核心资源概念</strong>（4 分，每个 0.5 分）：
+<ul>
+<li><strong>Pod</strong>：K8s 最小调度单元，含 1~N 个紧密协作的容器</li>
+<li><strong>Deployment</strong>：管理 Pod 副本，支持滚动更新与回滚</li>
+<li><strong>Service</strong>：为一组 Pod
+提供稳定访问入口（IP+DNS）和负载均衡</li>
+<li><strong>ConfigMap</strong>：存储非敏感配置（key-value），可挂载为环境变量或文件</li>
+<li><strong>Secret</strong>：存储敏感信息（密码/密钥），base64 编码</li>
+<li><strong>PV/PVC</strong>：PV 是集群级存储资源，PVC
+是用户对存储的申请</li>
+<li><strong>Ingress</strong>：七层路由（HTTP/HTTPS），把域名/路径映射到
+Service</li>
+<li><strong>Namespace</strong>：集群内虚拟集群，用于资源隔离</li>
+</ul></li>
+<li><strong>CTTS 项目角色分配</strong>（4 分，每个 0.5 分）：
+<ul>
+<li><strong>Pod</strong>：跑前端、后端、MySQL 的容器实例</li>
+<li><strong>Deployment</strong>：管理前端 2 副本、后端 3 副本（MySQL 用
+StatefulSet 更合适）</li>
+<li><strong>Service</strong>：为前端、后端、MySQL
+提供集群内访问入口（ClusterIP）</li>
+<li><strong>ConfigMap</strong>：存储后端的数据库连接、应用配置等非敏感配置</li>
+<li><strong>Secret</strong>：存储 MySQL root 密码等敏感信息</li>
+<li><strong>PV/PVC</strong>：MySQL 数据持久化（PVC 申请 10Gi 存储，绑定
+PV）</li>
+<li><strong>Ingress</strong>：配置域名（如 ctts.com），把请求路由到前端
+Service（/）和后端 Service（/api）</li>
+<li><strong>Namespace</strong>：可以按环境隔离（如
+dev/test/prod），学习环境用 default 即可</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：概念与角色分别给分；MySQL 用 StatefulSet
+提及给加分但不强制；意思对即可。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>13-阅读-001</strong>（★★ 知识点：K13-4/K13-5 架构流转，12
+分） 阅读以下"kubectl create deployment
+命令流转"的描述，补全缺失部分（每空 2 分，共 12 分）。</p>
+<pre class="text"><code>用户在终端执行：kubectl apply -f ctts-backend-deployment.yaml（replicas: 3）
+
+流转过程：
+1. kubectl 把请求发给 (a)________，它认证授权后把 Deployment 对象写入 (b)________。
+2. (c)________（控制器管理器）的 Deployment Controller 监听到新 Deployment，
+   创建 ReplicaSet，再创建 3 个 (d)________（此时还未分配节点）。
+3. (e)________（调度器）监听到未调度的 Pod，根据资源与规则选择合适的 Node，
+   把绑定信息写回 API Server → etcd。
+4. 目标 Node 上的 (f)________ 监听到自己被分了 Pod，
+   调用 container-runtime 拉镜像、启容器，并持续上报状态。</code></pre>
+<blockquote>
+<p><strong>参考答案</strong>： (a) API Server（或 kube-apiserver） (b)
+etcd (c) controller-manager（或 kube-controller-manager） (d) Pod (e)
+scheduler（或 kube-scheduler） (f) kubelet</p>
+<p><strong>解析</strong>：kubectl → API Server →
+etcd；controller-manager 创建 ReplicaSet 与 Pod；scheduler 调度 Pod 到
+Node；目标 Node 的 kubelet 调用容器运行时启动容器。</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。意思对即可，专有名词拼写错误不扣分（如 controller-manager 写成
+controller_manager）。</p>
+</blockquote>
+<hr />
+<p><strong>13-阅读-002</strong>（★★ 知识点：K13-3/K13-6 资源关系，12
+分） 阅读以下 CTTS K8s 部署的资源关系描述，补全缺失部分（每空 2 分，共
+12 分）。</p>
+<pre class="text"><code>CTTS K8s 部署的资源组织：
+
+1. 外部用户访问 http://ctts.com →
+   (a)________（七层路由资源）根据域名把请求转发到 (b)________（前端 Service）。
+
+2. 前端 Service 通过标签选择器关联到前端 (c)________（工作负载资源）管理的 Pod。
+
+3. 前端 Pod 调用后端 API →
+   通过 (d)________（DNS 服务）解析 ctts-backend 这个 Service 名，
+   拿到后端 Service 的 ClusterIP，再由 (e)________（Node 上的网络代理组件）
+   把流量路由到后端某个 Pod。
+
+4. 后端 Pod 启动时，从 (f)________ 读取数据库连接配置（非敏感），
+   从 Secret 读取 MySQL 密码（敏感），连接 MySQL Service。</code></pre>
+<blockquote>
+<p><strong>参考答案</strong>： (a) Ingress (b) Service（或 前端
+Service） (c) Deployment (d) CoreDNS（或 DNS / kube-dns） (e) kube-proxy
+(f) ConfigMap</p>
+<p><strong>解析</strong>：Ingress 做七层路由，Service
+做访问入口，Deployment 管理 Pod 副本，CoreDNS 做服务名解析，kube-proxy
+做 Service 流量路由，ConfigMap 存非敏感配置。</p>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。意思对即可，专有名词拼写错误不扣分。(d) 答 DNS/CoreDNS 都给分。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>13-编程-001</strong>（★★ 知识点：K13-2/K13-6 Compose vs K8s
+资源对照，15 分） <strong>K8s 资源方案设计</strong>：CTTS 项目要从
+Docker Compose 升级到 K8s 部署。已知 Compose 版的
+<code>docker-compose.yml</code> 如下：</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mysql</span><span class="kw">:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> mysql:8.0</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_ROOT_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="dv">123456</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> mysql_data:/var/lib/mysql</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-backend:v1</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8080:8080&quot;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/ctts</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> SPRING_DATASOURCE_PASSWORD=123456</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> mysql</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">frontend</span><span class="kw">:</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-frontend:v1</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;80:80&quot;</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mysql_data</span><span class="kw">:</span></span></code></pre></div>
+<p>请设计 K8s 版本的资源方案（不要求写完整
+YAML，只列资源清单），要求包含：</p>
+<ol type="1">
+<li>需要哪些 K8s 资源？每个资源的作用是什么？（8 分）</li>
+<li>MySQL 的密码应该用哪种资源？为什么？（3 分）</li>
+<li>MySQL 数据持久化在 K8s 中如何实现？需要哪些资源？（4 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<p><strong>1. K8s 资源清单与作用（8 分）</strong>：</p>
+<ul>
+<li><strong>Deployment/ctts-frontend</strong>（或
+StatefulSet）：管理前端 Pod 副本（2 副本），滚动更新（2 分）</li>
+<li><strong>Deployment/ctts-backend</strong>：管理后端 Pod 副本（3
+副本），滚动更新（2 分）</li>
+<li><strong>StatefulSet/ctts-mysql</strong>：管理 MySQL
+Pod（有状态应用，1 副本），稳定网络标识（2 分）</li>
+<li><strong>Service/ctts-frontend</strong>（ClusterIP）：前端集群内访问入口（0.5
+分）</li>
+<li><strong>Service/ctts-backend</strong>（ClusterIP）：后端集群内访问入口（0.5
+分）</li>
+<li><strong>Service/ctts-mysql</strong>（ClusterIP）：MySQL
+集群内访问入口（0.5 分）</li>
+<li><strong>Ingress/ctts-ingress</strong>：域名入口（如
+ctts.com），路由到前端/后端（0.5 分）</li>
+</ul>
+<p><strong>2. MySQL 密码的资源选择（3 分）</strong>：</p>
+<ul>
+<li>应该用 <strong>Secret</strong>（2 分）</li>
+<li>理由：MySQL 密码是敏感信息，ConfigMap 存的是非敏感配置。Secret 用
+base64 编码（不是加密，但比明文好），配合 RBAC 可限制访问，更安全（1
+分）</li>
+</ul>
+<p><strong>3. MySQL 数据持久化方案（4 分）</strong>：</p>
+<ul>
+<li>需要 <strong>PVC（PersistentVolumeClaim）</strong>：申请存储空间（如
+10Gi）（2 分）</li>
+<li>需要 <strong>PV（PersistentVolume）</strong>：集群级存储资源，PVC
+绑定 PV（1 分）</li>
+<li>可选 <strong>StorageClass</strong>：动态创建 PV，省去手动建 PV（1
+分）</li>
+<li>在 StatefulSet 中通过 <code>volumeClaimTemplates</code> 自动创建
+PVC，或手动建 PVC 后挂载到 Pod</li>
+</ul>
+<p><strong>评分要点</strong>：每部分独立给分；方案合理即可，不要求与答案完全一致；前端/后端用
+Deployment、MySQL 用 StatefulSet 是标准做法，但 MySQL 用 Deployment
+也接受（扣 1 分）。</p>
+</blockquote>
+<hr />
+<p><strong>13-编程-002</strong>（★★★ 知识点：K13-3/K13-4/K13-5
+综合应用，20 分） <strong>K8s 架构与命令流程综合题</strong>：某团队要将
+CTTS 项目部署到 K8s 集群，集群拓扑如下：</p>
+<pre class="text"><code>集群：1 Master + 2 Node
+Master: API Server + etcd + scheduler + controller-manager
+Node1:  kubelet + kube-proxy + containerd
+Node2:  kubelet + kube-proxy + containerd</code></pre>
+<p>团队成员小李在管理机执行了以下命令序列：</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令1</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get nodes</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令2</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> ctts-backend-deployment.yaml   <span class="co"># replicas: 3</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令3</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-o</span> wide</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令4</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> scale deployment ctts-backend <span class="at">--replicas</span><span class="op">=</span>5</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 命令5</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods</span></code></pre></div>
+<p><strong>问题</strong>：</p>
+<ol type="1">
+<li>说明命令1~5每条命令的作用，并指出每条命令在 K8s
+架构中是用户操作还是集群组件响应（10分）</li>
+<li>命令2执行后，集群中哪些 Master
+组件参与了处理？分别做了什么？（5分）</li>
+<li>命令4执行后，集群如何从 3 副本扩容到 5
+副本？涉及哪些组件？（5分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<p><strong>1. 各命令作用与架构归属（10分，每条2分）</strong>：</p>
+<ul>
+<li>命令1 <code>kubectl get nodes</code>：列出集群所有 Node
+及状态。用户操作（kubectl 发请求给 API Server），API Server 从 etcd
+读数据返回。</li>
+<li>命令2
+<code>kubectl apply -f ctts-backend-deployment.yaml</code>：提交
+Deployment（3 副本）到集群。用户操作（kubectl 发请求给 API Server），API
+Server 写入 etcd，触发 controller-manager 与 scheduler 协作。</li>
+<li>命令3 <code>kubectl get pods -o wide</code>：列出所有 Pod
+及详细信息（含所在 Node）。用户操作，API Server 从 etcd 读 Pod
+状态返回。</li>
+<li>命令4
+<code>kubectl scale deployment ctts-backend --replicas=5</code>：把
+ctts-backend 副本数从 3 扩到 5。用户操作（kubectl 发请求给 API
+Server），API Server 更新 Deployment 的 replicas
+字段，controller-manager 响应。</li>
+<li>命令5 <code>kubectl get pods</code>：列出所有 Pod。用户操作，API
+Server 返回当前 Pod 状态。 （每条命令：作用1分 + 归属1分）</li>
+</ul>
+<p><strong>2. 命令2执行后 Master 组件参与（5分）</strong>：</p>
+<ul>
+<li><strong>API Server</strong>：接收 kubectl 请求，认证授权，把
+Deployment 对象写入 etcd（1.5分）</li>
+<li><strong>etcd</strong>：保存 Deployment 对象（期望 3
+副本）及后续创建的 ReplicaSet、Pod 对象（1分）</li>
+<li><strong>controller-manager</strong>：Deployment Controller 监听到新
+Deployment，创建 ReplicaSet；ReplicaSet Controller 创建 3 个 Pod
+对象（但未调度）（1.5分）</li>
+<li><strong>scheduler</strong>：监听到 3 个未调度的
+Pod，根据资源/规则选择 Node（如 Pod1→Node1, Pod2→Node2,
+Pod3→Node1），把绑定信息写回 API Server → etcd（1分）
+（注意：真正启动容器的是目标 Node 上的 kubelet，不属于 Master
+组件）</li>
+</ul>
+<p><strong>3. 命令4 扩容流程（5分）</strong>：</p>
+<ul>
+<li>kubectl 把 scale 请求发给 API Server（0.5分）</li>
+<li>API Server 更新 Deployment 的 replicas 字段为 5，写入
+etcd（1分）</li>
+<li>controller-manager 的 Deployment Controller 监听到副本数变化，更新
+ReplicaSet（0.5分）</li>
+<li>ReplicaSet Controller 发现实际只有 3 个 Pod，期望 5 个，再创建 2
+个新 Pod（1分）</li>
+<li>scheduler 监听到 2 个未调度的 Pod，决策调度到哪个 Node（如
+Node1、Node2），写回绑定信息（1分）</li>
+<li>目标 Node 的 kubelet 调用 container-runtime
+启动新容器，上报状态（1分） （注意：kubelet 与 container-runtime 是 Node
+组件，但扩容流程必须提到）</li>
+</ul>
+<p><strong>评分要点</strong>：各小题独立给分；流程顺序正确即可；专有名词理解正确即可；第3问必须提到
+kubelet 才给最后1分。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

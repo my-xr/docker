@@ -1,0 +1,1161 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docker Compose多容器编排</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 11 次课 · 题库</div>
+      <h1>Docker Compose多容器编排</h1>
+      <p>面向练习、测验、考试与参考解析 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 11 次课</span>
+        <span class="hero-chip"><b>主题</b>Docker Compose多容器编排</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2 分）</a>
+<ul>
+<li><a href="#11-单项选择题30-题">1.1 单项选择题（30 题）</a></li>
+<li><a href="#12-多项选择题10-题">1.2 多项选择题（10 题）</a></li>
+</ul></li>
+<li><a href="#二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1 分）</a>
+<ul>
+</ul></li>
+<li><a href="#三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2 分）</a>
+<ul>
+</ul></li>
+<li><a href="#四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</a>
+<ul>
+</ul></li>
+<li><a href="#五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</a>
+<ul>
+</ul></li>
+<li><a href="#六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 11 次课 <span>｜</span> <strong>文档：</strong>题库</p>
+<blockquote>
+<p>配套：<code>教学设计.md</code>、<code>教学资料.md</code>（同文件夹）
+题量：40 选择 + 20 判断 + 10 填空 + 4 论述/简答 + 2 程序阅读/补全 + 2
+编程/接口设计 = <strong>78 题</strong>
+全部题目含参考答案与解析；主观题（论述/简答、程序阅读/补全、编程/接口设计）另附评分标准。
+难度标注：★ 基础 / ★★ 提高 / ★★★ 综合
+题目编号规则：<code>11-题型-序号</code></p>
+</blockquote>
+<hr />
+<h2 id="一选择题共-40-题每题-2-分">一、选择题（共 40 题，每题 2
+分）</h2>
+<h3 id="11-单项选择题30-题">1.1 单项选择题（30 题）</h3>
+<section class="question-card"><p><strong>11-选择-001</strong>（★ 知识点：K11-1 Compose 定位） Docker
+Compose 主要解决的问题是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>单机单容器运行太慢</span></li><li><span class="option-label">B</span><span>单机多容器手工部署易错、不可复现</span></li><li><span class="option-label">C</span><span>跨多台机器的容器调度</span></li><li><span class="option-label">D</span><span>容器镜像构建体积过大</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Compose
+的核心定位是单机多容器编排，把"多条 docker run + 配网络 +
+挂数据卷"的繁琐流程收敛为一份 YAML，一条命令启停。A 不是 Compose
+解决的问题；C 是 K8s 的工作；D 是 Dockerfile 多阶段构建的问题。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-002</strong>（★ 知识点：K11-1 v1 vs v2） 关于 Compose
+v2 命令，下列写法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker-compose up -d</code></span></li><li><span class="option-label">B</span><span><code>docker compose up -d</code></span></li><li><span class="option-label">C</span><span><code>dockercompose up -d</code></span></li><li><span class="option-label">D</span><span><code>docker:compose up -d</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Compose v2 是 docker
+CLI 的子命令，用空格分隔：<code>docker compose</code>。v1 是独立二进制
+<code>docker-compose</code>（连字符），已被废弃。其他写法都不合法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-003</strong>（★ 知识点：K11-2 顶层结构）
+<code>docker-compose.yml</code> 中<strong>必需</strong>的顶层段是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>version</code></span></li><li><span class="option-label">B</span><span><code>services</code></span></li><li><span class="option-label">C</span><span><code>networks</code></span></li><li><span class="option-label">D</span><span><code>volumes</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>services</code>
+是必需的，定义所有服务。<code>version</code> 在 v2
+中可省略；<code>networks</code> 和 <code>volumes</code> 是可选的，不写时
+Compose 会自动创建默认网络。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-004</strong>（★ 知识点：K11-2 version 字段） 关于
+Compose v2 中的 <code>version</code> 字段，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>必须写
+<code>version: "3.8"</code></span></li><li><span class="option-label">B</span><span>必须写 <code>version: "2"</code></span></li><li><span class="option-label">C</span><span>已不再必需，可省略</span></li><li><span class="option-label">D</span><span>必须写 <code>version: "latest"</code></span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：Compose v2
+不再强制要求 <code>version</code>
+字段，新版会自动识别文件格式，建议直接省略。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-005</strong>（★ 知识点：K11-3 image 配置） 关于
+<code>services</code> 下 <code>image</code> 与 <code>build</code>
+的关系，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>二者必须同时使用</span></li><li><span class="option-label">B</span><span>二者互斥，不能同时出现</span></li><li><span class="option-label">C</span><span>可以同时使用，build 构建后打上 image 指定的标签</span></li><li><span class="option-label">D</span><span>只能使用
+image，不能用 build</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：<code>image</code> 和
+<code>build</code> 可以同时写。同时写时，<code>build</code> 构建 image
+并打上 <code>image</code> 字段指定的标签，方便后续引用。只写
+<code>image</code> 用现成镜像；只写 <code>build</code> 每次构建。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-006</strong>（★ 知识点：K11-3 ports 配置） 下列
+<code>ports</code> 配置写法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>ports: [8080:8080]</code></span></li><li><span class="option-label">B</span><span><code>ports: 8080:8080</code></span></li><li><span class="option-label">C</span><span><code>ports: ["8080:8080"]</code></span></li><li><span class="option-label">D</span><span><code>ports: 8080</code></span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：端口映射
+<code>8080:8080</code> 必须用引号包起来作为字符串，否则 YAML
+会解析为时间。正确写法是 <code>- "8080:8080"</code> 或列表
+<code>["8080:8080"]</code>。A 没加引号会出错；B 不是列表；D
+只写一个数字无意义。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-007</strong>（★★ 知识点：K11-3 depends_on） 关于
+<code>depends_on</code>，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>它能保证依赖服务真正就绪后再启动当前服务</span></li><li><span class="option-label">B</span><span>它只能控制启动顺序，不保证依赖服务就绪</span></li><li><span class="option-label">C</span><span>它会自动给依赖服务添加健康检查</span></li><li><span class="option-label">D</span><span>它会让当前服务在依赖服务停止时也停止</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>depends_on</code>
+只控制启动顺序——先启动依赖服务的容器，再启动当前服务。但容器启动 ≠
+服务就绪（如 MySQL 进程起来了但还没准备好接受连接）。要保证就绪必须配合
+<code>healthcheck</code> + <code>condition: service_healthy</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-008</strong>（★ 知识点：K11-3 container_name） 关于
+<code>container_name</code>，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>必须为每个服务指定
+container_name</span></li><li><span class="option-label">B</span><span>不指定时默认容器名为
+<code>&lt;项目名&gt;-&lt;服务名&gt;-&lt;序号&gt;</code></span></li><li><span class="option-label">C</span><span>指定后仍可用
+<code>--scale</code> 扩缩容</span></li><li><span class="option-label">D</span><span>container_name 必须用大写字母</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：不指定时默认容器名为
+<code>&lt;项目名&gt;-&lt;服务名&gt;-&lt;序号&gt;</code>（如
+<code>ctts-mysql-1</code>）。固定 container_name 后无法用
+<code>--scale</code> 扩缩容（多容器会重名冲突）。建议用小写字母。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-009</strong>（★ 知识点：K11-3 environment） 下列
+<code>environment</code> 写法中，<strong>错误</strong>的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_ROOT_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;123456&quot;</span></span></code></pre></div>
+<p>B.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> MYSQL_ROOT_PASSWORD=123456</span></span></code></pre></div>
+<p>C.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_ROOT_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="dv">123456</span></span></code></pre></div>
+<p>D.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;p@ssw0rd&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_USER</span><span class="kw">:</span><span class="at"> ctts</span></span></code></pre></div>
+<blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：纯数字
+<code>123456</code> 不加引号会被 YAML
+解析为整数而非字符串，可能导致程序读到的不是预期值。密码建议统一加引号。A、B、D
+写法都正确（A 字典、B 列表、D 含特殊字符加引号）。</p>
+</blockquote>
+<hr />
+<p><strong>11-选择-010</strong>（★ 知识点：K11-3 restart） 下列
+<code>restart</code> 策略中，"除非手动 stop，否则总是重启"的是？ A.
+<code>no</code></span></li><li><span class="option-label">B</span><span><code>always</code></span></li><li><span class="option-label">C</span><span><code>on-failure</code></span></li><li><span class="option-label">D</span><span><code>unless-stopped</code></span></li></ul></div><blockquote>
+<p><strong>答案：D</strong>
+<strong>解析</strong>：<code>unless-stopped</code>
+表示除非手动停止，否则容器退出就自动重启，是生产推荐的策略。<code>always</code>
+是总是重启（即使手动 stop 也会在 Docker
+重启时拉起）；<code>on-failure</code>
+只在非零退出码时重启；<code>no</code> 不重启。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-011</strong>（★ 知识点：K11-4 具名卷） 关于 Compose
+中的具名卷，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>在 services 下引用即可，无需在 volumes
+顶层段声明</span></li><li><span class="option-label">B</span><span>必须在 volumes 顶层段声明，才能在 services 下引用</span></li><li><span class="option-label">C</span><span>具名卷不能用 <code>docker volume ls</code> 查看</span></li><li><span class="option-label">D</span><span>具名卷在
+<code>docker compose down</code> 时默认被删除</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：具名卷（<code>卷名:容器路径</code>）必须在
+<code>volumes</code> 顶层段声明，否则报错。具名卷由 Docker 管理，可用
+<code>docker volume ls</code> 查看。<code>docker compose down</code>
+默认保留卷，加 <code>-v</code> 才删除。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-012</strong>（★ 知识点：K11-4 绑定挂载）
+下列挂载写法中，属于<strong>绑定挂载</strong>的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>mysql-data:/var/lib/mysql</code></span></li><li><span class="option-label">B</span><span><code>./init.sql:/docker-entrypoint-initdb.d/init.sql</code></span></li><li><span class="option-label">C</span><span><code>ctts-net:bridge</code></span></li><li><span class="option-label">D</span><span><code>volume-data:/data</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：绑定挂载用宿主机路径（相对或绝对）作为源，如
+<code>./init.sql</code> 或 <code>/data/mysql</code>。A、D 是具名卷；C
+不是挂载语法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-013</strong>（★ 知识点：K11-5 up 命令）
+<code>docker compose up -d</code> 中 <code>-d</code> 参数的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>删除已有容器再启动</span></li><li><span class="option-label">B</span><span>后台运行（detached 模式）</span></li><li><span class="option-label">C</span><span>强制重新构建镜像</span></li><li><span class="option-label">D</span><span>仅启动默认服务</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>-d</code> 是
+detached 模式，让容器在后台运行，不占用当前终端。强制重建用
+<code>--build</code>；删除再启动不是 <code>-d</code> 的作用。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-014</strong>（★ 知识点：K11-5 down 命令）
+<code>docker compose down</code> 默认会执行的操作是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>停止并删除容器、网络，保留具名卷</span></li><li><span class="option-label">B</span><span>停止并删除容器、网络、具名卷</span></li><li><span class="option-label">C</span><span>仅停止容器，不删除任何资源</span></li><li><span class="option-label">D</span><span>删除所有镜像</span></li></ul></div><blockquote>
+<p><strong>答案：A</strong>
+<strong>解析</strong>：<code>docker compose down</code>
+默认停止并删除容器和网络，但<strong>保留具名卷</strong>（保护数据）。要删卷加
+<code>-v</code>；要删镜像加 <code>--rmi</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-015</strong>（★ 知识点：K11-5 down 删卷） 要彻底清理
+Compose 项目（包括数据卷），应使用命令？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker compose down</code></span></li><li><span class="option-label">B</span><span><code>docker compose down -v</code></span></li><li><span class="option-label">C</span><span><code>docker compose stop</code></span></li><li><span class="option-label">D</span><span><code>docker compose rm</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>-v</code>
+参数会在 down 时同时删除具名卷。慎用，数据会丢。<code>stop</code>
+只停止不删除；<code>rm</code> 删除已停止的容器但不删网络和卷。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-016</strong>（★★ 知识点：K11-5 up vs start） 修改了
+<code>docker-compose.yml</code> 后，要让修改生效，应使用命令？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker compose start</code></span></li><li><span class="option-label">B</span><span><code>docker compose up -d</code></span></li><li><span class="option-label">C</span><span><code>docker compose restart</code></span></li><li><span class="option-label">D</span><span><code>docker compose exec</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>start</code>
+只启动已存在的停止容器，不会应用 YAML 变更。<code>up -d</code>
+是声明式对齐——让真实状态向 YAML
+靠拢，会重建有变化的服务。<code>restart</code> 只是重启，不应用 YAML
+变更。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-017</strong>（★ 知识点：K11-5 logs 命令）
+实时跟随查看 backend 服务的日志，应使用命令？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker compose logs backend</code></span></li><li><span class="option-label">B</span><span><code>docker compose logs -f backend</code></span></li><li><span class="option-label">C</span><span><code>docker compose logs --tail 100 backend</code></span></li><li><span class="option-label">D</span><span><code>docker compose logs -t backend</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>-f</code> 是
+follow，实时跟随日志输出。A 只输出当前日志不跟随；C 只看最后 100 行；D
+带时间戳但不跟随。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-018</strong>（★ 知识点：K11-5 exec 命令）
+进入运行中的 backend 容器的 sh 交互终端，应使用命令？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker compose exec backend sh</code></span></li><li><span class="option-label">B</span><span><code>docker compose run backend sh</code></span></li><li><span class="option-label">C</span><span><code>docker compose attach backend</code></span></li><li><span class="option-label">D</span><span><code>docker compose shell backend</code></span></li></ul></div><blockquote>
+<p><strong>答案：A</strong> <strong>解析</strong>：<code>exec</code>
+在运行中的容器内执行命令，常用于进入交互终端。<code>run</code>
+是启动一个新容器执行命令；<code>attach</code> 是连接到容器主进程（PID
+1），不是开新 shell；<code>shell</code> 不是 compose 子命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-019</strong>（★★ 知识点：K11-5 --scale） 关于
+<code>docker compose up -d --scale backend=3</code>，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>会启动 3 个 backend 容器，并自动做负载均衡</span></li><li><span class="option-label">B</span><span>会启动 3 个 backend
+容器，但 Compose 本身不做负载均衡</span></li><li><span class="option-label">C</span><span>只能扩展到 2 个实例</span></li><li><span class="option-label">D</span><span>backend
+服务必须指定 <code>container_name</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>--scale</code>
+启动多个实例，但 Compose 本身不做负载均衡，多实例需要外部反向代理。固定
+<code>container_name</code>
+会冲突报错。扩展数量无硬性上限（受资源约束）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-020</strong>（★ 知识点：K11-5 -f 参数）
+使用非默认文件名 <code>docker-compose.prod.yml</code> 启动，应使用命令？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker compose up -d docker-compose.prod.yml</code></span></li><li><span class="option-label">B</span><span><code>docker compose -f docker-compose.prod.yml up -d</code></span></li><li><span class="option-label">C</span><span><code>docker compose --file docker-compose.prod.yml up -d</code></span></li><li><span class="option-label">D</span><span><code>docker compose up -d --file docker-compose.prod.yml</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>-f</code>
+参数指定 compose 文件，必须放在 <code>up</code> 之前。B 写法标准；C 用
+<code>--file</code> 也对但更冗长；A、D 位置错误。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-021</strong>（★ 知识点：K11-5 项目名） 关于 Compose
+项目名，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>项目名固定为 <code>docker-compose</code></span></li><li><span class="option-label">B</span><span>项目名默认是所在目录名（小写、特殊字符去除）</span></li><li><span class="option-label">C</span><span>项目名必须用
+<code>-p</code> 显式指定</span></li><li><span class="option-label">D</span><span>项目名不影响容器命名</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：项目名默认是
+docker-compose.yml 所在目录的名字（小写、特殊字符去除）。可用
+<code>-p</code> 显式指定覆盖。项目名会影响容器/网络/卷的命名前缀，如
+<code>&lt;项目名&gt;-&lt;服务名&gt;-&lt;序号&gt;</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-022</strong>（★ 知识点：K11-5 stop vs down） 关于
+<code>docker compose stop</code> 和 <code>docker compose down</code>
+的区别，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>二者完全等价</span></li><li><span class="option-label">B</span><span>stop
+只停止容器不删除，down 停止并删除容器和网络</span></li><li><span class="option-label">C</span><span>stop 删除容器，down
+删除容器和网络</span></li><li><span class="option-label">D</span><span>down 比 stop 更省资源，因为删除了容器</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：<code>stop</code>
+只停止容器（保留容器与配置，下次 <code>start</code>
+直接恢复）；<code>down</code> 停止并删除容器和网络（卷保留，下次
+<code>up</code> 重新创建容器）。二者用途不同，不是简单的"谁更省"。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-023</strong>（★★ 知识点：K11-3 健康检查） 下列
+<code>healthcheck</code> 配置中，<code>start_period: 30s</code>
+的含义是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>每 30 秒检查一次</span></li><li><span class="option-label">B</span><span>检查超时时间为 30 秒</span></li><li><span class="option-label">C</span><span>容器启动后 30
+秒内健康检查失败不计入 retries</span></li><li><span class="option-label">D</span><span>重试 30 次后才判定不健康</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong>
+<strong>解析</strong>：<code>start_period</code>
+是启动宽限期——容器启动后这段时间内健康检查失败不计入
+retries，给应用预留启动时间。<code>interval</code>
+是检查间隔；<code>timeout</code> 是单次检查超时；<code>retries</code>
+是重试次数。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-024</strong>（★ 知识点：K11-4 自定义网络） 关于
+Compose 中的自定义网络，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>同一网络内的服务只能用 IP
+互访</span></li><li><span class="option-label">B</span><span>同一网络内的服务可以用服务名互访（DNS 解析）</span></li><li><span class="option-label">C</span><span>自定义网络不支持
+DNS</span></li><li><span class="option-label">D</span><span>一个服务只能接入一个网络</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：自定义 bridge
+网络内置 DNS，同网络内的服务可以用服务名互访（这是相对默认 bridge
+的关键优势）。一个服务可以接入多个网络。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-025</strong>（★ 知识点：K11-4 external） 关于
+<code>external: true</code> 在 networks/volumes
+中的含义，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>让 Compose 创建一个新的外部网络</span></li><li><span class="option-label">B</span><span>引用
+Docker 中已存在的网络/卷，不创建新的</span></li><li><span class="option-label">C</span><span>网络对外公开</span></li><li><span class="option-label">D</span><span>卷会被外部进程访问</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>external: true</code> 告诉 Compose
+这个网络/卷已经存在（在 Docker
+中预先创建好），不要创建新的，直接引用。常用于多个 Compose
+项目共享资源。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-026</strong>（★★ 知识点：K11-3 YAML 缩进） 关于
+docker-compose.yml 的 YAML 语法，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>缩进可以用 Tab
+也可以用空格</span></li><li><span class="option-label">B</span><span>缩进必须用空格，不能混用 Tab</span></li><li><span class="option-label">C</span><span>缩进不影响解析</span></li><li><span class="option-label">D</span><span>一份文件可以混用 Tab 和空格</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：YAML
+严格依赖缩进，必须用空格（建议 2 个），不能用 Tab，更不能混用。Tab
+会导致解析错误。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-027</strong>（★ 知识点：K11-5 ps 命令） 查看 Compose
+项目下所有服务状态（包括已停止的），应使用命令？</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>docker compose ps</code></span></li><li><span class="option-label">B</span><span><code>docker compose ps -a</code></span></li><li><span class="option-label">C</span><span><code>docker compose ls</code></span></li><li><span class="option-label">D</span><span><code>docker compose status</code></span></li></ul></div><blockquote>
+<p><strong>答案：B</strong>
+<strong>解析</strong>：<code>docker compose ps</code>
+默认只显示运行中的服务；<code>-a</code>
+显示所有（包括已停止）。<code>ls</code> 是列出所有 Compose
+项目（不是服务）；<code>status</code> 不是 compose 子命令。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-028</strong>（★★ 知识点：K11-6 依赖顺序） 在 CTTS
+三服务编排中，正确的启动顺序应该是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>frontend → backend → mysql</span></li><li><span class="option-label">B</span><span>backend → mysql → frontend</span></li><li><span class="option-label">C</span><span>mysql → backend → frontend</span></li><li><span class="option-label">D</span><span>同时启动</span></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：mysql
+是基础（数据库要先就绪），backend 依赖
+mysql（启动时要连接数据库），frontend 依赖 backend（调用后端
+API）。所以顺序是 mysql → backend → frontend。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-029</strong>（★ 知识点：K11-1 Compose 与 K8s） 关于
+Compose 与 Kubernetes 的区别，下列说法正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>二者功能完全相同</span></li><li><span class="option-label">B</span><span>Compose 用于单机多容器编排，K8s 用于集群容器编排</span></li><li><span class="option-label">C</span><span>Compose 可以替代 K8s</span></li><li><span class="option-label">D</span><span>K8s 可以替代 Compose，所以不用学 Compose</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：Compose
+是单机多容器编排，K8s
+是集群容器编排。二者定位不同，不是替代关系。Compose
+适合开发/测试/小规模单机部署；K8s 适合生产级高可用、弹性扩缩容。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-030</strong>（★★ 知识点：K11-6 反向代理） 在 CTTS
+编排中，frontend 的 Nginx 配置
+<code>proxy_pass http://backend:8080/;</code> 中 <code>backend</code>
+指的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span>backend 容器的 IP 地址</span></li><li><span class="option-label">B</span><span>backend 服务的服务名（DNS 解析）</span></li><li><span class="option-label">C</span><span>backend 容器的容器名</span></li><li><span class="option-label">D</span><span>宿主机的主机名</span></li></ul></div><blockquote>
+<p><strong>答案：B</strong> <strong>解析</strong>：在 Compose
+自定义网络中，服务名会作为 DNS 名被解析为对应容器的
+IP。<code>backend</code> 是 services 下的服务名，Nginx 通过 DNS 解析到
+backend 容器的 IP。</p>
+</blockquote></section>
+<hr />
+<h3 id="12-多项选择题10-题">1.2 多项选择题（10 题）</h3>
+<section class="question-card"><p><strong>11-选择-031</strong>（★★ 知识点：K11-1 Compose 价值） 使用
+Docker Compose 带来的价值包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>多容器配置收敛为一份
+YAML，可入 Git 版本管理</span></li><li><span class="option-label">B</span><span>一条命令启停多服务，避免手工命令易错</span></li><li><span class="option-label">C</span><span>自动跨多台机器调度容器</span></li><li><span class="option-label">D</span><span>声明式配置，便于 Code Review E.
+配置可复现，迁移交付一致</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong> <strong>解析</strong>：A/B/D/E 都是
+Compose 的真实价值。C 错，Compose 只能在单机上编排，跨机调度是 K8s
+的工作。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-032</strong>（★★ 知识点：K11-2 顶层结构）
+<code>docker-compose.yml</code> 的顶层结构包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>version</code></span></li><li><span class="option-label">B</span><span><code>services</code></span></li><li><span class="option-label">C</span><span><code>networks</code></span></li><li><span class="option-label">D</span><span><code>volumes</code> E. <code>containers</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：顶层结构有
+version（v2
+可省）、services（必需）、networks（可选）、volumes（可选）。E 错，没有
+<code>containers</code> 顶层段，容器由 services 定义。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-033</strong>（★★ 知识点：K11-3 services 配置）
+下列属于 services 下服务配置项的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>image</code></span></li><li><span class="option-label">B</span><span><code>ports</code></span></li><li><span class="option-label">C</span><span><code>depends_on</code></span></li><li><span class="option-label">D</span><span><code>networks</code>
+E. <code>containers</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong>
+<strong>解析</strong>：image、ports、depends_on、networks 都是 services
+下的配置项。E 错，没有 <code>containers</code>
+配置项，服务本身就对应一个容器。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-034</strong>（★★ 知识点：K11-3 restart 策略）
+下列属于 Compose 中合法 <code>restart</code> 策略的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>no</code></span></li><li><span class="option-label">B</span><span><code>always</code></span></li><li><span class="option-label">C</span><span><code>on-failure</code></span></li><li><span class="option-label">D</span><span><code>unless-stopped</code> E. <code>never</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D</strong> <strong>解析</strong>：合法策略有
+no、always、on-failure、unless-stopped。E 错，没有
+<code>never</code>，不重启用 <code>no</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-035</strong>（★★ 知识点：K11-5 常用命令） 下列属于
+docker compose 子命令的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>up</code></span></li><li><span class="option-label">B</span><span><code>down</code></span></li><li><span class="option-label">C</span><span><code>logs</code></span></li><li><span class="option-label">D</span><span><code>exec</code> E.
+<code>run</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C、D、E</strong>
+<strong>解析</strong>：up、down、logs、exec、run 都是 compose
+子命令。其中 <code>run</code> 用于启动一个新容器执行一次性命令（不同于
+exec 在运行中容器内执行）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-036</strong>（★★ 知识点：K11-4 卷类型） 下列 volumes
+写法中，属于<strong>具名卷</strong>的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span><code>mysql-data:/var/lib/mysql</code></span></li><li><span class="option-label">B</span><span><code>./config:/etc/config</code></span></li><li><span class="option-label">C</span><span><code>/data/mysql:/var/lib/mysql</code></span></li><li><span class="option-label">D</span><span><code>redis-data:/data</code>
+E. <code>ctts-net:bridge</code></span></li></ul></div><blockquote>
+<p><strong>答案：A、D</strong>
+<strong>解析</strong>：具名卷以"卷名:容器路径"形式，卷名不带路径分隔符。A、D
+是具名卷。B、C 是绑定挂载（带路径分隔符）。E 不是挂载语法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-037</strong>（★★ 知识点：K11-3 depends_on 局限） 关于
+<code>depends_on</code> 的局限，下列说法正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>只能控制启动顺序，不保证依赖服务就绪</span></li><li><span class="option-label">B</span><span>依赖服务进程启动了不代表能接受连接</span></li><li><span class="option-label">C</span><span>配合 healthcheck + condition:
+service_healthy 可以等待真正就绪</span></li><li><span class="option-label">D</span><span>depends_on 会自动检测端口是否监听 E.
+depends_on 在 Compose v2 中已废弃</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、C</strong> <strong>解析</strong>：A/B 是
+depends_on 的核心局限，C 是正确的补救方案。D 错，depends_on
+不检测端口；E 错，v2 中 depends_on 仍可用且增强（支持 condition）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-038</strong>（★★ 知识点：K11-5 down 行为） 执行
+<code>docker compose down</code> 时，默认会被删除的资源包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>容器</span></li><li><span class="option-label">B</span><span>网络</span></li><li><span class="option-label">C</span><span>具名数据卷</span></li><li><span class="option-label">D</span><span>镜像 E. 默认网络</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、E</strong> <strong>解析</strong>：down
+默认删除容器、网络（包括默认网络和自定义网络）。C 错，具名卷默认保留，要
+<code>-v</code> 才删；D 错，镜像不删，要 <code>--rmi</code> 才删。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-选择-039</strong>（★★ 知识点：K11-6 CTTS 编排） 在 CTTS
+三服务 Compose 编排中，下列设计正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><span>mysql 配
+healthcheck 检查数据库是否就绪</span></li><li><span class="option-label">B</span><span>backend 用
+<code>depends_on: mysql: condition: service_healthy</code>
+等待数据库就绪</span></li><li><span class="option-label">C</span><span>frontend 用
+<code>depends_on: backend: condition: service_healthy</code>
+等待后端就绪</span></li><li><span class="option-label">D</span><span>三服务接入同一自定义网络 ctts-net E. mysql 数据用具名卷
+mysql-data 持久化</span></li></ul></div><blockquote>
+<p><strong>答案：A、B、D、E</strong> <strong>解析</strong>：A/B/D/E
+都正确。C 错，frontend 调 backend
+是运行时调用（浏览器发请求），不是启动依赖，用默认
+<code>service_started</code> 即可，不需要
+<code>service_healthy</code>。</p>
+</blockquote></section>
+<hr />
+<p><strong>11-选择-040</strong>（★★ 知识点：K11-3 environment 写法）
+下列 <code>environment</code>
+配置写法中，<strong>正确</strong>的有？（多选） A.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;123456&quot;</span></span></code></pre></div>
+<p>B.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> MYSQL_PASSWORD=123456</span></span></code></pre></div>
+<p>C.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> p@ssw0rd</span></span></code></pre></div>
+<p>D.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;p@ssw0rd&quot;</span></span></code></pre></div>
+<p>E.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> MYSQL_PASSWORD</span></span></code></pre></div>
+<blockquote>
+<p><strong>答案：A、B、D</strong> <strong>解析</strong>：A 字典写法、B
+列表写法都正确。C 错，含 <code>@</code> 等特殊字符的值必须加引号；D
+正确（加引号）。E 错，列表写法必须是 <code>KEY=VALUE</code> 形式，单独
+KEY 不行（除非从 shell 环境继承，但 Compose 中不支持这种用法）。</p>
+</blockquote>
+<hr />
+<h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
+分）</h2>
+<section class="question-card"><p><strong>11-判断-001</strong>（★ 知识点：K11-1 Compose 定位） Docker
+Compose 是单机多容器编排工具，不能跨多台机器编排容器。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Compose
+只能在单机上编排多容器。跨机编排要用 K8s 或 Docker Swarm。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-002</strong>（★ 知识点：K11-1 v1 vs v2） Compose v2
+的命令形式是 <code>docker-compose</code>（连字符），v1 是
+<code>docker compose</code>（空格）。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：相反。v1 是
+<code>docker-compose</code>（连字符，独立二进制）；v2 是
+<code>docker compose</code>（空格，作为 docker CLI 子命令）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-003</strong>（★ 知识点：K11-2 顶层结构）
+<code>docker-compose.yml</code> 中 <code>services</code>
+顶层段是必需的。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：services
+是必需的，定义所有服务。version、networks、volumes 是可选的。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-004</strong>（★ 知识点：K11-2 version 字段） 在
+Compose v2 中，<code>version</code> 字段已不再必需，可以省略。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：Compose v2
+不再强制要求 version 字段，建议直接省略，让 Compose 自动处理。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-005</strong>（★★ 知识点：K11-3 depends_on）
+<code>depends_on</code> 既能控制启动顺序，也能保证依赖服务"就绪"。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：depends_on
+只控制启动顺序，不保证就绪。要保证就绪必须配合 healthcheck + condition:
+service_healthy。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-006</strong>（★ 知识点：K11-3 ports 引号）
+<code>docker-compose.yml</code> 中 <code>ports: - "8080:8080"</code>
+的引号可以省略，不影响解析。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：必须加引号。不加引号时 <code>8080:8080</code>
+会被 YAML 解析为时间字符串（60 进制），导致端口映射错误。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-007</strong>（★ 知识点：K11-3 build 与 image）
+<code>services</code> 下 <code>image</code> 和 <code>build</code>
+可以同时使用，build 构建后会打上 image 指定的标签。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：同时写时，build 构建 image 并打上 image
+字段指定的标签，方便后续引用。这是常见用法。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-008</strong>（★ 知识点：K11-4 具名卷） 具名卷在
+services 下引用即可，无需在 volumes 顶层段声明。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：具名卷必须先在 volumes 顶层段声明，才能在
+services 下引用。绑定挂载才不需要声明。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-009</strong>（★ 知识点：K11-5 down 删卷）
+<code>docker compose down</code> 默认会删除具名数据卷。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：down
+默认保留具名卷（保护数据）。要删卷必须加
+<code>-v</code>：<code>docker compose down -v</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-010</strong>（★★ 知识点：K11-5 up vs start） 修改了
+docker-compose.yml 后，使用 <code>docker compose start</code>
+即可让修改生效。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：start
+只启动已存在的停止容器，不应用 YAML 变更。修改 YAML 后必须用
+<code>up -d</code>，必要时加 <code>--build</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-011</strong>（★ 知识点：K11-5 --scale） 给固定
+<code>container_name</code> 的服务使用 <code>--scale</code>
+扩缩容会因容器重名而失败。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：固定
+container_name 后，多个实例会重名冲突。要扩缩容就不能固定
+container_name。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-012</strong>（★ 知识点：K11-4 自定义网络） 同一自定义
+bridge 网络内的服务可以通过服务名互相访问。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：自定义 bridge
+网络内置 DNS，服务名作为 DNS 名被解析为容器
+IP，同网络内可用服务名互访。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-013</strong>（★ 知识点：K11-5 命令形式）
+<code>docker compose</code>（空格）是 Compose v2 的命令形式，作为 docker
+CLI 的子命令。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：v2 是 docker
+CLI 的子命令，用空格分隔。v1 的
+<code>docker-compose</code>（连字符）已被废弃。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-014</strong>（★★ 知识点：K11-3 健康检查）
+<code>healthcheck</code> 中的 <code>start_period</code>
+表示容器启动后的宽限期，期间健康检查失败不计入 retries。</p><blockquote>
+<p><strong>答案：正确（✓）</strong> <strong>解析</strong>：start_period
+是启动宽限期，给应用预留启动时间。期间检查失败不计入
+retries，避免应用启动慢被误判为不健康。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-015</strong>（★ 知识点：K11-2 项目名） Compose
+项目名默认是 docker-compose.yml 所在目录的名字。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：项目名默认是所在目录名（小写、特殊字符去除）。可用
+<code>-p</code> 显式指定覆盖。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-016</strong>（★ 知识点：K11-5 external）
+<code>external: true</code> 表示 Compose 会创建一个新的外部网络。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：external:
+true 表示引用 Docker 中已存在的网络/卷，不创建新的。常用于多个 Compose
+项目共享资源。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-017</strong>（★★ 知识点：K11-3 environment）
+<code>environment</code> 的字典写法和列表写法可以在同一份
+docker-compose.yml 中混用。</p><blockquote>
+<p><strong>答案：错误（✗）</strong>
+<strong>解析</strong>：不建议混用。一份文件里应统一用一种写法（字典或列表），避免格式混乱导致解析错误。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-018</strong>（★ 知识点：K11-5 logs 命令）
+<code>docker compose logs -f backend</code> 可以实时跟随查看 backend
+服务的日志。</p><blockquote>
+<p><strong>答案：正确（✓）</strong>
+<strong>解析</strong>：<code>-f</code> 是 follow，实时跟随日志输出，类似
+<code>tail -f</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-019</strong>（★★ 知识点：K11-6 依赖顺序） 在 CTTS
+三服务编排中，frontend 必须用 <code>condition: service_healthy</code>
+等待 backend 完全就绪后才能启动。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：frontend 是
+Nginx 静态资源，能独立启动；调 backend
+是运行时调用（浏览器发请求），不是启动依赖。用默认
+<code>service_started</code> 即可，不需要
+<code>service_healthy</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-判断-020</strong>（★ 知识点：K11-1 Compose 与 Docker）
+Docker Compose 是另一种容器引擎，与 Docker 引擎并行工作。</p><blockquote>
+<p><strong>答案：错误（✗）</strong> <strong>解析</strong>：Compose
+不是另一种引擎，它是 Docker CLI 的子命令，本质上还是调用 dockerd
+管理容器。Compose 只是配置组织工具。</p>
+</blockquote></section>
+<hr />
+<h2 id="三填空题共-10-题每题-2-分">三、填空题（共 10 题，每题 2
+分）</h2>
+<section class="question-card"><p><strong>11-填空-001</strong>（★ 知识点：K11-1 v2 命令） Compose v2
+的命令形式是 <code>docker ________</code>（空格分隔），作为 docker CLI
+的子命令。</p><blockquote>
+<p><strong>答案：compose</strong> <strong>解析</strong>：v2 是
+<code>docker compose</code>（空格）。v1 是
+<code>docker-compose</code>（连字符），已被废弃。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-填空-002</strong>（★ 知识点：K11-2 顶层结构）
+<code>docker-compose.yml</code> 中定义所有服务的必需顶层段是
+________。</p><blockquote>
+<p><strong>答案：services</strong> <strong>解析</strong>：services
+是必需的，定义所有服务（每个服务对应一个容器）。version、networks、volumes
+是可选的。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-填空-003</strong>（★ 知识点：K11-3 端口映射） 在
+<code>docker-compose.yml</code> 中，端口映射 <code>"8080:8080"</code>
+的含义是：宿主机 ________ 端口映射到容器 ________ 端口。</p><blockquote>
+<p><strong>答案：8080；8080</strong> <strong>解析</strong>：格式是
+<code>"宿主机端口:容器端口"</code>。即宿主机 8080 端口映射到容器 8080
+端口。必须加引号避免被解析为时间。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-填空-004</strong>（★★ 知识点：K11-3 depends_on 局限）
+<code>depends_on</code> 只能控制 ________ 顺序，不能保证依赖服务
+________。</p><blockquote>
+<p><strong>答案：启动；就绪</strong> <strong>解析</strong>：depends_on
+控制容器启动顺序，但不保证服务就绪（如 MySQL
+进程起来了但还没准备好接受连接）。要保证就绪需配合 healthcheck +
+condition: service_healthy。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-填空-005</strong>（★ 知识点：K11-5 启动命令） 后台启动
+Compose 项目所有服务的命令是 <code>docker compose ________</code>。</p><blockquote>
+<p><strong>答案：up -d</strong>
+<strong>解析</strong>：<code>up -d</code> 是后台启动（detached
+模式）。不带 <code>-d</code> 是前台启动，日志直接输出到终端。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-填空-006</strong>（★ 知识点：K11-5 清理命令） 停止并删除
+Compose 项目的容器和网络，但保留具名数据卷的命令是
+<code>docker compose ________</code>。</p><blockquote>
+<p><strong>答案：down</strong> <strong>解析</strong>：down
+默认删除容器和网络，保留具名卷。要删卷加
+<code>-v</code>：<code>down -v</code>。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-填空-007</strong>（★★ 知识点：K11-5 条件依赖） 要让
+backend 在 mysql 健康检查通过后才启动，应配置
+<code>depends_on: mysql: condition: ________</code>。</p><blockquote>
+<p><strong>答案：service_healthy</strong>
+<strong>解析</strong>：condition
+有三个值——<code>service_started</code>（默认，容器启动即可）、<code>service_healthy</code>（依赖服务健康检查通过）、<code>service_completed_successfully</code>（依赖服务成功退出）。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-填空-008</strong>（★ 知识点：K11-4 具名卷声明） Compose
+中具名卷必须在 ________ 顶层段声明后，才能在 services 下引用。</p><blockquote>
+<p><strong>答案：volumes</strong> <strong>解析</strong>：具名卷在
+volumes
+顶层段声明，定义驱动等属性。绑定挂载（带路径的）不需要在此声明。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-填空-009</strong>（★ 知识点：K11-3 重启策略）
+生产环境中推荐的重启策略是 ________，表示除非手动 stop
+否则总是重启。</p><blockquote>
+<p><strong>答案：unless-stopped</strong>
+<strong>解析</strong>：unless-stopped
+表示除非手动停止，否则容器退出就自动重启，是生产推荐策略。always 会在
+Docker 重启时拉起所有容器（包括手动 stop 的）；on-failure
+只在失败时重启。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-填空-010</strong>（★★ 知识点：K11-5 强制重建） 启动
+Compose 项目时强制重新构建镜像，应使用命令
+<code>docker compose up -d ________</code>。</p><blockquote>
+<p><strong>答案：--build</strong>
+<strong>解析</strong>：<code>--build</code> 在 up
+时强制重新构建镜像（针对配置了 build 的服务）。默认 up
+只在镜像不存在时构建。</p>
+</blockquote></section>
+<hr />
+<h2 id="四论述题简答题共-4-题">四、论述题/简答题（共 4 题）</h2>
+<section class="question-card"><p><strong>11-论述-001</strong>（★★ 知识点：K11-1/K11-3 Compose 价值与
+depends_on，10 分） 请阐述 Docker Compose 解决了什么问题，并说明
+<code>depends_on</code>
+的作用与局限，以及生产环境如何正确处理服务依赖。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（10 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>Compose 解决的问题</strong>（3 分）：</p>
+<ul>
+<li>单机多容器手工部署痛点：多条 <code>docker run</code>
+命令、参数易错、启动顺序难记、不可复现、无法版本化管理（1.5 分）</li>
+<li>Compose 把多服务配置收敛为一份
+<code>docker-compose.yml</code>，一条命令启停，可入 Git 版本管理、可
+Code Review、可一键复现（1.5 分）</li>
+</ul></li>
+<li><p><strong>depends_on 的作用与局限</strong>（4 分）：</p>
+<ul>
+<li>作用：控制服务启动顺序——先启动依赖服务的容器，再启动当前服务（2
+分）</li>
+<li>局限：只控制"容器启动顺序"，不保证"服务就绪"。例如 MySQL
+容器启动了但还没初始化完，无法接受连接，此时 backend
+启动会连不上数据库（2 分）</li>
+</ul></li>
+<li><p><strong>生产环境正确处理方式</strong>（3 分）：</p>
+<ul>
+<li>给依赖服务配置
+<code>healthcheck</code>，定义健康检查命令、间隔、超时、重试次数、启动宽限期（1.5
+分）</li>
+<li>当前服务的 <code>depends_on</code> 使用
+<code>condition: service_healthy</code>，等待依赖服务健康检查通过后再启动（1.5
+分）</li>
+<li>示例 YAML 片段（加分项，非必需）：
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mysql</span><span class="kw">:</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">healthcheck</span><span class="kw">:</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">test</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;CMD&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;mysqladmin&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;ping&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-h&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;localhost&quot;</span><span class="kw">]</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">interval</span><span class="kw">:</span><span class="at"> 10s</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">timeout</span><span class="kw">:</span><span class="at"> 5s</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">retries</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">start_period</span><span class="kw">:</span><span class="at"> 30s</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mysql</span><span class="kw">:</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">condition</span><span class="kw">:</span><span class="at"> service_healthy</span></span></code></pre></div></li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分独立给分；要点完整即可满分；只答"depends_on
+控制启动顺序"不答局限给 2 分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-论述-002</strong>（★★ 知识点：K11-5 命令对比，8 分）
+请对比以下 docker compose 命令对的异同：(1) <code>up -d</code> 与
+<code>start</code>；(2) <code>stop</code> 与 <code>down</code>；(3)
+<code>down</code> 与 <code>down -v</code>。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong><code>up -d</code> 与 <code>start</code></strong>（3
+分）：</p>
+<ul>
+<li><code>up -d</code>：声明式对齐——让真实状态向 YAML
+描述的目标状态靠拢。会创建不存在的容器、应用 YAML
+变更、重建有变化的服务（1.5 分）</li>
+<li><code>start</code>：只启动已存在的停止状态的容器，不会创建新容器，也不会应用
+YAML 变更（1.5 分）</li>
+<li>结论：修改 YAML 后必须用 <code>up -d</code>，不能用
+<code>start</code></li>
+</ul></li>
+<li><p><strong><code>stop</code> 与 <code>down</code></strong>（3
+分）：</p>
+<ul>
+<li><code>stop</code>：只停止容器（保留容器、配置、网络），下次
+<code>start</code> 直接恢复（1.5 分）</li>
+<li><code>down</code>：停止并删除容器和网络（卷保留），下次
+<code>up</code> 重新创建容器（1.5 分）</li>
+<li>结论：<code>stop</code> 适合临时暂停；<code>down</code>
+适合彻底清理</li>
+</ul></li>
+<li><p><strong><code>down</code> 与 <code>down -v</code></strong>（2
+分）：</p>
+<ul>
+<li><code>down</code>：删除容器和网络，<strong>保留</strong>具名数据卷（保护数据）（1
+分）</li>
+<li><code>down -v</code>：删除容器、网络，<strong>同时删除</strong>具名数据卷（数据会丢，慎用）（1
+分）</li>
+<li>结论：要保留数据用 <code>down</code>；要彻底清理用
+<code>down -v</code></li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三组对比各自独立给分；要点清晰即可满分；只列命令不解释给一半分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-论述-003</strong>（★★ 知识点：K11-6 CTTS 编排设计，8 分）
+请简述 CTTS 三服务（MySQL + Backend + Frontend）Compose
+编排的设计要点，包括：(1) 启动顺序与依赖关系；(2) 网络设计；(3)
+数据卷设计；(4) 前端如何调用后端 API。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>启动顺序与依赖关系</strong>（2.5 分）：</p>
+<ul>
+<li>顺序：mysql → backend → frontend（1 分）</li>
+<li>mysql 配 healthcheck 检查数据库就绪（0.5 分）</li>
+<li>backend 用
+<code>depends_on: mysql: condition: service_healthy</code>
+等待数据库就绪（0.5 分）</li>
+<li>frontend 用默认 <code>depends_on: backend</code>（service_started
+即可，因为调用是运行时行为）（0.5 分）</li>
+</ul></li>
+<li><p><strong>网络设计</strong>（2 分）：</p>
+<ul>
+<li>定义自定义 bridge 网络 ctts-net（0.5 分）</li>
+<li>三服务都接入 ctts-net（0.5 分）</li>
+<li>同网络内服务通过服务名互访（如 backend 用 mysql:3306 连数据库）（1
+分）</li>
+</ul></li>
+<li><p><strong>数据卷设计</strong>（2 分）：</p>
+<ul>
+<li>定义具名卷 mysql-data 持久化 MySQL 数据（1 分）</li>
+<li>用绑定挂载挂载 init.sql 到
+/docker-entrypoint-initdb.d/，首次启动时执行初始化 SQL（1 分）</li>
+</ul></li>
+<li><p><strong>前端调用后端 API</strong>（1.5 分）：</p>
+<ul>
+<li>浏览器是宿主机外客户端，不能用服务名（DNS 解析不到）（0.5 分）</li>
+<li>frontend 的 Nginx
+配置反向代理：<code>location /api/ { proxy_pass http://backend:8080/; }</code>（1
+分）</li>
+<li>浏览器访问 <code>http://宿主机IP/</code>，前端发请求到
+<code>/api/xxx</code>，Nginx 转发到 backend:8080</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：四部分独立给分；要点齐全即可满分；技术细节合理替代同样给分。</p>
+</blockquote></section>
+<hr />
+<section class="question-card"><p><strong>11-论述-004</strong>（★★ 知识点：K11-1/K11-5 Compose 与 K8s
+边界，8 分） 请说明 Docker Compose 与 Kubernetes
+各自的定位、适用场景，以及为什么"学了 Compose 还要学 K8s"。</p><blockquote>
+<p><strong>参考答案与评分标准</strong>（8 分，按要点给分）：</p>
+<ol type="1">
+<li><p><strong>Compose 的定位与适用场景</strong>（3 分）：</p>
+<ul>
+<li>定位：单机多容器编排工具（1 分）</li>
+<li>适用场景：开发环境、测试环境、CI 流水线、单机小规模部署（1 分）</li>
+<li>局限：不能跨机调度、不支持高可用、不支持自动弹性扩缩容、不做负载均衡（1
+分）</li>
+</ul></li>
+<li><p><strong>K8s 的定位与适用场景</strong>（3 分）：</p>
+<ul>
+<li>定位：集群容器编排平台（跨多台机器）（1 分）</li>
+<li>适用场景：生产级高可用部署、大规模微服务、弹性扩缩容、滚动更新与回滚（1
+分）</li>
+<li>能力：调度（决定容器跑哪台机器）、自愈（节点挂了自动迁移）、负载均衡（Service）、配置管理（ConfigMap/Secret）、存储编排（PV/PVC）（1
+分）</li>
+</ul></li>
+<li><p><strong>为什么要学 K8s</strong>（2 分）：</p>
+<ul>
+<li>Compose 只解决单机编排，无法满足生产级高可用、多节点、弹性需求（1
+分）</li>
+<li>Compose 的 YAML 声明式思维是 K8s 资源清单的预演，学 Compose 是为 K8s
+打基础（0.5 分）</li>
+<li>生产环境几乎都基于 K8s，DevOps/云运维岗位要求掌握 K8s（0.5 分）</li>
+</ul></li>
+</ol>
+<p><strong>评分要点</strong>：三部分独立给分；要点清晰即可满分；只答"Compose
+单机、K8s 集群"给 2 分。</p>
+</blockquote></section>
+<hr />
+<h2 id="五程序阅读补全题共-2-题">五、程序阅读/补全题（共 2 题）</h2>
+<p><strong>11-阅读-001</strong>（★★ 知识点：K11-3/K11-6 services
+配置补全，12 分） 阅读以下 CTTS 三服务
+<code>docker-compose.yml</code>，补全缺失部分（每空 2 分，共 12
+分）。</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mysql</span><span class="kw">:</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> mysql:8.0</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">container_name</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> (a)________</span><span class="co">              # 生产推荐：除非手动 stop 否则总是重启</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_ROOT_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;123456&quot;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_DATABASE</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> (b)________:/var/lib/mysql</span><span class="co">    # 引用具名卷 mysql-data</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ctts-net</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">(c)________</span><span class="kw">:</span><span class="co">                      # 健康检查配置段</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">test</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;CMD&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;mysqladmin&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;ping&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-h&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;localhost&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-p123456&quot;</span><span class="kw">]</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">interval</span><span class="kw">:</span><span class="at"> 10s</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">timeout</span><span class="kw">:</span><span class="at"> 5s</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">retries</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">start_period</span><span class="kw">:</span><span class="at"> 30s</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-backend:v1</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;(d)________&quot;</span><span class="co">                 # 宿主机 8080 映射到容器 8080</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ctts-net</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">mysql</span><span class="kw">:</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">condition</span><span class="kw">:</span><span class="at"> (e)________</span><span class="co">        # 等 mysql 健康检查通过</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> unless-stopped</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">frontend</span><span class="kw">:</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-frontend:v1</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;80:80&quot;</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> (f)________</span><span class="co">                   # 依赖 backend 服务</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ctts-net</span><span class="kw">:</span></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> bridge</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mysql-data</span><span class="kw">:</span></span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) <code>unless-stopped</code> (b)
+<code>mysql-data</code> (c) <code>healthcheck</code> (d)
+<code>8080:8080</code> (e) <code>service_healthy</code> (f)
+<code>backend</code></p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) 生产推荐重启策略是 <code>unless-stopped</code>（除非手动 stop
+否则总是重启）</li>
+<li>(b) 引用具名卷，卷名 mysql-data（在 volumes 顶层段已声明）</li>
+<li>(c) 健康检查配置段的关键字是 <code>healthcheck</code></li>
+<li>(d) 端口映射格式 <code>"宿主机:容器"</code>，必须加引号</li>
+<li>(e) 等 mysql 健康检查通过的条件是 <code>service_healthy</code></li>
+<li>(f) frontend 依赖 backend 服务</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。意思对即可，专有名词拼写错误不扣分（如 healthcheck 写成
+health-check）。</p>
+</blockquote>
+<hr />
+<p><strong>11-阅读-002</strong>（★★ 知识点：K11-5 命令流程补全，12 分）
+阅读以下 CTTS 项目部署与调试流程，补全缺失部分（每空 2 分，共 12
+分）。</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 校验 docker-compose.yml 配置</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="er">(</span><span class="ex">a</span><span class="kw">)</span><span class="ex">________</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 后台启动所有服务（首次构建镜像）</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span> <span class="er">(</span><span class="ex">b</span><span class="kw">)</span><span class="ex">________</span>    <span class="co"># 强制重新构建镜像</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 查看所有服务状态</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="er">(</span><span class="ex">c</span><span class="kw">)</span><span class="ex">________</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 实时查看 backend 服务日志</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose logs <span class="er">(</span><span class="ex">d</span><span class="kw">)</span><span class="ex">________</span> backend</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 进入 backend 容器的 sh 交互终端</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="er">(</span><span class="ex">e</span><span class="kw">)</span><span class="ex">________</span> backend sh</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. 停止并清理容器、网络（保留数据卷）</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="er">(</span><span class="ex">f</span><span class="kw">)</span><span class="ex">________</span></span></code></pre></div>
+<blockquote>
+<p><strong>参考答案</strong>： (a) <code>config</code> (b)
+<code>--build</code> (c) <code>ps</code> (d) <code>-f</code> (e)
+<code>exec</code> (f) <code>down</code></p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>(a) <code>docker compose config</code>
+校验并渲染配置，无报错即可启动</li>
+<li>(b) <code>--build</code> 强制重新构建镜像（针对配置了 build
+的服务）</li>
+<li>(c) <code>docker compose ps</code> 查看服务状态</li>
+<li>(d) <code>-f</code> 是 follow，实时跟随日志输出</li>
+<li>(e) <code>exec</code> 在运行中的容器内执行命令</li>
+<li>(f) <code>down</code> 停止并删除容器和网络（保留具名卷）</li>
+</ul>
+<p><strong>评分标准</strong>：每空 2 分，共 12
+分。意思对即可，参数顺序不影响得分。</p>
+</blockquote>
+<hr />
+<h2 id="六编程接口设计题共-2-题">六、编程/接口设计题（共 2 题）</h2>
+<p><strong>11-编程-001</strong>（★★ 知识点：K11-2/K11-3 services
+配置编写，15 分） <strong>Compose 基础编排</strong>：请编写一份
+<code>docker-compose.yml</code>，要求：</p>
+<ol type="1">
+<li>定义两个服务：<code>web</code>（nginx:alpine 镜像）和
+<code>redis</code>（redis:alpine 镜像）（4 分）</li>
+<li>web 服务端口映射 <code>8080:80</code>，接入自定义网络
+<code>app-net</code>（3 分）</li>
+<li>redis 服务接入同一网络 <code>app-net</code>，配置重启策略
+<code>unless-stopped</code>（3 分）</li>
+<li>定义自定义网络 <code>app-net</code>（bridge 驱动）（3 分）</li>
+<li>web 服务依赖 redis 服务（2 分）</li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（15 分）：</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">web</span><span class="kw">:</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> nginx:alpine</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8080:80&quot;</span><span class="co">               # 端口映射，必须加引号</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> app-net</span><span class="co">                  # 接入自定义网络</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> redis</span><span class="co">                    # 依赖 redis 服务</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">redis</span><span class="kw">:</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> redis:alpine</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> unless-stopped</span><span class="co">      # 重启策略</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> app-net</span><span class="co">                  # 接入同一网络</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">app-net</span><span class="kw">:</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> bridge</span><span class="co">               # 自定义网络定义</span></span></code></pre></div>
+<p><strong>评分要点</strong>：</p>
+<ul>
+<li>services 顶层段 + web/redis 两个服务定义（4 分，每个服务 2 分）</li>
+<li>web 的 ports 和 networks 配置正确（3 分：ports 加引号 1 分，networks
+引用 1 分，格式正确 1 分）</li>
+<li>redis 的 networks 和 restart 配置正确（3 分：networks 1 分，restart
+值正确 1 分，格式正确 1 分）</li>
+<li>networks 顶层段定义 app-net（3 分：顶层段存在 1 分，driver: bridge 1
+分，格式正确 1 分）</li>
+<li>web 的 depends_on 引用 redis（2 分）</li>
+</ul>
+<p><strong>扣分点</strong>：ports 不加引号扣 1 分；缩进错误扣 2
+分；服务名引用错误扣 2 分。</p>
+</blockquote>
+<hr />
+<p><strong>11-编程-002</strong>（★★★ 知识点：K11-6 CTTS 完整编排，20
+分） <strong>CTTS 三服务完整编排</strong>：请为 CTTS 项目编写完整的
+<code>docker-compose.yml</code>，要求包含：</p>
+<ol type="1">
+<li><p><strong>mysql 服务</strong>（5 分）：</p>
+<ul>
+<li>镜像 <code>mysql:8.0</code>，容器名 <code>ctts-mysql</code></li>
+<li>环境变量：root 密码 <code>123456</code>、数据库名
+<code>ctts</code>、时区 <code>Asia/Shanghai</code></li>
+<li>端口映射 <code>3306:3306</code></li>
+<li>挂载具名卷 <code>mysql-data</code> 到
+<code>/var/lib/mysql</code></li>
+<li>挂载 <code>./init.sql</code> 到
+<code>/docker-entrypoint-initdb.d/init.sql</code>（只读）</li>
+<li>健康检查：用 <code>mysqladmin ping</code> 检查，间隔 10s，超时
+5s，重试 5 次，启动宽限 30s</li>
+</ul></li>
+<li><p><strong>backend 服务</strong>（5 分）：</p>
+<ul>
+<li>镜像 <code>ctts-backend:v1</code>，容器名
+<code>ctts-backend</code></li>
+<li>环境变量：<code>MYSQL_HOST=mysql</code>、<code>MYSQL_PORT=3306</code>、<code>MYSQL_USER=root</code>、<code>MYSQL_PASSWORD=123456</code>、<code>MYSQL_DATABASE=ctts</code></li>
+<li>端口映射 <code>8080:8080</code></li>
+<li>重启策略 <code>unless-stopped</code></li>
+<li>依赖 mysql 且条件为 <code>service_healthy</code></li>
+</ul></li>
+<li><p><strong>frontend 服务</strong>（3 分）：</p>
+<ul>
+<li>镜像 <code>ctts-frontend:v1</code>，容器名
+<code>ctts-frontend</code></li>
+<li>端口映射 <code>80:80</code></li>
+<li>依赖 backend（默认 service_started）</li>
+</ul></li>
+<li><p><strong>网络与卷定义</strong>（4 分）：</p>
+<ul>
+<li>自定义网络 <code>ctts-net</code>（bridge 驱动）</li>
+<li>具名卷 <code>mysql-data</code>（local 驱动）</li>
+<li>三服务都接入 <code>ctts-net</code></li>
+</ul></li>
+<li><p><strong>整体规范</strong>（3 分）：</p>
+<ul>
+<li>YAML 缩进正确（2 空格）</li>
+<li>ports 加引号</li>
+<li>数字密码加引号</li>
+</ul></li>
+</ol>
+<blockquote>
+<p><strong>参考答案与评分标准</strong>（20 分）：</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mysql</span><span class="kw">:</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> mysql:8.0</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">container_name</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> unless-stopped</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_ROOT_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;123456&quot;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_DATABASE</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">TZ</span><span class="kw">:</span><span class="at"> Asia/Shanghai</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;3306:3306&quot;</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> mysql-data:/var/lib/mysql</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ctts-net</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">healthcheck</span><span class="kw">:</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">test</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;CMD&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;mysqladmin&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;ping&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-h&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;localhost&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-uroot&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-p123456&quot;</span><span class="kw">]</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">interval</span><span class="kw">:</span><span class="at"> 10s</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">timeout</span><span class="kw">:</span><span class="at"> 5s</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">retries</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">start_period</span><span class="kw">:</span><span class="at"> 30s</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-backend:v1</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">container_name</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> unless-stopped</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_HOST</span><span class="kw">:</span><span class="at"> mysql</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_PORT</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;3306&quot;</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_USER</span><span class="kw">:</span><span class="at"> root</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;123456&quot;</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_DATABASE</span><span class="kw">:</span><span class="at"> ctts</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8080:8080&quot;</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ctts-net</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">mysql</span><span class="kw">:</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">condition</span><span class="kw">:</span><span class="at"> service_healthy</span></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">frontend</span><span class="kw">:</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> ctts-frontend:v1</span></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">container_name</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> unless-stopped</span></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;80:80&quot;</span></span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ctts-net</span></span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> backend</span></span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ctts-net</span><span class="kw">:</span></span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> bridge</span></span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mysql-data</span><span class="kw">:</span></span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> local</span></span></code></pre></div>
+<p><strong>评分要点</strong>：</p>
+<ul>
+<li><strong>mysql 服务</strong>（5 分）：image/container_name/restart 各
+0.5 分；environment 三项 1.5 分；ports+volumes 1.5 分；healthcheck 五项
+1.5 分</li>
+<li><strong>backend 服务</strong>（5 分）：image/container_name/restart
+各 0.5 分；environment 五项 1.5 分；ports 1 分；depends_on + condition
+1.5 分</li>
+<li><strong>frontend 服务</strong>（3 分）：image/container_name 各 0.5
+分；ports 1 分；depends_on 1 分</li>
+<li><strong>网络与卷</strong>（4 分）：networks 顶层段 1
+分；三服务都接入 ctts-net 1.5 分；volumes 顶层段 1 分；mysql-data 引用
+0.5 分</li>
+<li><strong>整体规范</strong>（3 分）：缩进正确 1 分；ports 加引号 1
+分；数字密码加引号 1 分</li>
+</ul>
+<p><strong>扣分点</strong>：healthcheck 漏 <code>start_period</code> 扣
+0.5 分；depends_on 不加 condition 扣 1 分；ports 不加引号扣 1
+分；缩进错误每处扣 0.5 分（最多扣 3 分）。</p>
+<p><strong>评分补充</strong>：技术细节合理替代同样给分（如 healthcheck
+test 用其他有效命令、restart 用 always 等），只要满足题目意图即可。</p>
+</blockquote>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

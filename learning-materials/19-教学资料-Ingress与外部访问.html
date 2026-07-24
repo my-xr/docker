@@ -1,0 +1,1145 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ingress与外部访问</title>
+  <link rel="stylesheet" href="assets/course-html.css">
+  <link rel="stylesheet" href="assets/highlight-local.css">
+  <script src="assets/vue-sfc-highlight.js" defer></script>
+  <script src="assets/course-html.js" defer></script>
+</head>
+<body>
+  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="course-name">Docker云容器与管理技术</div>
+      <div class="kicker">第 19 次课 · 教学资料</div>
+      <h1>Ingress与外部访问</h1>
+      <p>面向学生复习、自学、命令示例与知识图示 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+        <span class="hero-chip"><b>课次</b>第 19 次课</span>
+        <span class="hero-chip"><b>主题</b>Ingress与外部访问</span>
+      </div>
+    </div>
+  </header>
+  <button class="toc-float-toggle" type="button">目录</button>
+  <div class="layout">
+    <aside class="sidebar" aria-label="页面目录">
+      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
+      <ul>
+<li><a href="#一学习导读">一、学习导读</a>
+<ul>
+<li><a href="#11-上节课回顾">1.1 上节课回顾</a></li>
+<li><a href="#12-本节课要解决的问题">1.2 本节课要解决的问题</a></li>
+<li><a href="#13-学完本课你能做到">1.3 学完本课你能做到</a></li>
+<li><a href="#14-学习建议">1.4 学习建议</a></li>
+</ul></li>
+<li><a href="#二知识点详解">二、知识点详解</a>
+<ul>
+<li><a href="#k19-1-ingress概念">K19-1 Ingress概念</a></li>
+<li><a href="#k19-2-ingress-controller">K19-2 Ingress Controller</a></li>
+<li><a href="#k19-3-ingress资源yaml">K19-3 Ingress资源YAML</a></li>
+<li><a href="#k19-4-域名虚拟主机与路径路由">K19-4 域名虚拟主机与路径路由</a></li>
+<li><a href="#k19-5-tlshttps配置">K19-5 TLS/HTTPS配置</a></li>
+<li><a href="#31-前置条件">3.1 前置条件</a></li>
+<li><a href="#32-完整流程">3.2 完整流程</a></li>
+<li><a href="#33-常见报错排查">3.3 常见报错排查</a></li>
+<li><a href="#34-完整流程示意">3.4 完整流程示意</a></li>
+</ul></li>
+<li><a href="#四拓展阅读">四、拓展阅读</a>
+<ul>
+<li><a href="#41-nginx-ingress-controller常用注解">4.1 Nginx Ingress Controller常用注解</a></li>
+<li><a href="#42-cert-manager自动证书管理">4.2 cert-manager自动证书管理</a></li>
+<li><a href="#43-国产云原生网关higress">4.3 国产云原生网关：Higress</a></li>
+<li><a href="#44-多ingress-controller共存">4.4 多Ingress Controller共存</a></li>
+<li><a href="#45-蓝绿与灰度发布">4.5 蓝绿与灰度发布</a></li>
+</ul></li>
+<li><a href="#五思维导图">五、思维导图</a>
+<ul>
+</ul></li>
+<li><a href="#六复习思考题">六、复习思考题</a>
+<ul>
+</ul></li>
+</ul>
+
+    </aside>
+    <main class="content">
+      <article class="article">
+        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 19 次课 <span>｜</span> <strong>文档：</strong>教学资料</p>
+<blockquote>
+<p><strong>学习路径</strong>：先理解"为什么需要Ingress" →
+再看"Controller是执行者" → 掌握"YAML字段" → 玩转"多域名与多路径" →
+加上"HTTPS/TLS" <strong>贯穿项目</strong>：CTTS（Vue3前端 +
+SpringBoot后端 + MySQL）部署到K8s
+<strong>环境</strong>：Minikube（已启动）+ kubectl + Nginx Ingress
+Controller</p>
+</blockquote>
+<hr />
+<h2 id="一学习导读">一、学习导读</h2>
+<h3 id="11-上节课回顾">1.1 上节课回顾</h3>
+<p>第18次课我们学习了Service：ClusterIP（集群内访问）、NodePort（节点端口暴露）、LoadBalancer（云厂商LB）。它们都是**四层（TCP/UDP）**负载均衡，只认IP+端口，不认HTTP
+Host、Path、Header。</p>
+<h3 id="12-本节课要解决的问题">1.2 本节课要解决的问题</h3>
+<ul>
+<li>CTTS前端Service用NodePort暴露成
+<code>节点IP:30001</code>，后端Service暴露成
+<code>节点IP:30002</code>，用户要记两串数字端口，体验差。</li>
+<li>浏览器访问 <code>http://节点IP:30001</code>
+时，前端Vue3调后端API写死成
+<code>http://节点IP:30002</code>，跨端口CORS、跨环境改配置，运维痛苦。</li>
+<li>没有HTTPS，登录密码明文传输，不符合生产要求。</li>
+</ul>
+<p><strong>Ingress就是来解决这三件事的</strong>：统一入口（一个IP/域名）、域名+路径路由（不同后端Service）、TLS卸载（HTTPS在入口终止）。</p>
+<h3 id="13-学完本课你能做到">1.3 学完本课你能做到</h3>
+<ul>
+<li>安装并验证Nginx Ingress Controller。</li>
+<li>编写Ingress YAML，让 <code>frontend.ctts.local</code>
+路由到前端、<code>api.ctts.local</code> 路由到后端。</li>
+<li>配置本机hosts，浏览器访问验证。</li>
+<li>生成自签证书、创建TLS Secret、为Ingress启用HTTPS。</li>
+<li>排查常见的404、503、路由不通等问题。</li>
+</ul>
+<h3 id="14-学习建议">1.4 学习建议</h3>
+<ul>
+<li><strong>一定要动手</strong>：Ingress是"配置即代码"的典型，光看不写记不住YAML字段。</li>
+<li><strong>善用
+<code>kubectl describe ingress</code></strong>：90%的路由问题都能从describe输出中看出来。</li>
+<li><strong>看Controller日志</strong>：<code>kubectl logs -n ingress-nginx &lt;controller-pod&gt;</code>
+是排查的高级手段。</li>
+<li><strong>不要跳过hosts配置</strong>：很多同学Ingress写对了但浏览器访问404，原因就是没配hosts。</li>
+</ul>
+<hr />
+<h2 id="二知识点详解">二、知识点详解</h2>
+<hr />
+<h3 id="k19-1-ingress概念">K19-1 Ingress概念</h3>
+<h4 id="定义">定义</h4>
+<p><strong>Ingress</strong>
+是Kubernetes中一种API对象，它管理对集群内Service的<strong>外部HTTP/HTTPS访问</strong>（七层），典型能力包括：</p>
+<ul>
+<li>基于域名的虚拟主机（virtual host）路由</li>
+<li>基于URL路径的路由</li>
+<li>TLS/SSL终止（卸载）</li>
+<li>域名级负载均衡</li>
+</ul>
+<h4 id="原理">原理</h4>
+<p>Ingress本身<strong>只是路由规则</strong>（一份YAML声明），真正执行转发的是
+<strong>Ingress
+Controller</strong>（一个跑在集群里的Pod）。Controller监听Ingress资源变化，把规则翻译成自身配置（如Nginx配置文件），然后由自己接收外部流量并转发到对应Service。</p>
+<div class="visual">
+  <div class="visual-title">图示 1：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">外部用户</span>
+<span class="diagram-line">   <span class="tree-token">│</span>  HTTP/HTTPS请求 (host: frontend.ctts.local)</span>
+<span class="diagram-line">   ▼</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span>   Ingress Controller (Pod)  <span class="tree-token">│</span>  ← 一个独立的Pod，监听80/443</span>
+<span class="diagram-line"><span class="tree-token">│</span>   (Nginx Ingress Controller)<span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">   <span class="tree-token">│</span> 查询Ingress规则</span>
+<span class="diagram-line">   <span class="tree-token">│</span> 匹配 host + path</span>
+<span class="diagram-line">   ▼</span>
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span> ctts-frontend<span class="tree-token">│</span>    <span class="tree-token">│</span> ctts-backend <span class="tree-token">│</span>   ← Service (ClusterIP)</span>
+<span class="diagram-line"><span class="tree-token">│</span>   Service    <span class="tree-token">│</span>    <span class="tree-token">│</span>   Service    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">   <span class="tree-token">│</span>                    <span class="tree-token">│</span></span>
+<span class="diagram-line">   ▼                    ▼</span>
+<span class="diagram-line">  Pod                  Pod</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="问题为什么需要ingress">问题：为什么需要Ingress？</h4>
+<table>
+<thead>
+<tr>
+<th>痛点</th>
+<th>不用Ingress</th>
+<th>用Ingress</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>端口暴露</td>
+<td>每个Service一个NodePort，端口散乱</td>
+<td>一个80/443对外，内部路由</td>
+</tr>
+<tr>
+<td>域名访问</td>
+<td>只能用IP:Port</td>
+<td>支持 <code>frontend.ctts.local</code></td>
+</tr>
+<tr>
+<td>HTTPS</td>
+<td>每个Service都要装证书</td>
+<td>入口统一TLS卸载</td>
+</tr>
+<tr>
+<td>路由规则</td>
+<td>无</td>
+<td>按host/path灵活路由</td>
+</tr>
+<tr>
+<td>资源占用</td>
+<td>NodePort占用端口段、LB要钱</td>
+<td>一个Controller即可</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一句话总结</strong>：Service是"四层粗粒度暴露"，Ingress是"七层细粒度路由"。</p>
+<h4 id="完整示例最小ingress">完整示例（最小Ingress）</h4>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Ingress</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> minimal-ingress</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ingressClassName</span><span class="kw">:</span><span class="at"> nginx</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
+<h4 id="图示四层-vs-七层">图示：四层 vs 七层</h4>
+<div class="visual">
+  <div class="visual-title">图示 2：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">四层（Service/NodePort）：</span>
+<span class="diagram-line">   用户 <span class="arrow-token">→</span> TCP:30001 <span class="arrow-token">→</span> Service <span class="arrow-token">→</span> Pod</span>
+<span class="diagram-line">        只看IP+Port</span>
+<span class="diagram-line">七层（Ingress）：</span>
+<span class="diagram-line">   用户 <span class="arrow-token">→</span> HTTP host+path <span class="arrow-token">→</span> Ingress <span class="arrow-token">→</span> Service <span class="arrow-token">→</span> Pod</span>
+<span class="diagram-line">        看HTTP协议字段</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点">易错点</h4>
+<ol type="1">
+<li><strong>Ingress只支持HTTP/HTTPS</strong>，不支持TCP/UDP（如要四层七层混合，需Controller扩展，如Nginx
+Ingress的tcp-services ConfigMap）。</li>
+<li><strong>Ingress本身不做负载均衡到Pod</strong>，它路由到Service，Service再负载到Pod。</li>
+<li><strong>Ingress资源不创建Controller</strong>，需先有Controller运行。</li>
+</ol>
+<h4 id="小结">小结</h4>
+<p>Ingress = 七层路由规则 +
+Controller执行。它解决了NodePort端口散、无域名、无HTTPS的问题。</p>
+<hr />
+<h3 id="k19-2-ingress-controller">K19-2 Ingress Controller</h3>
+<h4 id="定义-1">定义</h4>
+<p><strong>Ingress Controller</strong>
+是一个运行在K8s集群中的Pod，负责：</p>
+<ol type="1">
+<li>监听Ingress资源变化</li>
+<li>将规则翻译为自身配置（Nginx配置、Traefik配置等）</li>
+<li>接收外部HTTP/HTTPS流量并按规则转发</li>
+</ol>
+<h4 id="原理-1">原理</h4>
+<p>K8s官方没有内置Controller，需自行选择实现：</p>
+<table>
+<thead>
+<tr>
+<th>Controller</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nginx Ingress Controller</strong></td>
+<td>最主流、社区活跃、配置灵活、本课使用</td>
+</tr>
+<tr>
+<td>Traefik</td>
+<td>Go实现、自动配置、云原生友好</td>
+</tr>
+<tr>
+<td>HAProxy Ingress</td>
+<td>高性能、企业级</td>
+</tr>
+<tr>
+<td>Contour</td>
+<td>基于Envoy、CNCF项目</td>
+</tr>
+<tr>
+<td>Higress</td>
+<td>阿里开源、国内生态友好、网关+MCP</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>关键认知</strong>：Ingress Controller本质是一个<strong>Pod +
+Service（LoadBalancer或NodePort）</strong>。它本身也需要被外部访问到。</p>
+</blockquote>
+<h4 id="问题minikube下如何安装">问题：Minikube下如何安装？</h4>
+<p>Minikube提供了ingress addon，一键启用：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 启用ingress addon</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">minikube</span> addons enable ingress</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. 验证addon状态</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">minikube</span> addons list <span class="kw">|</span> <span class="fu">grep</span> ingress</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. 查看Controller Pod（在ingress-nginx命名空间）</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> ingress-nginx</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 查看Controller Service</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get svc <span class="at">-n</span> ingress-nginx</span></code></pre></div>
+<p><strong>预期输出</strong>：</p>
+<pre><code>$ kubectl get pods -n ingress-nginx
+NAME                                        READY   STATUS    RESTARTS   AGE
+ingress-nginx-controller-5xxxx              1/1     Running   0          2m</code></pre>
+<h4 id="完整示例验证controller工作">完整示例：验证Controller工作</h4>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看Controller的Deployment</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get deploy <span class="at">-n</span> ingress-nginx</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看Controller配置（实际就是Nginx配置）</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-n</span> ingress-nginx <span class="op">&lt;</span>controller-pod-name<span class="op">&gt;</span> -- cat /etc/nginx/nginx.conf <span class="kw">|</span> <span class="fu">head</span> <span class="at">-50</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看Controller Service，确认80/443端口</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get svc <span class="at">-n</span> ingress-nginx ingress-nginx-controller</span></code></pre></div>
+<h4
+id="图示controller在集群中的位置">图示：Controller在集群中的位置</h4>
+<div class="visual">
+  <div class="visual-title">图示 3：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span> Minikube Node <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span>                                                <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   80/443 ← ingress-nginx-controller (Pod)      <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                <span class="tree-token">│</span>                               <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                <span class="tree-token">│</span> watch                         <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                ▼                               <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   Ingress资源 (ctts-ingress)                   <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                <span class="tree-token">│</span>                               <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                <span class="tree-token">│</span> routes to                     <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>                ▼                               <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>   ctts-frontend Service / ctts-backend Service <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">        ▲</span>
+<span class="diagram-line">        <span class="tree-token">│</span> 外部访问 (minikube ip)</span>
+<span class="diagram-line">        <span class="tree-token">│</span></span>
+<span class="diagram-line">      用户</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-1">易错点</h4>
+<ol type="1">
+<li><strong>addon启用后Pod需1-2分钟才Running</strong>，别急着访问。</li>
+<li><strong>Controller在 <code>ingress-nginx</code>
+命名空间</strong>，不是default，查Pod要加 <code>-n</code>。</li>
+<li><strong>ingressClassName 必须与Controller匹配</strong>，默认是
+<code>nginx</code>，写错会路由不生效。</li>
+<li><strong>Minikube的Controller
+Service默认是NodePort</strong>，外部访问用 <code>minikube ip</code> +
+NodePort，或 <code>minikube tunnel</code> 走LoadBalancer。</li>
+</ol>
+<h4 id="小结-1">小结</h4>
+<p>Controller = Ingress规则的执行者。Minikube下用
+<code>minikube addons enable ingress</code> 一键安装，Pod在
+<code>ingress-nginx</code> 命名空间。</p>
+<hr />
+<h3 id="k19-3-ingress资源yaml">K19-3 Ingress资源YAML</h3>
+<h4 id="定义-2">定义</h4>
+<p>Ingress资源是K8s的一种API对象，<code>apiVersion: networking.k8s.io/v1</code>，<code>kind: Ingress</code>，用于声明HTTP/HTTPS路由规则。</p>
+<h4 id="原理核心字段">原理：核心字段</h4>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span><span class="co">     # 必须是v1（旧的extensions/v1beta1已废弃）</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Ingress</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> &lt;ingress名称&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> &lt;命名空间&gt;</span><span class="co">                # 默认default</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">annotations</span><span class="kw">:</span><span class="co">                        # 注解，针对Controller的扩展配置</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nginx.ingress.kubernetes.io/rewrite-target</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ingressClassName</span><span class="kw">:</span><span class="at"> nginx</span><span class="co">             # 指定使用哪个Controller</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">rules</span><span class="kw">:</span><span class="co">                              # 路由规则列表</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> &lt;域名&gt;</span><span class="co">                       # 可省略，省略表示匹配所有host</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> &lt;URL路径&gt;</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> &lt;Prefix|Exact&gt;</span><span class="co">      # 路径匹配类型</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> &lt;Service名称&gt;</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> &lt;Service端口&gt;</span><span class="co">    # 或 name: &lt;端口名&gt;</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">defaultBackend</span><span class="kw">:</span><span class="co">                     # 兜底后端（无规则匹配时）</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">name</span><span class="kw">:</span><span class="at"> &lt;Service名称&gt;</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">number</span><span class="kw">:</span><span class="at"> &lt;端口&gt;</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">tls</span><span class="kw">:</span><span class="co">                                # TLS配置</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> &lt;域名&gt;</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">secretName</span><span class="kw">:</span><span class="at"> &lt;TLS Secret名称&gt;</span></span></code></pre></div>
+<h4 id="问题pathtype-prefix-vs-exact-有什么区别">问题：pathType Prefix
+vs Exact 有什么区别？</h4>
+<table>
+<thead>
+<tr>
+<th>pathType</th>
+<th>含义</th>
+<th>示例：path=/foo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Prefix</strong></td>
+<td>前缀匹配，匹配
+<code>/foo</code>、<code>/foo/</code>、<code>/foo/bar</code></td>
+<td>✅ <code>/foo</code>、<code>/foo/</code>、<code>/foo/baz</code></td>
+</tr>
+<tr>
+<td><strong>Exact</strong></td>
+<td>精确匹配，仅匹配 <code>/foo</code> 本身</td>
+<td>✅ <code>/foo</code>；❌
+<code>/foo/</code>、<code>/foo/baz</code></td>
+</tr>
+<tr>
+<td>ImplementationSpecific</td>
+<td>由Controller自定义解释</td>
+<td>Nginx Ingress视同Prefix</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意</strong>：K8s 1.22+ 强制要求 <code>pathType</code>
+字段，不能省略。</p>
+<h4 id="完整示例ctts前后端域名路由">完整示例：CTTS前后端域名路由</h4>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Ingress</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-ingress</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> default</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">annotations</span><span class="kw">:</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nginx.ingress.kubernetes.io/rewrite-target</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ingressClassName</span><span class="kw">:</span><span class="at"> nginx</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> frontend.ctts.local</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> api.ctts.local</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
+<p>应用：</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> ctts-ingress.yaml</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get ingress</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe ingress ctts-ingress</span></code></pre></div>
+<p><strong>预期输出</strong>：</p>
+<pre><code>$ kubectl get ingress
+NAME            CLASS   HOSTS                                  ADDRESS        PORTS   AGE
+ctts-ingress    nginx   frontend.ctts.local,api.ctts.local     192.168.49.2   80      30s</code></pre>
+<h4 id="图示路径匹配流程">图示：路径匹配流程</h4>
+<div class="visual">
+  <div class="visual-title">图示 4：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">请求: GET http://frontend.ctts.local/user/list</span>
+<span class="diagram-line">       <span class="tree-token">│</span></span>
+<span class="diagram-line">       ▼</span>
+<span class="diagram-line">┌<span class="tree-token">─</span> Ingress Controller <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
+<span class="diagram-line"><span class="tree-token">│</span> 1. 解析Host: frontend.ctts.local        <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> 2. 查找该host的rules                    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> 3. 遍历paths，按最长前缀匹配            <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span>    path=/  pathType=Prefix 匹配 ✓       <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">│</span> 4. 转发到 ctts-frontend:80/user/list    <span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<span class="diagram-line">       <span class="tree-token">│</span></span>
+<span class="diagram-line">       ▼</span>
+<span class="diagram-line">   ctts-frontend Service <span class="arrow-token">→</span> Pod</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-2">易错点</h4>
+<ol type="1">
+<li><strong>apiVersion必须
+<code>networking.k8s.io/v1</code></strong>，老的
+<code>extensions/v1beta1</code> 在1.22+已删除。</li>
+<li><strong>backend.service 是对象不是字符串</strong>，正确写法是
+<code>service.name</code> 与 <code>service.port.number</code>。</li>
+<li><strong>pathType不可省略</strong>，否则API拒绝。</li>
+<li><strong>path要以 <code>/</code> 开头</strong>，如 <code>/api</code>
+而非 <code>api</code>。</li>
+<li><strong>ingressClassName必须匹配Controller</strong>，如Controller是nginx，className就写nginx。</li>
+<li><strong>多paths按最长前缀优先</strong>，但建议把更具体的path写在前面以增加可读性。</li>
+</ol>
+<h4 id="小结-2">小结</h4>
+<p>Ingress YAML核心是
+<code>rules[].host.http.paths[].backend</code>。pathType必填，Prefix最常用。</p>
+<hr />
+<h3 id="k19-4-域名虚拟主机与路径路由">K19-4 域名虚拟主机与路径路由</h3>
+<h4 id="定义-3">定义</h4>
+<ul>
+<li><strong>域名虚拟主机路由</strong>：一个Ingress定义多个host，每个host路由到不同Service。即"多域名共享一个IP"。</li>
+<li><strong>路径路由</strong>：一个host下定义多个path，不同path路由到不同Service。</li>
+<li><strong>defaultBackend</strong>：当没有任何rule匹配时（host和path都不匹配），转发到这里。</li>
+</ul>
+<h4 id="原理-2">原理</h4>
+<p>Nginx Ingress Controller在内部生成Nginx配置：</p>
+<ul>
+<li>每个host对应一个 <code>server { server_name xxx; }</code> 块</li>
+<li>每个 path 对应一个 <code>location /xxx { proxy_pass ...; }</code>
+块</li>
+<li>defaultBackend 对应一个默认server</li>
+</ul>
+<h4 id="问题多ingress规则会冲突吗">问题：多Ingress规则会冲突吗？</h4>
+<ul>
+<li>同一host可以分散在多个Ingress资源中声明，Controller会<strong>合并</strong>成一个server块。</li>
+<li>但同名path重复声明可能产生冲突，建议同一host的路由集中在一个Ingress。</li>
+</ul>
+<h4 id="完整示例1多域名虚拟主机">完整示例1：多域名虚拟主机</h4>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Ingress</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> multi-host-ingress</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ingressClassName</span><span class="kw">:</span><span class="at"> nginx</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> shop.ctts.local</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> shop-frontend</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> admin.ctts.local</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> admin-frontend</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> api.ctts.local</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
+<h4 id="完整示例2单域名多路径">完整示例2：单域名多路径</h4>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Ingress</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> path-based-ingress</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">annotations</span><span class="kw">:</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nginx.ingress.kubernetes.io/rewrite-target</span><span class="kw">:</span><span class="at"> /$2</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ingressClassName</span><span class="kw">:</span><span class="at"> nginx</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> ctts.local</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /()(.*)</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /api(/|$)(.*)</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
+<blockquote>
+<p>注：上面的rewrite-target: /$2 与 path中的正则捕获组配合，把
+<code>/api/xxx</code> 重写为 <code>/xxx</code>
+转发到后端。本课作为了解，初学者建议先用多host方案。</p>
+</blockquote>
+<h4 id="完整示例3defaultbackend兜底">完整示例3：defaultBackend兜底</h4>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Ingress</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ingress-with-default</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ingressClassName</span><span class="kw">:</span><span class="at"> nginx</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">defaultBackend</span><span class="kw">:</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">name</span><span class="kw">:</span><span class="at"> default-error-page</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> frontend.ctts.local</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
+<p>访问未定义的host或未匹配的path，会返回
+<code>default-error-page</code> 服务的内容。</p>
+<h4 id="图示虚拟主机路由">图示：虚拟主机路由</h4>
+<div class="visual">
+  <div class="visual-title">图示 5：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">            ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span> host=shop.ctts.local   <span class="arrow-token">→</span> shop-frontend</span>
+<span class="diagram-line">80/443 <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┼<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span> host=admin.ctts.local   <span class="arrow-token">→</span> admin-frontend</span>
+<span class="diagram-line">            <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span> host=api.ctts.local    <span class="arrow-token">→</span> ctts-backend</span>
+<span class="diagram-line">            <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span> 其他host（未匹配）      <span class="arrow-token">→</span> defaultBackend</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-3">易错点</h4>
+<ol type="1">
+<li><strong>多Ingress同名host会合并，但同名path冲突</strong>：建议同一host的路由集中在同一Ingress。</li>
+<li><strong>defaultBackend只在 <code>spec</code>
+顶层</strong>，不是每个rule内。</li>
+<li><strong>rewrite-target使用要谨慎</strong>：前端静态资源可能因路径重写找不到，调试时先去掉注解。</li>
+<li><strong>跨命名空间路由不支持</strong>：Ingress只能路由到同命名空间的Service。</li>
+</ol>
+<h4 id="小结-3">小结</h4>
+<p>虚拟主机 = 多host多Service；路径路由 =
+单host多path多Service；defaultBackend = 兜底。</p>
+<hr />
+<h3 id="k19-5-tlshttps配置">K19-5 TLS/HTTPS配置</h3>
+<h4 id="定义-4">定义</h4>
+<p>Ingress支持TLS终止（TLS
+Termination）：用户与Controller之间用HTTPS加密，Controller与集群内Service之间用HTTP明文。证书以Secret形式存储。</p>
+<h4 id="原理-3">原理</h4>
+<div class="visual">
+  <div class="visual-title">图示 6：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">浏览器 <span class="tree-token">─</span><span class="tree-token">─</span>HTTPS<span class="tree-token">─</span><span class="tree-token">─</span>&gt; Ingress Controller <span class="tree-token">─</span><span class="tree-token">─</span>HTTP<span class="tree-token">─</span><span class="tree-token">─</span>&gt; Service <span class="tree-token">─</span><span class="tree-token">─</span>HTTP<span class="tree-token">─</span><span class="tree-token">─</span>&gt; Pod</span>
+<span class="diagram-line">        (TLS加密)       (证书在此终止)        (集群内可明文)</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="问题证书从哪来放哪">问题：证书从哪来？放哪？</h4>
+<ul>
+<li>测试环境：用openssl生成自签证书。</li>
+<li>生产环境：从CA购买或用Let's
+Encrypt免费签发（结合cert-manager自动管理）。</li>
+<li>证书以 <strong>TLS类型Secret</strong> 存储在K8s中，Ingress通过
+<code>tls.secretName</code> 引用。</li>
+</ul>
+<h4 id="完整示例ctts启用https">完整示例：CTTS启用HTTPS</h4>
+<p><strong>步骤1：生成自签证书（含两个域名）</strong></p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 生成私钥</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> genrsa <span class="at">-out</span> ctts.key 2048</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 生成证书签名请求（CSR），包含两个域名</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> openssl.cnf <span class="op">&lt;&lt;EOF</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="st">[req]</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="st">distinguished_name = req_distinguished_name</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="st">req_extensions = v3_req</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="st">prompt = no</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="st">[req_distinguished_name]</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="st">CN = frontend.ctts.local</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="st">[v3_req]</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="st">subjectAltName = @alt_names</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="st">[alt_names]</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="st">DNS.1 = frontend.ctts.local</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="st">DNS.2 = api.ctts.local</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> req <span class="at">-new</span> <span class="at">-key</span> ctts.key <span class="at">-out</span> ctts.csr <span class="at">-config</span> openssl.cnf</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 自签证书（有效期365天）</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> x509 <span class="at">-req</span> <span class="at">-in</span> ctts.csr <span class="at">-signkey</span> ctts.key <span class="at">-out</span> ctts.crt <span class="at">-days</span> 365 <span class="at">-extensions</span> v3_req <span class="at">-extfile</span> openssl.cnf</span></code></pre></div>
+<p><strong>步骤2：创建TLS Secret</strong></p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> create secret tls ctts-tls-secret <span class="dt">\</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--cert</span><span class="op">=</span>ctts.crt <span class="dt">\</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--key</span><span class="op">=</span>ctts.key</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get secret ctts-tls-secret</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe secret ctts-tls-secret</span></code></pre></div>
+<p><strong>步骤3：更新Ingress，启用TLS</strong></p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Ingress</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-ingress-tls</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> default</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">annotations</span><span class="kw">:</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nginx.ingress.kubernetes.io/ssl-redirect</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;true&quot;</span><span class="co">   # HTTP自动跳转HTTPS</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ingressClassName</span><span class="kw">:</span><span class="at"> nginx</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">tls</span><span class="kw">:</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> frontend.ctts.local</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> api.ctts.local</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">secretName</span><span class="kw">:</span><span class="at"> ctts-tls-secret</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> frontend.ctts.local</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> api.ctts.local</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
+<p><strong>步骤4：应用并验证</strong></p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> ctts-ingress-tls.yaml</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看Ingress，PORTS应包含80, 443</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get ingress</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># curl测试HTTPS</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-k</span> https://frontend.ctts.local</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-k</span> https://api.ctts.local/actuator/health</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证HTTP自动跳转HTTPS</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-I</span> http://frontend.ctts.local</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期返回 301 Moved Permanently，Location: https://...</span></span></code></pre></div>
+<h4 id="图示tls终止流程">图示：TLS终止流程</h4>
+<div class="visual">
+  <div class="visual-title">图示 7：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">浏览器                                    Ingress Controller</span>
+<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> 1. ClientHello                             <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>►  <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> 2. ServerHello + 证书(ctts.crt)            <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> ◄<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>  <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> 3. 密钥协商，建立TLS通道                   <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>►  <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span>  4. TLS终止</span>
+<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span>     <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span>     ▼ HTTP明文</span>
+<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span>  ctts-frontend Service</span>
+<span class="diagram-line">   <span class="tree-token">│</span> 5. HTTPS响应                               <span class="tree-token">│</span>     <span class="tree-token">│</span></span>
+<span class="diagram-line">   <span class="tree-token">│</span> ◄<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>  <span class="tree-token">│</span> ◄<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<h4 id="易错点-4">易错点</h4>
+<ol type="1">
+<li><strong>证书SAN必须包含所有域名</strong>：只有CN不行，现代浏览器只认SAN。</li>
+<li><strong>Secret类型必须是 <code>kubernetes.io/tls</code></strong>，用
+<code>kubectl create secret tls</code> 创建的就是。</li>
+<li><strong>tls.hosts要列出使用该证书的所有host</strong>，遗漏会导致证书不匹配。</li>
+<li><strong>自签证书浏览器会警告</strong>，需手动信任；生产用Let's
+Encrypt。</li>
+<li><strong>ssl-redirect注解开启后</strong>，HTTP会自动301跳HTTPS。</li>
+<li><strong>不要把证书文件提交到Git</strong>，应放Secret或用cert-manager管理。</li>
+</ol>
+<h4 id="小结-4">小结</h4>
+<p>TLS三步走：openssl生成证书 → <code>kubectl create secret tls</code> →
+Ingress的 <code>tls</code> 字段引用。</p>
+<hr />
+<h2
+id="三综合示例ctts完整ingress部署流程">三、综合示例：CTTS完整Ingress部署流程</h2>
+<h3 id="31-前置条件">3.1 前置条件</h3>
+<ul>
+<li>Minikube已启动：<code>minikube start</code></li>
+<li>CTTS前后端已部署（Deployment + Service）</li>
+<li>假设Service清单如下：
+<ul>
+<li><code>ctts-frontend</code> ClusterIP 80→Pod 8080（Vue3 nginx）</li>
+<li><code>ctts-backend</code> ClusterIP 80→Pod 8081（SpringBoot）</li>
+</ul></li>
+</ul>
+<blockquote>
+<p>若还没有部署，可用以下快速示例：</p>
+</blockquote>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> create deployment ctts-frontend <span class="at">--image</span><span class="op">=</span>nginx:alpine <span class="at">--port</span><span class="op">=</span>8080</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> expose deployment ctts-frontend <span class="at">--port</span><span class="op">=</span>80 <span class="at">--target-port</span><span class="op">=</span>8080</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> create deployment ctts-backend <span class="at">--image</span><span class="op">=</span>nginx:alpine <span class="at">--port</span><span class="op">=</span>8081</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> expose deployment ctts-backend <span class="at">--port</span><span class="op">=</span>80 <span class="at">--target-port</span><span class="op">=</span>8081</span></code></pre></div>
+<h3 id="32-完整流程">3.2 完整流程</h3>
+<p><strong>Step 1：启用Ingress addon</strong></p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">minikube</span> addons enable ingress</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> ingress-nginx <span class="at">-w</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 等待 ingress-nginx-controller 进入 Running</span></span></code></pre></div>
+<p><strong>Step 2：编写 <code>ctts-ingress.yaml</code></strong></p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Ingress</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-ingress</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> default</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ingressClassName</span><span class="kw">:</span><span class="at"> nginx</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> frontend.ctts.local</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> api.ctts.local</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
+<p><strong>Step 3：应用并查看</strong></p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> ctts-ingress.yaml</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get ingress</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe ingress ctts-ingress</span></code></pre></div>
+<p><strong>Step 4：配置本机hosts</strong></p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 获取Minikube IP</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">minikube</span> ip</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 假设输出 192.168.49.2</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Windows: 以管理员身份编辑 C:\Windows\System32\drivers\etc\hosts</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Linux/Mac: 编辑 /etc/hosts</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 追加：</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="ex">192.168.49.2</span> frontend.ctts.local</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="ex">192.168.49.2</span> api.ctts.local</span></code></pre></div>
+<p><strong>Step 5：浏览器访问验证</strong></p>
+<ul>
+<li>打开 <code>http://frontend.ctts.local</code> → 看到Vue3首页</li>
+<li>打开 <code>http://api.ctts.local</code> → 看到后端响应</li>
+<li><code>curl -H "Host: frontend.ctts.local" http://$(minikube ip)</code>
+→ 返回前端HTML</li>
+</ul>
+<p><strong>Step 6：生成自签证书并创建Secret</strong></p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> genrsa <span class="at">-out</span> ctts.key 2048</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> openssl.cnf <span class="op">&lt;&lt;EOF</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="st">[req]</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="st">distinguished_name = req_distinguished_name</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="st">req_extensions = v3_req</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="st">prompt = no</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="st">[req_distinguished_name]</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="st">CN = frontend.ctts.local</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="st">[v3_req]</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="st">subjectAltName = @alt_names</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="st">[alt_names]</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="st">DNS.1 = frontend.ctts.local</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="st">DNS.2 = api.ctts.local</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> req <span class="at">-new</span> <span class="at">-key</span> ctts.key <span class="at">-out</span> ctts.csr <span class="at">-config</span> openssl.cnf</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> x509 <span class="at">-req</span> <span class="at">-in</span> ctts.csr <span class="at">-signkey</span> ctts.key <span class="at">-out</span> ctts.crt <span class="at">-days</span> 365 <span class="dt">\</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">-extensions</span> v3_req <span class="at">-extfile</span> openssl.cnf</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> create secret tls ctts-tls-secret <span class="at">--cert</span><span class="op">=</span>ctts.crt <span class="at">--key</span><span class="op">=</span>ctts.key</span></code></pre></div>
+<p><strong>Step 7：更新Ingress启用TLS</strong></p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Ingress</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-ingress</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> default</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">annotations</span><span class="kw">:</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nginx.ingress.kubernetes.io/ssl-redirect</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;true&quot;</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ingressClassName</span><span class="kw">:</span><span class="at"> nginx</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">tls</span><span class="kw">:</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> frontend.ctts.local</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> api.ctts.local</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">secretName</span><span class="kw">:</span><span class="at"> ctts-tls-secret</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> frontend.ctts.local</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-frontend</span></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">host</span><span class="kw">:</span><span class="at"> api.ctts.local</span></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">http</span><span class="kw">:</span></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pathType</span><span class="kw">:</span><span class="at"> Prefix</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ctts-backend</span></span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> ctts-ingress.yaml</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get ingress</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># PORTS 应为 80, 443</span></span></code></pre></div>
+<p><strong>Step 8：HTTPS验证</strong></p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-k</span> https://frontend.ctts.local</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-k</span> https://api.ctts.local</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-I</span> http://frontend.ctts.local   <span class="co"># 应返回 301 跳转</span></span></code></pre></div>
+<p>浏览器访问
+<code>https://frontend.ctts.local</code>，会有证书警告（自签证书），点击"继续访问"即可。</p>
+<h3 id="33-常见报错排查">3.3 常见报错排查</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>可能原因</th>
+<th>排查命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>浏览器404</td>
+<td>hosts未配置或Ingress未生效</td>
+<td><code>kubectl get ingress</code>、<code>ping frontend.ctts.local</code></td>
+</tr>
+<tr>
+<td>503 Service Unavailable</td>
+<td>后端Service无可用Pod</td>
+<td><code>kubectl get endpoints ctts-frontend</code></td>
+</tr>
+<tr>
+<td>502 Bad Gateway</td>
+<td>后端Pod未监听目标端口</td>
+<td><code>kubectl exec -it &lt;pod&gt; -- netstat -tln</code></td>
+</tr>
+<tr>
+<td>HTTPS证书不匹配</td>
+<td>证书SAN未包含该域名</td>
+<td><code>openssl x509 -in ctts.crt -text -noout | grep -A1 SAN</code></td>
+</tr>
+<tr>
+<td>HTTP未跳HTTPS</td>
+<td>未加ssl-redirect注解</td>
+<td><code>kubectl describe ingress</code> 检查annotations</td>
+</tr>
+<tr>
+<td><code>kubectl get ingress</code> ADDRESS为空</td>
+<td>Controller未分配IP</td>
+<td>等待30秒，或
+<code>kubectl logs -n ingress-nginx &lt;pod&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="34-完整流程示意">3.4 完整流程示意</h3>
+<div class="visual">
+  <div class="visual-title">图示 8：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">启动Minikube</span>
+<span class="diagram-line">   <span class="tree-token">│</span></span>
+<span class="diagram-line">   ▼</span>
+<span class="diagram-line">部署CTTS Deployment + Service</span>
+<span class="diagram-line">   <span class="tree-token">│</span></span>
+<span class="diagram-line">   ▼</span>
+<span class="diagram-line">启用 ingress addon</span>
+<span class="diagram-line">   <span class="tree-token">│</span></span>
+<span class="diagram-line">   ▼</span>
+<span class="diagram-line">编写 ctts-ingress.yaml（HTTP规则）</span>
+<span class="diagram-line">   <span class="tree-token">│</span></span>
+<span class="diagram-line">   ▼</span>
+<span class="diagram-line">kubectl apply + 配置hosts</span>
+<span class="diagram-line">   <span class="tree-token">│</span></span>
+<span class="diagram-line">   ▼</span>
+<span class="diagram-line">浏览器验证 frontend.ctts.local / api.ctts.local</span>
+<span class="diagram-line">   <span class="tree-token">│</span></span>
+<span class="diagram-line">   ▼</span>
+<span class="diagram-line">openssl 生成自签证书</span>
+<span class="diagram-line">   <span class="tree-token">│</span></span>
+<span class="diagram-line">   ▼</span>
+<span class="diagram-line">kubectl create secret tls</span>
+<span class="diagram-line">   <span class="tree-token">│</span></span>
+<span class="diagram-line">   ▼</span>
+<span class="diagram-line">更新Ingress加tls字段</span>
+<span class="diagram-line">   <span class="tree-token">│</span></span>
+<span class="diagram-line">   ▼</span>
+<span class="diagram-line">HTTPS验证 + 301跳转验证</span>
+<span class="diagram-line">   <span class="tree-token">│</span></span>
+<span class="diagram-line">   ▼</span>
+<span class="diagram-line">完成</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<hr />
+<h2 id="四拓展阅读">四、拓展阅读</h2>
+<h3 id="41-nginx-ingress-controller常用注解">4.1 Nginx Ingress
+Controller常用注解</h3>
+<table>
+<thead>
+<tr>
+<th>注解</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nginx.ingress.kubernetes.io/rewrite-target: /</code></td>
+<td>路径重写</td>
+</tr>
+<tr>
+<td><code>nginx.ingress.kubernetes.io/ssl-redirect: "true"</code></td>
+<td>HTTP自动跳HTTPS</td>
+</tr>
+<tr>
+<td><code>nginx.ingress.kubernetes.io/cors-allow-origin: "*"</code></td>
+<td>启用CORS</td>
+</tr>
+<tr>
+<td><code>nginx.ingress.kubernetes.io/limit-rps: "10"</code></td>
+<td>限流（每秒请求数）</td>
+</tr>
+<tr>
+<td><code>nginx.ingress.kubernetes.io/proxy-body-size: "10m"</code></td>
+<td>上传文件大小限制</td>
+</tr>
+<tr>
+<td><code>nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"</code></td>
+<td>读超时（秒）</td>
+</tr>
+<tr>
+<td><code>nginx.ingress.kubernetes.io/canary: "true"</code></td>
+<td>灰度发布标记</td>
+</tr>
+<tr>
+<td><code>nginx.ingress.kubernetes.io/canary-weight: "20"</code></td>
+<td>灰度流量比例</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-cert-manager自动证书管理">4.2 cert-manager自动证书管理</h3>
+<p>cert-manager是K8s的证书自动化控制器，可与Let's
+Encrypt对接，自动签发与续期：</p>
+<ul>
+<li>安装：<code>kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.0/cert-manager.yaml</code></li>
+<li>配置Issuer（Let's Encrypt或自签）</li>
+<li>在Ingress加注解
+<code>cert-manager.io/issuer: letsencrypt-prod</code></li>
+<li>证书自动签发并续期</li>
+</ul>
+<h3 id="43-国产云原生网关higress">4.3 国产云原生网关：Higress</h3>
+<ul>
+<li>阿里开源，基于Envoy，兼容Ingress API</li>
+<li>国内文档完善，对接Nacos、Sentinel等阿里生态友好</li>
+<li>适合国内企业落地，可作为课外了解</li>
+</ul>
+<h3 id="44-多ingress-controller共存">4.4 多Ingress Controller共存</h3>
+<ul>
+<li>一个集群可安装多个Controller（如nginx + traefik）</li>
+<li>通过 <code>ingressClassName</code>
+区分，每个Ingress指定使用哪个</li>
+<li>适合不同业务域走不同网关的场景</li>
+</ul>
+<h3 id="45-蓝绿与灰度发布">4.5 蓝绿与灰度发布</h3>
+<p>Nginx Ingress通过canary注解支持灰度：</p>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">annotations</span><span class="kw">:</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nginx.ingress.kubernetes.io/canary</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;true&quot;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nginx.ingress.kubernetes.io/canary-weight</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;20&quot;</span><span class="co">   # 20%流量到新版本</span></span></code></pre></div>
+<p>新建一个Ingress引用新版本Service即可，无需改动原Ingress。</p>
+<hr />
+<h2 id="五思维导图">五、思维导图</h2>
+<div class="visual">
+  <div class="visual-title">图示 9：结构与流程重绘</div>
+  <div class="diagram-lines">
+<span class="diagram-line">Ingress与外部访问</span>
+<span class="diagram-line"><span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> K19-1 概念</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 七层 HTTP/HTTPS 路由</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> vs Service（四层）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 价值：统一入口 / 域名 / TLS / 节省端口</span>
+<span class="diagram-line"><span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> K19-2 Ingress Controller</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 本质：独立Pod（监听80/443）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 实现：Nginx / Traefik / Contour / Higress</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> Minikube安装：minikube addons enable ingress</span>
+<span class="diagram-line"><span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> K19-3 Ingress资源YAML</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> apiVersion: networking.k8s.io/v1</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> spec.ingressClassName</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> spec.rules[].host.http.paths[].backend</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> pathType: Prefix | Exact | ImplementationSpecific</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> spec.defaultBackend</span>
+<span class="diagram-line"><span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> K19-4 路由模式</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 多域名虚拟主机（多host多Service）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 单域名多路径（单host多path多Service）</span>
+<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> defaultBackend兜底</span>
+<span class="diagram-line"><span class="tree-token">│</span></span>
+<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> K19-5 TLS/HTTPS</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> openssl生成自签证书（含SAN）</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> kubectl create secret tls</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> spec.tls[].hosts + secretName</span>
+<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ssl-redirect注解：HTTP<span class="arrow-token">→</span>HTTPS跳转</span>
+<span class="diagram-line">    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 生产：cert-manager + Let&#39;s Encrypt</span>
+  </div>
+  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+</div>
+<hr />
+<h2 id="六复习思考题">六、复习思考题</h2>
+<ol type="1">
+<li>用一句话说明Ingress与Service的本质区别。</li>
+<li>为什么说"Ingress只是规则，Controller才是执行者"？如果一个集群启用了Ingress资源但没有Controller，会发生什么？</li>
+<li>pathType Prefix与Exact分别适合什么场景？请各举一个使用例子。</li>
+<li>CTTS项目要新增一个文档站点 <code>docs.ctts.local</code> 路由到
+<code>docs-service:80</code>，请写出最小Ingress YAML。</li>
+<li>自签证书在浏览器中会警告，那为什么生产环境不能用？企业如何低成本获得可信证书？</li>
+<li>一个Ingress定义了 <code>host: api.ctts.local, path: /v1</code>，访问
+<code>https://api.ctts.local/v2</code>
+会发生什么？如何让所有未匹配路径返回一个自定义404页面？</li>
+<li>思考：如果CTTS后端是gRPC服务（非HTTP），Ingress还能直接路由吗？需要什么额外配置？（提示：Nginx
+Ingress支持gRPC，需grpc注解）</li>
+<li>在多团队共享一个K8s集群时，Ingress应如何治理？谁负责统一入口？</li>
+<li>灰度发布：如何让10%的用户访问CTTS
+v2版本，其他90%访问v1？请描述方案。</li>
+<li>反思：本课讲的"统一入口让访问更简单"，在你的学校选课系统、图书馆系统中是否也有类似设计？举例说明。</li>
+</ol>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
