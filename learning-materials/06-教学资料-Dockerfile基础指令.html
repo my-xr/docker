@@ -345,27 +345,7 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="
 <span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co"># drwxr-xr-x    1 root     root          4096 Jul 22 10:00 ..</span></span>
 <span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="co"># -rwxr-xr-x    1 root     root           130 Jul 22 10:00 hello.sh</span></span></code></pre></div>
 <h4 id="图示">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 1：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">Dockerfile 的角色：</span>
-<span class="diagram-line">  开发者                  Docker 引擎                镜像</span>
-<span class="diagram-line">  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐            ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐            ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">  <span class="tree-token">│</span>Dockerfile<span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span>build<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> <span class="tree-token">│</span> 按指令   <span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span>生成<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span>  <span class="tree-token">│</span>  只读    <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span> (源代码)  <span class="tree-token">│</span>            <span class="tree-token">│</span> 逐层构建  <span class="tree-token">│</span>            <span class="tree-token">│</span>  分层镜像 <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘            <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘            <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">       <span class="tree-token">│</span>                                               <span class="tree-token">│</span></span>
-<span class="diagram-line">       <span class="tree-token">│</span> git 提交                                      <span class="tree-token">│</span> docker run</span>
-<span class="diagram-line">       ▼                                               ▼</span>
-<span class="diagram-line">  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐                                    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">  <span class="tree-token">│</span>  代码仓库 <span class="tree-token">│</span>                                    <span class="tree-token">│</span>   容器    <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>  (Git)    <span class="tree-token">│</span>                                    <span class="tree-token">│</span> (运行实例)<span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘                                    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">对比 docker commit：</span>
-<span class="diagram-line">  容器 <span class="tree-token">─</span><span class="tree-token">─</span>commit<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 镜像（黑盒，没人知道里面有什么）</span>
-<span class="diagram-line">  Dockerfile <span class="tree-token">─</span><span class="tree-token">─</span>build<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 镜像（白盒，每层都可追溯）</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 1：Dockerfile 的角色：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">Dockerfile 的角色：</span></li> <li><span class="tree-label">开发者 Docker 引擎 镜像</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Dockerfile build ▶ 按指令 生成 ▶ 只读</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">(源代码) 逐层构建 分层镜像</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">git 提交 docker run</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">代码仓库 容器</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">(Git) (运行实例)</span></li> <li><span class="tree-label">对比 docker commit：</span></li> <li><span class="tree-label">容器 commit ▶ 镜像（黑盒，没人知道里面有什么）</span></li> <li><span class="tree-label">Dockerfile build ▶ 镜像（白盒，每层都可追溯）</span></li> </ul> </div> </div>
 </div>
 <h4 id="易错点">易错点</h4>
 <ol type="1">
@@ -399,15 +379,8 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb7-
 ubuntu、alpine），要么是某个运行时（如
 openjdk、python），要么是某个服务的官方镜像（如 mysql、nginx）。FROM
 就是告诉 Docker："我这个镜像站在哪个巨人的肩膀上"。</p>
-<div class="visual">
-  <div class="visual-title">图示 2：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">你的应用镜像（FROM 之上的层）</span>
-<span class="diagram-line"><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span></span>
-<span class="diagram-line">基础镜像（FROM 指定的镜像）</span>
-<span class="diagram-line"><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span></span>
+<div class="visual"> <div class="visual-title">图示 2：你的应用镜像（FROM 之上的层）</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer base">你的应用镜像（FROM 之上的层）</div> <div class="stack-layer base">基础镜像（FROM 指定的镜像）</div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <p><strong>FROM 的三种典型用法</strong>：</p>
 <div class="sourceCode" id="cb9"><pre
@@ -559,36 +532,8 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb12
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/app.jar</span>
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
 <h4 id="图示-1">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 3：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">基础镜像选择决策树：</span>
-<span class="diagram-line">  应用类型？</span>
-<span class="diagram-line">  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Java 应用 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> eclipse-temurin:&lt;LTS&gt;-jre</span>
-<span class="diagram-line">  <span class="tree-token">│</span>                 (例: eclipse-temurin:17-jre)</span>
-<span class="diagram-line">  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Python 应用 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> python:&lt;ver&gt;-slim</span>
-<span class="diagram-line">  <span class="tree-token">│</span>                   (例: python:3.11-slim)</span>
-<span class="diagram-line">  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Node.js 应用 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> node:&lt;ver&gt;-alpine</span>
-<span class="diagram-line">  <span class="tree-token">│</span>                    (例: node:20-alpine)</span>
-<span class="diagram-line">  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 静态网站 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> nginx:alpine</span>
-<span class="diagram-line">  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Go 静态二进制 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> FROM scratch</span>
-<span class="diagram-line">  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 需要完整 OS <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> ubuntu:22.04 / debian:bookworm-slim</span>
-<span class="diagram-line">镜像分层（FROM 之上叠加）：</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>  你的应用层（COPY jar）   <span class="tree-token">│</span>  ← 你写的</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
-<span class="diagram-line"><span class="tree-token">│</span>  JDK 17 运行时层          <span class="tree-token">│</span>  ← FROM eclipse-temurin:17-jre</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
-<span class="diagram-line"><span class="tree-token">│</span>  Ubuntu 底层系统层        <span class="tree-token">│</span>  ← eclipse-temurin 的底层</span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<div class="visual"> <div class="visual-title">图示 3：基础镜像选择决策树：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer base">基础镜像选择决策树：</div> <div class="stack-layer app">应用类型？</div> <div class="stack-layer runtime">Java 应用 ▶ eclipse-temurin:-jre</div> <div class="stack-layer runtime">(例: eclipse-temurin:17-jre)</div> <div class="stack-layer app">Python 应用 ▶ python:-slim</div> <div class="stack-layer">(例: python:3.11-slim)</div> <div class="stack-layer app">Node.js 应用 ▶ node:-alpine</div> <div class="stack-layer">(例: node:20-alpine)</div> <div class="stack-layer">静态网站 ▶ nginx:alpine</div> <div class="stack-layer base">Go 静态二进制 ▶ FROM scratch</div> <div class="stack-layer base">需要完整 OS ▶ ubuntu:22.04 / debian:bookworm-slim</div> <div class="stack-layer base">镜像分层（FROM 之上叠加）：</div> <div class="stack-layer app">你的应用层（COPY jar） ← 你写的</div> <div class="stack-layer base">JDK 17 运行时层 ← FROM eclipse-temurin:17-jre</div> <div class="stack-layer">Ubuntu 底层系统层 ← eclipse-temurin 的底层</div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <h4 id="易错点-1">易错点</h4>
 <ol type="1">
@@ -1074,27 +1019,8 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb35
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> config/ /app/config/</span>
 <span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
 <h4 id="图示-3">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 4：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">COPY vs ADD 功能对比：</span>
-<span class="diagram-line">COPY：                          ADD：</span>
-<span class="diagram-line">  本地文件 <span class="tree-token">─</span><span class="tree-token">─</span>复制<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 镜像         本地文件 <span class="tree-token">─</span><span class="tree-token">─</span>复制<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 镜像</span>
-<span class="diagram-line">                                  tar 包  <span class="tree-token">─</span><span class="tree-token">─</span>解压<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 镜像</span>
-<span class="diagram-line">                                  URL     <span class="tree-token">─</span><span class="tree-token">─</span>下载<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 镜像</span>
-<span class="diagram-line">选择决策：</span>
-<span class="diagram-line">  要复制文件到镜像？</span>
-<span class="diagram-line">  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 是 <span class="arrow-token">→</span> 是 tar 包需要解压？</span>
-<span class="diagram-line">  <span class="tree-token">│</span>       <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>       <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 是 <span class="arrow-token">→</span> 用 ADD</span>
-<span class="diagram-line">  <span class="tree-token">│</span>       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 否 <span class="arrow-token">→</span> 用 COPY（推荐）</span>
-<span class="diagram-line">  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 要从 URL 下载？</span>
-<span class="diagram-line">          <span class="tree-token">│</span></span>
-<span class="diagram-line">          <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 用 RUN wget + COPY（不推荐 ADD URL）</span>
+<div class="visual"> <div class="visual-title">图示 4：COPY vs ADD 功能对比：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>COPY vs ADD 功能对比：</p></div> <div class="diagram-note-card"><b>COPY</b><p>ADD：</p></div> <div class="diagram-note-card"><p>本地文件 复制 ▶ 镜像 本地文件 复制 ▶ 镜像</p></div> <div class="diagram-note-card"><p>tar 包 解压 ▶ 镜像</p></div> <div class="diagram-note-card"><p>URL 下载 ▶ 镜像</p></div> <div class="diagram-note-card"><p>选择决策：</p></div> <div class="diagram-note-card"><p>要复制文件到镜像？</p></div> <div class="diagram-note-card"><p>是 → 是 tar 包需要解压？</p></div> <div class="diagram-note-card"><p>是 → 用 ADD</p></div> <div class="diagram-note-card"><p>否 → 用 COPY（推荐）</p></div> <div class="diagram-note-card"><p>要从 URL 下载？</p></div> <div class="diagram-note-card"><p>用 RUN wget + COPY（不推荐 ADD URL）</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <h4 id="易错点-3">易错点</h4>
 <ol type="1">
@@ -1164,27 +1090,8 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb41
 隔离，但仍然是"特权用户"。如果应用有漏洞被攻击，攻击者拿到容器内的
 root，可能通过内核漏洞逃逸到宿主机
 root。<strong>最小权限原则</strong>要求：应用能用普通用户跑就用普通用户跑。</p>
-<div class="visual">
-  <div class="visual-title">图示 5：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">以 root 运行容器（危险）：</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>  容器内 root              <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  ↓ 应用漏洞              <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  攻击者拿到 root          <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  ↓ 内核逃逸              <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  宿主机 root              <span class="tree-token">│</span>  ← 灾难！</span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">以非 root 运行容器（安全）：</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>  容器内 appuser           <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  ↓ 应用漏洞              <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  攻击者只拿到 appuser     <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  ↓ 权限有限              <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  影响范围受限              <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<div class="visual"> <div class="visual-title">图示 5：以 root 运行容器（危险）：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>以 root 运行容器（危险）：</p></div> <div class="diagram-note-card"><p>容器内 root</p></div> <div class="diagram-note-card"><p>↓ 应用漏洞</p></div> <div class="diagram-note-card"><p>攻击者拿到 root</p></div> <div class="diagram-note-card"><p>↓ 内核逃逸</p></div> <div class="diagram-note-card"><p>宿主机 root ← 灾难！</p></div> <div class="diagram-note-card"><p>以非 root 运行容器（安全）：</p></div> <div class="diagram-note-card"><p>容器内 appuser</p></div> <div class="diagram-note-card"><p>↓ 应用漏洞</p></div> <div class="diagram-note-card"><p>攻击者只拿到 appuser</p></div> <div class="diagram-note-card"><p>↓ 权限有限</p></div> <div class="diagram-note-card"><p>影响范围受限</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <p><strong>USER 的注意事项</strong>：</p>
 <div class="sourceCode" id="cb43"><pre
@@ -1337,28 +1244,8 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href=
 <span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a><span class="co"># -rw-r--r-- 1 appuser appuser   18 Jul 22 10:00 app.jar</span></span>
 <span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a><span class="co"># → 注意：whoami 输出 appuser（非 root）</span></span></code></pre></div>
 <h4 id="图示-4">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 6：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">WORKDIR 持续生效 vs RUN cd 一次性：</span>
-<span class="diagram-line">WORKDIR（推荐）：              RUN cd（不推荐）：</span>
-<span class="diagram-line">WORKDIR /app                  RUN cd /app &amp;&amp; do_something</span>
-<span class="diagram-line">RUN pwd      # /app          RUN pwd                   # /</span>
-<span class="diagram-line">RUN ls       # 列出 /app     RUN ls                    # 列出 /</span>
-<span class="diagram-line">COPY x .     # 复制到 /app/x RUN cd /app &amp;&amp; cp /x .    # 复杂</span>
-<span class="diagram-line">CMD [&quot;./x&quot;]  # 在 /app 找 x</span>
-<span class="diagram-line">USER 切换流程：</span>
-<span class="diagram-line">  FROM ...（root）</span>
-<span class="diagram-line">  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> RUN 创建用户 + 创建目录 + chown  ← root 阶段（有权限）</span>
-<span class="diagram-line">  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> USER appuser                    ← 切换</span>
-<span class="diagram-line">  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> COPY / CMD（以 appuser 执行）   ← 非 root 阶段</span>
-<span class="diagram-line">  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 容器启动时也是 appuser           ← 安全！</span>
+<div class="visual"> <div class="visual-title">图示 6：WORKDIR 持续生效 vs RUN cd 一次性：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">WORKDIR 持续生效 vs RUN cd 一次性：</div> <div class="stack-layer">WORKDIR（推荐）： RUN cd（不推荐）：</div> <div class="stack-layer">WORKDIR /app RUN cd /app &amp;&amp; do_something</div> <div class="stack-layer">RUN pwd # /app RUN pwd # /</div> <div class="stack-layer">RUN ls # 列出 /app RUN ls # 列出 /</div> <div class="stack-layer">COPY x . # 复制到 /app/x RUN cd /app &amp;&amp; cp /x . # 复杂</div> <div class="stack-layer">CMD [&quot;./x&quot;] # 在 /app 找 x</div> <div class="stack-layer">USER 切换流程：</div> <div class="stack-layer base">FROM ...（root）</div> <div class="stack-layer">RUN 创建用户 + 创建目录 + chown ← root 阶段（有权限）</div> <div class="stack-layer">USER appuser ← 切换</div> <div class="stack-layer">COPY / CMD（以 appuser 执行） ← 非 root 阶段</div> <div class="stack-layer">容器启动时也是 appuser ← 安全！</div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <h4 id="易错点-4">易错点</h4>
 <ol type="1">
@@ -1431,23 +1318,7 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb53-1"><a href=
 <p>当执行 <code>docker build</code> 时，Docker
 客户端会把<strong>构建上下文路径下的所有文件</strong>打包发送给 Docker
 守护进程。这个"打包发送"的过程就是"发送构建上下文"。</p>
-<div class="visual">
-  <div class="visual-title">图示 7：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">客户端                      守护进程</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐   1.发送上下文    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span> docker   <span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> <span class="tree-token">│</span> dockerd  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> CLI      <span class="tree-token">│</span>                 <span class="tree-token">│</span>          <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘   2.发送Dockerfile <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">                  <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span>        <span class="tree-token">│</span></span>
-<span class="diagram-line">                                     <span class="tree-token">│</span> 3.按 Dockerfile 构建</span>
-<span class="diagram-line">                                     <span class="tree-token">│</span>   COPY/RUN/...</span>
-<span class="diagram-line">                                     ▼</span>
-<span class="diagram-line">                                 ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">                                 <span class="tree-token">│</span>  镜像     <span class="tree-token">│</span></span>
-<span class="diagram-line">                                 <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 7：客户端 守护进程</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">客户端 守护进程</span></li> <li><span class="tree-label">1.发送上下文</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">docker ▶ dockerd</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">CLI</span></li> <li><span class="tree-label">2.发送Dockerfile</span></li> <li>&nbsp;&nbsp;<span class="tree-label">▶</span></li> <li>&nbsp;&nbsp;<span class="tree-label">3.按 Dockerfile 构建</span></li> <li>&nbsp;&nbsp;<span class="tree-label">COPY/RUN/...</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">镜像</span></li> </ul> </div> </div>
 </div>
 <p><strong>关键点</strong>：构建上下文 = <code>docker build</code>
 最后那个路径下的<strong>所有文件</strong>。不管 Dockerfile 里有没有 COPY
@@ -1778,18 +1649,7 @@ Dockerfile（进阶版本在第 7 次课讲多阶段构建时优化）。</p>
 <li>启动命令：<code>java -jar /app/app.jar</code></li>
 </ul>
 <h3 id="32-完整目录结构">3.2 完整目录结构</h3>
-<div class="visual">
-  <div class="visual-title">图示 8：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">ctts/backend/</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Dockerfile                 ← 镜像构建脚本</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> .dockerignore              ← 构建上下文过滤</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ctts-backend.jar           ← SpringBoot 打包产物（实际由 mvn package 生成）</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> config/                    ← 配置文件目录</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> application.yml</span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> README.md                  ← 项目说明（不进镜像）</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 8：ctts/backend/</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">ctts/backend/</span></li> <li><span class="tree-label">Dockerfile ← 镜像构建脚本</span></li> <li><span class="tree-label">.dockerignore ← 构建上下文过滤</span></li> <li><span class="tree-label">ctts-backend.jar ← SpringBoot 打包产物（实际由 mvn package 生成）</span></li> <li><span class="tree-label">config/ ← 配置文件目录</span></li> <li>&nbsp;&nbsp;<span class="tree-label">application.yml</span></li> <li><span class="tree-label">README.md ← 项目说明（不进镜像）</span></li> </ul> </div> </div>
 </div>
 <h3 id="33-dockerignore-文件">3.3 .dockerignore 文件</h3>
 <pre class="gitignore"><code># 版本控制
@@ -2093,3 +1953,4 @@ jar）</li>
   </div>
 </body>
 </html>
+

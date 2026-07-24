@@ -1,195 +1,310 @@
 ﻿<!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Docker认知与容器化思想</title>
-  <link rel="stylesheet" href="assets/course-html.css">
-  <link rel="stylesheet" href="assets/highlight-local.css">
-  <script src="assets/vue-sfc-highlight.js" defer></script>
-  <script src="assets/course-html.js" defer></script>
-</head>
-<body>
-  <a class="archive-home-link" href="index.html" aria-label="回到首页" title="回到首页">首页</a>
-  <header class="hero">
-    <div class="hero-inner">
-      <div class="course-name">Docker云容器与管理技术</div>
-      <div class="kicker">第 01 次课 · 教学资料</div>
-      <h1>Docker认知与容器化思想</h1>
-      <p>面向学生复习、自学、命令示例与知识图示 ｜ 技术线：Docker + Dockerfile + Compose + Kubernetes + K8s</p>
-      <div class="hero-meta">
-        <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
-        <span class="hero-chip"><b>课次</b>第 01 次课</span>
-        <span class="hero-chip"><b>主题</b>Docker认知与容器化思想</span>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Docker认知与容器化思想</title>
+    <link rel="stylesheet" href="assets/course-html.css" />
+    <link rel="stylesheet" href="assets/highlight-local.css" />
+    <script src="assets/vue-sfc-highlight.js" defer></script>
+    <script src="assets/course-html.js" defer></script>
+  </head>
+  <body>
+    <a
+      class="archive-home-link"
+      href="index.html"
+      aria-label="回到首页"
+      title="回到首页"
+      >首页</a
+    >
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="course-name">Docker云容器与管理技术</div>
+        <div class="kicker">第 01 次课 · 教学资料</div>
+        <h1>Docker认知与容器化思想</h1>
+        <p>
+          面向学生复习、自学、命令示例与知识图示 ｜ 技术线：Docker + Dockerfile
+          + Compose + Kubernetes + K8s
+        </p>
+        <div class="hero-meta">
+          <span class="hero-chip"><b>课程</b>Docker云容器与管理技术</span>
+          <span class="hero-chip"><b>课次</b>第 01 次课</span>
+          <span class="hero-chip"><b>主题</b>Docker认知与容器化思想</span>
+        </div>
       </div>
-    </div>
-  </header>
-  <button class="toc-float-toggle" type="button">目录</button>
-  <div class="layout">
-    <aside class="sidebar" aria-label="页面目录">
-      <div class="toc-heading"><span>目录</span><button class="toc-toggle" type="button">收起</button></div>
-      <ul>
-<li><a href="#一学习导读">一、学习导读</a>
-<ul>
-<li><a href="#11-本节定位">1.1 本节定位</a></li>
-<li><a href="#12-先修基础">1.2 先修基础</a></li>
-<li><a href="#13-学习目标">1.3 学习目标</a></li>
-</ul></li>
-<li><a href="#二知识点详解">二、知识点详解</a>
-<ul>
-<li><a href="#知识点-k1-1为什么需要容器化">知识点 K1-1：为什么需要容器化</a></li>
-<li><a href="#知识点-k1-2什么是-docker-与容器化思想">知识点 K1-2：什么是 Docker 与容器化思想</a></li>
-<li><a href="#知识点-k1-3容器-vs-虚拟机">知识点 K1-3：容器 vs 虚拟机</a></li>
-<li><a href="#知识点-k1-4docker-引擎架构">知识点 K1-4：Docker 引擎架构</a></li>
-<li><a href="#知识点-k1-5镜像容器与仓库">知识点 K1-5：镜像、容器与仓库</a></li>
-<li><a href="#知识点-k1-6云原生生态与课程项目导入">知识点 K1-6：云原生生态与课程项目导入</a></li>
-</ul></li>
-<li><a href="#四拓展阅读选学">四、拓展阅读（选学）</a>
-<ul>
-</ul></li>
-<li><a href="#五本节小结与知识结构图">五、本节小结与知识结构图</a>
-<ul>
-<li><a href="#知识结构图思维导图">知识结构图（思维导图）</a></li>
-<li><a href="#一句话总结">一句话总结</a></li>
-</ul></li>
-</ul>
-
-    </aside>
-    <main class="content">
-      <article class="article">
-        <p class="doc-meta"><strong>课程：</strong>Docker云容器与管理技术 <span>｜</span> <strong>课次：</strong>第 01 次课 <span>｜</span> <strong>文档：</strong>教学资料</p>
-<blockquote>
-<p>学生复习资料 ｜
-配套：<code>教学设计.md</code>（教师教案）、<code>题库.md</code>（78
-题考试题库）
-本资料面向学生课后复习自学，包含定义、原理、问题、完整示例、图示、易错点与小结。</p>
-</blockquote>
-<hr />
-<h2 id="一学习导读">一、学习导读</h2>
-<h3 id="11-本节定位">1.1 本节定位</h3>
-<p>这是《Docker
-云容器与管理技术》的<strong>第一节课</strong>，属于"认知导入"课，不敲大量命令，重点是<strong>建立对容器化技术的全局认知</strong>，并导入贯穿全课程的实战项目。</p>
-<p>学完本节，你应当能回答：</p>
-<ul>
-<li>什么是容器化？它解决了什么问题？</li>
-<li>容器和虚拟机有什么区别？</li>
-<li>Docker
-的架构是什么样的？客户端、守护进程、镜像、容器、仓库分别是什么？</li>
-<li>什么是云原生？Kubernetes 和 Docker 是什么关系？</li>
-<li>我们这门课要做的"多服务容器化部署项目"是什么样的？</li>
-</ul>
-<h3 id="12-先修基础">1.2 先修基础</h3>
-<table>
-<thead>
-<tr>
-<th>先修知识</th>
-<th>用到程度</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Linux 基础</td>
-<td>基础认知</td>
-<td>知道命令行、文件系统、进程概念即可，本节不敲命令</td>
-</tr>
-<tr>
-<td>计算机网络基础</td>
-<td>基础认知</td>
-<td>了解客户端、服务器、网络请求的基本概念</td>
-</tr>
-<tr>
-<td>Java/Python 编程基础</td>
-<td>基础认知</td>
-<td>知道程序运行需要运行环境（JRE/解释器）</td>
-</tr>
-<tr>
-<td>操作系统常识</td>
-<td>有则更好</td>
-<td>了解进程、内存、内核的概念，有助于理解容器隔离原理</td>
-</tr>
-</tbody>
-</table>
-<h3 id="13-学习目标">1.3 学习目标</h3>
-<ul>
-<li>✅ 理解容器化思想与 Docker 的定位</li>
-<li>✅ 掌握容器与虚拟机的区别</li>
-<li>✅ 理解 Docker 引擎的 C/S 架构</li>
-<li>✅ 掌握镜像、容器、仓库三大核心概念</li>
-<li>✅ 了解云原生生态与 CNCF</li>
-<li>✅ 明确课程项目"多服务容器化部署"的业务背景与目标</li>
-</ul>
-<hr />
-<h2 id="二知识点详解">二、知识点详解</h2>
-<h3 id="知识点-k1-1为什么需要容器化">知识点 K1-1：为什么需要容器化</h3>
-<h4 id="定义">定义</h4>
-<p><strong>容器化（Containerization）</strong>
-是一种将应用程序及其所有依赖（运行时、库、配置、环境变量）打包到一起，形成一个标准化、可移植的运行单元（容器）的技术，使应用能在任何环境中一致地运行。</p>
-<h4 id="原理">原理</h4>
-<p>软件交付中长期存在一个经典痛点——<strong>"在我电脑上能跑"（Works on my
-machine）</strong>：</p>
-<div class="visual">
-  <div class="visual-title">图示 1：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">开发同学：代码在我电脑上能跑啊？</span>
-<span class="diagram-line">运维同学：但在服务器上跑不起来！</span>
-<span class="diagram-line">问题根源：</span>
-<span class="diagram-line">开发环境：Windows + JDK 17 + MySQL 8.0 + 某依赖库 v1.2</span>
-<span class="diagram-line">测试环境：Linux   + JDK 11 + MySQL 5.7 + 某依赖库 v0.9</span>
-<span class="diagram-line">生产环境：Linux   + JDK 17 + MySQL 8.0 + 某依赖库 v1.3</span>
-<span class="diagram-line">环境不一致 <span class="arrow-token">→</span> 行为不一致 <span class="arrow-token">→</span> 上线事故</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<p>传统解决方式与各自的问题：</p>
-<table>
-<thead>
-<tr>
-<th>传统方式</th>
-<th>做法</th>
-<th>问题</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>写部署文档</td>
-<td>把环境要求写进文档，运维手动配</td>
-<td>文档易过时、人为出错</td>
-</tr>
-<tr>
-<td>虚拟机镜像</td>
-<td>做一个虚拟机快照分发</td>
-<td>镜像太大（GB 级）、启动慢、资源浪费</td>
-</tr>
-<tr>
-<td>配置管理工具</td>
-<td>Ansible/Puppet 自动化配置</td>
-<td>仍是"在目标机上装环境"，环境本身不打包</td>
-</tr>
-</tbody>
-</table>
-<p><strong>容器化的思路</strong>：不把环境装到目标机上，而是把"应用 +
-它需要的全部依赖"打包成一个<strong>容器镜像</strong>，拿到任何机器上直接运行，环境完全一致。</p>
-<pre><code>传统交付：交付&quot;代码 + 部署文档&quot;，环境由目标机器提供（易不一致）
+    </header>
+    <button class="toc-float-toggle" type="button">目录</button>
+    <div class="layout">
+      <aside class="sidebar" aria-label="页面目录">
+        <div class="toc-heading">
+          <span>目录</span
+          ><button class="toc-toggle" type="button">收起</button>
+        </div>
+        <ul>
+          <li>
+            <a href="#一学习导读">一、学习导读</a>
+            <ul>
+              <li><a href="#11-本节定位">1.1 本节定位</a></li>
+              <li><a href="#12-先修基础">1.2 先修基础</a></li>
+              <li><a href="#13-学习目标">1.3 学习目标</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#二知识点详解">二、知识点详解</a>
+            <ul>
+              <li>
+                <a href="#知识点-k1-1为什么需要容器化"
+                  >知识点 K1-1：为什么需要容器化</a
+                >
+              </li>
+              <li>
+                <a href="#知识点-k1-2什么是-docker-与容器化思想"
+                  >知识点 K1-2：什么是 Docker 与容器化思想</a
+                >
+              </li>
+              <li>
+                <a href="#知识点-k1-3容器-vs-虚拟机"
+                  >知识点 K1-3：容器 vs 虚拟机</a
+                >
+              </li>
+              <li>
+                <a href="#知识点-k1-4docker-引擎架构"
+                  >知识点 K1-4：Docker 引擎架构</a
+                >
+              </li>
+              <li>
+                <a href="#知识点-k1-5镜像容器与仓库"
+                  >知识点 K1-5：镜像、容器与仓库</a
+                >
+              </li>
+              <li>
+                <a href="#知识点-k1-6云原生生态与课程项目导入"
+                  >知识点 K1-6：云原生生态与课程项目导入</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#四拓展阅读选学">四、拓展阅读（选学）</a>
+            <ul></ul>
+          </li>
+          <li>
+            <a href="#五本节小结与知识结构图">五、本节小结与知识结构图</a>
+            <ul>
+              <li><a href="#知识结构图思维导图">知识结构图（思维导图）</a></li>
+              <li><a href="#一句话总结">一句话总结</a></li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+      <main class="content">
+        <article class="article">
+          <p class="doc-meta">
+            <strong>课程：</strong>Docker云容器与管理技术 <span>｜</span>
+            <strong>课次：</strong>第 01 次课 <span>｜</span>
+            <strong>文档：</strong>教学资料
+          </p>
+          <blockquote>
+            <p>
+              学生复习资料 ｜
+              配套：<code>教学设计.md</code>（教师教案）、<code>题库.md</code>（78
+              题考试题库）
+              本资料面向学生课后复习自学，包含定义、原理、问题、完整示例、图示、易错点与小结。
+            </p>
+          </blockquote>
+          <hr />
+          <h2 id="一学习导读">一、学习导读</h2>
+          <h3 id="11-本节定位">1.1 本节定位</h3>
+          <p>
+            这是《Docker
+            云容器与管理技术》的<strong>第一节课</strong>，属于"认知导入"课，不敲大量命令，重点是<strong>建立对容器化技术的全局认知</strong>，并导入贯穿全课程的实战项目。
+          </p>
+          <p>学完本节，你应当能回答：</p>
+          <ul>
+            <li>什么是容器化？它解决了什么问题？</li>
+            <li>容器和虚拟机有什么区别？</li>
+            <li>
+              Docker
+              的架构是什么样的？客户端、守护进程、镜像、容器、仓库分别是什么？
+            </li>
+            <li>什么是云原生？Kubernetes 和 Docker 是什么关系？</li>
+            <li>我们这门课要做的"多服务容器化部署项目"是什么样的？</li>
+          </ul>
+          <h3 id="12-先修基础">1.2 先修基础</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>先修知识</th>
+                <th>用到程度</th>
+                <th>说明</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Linux 基础</td>
+                <td>基础认知</td>
+                <td>知道命令行、文件系统、进程概念即可，本节不敲命令</td>
+              </tr>
+              <tr>
+                <td>计算机网络基础</td>
+                <td>基础认知</td>
+                <td>了解客户端、服务器、网络请求的基本概念</td>
+              </tr>
+              <tr>
+                <td>Java/Python 编程基础</td>
+                <td>基础认知</td>
+                <td>知道程序运行需要运行环境（JRE/解释器）</td>
+              </tr>
+              <tr>
+                <td>操作系统常识</td>
+                <td>有则更好</td>
+                <td>了解进程、内存、内核的概念，有助于理解容器隔离原理</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3 id="13-学习目标">1.3 学习目标</h3>
+          <ul>
+            <li>✅ 理解容器化思想与 Docker 的定位</li>
+            <li>✅ 掌握容器与虚拟机的区别</li>
+            <li>✅ 理解 Docker 引擎的 C/S 架构</li>
+            <li>✅ 掌握镜像、容器、仓库三大核心概念</li>
+            <li>✅ 了解云原生生态与 CNCF</li>
+            <li>✅ 明确课程项目"多服务容器化部署"的业务背景与目标</li>
+          </ul>
+          <hr />
+          <h2 id="二知识点详解">二、知识点详解</h2>
+          <h3 id="知识点-k1-1为什么需要容器化">
+            知识点 K1-1：为什么需要容器化
+          </h3>
+          <h4 id="定义">定义</h4>
+          <p>
+            <strong>容器化（Containerization）</strong>
+            是一种将应用程序及其所有依赖（运行时、库、配置、环境变量）打包到一起，形成一个标准化、可移植的运行单元（容器）的技术，使应用能在任何环境中一致地运行。
+          </p>
+          <h4 id="原理">原理</h4>
+          <p>
+            软件交付中长期存在一个经典痛点——<strong
+              >"在我电脑上能跑"（Works on my machine）</strong
+            >：
+          </p>
+          <div class="visual">
+            <div class="visual-title">图示 1：环境不一致如何引发上线事故</div>
+            <div class="edu-diagram">
+              <div class="diagram-grid two">
+                <div class="diagram-card warn">
+                  <span class="diagram-badge warn">开发视角</span>
+                  <h4>代码在我电脑上能跑</h4>
+                  <p>本机依赖齐全，版本组合刚好匹配，问题被隐藏。</p>
+                </div>
+                <div class="diagram-card warn">
+                  <span class="diagram-badge warn">运维视角</span>
+                  <h4>服务器上跑不起来</h4>
+                  <p>目标机器的系统、运行时、数据库或依赖版本发生偏差。</p>
+                </div>
+              </div>
+              <div class="env-matrix">
+                <div class="env-row">
+                  <b>开发环境</b><span>Windows</span><span>JDK 17</span
+                  ><span>MySQL 8.0</span><span>依赖 v1.2</span>
+                </div>
+                <div class="env-row">
+                  <b>测试环境</b><span>Linux</span><span>JDK 11</span
+                  ><span>MySQL 5.7</span><span>依赖 v0.9</span>
+                </div>
+                <div class="env-row">
+                  <b>生产环境</b><span>Linux</span><span>JDK 17</span
+                  ><span>MySQL 8.0</span><span>依赖 v1.3</span>
+                </div>
+              </div>
+              <div class="diagram-flow">
+                <div class="diagram-card warn">
+                  <h4>环境不一致</h4>
+                  <p>基础软件和依赖版本漂移</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card warn">
+                  <h4>行为不一致</h4>
+                  <p>同一份代码表现不同</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card warn">
+                  <h4>上线事故</h4>
+                  <p>排障成本和交付风险上升</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p>传统解决方式与各自的问题：</p>
+          <table>
+            <thead>
+              <tr>
+                <th>传统方式</th>
+                <th>做法</th>
+                <th>问题</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>写部署文档</td>
+                <td>把环境要求写进文档，运维手动配</td>
+                <td>文档易过时、人为出错</td>
+              </tr>
+              <tr>
+                <td>虚拟机镜像</td>
+                <td>做一个虚拟机快照分发</td>
+                <td>镜像太大（GB 级）、启动慢、资源浪费</td>
+              </tr>
+              <tr>
+                <td>配置管理工具</td>
+                <td>Ansible/Puppet 自动化配置</td>
+                <td>仍是"在目标机上装环境"，环境本身不打包</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            <strong>容器化的思路</strong>：不把环境装到目标机上，而是把"应用 +
+            它需要的全部依赖"打包成一个<strong>容器镜像</strong>，拿到任何机器上直接运行，环境完全一致。
+          </p>
+          <pre><code>传统交付：交付&quot;代码 + 部署文档&quot;，环境由目标机器提供（易不一致）
 容器交付：交付&quot;容器镜像（含应用+依赖）&quot;，环境随镜像一起走（强一致）</code></pre>
-<h4 id="问题--场景">问题 / 场景</h4>
-<p><strong>问：容器化是不是只为了解决"在我电脑上能跑"这一个问题？</strong></p>
-<ul>
-<li>不止。除了环境一致性，容器化还带来：
-<ul>
-<li><strong>快速启动</strong>：容器秒级启动（虚拟机分钟级），适合弹性扩容。</li>
-<li><strong>资源利用率高</strong>：一台机器能跑成百上千个容器（虚拟机通常几十个）。</li>
-<li><strong>标准化交付</strong>：镜像就是交付物，可版本化、可回滚。</li>
-<li><strong>编排基础</strong>：为 Kubernetes 这类集群编排打下基础。</li>
-</ul></li>
-</ul>
-<p><strong>问：不学容器化行不行？</strong></p>
-<ul>
-<li>现代云原生应用几乎全部基于容器交付。DevOps、云运维、后端开发岗位都要求掌握容器技术。不学容器化，很难进入云原生技术栈。</li>
-</ul>
-<h4 id="完整示例">完整示例</h4>
-<p>一个真实场景的对比（伪代码描述，说明问题即可，本节不执行）：</p>
-<pre class="text"><code>【传统部署 CTTS 后端的痛苦流程】
+          <h4 id="问题--场景">问题 / 场景</h4>
+          <p>
+            <strong
+              >问：容器化是不是只为了解决"在我电脑上能跑"这一个问题？</strong
+            >
+          </p>
+          <ul>
+            <li>
+              不止。除了环境一致性，容器化还带来：
+              <ul>
+                <li>
+                  <strong>快速启动</strong
+                  >：容器秒级启动（虚拟机分钟级），适合弹性扩容。
+                </li>
+                <li>
+                  <strong>资源利用率高</strong
+                  >：一台机器能跑成百上千个容器（虚拟机通常几十个）。
+                </li>
+                <li>
+                  <strong>标准化交付</strong
+                  >：镜像就是交付物，可版本化、可回滚。
+                </li>
+                <li>
+                  <strong>编排基础</strong>：为 Kubernetes
+                  这类集群编排打下基础。
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <p><strong>问：不学容器化行不行？</strong></p>
+          <ul>
+            <li>
+              现代云原生应用几乎全部基于容器交付。DevOps、云运维、后端开发岗位都要求掌握容器技术。不学容器化，很难进入云原生技术栈。
+            </li>
+          </ul>
+          <h4 id="完整示例">完整示例</h4>
+          <p>一个真实场景的对比（伪代码描述，说明问题即可，本节不执行）：</p>
+          <pre class="text"><code>【传统部署 CTTS 后端的痛苦流程】
 1. 开发把 ctts-backend.jar 交给运维
 2. 运维在服务器上：apt install openjdk-17、apt install mysql、配置环境变量
 3. 运维发现服务器上是 JDK 11，升级怕影响别的应用
@@ -203,113 +318,198 @@ machine）</strong>：</p>
 3. docker push ctts-backend:v1           →  推送到镜像仓库
 4. 运维：docker run ctts-backend:v1      →  直接运行，环境完全一致
 5. 从交付到上线：10 分钟</code></pre>
-<blockquote>
-<p>📌
-这个对比体现了容器化的核心价值：<strong>环境随镜像走，一次构建到处运行</strong>。Docker
-具体命令在第 2~4 次课学习。</p>
-</blockquote>
-<h4 id="图示">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 2：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">传统交付（环境分离）：              容器化交付（环境打包）：</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  代码    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span> 开发电脑  <span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> <span class="tree-token">│</span> 服务器    <span class="tree-token">│</span>    <span class="tree-token">│</span> 开发电脑           <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> JDK17     <span class="tree-token">│</span>         <span class="tree-token">│</span> 装环境?   <span class="tree-token">│</span>    <span class="tree-token">│</span> 打包：JDK17+jar   <span class="tree-token">│</span> <span class="arrow-token">→</span> 镜像</span>
-<span class="diagram-line"><span class="tree-token">│</span> MySQL8.0  <span class="tree-token">│</span>         <span class="tree-token">│</span> JDK?     <span class="tree-token">│</span>    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘         <span class="tree-token">│</span> MySQL?   <span class="tree-token">│</span>              <span class="tree-token">│</span> 镜像（自带环境）</span>
-<span class="diagram-line">                      <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘              ▼</span>
-<span class="diagram-line">                      环境？运气！        ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">                                          <span class="tree-token">│</span> 服务器    <span class="tree-token">│</span></span>
-<span class="diagram-line">                                          <span class="tree-token">│</span> 直接运行  <span class="tree-token">│</span> 环境一致 ✓</span>
-<span class="diagram-line">                                          <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<h4 id="易错点">易错点</h4>
-<ol type="1">
-<li>❌ 误认为"容器化 = 虚拟机"。✅ 容器和虚拟机是不同的隔离技术，详见
-K1-3。</li>
-<li>❌ 误认为"容器化只是为了部署方便"。✅
-它还带来标准化交付、弹性扩容、编排基础等。</li>
-<li>❌ 误认为"容器化就不用管环境了"。✅
-容器只是把环境打包进镜像，镜像本身的构建仍需规范。</li>
-</ol>
-<h4 id="小结">小结</h4>
-<p>容器化解决的核心问题是"环境一致性 +
-标准化交付"。它把应用和依赖打包成镜像，做到"一次构建、到处运行"，是云原生技术的基础。</p>
-<hr />
-<h3 id="知识点-k1-2什么是-docker-与容器化思想">知识点 K1-2：什么是
-Docker 与容器化思想</h3>
-<h4 id="定义-1">定义</h4>
-<p><strong>Docker</strong>
-是一个开源的容器化平台，它让开发者能够将应用及其依赖打包成标准化的容器镜像，并在任何环境中快速、一致地运行。</p>
-<p>一句话概括 Docker 的核心思想：</p>
-<blockquote>
-<p><strong>Build once, run anywhere（一次构建，到处运行）</strong></p>
-</blockquote>
-<h4 id="原理-1">原理</h4>
-<p>Docker 的核心思想是**"把应用和它的运行环境一起打包"**：</p>
-<div class="visual">
-  <div class="visual-title">图示 3：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">传统：              Docker：</span>
-<span class="diagram-line">应用代码            ┌<span class="tree-token">─</span> Docker 镜像 <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">                    <span class="tree-token">│</span>  应用代码              <span class="tree-token">│</span></span>
-<span class="diagram-line">                    <span class="tree-token">│</span>  运行时（JRE/Python）  <span class="tree-token">│</span></span>
-<span class="diagram-line">                    <span class="tree-token">│</span>  依赖库                <span class="tree-token">│</span></span>
-<span class="diagram-line">                    <span class="tree-token">│</span>  配置文件              <span class="tree-token">│</span></span>
-<span class="diagram-line">                    <span class="tree-token">│</span>  环境变量              <span class="tree-token">│</span></span>
-<span class="diagram-line">                    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">                      ↓ docker run</span>
-<span class="diagram-line">                    ┌<span class="tree-token">─</span> Docker 容器 <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">                    <span class="tree-token">│</span>  运行中的应用实例       <span class="tree-token">│</span></span>
-<span class="diagram-line">                    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<p><strong>Docker 的诞生背景</strong>：</p>
-<ul>
-<li>2013 年由 dotCloud 公司（后改名 Docker Inc.）开源。</li>
-<li>基于 Linux 内核的 cgroups（资源限制）和
-namespaces（隔离）技术。</li>
-<li>把容器技术"平民化"——以前容器技术门槛高，Docker
-用简单的命令和镜像模型让容器易用。</li>
-</ul>
-<p><strong>Docker 能做什么</strong>：</p>
-<ol type="1">
-<li><strong>构建镜像</strong>：用 Dockerfile 把应用打包成镜像。</li>
-<li><strong>运行容器</strong>：用镜像启动容器实例。</li>
-<li><strong>分发镜像</strong>：通过镜像仓库（如 Docker
-Hub）分享镜像。</li>
-<li><strong>编排多服务</strong>：用 Docker Compose 编排多个容器（第 11
-次课）。</li>
-</ol>
-<h4 id="问题--场景-1">问题 / 场景</h4>
-<p><strong>问：Docker 和容器是什么关系？</strong></p>
-<ul>
-<li><strong>容器</strong>是一种技术概念（隔离的运行环境）。<strong>Docker</strong>
-是实现容器技术的一个工具/平台。可以类比为："容器"是"汽车"这个概念，"Docker"是其中一款流行的"汽车品牌"。理论上还有别的容器工具（如
-Podman、containerd），但 Docker 是最主流的。</li>
-</ul>
-<p><strong>问：Docker 只能跑 Linux 应用吗？</strong></p>
-<ul>
-<li>Docker 容器原生基于 Linux 内核特性，所以容器主要运行 Linux
-应用。Windows/Mac 上的 Docker Desktop 是通过一个轻量级 Linux
-虚拟机来实现的。Windows 容器也存在，但应用场景少，本课程以 Linux
-容器为主。</li>
-</ul>
-<p><strong>问：Docker 是免费的吗？</strong></p>
-<ul>
-<li>Docker 引擎（社区版）开源免费。Docker Desktop
-对个人和小企业免费，大企业商用需付费。容器运行时还有完全开源的替代品（如
-containerd）。</li>
-</ul>
-<h4 id="完整示例-1">完整示例</h4>
-<p>Docker
-的典型工作流（命令本节只看流程，不要求记忆，后续课程详讲）：</p>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 编写 Dockerfile（描述如何打包）</span></span>
+          <blockquote>
+            <p>
+              📌
+              这个对比体现了容器化的核心价值：<strong>环境随镜像走，一次构建到处运行</strong>。Docker
+              具体命令在第 2~4 次课学习。
+            </p>
+          </blockquote>
+          <h4 id="图示">图示</h4>
+          <div class="visual">
+            <div class="visual-title">图示 2：传统交付与容器化交付的差异</div>
+            <div class="edu-diagram">
+              <div class="diagram-grid two delivery-compare">
+                <div class="diagram-panel">
+                  <span class="diagram-badge warn">传统交付：环境分离</span>
+                  <div class="diagram-flow delivery-flow two-step">
+                    <div class="diagram-card neutral">
+                      <h4>开发电脑</h4>
+                      <p>代码 + JDK17 + MySQL8.0</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="diagram-card warn">
+                      <h4>服务器</h4>
+                      <p>重新安装环境：JDK? MySQL? 依赖?</p>
+                    </div>
+                  </div>
+                  <div class="diagram-callout">
+                    交付的是代码和文档，运行结果依赖目标机器，环境是否一致带有运气成分。
+                  </div>
+                </div>
+                <div class="diagram-panel">
+                  <span class="diagram-badge good">容器化交付：环境打包</span>
+                  <div class="diagram-flow delivery-flow three-step">
+                    <div class="diagram-card good">
+                      <h4>开发电脑</h4>
+                      <p>把 JDK17、jar、依赖一起打包</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="diagram-card good">
+                      <h4>镜像</h4>
+                      <p>自带运行环境的标准交付物</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="diagram-card good">
+                      <h4>服务器</h4>
+                      <p>直接运行，环境一致</p>
+                    </div>
+                  </div>
+                  <div class="diagram-callout">
+                    交付的是镜像，环境随镜像走，实现“一次构建，到处运行”。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h4 id="易错点">易错点</h4>
+          <ol type="1">
+            <li>
+              ❌ 误认为"容器化 = 虚拟机"。✅ 容器和虚拟机是不同的隔离技术，详见
+              K1-3。
+            </li>
+            <li>
+              ❌ 误认为"容器化只是为了部署方便"。✅
+              它还带来标准化交付、弹性扩容、编排基础等。
+            </li>
+            <li>
+              ❌ 误认为"容器化就不用管环境了"。✅
+              容器只是把环境打包进镜像，镜像本身的构建仍需规范。
+            </li>
+          </ol>
+          <h4 id="小结">小结</h4>
+          <p>
+            容器化解决的核心问题是"环境一致性 +
+            标准化交付"。它把应用和依赖打包成镜像，做到"一次构建、到处运行"，是云原生技术的基础。
+          </p>
+          <hr />
+          <h3 id="知识点-k1-2什么是-docker-与容器化思想">
+            知识点 K1-2：什么是 Docker 与容器化思想
+          </h3>
+          <h4 id="定义-1">定义</h4>
+          <p>
+            <strong>Docker</strong>
+            是一个开源的容器化平台，它让开发者能够将应用及其依赖打包成标准化的容器镜像，并在任何环境中快速、一致地运行。
+          </p>
+          <p>一句话概括 Docker 的核心思想：</p>
+          <blockquote>
+            <p>
+              <strong>Build once, run anywhere（一次构建，到处运行）</strong>
+            </p>
+          </blockquote>
+          <h4 id="原理-1">原理</h4>
+          <p>Docker 的核心思想是**"把应用和它的运行环境一起打包"**：</p>
+          <div class="visual">
+            <div class="visual-title">
+              图示 3：Docker 把应用和运行环境一起打包
+            </div>
+            <div class="edu-diagram">
+              <div class="relation-triad">
+                <div class="diagram-card neutral">
+                  <h4>传统方式</h4>
+                  <p>
+                    通常只交付应用代码，运行时、依赖库、配置由服务器另行准备。
+                  </p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-panel">
+                  <span class="diagram-badge good">Docker 镜像</span>
+                  <div class="stack-diagram">
+                    <div class="stack-layer app">应用代码</div>
+                    <div class="stack-layer runtime">运行时：JRE / Python</div>
+                    <div class="stack-layer">依赖库</div>
+                    <div class="stack-layer">配置文件</div>
+                    <div class="stack-layer base">环境变量</div>
+                  </div>
+                </div>
+              </div>
+              <div class="diagram-flow">
+                <div class="diagram-card good">
+                  <h4>镜像</h4>
+                  <p>静态、可分发、可复用</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card good">
+                  <h4>docker run</h4>
+                  <p>从镜像启动运行实例</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card good">
+                  <h4>Docker 容器</h4>
+                  <p>运行中的应用实例</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p><strong>Docker 的诞生背景</strong>：</p>
+          <ul>
+            <li>2013 年由 dotCloud 公司（后改名 Docker Inc.）开源。</li>
+            <li>
+              基于 Linux 内核的 cgroups（资源限制）和 namespaces（隔离）技术。
+            </li>
+            <li>
+              把容器技术"平民化"——以前容器技术门槛高，Docker
+              用简单的命令和镜像模型让容器易用。
+            </li>
+          </ul>
+          <p><strong>Docker 能做什么</strong>：</p>
+          <ol type="1">
+            <li><strong>构建镜像</strong>：用 Dockerfile 把应用打包成镜像。</li>
+            <li><strong>运行容器</strong>：用镜像启动容器实例。</li>
+            <li>
+              <strong>分发镜像</strong>：通过镜像仓库（如 Docker Hub）分享镜像。
+            </li>
+            <li>
+              <strong>编排多服务</strong>：用 Docker Compose 编排多个容器（第 11
+              次课）。
+            </li>
+          </ol>
+          <h4 id="问题--场景-1">问题 / 场景</h4>
+          <p><strong>问：Docker 和容器是什么关系？</strong></p>
+          <ul>
+            <li>
+              <strong>容器</strong>是一种技术概念（隔离的运行环境）。<strong
+                >Docker</strong
+              >
+              是实现容器技术的一个工具/平台。可以类比为："容器"是"汽车"这个概念，"Docker"是其中一款流行的"汽车品牌"。理论上还有别的容器工具（如
+              Podman、containerd），但 Docker 是最主流的。
+            </li>
+          </ul>
+          <p><strong>问：Docker 只能跑 Linux 应用吗？</strong></p>
+          <ul>
+            <li>
+              Docker 容器原生基于 Linux 内核特性，所以容器主要运行 Linux
+              应用。Windows/Mac 上的 Docker Desktop 是通过一个轻量级 Linux
+              虚拟机来实现的。Windows 容器也存在，但应用场景少，本课程以 Linux
+              容器为主。
+            </li>
+          </ul>
+          <p><strong>问：Docker 是免费的吗？</strong></p>
+          <ul>
+            <li>
+              Docker 引擎（社区版）开源免费。Docker Desktop
+              对个人和小企业免费，大企业商用需付费。容器运行时还有完全开源的替代品（如
+              containerd）。
+            </li>
+          </ul>
+          <h4 id="完整示例-1">完整示例</h4>
+          <p>
+            Docker 的典型工作流（命令本节只看流程，不要求记忆，后续课程详讲）：
+          </p>
+          <div class="sourceCode" id="cb6">
+            <pre
+              class="sourceCode bash"
+            ><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 编写 Dockerfile（描述如何打包）</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#    文件名：Dockerfile</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#    FROM openjdk:17</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#    COPY ctts-backend.jar /app/app.jar</span></span>
@@ -332,13 +532,17 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. 查看运行中的容器</span></span>
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps</span>
 <span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># CONTAINER ID   IMAGE              STATUS         PORTS                    NAMES</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 7f8a9b0c1d2e   ctts-backend:v1    Up 10 seconds  0.0.0.0:8080-&gt;8080/tcp   happy_euclid</span></span></code></pre></div>
-<blockquote>
-<p>📌 上面这套流程就是 Docker 的核心工作流：<strong>写 Dockerfile →
-build 镜像 → run 容器</strong>。具体命令在第 2~7 次课逐步学习。</p>
-</blockquote>
-<h4 id="图示-1">图示</h4>
-<pre><code>Docker 工作流：
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 7f8a9b0c1d2e   ctts-backend:v1    Up 10 seconds  0.0.0.0:8080-&gt;8080/tcp   happy_euclid</span></span></code></pre>
+          </div>
+          <blockquote>
+            <p>
+              📌 上面这套流程就是 Docker 的核心工作流：<strong
+                >写 Dockerfile → build 镜像 → run 容器</strong
+              >。具体命令在第 2~7 次课逐步学习。
+            </p>
+          </blockquote>
+          <h4 id="图示-1">图示</h4>
+          <pre><code>Docker 工作流：
 ┌───────────┐   build    ┌───────────┐    run     ┌───────────┐
 │Dockerfile│ ─────────▶ │   镜像     │ ────────▶ │   容器     │
 │ (打包描述)│            │ (只读模板) │           │ (运行实例) │
@@ -349,144 +553,203 @@ build 镜像 → run 容器</strong>。具体命令在第 2~7 次课逐步学习
                         │  仓库      │  ← 分发镜像（Docker Hub）
                         │ (Registry)│
                         └───────────┘</code></pre>
-<h4 id="易错点-1">易错点</h4>
-<ol type="1">
-<li>❌ 误认为"Docker = 容器"。✅ Docker
-是实现容器技术的工具，容器是技术概念。</li>
-<li>❌ 误认为"Docker 就是虚拟机"。✅ 二者隔离机制不同，详见 K1-3。</li>
-<li>❌ 误认为"Docker 只能跑 Web 应用"。✅ 任何 Linux
-应用都能容器化（数据库、消息队列、命令行工具等）。</li>
-</ol>
-<h4 id="小结-1">小结</h4>
-<p>Docker
-是一个容器化平台，核心思想是"把应用和依赖一起打包成镜像，到处运行"。它是云原生技术的基础工具，本课程前
-12 次课的核心内容。</p>
-<hr />
-<h3 id="知识点-k1-3容器-vs-虚拟机">知识点 K1-3：容器 vs 虚拟机</h3>
-<h4 id="定义-2">定义</h4>
-<ul>
-<li><strong>虚拟机（Virtual Machine, VM）</strong>：通过 Hypervisor
-在物理机上虚拟出完整的计算机系统，每个虚拟机都运行一个<strong>完整的客户机操作系统（Guest
-OS）</strong>。</li>
-<li><strong>容器（Container）</strong>：共享宿主机内核，通过 Linux
-内核的 namespaces 和 cgroups
-实现<strong>进程级隔离</strong>，不需要客户机操作系统。</li>
-</ul>
-<h4 id="原理-2">原理</h4>
-<p><strong>虚拟机架构</strong>：</p>
-<div class="visual">
-  <div class="visual-title">图示 4：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐ ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐ ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>  VM 1    <span class="tree-token">│</span> <span class="tree-token">│</span>  VM 2    <span class="tree-token">│</span> <span class="tree-token">│</span>  VM 3    <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐<span class="tree-token">│</span> <span class="tree-token">│</span>┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐<span class="tree-token">│</span> <span class="tree-token">│</span>┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐<span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span><span class="tree-token">│</span>Guest OS<span class="tree-token">│</span><span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">│</span>Guest OS<span class="tree-token">│</span><span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">│</span>Guest OS<span class="tree-token">│</span><span class="tree-token">│</span>  ← 每个VM都有一套完整OS</span>
-<span class="diagram-line"><span class="tree-token">│</span><span class="tree-token">│</span>Bin/Lib <span class="tree-token">│</span><span class="tree-token">│</span><span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">│</span>Bin/Lib <span class="tree-token">│</span><span class="tree-token">│</span><span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">│</span>Bin/Lib <span class="tree-token">│</span><span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span><span class="tree-token">│</span>  App   <span class="tree-token">│</span><span class="tree-token">│</span><span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">│</span>  App   <span class="tree-token">│</span><span class="tree-token">│</span><span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">│</span>  App   <span class="tree-token">│</span><span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘<span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘<span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘<span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘ <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘ <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>            Hypervisor               <span class="tree-token">│</span>  ← 虚拟化层</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
-<span class="diagram-line"><span class="tree-token">│</span>            Host OS (物理机系统)      <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
-<span class="diagram-line"><span class="tree-token">│</span>            物理硬件                   <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<p><strong>容器架构</strong>：</p>
-<div class="visual">
-  <div class="visual-title">图示 5：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐ ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐ ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span> 容器 1   <span class="tree-token">│</span> <span class="tree-token">│</span> 容器 2   <span class="tree-token">│</span> <span class="tree-token">│</span> 容器 3   <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐<span class="tree-token">│</span> <span class="tree-token">│</span>┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐<span class="tree-token">│</span> <span class="tree-token">│</span>┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐<span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span><span class="tree-token">│</span>Bin/Lib <span class="tree-token">│</span><span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">│</span>Bin/Lib <span class="tree-token">│</span><span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">│</span>Bin/Lib <span class="tree-token">│</span><span class="tree-token">│</span>  ← 只有应用+依赖库</span>
-<span class="diagram-line"><span class="tree-token">│</span><span class="tree-token">│</span>  App   <span class="tree-token">│</span><span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">│</span>  App   <span class="tree-token">│</span><span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">│</span>  App   <span class="tree-token">│</span><span class="tree-token">│</span>     没有Guest OS</span>
-<span class="diagram-line"><span class="tree-token">│</span><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘<span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘<span class="tree-token">│</span> <span class="tree-token">│</span><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘<span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘ <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘ <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>         Docker 引擎                   <span class="tree-token">│</span>  ← 容器运行时</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
-<span class="diagram-line"><span class="tree-token">│</span>         Host OS 内核 (共享内核)       <span class="tree-token">│</span>  ← 所有容器共享一个内核</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
-<span class="diagram-line"><span class="tree-token">│</span>            物理硬件                   <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<p><strong>核心区别对比</strong>：</p>
-<table>
-<thead>
-<tr>
-<th>对比项</th>
-<th>虚拟机</th>
-<th>容器</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>隔离机制</td>
-<td>Hypervisor 虚拟硬件</td>
-<td>namespaces + cgroups（内核级隔离）</td>
-</tr>
-<tr>
-<td>客户机 OS</td>
-<td>每个 VM 一个完整 Guest OS</td>
-<td>无 Guest OS，共享宿主内核</td>
-</tr>
-<tr>
-<td>启动速度</td>
-<td>分钟级（要启动整个 OS）</td>
-<td>秒级（启动进程）</td>
-</tr>
-<tr>
-<td>资源占用</td>
-<td>重（GB 级，每个 VM 几个 G）</td>
-<td>轻（MB 级，镜像通常几十~几百 MB）</td>
-</tr>
-<tr>
-<td>隔离强度</td>
-<td>强（硬件级隔离）</td>
-<td>较弱（进程级隔离，共享内核）</td>
-</tr>
-<tr>
-<td>单机密度</td>
-<td>几个~几十个 VM</td>
-<td>几十~几百~上千个容器</td>
-</tr>
-<tr>
-<td>典型用途</td>
-<td>强隔离、异构 OS、基础设施</td>
-<td>应用交付、微服务、弹性扩容</td>
-</tr>
-</tbody>
-</table>
-<h4 id="问题--场景-2">问题 / 场景</h4>
-<p><strong>问：容器隔离没虚拟机强，是不是不安全？</strong></p>
-<ul>
-<li>看场景。对于"多租户强隔离"（如公有云把不同客户的应用隔离），虚拟机更安全。对于"一个团队/一个公司内部的应用隔离"，容器的隔离强度足够，且更轻量。实际生产中常常<strong>虚拟机
-+ 容器并存</strong>：用虚拟机做基础设施隔离，在虚拟机里再跑容器。</li>
-</ul>
-<p><strong>问：既然容器这么好，为什么还要虚拟机？</strong></p>
-<ul>
-<li>容器共享内核，所以：
-<ul>
-<li>不能在 Linux 宿主上跑 Windows 容器（需要 Windows 宿主），异构 OS
-需要虚拟机。</li>
-<li>内核漏洞会影响所有容器，强安全场景需要虚拟机的硬件级隔离。</li>
-<li>一些传统应用（老旧系统）不适合容器化。</li>
-</ul></li>
-</ul>
-<p><strong>问：容器和虚拟机会取代谁？</strong></p>
-<ul>
-<li>不会互相取代，而是<strong>互补共存</strong>。云上典型架构：物理机 →
-虚拟机（IaaS）→ 容器（应用层）→ K8s（编排）。</li>
-</ul>
-<h4 id="完整示例-2">完整示例</h4>
-<p>判断一个场景该用容器还是虚拟机：</p>
-<pre class="text"><code>场景                          推荐技术     理由
+          <h4 id="易错点-1">易错点</h4>
+          <ol type="1">
+            <li>
+              ❌ 误认为"Docker = 容器"。✅ Docker
+              是实现容器技术的工具，容器是技术概念。
+            </li>
+            <li>
+              ❌ 误认为"Docker 就是虚拟机"。✅ 二者隔离机制不同，详见 K1-3。
+            </li>
+            <li>
+              ❌ 误认为"Docker 只能跑 Web 应用"。✅ 任何 Linux
+              应用都能容器化（数据库、消息队列、命令行工具等）。
+            </li>
+          </ol>
+          <h4 id="小结-1">小结</h4>
+          <p>
+            Docker
+            是一个容器化平台，核心思想是"把应用和依赖一起打包成镜像，到处运行"。它是云原生技术的基础工具，本课程前
+            12 次课的核心内容。
+          </p>
+          <hr />
+          <h3 id="知识点-k1-3容器-vs-虚拟机">知识点 K1-3：容器 vs 虚拟机</h3>
+          <h4 id="定义-2">定义</h4>
+          <ul>
+            <li>
+              <strong>虚拟机（Virtual Machine, VM）</strong>：通过 Hypervisor
+              在物理机上虚拟出完整的计算机系统，每个虚拟机都运行一个<strong
+                >完整的客户机操作系统（Guest OS）</strong
+              >。
+            </li>
+            <li>
+              <strong>容器（Container）</strong>：共享宿主机内核，通过 Linux
+              内核的 namespaces 和 cgroups
+              实现<strong>进程级隔离</strong>，不需要客户机操作系统。
+            </li>
+          </ul>
+          <h4 id="原理-2">原理</h4>
+          <p><strong>虚拟机架构</strong>：</p>
+          <div class="visual">
+            <div class="visual-title">
+              图示 4：虚拟机架构：每个 VM 携带完整 Guest OS
+            </div>
+            <div class="edu-diagram">
+              <div class="machine-row">
+                <div class="machine">
+                  <div class="machine-title">VM 1</div>
+                  <div class="mini-stack">
+                    <span>App</span><span>Bin / Lib</span><span>Guest OS</span>
+                  </div>
+                </div>
+                <div class="machine">
+                  <div class="machine-title">VM 2</div>
+                  <div class="mini-stack">
+                    <span>App</span><span>Bin / Lib</span><span>Guest OS</span>
+                  </div>
+                </div>
+                <div class="machine">
+                  <div class="machine-title">VM 3</div>
+                  <div class="mini-stack">
+                    <span>App</span><span>Bin / Lib</span><span>Guest OS</span>
+                  </div>
+                </div>
+              </div>
+              <div class="architecture-base">
+                <div class="diagram-layer emphasis">Hypervisor：虚拟化层</div>
+                <div class="diagram-layer">Host OS</div>
+                <div class="diagram-layer">物理硬件</div>
+              </div>
+              <div class="diagram-callout">
+                隔离强，但每个 VM
+                都有一套完整操作系统，体积大、启动慢、资源开销高。
+              </div>
+            </div>
+          </div>
+          <p><strong>容器架构</strong>：</p>
+          <div class="visual">
+            <div class="visual-title">
+              图示 5：容器架构：共享宿主机内核，只封装应用和依赖
+            </div>
+            <div class="edu-diagram">
+              <div class="machine-row">
+                <div class="machine">
+                  <div class="machine-title">容器 1</div>
+                  <div class="mini-stack">
+                    <span>App</span><span>Bin / Lib</span>
+                  </div>
+                </div>
+                <div class="machine">
+                  <div class="machine-title">容器 2</div>
+                  <div class="mini-stack">
+                    <span>App</span><span>Bin / Lib</span>
+                  </div>
+                </div>
+                <div class="machine">
+                  <div class="machine-title">容器 3</div>
+                  <div class="mini-stack">
+                    <span>App</span><span>Bin / Lib</span>
+                  </div>
+                </div>
+              </div>
+              <div class="architecture-base">
+                <div class="diagram-layer emphasis">
+                  Docker 引擎：容器运行时
+                </div>
+                <div class="diagram-layer">Host OS 内核：所有容器共享</div>
+                <div class="diagram-layer">物理硬件</div>
+              </div>
+              <div class="diagram-callout">
+                容器没有独立 Guest
+                OS，使用进程级隔离，因此更轻、更快、更适合密集部署。
+              </div>
+            </div>
+          </div>
+          <p><strong>核心区别对比</strong>：</p>
+          <table>
+            <thead>
+              <tr>
+                <th>对比项</th>
+                <th>虚拟机</th>
+                <th>容器</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>隔离机制</td>
+                <td>Hypervisor 虚拟硬件</td>
+                <td>namespaces + cgroups（内核级隔离）</td>
+              </tr>
+              <tr>
+                <td>客户机 OS</td>
+                <td>每个 VM 一个完整 Guest OS</td>
+                <td>无 Guest OS，共享宿主内核</td>
+              </tr>
+              <tr>
+                <td>启动速度</td>
+                <td>分钟级（要启动整个 OS）</td>
+                <td>秒级（启动进程）</td>
+              </tr>
+              <tr>
+                <td>资源占用</td>
+                <td>重（GB 级，每个 VM 几个 G）</td>
+                <td>轻（MB 级，镜像通常几十~几百 MB）</td>
+              </tr>
+              <tr>
+                <td>隔离强度</td>
+                <td>强（硬件级隔离）</td>
+                <td>较弱（进程级隔离，共享内核）</td>
+              </tr>
+              <tr>
+                <td>单机密度</td>
+                <td>几个~几十个 VM</td>
+                <td>几十~几百~上千个容器</td>
+              </tr>
+              <tr>
+                <td>典型用途</td>
+                <td>强隔离、异构 OS、基础设施</td>
+                <td>应用交付、微服务、弹性扩容</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4 id="问题--场景-2">问题 / 场景</h4>
+          <p><strong>问：容器隔离没虚拟机强，是不是不安全？</strong></p>
+          <ul>
+            <li>
+              看场景。对于"多租户强隔离"（如公有云把不同客户的应用隔离），虚拟机更安全。对于"一个团队/一个公司内部的应用隔离"，容器的隔离强度足够，且更轻量。实际生产中常常<strong
+                >虚拟机 + 容器并存</strong
+              >：用虚拟机做基础设施隔离，在虚拟机里再跑容器。
+            </li>
+          </ul>
+          <p><strong>问：既然容器这么好，为什么还要虚拟机？</strong></p>
+          <ul>
+            <li>
+              容器共享内核，所以：
+              <ul>
+                <li>
+                  不能在 Linux 宿主上跑 Windows 容器（需要 Windows 宿主），异构
+                  OS 需要虚拟机。
+                </li>
+                <li>
+                  内核漏洞会影响所有容器，强安全场景需要虚拟机的硬件级隔离。
+                </li>
+                <li>一些传统应用（老旧系统）不适合容器化。</li>
+              </ul>
+            </li>
+          </ul>
+          <p><strong>问：容器和虚拟机会取代谁？</strong></p>
+          <ul>
+            <li>
+              不会互相取代，而是<strong>互补共存</strong>。云上典型架构：物理机
+              → 虚拟机（IaaS）→ 容器（应用层）→ K8s（编排）。
+            </li>
+          </ul>
+          <h4 id="完整示例-2">完整示例</h4>
+          <p>判断一个场景该用容器还是虚拟机：</p>
+          <pre
+            class="text"
+          ><code>场景                          推荐技术     理由
 ─────────────────────────────────────────────────────────────
 个人电脑跑多个不同版本MySQL    容器        轻量、秒级启动、互不干扰
 银行核心系统强隔离             虚拟机      硬件级隔离，安全性高
@@ -494,142 +757,192 @@ OS）</strong>。</li>
 教学实验环境秒级启动           容器        资源省、学生人手一套
 跨OS运行（Linux上跑Windows）   虚拟机      容器不能跨内核
 公有云多租户隔离               虚拟机+容器  虚拟机做租户隔离，容器做应用</code></pre>
-<h4 id="图示-2">图示</h4>
-<pre><code>启动速度对比：
+          <h4 id="图示-2">图示</h4>
+          <pre><code>启动速度对比：
 虚拟机：███████████████████████  分钟级（要启动整个OS）
 容器  ：█                          秒级（只启动进程）
 
 资源占用对比（一个实例）：
 虚拟机：███████████████████████  GB级
 容器  ：████                       MB级</code></pre>
-<h4 id="易错点-2">易错点</h4>
-<ol type="1">
-<li>❌ 误认为"容器 = 轻量级虚拟机"。✅
-二者隔离机制根本不同：虚拟机虚拟硬件、跑完整
-OS；容器共享内核、做进程隔离。</li>
-<li>❌ 误认为"容器能完全取代虚拟机"。✅ 强隔离、异构 OS
-场景仍需虚拟机，二者常并存。</li>
-<li>❌ 误认为"容器不需要操作系统"。✅ 容器共享宿主机内核，仍依赖宿主 OS
-内核，不是"无操作系统"。</li>
-<li>❌ 误认为"容器隔离和虚拟机一样安全"。✅
-容器是进程级隔离，共享内核，隔离强度低于虚拟机的硬件级隔离。</li>
-</ol>
-<h4 id="小结-2">小结</h4>
-<p>容器和虚拟机是两种不同的隔离技术：虚拟机硬件级隔离、跑完整
-OS、重而安全；容器共享内核、进程级隔离、轻而快速。二者不是替代关系，生产中常常并存——虚拟机做基础设施，容器做应用交付。</p>
-<hr />
-<h3 id="知识点-k1-4docker-引擎架构">知识点 K1-4：Docker 引擎架构</h3>
-<h4 id="定义-3">定义</h4>
-<p><strong>Docker 引擎（Docker Engine）</strong> 是一个
-C/S（客户端/服务器）架构的应用，主要由三部分组成：</p>
-<ol type="1">
-<li><strong>Docker
-守护进程（dockerd）</strong>：服务器端，管理镜像、容器、网络、存储。</li>
-<li><strong>REST API</strong>：客户端与守护进程通信的接口。</li>
-<li><strong>Docker 客户端（docker
-CLI）</strong>：命令行工具，用户通过它下发命令。</li>
-</ol>
-<h4 id="原理-3">原理</h4>
-<p>Docker 的 C/S 架构：</p>
-<div class="visual">
-  <div class="visual-title">图示 6：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>                  宿主机                      <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                             <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  REST API   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐ <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span> docker    <span class="tree-token">│</span> ◀<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span>  dockerd      <span class="tree-token">│</span> <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">│</span> CLI 客户端<span class="tree-token">│</span>  (socket)   <span class="tree-token">│</span> (守护进程)    <span class="tree-token">│</span> <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘             <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘ <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>      <span class="tree-token">│</span>                           <span class="tree-token">│</span>         <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   用户敲命令                    管理         <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                           ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐   <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                           <span class="tree-token">│</span>           <span class="tree-token">│</span>   <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                           ▼           ▼   <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                       ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐ <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                       <span class="tree-token">│</span> 镜像  <span class="tree-token">│</span>  <span class="tree-token">│</span> 容器  <span class="tree-token">│</span> <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                       <span class="tree-token">│</span>管理  <span class="tree-token">│</span>  <span class="tree-token">│</span>运行  <span class="tree-token">│</span> <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘ <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                             <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">        ▲</span>
-<span class="diagram-line">        <span class="tree-token">│</span> docker pull / push (网络)</span>
-<span class="diagram-line">        <span class="tree-token">│</span></span>
-<span class="diagram-line">   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">   <span class="tree-token">│</span> 镜像仓库   <span class="tree-token">│</span>  (Docker Hub / Harbor)</span>
-<span class="diagram-line">   <span class="tree-token">│</span> Registry  <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<p><strong>三大组件详解</strong>：</p>
-<table>
-<thead>
-<tr>
-<th>组件</th>
-<th>作用</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Docker Client（docker 命令）</td>
-<td>用户交互入口</td>
-<td>用户敲 <code>docker xxx</code>，客户端把命令通过 REST API
-发给守护进程</td>
-</tr>
-<tr>
-<td>Docker Daemon（dockerd）</td>
-<td>核心管理服务</td>
-<td>后台常驻进程，负责构建/运行/分发镜像和容器，管理网络和存储</td>
-</tr>
-<tr>
-<td>REST API</td>
-<td>通信接口</td>
-<td>客户端与守护进程通过 Unix socket 或网络端口通信，接口是 RESTful
-的</td>
-</tr>
-</tbody>
-</table>
-<p><strong>更深的层次（了解）</strong>：</p>
-<pre><code>docker CLI
+          <h4 id="易错点-2">易错点</h4>
+          <ol type="1">
+            <li>
+              ❌ 误认为"容器 = 轻量级虚拟机"。✅
+              二者隔离机制根本不同：虚拟机虚拟硬件、跑完整
+              OS；容器共享内核、做进程隔离。
+            </li>
+            <li>
+              ❌ 误认为"容器能完全取代虚拟机"。✅ 强隔离、异构 OS
+              场景仍需虚拟机，二者常并存。
+            </li>
+            <li>
+              ❌ 误认为"容器不需要操作系统"。✅ 容器共享宿主机内核，仍依赖宿主
+              OS 内核，不是"无操作系统"。
+            </li>
+            <li>
+              ❌ 误认为"容器隔离和虚拟机一样安全"。✅
+              容器是进程级隔离，共享内核，隔离强度低于虚拟机的硬件级隔离。
+            </li>
+          </ol>
+          <h4 id="小结-2">小结</h4>
+          <p>
+            容器和虚拟机是两种不同的隔离技术：虚拟机硬件级隔离、跑完整
+            OS、重而安全；容器共享内核、进程级隔离、轻而快速。二者不是替代关系，生产中常常并存——虚拟机做基础设施，容器做应用交付。
+          </p>
+          <hr />
+          <h3 id="知识点-k1-4docker-引擎架构">知识点 K1-4：Docker 引擎架构</h3>
+          <h4 id="定义-3">定义</h4>
+          <p>
+            <strong>Docker 引擎（Docker Engine）</strong> 是一个
+            C/S（客户端/服务器）架构的应用，主要由三部分组成：
+          </p>
+          <ol type="1">
+            <li>
+              <strong>Docker 守护进程（dockerd）</strong
+              >：服务器端，管理镜像、容器、网络、存储。
+            </li>
+            <li><strong>REST API</strong>：客户端与守护进程通信的接口。</li>
+            <li>
+              <strong>Docker 客户端（docker CLI）</strong
+              >：命令行工具，用户通过它下发命令。
+            </li>
+          </ol>
+          <h4 id="原理-3">原理</h4>
+          <p>Docker 的 C/S 架构：</p>
+          <div class="visual">
+            <div class="visual-title">
+              图示 6：Docker C/S 架构与守护进程职责
+            </div>
+            <div class="edu-diagram">
+              <div class="diagram-flow">
+                <div class="diagram-card neutral">
+                  <h4>用户</h4>
+                  <p>输入 docker 命令</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card">
+                  <h4>docker CLI</h4>
+                  <p>客户端 命令转API请求</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card">
+                  <h4>REST API / Socket</h4>
+                  <p>客户端与守护进程通信</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card good">
+                  <h4>dockerd</h4>
+                  <p>守护进程，真正执行管理动作</p>
+                </div>
+              </div>
+              <div class="diagram-grid four">
+                <div class="diagram-card">
+                  <h4>镜像管理</h4>
+                  <p>pull、build、tag、push</p>
+                </div>
+                <div class="diagram-card">
+                  <h4>容器管理</h4>
+                  <p>run、stop、rm、logs</p>
+                </div>
+                <div class="diagram-card">
+                  <h4>网络管理</h4>
+                  <p>创建网络、端口映射</p>
+                </div>
+                <div class="diagram-card">
+                  <h4>存储管理</h4>
+                  <p>volume、bind mount</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p><strong>三大组件详解</strong>：</p>
+          <table>
+            <thead>
+              <tr>
+                <th>组件</th>
+                <th>作用</th>
+                <th>说明</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Docker Client（docker 命令）</td>
+                <td>用户交互入口</td>
+                <td>
+                  用户敲 <code>docker xxx</code>，客户端把命令通过 REST API
+                  发给守护进程
+                </td>
+              </tr>
+              <tr>
+                <td>Docker Daemon（dockerd）</td>
+                <td>核心管理服务</td>
+                <td>
+                  后台常驻进程，负责构建/运行/分发镜像和容器，管理网络和存储
+                </td>
+              </tr>
+              <tr>
+                <td>REST API</td>
+                <td>通信接口</td>
+                <td>
+                  客户端与守护进程通过 Unix socket 或网络端口通信，接口是
+                  RESTful 的
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong>更深的层次（了解）</strong>：</p>
+          <pre><code>docker CLI
     ↓
 dockerd（守护进程）
     ↓
 containerd（高级容器运行时，负责容器生命周期）
     ↓
 runC（低级容器运行时，真正创建/运行容器，遵循OCI标准）</code></pre>
-<blockquote>
-<p>📌 containerd 和 runC 是 Docker 捐献给 CNCF
-的项目，现在是行业标准。Kubernetes 也能直接用 containerd
-作为容器运行时。本课程了解即可，操作层面用 docker 命令。</p>
-</blockquote>
-<h4 id="问题--场景-3">问题 / 场景</h4>
-<p><strong>问：为什么 Docker 要做成 C/S 架构？</strong></p>
-<ul>
-<li>解耦：客户端和守护进程可以分开。可以远程管理——在本地敲 docker
-命令，操作远端服务器的守护进程（通过 DOCKER_HOST
-环境变量）。一个守护进程可以被多个客户端操作。</li>
-</ul>
-<p><strong>问：dockerd 和 containerd 是什么关系？</strong></p>
-<ul>
-<li>dockerd 是 Docker 的守护进程，它内部调用 containerd
-来管理容器生命周期，containerd 再调用 runC
-来真正跑容器。简单理解：dockerd 是"管家"，containerd 是"执行者"，runC
-是"工人"。</li>
-</ul>
-<p><strong>问：不装 docker 命令行工具能用 Docker 吗？</strong></p>
-<ul>
-<li>可以。dockerd 提供了 REST API，你可以直接用 curl 或程序调用 API
-来管理容器。docker CLI 只是一个方便的客户端封装。</li>
-</ul>
-<h4 id="完整示例-3">完整示例</h4>
-<p>一次 <code>docker run</code>
-命令在架构中的流转（伪流程，说明原理）：</p>
-<div class="sourceCode" id="cb14"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 用户在终端敲：</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">-p</span> 8080:8080 ctts-backend:v1</span></code></pre></div>
-<pre class="text"><code>流转过程：
+          <blockquote>
+            <p>
+              📌 containerd 和 runC 是 Docker 捐献给 CNCF
+              的项目，现在是行业标准。Kubernetes 也能直接用 containerd
+              作为容器运行时。本课程了解即可，操作层面用 docker 命令。
+            </p>
+          </blockquote>
+          <h4 id="问题--场景-3">问题 / 场景</h4>
+          <p><strong>问：为什么 Docker 要做成 C/S 架构？</strong></p>
+          <ul>
+            <li>
+              解耦：客户端和守护进程可以分开。可以远程管理——在本地敲 docker
+              命令，操作远端服务器的守护进程（通过 DOCKER_HOST
+              环境变量）。一个守护进程可以被多个客户端操作。
+            </li>
+          </ul>
+          <p><strong>问：dockerd 和 containerd 是什么关系？</strong></p>
+          <ul>
+            <li>
+              dockerd 是 Docker 的守护进程，它内部调用 containerd
+              来管理容器生命周期，containerd 再调用 runC
+              来真正跑容器。简单理解：dockerd 是"管家"，containerd
+              是"执行者"，runC 是"工人"。
+            </li>
+          </ul>
+          <p><strong>问：不装 docker 命令行工具能用 Docker 吗？</strong></p>
+          <ul>
+            <li>
+              可以。dockerd 提供了 REST API，你可以直接用 curl 或程序调用 API
+              来管理容器。docker CLI 只是一个方便的客户端封装。
+            </li>
+          </ul>
+          <h4 id="完整示例-3">完整示例</h4>
+          <p>
+            一次
+            <code>docker run</code> 命令在架构中的流转（伪流程，说明原理）：
+          </p>
+          <div class="sourceCode" id="cb14">
+            <pre
+              class="sourceCode bash"
+            ><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 用户在终端敲：</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">-p</span> 8080:8080 ctts-backend:v1</span></code></pre>
+          </div>
+          <pre class="text"><code>流转过程：
 1. docker CLI 把 &quot;run ctts-backend:v1&quot; 通过 REST API 发给 dockerd
 2. dockerd 收到命令：
    a. 检查本地有没有 ctts-backend:v1 镜像
@@ -639,166 +952,258 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href=
 4. containerd 调用 runC 真正创建并运行容器进程
 5. 容器跑起来，dockerd 返回容器 ID 给客户端
 6. 客户端打印容器 ID：7f8a9b0c1d2e...</code></pre>
-<blockquote>
-<p>📌 这个流转过程是理解所有 docker 命令的基础——所有命令都是"客户端 →
-API → 守护进程 → 执行"。后续命令课会反复用到这个模型。</p>
-</blockquote>
-<h4 id="图示-3">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 7：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">用户视角（简化）：</span>
-<span class="diagram-line">  用户 <span class="tree-token">─</span><span class="tree-token">─</span>docker命令<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> Docker <span class="tree-token">─</span><span class="tree-token">─</span>管理<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 镜像/容器/网络/存储</span>
-<span class="diagram-line">架构视角（完整）：</span>
-<span class="diagram-line">  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">  <span class="tree-token">│</span>用户  <span class="tree-token">│</span> docker  <span class="tree-token">│</span> docker   <span class="tree-token">│</span> 管理调用 <span class="tree-token">│</span>containerd  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>      <span class="tree-token">│</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span> daemon   <span class="tree-token">│</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span>            <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘         <span class="tree-token">│</span>(dockerd) <span class="tree-token">│</span>         <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">                   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘               <span class="tree-token">│</span> runC</span>
-<span class="diagram-line">                        <span class="tree-token">│</span>                     ▼</span>
-<span class="diagram-line">                   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┴</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">                   <span class="tree-token">│</span>  镜像/容器 <span class="tree-token">│</span>         <span class="tree-token">│</span> 容器进程  <span class="tree-token">│</span></span>
-<span class="diagram-line">                   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘         <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<h4 id="易错点-3">易错点</h4>
-<ol type="1">
-<li>❌ 误认为"docker 命令直接操作容器"。✅ docker 命令是客户端，它通过
-REST API 请求守护进程，由守护进程操作容器。</li>
-<li>❌ 误认为"dockerd 就是容器"。✅ dockerd
-是管理容器的守护进程（一个常驻后台服务），容器是被它管理的运行实例，二者不同。</li>
-<li>❌ 误认为"容器运行时只有 Docker"。✅ 还有 containerd、CRI-O 等，K8s
-支持多种容器运行时（CRI 标准）。</li>
-</ol>
-<h4 id="小结-3">小结</h4>
-<p>Docker 引擎是 C/S 架构：docker CLI（客户端）→ REST API →
-dockerd（守护进程）→ containerd → runC。理解这个架构，就能理解所有
-docker 命令的本质——"客户端发请求，守护进程执行"。</p>
-<hr />
-<h3 id="知识点-k1-5镜像容器与仓库">知识点 K1-5：镜像、容器与仓库</h3>
-<h4 id="定义-4">定义</h4>
-<p>Docker 的三大核心概念，几乎所有操作都围绕它们展开：</p>
-<table>
-<thead>
-<tr>
-<th>概念</th>
-<th>定义</th>
-<th>类比</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>镜像（Image）</strong></td>
-<td>只读的模板，包含应用及运行所需的所有内容</td>
-<td>面向对象中的"类" / 程序的"安装包"</td>
-</tr>
-<tr>
-<td><strong>容器（Container）</strong></td>
-<td>镜像运行起来的实例，可读写</td>
-<td>面向对象中的"对象" / 程序的"运行进程"</td>
-</tr>
-<tr>
-<td><strong>仓库（Registry）</strong></td>
-<td>存放和分发镜像的地方</td>
-<td>应用商店 / 代码托管平台（GitHub for images）</td>
-</tr>
-</tbody>
-</table>
-<h4 id="原理-4">原理</h4>
-<p>三者的关系：</p>
-<div class="visual">
-  <div class="visual-title">图示 8：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  docker run   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>   镜像    <span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> <span class="tree-token">│</span>   容器    <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> (只读模板)<span class="tree-token">│</span>               <span class="tree-token">│</span>(运行实例) <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘               <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">     <span class="tree-token">│</span>                          <span class="tree-token">│</span> docker stop/rm</span>
-<span class="diagram-line">     <span class="tree-token">│</span>                          ▼</span>
-<span class="diagram-line">     <span class="tree-token">│</span>                     容器可停止/删除</span>
-<span class="diagram-line">     <span class="tree-token">│</span>                          但镜像还在</span>
-<span class="diagram-line">     <span class="tree-token">│</span></span>
-<span class="diagram-line">     <span class="tree-token">│</span> docker push/pull</span>
-<span class="diagram-line">     ▼</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>   仓库    <span class="tree-token">│</span>  存放镜像，供分发</span>
-<span class="diagram-line"><span class="tree-token">│</span>(Registry)<span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<p><strong>1. 镜像（Image）</strong>：</p>
-<ul>
-<li>只读的分层结构（Layer），每条 Dockerfile 指令生成一层。</li>
-<li>一个镜像可以在底层镜像之上叠加（如 <code>FROM openjdk:17</code> +
-你的应用层）。</li>
-<li>通过 <code>镜像名:标签（tag）</code> 标识，如
-<code>openjdk:17</code>、<code>mysql:8.0</code>、<code>ctts-backend:v1</code>。</li>
-<li>镜像不可变（immutable），改了就生成新镜像（新 tag 或新 ID）。</li>
-</ul>
-<p><strong>2. 容器（Container）</strong>：</p>
-<ul>
-<li>镜像运行起来就是容器，是一个活的进程。</li>
-<li>容器在镜像之上加一层"可写层"（writable
-layer），所有运行时修改写在这层。</li>
-<li>容器停止后可写层仍在（除非删除），可再次启动。</li>
-<li>一个镜像可以同时运行多个容器实例（互不干扰）。</li>
-</ul>
-<p><strong>3. 仓库（Registry）</strong>：</p>
-<ul>
-<li>存放镜像的服务端，类似"镜像的 GitHub"。</li>
-<li><strong>Docker Hub</strong>（hub.docker.com）是 Docker
-官方公共仓库，存放大量官方镜像（mysql、nginx、openjdk 等）。</li>
-<li>企业可搭建<strong>私有仓库</strong>（如 Harbor）存放内部镜像。</li>
-<li>通过 <code>docker pull</code> 拉取、<code>docker push</code>
-推送。</li>
-</ul>
-<p><strong>镜像的分层结构（重要，第 3 次课详讲）</strong>：</p>
-<div class="visual">
-  <div class="visual-title">图示 9：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">一个镜像由多层组成（从下到上叠加）：</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>  你的应用代码 + jar        <span class="tree-token">│</span>  ← 你写的层（Dockerfile COPY）</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
-<span class="diagram-line"><span class="tree-token">│</span>  应用依赖（maven 下载的）  <span class="tree-token">│</span>  ← 你写的层（Dockerfile RUN）</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
-<span class="diagram-line"><span class="tree-token">│</span>  JDK 17 运行时            <span class="tree-token">│</span>  ← FROM openjdk:17 基础镜像层</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
-<span class="diagram-line"><span class="tree-token">│</span>  Debian 基础系统          <span class="tree-token">│</span>  ← openjdk:17 的底层</span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">分层好处：共享、缓存、增量传输</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<h4 id="问题--场景-4">问题 / 场景</h4>
-<p><strong>问：镜像和容器到底什么关系？</strong></p>
-<ul>
-<li>镜像 = 模板（静态、只读）；容器 =
-镜像运行出来的实例（动态、可写）。一个镜像可以跑出多个容器。类比：镜像是"类"，容器是"对象"；镜像是"安装包"，容器是"运行中的程序"。</li>
-</ul>
-<p><strong>问：容器删了，镜像还在吗？</strong></p>
-<ul>
-<li>在。容器只是镜像的一个运行实例，删容器不影响镜像。可以再用同一个镜像启动新容器。就像删了"对象"不影响"类"。</li>
-</ul>
-<p><strong>问：为什么要有仓库？直接拷贝镜像文件不行吗？</strong></p>
-<ul>
-<li>仓库提供版本管理、权限控制、分发加速。团队协作和 CI/CD 中，代码 push
-到 Git，镜像 push 到仓库，部署时从仓库 pull——标准化流程。</li>
-</ul>
-<p><strong>问：镜像名后面的 :v1、:latest 是什么？</strong></p>
-<ul>
-<li>是<strong>标签（tag）</strong>，用于标识镜像版本。<code>openjdk:17</code>
-表示 openjdk 镜像的 17 版本。不写标签默认
-<code>:latest</code>（最新版，但生产中不建议用
-latest，因为不可控）。</li>
-</ul>
-<h4 id="完整示例-4">完整示例</h4>
-<p>镜像/容器/仓库的完整操作流程（命令本节只看流程，第 2~5
-次课详讲）：</p>
-<div class="sourceCode" id="cb19"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 从仓库拉取镜像</span></span>
+          <blockquote>
+            <p>
+              📌 这个流转过程是理解所有 docker 命令的基础——所有命令都是"客户端 →
+              API → 守护进程 → 执行"。后续命令课会反复用到这个模型。
+            </p>
+          </blockquote>
+          <h4 id="图示-3">图示</h4>
+          <div class="visual">
+            <div class="visual-title">
+              图示 7：从用户命令到容器进程的执行链路
+            </div>
+            <div class="edu-diagram">
+              <p class="diagram-subtitle">
+                简化视角：用户通过 docker 命令，把管理动作交给
+                Docker，再落到镜像、容器、网络与存储。
+              </p>
+              <div class="diagram-flow">
+                <div class="diagram-card neutral">
+                  <h4>用户</h4>
+                  <p>docker run / pull / ps</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card">
+                  <h4>dockerd</h4>
+                  <p>接收命令并调度资源</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card">
+                  <h4>containerd</h4>
+                  <p>管理容器生命周期</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card good">
+                  <h4>runC</h4>
+                  <p>创建最终的容器进程</p>
+                </div>
+              </div>
+              <div class="diagram-grid two">
+                <div class="diagram-card">
+                  <h4>状态对象</h4>
+                  <p>镜像、容器、网络、存储由 dockerd 统一管理。</p>
+                </div>
+                <div class="diagram-card good">
+                  <h4>运行结果</h4>
+                  <p>命令最终落到一个被隔离的容器进程。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h4 id="易错点-3">易错点</h4>
+          <ol type="1">
+            <li>
+              ❌ 误认为"docker 命令直接操作容器"。✅ docker 命令是客户端，它通过
+              REST API 请求守护进程，由守护进程操作容器。
+            </li>
+            <li>
+              ❌ 误认为"dockerd 就是容器"。✅ dockerd
+              是管理容器的守护进程（一个常驻后台服务），容器是被它管理的运行实例，二者不同。
+            </li>
+            <li>
+              ❌ 误认为"容器运行时只有 Docker"。✅ 还有 containerd、CRI-O
+              等，K8s 支持多种容器运行时（CRI 标准）。
+            </li>
+          </ol>
+          <h4 id="小结-3">小结</h4>
+          <p>
+            Docker 引擎是 C/S 架构：docker CLI（客户端）→ REST API →
+            dockerd（守护进程）→ containerd → runC。理解这个架构，就能理解所有
+            docker 命令的本质——"客户端发请求，守护进程执行"。
+          </p>
+          <hr />
+          <h3 id="知识点-k1-5镜像容器与仓库">知识点 K1-5：镜像、容器与仓库</h3>
+          <h4 id="定义-4">定义</h4>
+          <p>Docker 的三大核心概念，几乎所有操作都围绕它们展开：</p>
+          <table>
+            <thead>
+              <tr>
+                <th>概念</th>
+                <th>定义</th>
+                <th>类比</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>镜像（Image）</strong></td>
+                <td>只读的模板，包含应用及运行所需的所有内容</td>
+                <td>面向对象中的"类" / 程序的"安装包"</td>
+              </tr>
+              <tr>
+                <td><strong>容器（Container）</strong></td>
+                <td>镜像运行起来的实例，可读写</td>
+                <td>面向对象中的"对象" / 程序的"运行进程"</td>
+              </tr>
+              <tr>
+                <td><strong>仓库（Registry）</strong></td>
+                <td>存放和分发镜像的地方</td>
+                <td>应用商店 / 代码托管平台（GitHub for images）</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4 id="原理-4">原理</h4>
+          <p>三者的关系：</p>
+          <div class="visual">
+            <div class="visual-title">图示 8：镜像、容器、仓库三者关系</div>
+            <div class="edu-diagram">
+              <div class="relation-triad">
+                <div class="diagram-card good">
+                  <h4>镜像 Image</h4>
+                  <p>只读模板，可通过 docker run 启动为容器。</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card">
+                  <h4>容器 Container</h4>
+                  <p>镜像的运行实例，删除容器不影响镜像。</p>
+                </div>
+              </div>
+              <div class="registry-loop">
+                <div class="diagram-card">
+                  <h4>本地镜像</h4>
+                  <p>build 生成或 pull 下载</p>
+                </div>
+                <div class="flow-arrow">↔</div>
+                <div class="diagram-card">
+                  <h4>仓库 Registry</h4>
+                  <p>存放镜像，供团队分发</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card good">
+                  <h4>多处运行</h4>
+                  <p>不同机器，一致环境</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p><strong>1. 镜像（Image）</strong>：</p>
+          <ul>
+            <li>只读的分层结构（Layer），每条 Dockerfile 指令生成一层。</li>
+            <li>
+              一个镜像可以在底层镜像之上叠加（如 <code>FROM openjdk:17</code> +
+              你的应用层）。
+            </li>
+            <li>
+              通过 <code>镜像名:标签（tag）</code> 标识，如
+              <code>openjdk:17</code
+              >、<code>mysql:8.0</code>、<code>ctts-backend:v1</code>。
+            </li>
+            <li>
+              镜像不可变（immutable），改了就生成新镜像（新 tag 或新 ID）。
+            </li>
+          </ul>
+          <p><strong>2. 容器（Container）</strong>：</p>
+          <ul>
+            <li>镜像运行起来就是容器，是一个活的进程。</li>
+            <li>
+              容器在镜像之上加一层"可写层"（writable
+              layer），所有运行时修改写在这层。
+            </li>
+            <li>容器停止后可写层仍在（除非删除），可再次启动。</li>
+            <li>一个镜像可以同时运行多个容器实例（互不干扰）。</li>
+          </ul>
+          <p><strong>3. 仓库（Registry）</strong>：</p>
+          <ul>
+            <li>存放镜像的服务端，类似"镜像的 GitHub"。</li>
+            <li>
+              <strong>Docker Hub</strong>（hub.docker.com）是 Docker
+              官方公共仓库，存放大量官方镜像（mysql、nginx、openjdk 等）。
+            </li>
+            <li>
+              企业可搭建<strong>私有仓库</strong>（如 Harbor）存放内部镜像。
+            </li>
+            <li>
+              通过 <code>docker pull</code> 拉取、<code>docker push</code>
+              推送。
+            </li>
+          </ul>
+          <p><strong>镜像的分层结构（重要，第 3 次课详讲）</strong>：</p>
+          <div class="visual">
+            <div class="visual-title">图示 9：镜像分层结构与缓存价值</div>
+            <div class="edu-diagram">
+              <div class="diagram-panel">
+                <span class="diagram-badge">从下到上叠加</span>
+                <div class="stack-diagram">
+                  <div class="stack-layer app">
+                    你的应用代码 + jar（Dockerfile COPY）
+                  </div>
+                  <div class="stack-layer">
+                    应用依赖：Maven 下载（Dockerfile RUN）
+                  </div>
+                  <div class="stack-layer runtime">
+                    JDK 17 运行时（FROM openjdk:17）
+                  </div>
+                  <div class="stack-layer base">
+                    Debian 基础系统（基础镜像底层）
+                  </div>
+                </div>
+              </div>
+              <div class="diagram-grid three">
+                <div class="diagram-card good">
+                  <h4>共享</h4>
+                  <p>多个镜像可复用相同基础层。</p>
+                </div>
+                <div class="diagram-card good">
+                  <h4>缓存</h4>
+                  <p>未变化的层无需重复构建。</p>
+                </div>
+                <div class="diagram-card good">
+                  <h4>增量传输</h4>
+                  <p>推送和拉取时只传变化层。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h4 id="问题--场景-4">问题 / 场景</h4>
+          <p><strong>问：镜像和容器到底什么关系？</strong></p>
+          <ul>
+            <li>
+              镜像 = 模板（静态、只读）；容器 =
+              镜像运行出来的实例（动态、可写）。一个镜像可以跑出多个容器。类比：镜像是"类"，容器是"对象"；镜像是"安装包"，容器是"运行中的程序"。
+            </li>
+          </ul>
+          <p><strong>问：容器删了，镜像还在吗？</strong></p>
+          <ul>
+            <li>
+              在。容器只是镜像的一个运行实例，删容器不影响镜像。可以再用同一个镜像启动新容器。就像删了"对象"不影响"类"。
+            </li>
+          </ul>
+          <p><strong>问：为什么要有仓库？直接拷贝镜像文件不行吗？</strong></p>
+          <ul>
+            <li>
+              仓库提供版本管理、权限控制、分发加速。团队协作和 CI/CD 中，代码
+              push 到 Git，镜像 push 到仓库，部署时从仓库 pull——标准化流程。
+            </li>
+          </ul>
+          <p><strong>问：镜像名后面的 :v1、:latest 是什么？</strong></p>
+          <ul>
+            <li>
+              是<strong>标签（tag）</strong>，用于标识镜像版本。<code
+                >openjdk:17</code
+              >
+              表示 openjdk 镜像的 17 版本。不写标签默认
+              <code>:latest</code>（最新版，但生产中不建议用
+              latest，因为不可控）。
+            </li>
+          </ul>
+          <h4 id="完整示例-4">完整示例</h4>
+          <p>
+            镜像/容器/仓库的完整操作流程（命令本节只看流程，第 2~5 次课详讲）：
+          </p>
+          <div class="sourceCode" id="cb19">
+            <pre
+              class="sourceCode bash"
+            ><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 从仓库拉取镜像</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull mysql:8.0</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出示例：</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 8.0: Pulling from library/mysql</span></span>
@@ -830,316 +1235,495 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href=
 <span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. 构建自己的镜像并推送到仓库</span></span>
 <span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> myname/ctts-backend:v1 .</span>
-<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> push myname/ctts-backend:v1   <span class="co"># 推送到 Docker Hub</span></span></code></pre></div>
-<blockquote>
-<p>📌 这些命令是 Docker 的核心操作，第 2~5
-次课会逐条详解。本节只需理解"镜像、容器、仓库"三者关系即可。</p>
-</blockquote>
-<h4 id="图示-4">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 10：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">镜像、容器、仓库关系：</span>
-<span class="diagram-line">   仓库(Registry)                 本地                  运行</span>
-<span class="diagram-line">  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐     pull       ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    run    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">  <span class="tree-token">│</span> mysql:8.0<span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> <span class="tree-token">│</span> mysql:8.0<span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span> 容器1     <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span> nginx    <span class="tree-token">│</span>                <span class="tree-token">│</span> (镜像)    <span class="tree-token">│</span>          <span class="tree-token">│</span> 容器2     <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span> openjdk  <span class="tree-token">│</span>                <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘          <span class="tree-token">│</span> 容器3 ... <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘     push                              <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">       ▲                ↑                              <span class="tree-token">│</span> stop</span>
-<span class="diagram-line">       <span class="tree-token">│</span>                <span class="tree-token">│</span> build                        ▼</span>
-<span class="diagram-line">       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘                       容器停止(可写层保留)</span>
-<span class="diagram-line">                        你的镜像                   rm <span class="arrow-token">→</span> 删除容器</span>
-<span class="diagram-line">关键：镜像只读可复用；容器是临时实例；仓库用于分发</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<h4 id="易错点-4">易错点</h4>
-<ol type="1">
-<li>❌ 混淆镜像和容器。✅
-镜像是静态只读模板，容器是动态可写运行实例。</li>
-<li>❌ 误认为"删了容器镜像就没了"。✅
-容器只是镜像的实例，删容器不影响镜像。</li>
-<li>❌ 误认为"latest 标签就是最新的最稳定的"。✅ latest
-只是默认标签名，可能指向任意版本，生产环境应指定明确版本号。</li>
-<li>❌ 误认为"镜像必须从仓库下载"。✅ 镜像也可以本地用 Dockerfile build
-出来，仓库只是分发手段。</li>
-</ol>
-<h4 id="小结-4">小结</h4>
-<p>镜像、容器、仓库是 Docker
-三大核心概念：镜像是只读模板，容器是镜像的运行实例，仓库用于存储和分发镜像。理解三者关系是理解所有
-Docker 操作的基础。</p>
-<hr />
-<h3 id="知识点-k1-6云原生生态与课程项目导入">知识点
-K1-6：云原生生态与课程项目导入</h3>
-<h4 id="定义-5">定义</h4>
-<p><strong>云原生（Cloud Native）</strong>
-是一种构建和运行应用程序的方法，利用云计算的弹性、分布式特性，通过容器、微服务、不可变基础设施、声明式
-API 等技术，让应用更易于弹性伸缩、可靠运维。</p>
-<p><strong>CNCF（Cloud Native Computing
-Foundation，云原生计算基金会）</strong> 是 Linux
-基金会下的子基金会，托管 Kubernetes、containerd、Prometheus
-等云原生核心项目，是云原生生态的 governing body。</p>
-<h4 id="原理-5">原理</h4>
-<p><strong>云原生技术栈全景</strong>：</p>
-<div class="visual">
-  <div class="visual-title">图示 11：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>              应用层                          <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   微服务、Serverless、Service Mesh          <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
-<span class="diagram-line"><span class="tree-token">│</span>            编排调度层                        <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>        Kubernetes（核心）                    <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
-<span class="diagram-line"><span class="tree-token">│</span>            容器运行时层                      <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>      Docker / containerd / runC              <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┤</span>
-<span class="diagram-line"><span class="tree-token">│</span>            基础设施层                        <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>      物理机 / 虚拟机 / 公有云                <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<p><strong>Docker 与 Kubernetes 的关系</strong>：</p>
-<table>
-<thead>
-<tr>
-<th>维度</th>
-<th>Docker</th>
-<th>Kubernetes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>定位</td>
-<td>容器化平台（单机）</td>
-<td>容器编排平台（集群）</td>
-</tr>
-<tr>
-<td>解决问题</td>
-<td>怎么把应用打包成容器、怎么在单机运行</td>
-<td>怎么管理成百上千个容器、怎么调度、怎么高可用</td>
-</tr>
-<tr>
-<td>关系</td>
-<td>Docker 是基础（把应用容器化）</td>
-<td>K8s 建立在容器之上（编排管理容器）</td>
-</tr>
-</tbody>
-</table>
-<p><strong>一句话理解</strong>：Docker 把应用装进"集装箱"，Kubernetes
-是管理这些集装箱的"码头调度系统"。</p>
-<p><strong>本课程定位</strong>：前 12 次课学 Docker（装箱），后 12
-次课学 K8s（调度）。</p>
-<h4 id="问题--场景-5">问题 / 场景</h4>
-<p><strong>问：为什么容器化还不够，还要 K8s？</strong></p>
-<ul>
-<li>单机 Docker
-能跑几十个容器，但生产环境是几十台机器、成千上万个容器。需要解决：哪个容器跑在哪台机器、某台机器挂了容器怎么迁移、流量怎么分发、怎么自动扩缩容。这些是
-K8s 的工作。类比：Docker 是"造集装箱"，K8s 是"码头+物流调度系统"。</li>
-</ul>
-<p><strong>问：云原生就是用容器和 K8s 吗？</strong></p>
-<ul>
-<li>不完全是。云原生是一套方法论，容器和 K8s
-是其核心技术，还包括：微服务、DevOps、CI/CD、不可变基础设施、声明式
-API、Service Mesh 等。容器和 K8s 是云原生的基础底座。</li>
-</ul>
-<p><strong>问：国产云原生技术有哪些？</strong></p>
-<ul>
-<li>华为云 CCE、阿里云 ACK、腾讯云 TKE；开源项目有
-KubeSphere（青云）、OpenAtom OpenHarmony 相关等。容器运行时 containerd
-是 CNCF 毕业项目，被广泛采用。这正是"自主可控"的体现。</li>
-</ul>
-<h4 id="完整示例课程贯穿项目导入">完整示例：课程贯穿项目导入</h4>
-<div class="visual">
-  <div class="visual-title">图示 12：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">===================================================</span>
-<span class="diagram-line">      多服务容器化部署项目 — 项目说明（简版）</span>
-<span class="diagram-line">===================================================</span>
-<span class="diagram-line">一、项目背景</span>
-<span class="diagram-line">  将 JavaWeb 课程的 CTTS 后端 + Vue3 课程的 CTTS-Frontend</span>
-<span class="diagram-line">  + MySQL 三服务容器化，并部署到 Kubernetes 集群。</span>
-<span class="diagram-line">二、项目架构</span>
-<span class="diagram-line">  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐     ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐     ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">  <span class="tree-token">│</span> Frontend <span class="tree-token">│</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span> Backend  <span class="tree-token">│</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span>  MySQL   <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span> (Vue3)   <span class="tree-token">│</span>     <span class="tree-token">│</span>(SpringBoot)<span class="tree-token">│</span>   <span class="tree-token">│</span>          <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘     <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘     <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">  容器化为3个镜像，Compose编排，最终部署到K8s</span>
-<span class="diagram-line">三、课程八阶段构建</span>
-<span class="diagram-line">  阶段1（M1）：安装Docker，运行首个容器</span>
-<span class="diagram-line">  阶段2（M2）：拉取MySQL/Java/Nginx镜像，运行容器</span>
-<span class="diagram-line">  阶段3（M3）：编写Dockerfile构建前后端镜像</span>
-<span class="diagram-line">  阶段4（M4）：Compose编排三服务+网络与存储</span>
-<span class="diagram-line">  阶段5（M5）：搭建K8s集群</span>
-<span class="diagram-line">  阶段6（M6）：部署Pod与Deployment</span>
-<span class="diagram-line">  阶段7（M7）：配置Service与Ingress对外访问</span>
-<span class="diagram-line">  阶段8（M8）：配置ConfigMap/Secret/存储，完成集群部署</span>
-<span class="diagram-line">四、技术选型</span>
-<span class="diagram-line">  Docker 24.x + Compose v2 + Kubernetes 1.28+</span>
-<span class="diagram-line">  + Minikube（学习集群）/ kubeadm（多节点）</span>
-<span class="diagram-line">  + kubectl（命令行）</span>
-<span class="diagram-line">五、最终交付</span>
-<span class="diagram-line">  - CTTS 三服务镜像</span>
-<span class="diagram-line">  - Docker Compose 编排文件</span>
-<span class="diagram-line">  - K8s 资源清单（Deployment/Service/ConfigMap/Secret/Ingress）</span>
-<span class="diagram-line">  - 部署文档 + 演示答辩</span>
-<span class="diagram-line">===================================================</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<h4 id="图示-5">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 13：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">云原生技术演进：</span>
-<span class="diagram-line">物理机 <span class="arrow-token">→</span> 虚拟机 <span class="arrow-token">→</span> 容器(Docker) <span class="arrow-token">→</span> 容器编排(K8s) <span class="arrow-token">→</span> 云原生生态</span>
-<span class="diagram-line">部署方式  资源隔离   应用打包      集群调度        完整方法论</span>
-<span class="diagram-line">课程路径：</span>
-<span class="diagram-line">[第1-12次课] Docker      <span class="arrow-token">→</span>  [第13-24次课] Kubernetes</span>
-<span class="diagram-line">  装箱（容器化应用）           调度（编排管理容器）</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<h4 id="易错点-5">易错点</h4>
-<ol type="1">
-<li>❌ 误认为"云原生 = 上云"。✅ 上云（用云服务器）≠
-云原生。云原生是用容器、微服务、声明式 API
-等方法构建应用，让应用天生适合云环境。</li>
-<li>❌ 误认为"Docker 和 K8s 是竞争关系"。✅ 二者是上下游：Docker
-负责容器化，K8s 负责编排。</li>
-<li>❌ 误认为"学了 Docker 就不用学 K8s"。✅ 单机 Docker
-无法满足生产级高可用、弹性、调度需求，K8s 是必需。</li>
-</ol>
-<h4 id="小结-5">小结</h4>
-<p>云原生是一套构建和运行应用的方法论，Docker（容器化）和
-Kubernetes（编排）是其核心技术底座。本课程先学 Docker 把应用容器化，再学
-K8s 做集群编排，最终完成 CTTS 多服务的容器化部署到 K8s 集群。</p>
-<hr />
-<h2
-id="三综合示例从痛点到方案ctts-容器化的完整逻辑">三、综合示例：从痛点到方案——CTTS
-容器化的完整逻辑</h2>
-<p>把前面所有知识点串起来，看 CTTS
-这个项目"为什么要容器化、怎么容器化、怎么部署到
-K8s"的完整逻辑（本节只看思路，不写实现）：</p>
-<div class="visual">
-  <div class="visual-title">图示 14：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">1. 痛点（K1-1）</span>
-<span class="diagram-line">   CTTS 后端在开发电脑（JDK17+MySQL8.0）能跑，</span>
-<span class="diagram-line">   到服务器（JDK11+MySQL5.7）报错 <span class="arrow-token">→</span> 环境不一致</span>
-<span class="diagram-line">2. 方案（K1-2）</span>
-<span class="diagram-line">   用 Docker 把 CTTS 后端 + JDK17 + 依赖 打包成镜像</span>
-<span class="diagram-line">   一次构建，到处运行</span>
-<span class="diagram-line">3. 为什么容器而非虚拟机（K1-3）</span>
-<span class="diagram-line">   CTTS 三个服务（前端/后端/MySQL）都要部署</span>
-<span class="diagram-line">   用虚拟机：3个VM，每个几个G，启动慢，资源浪费</span>
-<span class="diagram-line">   用容器：3个容器，MB级，秒级启动，资源省</span>
-<span class="diagram-line">4. 怎么操作（K1-4 架构）</span>
-<span class="diagram-line">   docker build <span class="arrow-token">→</span> 构建镜像</span>
-<span class="diagram-line">   docker run  <span class="arrow-token">→</span> 运行容器</span>
-<span class="diagram-line">   都是通过 docker CLI <span class="arrow-token">→</span> dockerd <span class="arrow-token">→</span> containerd <span class="arrow-token">→</span> runC 执行</span>
-<span class="diagram-line">5. 镜像从哪来（K1-5）</span>
-<span class="diagram-line">   MySQL <span class="arrow-token">→</span> docker pull mysql:8.0（从Docker Hub）</span>
-<span class="diagram-line">   后端  <span class="arrow-token">→</span> 自己写 Dockerfile，build 成镜像</span>
-<span class="diagram-line">   前端  <span class="arrow-token">→</span> 自己写 Dockerfile，build 成镜像</span>
-<span class="diagram-line">6. 多服务怎么管（K1-6 <span class="arrow-token">→</span> 后续课程）</span>
-<span class="diagram-line">   3个容器一起启动？<span class="arrow-token">→</span> Docker Compose（第11次课）</span>
-<span class="diagram-line">   上生产要高可用？<span class="arrow-token">→</span> Kubernetes（第13-24次课）</span>
-<span class="diagram-line">7. 最终交付（第24次课）</span>
-<span class="diagram-line">   CTTS 三服务 K8s 部署：3个Deployment + 3个Service</span>
-<span class="diagram-line">   + ConfigMap + Secret + PV/PVC + Ingress</span>
-<span class="diagram-line">   能部署、能运维、能排障 <span class="arrow-token">→</span> 合格交付</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<blockquote>
-<p>这个逻辑链体现了整个课程的主线：<strong>痛点 → 容器化 → 编排 →
-集群部署 → 运维交付</strong>。后续 23
-次课就是在学如何实现这条链路的每一步。</p>
-</blockquote>
-<hr />
-<h2 id="四拓展阅读选学">四、拓展阅读（选学）</h2>
-<ol type="1">
-<li><strong>容器底层原理</strong>：Linux
-namespaces（PID/NET/MNT/UTS/IPC/USER）和
-cgroups（cpu/memory/blkio）是容器的底层基础，第 3
-次课会涉及。想深入可读《自己动手写 Docker》。</li>
-<li><strong>OCI 标准</strong>：Open Container
-Initiative，定义了镜像格式（OCI Image Spec）和运行时（OCI Runtime
-Spec）标准，runC 是其参考实现。</li>
-<li><strong>containerd 与 CRI</strong>：K8s 通过 CRI（Container Runtime
-Interface）支持多种容器运行时（containerd、CRI-O、Docker），了解 CRI
-有助于理解 K8s 架构（第 13 次课）。</li>
-<li><strong>国产云原生</strong>：KubeSphere（开源 PaaS）、华为云
-CCE、阿里云 ACK、腾讯云 TKE——自主可控的云原生平台。</li>
-<li><strong>Docker 的演进</strong>：从 LXC 到 libcontainer 到
-runC，Docker 逐步把底层捐给 CNCF，自己专注上层工具链。</li>
-</ol>
-<hr />
-<h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
-<h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
-<div class="visual">
-  <div class="visual-title">图示 15：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">Docker认知与容器化思想</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 为什么需要容器化</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 痛点：环境不一致（在我电脑上能跑）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 价值：环境一致性+标准化交付+弹性</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 思路：把应用+依赖打包成镜像</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 什么是Docker</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 容器化平台（2013开源）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 基于 Linux 内核特性（namespaces+cgroups）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 核心思想：一次构建，到处运行</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 容器vs虚拟机</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 虚拟机：硬件级隔离，Guest OS，重</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 容器：进程级隔离，共享内核，轻</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 不是替代，是互补共存</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Docker架构（C/S）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> docker CLI（客户端）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> REST API（通信）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> dockerd（守护进程）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> containerd <span class="arrow-token">→</span> runC（运行时）</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 三大核心概念</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 镜像（Image）：只读模板</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 容器（Container）：运行实例</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 仓库（Registry）：镜像分发</span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 云原生与课程项目</span>
-<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 云原生方法论（CNCF）</span>
-<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Docker（装箱）<span class="arrow-token">→</span> K8s（调度）</span>
-<span class="diagram-line">    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> CTTS多服务容器化部署（8阶段）</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
-</div>
-<h3 id="一句话总结">一句话总结</h3>
-<blockquote>
-<p>本课程教你用 <strong>Docker</strong> 把 CTTS
-三服务<strong>容器化</strong>，再用 <strong>Kubernetes</strong>
-在集群上<strong>编排部署</strong>，形成"容器化 →
-编排部署"的完整能力链。</p>
-</blockquote>
-<hr />
-<h2
-id="六复习思考题开放式非题库题">六、复习思考题（开放式，非题库题）</h2>
-<ol type="1">
-<li>用自己的话描述"容器"和"虚拟机"的区别，各举一个适合使用的场景。</li>
-<li>为什么说"容器不是轻量级虚拟机"？从隔离机制角度说明。</li>
-<li>画出 Docker 的 C/S 架构图，标出一次 <code>docker run</code>
-命令从客户端到容器运行的完整流程。</li>
-<li>镜像、容器、仓库三者是什么关系？为什么删了容器镜像还在？</li>
-<li>在 CTTS 项目中，如果要容器化部署前端、后端、MySQL
-三个服务，你认为每个服务容器化时分别要打包什么内容？（提示：前端构建产物+Web服务器、后端JAR+JRE、数据库本身的镜像）</li>
-<li>思考：为什么生产环境不建议用 <code>:latest</code> 标签的镜像？（为第
-3 次课镜像管理做铺垫）</li>
-</ol>
-<blockquote>
-<p>这些思考题不要求标准答案，旨在引导你建立对后续课程的整体认知。下次课将进入
-Docker 安装与第一个容器的实际操作。</p>
-</blockquote>
-
-      </article>
-    </main>
-  </div>
-</body>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> push myname/ctts-backend:v1   <span class="co"># 推送到 Docker Hub</span></span></code></pre>
+          </div>
+          <blockquote>
+            <p>
+              📌 这些命令是 Docker 的核心操作，第 2~5
+              次课会逐条详解。本节只需理解"镜像、容器、仓库"三者关系即可。
+            </p>
+          </blockquote>
+          <h4 id="图示-4">图示</h4>
+          <div class="visual">
+            <div class="visual-title">
+              图示 10：镜像从仓库到本地，再运行成多个容器
+            </div>
+            <div class="edu-diagram">
+              <div class="registry-loop">
+                <div class="diagram-card">
+                  <h4>仓库 Registry</h4>
+                  <p>mysql:8.0、nginx、openjdk 等镜像</p>
+                </div>
+                <div class="flow-arrow">pull</div>
+                <div class="diagram-card good">
+                  <h4>本地镜像</h4>
+                  <p>只读、可复用；也可由 Dockerfile build 得到</p>
+                </div>
+                <div class="flow-arrow">run</div>
+                <div class="diagram-card">
+                  <h4>运行容器</h4>
+                  <p>容器1、容器2、容器3；每个都有独立可写层</p>
+                </div>
+              </div>
+              <div class="diagram-grid three">
+                <div class="diagram-card">
+                  <h4>build</h4>
+                  <p>把你的应用构建成新镜像。</p>
+                </div>
+                <div class="diagram-card">
+                  <h4>push</h4>
+                  <p>把镜像上传到仓库分发。</p>
+                </div>
+                <div class="diagram-card warn">
+                  <h4>stop / rm</h4>
+                  <p>停止或删除容器，不会删除原镜像。</p>
+                </div>
+              </div>
+              <div class="diagram-callout">
+                关键：镜像是静态只读模板；容器是临时运行实例；仓库负责镜像分发。
+              </div>
+            </div>
+          </div>
+          <h4 id="易错点-4">易错点</h4>
+          <ol type="1">
+            <li>
+              ❌ 混淆镜像和容器。✅ 镜像是静态只读模板，容器是动态可写运行实例。
+            </li>
+            <li>
+              ❌ 误认为"删了容器镜像就没了"。✅
+              容器只是镜像的实例，删容器不影响镜像。
+            </li>
+            <li>
+              ❌ 误认为"latest 标签就是最新的最稳定的"。✅ latest
+              只是默认标签名，可能指向任意版本，生产环境应指定明确版本号。
+            </li>
+            <li>
+              ❌ 误认为"镜像必须从仓库下载"。✅ 镜像也可以本地用 Dockerfile
+              build 出来，仓库只是分发手段。
+            </li>
+          </ol>
+          <h4 id="小结-4">小结</h4>
+          <p>
+            镜像、容器、仓库是 Docker
+            三大核心概念：镜像是只读模板，容器是镜像的运行实例，仓库用于存储和分发镜像。理解三者关系是理解所有
+            Docker 操作的基础。
+          </p>
+          <hr />
+          <h3 id="知识点-k1-6云原生生态与课程项目导入">
+            知识点 K1-6：云原生生态与课程项目导入
+          </h3>
+          <h4 id="定义-5">定义</h4>
+          <p>
+            <strong>云原生（Cloud Native）</strong>
+            是一种构建和运行应用程序的方法，利用云计算的弹性、分布式特性，通过容器、微服务、不可变基础设施、声明式
+            API 等技术，让应用更易于弹性伸缩、可靠运维。
+          </p>
+          <p>
+            <strong
+              >CNCF（Cloud Native Computing
+              Foundation，云原生计算基金会）</strong
+            >
+            是 Linux 基金会下的子基金会，托管 Kubernetes、containerd、Prometheus
+            等云原生核心项目，是云原生生态的 governing body。
+          </p>
+          <h4 id="原理-5">原理</h4>
+          <p><strong>云原生技术栈全景</strong>：</p>
+          <div class="visual">
+            <div class="visual-title">图示 11：云原生技术栈分层</div>
+            <div class="edu-diagram">
+              <div class="stack-diagram">
+                <div class="stack-layer app">
+                  应用层：微服务 / Serverless / Service Mesh
+                </div>
+                <div class="stack-layer">编排调度层：Kubernetes（核心）</div>
+                <div class="stack-layer runtime">
+                  容器运行时层：Docker / containerd / runC
+                </div>
+                <div class="stack-layer base">
+                  基础设施层：物理机 / 虚拟机 / 公有云
+                </div>
+              </div>
+              <div class="diagram-callout">
+                Docker 解决“装箱和运行”，Kubernetes
+                解决“集群调度和治理”，共同组成云原生落地链路。
+              </div>
+            </div>
+          </div>
+          <p><strong>Docker 与 Kubernetes 的关系</strong>：</p>
+          <table>
+            <thead>
+              <tr>
+                <th>维度</th>
+                <th>Docker</th>
+                <th>Kubernetes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>定位</td>
+                <td>容器化平台（单机）</td>
+                <td>容器编排平台（集群）</td>
+              </tr>
+              <tr>
+                <td>解决问题</td>
+                <td>怎么把应用打包成容器、怎么在单机运行</td>
+                <td>怎么管理成百上千个容器、怎么调度、怎么高可用</td>
+              </tr>
+              <tr>
+                <td>关系</td>
+                <td>Docker 是基础（把应用容器化）</td>
+                <td>K8s 建立在容器之上（编排管理容器）</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            <strong>一句话理解</strong>：Docker 把应用装进"集装箱"，Kubernetes
+            是管理这些集装箱的"码头调度系统"。
+          </p>
+          <p>
+            <strong>本课程定位</strong>：前 12 次课学 Docker（装箱），后 12
+            次课学 K8s（调度）。
+          </p>
+          <h4 id="问题--场景-5">问题 / 场景</h4>
+          <p><strong>问：为什么容器化还不够，还要 K8s？</strong></p>
+          <ul>
+            <li>
+              单机 Docker
+              能跑几十个容器，但生产环境是几十台机器、成千上万个容器。需要解决：哪个容器跑在哪台机器、某台机器挂了容器怎么迁移、流量怎么分发、怎么自动扩缩容。这些是
+              K8s 的工作。类比：Docker 是"造集装箱"，K8s 是"码头+物流调度系统"。
+            </li>
+          </ul>
+          <p><strong>问：云原生就是用容器和 K8s 吗？</strong></p>
+          <ul>
+            <li>
+              不完全是。云原生是一套方法论，容器和 K8s
+              是其核心技术，还包括：微服务、DevOps、CI/CD、不可变基础设施、声明式
+              API、Service Mesh 等。容器和 K8s 是云原生的基础底座。
+            </li>
+          </ul>
+          <p><strong>问：国产云原生技术有哪些？</strong></p>
+          <ul>
+            <li>
+              华为云 CCE、阿里云 ACK、腾讯云 TKE；开源项目有
+              KubeSphere（青云）、OpenAtom OpenHarmony 相关等。容器运行时
+              containerd 是 CNCF 毕业项目，被广泛采用。这正是"自主可控"的体现。
+            </li>
+          </ul>
+          <h4 id="完整示例课程贯穿项目导入">完整示例：课程贯穿项目导入</h4>
+          <div class="visual">
+            <div class="visual-title">
+              图示 12：课程贯穿项目：CTTS 三服务容器化部署
+            </div>
+            <div class="edu-diagram">
+              <div class="diagram-flow">
+                <div class="diagram-card">
+                  <h4>Frontend</h4>
+                  <p>Vue3 前端服务</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card">
+                  <h4>Backend</h4>
+                  <p>Spring Boot 后端服务</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card">
+                  <h4>MySQL</h4>
+                  <p>业务数据存储</p>
+                </div>
+              </div>
+              <div class="diagram-callout">
+                三服务分别容器化为 3 个镜像，先用 Compose 编排，最终部署到
+                Kubernetes 集群。
+              </div>
+              <div class="phase-grid">
+                <div class="phase"><b>M1</b>安装 Docker，运行首个容器</div>
+                <div class="phase"><b>M2</b>拉取 MySQL / Java / Nginx 镜像</div>
+                <div class="phase"><b>M3</b>编写 Dockerfile 构建前后端镜像</div>
+                <div class="phase"><b>M4</b>Compose 编排三服务、网络与存储</div>
+                <div class="phase"><b>M5</b>搭建 Kubernetes 集群</div>
+                <div class="phase"><b>M6</b>部署 Pod 与 Deployment</div>
+                <div class="phase">
+                  <b>M7</b>配置 Service 与 Ingress 对外访问
+                </div>
+                <div class="phase">
+                  <b>M8</b>配置 ConfigMap / Secret / 存储并完成部署
+                </div>
+              </div>
+              <div class="diagram-grid two">
+                <div class="diagram-card">
+                  <h4>技术选型</h4>
+                  <p>
+                    Docker 24.x、Compose v2、Kubernetes 1.28+、Minikube /
+                    kubeadm、kubectl。
+                  </p>
+                </div>
+                <div class="diagram-card good">
+                  <h4>最终交付</h4>
+                  <p>
+                    三服务镜像、Compose 文件、K8s 资源清单、部署文档与演示答辩。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h4 id="图示-5">图示</h4>
+          <div class="visual">
+            <div class="visual-title">图示 13：云原生技术演进与课程路径</div>
+            <div class="edu-diagram">
+              <div class="timeline">
+                <div class="diagram-step" data-step="1">
+                  <h4>物理机</h4>
+                  <p>部署方式</p>
+                </div>
+                <div class="diagram-step" data-step="2">
+                  <h4>虚拟机</h4>
+                  <p>资源隔离</p>
+                </div>
+                <div class="diagram-step" data-step="3">
+                  <h4>容器 Docker</h4>
+                  <p>应用打包</p>
+                </div>
+                <div class="diagram-step" data-step="4">
+                  <h4>容器编排 K8s</h4>
+                  <p>集群调度</p>
+                </div>
+                <div class="diagram-step" data-step="5">
+                  <h4>云原生生态</h4>
+                  <p>完整方法论</p>
+                </div>
+              </div>
+              <div class="course-roadmap">
+                <div class="diagram-card good">
+                  <h4>第 1-12 次课：Docker</h4>
+                  <p>重点学习装箱：把应用容器化。</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card">
+                  <h4>第 13-24 次课：Kubernetes</h4>
+                  <p>重点学习调度：编排和管理容器。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h4 id="易错点-5">易错点</h4>
+          <ol type="1">
+            <li>
+              ❌ 误认为"云原生 = 上云"。✅ 上云（用云服务器）≠
+              云原生。云原生是用容器、微服务、声明式 API
+              等方法构建应用，让应用天生适合云环境。
+            </li>
+            <li>
+              ❌ 误认为"Docker 和 K8s 是竞争关系"。✅ 二者是上下游：Docker
+              负责容器化，K8s 负责编排。
+            </li>
+            <li>
+              ❌ 误认为"学了 Docker 就不用学 K8s"。✅ 单机 Docker
+              无法满足生产级高可用、弹性、调度需求，K8s 是必需。
+            </li>
+          </ol>
+          <h4 id="小结-5">小结</h4>
+          <p>
+            云原生是一套构建和运行应用的方法论，Docker（容器化）和
+            Kubernetes（编排）是其核心技术底座。本课程先学 Docker
+            把应用容器化，再学 K8s 做集群编排，最终完成 CTTS
+            多服务的容器化部署到 K8s 集群。
+          </p>
+          <hr />
+          <h2 id="三综合示例从痛点到方案ctts-容器化的完整逻辑">
+            三、综合示例：从痛点到方案——CTTS 容器化的完整逻辑
+          </h2>
+          <p>
+            把前面所有知识点串起来，看 CTTS
+            这个项目"为什么要容器化、怎么容器化、怎么部署到
+            K8s"的完整逻辑（本节只看思路，不写实现）：
+          </p>
+          <div class="visual">
+            <div class="visual-title">
+              图示 14：CTTS 从痛点到交付的完整逻辑链
+            </div>
+            <div class="edu-diagram">
+              <div class="timeline">
+                <div class="diagram-step" data-step="1">
+                  <h4>痛点</h4>
+                  <p>开发环境能跑，服务器因版本不一致报错。</p>
+                </div>
+                <div class="diagram-step" data-step="2">
+                  <h4>方案</h4>
+                  <p>用 Docker 把 CTTS 后端、JDK17 和依赖打成镜像。</p>
+                </div>
+                <div class="diagram-step" data-step="3">
+                  <h4>选择容器</h4>
+                  <p>三服务用容器更轻、更快，比多个 VM 更省资源。</p>
+                </div>
+                <div class="diagram-step" data-step="4">
+                  <h4>操作链路</h4>
+                  <p>docker build 构建镜像，docker run 运行容器。</p>
+                </div>
+                <div class="diagram-step" data-step="5">
+                  <h4>运维交付</h4>
+                  <p>Compose 管多服务，K8s 做高可用集群部署。</p>
+                </div>
+              </div>
+              <div class="diagram-flow">
+                <div class="diagram-card">
+                  <h4>镜像来源</h4>
+                  <p>MySQL 从 Docker Hub 拉取；前后端由 Dockerfile 构建。</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card good">
+                  <h4>最终交付</h4>
+                  <p>
+                    3 个 Deployment + 3 个 Service + ConfigMap + Secret + PV/PVC
+                    + Ingress。
+                  </p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="diagram-card good">
+                  <h4>验收目标</h4>
+                  <p>能部署、能运维、能排障。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <blockquote>
+            <p>
+              这个逻辑链体现了整个课程的主线：<strong
+                >痛点 → 容器化 → 编排 → 集群部署 → 运维交付</strong
+              >。后续 23 次课就是在学如何实现这条链路的每一步。
+            </p>
+          </blockquote>
+          <hr />
+          <h2 id="四拓展阅读选学">四、拓展阅读（选学）</h2>
+          <ol type="1">
+            <li>
+              <strong>容器底层原理</strong>：Linux
+              namespaces（PID/NET/MNT/UTS/IPC/USER）和
+              cgroups（cpu/memory/blkio）是容器的底层基础，第 3
+              次课会涉及。想深入可读《自己动手写 Docker》。
+            </li>
+            <li>
+              <strong>OCI 标准</strong>：Open Container
+              Initiative，定义了镜像格式（OCI Image Spec）和运行时（OCI Runtime
+              Spec）标准，runC 是其参考实现。
+            </li>
+            <li>
+              <strong>containerd 与 CRI</strong>：K8s 通过 CRI（Container
+              Runtime
+              Interface）支持多种容器运行时（containerd、CRI-O、Docker），了解
+              CRI 有助于理解 K8s 架构（第 13 次课）。
+            </li>
+            <li>
+              <strong>国产云原生</strong>：KubeSphere（开源 PaaS）、华为云
+              CCE、阿里云 ACK、腾讯云 TKE——自主可控的云原生平台。
+            </li>
+            <li>
+              <strong>Docker 的演进</strong>：从 LXC 到 libcontainer 到
+              runC，Docker 逐步把底层捐给 CNCF，自己专注上层工具链。
+            </li>
+          </ol>
+          <hr />
+          <h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
+          <h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
+          <div class="visual">
+            <div class="visual-title">图示 15：本节知识结构图</div>
+            <div class="edu-diagram">
+              <div class="mindmap-grid">
+                <div class="mind-root">Docker认知与容器化思想</div>
+                <div class="mind-branch-grid">
+                  <div class="diagram-card">
+                    <h4>为什么需要容器化</h4>
+                    <ul class="diagram-list">
+                      <li>痛点：环境不一致</li>
+                      <li>价值：一致性、标准化交付、弹性</li>
+                      <li>思路：应用 + 依赖打包成镜像</li>
+                    </ul>
+                  </div>
+                  <div class="diagram-card">
+                    <h4>什么是 Docker</h4>
+                    <ul class="diagram-list">
+                      <li>容器化平台，2013 年开源</li>
+                      <li>基于 namespaces + cgroups</li>
+                      <li>核心思想：一次构建，到处运行</li>
+                    </ul>
+                  </div>
+                  <div class="diagram-card">
+                    <h4>容器 vs 虚拟机</h4>
+                    <ul class="diagram-list">
+                      <li>虚拟机：硬件级隔离，Guest OS，重</li>
+                      <li>容器：进程级隔离，共享内核，轻</li>
+                      <li>二者互补共存</li>
+                    </ul>
+                  </div>
+                  <div class="diagram-card">
+                    <h4>Docker 架构（C/S）</h4>
+                    <ul class="diagram-list">
+                      <li>docker CLI 客户端</li>
+                      <li>REST API 通信</li>
+                      <li>dockerd 守护进程</li>
+                      <li>containerd → runC 运行时</li>
+                    </ul>
+                  </div>
+                  <div class="diagram-card">
+                    <h4>三大核心概念</h4>
+                    <ul class="diagram-list">
+                      <li>镜像：只读模板</li>
+                      <li>容器：运行实例</li>
+                      <li>仓库：镜像分发</li>
+                    </ul>
+                  </div>
+                  <div class="diagram-card">
+                    <h4>云原生与课程项目</h4>
+                    <ul class="diagram-list">
+                      <li>CNCF 云原生方法论</li>
+                      <li>Docker 装箱 → K8s 调度</li>
+                      <li>CTTS 多服务容器化部署 8 阶段</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h3 id="一句话总结">一句话总结</h3>
+          <blockquote>
+            <p>
+              本课程教你用 <strong>Docker</strong> 把 CTTS
+              三服务<strong>容器化</strong>，再用
+              <strong>Kubernetes</strong>
+              在集群上<strong>编排部署</strong>，形成"容器化 →
+              编排部署"的完整能力链。
+            </p>
+          </blockquote>
+          <hr />
+          <h2 id="六复习思考题开放式非题库题">
+            六、复习思考题（开放式，非题库题）
+          </h2>
+          <ol type="1">
+            <li>
+              用自己的话描述"容器"和"虚拟机"的区别，各举一个适合使用的场景。
+            </li>
+            <li>为什么说"容器不是轻量级虚拟机"？从隔离机制角度说明。</li>
+            <li>
+              画出 Docker 的 C/S 架构图，标出一次
+              <code>docker run</code> 命令从客户端到容器运行的完整流程。
+            </li>
+            <li>镜像、容器、仓库三者是什么关系？为什么删了容器镜像还在？</li>
+            <li>
+              在 CTTS 项目中，如果要容器化部署前端、后端、MySQL
+              三个服务，你认为每个服务容器化时分别要打包什么内容？（提示：前端构建产物+Web服务器、后端JAR+JRE、数据库本身的镜像）
+            </li>
+            <li>
+              思考：为什么生产环境不建议用
+              <code>:latest</code> 标签的镜像？（为第 3 次课镜像管理做铺垫）
+            </li>
+          </ol>
+          <blockquote>
+            <p>
+              这些思考题不要求标准答案，旨在引导你建立对后续课程的整体认知。下次课将进入
+              Docker 安装与第一个容器的实际操作。
+            </p>
+          </blockquote>
+        </article>
+      </main>
+    </div>
+  </body>
 </html>

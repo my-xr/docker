@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -174,19 +174,8 @@ Dockerfile 编写</h3>
 jar，最终镜像只包含运行所需内容，体积小、安全。</p>
 <h4 id="原理">原理</h4>
 <p>Java 应用容器化的核心矛盾：</p>
-<div class="visual">
-  <div class="visual-title">图示 1：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">矛盾：构建时需要 Maven + JDK（几百 MB 工具链）</span>
-<span class="diagram-line">     运行时只需要 JRE + jar（几十 MB）</span>
-<span class="diagram-line">如果用单阶段构建（FROM maven <span class="arrow-token">→</span> COPY 源码 <span class="arrow-token">→</span> RUN mvn package <span class="arrow-token">→</span> CMD java -jar）：</span>
-<span class="diagram-line">  最终镜像包含 Maven + JDK + 源码 + jar <span class="arrow-token">→</span> 镜像 800MB+，含构建工具，不安全</span>
-<span class="diagram-line">用多阶段构建：</span>
-<span class="diagram-line">  阶段1（builder）：FROM maven <span class="arrow-token">→</span> COPY 源码 <span class="arrow-token">→</span> RUN mvn package <span class="arrow-token">→</span> 产出 jar</span>
-<span class="diagram-line">  阶段2（runtime）：FROM jre <span class="arrow-token">→</span> COPY --from=builder jar <span class="arrow-token">→</span> CMD java -jar</span>
-<span class="diagram-line">  最终镜像只含 JRE + jar <span class="arrow-token">→</span> 镜像 200MB 左右</span>
+<div class="visual"> <div class="visual-title">图示 1：矛盾：构建时需要 Maven + JDK（几百 MB 工具链）</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer runtime">矛盾：构建时需要 Maven + JDK（几百 MB 工具链）</div> <div class="stack-layer runtime">运行时只需要 JRE + jar（几十 MB）</div> <div class="stack-layer base">如果用单阶段构建（FROM maven → COPY 源码 → RUN mvn package → CMD java -jar）：</div> <div class="stack-layer runtime">最终镜像包含 Maven + JDK + 源码 + jar → 镜像 800MB+，含构建工具，不安全</div> <div class="stack-layer">用多阶段构建：</div> <div class="stack-layer base">阶段1（builder）：FROM maven → COPY 源码 → RUN mvn package → 产出 jar</div> <div class="stack-layer base">阶段2（runtime）：FROM jre → COPY --from=builder jar → CMD java -jar</div> <div class="stack-layer runtime">最终镜像只含 JRE + jar → 镜像 200MB 左右</div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <p>多阶段构建的关键指令
 <code>COPY --from=&lt;阶段名&gt;</code>：从指定的构建阶段复制产物到当前阶段。</p>
@@ -221,21 +210,7 @@ Maven 环境，且构建过程不可复现。</li>
 <h4 id="完整示例">完整示例</h4>
 <p><strong>1. 准备后端项目文件</strong></p>
 <p>目录结构：</p>
-<div class="visual">
-  <div class="visual-title">图示 2：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">ctts-backend/</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> pom.xml</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> src/</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> main/</span>
-<span class="diagram-line"><span class="tree-token">│</span>       <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> java/</span>
-<span class="diagram-line"><span class="tree-token">│</span>       <span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> com/ctts/api/</span>
-<span class="diagram-line"><span class="tree-token">│</span>       <span class="tree-token">│</span>       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> Application.java</span>
-<span class="diagram-line"><span class="tree-token">│</span>       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> resources/</span>
-<span class="diagram-line"><span class="tree-token">│</span>           <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> application.yml</span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> Dockerfile</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 2：ctts-backend/</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">ctts-backend/</span></li> <li><span class="tree-label">pom.xml</span></li> <li><span class="tree-label">src/</span></li> <li>&nbsp;&nbsp;<span class="tree-label">main/</span></li> <li>&nbsp;&nbsp;<span class="tree-label">java/</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">com/ctts/api/</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Application.java</span></li> <li>&nbsp;&nbsp;<span class="tree-label">resources/</span></li> <li>&nbsp;&nbsp;<span class="tree-label">application.yml</span></li> <li><span class="tree-label">Dockerfile</span></li> </ul> </div> </div>
 </div>
 <p><code>pom.xml</code>（最简 SpringBoot 项目）：</p>
 <div class="sourceCode" id="cb4"><pre
@@ -391,27 +366,8 @@ ctts-backend    v1        a1b2c3d4e5f6   30 seconds ago   198MB</code></pre>
 maven）会达到 800MB+。</p>
 </blockquote>
 <h4 id="图示">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 3：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">多阶段构建流程（后端）：</span>
-<span class="diagram-line">阶段1：构建阶段（builder）            阶段2：运行阶段（runtime）</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span> FROM maven:3.9-... AS builder <span class="tree-token">│</span>     <span class="tree-token">│</span> FROM eclipse-temurin:17-jre-alpine <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> WORKDIR /build            <span class="tree-token">│</span>         <span class="tree-token">│</span> WORKDIR /app             <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> COPY pom.xml .            <span class="tree-token">│</span>         <span class="tree-token">│</span>                          <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> RUN mvn dependency:...    <span class="tree-token">│</span>         <span class="tree-token">│</span>   COPY --from=builder    <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> COPY src ./src            <span class="tree-token">│</span>  <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐   <span class="tree-token">│</span>        /build/target/    <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> RUN mvn clean package     <span class="tree-token">│</span>     <span class="tree-token">│</span>   <span class="tree-token">│</span>        ctts-backend-1.0.0.jar <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                           <span class="tree-token">│</span>     <span class="tree-token">│</span>   <span class="tree-token">│</span>        app.jar           <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   产出：ctts-backend-1.0.0<span class="tree-token">│</span>     <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span> EXPOSE 8080              <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>         .jar              <span class="tree-token">│</span>         <span class="tree-token">│</span> CMD [&quot;java&quot;,&quot;-jar&quot;,...   <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘         <span class="tree-token">│</span>        &quot;app.jar&quot;]        <span class="tree-token">│</span></span>
-<span class="diagram-line">   含 Maven+JDK（800MB）              <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">   仅用于构建，不进最终镜像              含 JRE+jar（198MB）</span>
-<span class="diagram-line">                                      这是最终镜像 ✓</span>
+<div class="visual"> <div class="visual-title">图示 3：多阶段构建流程（后端）：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">多阶段构建流程（后端）：</div> <div class="stack-layer">阶段1：构建阶段（builder） 阶段2：运行阶段（runtime）</div> <div class="stack-layer base">FROM maven:3.9-... AS builder FROM eclipse-temurin:17-jre-alpine</div> <div class="stack-layer">WORKDIR /build WORKDIR /app</div> <div class="stack-layer">COPY pom.xml .</div> <div class="stack-layer base">RUN mvn dependency:... COPY --from=builder</div> <div class="stack-layer">COPY src ./src /build/target/</div> <div class="stack-layer app">RUN mvn clean package ctts-backend-1.0.0.jar</div> <div class="stack-layer app">app.jar</div> <div class="stack-layer">产出：ctts-backend-1.0.0 ▶ EXPOSE 8080</div> <div class="stack-layer app">.jar CMD [&quot;java&quot;,&quot;-jar&quot;,...</div> <div class="stack-layer app">&quot;app.jar&quot;]</div> <div class="stack-layer runtime">含 Maven+JDK（800MB）</div> <div class="stack-layer runtime">仅用于构建，不进最终镜像 含 JRE+jar（198MB）</div> <div class="stack-layer">这是最终镜像 ✓</div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <h4 id="易错点">易错点</h4>
 <ol type="1">
@@ -456,19 +412,8 @@ Dockerfile 编写</h3>
 <code>dist</code> 中的静态资源。</p>
 <h4 id="原理-1">原理</h4>
 <p>前端应用容器化的核心矛盾：</p>
-<div class="visual">
-  <div class="visual-title">图示 4：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">矛盾：构建时需要 Node + npm + 源码 + node_modules（几百 MB ~ 1GB）</span>
-<span class="diagram-line">     运行时只需要 Nginx + 静态文件 dist（几十 MB）</span>
-<span class="diagram-line">单阶段构建（FROM node <span class="arrow-token">→</span> npm install <span class="arrow-token">→</span> npm run build <span class="arrow-token">→</span> CMD nginx）：</span>
-<span class="diagram-line">  最终镜像含 Node + node_modules + 源码 + dist <span class="arrow-token">→</span> 1GB+，且含构建工具</span>
-<span class="diagram-line">多阶段构建：</span>
-<span class="diagram-line">  阶段1（builder）：FROM node <span class="arrow-token">→</span> npm install <span class="arrow-token">→</span> npm run build <span class="arrow-token">→</span> 产出 dist</span>
-<span class="diagram-line">  阶段2（runtime）：FROM nginx <span class="arrow-token">→</span> COPY --from=builder dist <span class="arrow-token">→</span> html</span>
-<span class="diagram-line">  最终镜像只含 Nginx + dist <span class="arrow-token">→</span> 50MB 左右</span>
+<div class="visual"> <div class="visual-title">图示 4：矛盾：构建时需要 Node + npm + 源码 + node_modules（几百 MB ~ 1GB）</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">矛盾：构建时需要 Node + npm + 源码 + node_modules（几百 MB ~ 1GB）</div> <div class="stack-layer runtime">运行时只需要 Nginx + 静态文件 dist（几十 MB）</div> <div class="stack-layer base">单阶段构建（FROM node → npm install → npm run build → CMD nginx）：</div> <div class="stack-layer">最终镜像含 Node + node_modules + 源码 + dist → 1GB+，且含构建工具</div> <div class="stack-layer">多阶段构建：</div> <div class="stack-layer base">阶段1（builder）：FROM node → npm install → npm run build → 产出 dist</div> <div class="stack-layer base">阶段2（runtime）：FROM nginx → COPY --from=builder dist → html</div> <div class="stack-layer">最终镜像只含 Nginx + dist → 50MB 左右</div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <p>Nginx 镜像的静态文件目录是 <code>/usr/share/nginx/html</code>，把
 <code>dist</code> 内容 COPY 到这里即可。</p>
@@ -505,19 +450,7 @@ Docker 构建中推荐 <code>npm ci</code>。前提是项目里有
 <h4 id="完整示例-1">完整示例</h4>
 <p><strong>1. 准备前端项目文件</strong></p>
 <p>目录结构：</p>
-<div class="visual">
-  <div class="visual-title">图示 5：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">ctts-frontend/</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> package.json</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> vite.config.js</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> index.html</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> src/</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> main.js</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> App.vue</span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> Dockerfile</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 5：ctts-frontend/</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">ctts-frontend/</span></li> <li><span class="tree-label">package.json</span></li> <li><span class="tree-label">vite.config.js</span></li> <li><span class="tree-label">index.html</span></li> <li><span class="tree-label">src/</span></li> <li>&nbsp;&nbsp;<span class="tree-label">main.js</span></li> <li>&nbsp;&nbsp;<span class="tree-label">App.vue</span></li> <li><span class="tree-label">Dockerfile</span></li> </ul> </div> </div>
 </div>
 <p><code>package.json</code>：</p>
 <div class="sourceCode" id="cb15"><pre
@@ -690,28 +623,8 @@ ctts-frontend    v1        b2c3d4e5f6a7   20 seconds ago   48MB</code></pre>
 ~8MB），如果用单阶段（FROM node）会达到 1GB+。</p>
 </blockquote>
 <h4 id="图示-1">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 6：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">多阶段构建流程（前端）：</span>
-<span class="diagram-line">阶段1：构建阶段（builder）            阶段2：运行阶段（runtime）</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span> FROM node:20-alpine AS builder <span class="tree-token">│</span>    <span class="tree-token">│</span> FROM nginx:alpine        <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> WORKDIR /build            <span class="tree-token">│</span>         <span class="tree-token">│</span>                          <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> COPY package*.json ./     <span class="tree-token">│</span>         <span class="tree-token">│</span>                          <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> RUN npm ci                <span class="tree-token">│</span>         <span class="tree-token">│</span>   COPY --from=builder    <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> COPY . .                  <span class="tree-token">│</span>  <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐   <span class="tree-token">│</span>     /build/dist          <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> RUN npm run build         <span class="tree-token">│</span>     <span class="tree-token">│</span>   <span class="tree-token">│</span>     /usr/share/nginx/html<span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                           <span class="tree-token">│</span>     <span class="tree-token">│</span>   <span class="tree-token">│</span>                          <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   产出：dist/（静态文件）  <span class="tree-token">│</span>     <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span> EXPOSE 80                <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>         index.html        <span class="tree-token">│</span>         <span class="tree-token">│</span> (默认 CMD: nginx -g ...) <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>         assets/           <span class="tree-token">│</span>         <span class="tree-token">│</span>                          <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘         <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">   含 Node+npm+node_modules            含 Nginx+dist</span>
-<span class="diagram-line">   （1GB+）                             （48MB）</span>
-<span class="diagram-line">   仅用于构建，不进最终镜像              这是最终镜像 ✓</span>
+<div class="visual"> <div class="visual-title">图示 6：多阶段构建流程（前端）：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">多阶段构建流程（前端）：</div> <div class="stack-layer">阶段1：构建阶段（builder） 阶段2：运行阶段（runtime）</div> <div class="stack-layer base">FROM node:20-alpine AS builder FROM nginx:alpine</div> <div class="stack-layer">WORKDIR /build</div> <div class="stack-layer">COPY package*.json ./</div> <div class="stack-layer base">RUN npm ci COPY --from=builder</div> <div class="stack-layer">COPY . . /build/dist</div> <div class="stack-layer">RUN npm run build /usr/share/nginx/html</div> <div class="stack-layer">产出：dist/（静态文件） ▶ EXPOSE 80</div> <div class="stack-layer">index.html (默认 CMD: nginx -g ...)</div> <div class="stack-layer">assets/</div> <div class="stack-layer">含 Node+npm+node_modules 含 Nginx+dist</div> <div class="stack-layer">（1GB+） （48MB）</div> <div class="stack-layer">仅用于构建，不进最终镜像 这是最终镜像 ✓</div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <h4 id="易错点-1">易错点</h4>
 <ol type="1">
@@ -755,19 +668,8 @@ Dockerfile 生成镜像的过程。<strong>标签管理</strong> 是用
 给镜像打标签（如版本号、仓库名），用于标识和分发镜像。</p>
 <h4 id="原理-2">原理</h4>
 <p><code>docker build</code> 命令的工作流程：</p>
-<div class="visual">
-  <div class="visual-title">图示 7：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">1. 读取 Dockerfile</span>
-<span class="diagram-line">2. 把构建上下文（build context，即 PATH 或 URL 指定的目录）打包发给守护进程</span>
-<span class="diagram-line">3. 按 Dockerfile 指令顺序，逐条执行：</span>
-<span class="diagram-line">   a. 每条指令生成一个新层（layer）</span>
-<span class="diagram-line">   b. 检查是否有可缓存的层（指令相同 + 上下文文件未变 <span class="arrow-token">→</span> 复用缓存）</span>
-<span class="diagram-line">   c. 执行指令（RUN/COPY 等）</span>
-<span class="diagram-line">4. 所有指令执行完，组合成最终镜像</span>
-<span class="diagram-line">5. 打上 -t 指定的标签</span>
+<div class="visual"> <div class="visual-title">图示 7：读取 Dockerfile</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>读取 Dockerfile</p></div> <div class="diagram-step"><p>把构建上下文（build context，即 PATH 或 URL 指定的目录）打包发给守护进程</p></div> <div class="diagram-step"><p>按 Dockerfile 指令顺序，逐条执行：</p></div> <div class="diagram-step"><p>a. 每条指令生成一个新层（layer）</p></div> <div class="diagram-step"><p>b. 检查是否有可缓存的层（指令相同 + 上下文文件未变 → 复用缓存）</p></div> <div class="diagram-step"><p>c. 执行指令（RUN/COPY 等）</p></div> <div class="diagram-step"><p>所有指令执行完，组合成最终镜像</p></div> <div class="diagram-step"><p>打上 -t 指定的标签</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <p><strong>标签命名规范</strong>：</p>
 <pre><code>&lt;仓库名&gt;/&lt;镜像名&gt;:&lt;标签&gt;
@@ -970,15 +872,8 @@ CTTS 项目，需要分别运行后端容器和前端容器，并完成前后端
    --network &lt;网络&gt;     加入指定网络（容器间通信）
    -e &lt;键=值&gt;           环境变量</code></pre>
 <p><strong>端口映射</strong>：</p>
-<div class="visual">
-  <div class="visual-title">图示 8：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">宿主机 8080 ←<span class="arrow-token">→</span> 容器 8080</span>
-<span class="diagram-line">docker run -p 8080:8080 ctts-backend:v1</span>
-<span class="diagram-line">            ↑    ↑</span>
-<span class="diagram-line">        宿主端口  容器端口</span>
+<div class="visual"> <div class="visual-title">图示 8：宿主机 8080 ←→ 容器 8080</div> <div class="edu-diagram"> <div class="diagram-flow"> <div class="diagram-card"><h4>宿主机 8080 ←</h4></div> <div class="flow-arrow">→</div> <div class="diagram-card"><h4>容器 8080</h4></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <p><strong>容器间通信</strong>：</p>
 <ul>
@@ -1141,37 +1036,7 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb58-1"><a href=
 <span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 删除网络</span></span>
 <span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> network rm ctts-net</span></code></pre></div>
 <h4 id="图示-3">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 9：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">容器运行与联调架构：</span>
-<span class="diagram-line">        宿主机（Linux）</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>                                                 <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   浏览器 <span class="tree-token">─</span><span class="tree-token">─</span>http://localhost:80<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                  <span class="tree-token">│</span> 前端容器  <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                  <span class="tree-token">│</span> ctts-web <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                  <span class="tree-token">│</span> Nginx:80 <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                       <span class="tree-token">│</span>        <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                       <span class="tree-token">│</span> /api/  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                       <span class="tree-token">│</span> proxy  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                       ▼        <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   curl <span class="tree-token">─</span><span class="tree-token">─</span>http://localhost:8080<span class="tree-token">─</span><span class="arrow-token">▶</span> ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                  <span class="tree-token">│</span> 后端容器  <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                  <span class="tree-token">│</span> ctts-api <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                  <span class="tree-token">│</span> Java:8080<span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                       ▲        <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                                       <span class="tree-token">│</span>        <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                            两个容器同在一个网络  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                            ctts-net（自定义）   <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">端口映射：</span>
-<span class="diagram-line">  宿主 80   ←<span class="arrow-token">→</span>  容器 80   (前端)</span>
-<span class="diagram-line">  宿主 8080 ←<span class="arrow-token">→</span>  容器 8080 (后端)</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 9：容器运行与联调架构：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">容器运行与联调架构：</span></li> <li><span class="tree-label">宿主机（Linux）</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">浏览器 http://localhost:80 ▶</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">前端容器</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ctts-web</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Nginx:80</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">/api/</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">proxy</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">curl http://localhost:8080 ▶</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">后端容器</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ctts-api</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Java:8080</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">两个容器同在一个网络</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ctts-net（自定义）</span></li> <li><span class="tree-label">端口映射：</span></li> <li><span class="tree-label">宿主 80 ←→ 容器 80 (前端)</span></li> <li><span class="tree-label">宿主 8080 ←→ 容器 8080 (后端)</span></li> </ul> </div> </div>
 </div>
 <h4 id="易错点-3">易错点</h4>
 <ol type="1">
@@ -1213,18 +1078,8 @@ DNS 解析 <code>ctts-api</code> 失败。✅ 运行时都加
 <p><strong>层缓存机制</strong>：</p>
 <p>Docker 镜像是分层的，每条 Dockerfile 指令生成一层。构建时 Docker
 会检查每层是否能复用缓存：</p>
-<div class="visual">
-  <div class="visual-title">图示 10：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">判断缓存命中的规则：</span>
-<span class="diagram-line">1. 指令本身没变（如 RUN mvn package 没改成 RUN mvn install）</span>
-<span class="diagram-line">2. 对于 COPY/ADD：被复制的文件内容没变（按文件校验和判断）</span>
-<span class="diagram-line">3. 上面的层都命中缓存</span>
-<span class="diagram-line">命中缓存 <span class="arrow-token">→</span> 直接复用旧层（秒级）</span>
-<span class="diagram-line">未命中缓存 <span class="arrow-token">→</span> 重新执行该层及后续所有层</span>
-<span class="diagram-line">所以：把变动少的层放前面，变动多的层放后面</span>
+<div class="visual"> <div class="visual-title">图示 10：判断缓存命中的规则：</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>判断缓存命中的规则：</p></div> <div class="diagram-step"><p>指令本身没变（如 RUN mvn package 没改成 RUN mvn install）</p></div> <div class="diagram-step"><p>对于 COPY/ADD：被复制的文件内容没变（按文件校验和判断）</p></div> <div class="diagram-step"><p>上面的层都命中缓存</p></div> <div class="diagram-step"><p>命中缓存 → 直接复用旧层（秒级）</p></div> <div class="diagram-step"><p>未命中缓存 → 重新执行该层及后续所有层</p></div> <div class="diagram-step"><p>所以：把变动少的层放前面，变动多的层放后面</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <p><strong><code>.dockerignore</code> 机制</strong>：</p>
 <p>构建上下文中的文件会全部发给 dockerd。<code>.dockerignore</code> 类似
@@ -1419,34 +1274,8 @@ a1b2c3d4e5f6   2 minutes ago  CMD [&quot;java&quot; &quot;-jar&quot; &quot;app.j
 170MB（JRE），总共约 195MB。</p>
 </blockquote>
 <h4 id="图示-4">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 11：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">层缓存机制（修改源码后第二次构建）：</span>
-<span class="diagram-line">第一次构建（全量）：              第二次构建（部分缓存）：</span>
-<span class="diagram-line">[builder 1] FROM maven     ↓    [builder 1] FROM maven     ↓</span>
-<span class="diagram-line">[builder 2] WORKDIR        ↓    [builder 2] WORKDIR        ↓</span>
-<span class="diagram-line">[builder 3] COPY pom.xml   ↓    [builder 3] COPY pom.xml   ↓</span>
-<span class="diagram-line">[builder 4] RUN mvn dep    ↓    [builder 4] RUN mvn dep    CACHED ✓（pom.xml 没变）</span>
-<span class="diagram-line">[builder 5] COPY src       ↓    [builder 5] COPY src       ↓（src 变了，重新 COPY）</span>
-<span class="diagram-line">[builder 6] RUN mvn pkg    ↓    [builder 6] RUN mvn pkg    ↓（重新打包）</span>
-<span class="diagram-line">                                                           ↓</span>
-<span class="diagram-line">                             依赖下载被缓存跳过，省 60 秒！</span>
-<span class="diagram-line">.dockerignore 作用：</span>
-<span class="diagram-line">  构建上下文（含 node_modules）          构建上下文（排除 node_modules）</span>
-<span class="diagram-line">  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐                ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">  <span class="tree-token">│</span> node_modules/140MB <span class="tree-token">│</span>                <span class="tree-token">│</span> package.json       <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span> package.json       <span class="tree-token">│</span>  <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐          <span class="tree-token">│</span> src/               <span class="tree-token">│</span>  <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">  <span class="tree-token">│</span> src/ 8KB           <span class="tree-token">│</span>     <span class="tree-token">│</span>          <span class="tree-token">│</span> index.html         <span class="tree-token">│</span>     <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘     <span class="tree-token">│</span>          <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘     <span class="tree-token">│</span></span>
-<span class="diagram-line">                             ↓                                     ↓</span>
-<span class="diagram-line">                    传输 150MB 到 dockerd                  传输 8KB 到 dockerd</span>
-<span class="diagram-line">                    构建慢                                    构建快 ✓</span>
-<span class="diagram-line">镜像大小对比：</span>
-<span class="diagram-line">  单阶段（FROM maven）：  ████████████████████████  820MB</span>
-<span class="diagram-line">  多阶段（FROM jre）：    █████                     198MB  ↓76%</span>
+<div class="visual"> <div class="visual-title">图示 11：层缓存机制（修改源码后第二次构建）：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">层缓存机制（修改源码后第二次构建）：</div> <div class="stack-layer">第一次构建（全量）： 第二次构建（部分缓存）：</div> <div class="stack-layer base">[builder 1] FROM maven ↓ [builder 1] FROM maven ↓</div> <div class="stack-layer">[builder 2] WORKDIR ↓ [builder 2] WORKDIR ↓</div> <div class="stack-layer">[builder 3] COPY pom.xml ↓ [builder 3] COPY pom.xml ↓</div> <div class="stack-layer">[builder 4] RUN mvn dep ↓ [builder 4] RUN mvn dep CACHED ✓（pom.xml 没变）</div> <div class="stack-layer">[builder 5] COPY src ↓ [builder 5] COPY src ↓（src 变了，重新 COPY）</div> <div class="stack-layer">[builder 6] RUN mvn pkg ↓ [builder 6] RUN mvn pkg ↓（重新打包）</div> <div class="stack-layer">↓</div> <div class="stack-layer">依赖下载被缓存跳过，省 60 秒！</div> <div class="stack-layer runtime">.dockerignore 作用：</div> <div class="stack-layer">构建上下文（含 node_modules） 构建上下文（排除 node_modules）</div> <div class="stack-layer">node_modules/140MB package.json</div> <div class="stack-layer">package.json src/</div> <div class="stack-layer">src/ 8KB index.html</div> <div class="stack-layer">↓ ↓</div> <div class="stack-layer runtime">传输 150MB 到 dockerd 传输 8KB 到 dockerd</div> <div class="stack-layer">构建慢 构建快 ✓</div> <div class="stack-layer">镜像大小对比：</div> <div class="stack-layer base">单阶段（FROM maven）： ████████████████████████ 820MB</div> <div class="stack-layer base">多阶段（FROM jre）： █████ 198MB ↓76%</div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <h4 id="易错点-4">易错点</h4>
 <ol type="1">
@@ -1481,21 +1310,8 @@ CTTS 前后端镜像构建中的高频踩坑问题，培养学生"日志 → 定
 修复"的排查思维。</p>
 <h4 id="原理-5">原理</h4>
 <p>构建问题排查的通用流程：</p>
-<div class="visual">
-  <div class="visual-title">图示 12：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">1. 看日志：构建失败时 docker build 输出的最后一段就是错误信息</span>
-<span class="diagram-line">2. 找 ERROR 行：定位到具体哪一步失败（如 [builder 5/5]）</span>
-<span class="diagram-line">3. 看错误信息：常见关键词</span>
-<span class="diagram-line">   - &quot;no such file or directory&quot; <span class="arrow-token">→</span> COPY 路径错误</span>
-<span class="diagram-line">   - &quot;permission denied&quot; <span class="arrow-token">→</span> 权限问题</span>
-<span class="diagram-line">   - &quot;command not found&quot; <span class="arrow-token">→</span> 基础镜像没装该命令</span>
-<span class="diagram-line">   - &quot;failed to solve&quot; <span class="arrow-token">→</span> 构建上下文或 Dockerfile 语法问题</span>
-<span class="diagram-line">   - &quot;Could not resolve&quot; <span class="arrow-token">→</span> 网络问题（拉不到依赖）</span>
-<span class="diagram-line">4. 定位 Dockerfile 行：根据错误信息指向的行号修改</span>
-<span class="diagram-line">5. 重新构建验证</span>
+<div class="visual"> <div class="visual-title">图示 12：docker build 构建失败排查路径</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>看日志：构建失败时 docker build 输出的最后一段就是错误信息</p></div> <div class="diagram-step"><p>找 ERROR 行：定位到具体哪一步失败（如 [builder 5/5]）</p></div> <div class="diagram-step"><p>看错误信息：常见关键词</p></div> <div class="diagram-step"><p>&quot;no such file or directory&quot; → COPY 路径错误</p></div> <div class="diagram-step"><p>&quot;permission denied&quot; → 权限问题</p></div> <div class="diagram-step"><p>&quot;command not found&quot; → 基础镜像没装该命令</p></div> <div class="diagram-step"><p>&quot;failed to solve&quot; → 构建上下文或 Dockerfile 语法问题</p></div> <div class="diagram-step"><p>&quot;Could not resolve&quot; → 网络问题（拉不到依赖）</p></div> <div class="diagram-step"><p>定位 Dockerfile 行：根据错误信息指向的行号修改</p></div> <div class="diagram-step"><p>重新构建验证</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <p>运行问题排查：</p>
 <pre><code>容器启动后立即退出：
@@ -1700,44 +1516,8 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb92-1"><a href=
 target
 dist</code></pre>
 <h4 id="图示-5">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 13：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">构建问题排查决策树：</span>
-<span class="diagram-line">构建失败</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">├</span><span class="tree-token">─</span> COPY failed: no such file?</span>
-<span class="diagram-line">   <span class="tree-token">│</span>    <span class="tree-token">└</span><span class="tree-token">─</span> 检查上下文目录是否有该文件 <span class="arrow-token">→</span> 修正路径</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">├</span><span class="tree-token">─</span> Could not transfer / npm ERR! network?</span>
-<span class="diagram-line">   <span class="tree-token">│</span>    <span class="tree-token">└</span><span class="tree-token">─</span> 网络问题 <span class="arrow-token">→</span> 配置镜像源（阿里云/npmmirror）</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">├</span><span class="tree-token">─</span> manifest not found?</span>
-<span class="diagram-line">   <span class="tree-token">│</span>    <span class="tree-token">└</span><span class="tree-token">─</span> 基础镜像名拼错 <span class="arrow-token">→</span> 核对镜像名:标签</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">├</span><span class="tree-token">─</span> command not found?</span>
-<span class="diagram-line">   <span class="tree-token">│</span>    <span class="tree-token">└</span><span class="tree-token">─</span> 基础镜像没装该命令 <span class="arrow-token">→</span> 换镜像或 RUN apt install</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span> transferring context 很大?</span>
-<span class="diagram-line">        <span class="tree-token">└</span><span class="tree-token">─</span> 配置 .dockerignore</span>
-<span class="diagram-line">运行问题排查决策树：</span>
-<span class="diagram-line">容器运行异常</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">├</span><span class="tree-token">─</span> docker ps 看不到?</span>
-<span class="diagram-line">   <span class="tree-token">│</span>    <span class="tree-token">└</span><span class="tree-token">─</span> docker ps -a 看 Exited <span class="arrow-token">→</span> docker logs 看错误</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">├</span><span class="tree-token">─</span> 容器在但访问不通?</span>
-<span class="diagram-line">   <span class="tree-token">│</span>    <span class="tree-token">├</span><span class="tree-token">─</span> docker port 看端口映射</span>
-<span class="diagram-line">   <span class="tree-token">│</span>    <span class="tree-token">├</span><span class="tree-token">─</span> docker exec 进容器 curl 测试</span>
-<span class="diagram-line">   <span class="tree-token">│</span>    <span class="tree-token">└</span><span class="tree-token">─</span> netstat 看宿主机端口</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">├</span><span class="tree-token">─</span> 前端调后端跨域?</span>
-<span class="diagram-line">   <span class="tree-token">│</span>    <span class="tree-token">└</span><span class="tree-token">─</span> Nginx 配 /api/ 代理（同源）</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span> 前端调后端 DNS 失败?</span>
-<span class="diagram-line">        <span class="tree-token">└</span><span class="tree-token">─</span> 两容器加 --network 同一网络</span>
+<div class="visual"> <div class="visual-title">图示 13：构建问题排查决策树：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">构建问题排查决策树：</div> <div class="stack-layer">构建失败</div> <div class="stack-layer">COPY failed: no such file?</div> <div class="stack-layer">检查上下文目录是否有该文件 → 修正路径</div> <div class="stack-layer">Could not transfer / npm ERR! network?</div> <div class="stack-layer">网络问题 → 配置镜像源（阿里云/npmmirror）</div> <div class="stack-layer">manifest not found?</div> <div class="stack-layer base">基础镜像名拼错 → 核对镜像名:标签</div> <div class="stack-layer">command not found?</div> <div class="stack-layer base">基础镜像没装该命令 → 换镜像或 RUN apt install</div> <div class="stack-layer">transferring context 很大?</div> <div class="stack-layer runtime">配置 .dockerignore</div> <div class="stack-layer">运行问题排查决策树：</div> <div class="stack-layer">容器运行异常</div> <div class="stack-layer runtime">docker ps 看不到?</div> <div class="stack-layer runtime">docker ps -a 看 Exited → docker logs 看错误</div> <div class="stack-layer">容器在但访问不通?</div> <div class="stack-layer runtime">docker port 看端口映射</div> <div class="stack-layer runtime">docker exec 进容器 curl 测试</div> <div class="stack-layer">netstat 看宿主机端口</div> <div class="stack-layer">前端调后端跨域?</div> <div class="stack-layer">Nginx 配 /api/ 代理（同源）</div> <div class="stack-layer">前端调后端 DNS 失败?</div> <div class="stack-layer">两容器加 --network 同一网络</div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <h4 id="易错点-5">易错点</h4>
 <ol type="1">
@@ -1873,45 +1653,8 @@ shell、包管理器，更安全。<code>gcr.io/distroless/java17</code> 适合 
 <hr />
 <h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
 <h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
-<div class="visual">
-  <div class="visual-title">图示 14：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">Dockerfile 构建实践</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 后端 Dockerfile（K8-1）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 多阶段：maven 构建 <span class="arrow-token">→</span> jre 运行</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 关键：先 COPY pom.xml 下载依赖（缓存）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 关键：COPY --from=builder jar</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 镜像大小：~200MB</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 前端 Dockerfile（K8-2）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 多阶段：node 构建 <span class="arrow-token">→</span> nginx 部署</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 关键：先 COPY package.json + npm ci（缓存）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 关键：COPY dist 到 /usr/share/nginx/html</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> Nginx 配置：history 路由 + API 代理</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 镜像大小：~50MB</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 构建与标签（K8-3）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> docker build -t &lt;名&gt;:&lt;标签&gt; &lt;上下文&gt;</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 构建日志：Step <span class="arrow-token">→</span> CACHED <span class="arrow-token">→</span> ERROR</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> docker tag 打多个标签</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 命名规范：&lt;仓库&gt;/&lt;镜像&gt;:&lt;版本&gt;</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 运行与验证（K8-4）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> docker run -d --name --network -p</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 自定义网络让容器间通信</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 验证：curl health / 浏览器访问</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 联调：Nginx 代理 /api/ 到后端容器名</span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 构建优化（K8-5）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> .dockerignore 排除 node_modules/target/.git</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 层缓存：变动少的放前面</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 多阶段：剔除构建工具链（820MB<span class="arrow-token">→</span>200MB）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> docker image history 分析每层大小</span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 问题排查（K8-6）</span>
-<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 构建失败：看 ERROR 行 + 错误信息</span>
-<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> COPY 路径错误：检查上下文</span>
-<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 网络问题：配镜像源（阿里云/npmmirror）</span>
-<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 容器退出：docker logs 看错误</span>
-<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 端口占用：换端口或停进程</span>
-<span class="diagram-line">    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 跨域/DNS：Nginx 代理 + 同一网络</span>
+<div class="visual"> <div class="visual-title">图示 14：Dockerfile 构建实践</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer runtime">Dockerfile 构建实践</div> <div class="stack-layer runtime">后端 Dockerfile（K8-1）</div> <div class="stack-layer runtime">多阶段：maven 构建 → jre 运行</div> <div class="stack-layer">关键：先 COPY pom.xml 下载依赖（缓存）</div> <div class="stack-layer base">关键：COPY --from=builder jar</div> <div class="stack-layer">镜像大小：~200MB</div> <div class="stack-layer runtime">前端 Dockerfile（K8-2）</div> <div class="stack-layer">多阶段：node 构建 → nginx 部署</div> <div class="stack-layer">关键：先 COPY package.json + npm ci（缓存）</div> <div class="stack-layer">关键：COPY dist 到 /usr/share/nginx/html</div> <div class="stack-layer">Nginx 配置：history 路由 + API 代理</div> <div class="stack-layer">镜像大小：~50MB</div> <div class="stack-layer">构建与标签（K8-3）</div> <div class="stack-layer runtime">docker build -t :</div> <div class="stack-layer">构建日志：Step → CACHED → ERROR</div> <div class="stack-layer runtime">docker tag 打多个标签</div> <div class="stack-layer">命名规范：/:</div> <div class="stack-layer">运行与验证（K8-4）</div> <div class="stack-layer runtime">docker run -d --name --network -p</div> <div class="stack-layer">自定义网络让容器间通信</div> <div class="stack-layer">验证：curl health / 浏览器访问</div> <div class="stack-layer">联调：Nginx 代理 /api/ 到后端容器名</div> <div class="stack-layer">构建优化（K8-5）</div> <div class="stack-layer runtime">.dockerignore 排除 node_modules/target/.git</div> <div class="stack-layer">层缓存：变动少的放前面</div> <div class="stack-layer">多阶段：剔除构建工具链（820MB→200MB）</div> <div class="stack-layer runtime">docker image history 分析每层大小</div> <div class="stack-layer">问题排查（K8-6）</div> <div class="stack-layer">构建失败：看 ERROR 行 + 错误信息</div> <div class="stack-layer">COPY 路径错误：检查上下文</div> <div class="stack-layer">网络问题：配镜像源（阿里云/npmmirror）</div> <div class="stack-layer runtime">容器退出：docker logs 看错误</div> <div class="stack-layer">端口占用：换端口或停进程</div> <div class="stack-layer">跨域/DNS：Nginx 代理 + 同一网络</div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <h3 id="一句话总结">一句话总结</h3>
 <blockquote>
@@ -1956,3 +1699,4 @@ ID 的关系是什么？</li>
   </div>
 </body>
 </html>
+

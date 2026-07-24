@@ -269,23 +269,7 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href=
 ...
 ubuntu@server:~$</code></pre>
 <h4 id="图示">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 1：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">环境准备检查清单：</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>  ☑ 操作系统：Ubuntu 22.04 LTS    <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  ☑ 内核版本：5.15+               <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  ☑ 架构：x86_64                  <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  ☑ apt 包管理：已安装            <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  ☑ 网络：能访问外网              <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  ☑ 用户权限：sudo                <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>  ☑ 依赖：ca-certificates/curl/   <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>           gnupg/lsb-release      <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">        ↓ 全部满足后进入 K2-2</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 1：环境准备检查清单：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">环境准备检查清单：</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">☑ 操作系统：Ubuntu 22.04 LTS</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">☑ 内核版本：5.15+</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">☑ 架构：x86_64</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">☑ apt 包管理：已安装</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">☑ 网络：能访问外网</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">☑ 用户权限：sudo</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">☑ 依赖：ca-certificates/curl/</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">gnupg/lsb-release</span></li> <li><span class="tree-label">↓ 全部满足后进入 K2-2</span></li> </ul> </div> </div>
 </div>
 <h4 id="易错点">易错点</h4>
 <ol type="1">
@@ -947,44 +931,7 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb54-1"><a href=
 <p>将 <code>abcdef12</code> 替换为你阿里云控制台显示的专属 ID。</p>
 </blockquote>
 <h4 id="图示-3">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 2：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">未配置加速器：</span>
-<span class="diagram-line">  docker pull mysql:8.0</span>
-<span class="diagram-line">       <span class="tree-token">│</span></span>
-<span class="diagram-line">       ▼</span>
-<span class="diagram-line">  Docker Hub (国外)  <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span> 慢/超时 <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span>  本地</span>
-<span class="diagram-line">配置加速器后：</span>
-<span class="diagram-line">  docker pull mysql:8.0</span>
-<span class="diagram-line">       <span class="tree-token">│</span></span>
-<span class="diagram-line">       ▼</span>
-<span class="diagram-line">  daemon.json 中 registry-mirrors</span>
-<span class="diagram-line">       <span class="tree-token">│</span></span>
-<span class="diagram-line">       <span class="tree-token">├</span><span class="tree-token">─</span>尝试1<span class="tree-token">─</span><span class="arrow-token">▶</span> 中科大镜像站 <span class="tree-token">─</span><span class="tree-token">─</span> 快 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 本地</span>
-<span class="diagram-line">       <span class="tree-token">│</span>（不通）</span>
-<span class="diagram-line">       <span class="tree-token">├</span><span class="tree-token">─</span>尝试2<span class="tree-token">─</span><span class="arrow-token">▶</span> 网易镜像站   <span class="tree-token">─</span><span class="tree-token">─</span> 快 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 本地</span>
-<span class="diagram-line">       <span class="tree-token">│</span>（不通）</span>
-<span class="diagram-line">       <span class="tree-token">└</span><span class="tree-token">─</span>尝试3<span class="tree-token">─</span><span class="arrow-token">▶</span> 百度云镜像站 <span class="tree-token">─</span><span class="tree-token">─</span> 快 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span> 本地</span>
-<span class="diagram-line">daemon.json 配置结构：</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span> {                               <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   &quot;registry-mirrors&quot;: [         <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>     &quot;https://...&quot;,              <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>     &quot;https://...&quot;               <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   ],                            <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   &quot;log-driver&quot;: &quot;json-file&quot;,    <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   &quot;log-opts&quot;: {                 <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>     &quot;max-size&quot;: &quot;10m&quot;,          <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>     &quot;max-file&quot;: &quot;3&quot;             <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   }                             <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> }                               <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">        <span class="tree-token">│</span> restart docker 后生效</span>
-<span class="diagram-line">        ▼</span>
-<span class="diagram-line">    dockerd 重新读取配置</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 2：未配置加速器：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">未配置加速器：</span></li> <li><span class="tree-label">docker pull mysql:8.0</span></li> <li><span class="tree-label">Docker Hub (国外) 慢/超时 ▶ 本地</span></li> <li><span class="tree-label">配置加速器后：</span></li> <li><span class="tree-label">docker pull mysql:8.0</span></li> <li><span class="tree-label">daemon.json 中 registry-mirrors</span></li> <li><span class="tree-label">尝试1 ▶ 中科大镜像站 快 ▶ 本地</span></li> <li>&nbsp;&nbsp;<span class="tree-label">（不通）</span></li> <li><span class="tree-label">尝试2 ▶ 网易镜像站 快 ▶ 本地</span></li> <li>&nbsp;&nbsp;<span class="tree-label">（不通）</span></li> <li><span class="tree-label">尝试3 ▶ 百度云镜像站 快 ▶ 本地</span></li> <li><span class="tree-label">daemon.json 配置结构：</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">{</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">&quot;registry-mirrors&quot;: [</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">&quot;https://...&quot;,</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">&quot;https://...&quot;</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">],</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">&quot;log-driver&quot;: &quot;json-file&quot;,</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">&quot;log-opts&quot;: {</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">&quot;max-size&quot;: &quot;10m&quot;,</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">&quot;max-file&quot;: &quot;3&quot;</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">}</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">}</span></li> <li>&nbsp;&nbsp;<span class="tree-label">restart docker 后生效</span></li> <li><span class="tree-label">dockerd 重新读取配置</span></li> </ul> </div> </div>
 </div>
 <h4 id="易错点-3">易错点</h4>
 <ol type="1">
@@ -1016,19 +963,8 @@ hello-world，验证 Docker 安装是否成功，并理解 docker run 背后的 
 <h4 id="原理-4">原理</h4>
 <p><code>docker run hello-world</code> 的执行流程（对应第 1 次课讲的 C/S
 架构）：</p>
-<div class="visual">
-  <div class="visual-title">图示 3：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">1. 用户敲 docker run hello-world</span>
-<span class="diagram-line">2. docker CLI 通过 REST API 把命令发给 dockerd</span>
-<span class="diagram-line">3. dockerd 检查本地是否有 hello-world:latest 镜像</span>
-<span class="diagram-line">4. 本地没有 <span class="arrow-token">→</span> dockerd 从配置的镜像源（Docker Hub 或加速器）拉取 hello-world:latest</span>
-<span class="diagram-line">5. 拉取成功 <span class="arrow-token">→</span> dockerd 基于 hello-world 镜像创建容器</span>
-<span class="diagram-line">6. 容器执行镜像内的程序（hello-world 程序打印一段说明文字）</span>
-<span class="diagram-line">7. 程序执行完毕，容器自动退出</span>
-<span class="diagram-line">8. 输出返回给 docker CLI，显示在终端</span>
+<div class="visual"> <div class="visual-title">图示 3：用户敲 docker run hello-world</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>用户敲 docker run hello-world</p></div> <div class="diagram-step"><p>docker CLI 通过 REST API 把命令发给 dockerd</p></div> <div class="diagram-step"><p>dockerd 检查本地是否有 hello-world:latest 镜像</p></div> <div class="diagram-step"><p>本地没有 → dockerd 从配置的镜像源（Docker Hub 或加速器）拉取 hello-world:latest</p></div> <div class="diagram-step"><p>拉取成功 → dockerd 基于 hello-world 镜像创建容器</p></div> <div class="diagram-step"><p>容器执行镜像内的程序（hello-world 程序打印一段说明文字）</p></div> <div class="diagram-step"><p>程序执行完毕，容器自动退出</p></div> <div class="diagram-step"><p>输出返回给 docker CLI，显示在终端</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <p><strong>pull 原理关键点</strong>：</p>
 <ul>
@@ -1818,3 +1754,4 @@ MySQL/Nginx/OpenJDK 镜像并查看镜像分层结构。</p>
   </div>
 </body>
 </html>
+

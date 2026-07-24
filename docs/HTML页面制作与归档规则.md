@@ -258,7 +258,51 @@ Model ───▶ ViewModel ───▶ View
 - 终端风格代码块 + 操作说明；
 - 文件树样式组件。
 
-### 9.3 图示必须准确
+### 9.3 语义化图示布局规则
+
+Markdown 字符图转换为网页图示时，不能只把字符画包进 `<span>` 或 `<pre>`。应先判断原图表达的逻辑类型，再选择合适的语义化结构：
+
+- 流程关系：使用卡片 + 箭头，表达清楚“先后 / 触发 / 交付 / 运行”的方向；
+- 对比关系：使用左右或上下对比面板，标题、流程、说明分区明确；
+- 分层关系：使用 stack / layer 结构，从下到上或从上到下保持层级含义；
+- 概念关系：使用三元关系、网格卡片或思维导图，不保留树线字符；
+- 项目路径：使用阶段卡片、时间线或路线图，强调阶段顺序和交付物。
+
+图示布局必须满足：
+
+1. **同一行的卡片高度一致**。横向排列的 `.diagram-card`、`.diagram-step`、对比面板等应使用 `align-items: stretch` 或等效网格布局，不能因为文字多少导致同一行高低不齐。
+2. **流程不能随机换行破坏含义**。像 `开发电脑 → 镜像 → 服务器` 这类链路，在页面宽度不足时，应整体切换为纵向流程，并把箭头旋转为向下，而不是让卡片和箭头各自换行。
+3. **对比图不要被窄列挤碎**。当左右对比面板内部还有流程时，中等宽度下可改为上下两块对比，每块内部保持完整链路。
+4. **卡片组之间要有稳定间距**。图示面板内的标题徽章、流程卡片、说明 callout 之间必须留出固定 `gap`，不能紧挨在一起。
+5. **箭头保持语义位置**。横向流程中箭头应垂直居中；纵向流程中箭头应居中并向下，不能被拉伸成卡片高度。
+6. **移动端优先保证逻辑完整**。小屏幕下宁可改为单列纵向，也不要压缩到文字重叠、箭头断裂或关系不清。
+7. **图示标题要说明图意**。不要统一写“结构与流程重绘”，应写成“环境不一致如何引发上线事故”“传统交付与容器化交付的差异”等能直接概括逻辑的标题。
+
+推荐 CSS 思路：
+
+```css
+.diagram-grid{display:grid;gap:14px;align-items:stretch}
+.diagram-flow{display:flex;gap:10px;align-items:stretch}
+.diagram-flow .diagram-card{flex:1 1 160px}
+.flow-arrow{align-self:center}
+.diagram-panel{display:grid;gap:13px;align-content:start}
+```
+
+对于特定图示，如“传统交付 vs 容器化交付”，应使用专用类保证链路完整：
+
+```css
+.delivery-compare{grid-template-columns:1fr}
+.delivery-flow.two-step{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+.delivery-flow.three-step{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr)}
+
+@media (max-width:640px){
+  .delivery-flow.two-step,
+  .delivery-flow.three-step{grid-template-columns:1fr}
+  .delivery-flow .flow-arrow{transform:rotate(90deg);margin:auto}
+}
+```
+
+### 9.4 图示必须准确
 
 图示不能为了好看而牺牲准确性。
 
@@ -637,7 +681,7 @@ Model        ViewModel        View
 03-16 批量生成时增加以下质量检查，后续如重生成页面也应保持：
 
 1. Pandoc 输入格式使用 `gfm-tex_math_dollars`，避免 Pinia API 中的 `$patch`、`$reset`、`$subscribe` 被误解析为数学公式。
-2. 对教学资料中无语言标记、且包含 `├`、`└`、`│`、`─`、`→`、`▶`、`⇒` 等流程/结构符号的代码围栏，生成后必须转换为 `.visual + .diagram-lines` 图示容器，不保留原始 `<pre><code>` 字符图。
+2. 对教学资料中无语言标记、且包含 `├`、`└`、`│`、`─`、`→`、`▶`、`⇒` 等流程/结构符号的代码围栏，生成后必须转换为 `.visual + .edu-diagram` 等语义化 HTML/CSS 图示组件，不保留原始 `<pre><code>` 字符图，也不要只包一层 `.diagram-lines` 字符行。
 3. 题库页每课应检查：题目卡片数量应为 78，选择题选项组应为 40。
 4. 每页应检查：无内联 `<style>`、公共 CSS/JS 引用完整、页面标题无“教学资料 — / 题库 — / 教学设计 —”前缀。
 

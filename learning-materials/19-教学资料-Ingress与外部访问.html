@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -127,28 +127,7 @@ Host、Path、Header。</p>
 <p>Ingress本身<strong>只是路由规则</strong>（一份YAML声明），真正执行转发的是
 <strong>Ingress
 Controller</strong>（一个跑在集群里的Pod）。Controller监听Ingress资源变化，把规则翻译成自身配置（如Nginx配置文件），然后由自己接收外部流量并转发到对应Service。</p>
-<div class="visual">
-  <div class="visual-title">图示 1：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">外部用户</span>
-<span class="diagram-line">   <span class="tree-token">│</span>  HTTP/HTTPS请求 (host: frontend.ctts.local)</span>
-<span class="diagram-line">   ▼</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>   Ingress Controller (Pod)  <span class="tree-token">│</span>  ← 一个独立的Pod，监听80/443</span>
-<span class="diagram-line"><span class="tree-token">│</span>   (Nginx Ingress Controller)<span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">   <span class="tree-token">│</span> 查询Ingress规则</span>
-<span class="diagram-line">   <span class="tree-token">│</span> 匹配 host + path</span>
-<span class="diagram-line">   ▼</span>
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span> ctts-frontend<span class="tree-token">│</span>    <span class="tree-token">│</span> ctts-backend <span class="tree-token">│</span>   ← Service (ClusterIP)</span>
-<span class="diagram-line"><span class="tree-token">│</span>   Service    <span class="tree-token">│</span>    <span class="tree-token">│</span>   Service    <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">   <span class="tree-token">│</span>                    <span class="tree-token">│</span></span>
-<span class="diagram-line">   ▼                    ▼</span>
-<span class="diagram-line">  Pod                  Pod</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 1：外部用户</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">外部用户</span></li> <li>&nbsp;&nbsp;<span class="tree-label">HTTP/HTTPS请求 (host: frontend.ctts.local)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Ingress Controller (Pod) ← 一个独立的Pod，监听80/443</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">(Nginx Ingress Controller)</span></li> <li>&nbsp;&nbsp;<span class="tree-label">查询Ingress规则</span></li> <li>&nbsp;&nbsp;<span class="tree-label">匹配 host + path</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ctts-frontend ctts-backend ← Service (ClusterIP)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Service Service</span></li> <li><span class="tree-label">Pod Pod</span></li> </ul> </div> </div>
 </div>
 <h4 id="问题为什么需要ingress">问题：为什么需要Ingress？</h4>
 <table>
@@ -207,17 +186,8 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
 <h4 id="图示四层-vs-七层">图示：四层 vs 七层</h4>
-<div class="visual">
-  <div class="visual-title">图示 2：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">四层（Service/NodePort）：</span>
-<span class="diagram-line">   用户 <span class="arrow-token">→</span> TCP:30001 <span class="arrow-token">→</span> Service <span class="arrow-token">→</span> Pod</span>
-<span class="diagram-line">        只看IP+Port</span>
-<span class="diagram-line">七层（Ingress）：</span>
-<span class="diagram-line">   用户 <span class="arrow-token">→</span> HTTP host+path <span class="arrow-token">→</span> Ingress <span class="arrow-token">→</span> Service <span class="arrow-token">→</span> Pod</span>
-<span class="diagram-line">        看HTTP协议字段</span>
+<div class="visual"> <div class="visual-title">图示 2：四层（Service/NodePort）：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>四层（Service/NodePort）：</p></div> <div class="diagram-note-card"><b>用户 → TCP</b><p>30001 → Service → Pod</p></div> <div class="diagram-note-card"><p>只看IP+Port</p></div> <div class="diagram-note-card"><p>七层（Ingress）：</p></div> <div class="diagram-note-card"><p>用户 → HTTP host+path → Ingress → Service → Pod</p></div> <div class="diagram-note-card"><p>看HTTP协议字段</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <h4 id="易错点">易错点</h4>
 <ol type="1">
@@ -305,27 +275,7 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get svc <span class="at">-n</span> ingress-nginx ingress-nginx-controller</span></code></pre></div>
 <h4
 id="图示controller在集群中的位置">图示：Controller在集群中的位置</h4>
-<div class="visual">
-  <div class="visual-title">图示 3：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span> Minikube Node <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span>                                                <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   80/443 ← ingress-nginx-controller (Pod)      <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                <span class="tree-token">│</span>                               <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                <span class="tree-token">│</span> watch                         <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                ▼                               <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   Ingress资源 (ctts-ingress)                   <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                <span class="tree-token">│</span>                               <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                <span class="tree-token">│</span> routes to                     <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>                ▼                               <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>   ctts-frontend Service / ctts-backend Service <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">        ▲</span>
-<span class="diagram-line">        <span class="tree-token">│</span> 外部访问 (minikube ip)</span>
-<span class="diagram-line">        <span class="tree-token">│</span></span>
-<span class="diagram-line">      用户</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 3：Minikube Node</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">Minikube Node</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">80/443 ← ingress-nginx-controller (Pod)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">watch</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Ingress资源 (ctts-ingress)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">routes to</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ctts-frontend Service / ctts-backend Service</span></li> <li>&nbsp;&nbsp;<span class="tree-label">外部访问 (minikube ip)</span></li> <li><span class="tree-label">用户</span></li> </ul> </div> </div>
 </div>
 <h4 id="易错点-1">易错点</h4>
 <ol type="1">
@@ -451,24 +401,7 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href=
 NAME            CLASS   HOSTS                                  ADDRESS        PORTS   AGE
 ctts-ingress    nginx   frontend.ctts.local,api.ctts.local     192.168.49.2   80      30s</code></pre>
 <h4 id="图示路径匹配流程">图示：路径匹配流程</h4>
-<div class="visual">
-  <div class="visual-title">图示 4：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">请求: GET http://frontend.ctts.local/user/list</span>
-<span class="diagram-line">       <span class="tree-token">│</span></span>
-<span class="diagram-line">       ▼</span>
-<span class="diagram-line">┌<span class="tree-token">─</span> Ingress Controller <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line"><span class="tree-token">│</span> 1. 解析Host: frontend.ctts.local        <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> 2. 查找该host的rules                    <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> 3. 遍历paths，按最长前缀匹配            <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span>    path=/  pathType=Prefix 匹配 ✓       <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">│</span> 4. 转发到 ctts-frontend:80/user/list    <span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">       <span class="tree-token">│</span></span>
-<span class="diagram-line">       ▼</span>
-<span class="diagram-line">   ctts-frontend Service <span class="arrow-token">→</span> Pod</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 4：Ingress 根据 Host 与 Path 匹配请求</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">请求: GET http://frontend.ctts.local/user/list</span></li> <li><span class="tree-label">Ingress Controller</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">1. 解析Host: frontend.ctts.local</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">2. 查找该host的rules</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">3. 遍历paths，按最长前缀匹配</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">path=/ pathType=Prefix 匹配 ✓</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">4. 转发到 ctts-frontend:80/user/list</span></li> <li><span class="tree-label">ctts-frontend Service → Pod</span></li> </ul> </div> </div>
 </div>
 <h4 id="易错点-2">易错点</h4>
 <ol type="1">
@@ -606,15 +539,7 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb15-1"><a href=
 <p>访问未定义的host或未匹配的path，会返回
 <code>default-error-page</code> 服务的内容。</p>
 <h4 id="图示虚拟主机路由">图示：虚拟主机路由</h4>
-<div class="visual">
-  <div class="visual-title">图示 5：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">            ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span> host=shop.ctts.local   <span class="arrow-token">→</span> shop-frontend</span>
-<span class="diagram-line">80/443 <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┼<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span> host=admin.ctts.local   <span class="arrow-token">→</span> admin-frontend</span>
-<span class="diagram-line">            <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span> host=api.ctts.local    <span class="arrow-token">→</span> ctts-backend</span>
-<span class="diagram-line">            <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span> 其他host（未匹配）      <span class="arrow-token">→</span> defaultBackend</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 5：多个 Host 映射到不同后端服务</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">host=shop.ctts.local → shop-frontend</span></li> <li><span class="tree-label">80/443 host=admin.ctts.local → admin-frontend</span></li> <li><span class="tree-label">host=api.ctts.local → ctts-backend</span></li> <li><span class="tree-label">其他host（未匹配） → defaultBackend</span></li> </ul> </div> </div>
 </div>
 <h4 id="易错点-3">易错点</h4>
 <ol type="1">
@@ -633,13 +558,8 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb15-1"><a href=
 <p>Ingress支持TLS终止（TLS
 Termination）：用户与Controller之间用HTTPS加密，Controller与集群内Service之间用HTTP明文。证书以Secret形式存储。</p>
 <h4 id="原理-3">原理</h4>
-<div class="visual">
-  <div class="visual-title">图示 6：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">浏览器 <span class="tree-token">─</span><span class="tree-token">─</span>HTTPS<span class="tree-token">─</span><span class="tree-token">─</span>&gt; Ingress Controller <span class="tree-token">─</span><span class="tree-token">─</span>HTTP<span class="tree-token">─</span><span class="tree-token">─</span>&gt; Service <span class="tree-token">─</span><span class="tree-token">─</span>HTTP<span class="tree-token">─</span><span class="tree-token">─</span>&gt; Pod</span>
-<span class="diagram-line">        (TLS加密)       (证书在此终止)        (集群内可明文)</span>
+<div class="visual"> <div class="visual-title">图示 6：浏览器 HTTPS &gt; Ingress Controller HTTP &gt; Service HTTP &gt; Pod</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>浏览器 HTTPS &gt; Ingress Controller HTTP &gt; Service HTTP &gt; Pod</p></div> <div class="diagram-note-card"><p>(TLS加密) (证书在此终止) (集群内可明文)</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <h4 id="问题证书从哪来放哪">问题：证书从哪来？放哪？</h4>
 <ul>
@@ -735,27 +655,8 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href=
 <span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-I</span> http://frontend.ctts.local</span>
 <span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期返回 301 Moved Permanently，Location: https://...</span></span></code></pre></div>
 <h4 id="图示tls终止流程">图示：TLS终止流程</h4>
-<div class="visual">
-  <div class="visual-title">图示 7：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">浏览器                                    Ingress Controller</span>
-<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> 1. ClientHello                             <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>►  <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> 2. ServerHello + 证书(ctts.crt)            <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> ◄<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> 3. 密钥协商，建立TLS通道                   <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> <span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>►  <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span>  4. TLS终止</span>
-<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span>     <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span>     ▼ HTTP明文</span>
-<span class="diagram-line">   <span class="tree-token">│</span>                                            <span class="tree-token">│</span>  ctts-frontend Service</span>
-<span class="diagram-line">   <span class="tree-token">│</span> 5. HTTPS响应                               <span class="tree-token">│</span>     <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> ◄<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>  <span class="tree-token">│</span> ◄<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<div class="visual"> <div class="visual-title">图示 7：浏览器 Ingress Controller</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>浏览器 Ingress Controller</p></div> <div class="diagram-note-card"><p>1. ClientHello</p></div> <div class="diagram-note-card"><p>►</p></div> <div class="diagram-note-card"><p>2. ServerHello + 证书(ctts.crt)</p></div> <div class="diagram-note-card"><p>◄</p></div> <div class="diagram-note-card"><p>3. 密钥协商，建立TLS通道</p></div> <div class="diagram-note-card"><p>►</p></div> <div class="diagram-note-card"><p>4. TLS终止</p></div> <div class="diagram-note-card"><p>▼ HTTP明文</p></div> <div class="diagram-note-card"><p>ctts-frontend Service</p></div> <div class="diagram-note-card"><p>5. HTTPS响应</p></div> <div class="diagram-note-card"><p>◄ ◄</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <h4 id="易错点-4">易错点</h4>
 <ol type="1">
@@ -966,42 +867,8 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href=
 </tbody>
 </table>
 <h3 id="34-完整流程示意">3.4 完整流程示意</h3>
-<div class="visual">
-  <div class="visual-title">图示 8：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">启动Minikube</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   ▼</span>
-<span class="diagram-line">部署CTTS Deployment + Service</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   ▼</span>
-<span class="diagram-line">启用 ingress addon</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   ▼</span>
-<span class="diagram-line">编写 ctts-ingress.yaml（HTTP规则）</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   ▼</span>
-<span class="diagram-line">kubectl apply + 配置hosts</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   ▼</span>
-<span class="diagram-line">浏览器验证 frontend.ctts.local / api.ctts.local</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   ▼</span>
-<span class="diagram-line">openssl 生成自签证书</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   ▼</span>
-<span class="diagram-line">kubectl create secret tls</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   ▼</span>
-<span class="diagram-line">更新Ingress加tls字段</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   ▼</span>
-<span class="diagram-line">HTTPS验证 + 301跳转验证</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   ▼</span>
-<span class="diagram-line">完成</span>
+<div class="visual"> <div class="visual-title">图示 8：启动Minikube</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>启动Minikube</p></div> <div class="diagram-note-card"><p>部署CTTS Deployment + Service</p></div> <div class="diagram-note-card"><p>启用 ingress addon</p></div> <div class="diagram-note-card"><p>编写 ctts-ingress.yaml（HTTP规则）</p></div> <div class="diagram-note-card"><p>kubectl apply + 配置hosts</p></div> <div class="diagram-note-card"><p>浏览器验证 frontend.ctts.local / api.ctts.local</p></div> <div class="diagram-note-card"><p>openssl 生成自签证书</p></div> <div class="diagram-note-card"><p>kubectl create secret tls</p></div> <div class="diagram-note-card"><p>更新Ingress加tls字段</p></div> <div class="diagram-note-card"><p>HTTPS验证 + 301跳转验证</p></div> <div class="diagram-note-card"><p>完成</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <hr />
 <h2 id="四拓展阅读">四、拓展阅读</h2>
@@ -1082,41 +949,7 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb33-1"><a href=
 <p>新建一个Ingress引用新版本Service即可，无需改动原Ingress。</p>
 <hr />
 <h2 id="五思维导图">五、思维导图</h2>
-<div class="visual">
-  <div class="visual-title">图示 9：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">Ingress与外部访问</span>
-<span class="diagram-line"><span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> K19-1 概念</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 七层 HTTP/HTTPS 路由</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> vs Service（四层）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 价值：统一入口 / 域名 / TLS / 节省端口</span>
-<span class="diagram-line"><span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> K19-2 Ingress Controller</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 本质：独立Pod（监听80/443）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 实现：Nginx / Traefik / Contour / Higress</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> Minikube安装：minikube addons enable ingress</span>
-<span class="diagram-line"><span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> K19-3 Ingress资源YAML</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> apiVersion: networking.k8s.io/v1</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> spec.ingressClassName</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> spec.rules[].host.http.paths[].backend</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> pathType: Prefix | Exact | ImplementationSpecific</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> spec.defaultBackend</span>
-<span class="diagram-line"><span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> K19-4 路由模式</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 多域名虚拟主机（多host多Service）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> 单域名多路径（单host多path多Service）</span>
-<span class="diagram-line"><span class="tree-token">│</span>   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> defaultBackend兜底</span>
-<span class="diagram-line"><span class="tree-token">│</span></span>
-<span class="diagram-line"><span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> K19-5 TLS/HTTPS</span>
-<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> openssl生成自签证书（含SAN）</span>
-<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> kubectl create secret tls</span>
-<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> spec.tls[].hosts + secretName</span>
-<span class="diagram-line">    <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ssl-redirect注解：HTTP<span class="arrow-token">→</span>HTTPS跳转</span>
-<span class="diagram-line">    <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 生产：cert-manager + Let&#39;s Encrypt</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 9：Ingress与外部访问</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">Ingress与外部访问</span></li> <li><span class="tree-label">K19-1 概念</span></li> <li>&nbsp;&nbsp;<span class="tree-label">七层 HTTP/HTTPS 路由</span></li> <li>&nbsp;&nbsp;<span class="tree-label">vs Service（四层）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">价值：统一入口 / 域名 / TLS / 节省端口</span></li> <li><span class="tree-label">K19-2 Ingress Controller</span></li> <li>&nbsp;&nbsp;<span class="tree-label">本质：独立Pod（监听80/443）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">实现：Nginx / Traefik / Contour / Higress</span></li> <li>&nbsp;&nbsp;<span class="tree-label">Minikube安装：minikube addons enable ingress</span></li> <li><span class="tree-label">K19-3 Ingress资源YAML</span></li> <li>&nbsp;&nbsp;<span class="tree-label">apiVersion: networking.k8s.io/v1</span></li> <li>&nbsp;&nbsp;<span class="tree-label">spec.ingressClassName</span></li> <li>&nbsp;&nbsp;<span class="tree-label">spec.rules[].host.http.paths[].backend</span></li> <li>&nbsp;&nbsp;<span class="tree-label">pathType: Prefix | Exact | ImplementationSpecific</span></li> <li>&nbsp;&nbsp;<span class="tree-label">spec.defaultBackend</span></li> <li><span class="tree-label">K19-4 路由模式</span></li> <li>&nbsp;&nbsp;<span class="tree-label">多域名虚拟主机（多host多Service）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">单域名多路径（单host多path多Service）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">defaultBackend兜底</span></li> <li><span class="tree-label">K19-5 TLS/HTTPS</span></li> <li><span class="tree-label">openssl生成自签证书（含SAN）</span></li> <li><span class="tree-label">kubectl create secret tls</span></li> <li><span class="tree-label">spec.tls[].hosts + secretName</span></li> <li><span class="tree-label">ssl-redirect注解：HTTP→HTTPS跳转</span></li> <li><span class="tree-label">生产：cert-manager + Let&#39;s Encrypt</span></li> </ul> </div> </div>
 </div>
 <hr />
 <h2 id="六复习思考题">六、复习思考题</h2>
@@ -1143,3 +976,4 @@ v2版本，其他90%访问v1？请描述方案。</li>
   </div>
 </body>
 </html>
+

@@ -339,24 +339,8 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rm mynginx</span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># mynginx</span></span></code></pre></div>
 <h4 id="图示">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 1：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">容器生命周期核心命令：</span>
-<span class="diagram-line">   create  <span class="arrow-token">→</span>  start  <span class="arrow-token">→</span>  running</span>
-<span class="diagram-line">                              <span class="tree-token">│</span></span>
-<span class="diagram-line">                              <span class="tree-token">│</span> stop</span>
-<span class="diagram-line">                              ▼</span>
-<span class="diagram-line">                            exited</span>
-<span class="diagram-line">                              <span class="tree-token">│</span></span>
-<span class="diagram-line">                              <span class="tree-token">│</span> rm</span>
-<span class="diagram-line">                              ▼</span>
-<span class="diagram-line">                           [删除]</span>
-<span class="diagram-line">   run = create + start   (一步到位)</span>
-<span class="diagram-line">   restart = stop + start (重启)</span>
-<span class="diagram-line">   rm -f = kill + rm      (强制删除)</span>
+<div class="visual"> <div class="visual-title">图示 1：容器生命周期核心命令：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>容器生命周期核心命令：</p></div> <div class="diagram-note-card"><p>create → start → running</p></div> <div class="diagram-note-card"><p>stop</p></div> <div class="diagram-note-card"><p>exited</p></div> <div class="diagram-note-card"><p>rm</p></div> <div class="diagram-note-card"><p>[删除]</p></div> <div class="diagram-note-card"><p>run = create + start (一步到位)</p></div> <div class="diagram-note-card"><p>restart = stop + start (重启)</p></div> <div class="diagram-note-card"><p>rm -f = kill + rm (强制删除)</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <h4 id="易错点">易错点</h4>
 <ol type="1">
@@ -472,25 +456,8 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="
 6. 容器主进程启动（如 nginx 的 master process）
 7. 返回容器 ID 给客户端</code></pre>
 <p><strong>前台运行 vs 后台运行（-d）</strong>：</p>
-<div class="visual">
-  <div class="visual-title">图示 2：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">前台运行（不加 -d）：</span>
-<span class="diagram-line">   docker run nginx</span>
-<span class="diagram-line">   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">   <span class="tree-token">│</span> 终端被 nginx 日志占据       <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> Ctrl+c <span class="arrow-token">→</span> 发 SIGINT 给主进程 <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span>         <span class="arrow-token">→</span> 容器退出         <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">后台运行（加 -d）：</span>
-<span class="diagram-line">   docker run -d nginx</span>
-<span class="diagram-line">   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">   <span class="tree-token">│</span> 命令立即返回容器 ID         <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> 终端可继续执行其他命令       <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> 容器在后台持续运行           <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
+<div class="visual"> <div class="visual-title">图示 2：前台运行（不加 -d）：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>前台运行（不加 -d）：</p></div> <div class="diagram-note-card"><p>docker run nginx</p></div> <div class="diagram-note-card"><p>终端被 nginx 日志占据</p></div> <div class="diagram-note-card"><p>Ctrl+c → 发 SIGINT 给主进程</p></div> <div class="diagram-note-card"><p>→ 容器退出</p></div> <div class="diagram-note-card"><p>后台运行（加 -d）：</p></div> <div class="diagram-note-card"><p>docker run -d nginx</p></div> <div class="diagram-note-card"><p>命令立即返回容器 ID</p></div> <div class="diagram-note-card"><p>终端可继续执行其他命令</p></div> <div class="diagram-note-card"><p>容器在后台持续运行</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <p><strong>端口映射（-p）原理</strong>：</p>
 <pre><code>docker run -p 8080:80 nginx
@@ -878,54 +845,14 @@ CPU/内存；<code>docker top</code>
 </table>
 <h4 id="原理-3">原理</h4>
 <p><strong>docker logs 原理</strong>：</p>
-<div class="visual">
-  <div class="visual-title">图示 3：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">容器主进程（如 nginx）</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> stdout <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> Docker 日志驱动 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> 存储</span>
-<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> stderr <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> Docker 日志驱动 <span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> 存储</span>
-<span class="diagram-line">docker logs &lt;容器&gt; 把存储的日志输出到终端</span>
-<span class="diagram-line">日志驱动（默认 json-file）：</span>
-<span class="diagram-line">   /var/lib/docker/containers/&lt;容器ID&gt;/&lt;容器ID&gt;-json.log</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 3：容器主进程（如 nginx）</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">容器主进程（如 nginx）</span></li> <li><span class="tree-label">stdout → Docker 日志驱动 → 存储</span></li> <li><span class="tree-label">stderr → Docker 日志驱动 → 存储</span></li> <li><span class="tree-label">docker logs 把存储的日志输出到终端</span></li> <li><span class="tree-label">日志驱动（默认 json-file）：</span></li> <li><span class="tree-label">/var/lib/docker/containers//-json.log</span></li> </ul> </div> </div>
 </div>
 <p><strong>docker exec 原理</strong>：</p>
-<div class="visual">
-  <div class="visual-title">图示 4：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">容器（运行中）</span>
-<span class="diagram-line">   主进程：nginx master</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> docker exec -it myweb bash</span>
-<span class="diagram-line">       <span class="tree-token">│</span></span>
-<span class="diagram-line">       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 在容器命名空间内新开一个 bash 进程</span>
-<span class="diagram-line">           （不影响主进程，独立终端）</span>
-<span class="diagram-line">特点：</span>
-<span class="diagram-line">   - 进入容器后是一个新的 shell</span>
-<span class="diagram-line">   - exit 退出后容器继续运行</span>
-<span class="diagram-line">   - 可同时开多个 exec 会话</span>
+<div class="visual"> <div class="visual-title">图示 4：容器（运行中）</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>容器（运行中）</p></div> <div class="diagram-note-card"><b>主进程</b><p>nginx master</p></div> <div class="diagram-note-card"><p>docker exec -it myweb bash</p></div> <div class="diagram-note-card"><p>在容器命名空间内新开一个 bash 进程</p></div> <div class="diagram-note-card"><p>（不影响主进程，独立终端）</p></div> <div class="diagram-note-card"><p>特点：</p></div> <div class="diagram-note-card"><p>进入容器后是一个新的 shell</p></div> <div class="diagram-note-card"><p>exit 退出后容器继续运行</p></div> <div class="diagram-note-card"><p>可同时开多个 exec 会话</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <p><strong>docker attach 原理</strong>：</p>
-<div class="visual">
-  <div class="visual-title">图示 5：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">容器（运行中）</span>
-<span class="diagram-line">   主进程：nginx master</span>
-<span class="diagram-line">   <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> docker attach myweb</span>
-<span class="diagram-line">       <span class="tree-token">│</span></span>
-<span class="diagram-line">       <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> 把当前终端的 stdin/stdout 直接连接到主进程</span>
-<span class="diagram-line">           （共享主进程的输入输出）</span>
-<span class="diagram-line">特点：</span>
-<span class="diagram-line">   - 不开新进程，连接到主进程</span>
-<span class="diagram-line">   - Ctrl+c 会发信号给主进程（可能导致容器停止！）</span>
-<span class="diagram-line">   - 想脱离但不停止容器：Ctrl+p, Ctrl+q（ detach keys）</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 5：容器（运行中）</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">容器（运行中）</span></li> <li><span class="tree-label">主进程：nginx master</span></li> <li><span class="tree-label">docker attach myweb</span></li> <li><span class="tree-label">把当前终端的 stdin/stdout 直接连接到主进程</span></li> <li><span class="tree-label">（共享主进程的输入输出）</span></li> <li><span class="tree-label">特点：</span></li> <li><span class="tree-label">- 不开新进程，连接到主进程</span></li> <li><span class="tree-label">- Ctrl+c 会发信号给主进程（可能导致容器停止！）</span></li> <li><span class="tree-label">- 想脱离但不停止容器：Ctrl+p, Ctrl+q（ detach keys）</span></li> </ul> </div> </div>
 </div>
 <p><strong>exec vs attach 对比</strong>：</p>
 <table>
@@ -1308,42 +1235,7 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href=
 <span id="cb27-57"><a href="#cb27-57" aria-hidden="true" tabindex="-1"></a><span class="co"># 80/tcp -&gt; 0.0.0.0:8080</span></span>
 <span id="cb27-58"><a href="#cb27-58" aria-hidden="true" tabindex="-1"></a><span class="co"># 443/tcp -&gt; 0.0.0.0:8443</span></span></code></pre></div>
 <h4 id="图示-4">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 6：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">端口映射三种场景：</span>
-<span class="diagram-line">场景 1：-p 8080:80（指定端口）</span>
-<span class="diagram-line">   客户端 <span class="arrow-token">→</span> 宿主机:8080 <span class="arrow-token">→</span> 容器:80</span>
-<span class="diagram-line">   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">   <span class="tree-token">│</span> 宿主机    <span class="tree-token">│</span>  8080   <span class="tree-token">│</span> 容器      <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> docker-  <span class="tree-token">│</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span> nginx:80 <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> proxy    <span class="tree-token">│</span>         <span class="tree-token">│</span>          <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘         <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">场景 2：-P（随机端口）</span>
-<span class="diagram-line">   客户端 <span class="arrow-token">→</span> 宿主机:49153（随机） <span class="arrow-token">→</span> 容器:80</span>
-<span class="diagram-line">   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">   <span class="tree-token">│</span> 宿主机    <span class="tree-token">│</span>  49153  <span class="tree-token">│</span> 容器      <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> docker-  <span class="tree-token">│</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span> nginx:80 <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> proxy    <span class="tree-token">│</span>         <span class="tree-token">│</span>          <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘         <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">场景 3：-p 127.0.0.1:8080:80（仅本机访问）</span>
-<span class="diagram-line">   本机 <span class="arrow-token">→</span> 127.0.0.1:8080 <span class="arrow-token">→</span> 容器:80</span>
-<span class="diagram-line">   ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐         ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">   <span class="tree-token">│</span> 宿主机    <span class="tree-token">│</span>  8080   <span class="tree-token">│</span> 容器      <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> docker-  <span class="tree-token">│</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span> nginx:80 <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> proxy    <span class="tree-token">│</span>  仅lo   <span class="tree-token">│</span>          <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">│</span> 127.0.0.1<span class="tree-token">│</span>         <span class="tree-token">│</span>          <span class="tree-token">│</span></span>
-<span class="diagram-line">   <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘         <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">docker inspect 核心字段：</span>
-<span class="diagram-line">  Id              <span class="tree-token">─</span> 容器完整 ID</span>
-<span class="diagram-line">  State.Status    <span class="tree-token">─</span> 容器状态（running/exited/...）</span>
-<span class="diagram-line">  State.Pid       <span class="tree-token">─</span> 容器主进程在宿主机的 PID</span>
-<span class="diagram-line">  NetworkSettings.IPAddress <span class="tree-token">─</span> 容器 IP</span>
-<span class="diagram-line">  HostConfig.PortBindings   <span class="tree-token">─</span> 端口映射配置</span>
-<span class="diagram-line">  Config.Env     <span class="tree-token">─</span> 环境变量</span>
-<span class="diagram-line">  Config.Cmd     <span class="tree-token">─</span> 启动命令</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 6：端口映射三种场景：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">端口映射三种场景：</span></li> <li><span class="tree-label">场景 1：-p 8080:80（指定端口）</span></li> <li><span class="tree-label">客户端 → 宿主机:8080 → 容器:80</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">宿主机 8080 容器</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">docker- ▶ nginx:80</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">proxy</span></li> <li><span class="tree-label">场景 2：-P（随机端口）</span></li> <li><span class="tree-label">客户端 → 宿主机:49153（随机） → 容器:80</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">宿主机 49153 容器</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">docker- ▶ nginx:80</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">proxy</span></li> <li><span class="tree-label">场景 3：-p 127.0.0.1:8080:80（仅本机访问）</span></li> <li><span class="tree-label">本机 → 127.0.0.1:8080 → 容器:80</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">宿主机 8080 容器</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">docker- ▶ nginx:80</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">proxy 仅lo</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">127.0.0.1</span></li> <li><span class="tree-label">docker inspect 核心字段：</span></li> <li><span class="tree-label">Id 容器完整 ID</span></li> <li><span class="tree-label">State.Status 容器状态（running/exited/...）</span></li> <li><span class="tree-label">State.Pid 容器主进程在宿主机的 PID</span></li> <li><span class="tree-label">NetworkSettings.IPAddress 容器 IP</span></li> <li><span class="tree-label">HostConfig.PortBindings 端口映射配置</span></li> <li><span class="tree-label">Config.Env 环境变量</span></li> <li><span class="tree-label">Config.Cmd 启动命令</span></li> </ul> </div> </div>
 </div>
 <h4 id="易错点-4">易错点</h4>
 <ol type="1">
@@ -1430,16 +1322,8 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href=
 </tbody>
 </table>
 <p><strong>为什么挂载数据卷 -v</strong>：</p>
-<div class="visual">
-  <div class="visual-title">图示 7：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">如果不挂载数据卷：</span>
-<span class="diagram-line">   容器删除 <span class="arrow-token">→</span> /var/lib/mysql 数据丢失 <span class="arrow-token">→</span> 数据库没了！</span>
-<span class="diagram-line">挂载数据卷 -v /data/ctts/mysql:/var/lib/mysql：</span>
-<span class="diagram-line">   宿主机 /data/ctts/mysql ←<span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">→</span> 容器 /var/lib/mysql</span>
-<span class="diagram-line">   容器删除 <span class="arrow-token">→</span> 数据仍在宿主机 <span class="arrow-token">→</span> 重新启动容器数据恢复</span>
+<div class="visual"> <div class="visual-title">图示 7：如果不挂载数据卷：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>如果不挂载数据卷：</p></div> <div class="diagram-note-card"><p>容器删除 → /var/lib/mysql 数据丢失 → 数据库没了！</p></div> <div class="diagram-note-card"><p>挂载数据卷 -v /data/ctts/mysql:/var/lib/mysql：</p></div> <div class="diagram-note-card"><p>宿主机 /data/ctts/mysql ← → 容器 /var/lib/mysql</p></div> <div class="diagram-note-card"><p>容器删除 → 数据仍在宿主机 → 重新启动容器数据恢复</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <p><strong>--restart=unless-stopped 的意义</strong>：</p>
 <ul>
@@ -1448,21 +1332,8 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href=
 <li>生产数据库容器必加此参数。</li>
 </ul>
 <p><strong>MySQL 容器启动流程</strong>：</p>
-<div class="visual">
-  <div class="visual-title">图示 8：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">1. Docker 拉取/使用 mysql:8.0 镜像</span>
-<span class="diagram-line">2. 创建容器，挂载 /data/ctts/mysql <span class="arrow-token">→</span> /var/lib/mysql</span>
-<span class="diagram-line">3. 启动容器主进程：mysqld</span>
-<span class="diagram-line">4. MySQL 首次启动：</span>
-<span class="diagram-line">   a. 初始化数据目录（如果为空）</span>
-<span class="diagram-line">   b. 创建 root 用户，密码来自 MYSQL_ROOT_PASSWORD</span>
-<span class="diagram-line">   c. 创建 MYSQL_DATABASE 数据库（如 ctts）</span>
-<span class="diagram-line">   d. 创建 MYSQL_USER 用户并授权访问该数据库</span>
-<span class="diagram-line">5. MySQL 监听 3306 端口，等待连接</span>
-<span class="diagram-line">6. docker-proxy 监听宿主机 3306，转发到容器 3306</span>
+<div class="visual"> <div class="visual-title">图示 8：Docker 拉取/使用 mysql:8.0 镜像</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>Docker 拉取/使用 mysql:8.0 镜像</p></div> <div class="diagram-step"><p>创建容器，挂载 /data/ctts/mysql → /var/lib/mysql</p></div> <div class="diagram-step"><p>启动容器主进程：mysqld</p></div> <div class="diagram-step"><p>MySQL 首次启动：</p></div> <div class="diagram-step"><p>a. 初始化数据目录（如果为空）</p></div> <div class="diagram-step"><p>b. 创建 root 用户，密码来自 MYSQL_ROOT_PASSWORD</p></div> <div class="diagram-step"><p>c. 创建 MYSQL_DATABASE 数据库（如 ctts）</p></div> <div class="diagram-step"><p>d. 创建 MYSQL_USER 用户并授权访问该数据库</p></div> <div class="diagram-step"><p>MySQL 监听 3306 端口，等待连接</p></div> <div class="diagram-step"><p>docker-proxy 监听宿主机 3306，转发到容器 3306</p></div> </div>
   </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
 </div>
 <h4 id="问题--场景-5">问题 / 场景</h4>
 <p><strong>问：为什么 MYSQL_ROOT_PASSWORD 是必填的？</strong></p>
@@ -1623,49 +1494,7 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href=
 <span id="cb32-118"><a href="#cb32-118" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> rm <span class="at">-rf</span> /data/ctts/mysql</span>
 <span id="cb32-119"><a href="#cb32-119" aria-hidden="true" tabindex="-1"></a><span class="co"># ⚠️ 生产环境慎用！数据将永久丢失！</span></span></code></pre></div>
 <h4 id="图示-5">图示</h4>
-<div class="visual">
-  <div class="visual-title">图示 9：结构与流程重绘</div>
-  <div class="diagram-lines">
-<span class="diagram-line">CTTS MySQL 容器化部署架构：</span>
-<span class="diagram-line">           宿主机</span>
-<span class="diagram-line">  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐</span>
-<span class="diagram-line">  <span class="tree-token">│</span>                                         <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>  客户端（Navicat/DBeaver/应用）           <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>       <span class="tree-token">│</span>                                 <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>       <span class="tree-token">│</span> 连接 127.0.0.1:3306             <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>       ▼                                 <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐    ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span> docker-proxy <span class="tree-token">│</span>    <span class="tree-token">│</span>  容器         <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span> 监听 :3306   <span class="tree-token">│</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="arrow-token">▶</span><span class="tree-token">│</span>  ctts-mysql  <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘    <span class="tree-token">│</span>              <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>                      <span class="tree-token">│</span>  mysqld      <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>                      <span class="tree-token">│</span>  监听 :3306  <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>                      <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">┬</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>                             <span class="tree-token">│</span>           <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>                             <span class="tree-token">│</span> /var/lib/mysql</span>
-<span class="diagram-line">  <span class="tree-token">│</span>                             ▼           <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>  ┌<span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┐  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span> 数据卷（宿主机目录）              <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span> /data/ctts/mysql                 <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> ctts/         (业务库)       <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span>  <span class="tree-token">├</span><span class="tree-token">─</span><span class="tree-token">─</span> mysql/        (系统库)       <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span> ...           (其他文件)     <span class="tree-token">│</span>  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘  <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">│</span>                                         <span class="tree-token">│</span></span>
-<span class="diagram-line">  <span class="tree-token">└</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span><span class="tree-token">─</span>┘</span>
-<span class="diagram-line">参数解读：</span>
-<span class="diagram-line">docker run -d \</span>
-<span class="diagram-line">  --name ctts-mysql \                ← 容器名（规范命名）</span>
-<span class="diagram-line">  -p 3306:3306 \                     ← 端口映射（宿主:容器）</span>
-<span class="diagram-line">  -e MYSQL_ROOT_PASSWORD=123456 \    ← root 密码（必填）</span>
-<span class="diagram-line">  -e MYSQL_DATABASE=ctts \           ← 自动创建数据库</span>
-<span class="diagram-line">  -e MYSQL_USER=ctts \               ← 自动创建用户</span>
-<span class="diagram-line">  -e MYSQL_PASSWORD=ctts123 \        ← 用户密码</span>
-<span class="diagram-line">  -v /data/ctts/mysql:/var/lib/mysql \ ← 数据卷持久化</span>
-<span class="diagram-line">  --restart=unless-stopped \         ← 自动重启</span>
-<span class="diagram-line">  mysql:8.0                          ← 镜像（明确版本）</span>
-  </div>
-  <p class="diagram-hint">已由原 Markdown 字符图转换为网页图示，保留原有逻辑关系并优化阅读效果。</p>
+<div class="visual"> <div class="visual-title">图示 9：CTTS MySQL 容器化部署架构：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">CTTS MySQL 容器化部署架构：</span></li> <li><span class="tree-label">宿主机</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">客户端（Navicat/DBeaver/应用）</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">连接 127.0.0.1:3306</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">docker-proxy 容器</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">监听 :3306 ▶ ctts-mysql</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">mysqld</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">监听 :3306</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">/var/lib/mysql</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">数据卷（宿主机目录）</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">/data/ctts/mysql</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ctts/ (业务库)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">mysql/ (系统库)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">... (其他文件)</span></li> <li><span class="tree-label">参数解读：</span></li> <li><span class="tree-label">docker run -d \</span></li> <li><span class="tree-label">--name ctts-mysql \ ← 容器名（规范命名）</span></li> <li><span class="tree-label">-p 3306:3306 \ ← 端口映射（宿主:容器）</span></li> <li><span class="tree-label">-e MYSQL_ROOT_PASSWORD=123456 \ ← root 密码（必填）</span></li> <li><span class="tree-label">-e MYSQL_DATABASE=ctts \ ← 自动创建数据库</span></li> <li><span class="tree-label">-e MYSQL_USER=ctts \ ← 自动创建用户</span></li> <li><span class="tree-label">-e MYSQL_PASSWORD=ctts123 \ ← 用户密码</span></li> <li><span class="tree-label">-v /data/ctts/mysql:/var/lib/mysql \ ← 数据卷持久化</span></li> <li><span class="tree-label">--restart=unless-stopped \ ← 自动重启</span></li> <li><span class="tree-label">mysql:8.0 ← 镜像（明确版本）</span></li> </ul> </div> </div>
 </div>
 <h4 id="易错点-5">易错点</h4>
 <ol type="1">
@@ -1920,3 +1749,4 @@ id="六复习思考题开放式非题库题">六、复习思考题（开放式�
   </div>
 </body>
 </html>
+
