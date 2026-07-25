@@ -155,16 +155,35 @@ Pod 的具体 IP 与数量。</p>
 </blockquote>
 <h4 id="原理">原理</h4>
 <p><strong>为什么需要 Service？</strong>——Pod 有三个"不稳定"特征：</p>
-<div class="visual"> <div class="visual-title">图示 1：Pod 的三个&quot;不稳定&quot;特征：</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>Pod 的三个&quot;不稳定&quot;特征：</p></div> <div class="diagram-step"><p>Pod IP 不固定</p></div> <div class="diagram-step"><p>Pod 每次重建，IP 都会变化（由 CNI 插件分配，如 10.244.1.5 → 10.244.1.8）</p></div> <div class="diagram-step"><p>调用方记不住变化的 IP</p></div> <div class="diagram-step"><p>示例：</p></div> <div class="diagram-step"><p>第 1 次部署 MySQL Pod：IP 10.244.1.5</p></div> <div class="diagram-step"><p>Pod 挂了重建：IP 10.244.1.8</p></div> <div class="diagram-step"><p>又挂了重建：IP 10.244.2.3</p></div> <div class="diagram-step"><p>后端怎么连？写死 IP 肯定不行</p></div> <div class="diagram-step"><p>Pod 会重建</p></div> <div class="diagram-step"><p>Deployment 滚动更新：旧 Pod 终止，新 Pod 创建</p></div> <div class="diagram-step"><p>Pod 崩溃：自动重启（CrashLoopBackOff）</p></div> <div class="diagram-step"><p>节点故障：Pod 被重新调度到其他节点</p></div> <div class="diagram-step"><p>任意时刻都有 Pod 在生灭，调用方不能依赖&quot;某个 Pod&quot;</p></div> <div class="diagram-step"><p>一组 Pod 需要负载均衡</p></div> <div class="diagram-step"><p>后端 Deployment 3 副本（Pod1, Pod2, Pod3）</p></div> <div class="diagram-step"><p>调用方请求来了，应该分发给哪个 Pod？</p></div> <div class="diagram-step"><p>不能让一个 Pod 累死，其他 Pod 闲死</p></div> <div class="diagram-step"><p>需要一个&quot;流量分发器&quot;做负载均衡</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 1：Pod 的三个&quot;不稳定&quot;特征：</div>
+<div class="edu-diagram">
+<div class="diagram-grid three">
+<div class="diagram-card warn"><h4>IP 不稳定</h4><p>Pod 重建后 IP 可能变化，客户端不能依赖 Pod IP。</p></div>
+<div class="diagram-card warn"><h4>数量不稳定</h4><p>Deployment 扩缩容会让 Pod 数量随时变化。</p></div>
+<div class="diagram-card warn"><h4>位置不稳定</h4><p>Pod 可能被调度到不同 Node，访问路径不能绑定机器。</p></div>
+</div>
+<div class="diagram-callout">Service 的价值就是给一组变化的 Pod 提供稳定名字、稳定虚拟 IP 和负载均衡入口。</div>
+</div>
 </div>
 <p><strong>Service 提供的三大能力</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 2：Service</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>Service</p></div> <div class="diagram-note-card"><p>① 稳定 IP（ClusterIP）</p></div> <div class="diagram-note-card"><p>Service 创建时分配一个集群内固定的 IP（如 10.96.123.456）</p></div> <div class="diagram-note-card"><p>Service 生命周期内 IP 不变</p></div> <div class="diagram-note-card"><p>调用方记住这个 IP 即可，不用管 Pod IP</p></div> <div class="diagram-note-card"><p>② 稳定 DNS 名</p></div> <div class="diagram-note-card"><p>CoreDNS 为 Service 自动创建 DNS 记录</p></div> <div class="diagram-note-card"><b>格式</b><p>service-name.namespace.svc.cluster.local</p></div> <div class="diagram-note-card"><p>调用方用 DNS 名访问，比记 IP 更友好</p></div> <div class="diagram-note-card"><b>例如</b><p>mysql.ctts.svc.cluster.local</p></div> <div class="diagram-note-card"><p>③ 负载均衡</p></div> <div class="diagram-note-card"><p>Service 把请求负载均衡到后端所有 Ready 的 Pod</p></div> <div class="diagram-note-card"><b>默认策略</b><p>轮询（Round-Robin）</p></div> <div class="diagram-note-card"><p>后端 Pod 增减时，Service 自动感知（通过 Endpoints）</p></div> <div class="diagram-note-card"><p>后端 Pod 集合</p></div> <div class="diagram-note-card"><p>Pod1 (10.244.1.5)</p></div> <div class="diagram-note-card"><p>Pod2 (10.244.1.6)</p></div> <div class="diagram-note-card"><p>Pod3 (10.244.1.7)</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 2：Service</div>
+<div class="edu-diagram">
+<div class="diagram-panel"><h4>Service 给一组 Pod 提供稳定入口</h4><p>Pod 会重建、IP 会变化，Service 用 selector 找到一组 Pod，并提供稳定 DNS、ClusterIP 和负载均衡。</p></div>
+<div class="diagram-flow"><div class="diagram-card"><h4>Client Pod</h4><p>访问 ctts-backend:8080</p></div><div class="flow-arrow">→</div><div class="diagram-card good"><h4>Service</h4><p>稳定名称与虚拟 IP</p></div><div class="flow-arrow">→</div><div class="diagram-card"><h4>Backend Pods</h4><p>Pod1 / Pod2 / Pod3</p></div></div>
+</div>
 </div>
 <p><strong>Service 与 Pod 的关系</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 3：selector</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>selector</p></div> <div class="diagram-note-card"><p>Service (app=backend) ▶ Pod 集合</p></div> <div class="diagram-note-card"><p>ClusterIP Pod1 (v1)</p></div> <div class="diagram-note-card"><p>DNS 名 ◀ (Endpoints) Pod2 (v1)</p></div> <div class="diagram-note-card"><p>负载均衡 Pod3 (v1)</p></div> <div class="diagram-note-card"><p>Service 通过 selector 选择 Pod（基于 Pod labels）</p></div> <div class="diagram-note-card"><p>Service 通过 Endpoints 跟踪 Pod IP 列表</p></div> <div class="diagram-note-card"><p>Pod 变化时，Endpoints 自动更新</p></div> <div class="diagram-note-card"><p>Service 始终把流量发给 Endpoints 里的 Pod</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 3：selector</div>
+<div class="edu-diagram">
+<div class="docker-chain three">
+<div class="diagram-card"><h4>Service selector</h4><p>app=ctts-backend</p></div>
+<div class="diagram-card good"><h4>匹配 Pod labels</h4><p>只有带 app=ctts-backend 的 Pod 会被选中。</p></div>
+<div class="diagram-card"><h4>生成 Endpoints</h4><p>K8s 自动维护后端 Pod IP 列表。</p></div>
+</div>
+</div>
 </div>
 <h4 id="问题--场景">问题 / 场景</h4>
 <p><strong>问：为什么不能直接用 Pod IP？</strong></p>
@@ -307,7 +326,7 @@ Pod，通过 Endpoints 跟踪 Pod IP，Pod 变化对调用方透明。</p>
 </table>
 <h4 id="原理-1">原理</h4>
 <p><strong>四种类型的层次关系</strong>（层层扩展）：</p>
-<div class="visual"> <div class="visual-title">图示 5：ClusterIP（基础类型）</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>ClusterIP（基础类型）</p></div> <div class="diagram-note-card"><p>+ 节点端口（nodePort）</p></div> <div class="diagram-note-card"><p>NodePort</p></div> <div class="diagram-note-card"><p>+ 云负载均衡器</p></div> <div class="diagram-note-card"><p>LoadBalancer</p></div> <div class="diagram-note-card"><p>ExternalName（独立类型，CNAME 映射，无 ClusterIP）</p></div> </div>
+<div class="visual"> <div class="visual-title">图示 5：ClusterIP（基础类型）</div> <div class="edu-diagram"> <div class="diagram-grid three"> <div class="diagram-card"><p>ClusterIP（基础类型）</p></div> <div class="diagram-card"><p>+ 节点端口（nodePort）</p></div> <div class="diagram-card"><p>NodePort</p></div> <div class="diagram-card"><p>+ 云负载均衡器</p></div> <div class="diagram-card"><p>LoadBalancer</p></div> <div class="diagram-card"><p>ExternalName（独立类型，CNAME 映射，无 ClusterIP）</p></div> </div>
   </div>
 </div>
 <p><strong>1. ClusterIP（默认类型）</strong>：</p>
@@ -315,14 +334,40 @@ Pod，通过 Endpoints 跟踪 Pod IP，Pod 变化对调用方透明。</p>
   </div>
 </div>
 <p><strong>2. NodePort 类型</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 7：NodePort 类型：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">NodePort 类型：</span></li> <li><span class="tree-label">集群外部 集群节点 集群内部</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Node1</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">外部用户 ▶ :30036 ▶ Service</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">(nodePort) ClusterIP</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">+ 负载均衡</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Node2</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">:30036</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">后端 Pod</span></li> <li><span class="tree-label">特征：</span></li> <li><span class="tree-label">- 在 ClusterIP 基础上，每个节点开放一个端口（nodePort，默认 30000-32767）</span></li> <li><span class="tree-label">- 外部可通过 任意节点IP:nodePort 访问</span></li> <li><span class="tree-label">- 仍然有 ClusterIP，集群内也能访问</span></li> <li><span class="tree-label">- 适合：临时对外调试、非云环境对外</span></li> <li><span class="tree-label">示例：</span></li> <li><span class="tree-label">minikube ip → 192.168.49.2</span></li> <li><span class="tree-label">NodePort 30036</span></li> <li><span class="tree-label">浏览器访问 http://192.168.49.2:30036 → 前端页面</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 7：NodePort 类型：</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>外部访问</h4><p>访问任意 NodeIP:NodePort。</p></div>
+<div class="diagram-card"><h4>NodePort</h4><p>每个节点打开同一个高位端口。</p></div>
+<div class="diagram-card good"><h4>Service</h4><p>转到 ClusterIP 规则。</p></div>
+<div class="diagram-card"><h4>Pods</h4><p>负载均衡到后端 Pod。</p></div>
+</div>
+<div class="diagram-callout">NodePort 适合学习和临时暴露；生产 HTTP 入口更常交给 Ingress。</div>
+</div>
 </div>
 <p><strong>3. LoadBalancer 类型</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 8：LoadBalancer 类型：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">LoadBalancer 类型：</span></li> <li><span class="tree-label">集群外部 云负载均衡器 集群内部</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">外部用户 ▶ Cloud LB ▶ NodePort</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">EXTERNAL-IP → Service</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">1.2.3.4 → Pod</span></li> <li><span class="tree-label">特征：</span></li> <li><span class="tree-label">- 在 NodePort 基础上，云厂商自动创建一个负载均衡器</span></li> <li><span class="tree-label">- 分配一个外部 IP（EXTERNAL-IP）</span></li> <li><span class="tree-label">- 外部通过 EXTERNAL-IP 访问</span></li> <li><span class="tree-label">- 仅在云厂商 K8s（ACK/ACK/TKE/EKS/GKE/EKS）生效</span></li> <li><span class="tree-label">- Minikube 等本地集群不支持（EXTERNAL-IP 一直 ）</span></li> <li><span class="tree-label">- 适合：云生产环境对外暴露服务</span></li> <li><span class="tree-label">示例：</span></li> <li><span class="tree-label">云厂商 K8s 上创建 LoadBalancer Service</span></li> <li><span class="tree-label">自动创建一个 ELB/SLB，分配公网 IP</span></li> <li><span class="tree-label">用户通过公网 IP 访问</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 8：LoadBalancer 类型：</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>云负载均衡器</h4><p>云平台分配公网 IP 或内网 LB。</p></div>
+<div class="diagram-card good"><h4>LoadBalancer Service</h4><p>K8s Service 与云厂商 LB 对接。</p></div>
+<div class="diagram-card"><h4>Node / ClusterIP</h4><p>流量进入集群转发规则。</p></div>
+<div class="diagram-card"><h4>Pods</h4><p>最终到达业务副本。</p></div>
+</div>
+</div>
 </div>
 <p><strong>4. ExternalName 类型</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 9：ExternalName 类型：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>ExternalName 类型：</p></div> <div class="diagram-note-card"><p>集群内部 集群外部</p></div> <div class="diagram-note-card"><p>Pod (my-db.svc...) ▶ Service 外部数据库</p></div> <div class="diagram-note-card"><p>(无 ClusterIP) rds.xxy.com</p></div> <div class="diagram-note-card"><p>CNAME → rds.xxy.com</p></div> <div class="diagram-note-card"><p>特征：</p></div> <div class="diagram-note-card"><p>无 ClusterIP，无 Endpoints</p></div> <div class="diagram-note-card"><p>通过 DNS CNAME 把 Service 名映射到外部域名</p></div> <div class="diagram-note-card"><p>集群内 Pod 用 Service 名访问，DNS 解析到外部域名</p></div> <div class="diagram-note-card"><b>适合</b><p>集群内应用访问外部已有服务（如 RDS、外部 API）</p></div> <div class="diagram-note-card"><p>示例：</p></div> <div class="diagram-note-card"><p>集群内应用访问阿里云 RDS：</p></div> <div class="diagram-note-card"><p>Service 名 my-db.ctts.svc.cluster.local</p></div> <div class="diagram-note-card"><p>→ CNAME → rm-xxx.mysql.rds.aliyuncs.com</p></div> <div class="diagram-note-card"><p>→ 解析到 RDS 真实 IP</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 9：ExternalName 类型：</div>
+<div class="edu-diagram">
+<div class="diagram-grid two">
+<div class="diagram-panel"><h4>集群内名字</h4><p>应用访问 external-db.default.svc.cluster.local。</p></div>
+<div class="diagram-panel good"><h4>外部 DNS</h4><p>Service 返回 CNAME，例如 mysql.example.com，不创建 ClusterIP 和代理规则。</p></div>
+</div>
+<div class="diagram-callout">ExternalName 本质是 DNS 别名，适合把外部服务纳入集群内命名体系。</div>
+</div>
 </div>
 <p><strong>四种类型对比表（重点记忆）</strong>：</p>
 <table>
@@ -610,8 +655,17 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href=
 <span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a><span class="co"># Address: 47.x.x.x</span></span>
 <span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a><span class="co"># DNS 解析 external-db.ctts.svc.cluster.local → CNAME → 外部域名 → 外部 IP</span></span></code></pre></div>
 <h4 id="图示-1">图示</h4>
-<div class="visual"> <div class="visual-title">图示 10：四种 Service 类型访问范围对比：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>四种 Service 类型访问范围对比：</p></div> <div class="diagram-note-card"><p>ClusterIP（默认）：</p></div> <div class="diagram-note-card"><p>集群内 ✓ | 集群外 ✗</p></div> <div class="diagram-note-card"><p>集群</p></div> <div class="diagram-note-card"><p>Pod → Service → Pod</p></div> <div class="diagram-note-card"><p>NodePort：</p></div> <div class="diagram-note-card"><p>集群内 ✓ | 集群外 ✓（节点端口）</p></div> <div class="diagram-note-card"><p>集群</p></div> <div class="diagram-note-card"><p>Pod → Service → Pod</p></div> <div class="diagram-note-card"><p>nodePort</p></div> <div class="diagram-note-card"><b>外部 → 节点IP</b><p>30080</p></div> <div class="diagram-note-card"><p>LoadBalancer：</p></div> <div class="diagram-note-card"><p>集群内 ✓ | 集群外 ✓（云 LB 公网 IP）</p></div> <div class="diagram-note-card"><p>集群</p></div> <div class="diagram-note-card"><p>Pod → Service → Pod</p></div> <div class="diagram-note-card"><p>NodePort</p></div> <div class="diagram-note-card"><p>Cloud LB</p></div> <div class="diagram-note-card"><p>公网 IP</p></div> <div class="diagram-note-card"><b>外部 → 公网IP</b><p>80</p></div> <div class="diagram-note-card"><p>ExternalName：</p></div> <div class="diagram-note-card"><p>集群内 Pod → Service(DNS CNAME) → 外部域名</p></div> <div class="diagram-note-card"><p>集群</p></div> <div class="diagram-note-card"><p>Pod → Service CNAME ▶ 外部域名（如 RDS）</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 10：四种 Service 类型访问范围对比：</div>
+<div class="edu-diagram">
+<div class="diagram-grid four">
+<div class="diagram-card good"><h4>ClusterIP</h4><p>默认类型，只在集群内部访问，适合后端和数据库。</p></div>
+<div class="diagram-card"><h4>NodePort</h4><p>在每个 Node 开端口，适合学习和临时调试。</p></div>
+<div class="diagram-card"><h4>LoadBalancer</h4><p>由云平台分配外部负载均衡器，适合云上生产入口。</p></div>
+<div class="diagram-card"><h4>ExternalName</h4><p>把集群内服务名映射到外部 DNS 名称，不创建代理规则。</p></div>
+</div>
+<div class="diagram-callout">CTTS 内部服务优先 ClusterIP；真正对外访问通常交给 Ingress，而不是直接暴露每个 Service。</div>
+</div>
 </div>
 <h4 id="易错点-1">易错点</h4>
 <ol type="1">
@@ -667,16 +721,32 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb14-1"><a href=
 <span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">externalIPs</span><span class="kw">:</span><span class="co">                       # 外部 IP（可选，了解）</span></span>
 <span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> &lt;ip&gt;</span></span></code></pre></div>
 <p><strong>关键字段详解</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 11：apiVersion: v1</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>apiVersion: v1</p></div> <div class="diagram-step"><p>Service 的 apiVersion 固定为 v1（不是 apps/v1）</p></div> <div class="diagram-step"><p>容易写错（Pod/Service 都是 v1，Deployment 是 apps/v1）</p></div> <div class="diagram-step"><p>kind: Service</p></div> <div class="diagram-step"><p>固定为 Service</p></div> <div class="diagram-step"><p>metadata.name</p></div> <div class="diagram-step"><p>Service 名称，也是 DNS 名的第一段</p></div> <div class="diagram-step"><p>如 name: mysql → DNS 名 mysql.ctts.svc.cluster.local</p></div> <div class="diagram-step"><p>命名规范：小写、可含 - 、不超过 63 字符</p></div> <div class="diagram-step"><p>spec.type</p></div> <div class="diagram-step"><p>四种类型之一，省略时默认 ClusterIP</p></div> <div class="diagram-step"><p>spec.selector</p></div> <div class="diagram-step"><p>标签选择器，关联匹配的 Pod</p></div> <div class="diagram-step"><p>必须与 Pod 的 labels 完全匹配（key=value 都要匹配）</p></div> <div class="diagram-step"><p>示例：selector: { app: ctts-backend } → 选中所有 app=ctts-backend 的 Pod</p></div> <div class="diagram-step"><p>spec.ports</p></div> <div class="diagram-step"><p>端口配置，可定义多个端口（如一个 Service 同时暴露 80 和 443）</p></div> <div class="diagram-step"><p>port：Service 端口（ClusterIP 上访问的端口）</p></div> <div class="diagram-step"><p>targetPort：Pod 端口（containerPort），省略时等于 port</p></div> <div class="diagram-step"><p>nodePort：节点端口（仅 NodePort/LoadBalancer 类型用）</p></div> <div class="diagram-step"><p>spec.sessionAffinity</p></div> <div class="diagram-step"><p>会话亲和性，默认 None（轮询）</p></div> <div class="diagram-step"><p>ClientIP：同一客户端 IP 的请求固定打到同一 Pod（保持会话）</p></div> <div class="diagram-step"><p>spec.externalName</p></div> <div class="diagram-step"><p>仅 ExternalName 类型用，指定外部域名</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 11：apiVersion: v1</div>
+<div class="edu-diagram">
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>apiVersion / kind</h4><p>Service 属于 v1 核心资源，kind 写 Service。</p></div>
+<div class="diagram-card"><h4>metadata</h4><p>定义 name、namespace 和 labels，决定资源身份。</p></div>
+<div class="diagram-card good"><h4>spec.selector</h4><p>选择一组 Pod，是 Service 和后端 Pod 建立关联的关键。</p></div>
+<div class="diagram-card"><h4>spec.ports</h4><p>声明 port、targetPort、protocol，决定访问入口和转发目标。</p></div>
+</div>
+</div>
 </div>
 <p><strong>port、targetPort、nodePort 三者关系</strong>：</p>
 <div class="visual"> <div class="visual-title">图示 12：port、targetPort 与 nodePort 的关系</div> <div class="edu-diagram"> <div class="diagram-flow"> <div class="diagram-card"><h4>Client</h4><p>集群内客户端访问 Service。</p></div> <div class="flow-arrow">→</div> <div class="diagram-card good"><h4>Service: port</h4><p>ClusterIP:8080 是稳定入口。</p></div> <div class="flow-arrow">→</div> <div class="diagram-card"><h4>Pod: targetPort</h4><p>PodIP:8080 是容器真实监听端口。</p></div> </div> <div class="diagram-panel"> <h4>NodePort 类型额外暴露一层节点端口</h4> <div class="diagram-flow"> <div class="diagram-card warn"><h4>外部访问</h4><p>节点IP:30080</p></div> <div class="flow-arrow">→</div> <div class="diagram-card"><h4>Service: port</h4><p>Service:80 或 Service:8080</p></div> <div class="flow-arrow">→</div> <div class="diagram-card"><h4>Pod: targetPort</h4><p>最终进入容器端口。</p></div> </div> </div> <div class="diagram-grid three"> <div class="diagram-card"><h4>port: 8080</h4><p>集群内访问 ctts-backend.ctts.svc.cluster.local:8080。</p></div> <div class="diagram-card"><h4>targetPort: 8080</h4><p>流量转发到 Pod 的 containerPort。</p></div> <div class="diagram-card"><h4>nodePort: 30080</h4><p>外部经节点端口进入，仅 NodePort 类型需要。</p></div> </div>
   </div>
 </div>
 <p><strong>selector 与 Pod labels 的匹配</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 13：Service YAML：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>Service YAML：</p></div> <div class="diagram-note-card"><p>spec:</p></div> <div class="diagram-note-card"><p>selector:</p></div> <div class="diagram-note-card"><b>app</b><p>ctts-backend</p></div> <div class="diagram-note-card"><p>Pod YAML（由 Deployment 创建）：</p></div> <div class="diagram-note-card"><p>spec:</p></div> <div class="diagram-note-card"><p>template:</p></div> <div class="diagram-note-card"><p>metadata:</p></div> <div class="diagram-note-card"><p>labels:</p></div> <div class="diagram-note-card"><b>app</b><p>ctts-backend ← 必须与 selector 匹配</p></div> <div class="diagram-note-card"><b>tier</b><p>backend</p></div> <div class="diagram-note-card"><b>version</b><p>v1</p></div> <div class="diagram-note-card"><p>匹配规则：</p></div> <div class="diagram-note-card"><p>selector 里的所有 key=value 必须在 Pod labels 里都存在</p></div> <div class="diagram-note-card"><p>Pod labels 可以有额外的 label（selector 不要求&quot;完全相等&quot;，只要求&quot;包含&quot;）</p></div> <div class="diagram-note-card"><p>示例：</p></div> <div class="diagram-note-card"><b>selector</b><p>{ app: ctts-backend }</p></div> <div class="diagram-note-card"><b>Pod labels</b><p>{ app: ctts-backend, tier: backend, version: v1 }</p></div> <div class="diagram-note-card"><p>→ 匹配 ✓（selector 的 app=ctts-backend 在 Pod labels 里）</p></div> <div class="diagram-note-card"><p>反例：</p></div> <div class="diagram-note-card"><b>selector</b><p>{ app: ctts-backend, env: prod }</p></div> <div class="diagram-note-card"><b>Pod labels</b><p>{ app: ctts-backend, tier: backend }</p></div> <div class="diagram-note-card"><p>→ 不匹配 ✗（selector 的 env=prod 在 Pod labels 里没有）</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 13：Service YAML：</div>
+<div class="edu-diagram">
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>apiVersion / kind</h4><p>Service 是核心资源，写 apiVersion: v1、kind: Service。</p></div>
+<div class="diagram-card"><h4>metadata</h4><p>定义 name、namespace、labels。</p></div>
+<div class="diagram-card good"><h4>selector</h4><p>选择后端 Pod，是 Service 生效的关键。</p></div>
+<div class="diagram-card"><h4>ports</h4><p>port 是 Service 入口，targetPort 是 Pod 容器端口。</p></div>
+</div>
+</div>
 </div>
 <h4 id="问题--场景-2">问题 / 场景</h4>
 <p><strong>问：targetPort 省略时会怎样？</strong></p>
@@ -890,12 +960,26 @@ Endpoints 里的 Pod。当 Pod 创建/删除/Ready 状态变化时，Endpoints
 <div class="visual"> <div class="visual-title">图示 15：Service: ctts-backend</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Service: ctts-backend</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">spec.selector: { app: ctts-backend }</span></li> <li>&nbsp;&nbsp;<span class="tree-label">EndpointsController 监听 Pod 变化</span></li> <li>&nbsp;&nbsp;<span class="tree-label">自动把匹配 selector 且 Ready 的 Pod 加入 Endpoints</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Endpoints: ctts-backend</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Addresses:</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- 10.244.1.10:8080 (Pod1, Ready)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- 10.244.1.11:8080 (Pod2, Ready)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- 10.244.1.12:8080 (Pod3, Ready)</span></li> <li>&nbsp;&nbsp;<span class="tree-label">kube-proxy 在节点上配置 iptables/IPVS 规则</span></li> <li>&nbsp;&nbsp;<span class="tree-label">把发往 ClusterIP 的流量 DNAT 到 Endpoints</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod1 (10.244.1.10) Pod2 (10.244.1.11) Pod3 (10.244.1.12)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">labels: app=ctts-backend</span></li> <li><span class="tree-label">工作机制：</span></li> <li><span class="tree-label">① Service 创建时，EndpointsController 根据 selector 找到匹配的 Pod</span></li> <li><span class="tree-label">② 把 Ready 的 Pod IP:targetPort 加入 Endpoints</span></li> <li><span class="tree-label">③ Pod 变化时（新建/删除/NotReady），Endpoints 自动更新</span></li> <li><span class="tree-label">④ kube-proxy 监听 Endpoints 变化，更新节点的 iptables/IPVS 规则</span></li> <li><span class="tree-label">⑤ 流量通过 ClusterIP → iptables → Pod IP（负载均衡）</span></li> </ul> </div> </div>
 </div>
 <p><strong>Endpoints 的关键特性</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 16：自动维护</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>自动维护</p></div> <div class="diagram-step"><p>EndpointsController 自动监听 Pod 变化</p></div> <div class="diagram-step"><p>Pod 新建并 Ready → 加入 Endpoints</p></div> <div class="diagram-step"><p>Pod 删除或 NotReady → 从 Endpoints 移除</p></div> <div class="diagram-step"><p>无需手动操作</p></div> <div class="diagram-step"><p>只包含 Ready 的 Pod</p></div> <div class="diagram-step"><p>Pod 状态为 Running 但 readinessProbe 未通过 → 不在 Endpoints</p></div> <div class="diagram-step"><p>这样保证流量只发给能正常响应的 Pod</p></div> <div class="diagram-step"><p>滚动更新时新 Pod Ready 才加入，旧 Pod 终止前先移除</p></div> <div class="diagram-step"><p>负载均衡</p></div> <div class="diagram-step"><p>Service 默认轮询（Round-Robin）Endpoints 里的 Pod</p></div> <div class="diagram-step"><p>iptables 模式：随机概率分配</p></div> <div class="diagram-step"><p>IPVS 模式：真正的轮询/最少连接等算法</p></div> <div class="diagram-step"><p>健康检查联动</p></div> <div class="diagram-step"><p>Pod readinessProbe 失败 → NotReady → 从 Endpoints 移除</p></div> <div class="diagram-step"><p>Pod readinessProbe 恢复 → Ready → 重新加入 Endpoints</p></div> <div class="diagram-step"><p>这就是&quot;就绪探针&quot;的作用：控制 Pod 是否接收流量</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 16：自动维护</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>Pod 创建</h4><p>带有匹配 label 的 Pod 出现。</p></div>
+<div class="diagram-card good"><h4>EndpointSlice 更新</h4><p>K8s 自动把 Pod IP 加入后端列表。</p></div>
+<div class="diagram-card warn"><h4>Pod 删除</h4><p>Pod 被缩容或重建后，旧 IP 自动移除。</p></div>
+<div class="diagram-card"><h4>Service 稳定</h4><p>客户端始终访问同一个 Service 名称。</p></div>
+</div>
+</div>
 </div>
 <p><strong>无选择器 Service（无 selector 的 Service）</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 17：普通 Service（有 selector）：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>普通 Service（有 selector）：</p></div> <div class="diagram-note-card"><b>spec.selector</b><p>{ app: xxx }</p></div> <div class="diagram-note-card"><p>→ K8s 自动创建 Endpoints，跟踪匹配的 Pod</p></div> <div class="diagram-note-card"><p>无选择器 Service（无 selector）：</p></div> <div class="diagram-note-card"><b>spec</b><p># 没有 selector</p></div> <div class="diagram-note-card"><p>ports:</p></div> <div class="diagram-note-card"><b>port</b><p>3306</p></div> <div class="diagram-note-card"><b>targetPort</b><p>3306</p></div> <div class="diagram-note-card"><p>→ K8s 不会自动创建 Endpoints</p></div> <div class="diagram-note-card"><p>→ 需要手动创建 Endpoints 关联外部 IP</p></div> <div class="diagram-note-card"><p>应用场景：</p></div> <div class="diagram-note-card"><p>集群内应用通过 Service 访问外部数据库（如自建 MySQL 在集群外）</p></div> <div class="diagram-note-card"><p>Service 提供稳定 DNS 名（外部-db.ctts.svc.cluster.local）</p></div> <div class="diagram-note-card"><p>手动创建 Endpoints 指向外部 IP</p></div> <div class="diagram-note-card"><p>应用通过 Service DNS 名访问，实际流量到外部 IP</p></div> <div class="diagram-note-card"><p>与 ExternalName 的区别：</p></div> <div class="diagram-note-card"><b>ExternalName</b><p>DNS CNAME 到外部域名（L7 解析）</p></div> <div class="diagram-note-card"><p>无选择器 Service + 手动 Endpoints：指向外部 IP（L4 转发）</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 17：普通 Service（有 selector）：</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel good"><span class="diagram-badge good">有 selector</span><h4>K8s 自动维护 Endpoints</h4><p>Service 根据 selector 找 Pod，Pod 变化时后端列表自动更新。</p></div>
+<div class="diagram-panel warn"><span class="diagram-badge warn">无 selector</span><h4>需要手写 Endpoints</h4><p>适合代理外部系统或特殊场景，但需要人工维护后端地址。</p></div>
+</div>
+</div>
 </div>
 <h4 id="问题--场景-3">问题 / 场景</h4>
 <p><strong>问：Endpoints 和 Service 是同一个资源吗？</strong></p>
@@ -1143,7 +1227,15 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href=
 <span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Address: 10.96.234.40</span></span>
 <span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a><span class="co"># ← 解析到 Service ClusterIP，流量经 iptables 转发到 192.168.1.100</span></span></code></pre></div>
 <h4 id="图示-3">图示</h4>
-<div class="visual"> <div class="visual-title">图示 18：Service → Endpoints → Pod 关联：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">Service → Endpoints → Pod 关联：</span></li> <li><span class="tree-label">Service (ctts-backend)</span></li> <li><span class="tree-label">selector: app=ctts-backend</span></li> <li>&nbsp;&nbsp;<span class="tree-label">EndpointsController</span></li> <li>&nbsp;&nbsp;<span class="tree-label">监听 Pod 变化</span></li> <li><span class="tree-label">Endpoints (ctts-backend)</span></li> <li><span class="tree-label">- 10.244.1.10:8080 ← Pod1 (app=ctts-backend, Ready)</span></li> <li><span class="tree-label">- 10.244.1.11:8080 ← Pod2 (app=ctts-backend, Ready)</span></li> <li><span class="tree-label">- 10.244.1.12:8080 ← Pod3 (app=ctts-backend, Ready)</span></li> <li>&nbsp;&nbsp;<span class="tree-label">kube-proxy 监听 Endpoints</span></li> <li>&nbsp;&nbsp;<span class="tree-label">配置 iptables/IPVS</span></li> <li><span class="tree-label">节点 iptables 规则：</span></li> <li><span class="tree-label">-A KUBE-SVC-XXX -m statistic --mode random --probability 0.33 -j KUBE-SEP-YYY1</span></li> <li><span class="tree-label">-A KUBE-SVC-XXX -m statistic --mode random --probability 0.5 -j KUBE-SEP-YYY2</span></li> <li><span class="tree-label">-A KUBE-SVC-XXX -j KUBE-SEP-YYY3</span></li> <li><span class="tree-label">→ 流量随机分配到 3 个 Pod（轮询）</span></li> <li><span class="tree-label">Pod 变化时 Endpoints 自动更新：</span></li> <li><span class="tree-label">时刻 t0: 3 副本 Running</span></li> <li><span class="tree-label">Endpoints: [Pod1:8080, Pod2:8080, Pod3:8080]</span></li> <li><span class="tree-label">时刻 t1: Pod2 readinessProbe 失败（NotReady）</span></li> <li><span class="tree-label">Endpoints: [Pod1:8080, Pod3:8080] ← Pod2 被移除</span></li> <li><span class="tree-label">流量只发给 Pod1, Pod3</span></li> <li><span class="tree-label">时刻 t2: Pod2 恢复 Ready</span></li> <li><span class="tree-label">Endpoints: [Pod1:8080, Pod2:8080, Pod3:8080] ← Pod2 重新加入</span></li> <li><span class="tree-label">时刻 t3: Pod4 新建并 Ready（扩容）</span></li> <li><span class="tree-label">Endpoints: [Pod1, Pod2, Pod3, Pod4] ← Pod4 加入</span></li> <li><span class="tree-label">时刻 t4: Pod1 删除（缩容）</span></li> <li><span class="tree-label">Endpoints: [Pod2, Pod3, Pod4] ← Pod1 移除</span></li> <li><span class="tree-label">无选择器 Service + 手动 Endpoints：</span></li> <li><span class="tree-label">Service (external-db) Endpoints (external-db) 外部</span></li> <li><span class="tree-label">无 selector subsets.addresses: 192.168.1.100</span></li> <li><span class="tree-label">ports: 3306 - ip: 192.168.1.100 :3306</span></li> <li>&nbsp;&nbsp;<span class="tree-label">ports:</span></li> <li>&nbsp;&nbsp;<span class="tree-label">- port: 3306</span></li> <li><span class="tree-label">同名关联</span></li> <li><span class="tree-label">流量转发到外部 IP</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 18：Service → Endpoints → Pod 关联：</div>
+<div class="edu-diagram">
+<div class="docker-chain three">
+<div class="diagram-card"><h4>Service</h4><p>ctts-backend，selector: app=ctts-backend。</p></div>
+<div class="diagram-card good"><h4>Endpoints / EndpointSlice</h4><p>自动保存匹配 Pod 的 IP:Port 列表。</p></div>
+<div class="diagram-card"><h4>Pods</h4><p>backend Pod 副本实际承接流量。</p></div>
+</div>
+</div>
 </div>
 <h4 id="易错点-3">易错点</h4>
 <ol type="1">
@@ -1175,7 +1267,12 @@ Service ClusterIP 的机制。K8s 集群内置 <strong>CoreDNS</strong>
 DNS 名）即可访问服务，无需查 IP。</p>
 <h4 id="原理-4">原理</h4>
 <p><strong>CoreDNS 工作机制</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 19：K8s 集群</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">K8s 集群</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">CoreDNS Pod ← 部署在 kube-system namespace</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">(kube-dns) ← Service: kube-dns (10.96.0.10)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">监听 Service 变化</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">自动创建 DNS 记录</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">DNS 记录：</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- mysql.ctts.svc.cluster.local → 10.96.123.456</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- ctts-backend.ctts.svc.cluster.local → 10.96.234.10</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- ctts-frontend.ctts.svc.cluster.local → 10.96.234.20</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">每个 Pod 的 /etc/resolv.conf 自动配置：</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">nameserver 10.96.0.10 ← CoreDNS Service IP</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">search ctts.svc.cluster.local svc.cluster.local cluster.local</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 19：K8s 集群</div>
+<div class="edu-diagram">
+<div class="diagram-panel"><h4>集群内访问路径</h4><p>Pod 不需要知道目标 Pod IP，只需要访问 Service 名称。</p></div>
+<div class="diagram-flow"><div class="diagram-card"><h4>Frontend Pod</h4><p>curl backend-service:8080</p></div><div class="flow-arrow">→</div><div class="diagram-card good"><h4>Service / DNS</h4><p>CoreDNS 解析并转发</p></div><div class="flow-arrow">→</div><div class="diagram-card"><h4>Backend Pod</h4><p>真实业务副本</p></div></div>
+</div>
 </div>
 <p><strong>Service DNS 名格式</strong>：</p>
 <pre><code>完整格式：
@@ -1210,11 +1307,19 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href=
 <span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="co"># options ndots:5</span></span>
 <span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   → 名字里有 5 个点以上才走完整 FQDN 解析，否则先走 search 补全</span></span></code></pre></div>
 <p><strong>Service DNS 名解析流程</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 20：后端 Pod 内执行：nslookup mysql</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>后端 Pod 内执行：nslookup mysql</p></div> <div class="diagram-step"><p>Pod 查 /etc/resolv.conf</p></div> <div class="diagram-step"><p>nameserver 10.96.0.10 → 走 CoreDNS</p></div> <div class="diagram-step"><p>search ctts.svc.cluster.local ...</p></div> <div class="diagram-step"><p>Pod 向 CoreDNS 查询 &quot;mysql&quot;</p></div> <div class="diagram-step"><p>CoreDNS 自动补全：mysql.ctts.svc.cluster.local</p></div> <div class="diagram-step"><p>CoreDNS 查找 DNS 记录</p></div> <div class="diagram-step"><p>找到 mysql.ctts.svc.cluster.local → 10.96.123.456</p></div> <div class="diagram-step"><p>返回结果</p></div> <div class="diagram-step"><p>mysql → 10.96.123.456</p></div> <div class="diagram-step"><p>Pod 用 10.96.123.456:3306 连接 MySQL Service</p></div> <div class="diagram-step"><p>→ kube-proxy iptables 转发到 MySQL Pod IP</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 20：后端 Pod 内执行：nslookup mysql</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>nslookup mysql</h4><p>后端 Pod 发起 DNS 查询。</p></div>
+<div class="diagram-card good"><h4>CoreDNS</h4><p>解析 mysql 当前 namespace 下的 Service。</p></div>
+<div class="diagram-card"><h4>ClusterIP</h4><p>返回 mysql Service 的虚拟 IP。</p></div>
+<div class="diagram-card"><h4>连接 3306</h4><p>后端通过 Service 访问 MySQL Pod。</p></div>
+</div>
+</div>
 </div>
 <p><strong>Pod 的 DNS 记录（了解）</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 21：除了 Service，Pod 也有 DNS 记录（默认格式）：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>除了 Service，Pod 也有 DNS 记录（默认格式）：</p></div> <div class="diagram-note-card"><p>..pod.cluster.local</p></div> <div class="diagram-note-card"><p>示例：</p></div> <div class="diagram-note-card"><p>Pod IP 10.244.1.10（ctts namespace）</p></div> <div class="diagram-note-card"><p>→ 10-244-1-10.ctts.pod.cluster.local</p></div> <div class="diagram-note-card"><p>但 Pod DNS 名不常用，主要用 Service DNS 名。</p></div> </div>
+<div class="visual"> <div class="visual-title">图示 21：除了 Service，Pod 也有 DNS 记录（默认格式）：</div> <div class="edu-diagram"> <div class="diagram-grid three"> <div class="diagram-card"><p>除了 Service，Pod 也有 DNS 记录（默认格式）：</p></div> <div class="diagram-card"><p>..pod.cluster.local</p></div> <div class="diagram-card"><p>示例：</p></div> <div class="diagram-card"><p>Pod IP 10.244.1.10（ctts namespace）</p></div> <div class="diagram-card"><p>→ 10-244-1-10.ctts.pod.cluster.local</p></div> <div class="diagram-card"><p>但 Pod DNS 名不常用，主要用 Service DNS 名。</p></div> </div>
   </div>
 </div>
 <h4 id="问题--场景-4">问题 / 场景</h4>
@@ -1403,7 +1508,16 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb40-1"><a href=
 <span id="cb40-58"><a href="#cb40-58" aria-hidden="true" tabindex="-1"></a><span class="co"># ← 前端 → ctts-backend Service → 后端 Pod → mysql Service → MySQL Pod</span></span>
 <span id="cb40-59"><a href="#cb40-59" aria-hidden="true" tabindex="-1"></a><span class="co">#   全链路通过 Service 名通信，无需关心任何 IP</span></span></code></pre></div>
 <h4 id="图示-4">图示</h4>
-<div class="visual"> <div class="visual-title">图示 22：CoreDNS 服务发现全景：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">CoreDNS 服务发现全景：</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">K8s 集群</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">CoreDNS Pod 监听 Service 创建/删除</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">(kube-system) 自动维护 DNS 记录</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">DNS 记录</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">mysql.ctts.svc.cluster.local → 10.96.123.456</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ctts-backend.ctts.svc.cluster.local → 10.96.234.10</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ctts-frontend.ctts.svc.cluster.local → 10.96.234.20</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">后端 Pod</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">/etc/resolv.conf:</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">nameserver 10.96.0.10 (CoreDNS)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">search ctts.svc.cluster.local ...</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">访问 mysql → DNS 查询 → 10.96.123.456</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">→ kube-proxy iptables → MySQL Pod</span></li> <li><span class="tree-label">CTTS 服务间通过 Service 名通信：</span></li> <li><span class="tree-label">浏览器</span></li> <li>&nbsp;&nbsp;<span class="tree-label">:8081 (port-forward)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Frontend Pod (Nginx)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">/ → 返回 HTML</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">/api → proxy_pass</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">http://ctts-backend:8080 ← Service 名（同 namespace 简写）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">DNS 解析 ctts-backend → 10.96.234.10</span></li> <li>&nbsp;&nbsp;<span class="tree-label">访问 10.96.234.10:8080</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Service: ctts-backend</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ClusterIP: 10.96.234.10</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">负载均衡到 3 个后端 Pod</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Backend Pod &#215; 3</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">连接 mysql:3306 ← Service 名</span></li> <li>&nbsp;&nbsp;<span class="tree-label">DNS 解析 mysql → 10.96.123.456</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Service: mysql</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ClusterIP: 10.96.123.456</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">MySQL Pod</span></li> <li><span class="tree-label">全链路：浏览器 → Frontend → ctts-backend Service → Backend → mysql Service → MySQL</span></li> <li><span class="tree-label">所有服务间通信都用 Service DNS 名，无需关心任何 IP</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 22：CoreDNS 服务发现全景：</div>
+<div class="edu-diagram">
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>短名称</h4><p>mysql：同 namespace 内最常用。</p></div>
+<div class="diagram-card good"><h4>带 namespace</h4><p>mysql.ctts：跨 namespace 时更明确。</p></div>
+<div class="diagram-card"><h4>完整域名</h4><p>mysql.ctts.svc.cluster.local：完整集群 DNS 名称。</p></div>
+</div>
+<div class="diagram-callout">CoreDNS 把 Service 名称解析为 ClusterIP，让应用避免硬编码 Pod IP。</div>
+</div>
 </div>
 <h4 id="易错点-4">易错点</h4>
 <ol type="1">
@@ -1445,12 +1559,27 @@ Deployment（MySQL / Backend / Frontend）分别编写标准 Service YAML
   </div>
 </div>
 <p><strong>三个 Service 设计原则</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 24：mysql Service（ClusterIP）</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>mysql Service（ClusterIP）</p></div> <div class="diagram-step"><p>类型：ClusterIP（仅后端访问，不对外）</p></div> <div class="diagram-step"><p>端口：3306 → 3306</p></div> <div class="diagram-step"><p>selector: app=ctts-mysql</p></div> <div class="diagram-step"><p>用途：后端通过 mysql.ctts.svc.cluster.local:3306 访问数据库</p></div> <div class="diagram-step"><p>ctts-backend Service（ClusterIP）</p></div> <div class="diagram-step"><p>类型：ClusterIP（仅前端访问，不对外）</p></div> <div class="diagram-step"><p>端口：8080 → 8080</p></div> <div class="diagram-step"><p>selector: app=ctts-backend</p></div> <div class="diagram-step"><p>用途：前端 Nginx 通过 ctts-backend.ctts.svc.cluster.local:8080 反向代理</p></div> <div class="diagram-step"><p>ctts-frontend Service（ClusterIP，默认；NodePort，调试时）</p></div> <div class="diagram-step"><p>类型：ClusterIP（默认）+ NodePort（临时对外调试）</p></div> <div class="diagram-step"><p>端口：80 → 80</p></div> <div class="diagram-step"><p>selector: app=ctts-frontend</p></div> <div class="diagram-step"><p>用途：集群内访问前端；外部访问通过 NodePort 或 port-forward</p></div> <div class="diagram-step"><p>生产对外：用 Ingress（第 19 次课学），不用 NodePort</p></div> <div class="diagram-step"><p>设计原则：</p></div> <div class="diagram-step"><p>① 内部服务（数据库、后端 API）一律 ClusterIP，不对外暴露（安全原则）</p></div> <div class="diagram-step"><p>② 前端默认 ClusterIP，对外用 Ingress 或 NodePort（临时调试）</p></div> <div class="diagram-step"><p>③ 三个 Service 都用 ClusterIP，对外访问统一通过 Ingress（下节课）</p></div> <div class="diagram-step"><p>④ Service 名与 Deployment 名一致，便于对应</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 24：mysql Service（ClusterIP）</div>
+<div class="edu-diagram">
+<div class="docker-route">
+<div class="diagram-panel"><h4><span>DB</span> mysql Service</h4><p>ClusterIP，只在集群内部暴露 3306。</p></div>
+<div class="diagram-panel good"><h4><span>API</span> backend</h4><p>通过 mysql:3306 连接数据库，不关心 MySQL Pod IP。</p></div>
+<div class="diagram-panel"><h4><span>PV</span> 数据持久化</h4><p>MySQL Pod 重建后，Service 名称不变，数据由 PVC 保留。</p></div>
+</div>
+</div>
 </div>
 <p><strong>为什么三个 Service 都用 ClusterIP？</strong></p>
-<div class="visual"> <div class="visual-title">图示 25：安全考虑（最小暴露原则）：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>安全考虑（最小暴露原则）：</p></div> <div class="diagram-note-card"><p>mysql Service 仅后端需要访问，对外暴露会增大攻击面</p></div> <div class="diagram-note-card"><p>ctts-backend Service 仅前端需要访问，对外暴露会绕过前端的统一入口</p></div> <div class="diagram-note-card"><p>ctts-frontend Service 是对外入口，但本课用 port-forward 临时调试</p></div> <div class="diagram-note-card"><p>生产环境用 Ingress 统一对外（第 19 次课），不直接暴露 Service</p></div> <div class="diagram-note-card"><p>简化考虑：</p></div> <div class="diagram-note-card"><p>三个 ClusterIP Service 配置简单，YAML 结构一致</p></div> <div class="diagram-note-card"><p>内部全链路通过 DNS 名通信，无需 NodePort 的节点端口</p></div> <div class="diagram-note-card"><p>临时调试用 port-forward，不影响 Service 配置</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 25：安全考虑（最小暴露原则）：</div>
+<div class="edu-diagram">
+<div class="diagram-grid three">
+<div class="diagram-card good"><h4>MySQL</h4><p>ClusterIP，仅后端在集群内访问。</p></div>
+<div class="diagram-card"><h4>Backend</h4><p>ClusterIP，供前端或 Ingress 内部路由访问。</p></div>
+<div class="diagram-card warn"><h4>Frontend / Ingress</h4><p>只有真正入口暴露给用户。</p></div>
+</div>
+<div class="diagram-callout">最小暴露原则：能不出集群就不出集群，能通过 Ingress 统一入口就不要散开多个外部端口。</div>
+</div>
 </div>
 <h4 id="问题--场景-5">问题 / 场景</h4>
 <p><strong>问：为什么前端 Service 不直接用 NodePort 对外？</strong></p>
@@ -1717,7 +1846,15 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb46-1"><a href=
 <span id="cb46-162"><a href="#cb46-162" aria-hidden="true" tabindex="-1"></a><span class="co"># NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE</span></span>
 <span id="cb46-163"><a href="#cb46-163" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-frontend   ClusterIP   10.96.234.20    &lt;none&gt;        80/TCP    10m</span></span></code></pre></div>
 <h4 id="图示-5">图示</h4>
-<div class="visual"> <div class="visual-title">图示 26：CTTS 三 Service 与三 Deployment 全景：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">CTTS 三 Service 与三 Deployment 全景：</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">K8s 集群（Minikube） Namespace: ctts</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Service 层（本节课创建）</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">mysql ctts-backend ctts-frontend</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ClusterIP ClusterIP ClusterIP</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">:3306 :8080 :80</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">selector: selector: selector:</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ctts-mysql ctts- ctts-frontend</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">backend</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Endpoints Endpoints Endpoints</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Deployment 层（第 17 次课创建）</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ctts-mysql ctts-backend ctts-frontend</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">1 副本 3 副本 2 副本</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">MySQL Pod Backend Pod Frontend Pod</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">&#215; 3 &#215; 2</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">通信链路：</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Frontend → ctts-backend:8080 → Backend Pod → mysql:3306 → MySQL Pod</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">外部 → port-forward / NodePort → ctts-frontend:80 → Frontend Pod</span></li> <li><span class="tree-label">Service 创建流程：</span></li> <li><span class="tree-label">① 编写 ctts-services.yaml（三个 Service）</span></li> <li><span class="tree-label">② kubectl apply -f ctts-services.yaml</span></li> <li><span class="tree-label">③ kubectl get svc 验证创建</span></li> <li><span class="tree-label">④ kubectl get endpoints 验证后端关联</span></li> <li><span class="tree-label">⑤ kubectl exec nslookup 验证 DNS 解析</span></li> <li><span class="tree-label">⑥ kubectl exec curl 验证服务间通信</span></li> <li><span class="tree-label">⑦ kubectl port-forward 临时访问前端</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 26：CTTS 三 Service 与三 Deployment 全景：</div>
+<div class="edu-diagram">
+<div class="docker-route">
+<div class="diagram-panel"><h4><span>WEB</span> frontend-service</h4><p>指向 frontend Deployment 的 Pod，后续由 Ingress 对外暴露。</p></div>
+<div class="diagram-panel good"><h4><span>API</span> backend-service</h4><p>指向 backend Deployment 的多个副本，承接业务 API。</p></div>
+<div class="diagram-panel"><h4><span>DB</span> mysql-service</h4><p>指向 MySQL 单副本，提供稳定数据库入口。</p></div>
+</div>
+</div>
 </div>
 <h4 id="易错点-5">易错点</h4>
 <ol type="1">
@@ -1846,7 +1983,21 @@ K8s 常用。</p></li>
 <hr />
 <h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
 <h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
-<div class="visual"> <div class="visual-title">图示 27：Service 服务发现与负载均衡</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">Service 服务发现与负载均衡</span></li> <li><span class="tree-label">Service 概念与作用（K18-1）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">为什么需要 Service：Pod IP 不固定 / Pod 会重建 / 需要负载均衡</span></li> <li>&nbsp;&nbsp;<span class="tree-label">三大能力：稳定 IP（ClusterIP）+ 稳定 DNS 名 + 负载均衡</span></li> <li>&nbsp;&nbsp;<span class="tree-label">与 Pod 关系：selector 关联 Pod，Endpoints 跟踪 Pod IP</span></li> <li><span class="tree-label">Service 四种类型（K18-2）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">ClusterIP（默认）：集群内部访问</span></li> <li>&nbsp;&nbsp;<span class="tree-label">NodePort：节点端口对外（30000-32767）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">LoadBalancer：云负载均衡对外（云厂商环境）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">ExternalName：CNAME 映射外部域名</span></li> <li>&nbsp;&nbsp;<span class="tree-label">选型：内部 ClusterIP / 临时对外 NodePort / 云生产 LB / 外部对接 ExternalName</span></li> <li><span class="tree-label">Service YAML 结构（K18-3）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">apiVersion: v1（注意不是 apps/v1）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">kind: Service</span></li> <li>&nbsp;&nbsp;<span class="tree-label">metadata.name（决定 DNS 名第一段）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">spec.type / selector / ports</span></li> <li>&nbsp;&nbsp;<span class="tree-label">port：Service 端口</span></li> <li>&nbsp;&nbsp;<span class="tree-label">targetPort：Pod 端口（= containerPort）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">nodePort：节点端口（仅 NodePort/LoadBalancer）</span></li> <li><span class="tree-label">标签选择器与 Endpoints（K18-4）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">selector 匹配 Pod labels</span></li> <li>&nbsp;&nbsp;<span class="tree-label">Endpoints：后端 Pod IP:端口列表（自动维护）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">只有 Ready 的 Pod 才在 Endpoints</span></li> <li>&nbsp;&nbsp;<span class="tree-label">kubectl get endpoints 查看</span></li> <li>&nbsp;&nbsp;<span class="tree-label">无选择器 Service + 手动 Endpoints（对接外部 IP）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">排查：Endpoints 为空 = selector 错 / Pod NotReady / namespace 不同</span></li> <li><span class="tree-label">DNS 服务发现（K18-5）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">CoreDNS 组件（kube-system namespace）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">DNS 名格式：service-name.namespace.svc.cluster.local</span></li> <li>&nbsp;&nbsp;<span class="tree-label">同 namespace 简写：service-name</span></li> <li>&nbsp;&nbsp;<span class="tree-label">跨 namespace：.</span></li> <li>&nbsp;&nbsp;<span class="tree-label">Pod /etc/resolv.conf 自动配置 nameserver + search</span></li> <li>&nbsp;&nbsp;<span class="tree-label">生产用 DNS 名，不写死 IP</span></li> <li><span class="tree-label">CTTS 各 Service 创建（K18-6）</span></li> <li><span class="tree-label">mysql Service（ClusterIP, app=ctts-mysql, 3306）</span></li> <li><span class="tree-label">ctts-backend Service（ClusterIP, app=ctts-backend, 8080）</span></li> <li><span class="tree-label">ctts-frontend Service（ClusterIP, app=ctts-frontend, 80）</span></li> <li><span class="tree-label">三个 Service 都 ClusterIP（最小暴露原则）</span></li> <li><span class="tree-label">验证：kubectl get svc / endpoints / nslookup / curl</span></li> <li><span class="tree-label">全链路：Frontend → ctts-backend → Backend → mysql → MySQL</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 27：Service 服务发现与负载均衡</div>
+<div class="edu-diagram">
+<div class="mindmap-grid">
+<div class="mind-root">Service<br>服务发现与负载均衡</div>
+<div class="mind-branch-grid">
+<div class="diagram-card"><h4>为什么需要 Service</h4><p>Pod IP、数量、位置都不稳定，需要稳定入口。</p></div>
+<div class="diagram-card"><h4>核心机制</h4><p>selector 选中 Pod，Endpoints/EndpointSlice 维护真实后端。</p></div>
+<div class="diagram-card"><h4>Service 类型</h4><p>ClusterIP、NodePort、LoadBalancer、ExternalName 对应不同访问范围。</p></div>
+<div class="diagram-card"><h4>DNS 发现</h4><p>CoreDNS 提供 service.namespace.svc.cluster.local 名称解析。</p></div>
+<div class="diagram-card"><h4>CTTS 实践</h4><p>frontend、backend、mysql 都用 Service 建立稳定访问入口。</p></div>
+<div class="diagram-card"><h4>暴露原则</h4><p>内部服务用 ClusterIP，对外入口留给 Ingress 或网关。</p></div>
+</div>
+</div>
+</div>
 </div>
 <h3 id="一句话总结">一句话总结</h3>
 <blockquote>

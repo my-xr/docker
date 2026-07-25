@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -153,8 +153,16 @@ K17-1：实践总览与 CTTS 三服务 Deployment 规划</h3>
 YAML"，避免边写边改导致部署混乱。</p>
 <h4 id="原理">原理</h4>
 <p><strong>CTTS 三服务部署架构</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 1：K8s 集群（Minikube）</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>K8s 集群（Minikube）</p></div> <div class="diagram-note-card"><b>Namespace</b><p>ctts</p></div> <div class="diagram-note-card"><p>MySQL Dep Backend Dep Frontend Dep</p></div> <div class="diagram-note-card"><p>1 副本 3 副本 2 副本</p></div> <div class="diagram-note-card"><p>端口 3306 端口 8080 端口 80</p></div> <div class="diagram-note-card"><p>数据卷持久化 连 MySQL Nginx 静态</p></div> <div class="diagram-note-card"><p>Pod Pod Pod Pod Pod Pod</p></div> <div class="diagram-note-card"><p>依赖顺序</p></div> <div class="diagram-note-card"><p>MySQL 先 → 后端次 → 前端最后</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 1：K8s 集群（Minikube）</div>
+<div class="edu-diagram">
+<div class="diagram-panel"><h4>CTTS 三服务部署在同一个 Minikube 集群中</h4><p>本课关注工作负载资源本身：先把 MySQL、Backend、Frontend 作为 Deployment 跑起来，Service 访问在下一课系统解决。</p></div>
+<div class="docker-route">
+<div class="diagram-panel"><h4><span>DB</span> MySQL</h4><p>单副本，保存业务数据，是后端启动前的依赖。</p></div>
+<div class="diagram-panel good"><h4><span>API</span> Backend</h4><p>SpringBoot 多副本，读取环境变量连接 MySQL。</p></div>
+<div class="diagram-panel"><h4><span>WEB</span> Frontend</h4><p>Vue3 + Nginx 多副本，对外页面入口的工作负载雏形。</p></div>
+</div>
+</div>
 </div>
 <p><strong>资源规划表</strong>：</p>
 <table>
@@ -210,8 +218,16 @@ StatefulSet + PV/PVC，第 22 次课学）；② 后端是核心 API 服务，3
 副本是高可用最低要求；③ 前端是静态资源，2 副本足够，且资源占用小。</p>
 </blockquote>
 <p><strong>标签设计</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 2：所有资源统一使用 app 标签区分服务，tier 标签区分层级：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>所有资源统一使用 app 标签区分服务，tier 标签区分层级：</p></div> <div class="diagram-note-card"><b>MySQL</b><p>app=ctts-mysql, tier=database</p></div> <div class="diagram-note-card"><b>后端</b><p>app=ctts-backend, tier=backend</p></div> <div class="diagram-note-card"><b>前端</b><p>app=ctts-frontend, tier=frontend</p></div> <div class="diagram-note-card"><p>Deployment、Pod、（后续）Service 都打对应标签</p></div> <div class="diagram-note-card"><p>Deployment.metadata.labels: app / tier</p></div> <div class="diagram-note-card"><p>Deployment.spec.template.metadata.labels: app / tier / version</p></div> <div class="diagram-note-card"><p>Pod 继承 template.labels，自动带上 app / tier / version</p></div> <div class="diagram-note-card"><p>标签设计原则：</p></div> <div class="diagram-note-card"><p>① app 标签唯一标识服务（ctts-mysql / ctts-backend / ctts-frontend）</p></div> <div class="diagram-note-card"><p>② tier 标签标识层级（database / backend / frontend），便于按层筛选</p></div> <div class="diagram-note-card"><p>③ version 标签标识版本（v1 / v2），便于滚动更新时区分</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 2：所有资源统一使用 app 标签区分服务，tier 标签区分层级：</div>
+<div class="edu-diagram">
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>app 标签</h4><p>区分具体服务：ctts-mysql、ctts-backend、ctts-frontend。</p></div>
+<div class="diagram-card good"><h4>tier 标签</h4><p>区分系统层级：database、backend、frontend。</p></div>
+<div class="diagram-card"><h4>version 标签</h4><p>标识版本：v1、v2，服务滚动更新和排查时很有用。</p></div>
+</div>
+<div class="diagram-callout">标签不是装饰，它决定 Deployment 管哪些 Pod、Service 找哪些 Pod、kubectl 过滤哪些资源。</div>
+</div>
 </div>
 <p><strong>Namespace 规划</strong>：</p>
 <pre><code>本次实践统一用 ctts namespace（第 14 次课已创建）：
@@ -230,8 +246,15 @@ StatefulSet + PV/PVC，第 22 次课学）；② 后端是核心 API 服务，3
   ctts-test  测试环境
   ctts-prod  生产环境</code></pre>
 <p><strong>部署顺序（依赖关系）</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 3：部署顺序：MySQL → 后端 → 前端</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><b>部署顺序</b><p>MySQL → 后端 → 前端</p></div> <div class="diagram-note-card"><b>原因</b><p>依赖关系决定</p></div> <div class="diagram-note-card"><p>MySQL 后端 前端</p></div> <div class="diagram-note-card"><p>先启动 ▶ 依赖 MySQL ▶ 依赖后端</p></div> <div class="diagram-note-card"><p>数据就绪 才能启动 才能启动</p></div> <div class="diagram-note-card"><p>① MySQL 先启动，等待数据就绪（可被连接）</p></div> <div class="diagram-note-card"><p>② 后端启动，连接 MySQL（环境变量 DB_HOST 指向 MySQL Service）</p></div> <div class="diagram-note-card"><p>③ 前端启动，Nginx 反向代理到后端</p></div> <div class="diagram-note-card"><b>注意</b><p>本课还没学 Service（第 18 次课），后端连 MySQL 用 Service DNS 名</p></div> <div class="diagram-note-card"><p>mysql.ctts.svc.cluster.local（需提前创建 mysql Service，或用 Pod IP 临时调试）</p></div> <div class="diagram-note-card"><p>本课为简化，先部署 Deployment，Service 在第 18 次课统一配置</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 3：部署顺序：MySQL → 后端 → 前端</div>
+<div class="edu-diagram">
+<div class="docker-chain three">
+<div class="diagram-card"><h4>先部署 MySQL</h4><p>数据库先 Running，后端才有可连接的存储依赖。</p></div>
+<div class="diagram-card good"><h4>再部署 Backend</h4><p>后端通过环境变量读取数据库地址、账号和密码。</p></div>
+<div class="diagram-card"><h4>最后部署 Frontend</h4><p>前端 Nginx 作为页面入口，后续再通过 Service/Ingress 完成访问链路。</p></div>
+</div>
+</div>
 </div>
 <h4 id="问题--场景">问题 / 场景</h4>
 <p><strong>问：为什么 MySQL 用 1 副本而不是 3 副本？</strong></p>
@@ -363,8 +386,15 @@ YAML 并应用到集群的过程。MySQL 是 CTTS
 资源限制要充足（InnoDB 缓冲池需要内存）。</p>
 <h4 id="原理-1">原理</h4>
 <p><strong>MySQL Deployment 的关键设计点</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 5：副本数：1</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>副本数：1</p></div> <div class="diagram-step"><p>MySQL 是有状态应用，多副本数据冲突</p></div> <div class="diagram-step"><p>本课用 1 副本 Deployment 简化（生产用 StatefulSet）</p></div> <div class="diagram-step"><p>镜像：mysql:8.0</p></div> <div class="diagram-step"><p>官方镜像，版本明确（不用 :latest）</p></div> <div class="diagram-step"><p>端口 3306</p></div> <div class="diagram-step"><p>环境变量：</p></div> <div class="diagram-step"><p>MYSQL_ROOT_PASSWORD：root 用户密码（必须设置，否则启动失败）</p></div> <div class="diagram-step"><p>MYSQL_DATABASE：自动创建的数据库（ctts）</p></div> <div class="diagram-step"><p>MYSQL_USER / MYSQL_PASSWORD：业务用户（可选）</p></div> <div class="diagram-step"><p>数据持久化：</p></div> <div class="diagram-step"><p>本课用 emptyDir 卷（Pod 删除数据丢失，仅实践用）</p></div> <div class="diagram-step"><p>生产用 PersistentVolumeClaim（第 22 次课学）</p></div> <div class="diagram-step"><p>挂载路径：/var/lib/mysql（MySQL 数据目录）</p></div> <div class="diagram-step"><p>资源限制：</p></div> <div class="diagram-step"><p>requests: cpu=500m, memory=512Mi（InnoDB 缓冲池）</p></div> <div class="diagram-step"><p>limits: cpu=1000m, memory=1Gi</p></div> <div class="diagram-step"><p>内存太小会 OOM，CPU 太小会查询慢</p></div> <div class="diagram-step"><p>标签：</p></div> <div class="diagram-step"><p>app=ctts-mysql, tier=database</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 5：副本数：1</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel warn"><span class="diagram-badge warn">MySQL</span><h4>副本数 1</h4><p>数据库是有状态服务，本课先用单副本降低复杂度，避免多个副本同时写同一份数据。</p></div>
+<div class="diagram-panel good"><span class="diagram-badge good">Backend / Frontend</span><h4>副本数可大于 1</h4><p>无状态服务更适合多副本，后续可通过 Service 负载均衡。</p></div>
+</div>
+<div class="diagram-callout">这张图的核心不是“1 这个数字”，而是区分有状态和无状态工作负载。</div>
+</div>
 </div>
 <p><strong>MySQL 官方镜像的环境变量</strong>：</p>
 <pre><code>mysql:8.0 镜像支持的环境变量：
@@ -664,8 +694,16 @@ Deployment YAML 并应用到集群的过程。后端是 CTTS 的核心 API
 6. 标签：
    - app=ctts-backend, tier=backend, version=v1</code></pre>
 <p><strong>后端连接 MySQL 的环境变量传递</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 7：SpringBoot 应用通常用环境变量覆盖 application.yml 配置：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>SpringBoot 应用通常用环境变量覆盖 application.yml 配置：</p></div> <div class="diagram-note-card"><p>application.yml:</p></div> <div class="diagram-note-card"><p>spring:</p></div> <div class="diagram-note-card"><p>datasource:</p></div> <div class="diagram-note-card"><b>url</b><p>jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:ctts}</p></div> <div class="diagram-note-card"><b>username</b><p>${DB_USER:root}</p></div> <div class="diagram-note-card"><b>password</b><p>${DB_PASSWORD:}</p></div> <div class="diagram-note-card"><p>Deployment YAML 环境变量覆盖：</p></div> <div class="diagram-note-card"><p>env:</p></div> <div class="diagram-note-card"><b>name</b><p>DB_HOST</p></div> <div class="diagram-note-card"><b>value</b><p>&quot;mysql.ctts.svc.cluster.local&quot;</p></div> <div class="diagram-note-card"><b>name</b><p>DB_PORT</p></div> <div class="diagram-note-card"><b>value</b><p>&quot;3306&quot;</p></div> <div class="diagram-note-card"><b>name</b><p>DB_NAME</p></div> <div class="diagram-note-card"><b>value</b><p>&quot;ctts&quot;</p></div> <div class="diagram-note-card"><b>name</b><p>DB_USER</p></div> <div class="diagram-note-card"><b>value</b><p>&quot;ctts&quot;</p></div> <div class="diagram-note-card"><b>name</b><p>DB_PASSWORD</p></div> <div class="diagram-note-card"><b>value</b><p>&quot;ctts123456&quot;</p></div> <div class="diagram-note-card"><p>SpringBoot 启动时读取环境变量，覆盖 application.yml 的默认值</p></div> <div class="diagram-note-card"><p>→ 后端连接到 K8s 集群中的 MySQL</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 7：SpringBoot 应用通常用环境变量覆盖 application.yml 配置：</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>镜像内默认配置</h4><p>application.yml 提供开发默认值。</p></div>
+<div class="diagram-card good"><h4>Deployment env</h4><p>在 YAML 中写 SPRING_DATASOURCE_URL、USERNAME、PASSWORD 等环境变量。</p></div>
+<div class="diagram-card"><h4>容器启动</h4><p>SpringBoot 启动时读取环境变量并覆盖默认配置。</p></div>
+<div class="diagram-card"><h4>连接 MySQL</h4><p>后端按集群环境连接数据库，镜像本身不用重建。</p></div>
+</div>
+</div>
 </div>
 <p><strong>imagePullPolicy 三种策略</strong>：</p>
 <pre><code>Always:        每次都从仓库拉取（生产用，确保最新）
@@ -675,8 +713,14 @@ Never:         从不拉取，只用本地（本地构建镜像用）
 本课用 Never，因为 ctts-backend:v1 是本地构建的镜像（在 Minikube Docker daemon 里）
 如果用 Always 或 IfNotPresent，K8s 会尝试从 Docker Hub 拉取 ctts-backend:v1，拉不到会 ImagePullBackOff</code></pre>
 <p><strong>关于 DB_HOST 的注意点</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 8：本课还没学 Service（第 18 次课），后端连 MySQL 有两种临时方案：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>本课还没学 Service（第 18 次课），后端连 MySQL 有两种临时方案：</p></div> <div class="diagram-note-card"><b>方案 1（推荐）</b><p>先创建 mysql Service，再用 DNS 名</p></div> <div class="diagram-note-card"><p>mysql.ctts.svc.cluster.local</p></div> <div class="diagram-note-card"><p>创建 Service（第 18 次课详学，本课先提供一个最简版）：</p></div> <div class="diagram-note-card"><p>kubectl expose deployment ctts-mysql --port=3306 --name=mysql -n ctts</p></div> <div class="diagram-note-card"><p>→ 创建一个 ClusterIP Service，DNS 名为 mysql.ctts.svc.cluster.local</p></div> <div class="diagram-note-card"><b>方案 2（临时）</b><p>用 MySQL Pod IP</p></div> <div class="diagram-note-card"><p>kubectl get pod -n ctts -l app=ctts-mysql -o jsonpath=&#39;{.items[0].status.podIP}&#39;</p></div> <div class="diagram-note-card"><p>→ 10.244.1.5（举例）</p></div> <div class="diagram-note-card"><b>缺点</b><p>Pod 重建后 IP 变化，环境变量要改，不推荐</p></div> <div class="diagram-note-card"><b>本课推荐方案 1</b><p>先 expose Service，再部署后端</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 8：本课还没学 Service（第 18 次课），后端连 MySQL 有两种临时方案：</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel warn"><span class="diagram-badge warn">临时方案</span><h4>用 Pod IP 或端口转发验证</h4><p>适合课堂短暂验证，但 Pod IP 会变化，不适合作为稳定依赖。</p></div>
+<div class="diagram-panel good"><span class="diagram-badge good">正式方案</span><h4>第 18 次课使用 Service</h4><p>为 MySQL 创建稳定 DNS 和 ClusterIP，Backend 通过 mysql Service 访问。</p></div>
+</div>
+</div>
 </div>
 <h4 id="问题--场景-2">问题 / 场景</h4>
 <p><strong>问：为什么后端用 3 副本，MySQL 用 1 副本？</strong></p>
@@ -1015,8 +1059,16 @@ Service，部署后用 <code>kubectl logs</code> 确认 SpringBoot
    - 前端通常配置 Nginx 反向代理 /api 到后端 Service
    - 本课简化，先部署静态资源，反向代理在第 19 次课 Ingress 详学</code></pre>
 <p><strong>前端镜像的构建（回顾第 8 次课）</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 9：ctts-frontend:v1 镜像结构（第 8 次课已构建）：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">ctts-frontend:v1 镜像结构（第 8 次课已构建）：</div> <div class="stack-layer runtime">Dockerfile：</div> <div class="stack-layer"># 阶段1：构建 Vue3</div> <div class="stack-layer base">FROM node:18-alpine AS builder</div> <div class="stack-layer">WORKDIR /app</div> <div class="stack-layer">COPY package*.json ./</div> <div class="stack-layer">RUN npm install</div> <div class="stack-layer">COPY . .</div> <div class="stack-layer">RUN npm run build # 生成 dist/</div> <div class="stack-layer"># 阶段2：Nginx 托管静态资源</div> <div class="stack-layer base">FROM nginx:1.25-alpine</div> <div class="stack-layer base">COPY --from=builder /app/dist /usr/share/nginx/html</div> <div class="stack-layer">COPY nginx.conf /etc/nginx/conf.d/default.conf</div> <div class="stack-layer">EXPOSE 80</div> <div class="stack-layer">CMD [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</div> <div class="stack-layer">镜像内容：</div> <div class="stack-layer">Nginx 1.25</div> <div class="stack-layer">Vue3 构建产物（dist/）</div> <div class="stack-layer">Nginx 配置（default.conf）</div> <div class="stack-layer">Nginx 配置示例（nginx.conf）：</div> <div class="stack-layer">server {</div> <div class="stack-layer">listen 80;</div> <div class="stack-layer base">server_name localhost;</div> <div class="stack-layer">root /usr/share/nginx/html;</div> <div class="stack-layer">index index.html;</div> <div class="stack-layer">location / {</div> <div class="stack-layer">try_files $uri $uri/ /index.html; # Vue Router history 模式</div> <div class="stack-layer">}</div> <div class="stack-layer">location /api {</div> <div class="stack-layer">proxy_pass http://ctts-backend.ctts.svc.cluster.local:8080; # 反向代理后端</div> <div class="stack-layer">}</div> <div class="stack-layer">}</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 9：ctts-frontend:v1 镜像结构（第 8 次课已构建）：</div>
+<div class="edu-diagram">
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>Nginx runtime</h4><p>最终镜像基于 nginx:alpine，只负责运行静态站点。</p></div>
+<div class="diagram-card good"><h4>dist 静态资源</h4><p>Vue3 构建结果位于 /usr/share/nginx/html。</p></div>
+<div class="diagram-card"><h4>nginx.conf</h4><p>负责静态资源、SPA fallback，以及后续 /api 反向代理。</p></div>
+</div>
+<div class="diagram-callout">前端 Deployment 运行的是“已经构建好的 Nginx 镜像”，不是在集群里 npm run build。</div>
+</div>
 </div>
 <p><strong>前端 Nginx 反向代理后端</strong>：</p>
 <div class="visual"> <div class="visual-title">图示 10：前端容器内的 Nginx 配置：</div> <div class="edu-diagram"> <div class="diagram-grid two"> <div class="diagram-panel"> <h4>前端容器内的反代规则</h4> <div class="diagram-code-tree">location /api {<br>  proxy_pass http://ctts-backend.ctts.svc.cluster.local:8080;<br>}</div> <p>前端 Nginx 使用后端 Service DNS 名转发 API 请求。</p> </div> <div class="diagram-panel"> <h4>请求流程</h4> <div class="diagram-flow"><div class="diagram-card"><h4>浏览器</h4><p>访问前端 Service。</p></div><div class="flow-arrow">→</div><div class="diagram-card"><h4>前端 Pod</h4><p>Nginx 接收请求。</p></div></div> <div class="diagram-grid two"> <div class="diagram-card good"><h4>静态资源 /</h4><p>Nginx 直接返回 HTML、JS、CSS。</p></div> <div class="diagram-card"><h4>API 请求 /api</h4><p>Nginx 反向代理到后端 Service。</p></div> </div> <div class="diagram-callout">需要先创建后端 Service：kubectl expose deployment ctts-backend --name=ctts-backend -n ctts。</div> </div> </div>
@@ -1259,8 +1311,16 @@ K17-5：滚动更新与回滚实践</h3>
 <div class="visual"> <div class="visual-title">图示 12：初始状态：后端 3 副本，全部 v1</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">初始状态：后端 3 副本，全部 v1</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Deployment: ctts-backend</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-v1 (revision 1) 副本数=3</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod1 (v1)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod2 (v1)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod3 (v1)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-v2 (不存在)</span></li> <li><span class="tree-label">执行 kubectl set image deployment/ctts-backend backend=ctts-backend:v2</span></li> <li><span class="tree-label">Step 1：创建 RS-v2，副本数=0</span></li> <li><span class="tree-label">Step 2：RS-v2 副本数+1（Pod4 v2 启动），RS-v1 副本数-1（Pod1 v1 终止）</span></li> <li><span class="tree-label">Step 3：继续替换，Pod5 v2 启动，Pod2 v1 终止</span></li> <li><span class="tree-label">Step 4：继续替换，Pod6 v2 启动，Pod3 v1 终止</span></li> <li><span class="tree-label">Step 5：完成，RS-v1 副本数=0（保留），RS-v2 副本数=3</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Deployment: ctts-backend</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-v1 (revision 1) 副本数=0 ← 保留用于回滚</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-v2 (revision 2) 副本数=3 ← 当前版本</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod4 (v2)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod5 (v2)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod6 (v2)</span></li> <li><span class="tree-label">回滚：kubectl rollout undo deployment/ctts-backend</span></li> <li><span class="tree-label">→ RS-v2 副本数降到 0，RS-v1 副本数升到 3（反向滚动更新）</span></li> <li><span class="tree-label">→ 回到 v1</span></li> </ul> </div> </div>
 </div>
 <p><strong>服务不中断的保证</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 13：滚动更新期间，3 副本 + maxSurge=25% + maxUnavailable=25%：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>滚动更新期间，3 副本 + maxSurge=25% + maxUnavailable=25%：</p></div> <div class="diagram-note-card"><b>时刻 t0</b><p>3 个 v1 Pod（Pod1, Pod2, Pod3）→ 服务可用 ✓</p></div> <div class="diagram-note-card"><b>时刻 t1</b><p>4 个 Pod（Pod1 v1, Pod2 v1, Pod3 v1, Pod4 v2 启动中）</p></div> <div class="diagram-note-card"><p>→ 3 个 v1 仍可用 ✓</p></div> <div class="diagram-note-card"><b>时刻 t2</b><p>3 个 Pod（Pod2 v1, Pod3 v1, Pod4 v2 就绪）</p></div> <div class="diagram-note-card"><p>→ Pod1 终止，但 Pod4 已就绪，3 个可用 ✓</p></div> <div class="diagram-note-card"><b>时刻 t3</b><p>4 个 Pod（Pod2 v1, Pod3 v1, Pod4 v2, Pod5 v2 启动中）</p></div> <div class="diagram-note-card"><p>→ 3 个可用 ✓</p></div> <div class="diagram-note-card"><b>时刻 t4</b><p>3 个 Pod（Pod3 v1, Pod4 v2, Pod5 v2 就绪）</p></div> <div class="diagram-note-card"><p>→ Pod2 终止，3 个可用 ✓</p></div> <div class="diagram-note-card"><b>时刻 t5</b><p>4 个 Pod（Pod3 v1, Pod4 v2, Pod5 v2, Pod6 v2 启动中）</p></div> <div class="diagram-note-card"><p>→ 3 个可用 ✓</p></div> <div class="diagram-note-card"><b>时刻 t6</b><p>3 个 Pod（Pod4 v2, Pod5 v2, Pod6 v2 就绪）</p></div> <div class="diagram-note-card"><p>→ 完成，3 个 v2 可用 ✓</p></div> <div class="diagram-note-card"><p>全程最少 2 个 Pod 可用（maxUnavailable=1），服务不中断</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 13：滚动更新期间，3 副本 + maxSurge=25% + maxUnavailable=25%：</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>v1 稳定</h4><p>Backend 当前 3 个 v1 副本。</p></div>
+<div class="diagram-card good"><h4>先加 v2</h4><p>maxSurge 允许临时多 1 个 Pod，先启动 1 个 v2。</p></div>
+<div class="diagram-card warn"><h4>再减 v1</h4><p>v2 Ready 后删除 1 个 v1，保证可用副本不低于限制。</p></div>
+<div class="diagram-card"><h4>完成替换</h4><p>重复这个节奏，直到全部变成 v2。</p></div>
+</div>
+</div>
 </div>
 <h4 id="问题--场景-4">问题 / 场景</h4>
 <p><strong>问：滚动更新期间用户请求会打到 v1 还是 v2 Pod？</strong></p>
@@ -1500,8 +1560,17 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href=
 <span id="cb28-203"><a href="#cb28-203" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend-9c8d7e6f5    3         3         3       5m    ← v2 RS（当前版本）</span></span>
 <span id="cb28-204"><a href="#cb28-204" aria-hidden="true" tabindex="-1"></a><span class="co"># 可以看到旧 RS 保留（副本=0），用于回滚</span></span></code></pre></div>
 <h4 id="图示-4">图示</h4>
-<div class="visual"> <div class="visual-title">图示 14：滚动更新过程时间轴（3 副本，maxSurge=25%, maxUnavailable=25%）：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>滚动更新过程时间轴（3 副本，maxSurge=25%, maxUnavailable=25%）：</p></div> <div class="diagram-note-card"><b>t0</b><p>[Pod1 v1] [Pod2 v1] [Pod3 v1] 3 个 v1，服务可用 ✓</p></div> <div class="diagram-note-card"><b>t1</b><p>[Pod1 v1] [Pod2 v1] [Pod3 v1] [Pod4 v2⏳] 4 个 Pod，3 v1 可用 ✓</p></div> <div class="diagram-note-card"><p>↑ maxSurge=1 允许超出 1 个</p></div> <div class="diagram-note-card"><b>t2</b><p>[Pod2 v1] [Pod3 v1] [Pod4 v2✓] 3 个 Pod，Pod1 终止，Pod4 就绪 ✓</p></div> <div class="diagram-note-card"><p>↑ maxUnavailable=1 允许少于 1 个</p></div> <div class="diagram-note-card"><b>t3</b><p>[Pod2 v1] [Pod3 v1] [Pod4 v2] [Pod5 v2⏳] 4 个 Pod，3 可用 ✓</p></div> <div class="diagram-note-card"><b>t4</b><p>[Pod3 v1] [Pod4 v2] [Pod5 v2✓] 3 个 Pod，Pod2 终止 ✓</p></div> <div class="diagram-note-card"><b>t5</b><p>[Pod3 v1] [Pod4 v2] [Pod5 v2] [Pod6 v2⏳] 4 个 Pod，3 可用 ✓</p></div> <div class="diagram-note-card"><b>t6</b><p>[Pod4 v2✓] [Pod5 v2] [Pod6 v2✓] 3 个 v2，完成 ✓</p></div> <div class="diagram-note-card"><p>RS-v1 副本数=0（保留），RS-v2 副本数=3（当前）</p></div> <div class="diagram-note-card"><p>全程最少 2 个 Pod 可用，服务不中断 ✓</p></div> <div class="diagram-note-card"><p>回滚过程（反向）：</p></div> <div class="diagram-note-card"><p>kubectl rollout undo</p></div> <div class="diagram-note-card"><p>→ RS-v2 副本数降到 0，RS-v1 副本数升到 3</p></div> <div class="diagram-note-card"><p>→ 等于&quot;反向滚动更新&quot;，服务同样不中断</p></div> <div class="diagram-note-card"><p>kubectl rollout 命令族：</p></div> <div class="diagram-note-card"><p>kubectl set image → 触发滚动更新</p></div> <div class="diagram-note-card"><p>kubectl rollout status → 查看更新状态</p></div> <div class="diagram-note-card"><p>kubectl rollout history → 查看版本历史</p></div> <div class="diagram-note-card"><p>kubectl rollout undo → 回滚（默认上一版，--to-revision 指定版本）</p></div> <div class="diagram-note-card"><p>kubectl rollout pause → 暂停滚动更新（了解）</p></div> <div class="diagram-note-card"><p>kubectl rollout resume → 恢复滚动更新（了解）</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 14：滚动更新过程时间轴（3 副本，maxSurge=25%, maxUnavailable=25%）：</div>
+<div class="edu-diagram">
+<div class="docker-chain five">
+<div class="diagram-card"><h4>T0</h4><p>3 个 backend v1 正常运行。</p></div>
+<div class="diagram-card"><h4>T1</h4><p>创建 1 个 v2，临时总数变为 4。</p></div>
+<div class="diagram-card"><h4>T2</h4><p>v2 Ready 后删除 1 个 v1，总数回到 3。</p></div>
+<div class="diagram-card"><h4>T3</h4><p>重复新增 v2、删除 v1，直到版本完全替换。</p></div>
+<div class="diagram-card good"><h4>T4</h4><p>v2 副本全部 Ready，旧 ReplicaSet 保留为可回滚历史。</p></div>
+</div>
+</div>
 </div>
 <h4 id="易错点-4">易错点</h4>
 <ol type="1">
@@ -1538,8 +1607,16 @@ K17-6：实践复盘与 K8s 部署常见问题排查</h3>
 定位。</p>
 <h4 id="原理-5">原理</h4>
 <p><strong>K8s 部署问题排查的四步法</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 15：四步排查法：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>四步排查法：</p></div> <div class="diagram-note-card"><b>① 看状态</b><p>kubectl get pods（STATUS 列）</p></div> <div class="diagram-note-card"><p>Running 正常运行</p></div> <div class="diagram-note-card"><p>Pending 调度失败（资源不足 / 节点不匹配）</p></div> <div class="diagram-note-card"><p>ContainerCreating 容器创建中（拉镜像 / 挂卷）</p></div> <div class="diagram-note-card"><p>CrashLoopBackOff 容器崩溃重启</p></div> <div class="diagram-note-card"><p>ImagePullBackOff 镜像拉取失败</p></div> <div class="diagram-note-card"><p>ErrImageNeverPull 本地无镜像（Never 策略）</p></div> <div class="diagram-note-card"><p>OOMKilled 内存不足被杀</p></div> <div class="diagram-note-card"><b>② 看详情</b><p>kubectl describe pod</p></div> <div class="diagram-note-card"><b>Events 部分</b><p>调度、拉镜像、启动容器的事件</p></div> <div class="diagram-note-card"><p>看 Warning 和 Error</p></div> <div class="diagram-note-card"><p>看容器状态（State、Last State）</p></div> <div class="diagram-note-card"><b>③ 看日志</b><p>kubectl logs</p></div> <div class="diagram-note-card"><p>应用启动日志</p></div> <div class="diagram-note-card"><p>异常堆栈</p></div> <div class="diagram-note-card"><p>连接错误（如连不上数据库）</p></div> <div class="diagram-note-card"><b>④ 定根因</b><p>根据 ①②③ 信息定位根因，修复 YAML 重新 apply</p></div> <div class="diagram-note-card"><p>配置错误 → 修改 YAML</p></div> <div class="diagram-note-card"><p>镜像问题 → 重新构建镜像</p></div> <div class="diagram-note-card"><p>资源不足 → 调整 requests 或加节点</p></div> <div class="diagram-note-card"><p>依赖问题 → 先部署依赖服务</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 15：四步排查法：</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>看状态</h4><p>kubectl get pods/deploy 判断是 Pending、CrashLoopBackOff、ImagePullBackOff 还是 Ready 问题。</p></div>
+<div class="diagram-card"><h4>看事件</h4><p>kubectl describe pod/deployment 关注 Events、调度、探针、镜像拉取。</p></div>
+<div class="diagram-card"><h4>看日志</h4><p>kubectl logs 查看应用启动和异常栈；必要时查看 previous 日志。</p></div>
+<div class="diagram-card good"><h4>改配置并验证</h4><p>修复 YAML、镜像、环境变量或资源限制后重新 apply，再验证状态。</p></div>
+</div>
+</div>
 </div>
 <p><strong>四大常见问题速查表</strong>：</p>
 <table>
@@ -1585,8 +1662,17 @@ K17-6：实践复盘与 K8s 部署常见问题排查</h3>
 </table>
 <h4 id="问题--场景-5">问题 / 场景</h4>
 <p><strong>问题 1：Pod CrashLoopBackOff</strong></p>
-<div class="visual"> <div class="visual-title">图示 16：kubectl get pods -n ctts -l app=ctts-backend</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>现象：</p></div> <div class="diagram-note-card"><p>kubectl get pods -n ctts -l app=ctts-backend</p></div> <div class="diagram-note-card"><p>NAME READY STATUS RESTARTS AGE</p></div> <div class="diagram-note-card"><p>ctts-backend-7b6f8c9d4-abc12 0/1 CrashLoopBackOff 5 3m</p></div> <div class="diagram-note-card"><p>排查步骤：</p></div> <div class="diagram-note-card"><p># 1. 看 Pod 详情</p></div> <div class="diagram-note-card"><p>kubectl describe pod ctts-backend-7b6f8c9d4-abc12 -n ctts</p></div> <div class="diagram-note-card"><p># 关注 Events 和 Containers.backend.State</p></div> <div class="diagram-note-card"><p># 关键信息：</p></div> <div class="diagram-note-card"><p># Containers:</p></div> <div class="diagram-note-card"><p># backend:</p></div> <div class="diagram-note-card"><b># State</b><p>Waiting</p></div> <div class="diagram-note-card"><b># Reason</b><p>CrashLoopBackOff</p></div> <div class="diagram-note-card"><b># Last State</b><p>Terminated</p></div> <div class="diagram-note-card"><b># Reason</b><p>Error</p></div> <div class="diagram-note-card"><b># Exit Code</b><p>1</p></div> <div class="diagram-note-card"><p># Events:</p></div> <div class="diagram-note-card"><p># Normal Pulled ... Successfully pulled image &quot;ctts-backend:v1&quot;</p></div> <div class="diagram-note-card"><p># Normal Created ... Created container backend</p></div> <div class="diagram-note-card"><p># Normal Started ... Started container backend</p></div> <div class="diagram-note-card"><p># Warning BackOff ... Back-off restarting failed container</p></div> <div class="diagram-note-card"><p># 2. 看应用日志（最关键）</p></div> <div class="diagram-note-card"><p>kubectl logs ctts-backend-7b6f8c9d4-abc12 -n ctts</p></div> <div class="diagram-note-card"><p># 常见报错：</p></div> <div class="diagram-note-card"><p># - &quot;Connection refused mysql.ctts.svc.cluster.local:3306&quot;</p></div> <div class="diagram-note-card"><p># → MySQL Service 未创建或 MySQL Pod 未 Ready</p></div> <div class="diagram-note-card"><p># - &quot;Cannot find class xxx&quot;</p></div> <div class="diagram-note-card"><p># → 镜像构建问题，缺依赖</p></div> <div class="diagram-note-card"><p># - &quot;NullPointerException&quot;</p></div> <div class="diagram-note-card"><p># → 应用代码 bug</p></div> <div class="diagram-note-card"><p># - &quot;OutOfMemoryError&quot;</p></div> <div class="diagram-note-card"><p># → JVM 内存不足，需增大 limits.memory</p></div> <div class="diagram-note-card"><p>常见根因与解决方案：</p></div> <div class="diagram-note-card"><p>① 连不上 MySQL：</p></div> <div class="diagram-note-card"><b>检查 MySQL Pod 是否 Ready</b><p>kubectl get pod -l app=ctts-mysql</p></div> <div class="diagram-note-card"><b>检查 mysql Service 是否存在</b><p>kubectl get svc mysql</p></div> <div class="diagram-note-card"><p>检查环境变量 DB_HOST 是否正确</p></div> <div class="diagram-note-card"><b>解决</b><p>先部署 MySQL 并 Ready，再部署后端</p></div> <div class="diagram-note-card"><p>② 应用启动报错：</p></div> <div class="diagram-note-card"><p>看日志堆栈，修复代码，重新构建镜像</p></div> <div class="diagram-note-card"><p>③ 内存不足：</p></div> <div class="diagram-note-card"><p>kubectl describe pod 看 Last State Reason 是否 OOMKilled</p></div> <div class="diagram-note-card"><p>增大 limits.memory</p></div> <div class="diagram-note-card"><p>③ 配置错误：</p></div> <div class="diagram-note-card"><p>检查环境变量是否正确</p></div> <div class="diagram-note-card"><p>修改 YAML 重新 apply</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 16：kubectl get pods -n ctts -l app=ctts-backend</div>
+<div class="edu-diagram">
+<div class="diagram-panel"><h4>用标签过滤后端 Pod</h4><p>这条命令不是为了“列很多文本”，而是用 app=ctts-backend 只观察后端工作负载的 Pod 状态。</p></div>
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>NAME</h4><p>确认是否属于 backend Deployment 创建的 Pod。</p></div>
+<div class="diagram-card good"><h4>READY</h4><p>3/3 或 1/1 代表容器是否就绪。</p></div>
+<div class="diagram-card warn"><h4>STATUS</h4><p>Running、Pending、CrashLoopBackOff 是第一判断点。</p></div>
+<div class="diagram-card"><h4>RESTARTS / AGE</h4><p>判断是否频繁重启，以及是否刚被重建。</p></div>
+</div>
+</div>
 </div>
 <p><strong>问题 2：Pod ImagePullBackOff</strong></p>
 <pre><code>现象：
@@ -1661,8 +1747,17 @@ K17-6：实践复盘与 K8s 部署常见问题排查</h3>
      # 关注 Allocatable 部分的 cpu 和 memory
      # 看 Allocated resources 部分，了解已分配多少</code></pre>
 <p><strong>问题 4：Deployment READY 0/3（selector 不匹配）</strong></p>
-<div class="visual"> <div class="visual-title">图示 17：kubectl get deployment ctts-backend -n ctts</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>现象：</p></div> <div class="diagram-note-card"><p>kubectl get deployment ctts-backend -n ctts</p></div> <div class="diagram-note-card"><p>NAME READY UP-TO-DATE AVAILABLE AGE</p></div> <div class="diagram-note-card"><p>ctts-backend 0/3 3 0 5m</p></div> <div class="diagram-note-card"><p>kubectl get pods -n ctts -l app=ctts-backend</p></div> <div class="diagram-note-card"><p># 有 3 个 Pod Running，但 Deployment 显示 0/3</p></div> <div class="diagram-note-card"><p>排查步骤：</p></div> <div class="diagram-note-card"><p># 1. 看 Pod 标签</p></div> <div class="diagram-note-card"><p>kubectl get pods -n ctts --show-labels | grep ctts-backend</p></div> <div class="diagram-note-card"><p># 发现 Pod 标签是 app=ctts-api（不是 ctts-backend）</p></div> <div class="diagram-note-card"><p># 2. 看 Deployment selector</p></div> <div class="diagram-note-card"><p>kubectl describe deployment ctts-backend -n ctts</p></div> <div class="diagram-note-card"><b># Selector</b><p>app=ctts-backend</p></div> <div class="diagram-note-card"><p># 但 Pod 标签是 app=ctts-api，selector 匹配不到 Pod</p></div> <div class="diagram-note-card"><p>根因：</p></div> <div class="diagram-note-card"><p>YAML 中 selector.matchLabels 与 template.metadata.labels 不匹配：</p></div> <div class="diagram-note-card"><p>selector:</p></div> <div class="diagram-note-card"><p>matchLabels:</p></div> <div class="diagram-note-card"><b>app</b><p>ctts-backend ← selector 选 app=ctts-backend</p></div> <div class="diagram-note-card"><p>template:</p></div> <div class="diagram-note-card"><p>metadata:</p></div> <div class="diagram-note-card"><p>labels:</p></div> <div class="diagram-note-card"><b>app</b><p>ctts-api ← 但 Pod 标签是 app=ctts-api</p></div> <div class="diagram-note-card"><p>→ Deployment 创建了 Pod，但 selector 找不到它们，READY 永远 0/3</p></div> <div class="diagram-note-card"><p>解决方案：</p></div> <div class="diagram-note-card"><p>修正 YAML，让 selector.matchLabels 与 template.metadata.labels 匹配：</p></div> <div class="diagram-note-card"><p>selector:</p></div> <div class="diagram-note-card"><p>matchLabels:</p></div> <div class="diagram-note-card"><b>app</b><p>ctts-backend ← 改为一致</p></div> <div class="diagram-note-card"><p>template:</p></div> <div class="diagram-note-card"><p>metadata:</p></div> <div class="diagram-note-card"><p>labels:</p></div> <div class="diagram-note-card"><b>app</b><p>ctts-backend ← 改为一致</p></div> <div class="diagram-note-card"><p>kubectl apply -f ctts-backend-deployment.yaml -n ctts</p></div> <div class="diagram-note-card"><p># 修正后新 Pod 会被正确匹配，READY 变为 3/3</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 17：kubectl get deployment ctts-backend -n ctts</div>
+<div class="edu-diagram">
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>READY</h4><p>可用副本 / 期望副本，例如 3/3。</p></div>
+<div class="diagram-card"><h4>UP-TO-DATE</h4><p>已经更新到最新模板的副本数量。</p></div>
+<div class="diagram-card good"><h4>AVAILABLE</h4><p>真正可服务的副本数量。</p></div>
+<div class="diagram-card warn"><h4>AGE</h4><p>结合 rollout 操作判断资源存在时间和更新历史。</p></div>
+</div>
+<div class="diagram-callout">Deployment 看“控制器是否达成期望”，Pod 看“每个实例是否正常运行”。两者要一起看。</div>
+</div>
 </div>
 <h4 id="完整示例-5">完整示例</h4>
 <p><strong>常见问题排查综合演练</strong>：</p>
@@ -1885,7 +1980,15 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href=
 <span id="cb35-216"><a href="#cb35-216" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> delete deployment mismatch-demo <span class="at">-n</span> ctts</span>
 <span id="cb35-217"><a href="#cb35-217" aria-hidden="true" tabindex="-1"></a><span class="co"># deployment.apps &quot;mismatch-demo&quot; deleted</span></span></code></pre></div>
 <h4 id="图示-5">图示</h4>
-<div class="visual"> <div class="visual-title">图示 18：K8s 部署问题排查决策树：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">K8s 部署问题排查决策树：</span></li> <li><span class="tree-label">kubectl get pods</span></li> <li><span class="tree-label">STATUS = Running → 正常 ✓</span></li> <li><span class="tree-label">STATUS = Pending → kubectl describe pod → 看 Events</span></li> <li>&nbsp;&nbsp;<span class="tree-label">Insufficient cpu/memory</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">→ 减少 requests 或加节点</span></li> <li>&nbsp;&nbsp;<span class="tree-label">nodeSelector mismatch</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">→ 修正 nodeSelector</span></li> <li>&nbsp;&nbsp;<span class="tree-label">Taints/Tolerations</span></li> <li>&nbsp;&nbsp;<span class="tree-label">→ 加 toleration 或去污点</span></li> <li><span class="tree-label">STATUS = ContainerCreating → kubectl describe pod → 看 Events</span></li> <li>&nbsp;&nbsp;<span class="tree-label">Failed to mount volume</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">→ 检查 PVC / volume 配置</span></li> <li>&nbsp;&nbsp;<span class="tree-label">拉镜像慢</span></li> <li>&nbsp;&nbsp;<span class="tree-label">→ 等待或换镜像源</span></li> <li><span class="tree-label">STATUS = ImagePullBackOff → kubectl describe pod → 看 Events</span></li> <li>&nbsp;&nbsp;<span class="tree-label">pull access denied</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">→ 镜像名错 / 私有仓库未登录</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">→ 本地镜像用 imagePullPolicy: Never</span></li> <li>&nbsp;&nbsp;<span class="tree-label">network timeout</span></li> <li>&nbsp;&nbsp;<span class="tree-label">→ 检查网络 / 换镜像源</span></li> <li><span class="tree-label">STATUS = CrashLoopBackOff → kubectl logs pod → 看应用日志</span></li> <li>&nbsp;&nbsp;<span class="tree-label">Connection refused (DB)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">→ 检查依赖 Service / Pod</span></li> <li>&nbsp;&nbsp;<span class="tree-label">OOMKilled</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">→ 增大 limits.memory</span></li> <li>&nbsp;&nbsp;<span class="tree-label">应用代码 bug</span></li> <li>&nbsp;&nbsp;<span class="tree-label">→ 修复代码，重新构建镜像</span></li> <li><span class="tree-label">STATUS = ErrImageNeverPull → kubectl describe pod</span></li> <li><span class="tree-label">本地无镜像 + imagePullPolicy=Never</span></li> <li><span class="tree-label">→ 构建镜像 / 改 imagePullPolicy</span></li> <li><span class="tree-label">排查口诀：</span></li> <li><span class="tree-label">一看状态（get pods）</span></li> <li><span class="tree-label">二看详情（describe pod）</span></li> <li><span class="tree-label">三看日志（logs pod）</span></li> <li><span class="tree-label">四定根因（根据信息修复）</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 18：K8s 部署问题排查决策树：</div>
+<div class="edu-diagram">
+<div class="docker-route">
+<div class="diagram-panel"><h4><span>1</span> Pod 没起来</h4><p>看 get pods 和 describe events，优先定位镜像、调度、资源、配置问题。</p></div>
+<div class="diagram-panel warn"><h4><span>2</span> Pod 反复重启</h4><p>看 logs --previous，检查启动参数、环境变量、数据库连接和探针。</p></div>
+<div class="diagram-panel good"><h4><span>3</span> Deployment 不达标</h4><p>看 rollout status、ReplicaSet、selector/labels 是否匹配。</p></div>
+</div>
+</div>
 </div>
 <h4 id="易错点-5">易错点</h4>
 <ol type="1">
@@ -2170,7 +2273,21 @@ MySQL 就绪、下载配置）。本课未用，但生产常用。</li>
 <hr />
 <h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
 <h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
-<div class="visual"> <div class="visual-title">图示 19：工作负载管理实践（CTTS 三服务部署）</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">工作负载管理实践（CTTS 三服务部署）</span></li> <li><span class="tree-label">K17-1 实践总览与规划</span></li> <li>&nbsp;&nbsp;<span class="tree-label">三服务部署架构（MySQL+后端+前端）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">资源规划（副本数/资源限制/标签）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">Namespace 规划（ctts）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">部署顺序（MySQL→后端→前端）</span></li> <li><span class="tree-label">K17-2 MySQL Deployment</span></li> <li>&nbsp;&nbsp;<span class="tree-label">1 副本（有状态简化）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">环境变量（MYSQL_ROOT_PASSWORD 等）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">emptyDir 卷临时持久化（生产用 PVC）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">资源限制（512Mi/1Gi）</span></li> <li><span class="tree-label">K17-3 后端 Deployment</span></li> <li>&nbsp;&nbsp;<span class="tree-label">3 副本（无状态高可用）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">环境变量连接 MySQL（DB_HOST 等）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">imagePullPolicy: Never（本地镜像）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">资源限制（256Mi/512Mi）</span></li> <li><span class="tree-label">K17-4 前端 Deployment</span></li> <li>&nbsp;&nbsp;<span class="tree-label">2 副本（静态资源轻量）</span></li> <li>&nbsp;&nbsp;<span class="tree-label">Nginx 托管 Vue3 dist</span></li> <li>&nbsp;&nbsp;<span class="tree-label">Nginx 反向代理到后端 Service</span></li> <li>&nbsp;&nbsp;<span class="tree-label">资源限制（128Mi/256Mi）</span></li> <li><span class="tree-label">K17-5 滚动更新与回滚</span></li> <li>&nbsp;&nbsp;<span class="tree-label">kubectl set image 触发更新</span></li> <li>&nbsp;&nbsp;<span class="tree-label">kubectl rollout status 观察</span></li> <li>&nbsp;&nbsp;<span class="tree-label">kubectl rollout history 查看版本</span></li> <li>&nbsp;&nbsp;<span class="tree-label">kubectl rollout undo 回滚</span></li> <li>&nbsp;&nbsp;<span class="tree-label">服务不中断保证（maxSurge/maxUnavailable）</span></li> <li><span class="tree-label">K17-6 常见问题排查</span></li> <li><span class="tree-label">CrashLoopBackOff（应用崩溃，看 logs）</span></li> <li><span class="tree-label">ImagePullBackOff（镜像拉取失败）</span></li> <li><span class="tree-label">Pending（资源不足）</span></li> <li><span class="tree-label">Deployment 0/3（selector 不匹配）</span></li> <li><span class="tree-label">四步排查法（get→describe→logs→修复）</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 19：工作负载管理实践（CTTS 三服务部署）</div>
+<div class="edu-diagram">
+<div class="mindmap-grid">
+<div class="mind-root">CTTS<br>工作负载实践</div>
+<div class="mind-branch-grid">
+<div class="diagram-card"><h4>统一标签</h4><p>app 区分服务，tier 区分层级，为 selector、Service、排查打基础。</p></div>
+<div class="diagram-card"><h4>部署顺序</h4><p>MySQL 先运行，Backend 再连接数据库，Frontend 最后作为入口。</p></div>
+<div class="diagram-card"><h4>三类 Deployment</h4><p>MySQL 单副本、Backend 多副本、Frontend Nginx 静态服务。</p></div>
+<div class="diagram-card"><h4>滚动更新</h4><p>用 Deployment 策略实现后端版本平滑替换和回滚。</p></div>
+<div class="diagram-card"><h4>临时访问</h4><p>在 Service 课程前，用端口转发或临时方案完成验证。</p></div>
+<div class="diagram-card"><h4>排查闭环</h4><p>get、describe、logs、events、rollout status 串起部署诊断。</p></div>
+</div>
+</div>
+</div>
 </div>
 <h3 id="一句话总结">一句话总结</h3>
 <blockquote>

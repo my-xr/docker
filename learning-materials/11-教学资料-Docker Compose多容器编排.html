@@ -155,7 +155,23 @@ Compose 概念与作用</h3>
 </blockquote>
 <h4 id="原理">原理</h4>
 <p><strong>单机多容器编排的痛点</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 1：【手工启动 CTTS 三服务的痛苦流程】</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>【手工启动 CTTS 三服务的痛苦流程】</p></div> <div class="diagram-note-card"><p># 1. 创建网络</p></div> <div class="diagram-note-card"><p>docker network create ctts-net</p></div> <div class="diagram-note-card"><p># 2. 创建数据卷</p></div> <div class="diagram-note-card"><p>docker volume create ctts-mysql-data</p></div> <div class="diagram-note-card"><p># 3. 启动 MySQL</p></div> <div class="diagram-note-card"><p>docker run -d --name mysql --network ctts-net \</p></div> <div class="diagram-note-card"><p>e MYSQL_ROOT_PASSWORD=123456 \</p></div> <div class="diagram-note-card"><p>e MYSQL_DATABASE=ctts \</p></div> <div class="diagram-note-card"><b>v ctts-mysql-data</b><p>/var/lib/mysql \</p></div> <div class="diagram-note-card"><b>mysql</b><p>8.0</p></div> <div class="diagram-note-card"><p># 4. 等 MySQL 就绪（多久？看运气）</p></div> <div class="diagram-note-card"><p>sleep 10</p></div> <div class="diagram-note-card"><p># 5. 启动后端</p></div> <div class="diagram-note-card"><p>docker run -d --name backend --network ctts-net \</p></div> <div class="diagram-note-card"><b>p 8080</b><p>8080 \</p></div> <div class="diagram-note-card"><p>e MYSQL_HOST=mysql \</p></div> <div class="diagram-note-card"><p>e MYSQL_PASSWORD=123456 \</p></div> <div class="diagram-note-card"><b>ctts-backend</b><p>v1</p></div> <div class="diagram-note-card"><p># 6. 启动前端</p></div> <div class="diagram-note-card"><p>docker run -d --name frontend --network ctts-net \</p></div> <div class="diagram-note-card"><b>p 80</b><p>80 \</p></div> <div class="diagram-note-card"><b>ctts-frontend</b><p>v1</p></div> <div class="diagram-note-card"><p># 问题：</p></div> <div class="diagram-note-card"><p># - 6 条命令、20+ 参数，记不住、易出错</p></div> <div class="diagram-note-card"><p># - 启动顺序错了后端连不上数据库</p></div> <div class="diagram-note-card"><p># - 重启、迁移、交给同事都要重敲一遍</p></div> <div class="diagram-note-card"><p># - 没法版本化管理（命令不在 Git 里）</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 1：手工启动 CTTS 三服务的痛点链路</div>
+  <div class="edu-diagram">
+    <div class="docker-chain six">
+      <div class="diagram-card"><h4>创建网络</h4><p><code>docker network create ctts-net</code></p></div>
+      <div class="diagram-card"><h4>创建数据卷</h4><p><code>docker volume create ctts-mysql-data</code></p></div>
+      <div class="diagram-card"><h4>启动 MySQL</h4><p>配置 root 密码、数据库名、数据卷和网络。</p></div>
+      <div class="diagram-card warn"><h4>等待就绪</h4><p>常用 <code>sleep</code> 硬等，时间不稳定。</p></div>
+      <div class="diagram-card"><h4>启动 Backend</h4><p>配置端口、数据库主机、密码和镜像版本。</p></div>
+      <div class="diagram-card"><h4>启动 Frontend</h4><p>配置端口和前端镜像，接入同一网络。</p></div>
+    </div>
+    <div class="diagram-grid four">
+      <div class="diagram-callout">命令多，参数多，记不住。</div>
+      <div class="diagram-callout">启动顺序错，后端连不上数据库。</div>
+      <div class="diagram-callout">迁移给同事时需要重敲一遍。</div>
+      <div class="diagram-callout">命令不在 Git 中，难以版本化管理。</div>
+    </div>
   </div>
 </div>
 <p><strong>Compose
@@ -325,8 +341,16 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="
 <h4 id="图示">图示</h4>
 <div class="visual"> <div class="visual-title">图示 2：手工部署 vs Compose 部署：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">手工部署 vs Compose 部署：</span></li> <li><span class="tree-label">手工： Compose：</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">docker network docker-compose.yml</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">create ... services:</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">docker volume mysql: ...</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">create ... backend: ...</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">docker run mysql → frontend: ...</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">docker run ... networks: ...</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">docker run ... volumes: ...</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">（6+ 条命令）</span></li> <li><span class="tree-label">易错、不可复现 ▼</span></li> <li><span class="tree-label">docker compose up -d</span></li> <li><span class="tree-label">（1 条命令搞定）</span></li> </ul> </div> </div>
 </div>
-<div class="visual"> <div class="visual-title">图示 3：Compose 在容器生态中的定位：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">Compose 在容器生态中的定位：</div> <div class="stack-layer app">Kubernetes（集群编排，多机） ← 第 13~24 次课</div> <div class="stack-layer runtime">Docker Compose（单机编排） ← 本节课</div> <div class="stack-layer runtime">Docker Engine（容器引擎，单机） ← 第 1~10 次课</div> <div class="stack-layer">Linux 内核（namespaces/cgroups）</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 3：Compose 在容器生态中的定位：</div>
+<div class="edu-diagram">
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>Dockerfile</h4><p>描述单个服务镜像如何构建。</p></div>
+<div class="diagram-card good"><h4>Docker Compose</h4><p>描述多个容器如何一起运行：服务、网络、卷、依赖和端口。</p></div>
+<div class="diagram-card"><h4>Kubernetes</h4><p>面向集群生产环境，负责调度、自愈、弹性和滚动发布。</p></div>
+</div>
+<div class="diagram-callout">Compose 不是替代 Dockerfile，而是在镜像之上编排多个容器的本地/测试运行形态。</div>
+</div>
 </div>
 <h4 id="易错点">易错点</h4>
 <ol type="1">
@@ -1434,7 +1458,15 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href=
                   ↑                                  │
                   └────── start ─────────────────────┘
                        （不重建，只启动已停止的）</code></pre>
-<div class="visual"> <div class="visual-title">图示 7：up vs start vs down：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>up vs start vs down：</p></div> <div class="diagram-note-card"><b>up</b><p>声明式对齐 → 让真实状态向 YAML 靠拢（创建+启动+重建）</p></div> <div class="diagram-note-card"><b>start</b><p>只启动已存在的停止容器（不创建新容器）</p></div> <div class="diagram-note-card"><b>stop</b><p>停止容器（保留容器与配置）</p></div> <div class="diagram-note-card"><b>down</b><p>停止+删除容器+删除网络（保留卷，加 -v 才删卷）</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 7：Compose up、start、stop、down 的语义差异</div>
+  <div class="edu-diagram">
+    <div class="diagram-grid four">
+      <div class="diagram-card good"><span class="diagram-badge good">up</span><h4>声明式对齐</h4><p>按 YAML 创建、启动，必要时重建服务，让真实状态向配置靠拢。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">start</span><h4>只启动已有容器</h4><p>不会创建新容器，也不会根据 YAML 变化重建。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">stop</span><h4>停止但保留</h4><p>停止容器，保留容器、网络和卷，便于后续 start。</p></div>
+      <div class="diagram-card warn"><span class="diagram-badge warn">down</span><h4>停止并删除</h4><p>删除容器和网络；卷默认保留，加 <code>-v</code> 才删除卷。</p></div>
+    </div>
   </div>
 </div>
 <h4 id="易错点-4">易错点</h4>
@@ -1472,7 +1504,14 @@ YAML 后用 <code>up</code> 而非 <code>start</code>；保留数据用
 <p>并设计正确的依赖顺序（<code>depends_on</code>）、自定义网络（<code>ctts-net</code>）、数据卷（<code>mysql-data</code>）与环境变量配置。</p>
 <h4 id="原理-5">原理</h4>
 <p><strong>CTTS 三服务架构回顾</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 8：Frontend ▶ Backend ▶ MySQL</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>Frontend ▶ Backend ▶ MySQL</p></div> <div class="diagram-note-card"><p>(Vue3) (SpringBoot)</p></div> <div class="diagram-note-card"><b>nginx</b><p>80 tomcat:8080 mysql:3306</p></div> <div class="diagram-note-card"><p>静态资源 SpringBoot API 数据存储</p></div> <div class="diagram-note-card"><p>访问入口 业务逻辑 持久化</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 8：Compose 三服务职责链路</div>
+  <div class="edu-diagram">
+    <div class="docker-chain three">
+      <div class="diagram-card good"><span class="diagram-badge good">frontend</span><h4>Vue3 + Nginx :80</h4><p>用户访问入口，提供静态资源，并通过反向代理把 API 请求转发给后端。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">backend</span><h4>Spring Boot :8080</h4><p>承载业务逻辑和 REST API，连接 MySQL 读写业务数据。</p></div>
+      <div class="diagram-card warn"><span class="diagram-badge warn">mysql</span><h4>MySQL :3306</h4><p>负责持久化存储，使用 volume 保存数据，通常不直接面向外部用户。</p></div>
+    </div>
   </div>
 </div>
 <p><strong>依赖顺序设计</strong>：</p>
@@ -1510,7 +1549,18 @@ YAML 后用 <code>up</code> 而非 <code>start</code>；保留数据用
 depends_on 用默认的 <code>service_started</code> 即可。</li>
 </ul>
 <p><strong>网络设计</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 9：自定义 bridge 网络：ctts-net</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><b>自定义 bridge 网络</b><p>ctts-net</p></div> <div class="diagram-note-card"><p>mysql（容器名 mysql，监听 3306）</p></div> <div class="diagram-note-card"><p>backend（容器名 backend，监听 8080）</p></div> <div class="diagram-note-card"><p>frontend（容器名 frontend，监听 80）</p></div> <div class="diagram-note-card"><p>同网络内服务可通过服务名互访：</p></div> <div class="diagram-note-card"><b>backend 用 mysql</b><p>3306 连数据库</p></div> <div class="diagram-note-card"><b>frontend 用 backend</b><p>8080 调 API（在 Nginx 反代配置里）</p></div> <div class="diagram-note-card"><p>对外暴露：</p></div> <div class="diagram-note-card"><b>mysql</b><p>3306→3306（开发调试用，生产可关）</p></div> <div class="diagram-note-card"><b>backend</b><p>8080→8080（API 调试用）</p></div> <div class="diagram-note-card"><b>frontend</b><p>80→80（用户访问入口）</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 9：Compose 自定义网络 ctts-net</div>
+  <div class="edu-diagram">
+    <div class="diagram-grid three">
+      <div class="diagram-card"><span class="diagram-badge">mysql</span><h4>服务名 mysql</h4><p>监听 3306，backend 使用 <code>mysql:3306</code> 连接数据库。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">backend</span><h4>服务名 backend</h4><p>监听 8080，frontend 的 Nginx 反代配置可使用 <code>backend:8080</code>。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">frontend</span><h4>服务名 frontend</h4><p>监听 80，是用户访问入口，通常映射 <code>80:80</code>。</p></div>
+    </div>
+    <div class="docker-compare">
+      <div class="diagram-panel good"><h4>同网络内</h4><p>Compose 为服务加入 <code>ctts-net</code> 后，服务名就是 DNS 名，容器可互相解析。</p></div>
+      <div class="diagram-panel warn"><h4>对外暴露</h4><p>开发调试可临时暴露 backend/mysql；生产环境优先只暴露 frontend，缩小攻击面。</p></div>
+    </div>
   </div>
 </div>
 <p><strong>数据卷设计</strong>：</p>

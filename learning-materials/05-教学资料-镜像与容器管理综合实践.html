@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -297,7 +297,18 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect mysql:8.0 <span class="at">--format</span> <span class="st">&#39;{{.Config.Env}}&#39;</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 预期输出：[MYSQL_ROOT_PASSWORD= GOSU_VERSION=1.16 MYSQL_MAJOR=8.0 MYSQL_VERSION=8.0.36-1.el8 ...]</span></span></code></pre></div>
 <h4 id="图示">图示</h4>
-<div class="visual"> <div class="visual-title">图示 1：CTTS 三服务镜像准备：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>CTTS 三服务镜像准备：</p></div> <div class="diagram-note-card"><p>Docker Hub (公共仓库)</p></div> <div class="diagram-note-card"><p>mysql nginx openjdk</p></div> <div class="diagram-note-card"><p>8.0 stable 17-slim</p></div> <div class="diagram-note-card"><p>pull pull pull</p></div> <div class="diagram-note-card"><p>本地镜像仓库</p></div> <div class="diagram-note-card"><b>mysql</b><p>8.0 nginx:stable openjdk:17-jdk-slim</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 1：CTTS 三服务镜像准备链路</div>
+  <div class="edu-diagram">
+    <div class="docker-chain three">
+      <div class="diagram-card"><span class="diagram-badge">MySQL</span><h4><code>mysql:8.0</code></h4><p>作为 CTTS 的数据存储服务，提供业务库和初始化表数据。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">Nginx</span><h4><code>nginx:stable</code></h4><p>作为前端静态资源服务器，后续承载 Vue 构建产物。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">OpenJDK</span><h4><code>openjdk:17-jdk-slim</code></h4><p>作为 Java 后端运行基础镜像，支撑 Spring Boot 应用。</p></div>
+    </div>
+    <div class="diagram-grid two">
+      <div class="diagram-callout">来源：Docker Hub 公共仓库，使用 <code>docker pull</code> 拉取。</div>
+      <div class="diagram-callout">结果：三类基础镜像进入本地镜像仓库，为后续启动容器做准备。</div>
+    </div>
   </div>
 </div>
 <h4 id="常见报错排查">常见报错排查</h4>
@@ -535,7 +546,16 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href=
 重定向，可以将宿主机文件内容传给容器内的命令。这是初始化数据库的常用技巧。</p>
 </blockquote>
 <h4 id="图示-1">图示</h4>
-<div class="visual"> <div class="visual-title">图示 2：MySQL 容器初始化流程：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>MySQL 容器初始化流程：</p></div> <div class="diagram-note-card"><p>docker run</p></div> <div class="diagram-note-card"><b>mysql</b><p>8.0 ▶ MySQL 容器</p></div> <div class="diagram-note-card"><p>(镜像) ctts-mysql</p></div> <div class="diagram-note-card"><p>端口 3306</p></div> <div class="diagram-note-card"><p>root 密码 123456</p></div> <div class="diagram-note-card"><p>自动创建 ctts 库</p></div> <div class="diagram-note-card"><p>docker exec -i</p></div> <div class="diagram-note-card"><p>&lt; ctts-init.sql</p></div> <div class="diagram-note-card"><p>CTTS 数据库</p></div> <div class="diagram-note-card"><p>t_user 表（3 条）</p></div> <div class="diagram-note-card"><p>t_question 表（2 条）</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 2：MySQL 容器初始化流程</div>
+  <div class="edu-diagram">
+    <div class="docker-chain five">
+      <div class="diagram-card"><h4>选择镜像</h4><p>使用 <code>mysql:8.0</code> 创建数据库容器。</p></div>
+      <div class="diagram-card"><h4>启动容器</h4><p><code>docker run</code> 指定名称 <code>ctts-mysql</code>、端口 3306 和 root 密码。</p></div>
+      <div class="diagram-card"><h4>创建数据库</h4><p>通过环境变量自动创建 <code>ctts</code> 库。</p></div>
+      <div class="diagram-card"><h4>导入脚本</h4><p>使用 <code>docker exec -i &lt; ctts-init.sql</code> 导入初始化 SQL。</p></div>
+      <div class="diagram-card good"><h4>得到业务数据</h4><p>生成 <code>t_user</code>、<code>t_question</code> 等 CTTS 示例表和数据。</p></div>
+    </div>
   </div>
 </div>
 <h4 id="常见报错排查-1">常见报错排查</h4>
@@ -1357,7 +1377,16 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb54-1"><a href=
 <span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> network connect ctts-net ctts-nginx</span>
 <span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 这样两个容器都能用名字互相访问</span></span></code></pre></div>
 <h4 id="图示-5">图示</h4>
-<div class="visual"> <div class="visual-title">图示 6：容器故障排查流程图：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>容器故障排查流程图：</p></div> <div class="diagram-note-card"><p>容器出问题了</p></div> <div class="diagram-note-card"><p>docker ps -a ▶ 看 Exit Code</p></div> <div class="diagram-note-card"><p>docker logs ▶ 看应用报错</p></div> <div class="diagram-note-card"><p>docker inspect ▶ 看配置、网络、挂载</p></div> <div class="diagram-note-card"><p>docker exec bash ▶ 进容器手动排查</p></div> <div class="diagram-note-card"><p>定位原因 → 修复</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 6：容器故障排查流程</div>
+  <div class="edu-diagram">
+    <div class="docker-chain five">
+      <div class="diagram-card warn"><h4>发现异常</h4><p>容器无法访问、启动失败或服务响应不正常。</p></div>
+      <div class="diagram-card"><h4>看状态</h4><p><code>docker ps -a</code> 查看 STATUS 和 Exit Code。</p></div>
+      <div class="diagram-card"><h4>看日志</h4><p><code>docker logs</code> 定位应用启动异常、配置错误或端口问题。</p></div>
+      <div class="diagram-card"><h4>看配置</h4><p><code>docker inspect</code> 检查端口、网络、挂载、环境变量。</p></div>
+      <div class="diagram-card good"><h4>进容器验证</h4><p><code>docker exec bash</code> 手动排查文件、进程和连通性，定位后修复。</p></div>
+    </div>
   </div>
 </div>
 <h4 id="易错点-5">易错点</h4>

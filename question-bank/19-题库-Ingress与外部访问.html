@@ -139,163 +139,116 @@ YAML(rules/host/path/backend/pathType)、域名虚拟主机与路径路由、TLS
 <hr />
 <h2
 id="一单项选择题30题每题2分共60分">一、单项选择题（30题，每题2分，共60分）</h2>
-<h3 id="19-单选-01-">19-单选-01 ★</h3>
-<p><strong>Ingress 在 Kubernetes
-中主要提供的是哪一层的负载均衡与路由？</strong> A. 二层（数据链路层） B.
-三层（网络层） C. 四层（传输层） D. 七层（应用层）</p>
+<section class="question-card" id="19-单选-01-"><p><strong>19-单选-01 ★</strong> <strong>Ingress 在 Kubernetes 中主要提供的是哪一层的负载均衡与路由？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">二层（数据链路层）</div></li><li><span class="option-label">B</span><div class="option-content">三层（网络层）</div></li><li><span class="option-label">C</span><div class="option-content">四层（传输层）</div></li><li><span class="option-label">D</span><div class="option-content">七层（应用层）</div></li></ul></div>
+<blockquote>
 <p><strong>答案：D</strong> <strong>解析：</strong> Ingress 是
 Kubernetes 中的七层（应用层）路由资源对象，基于 HTTP/HTTPS
 的域名（Host）和路径（Path）进行请求转发，区别于 Service
 的四层（IP+端口）负载均衡。</p>
-<hr />
-<h3 id="19-单选-02-">19-单选-02 ★</h3>
-<p><strong>下列关于 Ingress 与 Service 的区别，描述正确的是？</strong>
-A. 两者都工作在七层 B. Service 只能做四层负载，Ingress 做七层路由 C.
-Ingress 可以替代 Service 直接管理 Pod D. Service 无法与 Ingress
-配合使用</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-02-"><p><strong>19-单选-02 ★</strong> <strong>下列关于 Ingress 与 Service 的区别，描述正确的是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">两者都工作在七层</div></li><li><span class="option-label">B</span><div class="option-content">Service 只能做四层负载，Ingress 做七层路由</div></li><li><span class="option-label">C</span><div class="option-content">Ingress 可以替代 Service 直接管理 Pod</div></li><li><span class="option-label">D</span><div class="option-content">Service 无法与 Ingress 配合使用</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> Service
 提供四层（IP:Port）负载均衡与服务发现，Ingress 在七层基于 HTTP Host/Path
 进行路由；Ingress 通过 Service 间接将流量转发到 Pod，不能替代
 Service。</p>
-<hr />
-<h3 id="19-单选-03-">19-单选-03 ★</h3>
-<p><strong>下列哪个是 Kubernetes 官方维护的 Ingress Controller
-实现之一？</strong> A. Traefik B. HAProxy Ingress C. NGINX Ingress
-Controller D. Kong Ingress</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-03-"><p><strong>19-单选-03 ★</strong> <strong>下列哪个是 Kubernetes 官方维护的 Ingress Controller 实现之一？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Traefik</div></li><li><span class="option-label">B</span><div class="option-content">HAProxy Ingress</div></li><li><span class="option-label">C</span><div class="option-content">NGINX Ingress Controller</div></li><li><span class="option-label">D</span><div class="option-content">Kong Ingress</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong> NGINX Ingress
 Controller 是 Kubernetes 官方维护（kubernetes/ingress-nginx）的 Ingress
 控制器实现之一；Traefik、HAProxy、Kong 均为第三方实现。</p>
-<hr />
-<h3 id="19-单选-04-">19-单选-04 ★★</h3>
-<p><strong>安装 NGINX Ingress Controller
-时，通常通过哪个命令进行部署？</strong> A.
-<code>kubectl apply -f https://k8s.io/ingress-nginx/deploy.yaml</code>
-B. <code>helm install ingress-nginx ingress-nginx/ingress-nginx</code>
-C. <code>docker run -d ingress-nginx</code> D.
-<code>kubeadm init ingress-nginx</code></p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-04-"><p><strong>19-单选-04 ★★</strong> <strong>安装 NGINX Ingress Controller 时，通常通过哪个命令进行部署？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>kubectl apply -f https://k8s.io/ingress-nginx/deploy.yaml</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>helm install ingress-nginx ingress-nginx/ingress-nginx</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>docker run -d ingress-nginx</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>kubeadm init ingress-nginx</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> 官方推荐使用 Helm
 进行安装：<code>helm install ingress-nginx ingress-nginx/ingress-nginx</code>，也可使用
 <code>kubectl apply -f</code> 部署官方 manifest，但 A 中的 URL
 不是官方真实地址；C/D 不是 K8s 部署方式。</p>
-<hr />
-<h3 id="19-单选-05-">19-单选-05 ★</h3>
-<p><strong>Ingress 资源定义中，<code>spec.rules</code>
-字段的作用是？</strong> A. 定义后端 Pod 的副本数 B.
-定义七层路由规则（Host + Path + Backend） C. 定义 TLS 证书 D.
-定义命名空间隔离</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-05-"><p><strong>19-单选-05 ★</strong> <strong>Ingress 资源定义中，<code>spec.rules</code> 字段的作用是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">定义后端 Pod 的副本数</div></li><li><span class="option-label">B</span><div class="option-content">定义七层路由规则（Host + Path + Backend）</div></li><li><span class="option-label">C</span><div class="option-content">定义 TLS 证书</div></li><li><span class="option-label">D</span><div class="option-content">定义命名空间隔离</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 <code>spec.rules</code> 是 Ingress 的核心字段，用于定义基于
 Host（域名）和 Path（路径）的路由规则，每条规则指定一个后端
 Service。</p>
-<hr />
-<h3 id="19-单选-06-">19-单选-06 ★</h3>
-<p><strong>Ingress 资源 YAML
-中，<code>spec.rules[].http.paths[].backend</code>
-字段必须包含哪两个子字段（最简形式）？</strong> A. serviceName 和
-servicePort B. name 和 port C. host 和 path D. kind 和 apiVersion</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-06-"><p><strong>19-单选-06 ★</strong> <strong>Ingress 资源 YAML 中，<code>spec.rules[].http.paths[].backend</code> 字段必须包含哪两个子字段（最简形式）？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">serviceName 和 servicePort</div></li><li><span class="option-label">B</span><div class="option-content">name 和 port</div></li><li><span class="option-label">C</span><div class="option-content">host 和 path</div></li><li><span class="option-label">D</span><div class="option-content">kind 和 apiVersion</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> 自
 networking.k8s.io/v1 起，<code>backend.service</code> 下使用
 <code>name</code>（Service 名称）和
 <code>port</code>（端口号或名称）两个字段。A 是已废弃的
 extensions/v1beta1 写法。</p>
-<hr />
-<h3 id="19-单选-07-">19-单选-07 ★★</h3>
-<p><strong>Kubernetes 1.19+ 中 Ingress 的稳定 API 版本是？</strong> A.
-extensions/v1beta1 B. networking.k8s.io/v1beta1 C. networking.k8s.io/v1
-D. apps/v1</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-07-"><p><strong>19-单选-07 ★★</strong> <strong>Kubernetes 1.19+ 中 Ingress 的稳定 API 版本是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">extensions/v1beta1</div></li><li><span class="option-label">B</span><div class="option-content">networking.k8s.io/v1beta1</div></li><li><span class="option-label">C</span><div class="option-content">networking.k8s.io/v1</div></li><li><span class="option-label">D</span><div class="option-content">apps/v1</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 <code>networking.k8s.io/v1</code> 是 Kubernetes 1.19
 起的稳定版本，extensions/v1beta1 和 networking.k8s.io/v1beta1
 已废弃。</p>
-<hr />
-<h3 id="19-单选-08-">19-单选-08 ★</h3>
-<p><strong>Ingress 中 <code>pathType</code>
-字段的可选值不包括下列哪一项？</strong> A. Prefix B. Exact C.
-ImplementationSpecific D. Regex</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-08-"><p><strong>19-单选-08 ★</strong> <strong>Ingress 中 <code>pathType</code> 字段的可选值不包括下列哪一项？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Prefix</div></li><li><span class="option-label">B</span><div class="option-content">Exact</div></li><li><span class="option-label">C</span><div class="option-content">ImplementationSpecific</div></li><li><span class="option-label">D</span><div class="option-content">Regex</div></li></ul></div>
+<blockquote>
 <p><strong>答案：D</strong> <strong>解析：</strong>
 <code>pathType</code> 在 networking.k8s.io/v1
 中只有三个合法值：<code>Prefix</code>（前缀匹配）、<code>Exact</code>（精确匹配）、<code>ImplementationSpecific</code>（由
 Ingress Controller 决定）。没有 Regex。</p>
-<hr />
-<h3 id="19-单选-09-">19-单选-09 ★★</h3>
-<p><strong>若希望路径 <code>/api</code> 同时匹配
-<code>/api</code>、<code>/api/</code>、<code>/api/v1</code>，应使用哪种
-pathType？</strong> A. Exact B. Prefix C. ImplementationSpecific D.
-Regex</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-09-"><p><strong>19-单选-09 ★★</strong> <strong>若希望路径 <code>/api</code> 同时匹配 <code>/api</code>、<code>/api/</code>、<code>/api/v1</code>，应使用哪种 pathType？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Exact</div></li><li><span class="option-label">B</span><div class="option-content">Prefix</div></li><li><span class="option-label">C</span><div class="option-content">ImplementationSpecific</div></li><li><span class="option-label">D</span><div class="option-content">Regex</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> <code>Prefix</code>
 按路径段前缀匹配，<code>/api</code> 会匹配
 <code>/api</code>、<code>/api/</code>、<code>/api/v1</code>，但不会匹配
 <code>/apiabc</code>。</p>
-<hr />
-<h3 id="19-单选-10-">19-单选-10 ★★</h3>
-<p><strong>若希望路径 <code>/health</code> 仅精确匹配
-<code>/health</code>，不匹配 <code>/health/x</code>，应使用哪种
-pathType？</strong> A. Exact B. Prefix C. ImplementationSpecific D.
-Regex</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-10-"><p><strong>19-单选-10 ★★</strong> <strong>若希望路径 <code>/health</code> 仅精确匹配 <code>/health</code>，不匹配 <code>/health/x</code>，应使用哪种 pathType？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Exact</div></li><li><span class="option-label">B</span><div class="option-content">Prefix</div></li><li><span class="option-label">C</span><div class="option-content">ImplementationSpecific</div></li><li><span class="option-label">D</span><div class="option-content">Regex</div></li></ul></div>
+<blockquote>
 <p><strong>答案：A</strong> <strong>解析：</strong> <code>Exact</code>
 要求 URL 路径与 path
 完全一致才转发，多一个字符都不匹配，适合健康检查等单一固定路径。</p>
-<hr />
-<h3 id="19-单选-11-">19-单选-11 ★</h3>
-<p><strong>Ingress YAML 中 <code>spec.tls[].hosts</code>
-字段的作用是？</strong> A. 列出后端 Pod 的主机名 B. 列出该 TLS
-配置所覆盖的域名列表 C. 列出 Node 节点 D. 列出 Ingress Controller
-实例</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-11-"><p><strong>19-单选-11 ★</strong> <strong>Ingress YAML 中 <code>spec.tls[].hosts</code> 字段的作用是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">列出后端 Pod 的主机名</div></li><li><span class="option-label">B</span><div class="option-content">列出该 TLS 配置所覆盖的域名列表</div></li><li><span class="option-label">C</span><div class="option-content">列出 Node 节点</div></li><li><span class="option-label">D</span><div class="option-content">列出 Ingress Controller 实例</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 <code>spec.tls[].hosts</code> 是字符串数组，列出该 TLS
 证书所覆盖的域名（必须与 rules 中 host 对应），配合
 <code>secretName</code> 使用。</p>
-<hr />
-<h3 id="19-单选-12-">19-单选-12 ★★</h3>
-<p><strong>Ingress 中 TLS 证书存储在哪种 Kubernetes 资源中？</strong> A.
-ConfigMap B. Secret C. ServiceAccount D. PersistentVolume</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-12-"><p><strong>19-单选-12 ★★</strong> <strong>Ingress 中 TLS 证书存储在哪种 Kubernetes 资源中？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">ConfigMap</div></li><li><span class="option-label">B</span><div class="option-content">Secret</div></li><li><span class="option-label">C</span><div class="option-content">ServiceAccount</div></li><li><span class="option-label">D</span><div class="option-content">PersistentVolume</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> TLS 证书和私钥以
 <code>kubernetes.io/tls</code> 类型的 Secret 存储，Ingress 通过
 <code>spec.tls[].secretName</code> 引用该 Secret 完成 HTTPS 配置。</p>
-<hr />
-<h3 id="19-单选-13-">19-单选-13 ★★</h3>
-<p><strong>创建 TLS Secret 时，证书文件和私钥文件对应的 key
-名称分别是？</strong> A. cert 和 key B. tls.crt 和 tls.key C. public.crt
-和 private.key D. certificate 和 privateKey</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-13-"><p><strong>19-单选-13 ★★</strong> <strong>创建 TLS Secret 时，证书文件和私钥文件对应的 key 名称分别是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">cert 和 key</div></li><li><span class="option-label">B</span><div class="option-content">tls.crt 和 tls.key</div></li><li><span class="option-label">C</span><div class="option-content">public.crt 和 private.key</div></li><li><span class="option-label">D</span><div class="option-content">certificate 和 privateKey</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 <code>kubernetes.io/tls</code> 类型 Secret 要求两个固定
 key：<code>tls.crt</code>（证书）和 <code>tls.key</code>（私钥），可用
 <code>kubectl create secret tls --cert --key</code> 自动生成。</p>
-<hr />
-<h3 id="19-单选-14-">19-单选-14 ★</h3>
-<p><strong>下列命令正确创建 TLS Secret 的是？</strong> A.
-<code>kubectl create secret tls my-tls --cert=cert.pem --key=key.pem</code>
-B.
-<code>kubectl create configmap tls my-tls --cert=cert.pem --key=key.pem</code>
-C.
-<code>kubectl create secret generic my-tls --cert=cert.pem --key=key.pem</code>
-D.
-<code>kubectl create secret docker-registry my-tls --cert=cert.pem --key=key.pem</code></p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-14-"><p><strong>19-单选-14 ★</strong> <strong>下列命令正确创建 TLS Secret 的是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>kubectl create secret tls my-tls --cert=cert.pem --key=key.pem</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>kubectl create configmap tls my-tls --cert=cert.pem --key=key.pem</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>kubectl create secret generic my-tls --cert=cert.pem --key=key.pem</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>kubectl create secret docker-registry my-tls --cert=cert.pem --key=key.pem</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案：A</strong> <strong>解析：</strong> 使用
 <code>kubectl create secret tls &lt;name&gt; --cert=&lt;cert&gt; --key=&lt;key&gt;</code>
 创建 <code>kubernetes.io/tls</code> 类型 Secret；generic 是 Opaque
 类型，docker-registry 是镜像仓库凭证。</p>
-<hr />
-<h3 id="19-单选-15-">19-单选-15 ★</h3>
-<p><strong>Ingress 资源 YAML 顶层 <code>kind</code>
-字段的值是？</strong> A. Ingress B. IngressController C. Gateway D.
-Route</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-15-"><p><strong>19-单选-15 ★</strong> <strong>Ingress 资源 YAML 顶层 <code>kind</code> 字段的值是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Ingress</div></li><li><span class="option-label">B</span><div class="option-content">IngressController</div></li><li><span class="option-label">C</span><div class="option-content">Gateway</div></li><li><span class="option-label">D</span><div class="option-content">Route</div></li></ul></div>
+<blockquote>
 <p><strong>答案：A</strong> <strong>解析：</strong> Ingress 资源的
 <code>kind</code> 字段固定为
 <code>Ingress</code>，<code>apiVersion: networking.k8s.io/v1</code>。</p>
-<hr />
-<h3 id="19-单选-16-">19-单选-16 ★</h3>
-<p><strong>下列关于 Ingress 域名虚拟主机的描述，正确的是？</strong> A.
-一个 Ingress 只能配置一个 host B. 多个 host 可在同一 Ingress 中通过
-<code>spec.rules</code> 数组实现虚拟主机 C. 不同 host 必须使用不同的
-Ingress Controller D. 虚拟主机不能与 TLS 同时使用</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-16-"><p><strong>19-单选-16 ★</strong> <strong>下列关于 Ingress 域名虚拟主机的描述，正确的是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">一个 Ingress 只能配置一个 host</div></li><li><span class="option-label">B</span><div class="option-content">多个 host 可在同一 Ingress 中通过 <code>spec.rules</code> 数组实现虚拟主机</div></li><li><span class="option-label">C</span><div class="option-content">不同 host 必须使用不同的 Ingress Controller</div></li><li><span class="option-label">D</span><div class="option-content">虚拟主机不能与 TLS 同时使用</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> Ingress 通过
 <code>spec.rules</code> 数组定义多条规则，每条规则可以指定不同
 host，实现基于域名的虚拟主机路由；不同 host 可共用同一个 Ingress
 Controller。</p>
-<hr />
-<h3 id="19-单选-17-">19-单选-17 ★★</h3>
-<p><strong>下列 Ingress YAML 片段中，能将
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-17-"><p><strong>19-单选-17 ★★</strong> <strong>下列 Ingress YAML 片段中，能将
 <code>http://app.example.com/v1</code> 转发到 Service
 <code>app-svc:8080</code> 的是？</strong> A.</p>
 <div class="sourceCode" id="cb1"><pre
@@ -337,418 +290,363 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /v1</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">backend</span><span class="kw">:</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">service</span><span class="kw">:</span><span class="at"> app-svc:8080</span></span></code></pre></div>
+<blockquote>
 <p><strong>答案：A</strong> <strong>解析：</strong> A 符合
 networking.k8s.io/v1 规范，pathType=Prefix、backend.service.name +
 port.number 结构正确。B 缺少 pathType 且 backend 结构错误；C
 pathType=Regex 不存在；D 缺少 http 字段且 backend 结构错误。</p>
-<hr />
-<h3 id="19-单选-18-">19-单选-18 ★</h3>
-<p><strong>Ingress 默认后端（defaultBackend）的作用是？</strong> A.
-处理所有请求 B. 处理不匹配任何 rule 的请求 C. 提供 HTTPS 证书 D.
-管理命名空间</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-18-"><p><strong>19-单选-18 ★</strong> <strong>Ingress 默认后端（defaultBackend）的作用是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">处理所有请求</div></li><li><span class="option-label">B</span><div class="option-content">处理不匹配任何 rule 的请求</div></li><li><span class="option-label">C</span><div class="option-content">提供 HTTPS 证书</div></li><li><span class="option-label">D</span><div class="option-content">管理命名空间</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 <code>defaultBackend</code>（默认后端）用于处理未匹配任何 host/path
 规则的请求，通常返回 404。</p>
-<hr />
-<h3 id="19-单选-19-">19-单选-19 ★★</h3>
-<p><strong>Ingress Controller 的核心职责是？</strong> A. 直接运行业务
-Pod B. 监听 Ingress 资源变化并生成对应反向代理配置（如 nginx.conf） C.
-替代 kube-scheduler D. 管理 etcd 数据</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-19-"><p><strong>19-单选-19 ★★</strong> <strong>Ingress Controller 的核心职责是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">直接运行业务 Pod</div></li><li><span class="option-label">B</span><div class="option-content">监听 Ingress 资源变化并生成对应反向代理配置（如 nginx.conf）</div></li><li><span class="option-label">C</span><div class="option-content">替代 kube-scheduler</div></li><li><span class="option-label">D</span><div class="option-content">管理 etcd 数据</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> Ingress Controller
 持续监听 Ingress、Service、Endpoints
 等资源变化，将路由规则转换为底层代理（如 NGINX）的配置并
 reload，从而实现七层路由。</p>
-<hr />
-<h3 id="19-单选-20-">19-单选-20 ★</h3>
-<p><strong>NGINX Ingress Controller 默认监听的端口是？</strong> A. 80 和
-443 B. 8080 和 8443 C. 30000 和 30001 D. 53 和 22</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-20-"><p><strong>19-单选-20 ★</strong> <strong>NGINX Ingress Controller 默认监听的端口是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">80 和 443</div></li><li><span class="option-label">B</span><div class="option-content">8080 和 8443</div></li><li><span class="option-label">C</span><div class="option-content">30000 和 30001</div></li><li><span class="option-label">D</span><div class="option-content">53 和 22</div></li></ul></div>
+<blockquote>
 <p><strong>答案：A</strong> <strong>解析：</strong> NGINX Ingress
 Controller 默认对外暴露 80（HTTP）和 443（HTTPS）端口，通过 Service
 类型为 LoadBalancer 或 hostNetwork 方式接入外部流量。</p>
-<hr />
-<h3 id="19-单选-21-">19-单选-21 ★★</h3>
-<p><strong>Ingress 资源 YAML 中 <code>ingressClassName</code>
-字段的作用是？</strong> A. 指定 Ingress 使用的 Controller B. 指定
-Service 类型 C. 指定命名空间 D. 指定 TLS 版本</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-21-"><p><strong>19-单选-21 ★★</strong> <strong>Ingress 资源 YAML 中 <code>ingressClassName</code> 字段的作用是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">指定 Ingress 使用的 Controller</div></li><li><span class="option-label">B</span><div class="option-content">指定 Service 类型</div></li><li><span class="option-label">C</span><div class="option-content">指定命名空间</div></li><li><span class="option-label">D</span><div class="option-content">指定 TLS 版本</div></li></ul></div>
+<blockquote>
 <p><strong>答案：A</strong> <strong>解析：</strong>
 <code>spec.ingressClassName</code> 用于指定该 Ingress 由哪个
 IngressClass（即哪个 Ingress Controller）处理，一个集群可存在多个
 Controller。</p>
-<hr />
-<h3 id="19-单选-22-">19-单选-22 ★</h3>
-<p><strong><code>IngressClass</code> 资源的作用是？</strong> A. 定义
-Ingress 的命名空间 B. 描述一个 Ingress Controller 实例及其控制器 C.
-定义后端 Pod D. 定义证书</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-22-"><p><strong>19-单选-22 ★</strong> <strong><code>IngressClass</code> 资源的作用是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">定义 Ingress 的命名空间</div></li><li><span class="option-label">B</span><div class="option-content">描述一个 Ingress Controller 实例及其控制器</div></li><li><span class="option-label">C</span><div class="option-content">定义后端 Pod</div></li><li><span class="option-label">D</span><div class="option-content">定义证书</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 <code>IngressClass</code> 是集群级资源，描述一个 Ingress Controller
 实例（包括其 controller 名称、参数等），Ingress 通过
 <code>ingressClassName</code> 关联到某个 IngressClass。</p>
-<hr />
-<h3 id="19-单选-23-">19-单选-23 ★★</h3>
-<p><strong>当同一 Ingress 中存在多条 path
-规则时，匹配优先级通常是？</strong> A. 后定义的优先 B. 最长前缀匹配优先
-C. 随机匹配 D. 全部转发到 defaultBackend</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-23-"><p><strong>19-单选-23 ★★</strong> <strong>当同一 Ingress 中存在多条 path 规则时，匹配优先级通常是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">后定义的优先</div></li><li><span class="option-label">B</span><div class="option-content">最长前缀匹配优先</div></li><li><span class="option-label">C</span><div class="option-content">随机匹配</div></li><li><span class="option-label">D</span><div class="option-content">全部转发到 defaultBackend</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> NGINX Ingress
 Controller 一般采用最长前缀匹配优先的策略，<code>/api/v1</code> 比
 <code>/api</code> 更具体，会优先匹配。</p>
-<hr />
-<h3 id="19-单选-24-">19-单选-24 ★</h3>
-<p><strong>下列哪种 Service 类型最常用于暴露 NGINX Ingress Controller
-给外部用户？</strong> A. ClusterIP B. NodePort C.
-LoadBalancer（云厂商环境下） D. Headless</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-24-"><p><strong>19-单选-24 ★</strong> <strong>下列哪种 Service 类型最常用于暴露 NGINX Ingress Controller 给外部用户？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">ClusterIP</div></li><li><span class="option-label">B</span><div class="option-content">NodePort</div></li><li><span class="option-label">C</span><div class="option-content">LoadBalancer（云厂商环境下）</div></li><li><span class="option-label">D</span><div class="option-content">Headless</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 在云厂商环境下，通常使用 <code>type: LoadBalancer</code>
 自动分配一个外部 IP 暴露 Ingress Controller；本地/裸机环境常用 NodePort
 或 hostNetwork。</p>
-<hr />
-<h3 id="19-单选-25-">19-单选-25 ★★</h3>
-<p><strong>关于 Ingress 与 TLS 的关系，下列描述错误的是？</strong> A.
-一份证书可覆盖多个域名（SAN 证书） B. TLS 配置需通过 Secret 引用证书 C.
-启用 TLS 后 HTTP 默认会自动重定向到 HTTPS（NGINX Ingress 默认行为） D.
-一个 Ingress 只能引用一个 Secret</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-25-"><p><strong>19-单选-25 ★★</strong> <strong>关于 Ingress 与 TLS 的关系，下列描述错误的是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">一份证书可覆盖多个域名（SAN 证书）</div></li><li><span class="option-label">B</span><div class="option-content">TLS 配置需通过 Secret 引用证书</div></li><li><span class="option-label">C</span><div class="option-content">启用 TLS 后 HTTP 默认会自动重定向到 HTTPS（NGINX Ingress 默认行为）</div></li><li><span class="option-label">D</span><div class="option-content">一个 Ingress 只能引用一个 Secret</div></li></ul></div>
+<blockquote>
 <p><strong>答案：D</strong> <strong>解析：</strong>
 <code>spec.tls</code> 是数组，可以指定多组 TLS 配置，每组引用一个
 Secret，覆盖不同域名，因此 D 错误。</p>
-<hr />
-<h3 id="19-单选-26-">19-单选-26 ★</h3>
-<p><strong>Ingress YAML 中 <code>spec.rules[].host</code>
-字段缺省时表示？</strong> A. 仅匹配 localhost B. 匹配所有未指定 host
-的请求 C. 等同于 defaultBackend D. 报错</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-26-"><p><strong>19-单选-26 ★</strong> <strong>Ingress YAML 中 <code>spec.rules[].host</code> 字段缺省时表示？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">仅匹配 localhost</div></li><li><span class="option-label">B</span><div class="option-content">匹配所有未指定 host 的请求</div></li><li><span class="option-label">C</span><div class="option-content">等同于 defaultBackend</div></li><li><span class="option-label">D</span><div class="option-content">报错</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> 当 <code>host</code>
 字段缺省时，该规则匹配所有未明确指定 host 的请求（即通过 IP 访问或 Host
 头为空的情况）。</p>
-<hr />
-<h3 id="19-单选-27-">19-单选-27 ★★</h3>
-<p><strong>使用自签名证书测试 HTTPS 时，客户端应？</strong> A. 直接信任
-B. 将 CA 证书加入信任或使用 <code>-k</code> 跳过验证 C. 删除证书 D.
-重新申请 Let's Encrypt 证书</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-27-"><p><strong>19-单选-27 ★★</strong> <strong>使用自签名证书测试 HTTPS 时，客户端应？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">直接信任</div></li><li><span class="option-label">B</span><div class="option-content">将 CA 证书加入信任或使用 <code>-k</code> 跳过验证</div></li><li><span class="option-label">C</span><div class="option-content">删除证书</div></li><li><span class="option-label">D</span><div class="option-content">重新申请 Let's Encrypt 证书</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 自签名证书不在系统信任链中，客户端需要将 CA 加入信任链，或在测试环境使用
 <code>curl -k</code> 跳过证书校验。</p>
-<hr />
-<h3 id="19-单选-28-">19-单选-28 ★★</h3>
-<p><strong>关于 NGINX Ingress 的
-<code>nginx.ingress.kubernetes.io/rewrite-target</code>
-注解，描述正确的是？</strong> A. 修改响应状态码 B.
-重写请求路径后再转发到后端 C. 修改 Host 头 D. 设置超时时间</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-28-"><p><strong>19-单选-28 ★★</strong> <strong>关于 NGINX Ingress 的 <code>nginx.ingress.kubernetes.io/rewrite-target</code> 注解，描述正确的是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">修改响应状态码</div></li><li><span class="option-label">B</span><div class="option-content">重写请求路径后再转发到后端</div></li><li><span class="option-label">C</span><div class="option-content">修改 Host 头</div></li><li><span class="option-label">D</span><div class="option-content">设置超时时间</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 <code>rewrite-target</code> 注解用于在转发请求到后端 Service 前重写 URL
 路径，例如将 <code>/api/(.*)</code> 重写为 <code>/$1</code>。</p>
-<hr />
-<h3 id="19-单选-29-">19-单选-29 ★</h3>
-<p><strong>下列哪个命令可以查看 Ingress 资源状态？</strong> A.
-<code>kubectl get ingress</code> B. <code>kubectl describe svc</code> C.
-<code>kubectl logs ingress</code> D.
-<code>kubectl exec ingress</code></p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-29-"><p><strong>19-单选-29 ★</strong> <strong>下列哪个命令可以查看 Ingress 资源状态？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>kubectl get ingress</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>kubectl describe svc</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>kubectl logs ingress</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>kubectl exec ingress</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案：A</strong> <strong>解析：</strong> 使用
 <code>kubectl get ingress</code>（简写
 <code>kubectl get ing</code>）列出 Ingress 资源，可通过
 <code>-o wide</code> 查看 ADDRESS 和 PORTS。</p>
-<hr />
-<h3 id="19-单选-30-">19-单选-30 ★★</h3>
-<p><strong>若访问 Ingress 配置的域名返回
-502/503，最不可能的原因是？</strong> A. 后端 Service 没有 endpoints B.
-后端 Pod 健康检查失败 C. 域名未配置 DNS 解析 D. Ingress Controller
-副本数过多</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-单选-30-"><p><strong>19-单选-30 ★★</strong> <strong>若访问 Ingress 配置的域名返回 502/503，最不可能的原因是？</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">后端 Service 没有 endpoints</div></li><li><span class="option-label">B</span><div class="option-content">后端 Pod 健康检查失败</div></li><li><span class="option-label">C</span><div class="option-content">域名未配置 DNS 解析</div></li><li><span class="option-label">D</span><div class="option-content">Ingress Controller 副本数过多</div></li></ul></div>
+<blockquote>
 <p><strong>答案：D</strong> <strong>解析：</strong> 502/503
 通常因后端不可用（A/B）或路由错误；C 会导致域名无法解析而非 502。Ingress
 Controller 副本数与 502/503 无直接因果，D 最不可能。</p>
-<hr />
-<h2
+</blockquote></section>
+<hr /><h2
 id="二多项选择题10题每题2分共20分">二、多项选择题（10题，每题2分，共20分）</h2>
-<h3 id="19-多选-01-">19-多选-01 ★</h3>
-<p><strong>下列属于 Ingress Controller 实现的有？（多选）</strong> A.
-NGINX Ingress Controller B. Traefik C. HAProxy Ingress D. kube-proxy</p>
+<section class="question-card" id="19-多选-01-"><p><strong>19-多选-01 ★</strong> <strong>下列属于 Ingress Controller 实现的有？（多选）</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">NGINX Ingress Controller</div></li><li><span class="option-label">B</span><div class="option-content">Traefik</div></li><li><span class="option-label">C</span><div class="option-content">HAProxy Ingress</div></li><li><span class="option-label">D</span><div class="option-content">kube-proxy</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABC</strong> <strong>解析：</strong> A/B/C 都是常见的
 Ingress Controller 实现；kube-proxy 是四层代理组件，不是 Ingress
 Controller。</p>
-<hr />
-<h3 id="19-多选-02-">19-多选-02 ★★</h3>
-<p><strong>Ingress 资源 YAML 中，一条 rule
-可以包含的字段有？（多选）</strong> A. host B. http.paths C. tls D.
-defaultBackend</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-多选-02-"><p><strong>19-多选-02 ★★</strong> <strong>Ingress 资源 YAML 中，一条 rule 可以包含的字段有？（多选）</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">host</div></li><li><span class="option-label">B</span><div class="option-content">http.paths</div></li><li><span class="option-label">C</span><div class="option-content">tls</div></li><li><span class="option-label">D</span><div class="option-content">defaultBackend</div></li></ul></div>
+<blockquote>
 <p><strong>答案：AB</strong> <strong>解析：</strong> 一条 rule 包含
 <code>host</code> 和 <code>http.paths</code>；<code>tls</code> 和
 <code>defaultBackend</code> 属于 <code>spec</code> 顶层字段，不在 rule
 内。</p>
-<hr />
-<h3 id="19-多选-03-">19-多选-03 ★★</h3>
-<p><strong>下列关于 <code>pathType</code>
-的描述，正确的有？（多选）</strong> A. Prefix 按路径段前缀匹配 B. Exact
-要求完全一致 C. ImplementationSpecific 由 Controller 决定语义 D. Regex
-是合法的 pathType</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-多选-03-"><p><strong>19-多选-03 ★★</strong> <strong>下列关于 <code>pathType</code> 的描述，正确的有？（多选）</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Prefix 按路径段前缀匹配</div></li><li><span class="option-label">B</span><div class="option-content">Exact 要求完全一致</div></li><li><span class="option-label">C</span><div class="option-content">ImplementationSpecific 由 Controller 决定语义</div></li><li><span class="option-label">D</span><div class="option-content">Regex 是合法的 pathType</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABC</strong> <strong>解析：</strong> A/B/C 描述正确；D
 错误，pathType 没有 Regex，正则需求需通过 ImplementationSpecific +
 注解实现。</p>
-<hr />
-<h3 id="19-多选-04-">19-多选-04 ★★</h3>
-<p><strong>在 Ingress 中配置 HTTPS 需要？（多选）</strong> A. 创建
-<code>kubernetes.io/tls</code> 类型 Secret B. 在 <code>spec.tls</code>
-中指定 hosts 和 secretName C. 配置 ServiceAccount D. 安装并运行 Ingress
-Controller</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-多选-04-"><p><strong>19-多选-04 ★★</strong> <strong>在 Ingress 中配置 HTTPS 需要？（多选）</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">创建 <code>kubernetes.io/tls</code> 类型 Secret</div></li><li><span class="option-label">B</span><div class="option-content">在 <code>spec.tls</code> 中指定 hosts 和 secretName</div></li><li><span class="option-label">C</span><div class="option-content">配置 ServiceAccount</div></li><li><span class="option-label">D</span><div class="option-content">安装并运行 Ingress Controller</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABD</strong> <strong>解析：</strong> HTTPS 需要 TLS
 Secret（A）、Ingress 引用（B）和 Controller 实现（D）；与 ServiceAccount
 无关。</p>
-<hr />
-<h3 id="19-多选-05-">19-多选-05 ★</h3>
-<p><strong>Ingress 的典型应用场景包括？（多选）</strong> A.
-基于域名的虚拟主机 B. 基于路径的路由分发 C. HTTPS 终结（TLS
-Termination） D. 跨集群数据库主从同步</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-多选-05-"><p><strong>19-多选-05 ★</strong> <strong>Ingress 的典型应用场景包括？（多选）</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">基于域名的虚拟主机</div></li><li><span class="option-label">B</span><div class="option-content">基于路径的路由分发</div></li><li><span class="option-label">C</span><div class="option-content">HTTPS 终结（TLS Termination）</div></li><li><span class="option-label">D</span><div class="option-content">跨集群数据库主从同步</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABC</strong> <strong>解析：</strong> A/B/C 都是 Ingress
 典型场景；D 与 Ingress 无关。</p>
-<hr />
-<h3 id="19-多选-06-">19-多选-06 ★★</h3>
-<p><strong>下列关于 Ingress 与 Service
-关系的描述，正确的有？（多选）</strong> A. Ingress 通过 Service
-间接转发到 Pod B. Ingress 引用的 Service 通常类型为 ClusterIP C. 一个
-Ingress 可引用多个不同 Service D. Ingress 可直接管理 Pod 生命周期</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-多选-06-"><p><strong>19-多选-06 ★★</strong> <strong>下列关于 Ingress 与 Service 关系的描述，正确的有？（多选）</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Ingress 通过 Service 间接转发到 Pod</div></li><li><span class="option-label">B</span><div class="option-content">Ingress 引用的 Service 通常类型为 ClusterIP</div></li><li><span class="option-label">C</span><div class="option-content">一个 Ingress 可引用多个不同 Service</div></li><li><span class="option-label">D</span><div class="option-content">Ingress 可直接管理 Pod 生命周期</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABC</strong> <strong>解析：</strong> A/B/C 正确；D
 错误，Ingress 不直接管理 Pod，需通过 Service 间接转发。</p>
-<hr />
-<h3 id="19-多选-07-">19-多选-07 ★★</h3>
-<p><strong>NGINX Ingress Controller 的常见部署方式有？（多选）</strong>
-A. Helm Chart 安装 B. 官方 manifest <code>kubectl apply</code> C.
-Bare-metal NodePort 方式 D. <code>docker run</code> 单机方式</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-多选-07-"><p><strong>19-多选-07 ★★</strong> <strong>NGINX Ingress Controller 的常见部署方式有？（多选）</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Helm Chart 安装</div></li><li><span class="option-label">B</span><div class="option-content">官方 manifest <code>kubectl apply</code></div></li><li><span class="option-label">C</span><div class="option-content">Bare-metal NodePort 方式</div></li><li><span class="option-label">D</span><div class="option-content"><code>docker run</code> 单机方式</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABC</strong> <strong>解析：</strong> A/B/C 都是 K8s
 集群中常见的部署方式；D 不是 K8s 部署方式，Ingress Controller
 需运行在集群内。</p>
-<hr />
-<h3 id="19-多选-08-">19-多选-08 ★★</h3>
-<p><strong>下列哪些字段属于
-<code>spec.rules[].http.paths[].backend.service</code>？（多选）</strong>
-A. name B. port.number C. port.name D. namespace</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-多选-08-"><p><strong>19-多选-08 ★★</strong> <strong>下列哪些字段属于 <code>spec.rules[].http.paths[].backend.service</code>？（多选）</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">name</div></li><li><span class="option-label">B</span><div class="option-content">port.number</div></li><li><span class="option-label">C</span><div class="option-content">port.name</div></li><li><span class="option-label">D</span><div class="option-content">namespace</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABC</strong> <strong>解析：</strong> backend.service
 包含 <code>name</code> 和 <code>port</code>，port 可用
 <code>number</code> 或 <code>name</code>；namespace
 不在此结构内（Ingress 与 Service 默认同命名空间）。</p>
-<hr />
-<h3 id="19-多选-09-">19-多选-09 ★★</h3>
-<p><strong>下列关于 Ingress TLS 的描述，正确的有？（多选）</strong> A.
-一份证书可通过 SAN 覆盖多个域名 B. <code>spec.tls</code>
-是数组，可配置多组 TLS C. Secret 类型必须为
-<code>kubernetes.io/tls</code> D. 必须使用 Let's Encrypt 证书</p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-多选-09-"><p><strong>19-多选-09 ★★</strong> <strong>下列关于 Ingress TLS 的描述，正确的有？（多选）</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">一份证书可通过 SAN 覆盖多个域名</div></li><li><span class="option-label">B</span><div class="option-content"><code>spec.tls</code> 是数组，可配置多组 TLS</div></li><li><span class="option-label">C</span><div class="option-content">Secret 类型必须为 <code>kubernetes.io/tls</code></div></li><li><span class="option-label">D</span><div class="option-content">必须使用 Let's Encrypt 证书</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABC</strong> <strong>解析：</strong> A/B/C 描述正确；D
 错误，证书来源可以是自签名、商业 CA、Let's Encrypt
 等任意来源，只要符合格式即可。</p>
-<hr />
-<h3 id="19-多选-10-">19-多选-10 ★★★</h3>
-<p><strong>下列哪些是 NGINX Ingress Controller
-常用注解？（多选）</strong> A.
-<code>nginx.ingress.kubernetes.io/rewrite-target</code> B.
-<code>nginx.ingress.kubernetes.io/ssl-redirect</code> C.
-<code>nginx.ingress.kubernetes.io/canary-weight</code> D.
-<code>nginx.ingress.kubernetes.io/replicas</code></p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-多选-10-"><p><strong>19-多选-10 ★★★</strong> <strong>下列哪些是 NGINX Ingress Controller 常用注解？（多选）</strong></p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>nginx.ingress.kubernetes.io/rewrite-target</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>nginx.ingress.kubernetes.io/ssl-redirect</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>nginx.ingress.kubernetes.io/canary-weight</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>nginx.ingress.kubernetes.io/replicas</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABC</strong> <strong>解析：</strong> A 路径重写、B
 HTTPS 强制跳转、C 金丝雀权重都是常用注解；D 不是合法注解，副本数通过
 Deployment/Helm 设置。</p>
-<hr />
-<h2
+</blockquote></section>
+<hr /><h2
 id="三判断题20题每题1分共20分">三、判断题（20题，每题1分，共20分）</h2>
-<h3 id="19-判断-01-">19-判断-01 ★</h3>
-<p><strong>Ingress 是 Kubernetes 内置的七层路由资源对象。</strong></p>
+<section class="question-card" id="19-判断-01-"><p><strong>19-判断-01 ★</strong> <strong>Ingress 是 Kubernetes 内置的七层路由资源对象。</strong></p>
+<blockquote>
 <p><strong>答案：正确</strong> <strong>解析：</strong> Ingress 是
 Kubernetes 的标准 API 资源（networking.k8s.io/v1），提供基于 HTTP/HTTPS
 的七层路由能力。</p>
-<hr />
-<h3 id="19-判断-02-">19-判断-02 ★</h3>
-<p><strong>Service 可以完全替代 Ingress
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-02-"><p><strong>19-判断-02 ★</strong> <strong>Service 可以完全替代 Ingress
 实现基于域名的路由。</strong></p>
+<blockquote>
 <p><strong>答案：错误</strong> <strong>解析：</strong> Service
 是四层（IP:Port）负载均衡，无法基于 HTTP 域名/路径路由，需要 Ingress
 才能实现七层路由。</p>
-<hr />
-<h3 id="19-判断-03-">19-判断-03 ★</h3>
-<p><strong>Ingress Controller 是 Kubernetes
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-03-"><p><strong>19-判断-03 ★</strong> <strong>Ingress Controller 是 Kubernetes
 控制平面核心组件，集群启动时自动运行。</strong></p>
+<blockquote>
 <p><strong>答案：错误</strong> <strong>解析：</strong> Ingress
 Controller 不是 K8s 控制平面核心组件，需要用户根据需要自行安装部署（如
 NGINX Ingress Controller）。</p>
-<hr />
-<h3 id="19-判断-04-">19-判断-04 ★★</h3>
-<p><strong><code>networking.k8s.io/v1</code> 是 Ingress 的稳定 API
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-04-"><p><strong>19-判断-04 ★★</strong> <strong><code>networking.k8s.io/v1</code> 是 Ingress 的稳定 API
 版本。</strong></p>
+<blockquote>
 <p><strong>答案：正确</strong> <strong>解析：</strong> 自 K8s 1.19
 起，<code>networking.k8s.io/v1</code> 成为 Ingress
 的稳定版本（GA），1.22 起完全移除 extensions/v1beta1。</p>
-<hr />
-<h3 id="19-判断-05-">19-判断-05 ★</h3>
-<p><strong>Ingress 必须配置 host 字段才能工作。</strong></p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-05-"><p><strong>19-判断-05 ★</strong> <strong>Ingress 必须配置 host 字段才能工作。</strong></p>
+<blockquote>
 <p><strong>答案：错误</strong> <strong>解析：</strong> host
 字段可省略，省略时该规则匹配所有未指定 host 的请求。</p>
-<hr />
-<h3 id="19-判断-06-">19-判断-06 ★★</h3>
-<p><strong><code>pathType: Exact</code>
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-06-"><p><strong>19-判断-06 ★★</strong> <strong><code>pathType: Exact</code>
 要求请求路径与配置路径完全一致。</strong></p>
+<blockquote>
 <p><strong>答案：正确</strong> <strong>解析：</strong> Exact 模式下，URL
 路径必须与 <code>path</code> 完全相等才匹配转发，多一个字符都不行。</p>
-<hr />
-<h3 id="19-判断-07-">19-判断-07 ★</h3>
-<p><strong>Ingress 可以直接将流量转发到 Pod，无需经过
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-07-"><p><strong>19-判断-07 ★</strong> <strong>Ingress 可以直接将流量转发到 Pod，无需经过
 Service。</strong></p>
+<blockquote>
 <p><strong>答案：错误</strong> <strong>解析：</strong> Ingress 的
 backend 必须指向 Service，由 Service 再转发到 Pod，不能直接指向
 Pod。</p>
-<hr />
-<h3 id="19-判断-08-">19-判断-08 ★★</h3>
-<p><strong>TLS Secret 中证书和私钥的 key 名称分别为 <code>tls.crt</code>
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-08-"><p><strong>19-判断-08 ★★</strong> <strong>TLS Secret 中证书和私钥的 key 名称分别为 <code>tls.crt</code>
 和 <code>tls.key</code>。</strong></p>
+<blockquote>
 <p><strong>答案：正确</strong> <strong>解析：</strong>
 <code>kubernetes.io/tls</code> 类型 Secret 固定使用 <code>tls.crt</code>
 和 <code>tls.key</code> 两个 key。</p>
-<hr />
-<h3 id="19-判断-09-">19-判断-09 ★</h3>
-<p><strong>一个 Ingress 资源只能定义一条路由规则。</strong></p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-09-"><p><strong>19-判断-09 ★</strong> <strong>一个 Ingress 资源只能定义一条路由规则。</strong></p>
+<blockquote>
 <p><strong>答案：错误</strong> <strong>解析：</strong>
 <code>spec.rules</code> 是数组，可定义多条规则，支持多 host 虚拟主机和多
 path 路径路由。</p>
-<hr />
-<h3 id="19-判断-10-">19-判断-10 ★★</h3>
-<p><strong><code>ingressClassName</code> 用于指定处理该 Ingress 的
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-10-"><p><strong>19-判断-10 ★★</strong> <strong><code>ingressClassName</code> 用于指定处理该 Ingress 的
 Controller。</strong></p>
+<blockquote>
 <p><strong>答案：正确</strong> <strong>解析：</strong> 通过
 <code>spec.ingressClassName</code> 关联到某个
 IngressClass，从而指定由哪个 Controller 实例处理。</p>
-<hr />
-<h3 id="19-判断-11-">19-判断-11 ★</h3>
-<p><strong>ConfigMap 也可以存储 TLS 证书用于 Ingress。</strong></p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-11-"><p><strong>19-判断-11 ★</strong> <strong>ConfigMap 也可以存储 TLS 证书用于 Ingress。</strong></p>
+<blockquote>
 <p><strong>答案：错误</strong> <strong>解析：</strong> ConfigMap
 不支持敏感数据，TLS 证书必须存储在 <code>kubernetes.io/tls</code> 类型的
 Secret 中。</p>
-<hr />
-<h3 id="19-判断-12-">19-判断-12 ★★</h3>
-<p><strong>Ingress 与 Service 必须在同一个命名空间。</strong></p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-12-"><p><strong>19-判断-12 ★★</strong> <strong>Ingress 与 Service 必须在同一个命名空间。</strong></p>
+<blockquote>
 <p><strong>答案：正确</strong> <strong>解析：</strong> Ingress 引用
 Service 时只能引用同命名空间的 Service，跨命名空间引用不被支持。</p>
-<hr />
-<h3 id="19-判断-13-">19-判断-13 ★★</h3>
-<p><strong><code>pathType: Prefix</code> 配置 path 为 <code>/</code>
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-13-"><p><strong>19-判断-13 ★★</strong> <strong><code>pathType: Prefix</code> 配置 path 为 <code>/</code>
 时可以匹配所有路径。</strong></p>
+<blockquote>
 <p><strong>答案：正确</strong> <strong>解析：</strong> <code>/</code>
 是最短前缀，所有路径都以 <code>/</code>
 开头，因此可作为通配规则匹配所有请求。</p>
-<hr />
-<h3 id="19-判断-14-">19-判断-14 ★</h3>
-<p><strong>Ingress Controller 一旦安装，集群所有 Ingress
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-14-"><p><strong>19-判断-14 ★</strong> <strong>Ingress Controller 一旦安装，集群所有 Ingress
 资源都会被它处理。</strong></p>
+<blockquote>
 <p><strong>答案：错误</strong> <strong>解析：</strong> 只有 Ingress 通过
 <code>ingressClassName</code>（或 Controller 设为默认）显式关联的
 Ingress 才会被该 Controller 处理。</p>
-<hr />
-<h3 id="19-判断-15-">19-判断-15 ★★</h3>
-<p><strong>NGINX Ingress Controller 默认会将 HTTP 请求重定向到
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-15-"><p><strong>19-判断-15 ★★</strong> <strong>NGINX Ingress Controller 默认会将 HTTP 请求重定向到
 HTTPS（当配置了 TLS 时）。</strong></p>
+<blockquote>
 <p><strong>答案：正确</strong> <strong>解析：</strong> NGINX Ingress
 Controller 在 Ingress 配置了 TLS 后，默认启用
 <code>ssl-redirect: true</code>，将 80 端口请求 301 重定向到 443。</p>
-<hr />
-<h3 id="19-判断-16-">19-判断-16 ★★</h3>
-<p><strong>多 host 虚拟主机需要在同一 Ingress
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-16-"><p><strong>19-判断-16 ★★</strong> <strong>多 host 虚拟主机需要在同一 Ingress
 资源中定义才能生效。</strong></p>
+<blockquote>
 <p><strong>答案：错误</strong> <strong>解析：</strong> 不同 host
 可以拆分到不同 Ingress 资源中定义，只要 Ingress Controller
 处理即可，虚拟主机机制不要求合并。</p>
-<hr />
-<h3 id="19-判断-17-">19-判断-17 ★</h3>
-<p><strong>Ingress 适用于 TCP/UDP 协议的负载均衡。</strong></p>
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-17-"><p><strong>19-判断-17 ★</strong> <strong>Ingress 适用于 TCP/UDP 协议的负载均衡。</strong></p>
+<blockquote>
 <p><strong>答案：错误</strong> <strong>解析：</strong> Ingress 仅支持
 HTTP/HTTPS（七层），TCP/UDP 需通过 Service（NodePort/LoadBalancer）或
 Ingress Controller 的扩展配置实现。</p>
-<hr />
-<h3 id="19-判断-18-">19-判断-18 ★★</h3>
-<p><strong><code>kubectl create secret tls</code> 命令需要同时提供
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-18-"><p><strong>19-判断-18 ★★</strong> <strong><code>kubectl create secret tls</code> 命令需要同时提供
 <code>--cert</code> 和 <code>--key</code> 参数。</strong></p>
+<blockquote>
 <p><strong>答案：正确</strong> <strong>解析：</strong> 创建 TLS Secret
 必须同时提供证书文件（<code>--cert</code>）和私钥文件（<code>--key</code>），缺一不可。</p>
-<hr />
-<h3 id="19-判断-19-">19-判断-19 ★★</h3>
-<p><strong><code>defaultBackend</code>
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-19-"><p><strong>19-判断-19 ★★</strong> <strong><code>defaultBackend</code>
 用于处理未匹配任何规则的请求。</strong></p>
+<blockquote>
 <p><strong>答案：正确</strong> <strong>解析：</strong>
 <code>spec.defaultBackend</code> 指定默认后端，处理未匹配任何 host/path
 规则的请求，通常返回 404。</p>
-<hr />
-<h3 id="19-判断-20-">19-判断-20 ★★★</h3>
-<p><strong>Ingress 配置 <code>rewrite-target</code> 注解后，原 path
+</blockquote></section>
+<hr /><section class="question-card" id="19-判断-20-"><p><strong>19-判断-20 ★★★</strong> <strong>Ingress 配置 <code>rewrite-target</code> 注解后，原 path
 不会被传到后端 Service。</strong></p>
+<blockquote>
 <p><strong>答案：正确</strong> <strong>解析：</strong>
 <code>rewrite-target</code> 会按规则重写 URL
 后再转发，后端收到的是重写后的路径，原始 path 不直接透传。</p>
-<hr />
-<h2
+</blockquote></section>
+<hr /><h2
 id="四填空题10题每题2分共20分">四、填空题（10题，每题2分，共20分）</h2>
-<h3 id="19-填空-01-">19-填空-01 ★</h3>
-<p><strong>Ingress 是 Kubernetes 中提供 ________
+<section class="question-card" id="19-填空-01-"><p><strong>19-填空-01 ★</strong> <strong>Ingress 是 Kubernetes 中提供 ________
 层路由的资源对象。</strong></p>
+<blockquote>
 <p><strong>答案：七（或 应用层 / 7）</strong> <strong>解析：</strong>
 Ingress 工作在 OSI 第七层（应用层），基于 HTTP/HTTPS 的 Host 和 Path
 进行路由。</p>
-<hr />
-<h3 id="19-填空-02-">19-填空-02 ★</h3>
-<p><strong>Ingress 资源在 Kubernetes 1.19+ 中的稳定 API 版本是
+</blockquote></section>
+<hr /><section class="question-card" id="19-填空-02-"><p><strong>19-填空-02 ★</strong> <strong>Ingress 资源在 Kubernetes 1.19+ 中的稳定 API 版本是
 ________。</strong></p>
+<blockquote>
 <p><strong>答案：networking.k8s.io/v1</strong> <strong>解析：</strong>
 <code>networking.k8s.io/v1</code> 是 GA 稳定版本，1.22
 起废弃旧版本。</p>
-<hr />
-<h3 id="19-填空-03-">19-填空-03 ★★</h3>
-<p><strong>Ingress YAML 中 <code>backend.service</code> 下用于指定
+</blockquote></section>
+<hr /><section class="question-card" id="19-填空-03-"><p><strong>19-填空-03 ★★</strong> <strong>Ingress YAML 中 <code>backend.service</code> 下用于指定
 Service 名称的字段是 ________。</strong></p>
+<blockquote>
 <p><strong>答案：name</strong> <strong>解析：</strong>
 <code>backend.service.name</code> 指定后端 Service
 名称，<code>backend.service.port</code> 指定端口。</p>
-<hr />
-<h3 id="19-填空-04-">19-填空-04 ★★</h3>
-<p><strong><code>pathType</code> 的三个合法取值是 Prefix、Exact 和
+</blockquote></section>
+<hr /><section class="question-card" id="19-填空-04-"><p><strong>19-填空-04 ★★</strong> <strong><code>pathType</code> 的三个合法取值是 Prefix、Exact 和
 ________。</strong></p>
+<blockquote>
 <p><strong>答案：ImplementationSpecific</strong> <strong>解析：</strong>
 networking.k8s.io/v1 中 pathType 只有
 Prefix、Exact、ImplementationSpecific 三种。</p>
-<hr />
-<h3 id="19-填空-05-">19-填空-05 ★★</h3>
-<p><strong>Ingress 中 TLS 证书存储在类型为 ________ 的 Secret
+</blockquote></section>
+<hr /><section class="question-card" id="19-填空-05-"><p><strong>19-填空-05 ★★</strong> <strong>Ingress 中 TLS 证书存储在类型为 ________ 的 Secret
 中。</strong></p>
+<blockquote>
 <p><strong>答案：kubernetes.io/tls</strong> <strong>解析：</strong> TLS
 证书必须存于 <code>kubernetes.io/tls</code> 类型 Secret，包含 tls.crt 和
 tls.key 两个 key。</p>
-<hr />
-<h3 id="19-填空-06-">19-填空-06 ★★</h3>
-<p><strong><code>spec.tls</code> 字段包含 <code>hosts</code> 和 ________
+</blockquote></section>
+<hr /><section class="question-card" id="19-填空-06-"><p><strong>19-填空-06 ★★</strong> <strong><code>spec.tls</code> 字段包含 <code>hosts</code> 和 ________
 两个子字段。</strong></p>
+<blockquote>
 <p><strong>答案：secretName</strong> <strong>解析：</strong>
 <code>spec.tls[].hosts</code>（域名数组）和
 <code>spec.tls[].secretName</code>（引用的 Secret 名称）成对出现。</p>
-<hr />
-<h3 id="19-填空-07-">19-填空-07 ★</h3>
-<p><strong>创建 TLS Secret 的命令是
+</blockquote></section>
+<hr /><section class="question-card" id="19-填空-07-"><p><strong>19-填空-07 ★</strong> <strong>创建 TLS Secret 的命令是
 <code>kubectl create secret ________ my-tls --cert=cert.pem --key=key.pem</code>。</strong></p>
+<blockquote>
 <p><strong>答案：tls</strong> <strong>解析：</strong> 使用
 <code>kubectl create secret tls &lt;name&gt;</code> 创建 TLS 类型
 Secret。</p>
-<hr />
-<h3 id="19-填空-08-">19-填空-08 ★★</h3>
-<p><strong>Ingress 中用于指定处理该 Ingress 的 Controller 的字段是
+</blockquote></section>
+<hr /><section class="question-card" id="19-填空-08-"><p><strong>19-填空-08 ★★</strong> <strong>Ingress 中用于指定处理该 Ingress 的 Controller 的字段是
 ________。</strong></p>
+<blockquote>
 <p><strong>答案：ingressClassName</strong> <strong>解析：</strong>
 <code>spec.ingressClassName</code> 引用某个 IngressClass，决定由哪个
 Controller 处理。</p>
-<hr />
-<h3 id="19-填空-09-">19-填空-09 ★★</h3>
-<p><strong>当 path 为 <code>/</code> 且 pathType 为 ________
+</blockquote></section>
+<hr /><section class="question-card" id="19-填空-09-"><p><strong>19-填空-09 ★★</strong> <strong>当 path 为 <code>/</code> 且 pathType 为 ________
 时，可以匹配所有 HTTP 路径。</strong></p>
+<blockquote>
 <p><strong>答案：Prefix</strong> <strong>解析：</strong>
 <code>Prefix</code> 模式下 <code>/</code> 是最短前缀，匹配所有以
 <code>/</code> 开头的路径，即所有 HTTP 请求。</p>
-<hr />
-<h3 id="19-填空-10-">19-填空-10 ★★★</h3>
-<p><strong>NGINX Ingress Controller 通过 ________ 注解实现 URL
+</blockquote></section>
+<hr /><section class="question-card" id="19-填空-10-"><p><strong>19-填空-10 ★★★</strong> <strong>NGINX Ingress Controller 通过 ________ 注解实现 URL
 路径重写。</strong></p>
+<blockquote>
 <p><strong>答案：nginx.ingress.kubernetes.io/rewrite-target</strong>
 <strong>解析：</strong> <code>rewrite-target</code> 注解用于将匹配的
 path 重写后再转发到后端 Service。</p>
-<hr />
-<h2 id="五论述简答题4题共32分">五、论述简答题（4题，共32分）</h2>
-<h3 id="19-论述-01-8分">19-论述-01 ★★（8分）</h3>
-<p><strong>请论述 Ingress 与 Service 在 Kubernetes
+</blockquote></section>
+<hr /><h2 id="五论述简答题4题共32分">五、论述简答题（4题，共32分）</h2>
+<section class="question-card" id="19-论述-01-8分"><p><strong>19-论述-01 ★★（8分）</strong> <strong>请论述 Ingress 与 Service 在 Kubernetes
 中的区别与联系，并说明各自适用的场景。</strong></p>
 <p><strong>评分标准（满分8分）：</strong></p>
 <ul>
@@ -783,10 +681,8 @@ IP+端口转发，不感知 HTTP 协议内容。</li>
 <li>Ingress：对外统一域名入口、按路径拆分微服务、HTTPS
 证书集中管理、灰度发布等。</li>
 </ul></li>
-</ol>
-<hr />
-<h3 id="19-论述-02-10分">19-论述-02 ★★★（10分）</h3>
-<p><strong>请完整说明在 Kubernetes 集群中部署并使用 NGINX Ingress
+</ol></section>
+<hr /><section class="question-card" id="19-论述-02-10分"><p><strong>19-论述-02 ★★★（10分）</strong> <strong>请完整说明在 Kubernetes 集群中部署并使用 NGINX Ingress
 Controller 暴露一个 HTTP
 服务的流程，包括组件安装、资源定义、验证步骤。</strong></p>
 <p><strong>评分标准（满分10分）：</strong></p>
@@ -873,10 +769,8 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="
 <code>kubectl logs -n ingress-nginx &lt;controller-pod&gt;</code>
 排查。</li>
 </ul></li>
-</ol>
-<hr />
-<h3 id="19-论述-03-8分">19-论述-03 ★★★（8分）</h3>
-<p><strong>请论述 Ingress 中 <code>pathType</code>
+</ol></section>
+<hr /><section class="question-card" id="19-论述-03-8分"><p><strong>19-论述-03 ★★★（8分）</strong> <strong>请论述 Ingress 中 <code>pathType</code>
 三种取值的含义、匹配规则及典型使用场景，并举例说明。</strong></p>
 <p><strong>评分标准（满分8分）：</strong></p>
 <ul>
@@ -903,10 +797,8 @@ Controller 自定义（NGINX 默认按 Prefix，可结合注解支持正则）�
 <code>nginx.ingress.kubernetes.io/use-regex: "true"</code>
 注解，则可支持正则表达式匹配，适合复杂 URL 模式（如
 <code>/api/v[0-9]+/users</code>）。</li>
-</ol>
-<hr />
-<h3 id="19-论述-04-6分">19-论述-04 ★★（6分）</h3>
-<p><strong>简述 Ingress 配置 HTTPS 的完整流程，并说明证书与 Secret
+</ol></section>
+<hr /><section class="question-card" id="19-论述-04-6分"><p><strong>19-论述-04 ★★（6分）</strong> <strong>简述 Ingress 配置 HTTPS 的完整流程，并说明证书与 Secret
 的关系。</strong></p>
 <p><strong>评分标准（满分6分）：</strong></p>
 <ul>
@@ -944,12 +836,10 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="
 Secret 专门存储证书和私钥；Ingress 通过 <code>secretName</code> 引用
 Secret，实现证书生命周期与 Ingress 解耦，更新证书只需更新 Secret
 即可。</li>
-</ol>
-<hr />
-<h2
+</ol></section>
+<hr /><h2
 id="六程序阅读补全题2题共25分">六、程序阅读补全题（2题，共25分）</h2>
-<h3 id="19-阅读-01-12分">19-阅读-01 ★★（12分）</h3>
-<p><strong>阅读以下 Ingress YAML，补全①②③④处缺失的字段值，使该 Ingress
+<section class="question-card" id="19-阅读-01-12分"><p><strong>19-阅读-01 ★★（12分）</strong> <strong>阅读以下 Ingress YAML，补全①②③④处缺失的字段值，使该 Ingress
 将 <code>http://api.example.com/v1/users</code> 转发到 Service
 <code>users-svc</code> 的 8080 端口，并将
 <code>http://api.example.com/v1/orders</code> 转发到 Service
@@ -999,10 +889,8 @@ Prefix）。</li>
 users-svc。</li>
 <li>④ <code>orders-svc</code>：<code>/v1/orders</code> 路径转发到
 orders-svc。</li>
-</ul>
-<hr />
-<h3 id="19-阅读-02-13分">19-阅读-02 ★★★（13分）</h3>
-<p><strong>阅读以下带 TLS 的 Ingress YAML，补全①~⑤处缺失的字段值，使该
+</ul></section>
+<hr /><section class="question-card" id="19-阅读-02-13分"><p><strong>19-阅读-02 ★★★（13分）</strong> <strong>阅读以下带 TLS 的 Ingress YAML，补全①~⑤处缺失的字段值，使该
 Ingress 同时为 <code>www.example.com</code> 和
 <code>api.example.com</code> 提供 HTTPS 服务，证书存于 Secret
 <code>example-tls</code>，HTTP 路径 <code>/</code> 分别转发到
@@ -1056,12 +944,10 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href=
 <li>④ <code>/</code>：题目要求路径 <code>/</code> 转发，pathType=Prefix
 匹配所有路径。</li>
 <li>⑤ <code>80</code>：web-svc 端口为 80。</li>
-</ul>
-<hr />
-<h2
+</ul></section>
+<hr /><h2
 id="七编程接口设计题2题共35分">七、编程接口设计题（2题，共35分）</h2>
-<h3 id="19-编程-01-15分">19-编程-01 ★★★（15分）</h3>
-<p><strong>请编写一个完整的 Ingress YAML，实现以下需求：</strong></p>
+<section class="question-card" id="19-编程-01-15分"><p><strong>19-编程-01 ★★★（15分）</strong> <strong>请编写一个完整的 Ingress YAML，实现以下需求：</strong></p>
 <ol type="1">
 <li>Ingress
 名称：<code>ecommerce-ingress</code>，命名空间：<code>default</code>；</li>
@@ -1137,10 +1023,8 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href=
 <span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">service</span><span class="kw">:</span></span>
 <span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">name</span><span class="kw">:</span><span class="at"> frontend-svc</span></span>
 <span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span></span>
-<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
-<hr />
-<h3 id="19-编程-02-20分">19-编程-02 ★★★（20分）</h3>
-<p><strong>请编写一个完整的 Ingress YAML，实现多域名虚拟主机 + TLS +
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">number</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div></section>
+<hr /><section class="question-card" id="19-编程-02-20分"><p><strong>19-编程-02 ★★★（20分）</strong> <strong>请编写一个完整的 Ingress YAML，实现多域名虚拟主机 + TLS +
 路径重写，需求如下：</strong></p>
 <ol type="1">
 <li>Ingress
@@ -1252,9 +1136,8 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb14-1"><a href=
 <code>canary: "true"</code>
 注解标记为副本，<code>canary-weight: "10"</code> 表示 10%
 流量进入金丝雀后端，主 Ingress 与金丝雀 Ingress 的 host/path
-必须完全一致才能形成金丝雀关系。</p>
-<hr />
-<h2 id="附题量统计表">附：题量统计表</h2>
+必须完全一致才能形成金丝雀关系。</p></section>
+<hr /><h2 id="附题量统计表">附：题量统计表</h2>
 <table>
 <thead>
 <tr>

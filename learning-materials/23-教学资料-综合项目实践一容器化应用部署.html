@@ -144,7 +144,16 @@ YAML 均经过验证，可直接 <code>kubectl apply -f</code>。</p>
 <hr />
 <h2 id="一项目架构总览">一、项目架构总览</h2>
 <h3 id="11-系统架构图">1.1 系统架构图</h3>
-<div class="visual"> <div class="visual-title">图示 1：外部用户 / 浏览器</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">外部用户 / 浏览器</span></li> <li><span class="tree-label">(frontend.ctts.local / api.ctts.local)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Ingress Controller (Nginx)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">minikube ingress addon</span></li> <li><span class="tree-label">frontend.ctts.local api.ctts.local</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">frontend-service backend-service</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">(ClusterIP) (ClusterIP)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">port: 80 → 80 port: 8080 → 8080</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Frontend Deployment Backend Deployment</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">(Vue3 + Nginx) (SpringBoot 3)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">replicas: 2 replicas: 2</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">image: image:</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">frontend:ctts-v1 backend:ctts-v1</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">mysql-service</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">(ClusterIP)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">port: 3306→3306</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">MySQL Deployment</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">image: mysql:8.0</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">PVC: mysql-pvc</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">(持久化存储)</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 1：外部用户 / 浏览器</div>
+<div class="edu-diagram">
+<div class="diagram-panel"><h4>CTTS 多服务 K8s 部署全景</h4><p>外部入口由 Ingress 统一承接，集群内部通过 Service 连接前端、后端和 MySQL。</p></div>
+<div class="docker-route">
+<div class="diagram-panel"><h4><span>WEB</span> Frontend</h4><p>frontend.ctts.local → Ingress → frontend-service → Frontend Deployment 2 副本。</p></div>
+<div class="diagram-panel good"><h4><span>API</span> Backend</h4><p>api.ctts.local 或 /api → backend-service → Backend Deployment 2 副本。</p></div>
+<div class="diagram-panel"><h4><span>DB</span> MySQL</h4><p>backend 通过 mysql-service 访问 MySQL，数据保存在 mysql-pvc。</p></div>
+</div>
+</div>
 </div>
 <h3 id="12-资源对象清单">1.2 资源对象清单</h3>
 <table>
@@ -1120,7 +1129,7 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href=
 <hr />
 <h2 id="八完整部署步骤">八、完整部署步骤</h2>
 <h3 id="81-部署顺序总览">8.1 部署顺序总览</h3>
-<div class="visual"> <div class="visual-title">图示 2：创建命名空间 → namespace.yaml</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>创建命名空间 → namespace.yaml</p></div> <div class="diagram-step"><p>部署 MySQL → mysql.yaml (等待 Running + Ready)</p></div> <div class="diagram-step"><p>部署 Backend → backend.yaml (等待 initContainer 通过 + Ready)</p></div> <div class="diagram-step"><p>部署 Frontend → frontend.yaml (等待 Ready)</p></div> <div class="diagram-step"><p>配置 Ingress → ingress.yaml (等待 ADDRESS 分配)</p></div> <div class="diagram-step"><p>全链路验证 → kubectl get all + curl + 浏览器</p></div> </div>
+<div class="visual"> <div class="visual-title">图示 2：创建命名空间 → namespace.yaml</div> <div class="edu-diagram"> <div class="diagram-grid three"> <div class="diagram-card"><p>创建命名空间 → namespace.yaml</p></div> <div class="diagram-card"><p>部署 MySQL → mysql.yaml (等待 Running + Ready)</p></div> <div class="diagram-card"><p>部署 Backend → backend.yaml (等待 initContainer 通过 + Ready)</p></div> <div class="diagram-card"><p>部署 Frontend → frontend.yaml (等待 Ready)</p></div> <div class="diagram-card"><p>配置 Ingress → ingress.yaml (等待 ADDRESS 分配)</p></div> <div class="diagram-card"><p>全链路验证 → kubectl get all + curl + 浏览器</p></div> </div>
   </div>
 </div>
 <h3 id="82-逐步部署命令">8.2 逐步部署命令</h3>
@@ -1376,7 +1385,17 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href=
 <hr />
 <h2 id="十故障排查指南">十、故障排查指南</h2>
 <h3 id="101-排查方法论五步法">10.1 排查方法论（五步法）</h3>
-<div class="visual"> <div class="visual-title">图示 3：Pod 故障排查五步法</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Step 1: kubectl get pods → 看 STATUS 是否 Running</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Step 2: kubectl describe pod → 看 Events</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Step 3: kubectl logs → 看应用日志</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Step 4: kubectl get events --sort-by=.lastTimestamp</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Step 5: 针对性修复（改 YAML / 补资源 / 改配置）</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 3：Pod 故障排查五步法</div>
+<div class="edu-diagram">
+<div class="docker-chain five">
+<div class="diagram-card"><h4>看状态</h4><p>kubectl get pods，先判断 STATUS 与 READY。</p></div>
+<div class="diagram-card"><h4>看详情</h4><p>kubectl describe pod，重点看 Events。</p></div>
+<div class="diagram-card"><h4>看日志</h4><p>kubectl logs，必要时加 --previous。</p></div>
+<div class="diagram-card"><h4>看事件</h4><p>kubectl get events --sort-by=.lastTimestamp。</p></div>
+<div class="diagram-card good"><h4>修复验证</h4><p>改 YAML、补资源或改配置后重新 apply 并验证。</p></div>
+</div>
+</div>
 </div>
 <h3 id="102-pod-pending-排查">10.2 Pod Pending 排查</h3>
 <p><strong>现象</strong>：<code>kubectl get pods</code> 显示

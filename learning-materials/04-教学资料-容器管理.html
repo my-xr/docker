@@ -339,7 +339,21 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rm mynginx</span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># mynginx</span></span></code></pre></div>
 <h4 id="图示">图示</h4>
-<div class="visual"> <div class="visual-title">图示 1：容器生命周期核心命令：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>容器生命周期核心命令：</p></div> <div class="diagram-note-card"><p>create → start → running</p></div> <div class="diagram-note-card"><p>stop</p></div> <div class="diagram-note-card"><p>exited</p></div> <div class="diagram-note-card"><p>rm</p></div> <div class="diagram-note-card"><p>[删除]</p></div> <div class="diagram-note-card"><p>run = create + start (一步到位)</p></div> <div class="diagram-note-card"><p>restart = stop + start (重启)</p></div> <div class="diagram-note-card"><p>rm -f = kill + rm (强制删除)</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 1：容器生命周期核心命令</div>
+  <div class="edu-diagram">
+    <div class="docker-chain five">
+      <div class="diagram-card"><span class="diagram-badge">create</span><h4>创建容器</h4><p>基于镜像生成容器配置和可写层，但主进程尚未运行。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">start</span><h4>启动容器</h4><p>启动容器主进程，状态进入 Running。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">running</span><h4>运行中</h4><p>可访问服务、查看日志，也可以使用 <code>exec</code> 进入容器排查。</p></div>
+      <div class="diagram-card warn"><span class="diagram-badge warn">stop</span><h4>停止容器</h4><p>向主进程发送停止信号，容器进入 Exited，但容器记录仍保留。</p></div>
+      <div class="diagram-card warn"><span class="diagram-badge warn">rm</span><h4>删除容器</h4><p>移除容器对象和可写层；未挂载的数据会随容器删除而丢失。</p></div>
+    </div>
+    <div class="diagram-grid three">
+      <div class="diagram-callout"><code>docker run</code> = create + start，一步创建并启动。</div>
+      <div class="diagram-callout"><code>docker restart</code> = stop + start，用于重启主进程。</div>
+      <div class="diagram-callout"><code>docker rm -f</code> = kill + rm，适合强制清理异常容器。</div>
+    </div>
   </div>
 </div>
 <h4 id="易错点">易错点</h4>
@@ -456,7 +470,13 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="
 6. 容器主进程启动（如 nginx 的 master process）
 7. 返回容器 ID 给客户端</code></pre>
 <p><strong>前台运行 vs 后台运行（-d）</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 2：前台运行（不加 -d）：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>前台运行（不加 -d）：</p></div> <div class="diagram-note-card"><p>docker run nginx</p></div> <div class="diagram-note-card"><p>终端被 nginx 日志占据</p></div> <div class="diagram-note-card"><p>Ctrl+c → 发 SIGINT 给主进程</p></div> <div class="diagram-note-card"><p>→ 容器退出</p></div> <div class="diagram-note-card"><p>后台运行（加 -d）：</p></div> <div class="diagram-note-card"><p>docker run -d nginx</p></div> <div class="diagram-note-card"><p>命令立即返回容器 ID</p></div> <div class="diagram-note-card"><p>终端可继续执行其他命令</p></div> <div class="diagram-note-card"><p>容器在后台持续运行</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 2：前台运行与后台运行的差异</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel warn"><span class="diagram-badge warn">不加 -d</span><h4>前台运行</h4><ul class="diagram-list"><li><code>docker run nginx</code></li><li>终端被 nginx 日志占据。</li><li><code>Ctrl+C</code> 会把中断信号发给主进程。</li><li>主进程退出后，容器随之退出。</li></ul></div>
+      <div class="diagram-panel good"><span class="diagram-badge good">加 -d</span><h4>后台运行</h4><ul class="diagram-list"><li><code>docker run -d nginx</code></li><li>命令立即返回容器 ID。</li><li>终端可继续执行其它命令。</li><li>容器在后台持续运行，日志用 <code>docker logs</code> 查看。</li></ul></div>
+    </div>
   </div>
 </div>
 <p><strong>端口映射（-p）原理</strong>：</p>
@@ -848,7 +868,18 @@ CPU/内存；<code>docker top</code>
 <div class="visual"> <div class="visual-title">图示 3：容器主进程（如 nginx）</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">容器主进程（如 nginx）</span></li> <li><span class="tree-label">stdout → Docker 日志驱动 → 存储</span></li> <li><span class="tree-label">stderr → Docker 日志驱动 → 存储</span></li> <li><span class="tree-label">docker logs 把存储的日志输出到终端</span></li> <li><span class="tree-label">日志驱动（默认 json-file）：</span></li> <li><span class="tree-label">/var/lib/docker/containers//-json.log</span></li> </ul> </div> </div>
 </div>
 <p><strong>docker exec 原理</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 4：容器（运行中）</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>容器（运行中）</p></div> <div class="diagram-note-card"><b>主进程</b><p>nginx master</p></div> <div class="diagram-note-card"><p>docker exec -it myweb bash</p></div> <div class="diagram-note-card"><p>在容器命名空间内新开一个 bash 进程</p></div> <div class="diagram-note-card"><p>（不影响主进程，独立终端）</p></div> <div class="diagram-note-card"><p>特点：</p></div> <div class="diagram-note-card"><p>进入容器后是一个新的 shell</p></div> <div class="diagram-note-card"><p>exit 退出后容器继续运行</p></div> <div class="diagram-note-card"><p>可同时开多个 exec 会话</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 4：docker exec 与容器主进程的关系</div>
+  <div class="edu-diagram">
+    <div class="diagram-grid two">
+      <div class="diagram-panel good"><span class="diagram-badge good">主进程</span><h4>nginx master 持续运行</h4><p>容器是否存活取决于主进程；只要主进程不退出，容器就保持 Running。</p></div>
+      <div class="diagram-panel"><span class="diagram-badge">exec 会话</span><h4><code>docker exec -it myweb bash</code></h4><p>在同一个容器命名空间内新开一个 shell，用于查看文件、执行命令和排查问题。</p></div>
+    </div>
+    <div class="diagram-grid three">
+      <div class="diagram-callout">进入容器后得到的是新的 shell，不会替代主进程。</div>
+      <div class="diagram-callout"><code>exit</code> 退出 exec 会话后，容器继续运行。</div>
+      <div class="diagram-callout">同一容器可以同时打开多个 exec 会话。</div>
+    </div>
   </div>
 </div>
 <p><strong>docker attach 原理</strong>：</p>
@@ -1322,7 +1353,13 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href=
 </tbody>
 </table>
 <p><strong>为什么挂载数据卷 -v</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 7：如果不挂载数据卷：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>如果不挂载数据卷：</p></div> <div class="diagram-note-card"><p>容器删除 → /var/lib/mysql 数据丢失 → 数据库没了！</p></div> <div class="diagram-note-card"><p>挂载数据卷 -v /data/ctts/mysql:/var/lib/mysql：</p></div> <div class="diagram-note-card"><p>宿主机 /data/ctts/mysql ← → 容器 /var/lib/mysql</p></div> <div class="diagram-note-card"><p>容器删除 → 数据仍在宿主机 → 重新启动容器数据恢复</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 7：是否挂载数据卷对数据保留的影响</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel warn"><span class="diagram-badge warn">不挂载数据卷</span><h4>数据跟着容器走</h4><p>MySQL 数据写在容器可写层里；容器删除后，<code>/var/lib/mysql</code> 中的数据也随之消失。</p></div>
+      <div class="diagram-panel good"><span class="diagram-badge good">挂载数据卷</span><h4>数据落在宿主机</h4><p><code>-v /data/ctts/mysql:/var/lib/mysql</code> 把数据目录映射到宿主机；容器删除后，数据仍可被新容器复用。</p></div>
+    </div>
   </div>
 </div>
 <p><strong>--restart=unless-stopped 的意义</strong>：</p>
@@ -1332,8 +1369,17 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href=
 <li>生产数据库容器必加此参数。</li>
 </ul>
 <p><strong>MySQL 容器启动流程</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 8：Docker 拉取/使用 mysql:8.0 镜像</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>Docker 拉取/使用 mysql:8.0 镜像</p></div> <div class="diagram-step"><p>创建容器，挂载 /data/ctts/mysql → /var/lib/mysql</p></div> <div class="diagram-step"><p>启动容器主进程：mysqld</p></div> <div class="diagram-step"><p>MySQL 首次启动：</p></div> <div class="diagram-step"><p>a. 初始化数据目录（如果为空）</p></div> <div class="diagram-step"><p>b. 创建 root 用户，密码来自 MYSQL_ROOT_PASSWORD</p></div> <div class="diagram-step"><p>c. 创建 MYSQL_DATABASE 数据库（如 ctts）</p></div> <div class="diagram-step"><p>d. 创建 MYSQL_USER 用户并授权访问该数据库</p></div> <div class="diagram-step"><p>MySQL 监听 3306 端口，等待连接</p></div> <div class="diagram-step"><p>docker-proxy 监听宿主机 3306，转发到容器 3306</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 8：Docker 拉取/使用 mysql:8.0 镜像</div>
+<div class="edu-diagram">
+<div class="docker-chain five">
+<div class="diagram-card"><h4>拉取镜像</h4><p>docker pull mysql:8.0，获得官方 MySQL 镜像。</p></div>
+<div class="diagram-card"><h4>准备参数</h4><p>设置 MYSQL_ROOT_PASSWORD、端口映射、容器名和数据目录。</p></div>
+<div class="diagram-card good"><h4>启动容器</h4><p>docker run 创建并启动 MySQL 进程。</p></div>
+<div class="diagram-card"><h4>验证连接</h4><p>使用 docker ps、logs 或 mysql 客户端确认 3306 可用。</p></div>
+<div class="diagram-card warn"><h4>处理持久化</h4><p>生产或长期练习必须挂载 volume，避免容器删除导致数据丢失。</p></div>
+</div>
+</div>
 </div>
 <h4 id="问题--场景-5">问题 / 场景</h4>
 <p><strong>问：为什么 MYSQL_ROOT_PASSWORD 是必填的？</strong></p>

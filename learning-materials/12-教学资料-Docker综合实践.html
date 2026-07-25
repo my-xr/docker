@@ -171,8 +171,16 @@ docker-compose.yml + 两份 Dockerfile + 一份 SQL
 脚本，一键部署一个完整可用的 CTTS 应用</strong>。</p>
 <h4 id="原理">原理</h4>
 <p><strong>CTTS 三服务架构回顾</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 1：Frontend ▶ Backend ▶ MySQL</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>Frontend ▶ Backend ▶ MySQL</p></div> <div class="diagram-note-card"><p>(Vue3) (SpringBoot)</p></div> <div class="diagram-note-card"><b>nginx</b><p>80 tomcat:8080 mysql:3306</p></div> <div class="diagram-note-card"><p>静态资源 SpringBoot API 数据存储</p></div> <div class="diagram-note-card"><p>访问入口 业务逻辑 持久化</p></div> <div class="diagram-note-card"><p>Nginx 反代 连接 MySQL 数据卷持久化</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 1：Frontend ▶ Backend ▶ MySQL</div>
+<div class="edu-diagram">
+<div class="docker-chain three">
+<div class="diagram-card"><h4>Frontend</h4><p>Vue3 构建出的静态资源由 Nginx 监听 80 端口对外提供，是用户访问入口。</p><ul class="docker-mini-list"><li>/ 返回页面与静态资源</li><li>/api 转发到后端服务</li></ul></div>
+<div class="diagram-card good"><h4>Backend</h4><p>SpringBoot 运行在 8080 端口，承接业务 API、参数校验与事务处理。</p><ul class="docker-mini-list"><li>接收 Nginx 反向代理流量</li><li>通过服务名 mysql 连接数据库</li></ul></div>
+<div class="diagram-card"><h4>MySQL</h4><p>MySQL 监听 3306，保存 CTTS 的核心业务数据。</p><ul class="docker-mini-list"><li>/var/lib/mysql 挂载具名卷</li><li>容器重建后数据仍保留</li></ul></div>
+</div>
+<div class="diagram-callout">这张图的重点不是三个容器简单排队，而是“入口、业务、数据”三层边界：Frontend 统一接入，Backend 处理业务，MySQL 负责持久化。</div>
+</div>
 </div>
 <p><strong>Docker 部分（前 11 次课）知识体系串联</strong>：</p>
 <table>
@@ -350,8 +358,18 @@ Dockerfile、init.sql、nginx.conf 等多个文件的协同。</p>
 </ol>
 <h4 id="原理-1">原理</h4>
 <p><strong>MySQL 官方镜像的初始化机制</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 3：mysql:8.0 镜像启动流程：</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>mysql:8.0 镜像启动流程：</p></div> <div class="diagram-step"><p>读取环境变量（MYSQL_ROOT_PASSWORD / MYSQL_DATABASE / MYSQL_USER / MYSQL_PASSWORD）</p></div> <div class="diagram-step"><p>初始化数据目录 /var/lib/mysql（首次启动）</p></div> <div class="diagram-step"><p>创建 root 用户，设置密码</p></div> <div class="diagram-step"><p>如果指定了 MYSQL_DATABASE，创建该数据库</p></div> <div class="diagram-step"><p>如果指定了 MYSQL_USER/MYSQL_PASSWORD，创建该用户并授权</p></div> <div class="diagram-step"><p>扫描 /docker-entrypoint-initdb.d/ 目录，按文件名顺序执行 .sql/.sh 文件</p></div> <div class="diagram-step"><p>启动 mysqld 服务，监听 3306</p></div> <div class="diagram-step"><p>关键：第 6 步只在&quot;首次启动&quot;（数据目录为空）时执行！</p></div> <div class="diagram-step"><p>如果数据卷已有数据，init.sql 不会再次执行。</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 3：mysql:8.0 镜像启动流程：</div>
+<div class="edu-diagram">
+<div class="docker-chain five">
+<div class="diagram-card"><h4>读取配置</h4><p>入口脚本先读取 MYSQL_ROOT_PASSWORD、MYSQL_DATABASE、MYSQL_USER、MYSQL_PASSWORD 等环境变量。</p></div>
+<div class="diagram-card"><h4>判断数据目录</h4><p>检查 /var/lib/mysql 是否为空。只有首次启动、数据目录为空时才进入初始化流程。</p></div>
+<div class="diagram-card"><h4>初始化账号与库</h4><p>创建 root 密码；如设置了 MYSQL_DATABASE，则创建业务库；如设置了 MYSQL_USER，则创建用户并授权。</p></div>
+<div class="diagram-card good"><h4>执行初始化脚本</h4><p>按文件名顺序执行 /docker-entrypoint-initdb.d/ 下的 .sql 与 .sh，完成建表和初始数据。</p></div>
+<div class="diagram-card"><h4>启动 MySQL</h4><p>正式启动 mysqld，监听 3306，对 backend 提供数据库连接。</p></div>
+</div>
+<div class="diagram-callout">关键规则：数据卷已有数据时，初始化脚本不会再次执行。想重跑 init.sql，需要清空或更换 MySQL 数据卷。</div>
+</div>
 </div>
 <p><strong>环境变量说明</strong>：</p>
 <table>
@@ -636,12 +654,26 @@ JDK，负责把源码打包成 jar。</li>
 <p>多阶段构建的核心价值是<strong>把"构建工具"与"运行时"分离</strong>，最终镜像只包含运行所必需的内容，体积大幅减小。</p>
 <h4 id="原理-2">原理</h4>
 <p><strong>为什么需要多阶段构建？</strong></p>
-<div class="visual"> <div class="visual-title">图示 6：【单阶段构建的问题】</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">【单阶段构建的问题】</div> <div class="stack-layer base">FROM maven:3.9-eclipse-temurin-17</div> <div class="stack-layer">COPY . /app</div> <div class="stack-layer">WORKDIR /app</div> <div class="stack-layer">RUN mvn clean package -DskipTests</div> <div class="stack-layer app">CMD [&quot;java&quot;, &quot;-jar&quot;, &quot;target/ctts-backend.jar&quot;]</div> <div class="stack-layer">问题：</div> <div class="stack-layer runtime">最终镜像包含完整 Maven + JDK + 源码 + target 目录</div> <div class="stack-layer runtime">镜像体积约 800MB+（实际运行只需要 JRE + jar）</div> <div class="stack-layer">攻击面大（包含构建工具、编译器等无关组件）</div> <div class="stack-layer">拉取/推送慢，浪费存储与带宽</div> <div class="stack-layer">【多阶段构建的解决思路】</div> <div class="stack-layer app">阶段1（builder）：用 maven 镜像打包 → 产出 jar</div> <div class="stack-layer runtime">阶段2（runtime）：用 jre 镜像 + 阶段1产出的 jar → 最终镜像</div> <div class="stack-layer runtime">最终镜像只包含：JRE + jar，约 300MB</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 6：【单阶段构建的问题】</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel warn"><span class="diagram-badge warn">单阶段</span><h4>Maven 镜像既构建又运行</h4><p>FROM maven:3.9-eclipse-temurin-17 后直接 COPY 源码、mvn package，再 java -jar 运行。</p><ul class="docker-mini-list"><li>最终镜像包含 Maven、JDK、源码和 target</li><li>体积约 800MB+，拉取推送都慢</li><li>构建工具和源码进入生产镜像，攻击面更大</li></ul></div>
+<div class="diagram-panel good"><span class="diagram-badge good">多阶段</span><h4>构建环境和运行环境分离</h4><p>builder 阶段只负责打 jar，runtime 阶段只复制 jar 并使用 JRE 运行。</p><ul class="docker-mini-list"><li>最终镜像只保留 JRE + app.jar</li><li>体积约 300MB，镜像更轻</li><li>运行镜像更干净，职责更明确</li></ul></div>
+</div>
+<div class="diagram-callout">多阶段构建的本意：把“编译需要的东西”留在 builder，把“运行必须的东西”放进最终镜像。</div>
+</div>
 </div>
 <p><strong>后端 Dockerfile 多阶段构建原理</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 7：阶段 1：builder（构建阶段）</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">阶段 1：builder（构建阶段）</div> <div class="stack-layer base">基础镜像：maven:3.9-eclipse-temurin-17</div> <div class="stack-layer runtime">包含：Maven 3.9 + JDK 17 + 编译工具</div> <div class="stack-layer">操作：</div> <div class="stack-layer">1. COPY pom.xml → 下载依赖（利用缓存）</div> <div class="stack-layer">2. COPY src/ → 编译源码</div> <div class="stack-layer">3. RUN mvn clean package -DskipTests</div> <div class="stack-layer app">产出：target/ctts-backend-1.0.0.jar</div> <div class="stack-layer base">COPY --from=builder 产物</div> <div class="stack-layer">▼</div> <div class="stack-layer">阶段 2：runtime（运行阶段）</div> <div class="stack-layer base">基础镜像：eclipse-temurin:17-jre</div> <div class="stack-layer runtime">包含：JRE 17（无 Maven、无编译器）</div> <div class="stack-layer">操作：</div> <div class="stack-layer base">1. COPY --from=builder /app/target/*.jar</div> <div class="stack-layer">2. EXPOSE 8080</div> <div class="stack-layer app">3. ENTRYPOINT java -jar app.jar</div> <div class="stack-layer">最终镜像体积：约 300MB</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 7：阶段 1：builder（构建阶段）</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel"><span class="diagram-badge">阶段 1</span><h4>builder：准备 jar</h4><p>基础镜像 maven:3.9-eclipse-temurin-17，包含 Maven、JDK 和编译工具。</p><ul class="docker-mini-list"><li>COPY pom.xml，先下载依赖并利用缓存</li><li>COPY src/，编译业务源码</li><li>RUN mvn clean package -DskipTests</li><li>产出 target/ctts-backend-1.0.0.jar</li></ul></div>
+<div class="diagram-panel good"><span class="diagram-badge good">阶段 2</span><h4>runtime：只运行 jar</h4><p>基础镜像 eclipse-temurin:17-jre，不包含 Maven 和编译器。</p><ul class="docker-mini-list"><li>COPY --from=builder /app/target/*.jar</li><li>EXPOSE 8080</li><li>ENTRYPOINT java -jar app.jar</li><li>最终镜像约 300MB</li></ul></div>
+</div>
+<div class="diagram-callout">`COPY --from=builder` 是两阶段之间的桥，只复制构建产物，不把构建现场搬进生产镜像。</div>
+</div>
 </div>
 <p><strong>为什么先 COPY pom.xml 再 COPY src/？</strong></p>
 <ul>
@@ -855,8 +887,18 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href=
 <span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. 清理测试容器</span></span>
 <span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rm <span class="at">-f</span> ctts-backend-test</span></code></pre></div>
 <h4 id="图示-2">图示</h4>
-<div class="visual"> <div class="visual-title">图示 8：后端多阶段构建流程：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">后端多阶段构建流程：</div> <div class="stack-layer">源码（pom.xml + src/）</div> <div class="stack-layer">▼</div> <div class="stack-layer">阶段1：builder</div> <div class="stack-layer base">FROM maven:3.9-eclipse-temurin-17</div> <div class="stack-layer">COPY pom.xml → mvn dependency ← 依赖层（缓存）</div> <div class="stack-layer">COPY src/ → mvn package ← 编译层</div> <div class="stack-layer app">产出：ctts-backend-1.0.0.jar</div> <div class="stack-layer base">COPY --from=builder</div> <div class="stack-layer">▼</div> <div class="stack-layer">阶段2：runtime</div> <div class="stack-layer base">FROM eclipse-temurin:17-jre</div> <div class="stack-layer app">COPY jar → /app/app.jar</div> <div class="stack-layer app">ENTRYPOINT java -jar app.jar</div> <div class="stack-layer">最终镜像：~320MB</div> <div class="stack-layer">对比单阶段构建：</div> <div class="stack-layer runtime">单阶段：maven 镜像（含 Maven+JDK+源码）= ~800MB</div> <div class="stack-layer runtime">多阶段：jre 镜像（只含 JRE+jar） = ~320MB</div> <div class="stack-layer">减小约 60%</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 8：后端多阶段构建流程：</div>
+<div class="edu-diagram">
+<div class="docker-chain five">
+<div class="diagram-card"><h4>源码输入</h4><p>pom.xml 与 src/ 进入 Docker build，上下文中包含后端工程源码。</p></div>
+<div class="diagram-card"><h4>依赖缓存层</h4><p>先 COPY pom.xml 并下载依赖，让依赖层在源码小改动时可复用。</p></div>
+<div class="diagram-card"><h4>编译打包</h4><p>COPY src/ 后执行 mvn package，产出 ctts-backend-1.0.0.jar。</p></div>
+<div class="diagram-card good"><h4>复制到运行层</h4><p>runtime 阶段基于 JRE 镜像，只 COPY --from=builder 得到的 jar。</p></div>
+<div class="diagram-card"><h4>最终镜像</h4><p>ENTRYPOINT java -jar app.jar，镜像约 320MB，比单阶段约减少 60%。</p></div>
+</div>
+<div class="diagram-callout">流程优化点在“缓存”和“瘦身”：pom.xml 提前复制提升构建速度，运行阶段只带 jar 降低镜像体积。</div>
+</div>
 </div>
 <h4 id="易错点-2">易错点</h4>
 <ol type="1">
@@ -902,8 +944,14 @@ Docker 镜像。本节采用<strong>多阶段构建</strong>：</p>
 反向代理是本知识点的核心——它解决了浏览器跨域问题，让前端与后端看起来"同源"。</p>
 <h4 id="原理-3">原理</h4>
 <p><strong>前端为什么要多阶段构建？</strong></p>
-<div class="visual"> <div class="visual-title">图示 9：【单阶段构建的问题】</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">【单阶段构建的问题】</div> <div class="stack-layer base">FROM node:20-alpine</div> <div class="stack-layer">COPY . .</div> <div class="stack-layer">RUN npm install &amp;&amp; npm run build</div> <div class="stack-layer">CMD [&quot;npm&quot;, &quot;run&quot;, &quot;preview&quot;]</div> <div class="stack-layer">问题：</div> <div class="stack-layer">最终镜像包含 Node.js + 源码 + node_modules + dist</div> <div class="stack-layer">镜像体积约 500MB+（实际运行只需要 Nginx + dist）</div> <div class="stack-layer">用 npm run preview 跑前端不适合生产（性能差、无 SPA fallback）</div> <div class="stack-layer">【多阶段构建】</div> <div class="stack-layer">阶段1（builder）：node 镜像 → npm run build → 产出 dist/</div> <div class="stack-layer">阶段2（runtime）：nginx 镜像 + dist/ → 最终镜像约 50MB</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 9：【单阶段构建的问题】</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel warn"><span class="diagram-badge warn">单阶段前端</span><h4>Node 镜像直接跑生产页面</h4><p>FROM node:20-alpine 后 npm install、npm run build，再用 npm run preview 提供页面。</p><ul class="docker-mini-list"><li>最终镜像包含 Node.js、源码、node_modules 和 dist</li><li>体积约 500MB+</li><li>preview 更偏开发预览，不适合生产接入</li></ul></div>
+<div class="diagram-panel good"><span class="diagram-badge good">多阶段前端</span><h4>Node 构建，Nginx 承载</h4><p>builder 用 Node 生成 dist，runtime 用 nginx:alpine 托管静态文件。</p><ul class="docker-mini-list"><li>最终镜像只包含 Nginx + dist</li><li>体积约 50MB</li><li>可同时配置 SPA fallback 与 /api 反向代理</li></ul></div>
+</div>
+</div>
 </div>
 <p><strong>Nginx 反向代理解决跨域的原理</strong>：</p>
 <div class="visual"> <div class="visual-title">图示 10：反向代理如何避开跨域</div> <div class="edu-diagram"> <div class="diagram-grid two"> <div class="diagram-panel"> <span class="diagram-badge warn">没有反代</span> <h4>端口不同，浏览器判定跨域</h4> <div class="diagram-flow"><div class="diagram-card"><h4>浏览器</h4><p>访问 http://localhost/</p></div><div class="flow-arrow">→</div><div class="diagram-card"><h4>前端 Nginx</h4><p>80 端口返回页面</p></div></div> <div class="diagram-flow"><div class="diagram-card warn"><h4>前端 JS</h4><p>调用 http://localhost:8080/api/users</p></div><div class="flow-arrow">→</div><div class="diagram-card warn"><h4>后端</h4><p>8080 端口，触发 CORS 限制。</p></div></div> <p>结果：浏览器拦截请求，后端需要额外配置 CORS。</p> </div> <div class="diagram-panel"> <span class="diagram-badge good">有反代</span> <h4>浏览器只看见同一个入口</h4> <div class="diagram-flow"><div class="diagram-card good"><h4>浏览器</h4><p>访问 http://localhost/api/users</p></div><div class="flow-arrow">→</div><div class="diagram-card"><h4>前端 Nginx</h4><p>仍然是 80 端口，同源。</p></div></div> <div class="diagram-flow"><div class="diagram-card"><h4>/api/ 规则</h4><p>Nginx 内部转发到 backend:8080/api/</p></div><div class="flow-arrow">→</div><div class="diagram-card good"><h4>后端服务</h4><p>由 Nginx 代为通信，浏览器不直接跨端口访问。</p></div></div> <p>结果：浏览器侧保持同源，系统边界也更清晰。</p> </div> </div>
@@ -1133,8 +1181,22 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href=
 <span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a><span class="co"># 9. 清理测试容器</span></span>
 <span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rm <span class="at">-f</span> ctts-frontend-test</span></code></pre></div>
 <h4 id="图示-3">图示</h4>
-<div class="visual"> <div class="visual-title">图示 11：前端多阶段构建流程：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">前端多阶段构建流程：</div> <div class="stack-layer">源码（package.json + src/）</div> <div class="stack-layer">▼</div> <div class="stack-layer">阶段1：builder</div> <div class="stack-layer base">FROM node:20-alpine</div> <div class="stack-layer">COPY package.json → npm ci ← 依赖层（缓存）</div> <div class="stack-layer">COPY . → npm run build ← 构建层</div> <div class="stack-layer">产出：dist/（静态文件）</div> <div class="stack-layer base">COPY --from=builder /app/dist</div> <div class="stack-layer">▼</div> <div class="stack-layer">阶段2：runtime</div> <div class="stack-layer base">FROM nginx:alpine</div> <div class="stack-layer">COPY nginx.conf → /etc/nginx/...</div> <div class="stack-layer">COPY dist/ → /usr/share/...</div> <div class="stack-layer">最终镜像：~55MB</div> <div class="stack-layer">Nginx: ①静态托管 ②SPA fallback ③反代</div> <div class="stack-layer">Nginx 反向代理流量路径：</div> <div class="stack-layer base">浏览器 http://localhost/ ▶ Nginx (frontend)</div> <div class="stack-layer">/ → index.html</div> <div class="stack-layer">/users → fallback</div> <div class="stack-layer base">浏览器 http://localhost/api/users ▶ /api/users 转发</div> <div class="stack-layer">▼</div> <div class="stack-layer">Backend (SpringBoot)</div> <div class="stack-layer">http://backend:8080/</div> <div class="stack-layer">→ /users</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 11：前端多阶段构建流程：</div>
+<div class="edu-diagram">
+<div class="docker-chain five">
+<div class="diagram-card"><h4>源码输入</h4><p>package.json、package-lock.json 与 src/ 进入构建上下文。</p></div>
+<div class="diagram-card"><h4>Node builder</h4><p>基于 node:20-alpine，先 npm ci 安装依赖，再 npm run build。</p></div>
+<div class="diagram-card good"><h4>产出 dist</h4><p>Vue3 被编译成静态文件，运行时不再需要源码、Node 和 node_modules。</p></div>
+<div class="diagram-card"><h4>Nginx runtime</h4><p>基于 nginx:alpine，复制 nginx.conf 与 dist 到 Nginx 目录。</p></div>
+<div class="diagram-card"><h4>生产入口</h4><p>Nginx 监听 80，负责静态资源、SPA fallback，并把 /api 转发到 backend:8080。</p></div>
+</div>
+<div class="docker-route">
+<div class="diagram-panel"><h4><span>/</span> 页面访问</h4><p>浏览器访问 /，Nginx 返回 index.html 与静态资源。</p></div>
+<div class="diagram-panel"><h4><span>*</span> SPA fallback</h4><p>/users 等前端路由回退到 index.html，由 Vue Router 接管。</p></div>
+<div class="diagram-panel good"><h4><span>/api</span> 后端代理</h4><p>/api/users 被 Nginx 转发到 http://backend:8080/users。</p></div>
+</div>
+</div>
 </div>
 <h4 id="易错点-3">易错点</h4>
 <ol type="1">

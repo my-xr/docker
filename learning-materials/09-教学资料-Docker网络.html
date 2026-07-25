@@ -446,7 +446,18 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="
 自定义网络要解决的问题。</p>
 </blockquote>
 <h4 id="图示-1">图示</h4>
-<div class="visual"> <div class="visual-title">图示 2：默认 bridge（docker0）的局限：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>默认 bridge（docker0）的局限：</p></div> <div class="diagram-note-card"><p>容器 c1 容器 c2</p></div> <div class="diagram-note-card"><p>172.17.0.2 172.17.0.3</p></div> <div class="diagram-note-card"><p>ping c2 ❌</p></div> <div class="diagram-note-card"><p>(无DNS,报错bad address)</p></div> <div class="diagram-note-card"><p>ping 172.17.0.3 ✓</p></div> <div class="diagram-note-card"><p>docker0 ← 默认 bridge</p></div> <div class="diagram-note-card"><p>172.17.0.1 ← 无 DNS 服务</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 2：默认 bridge（docker0）的局限</div>
+  <div class="edu-diagram">
+    <div class="diagram-grid three">
+      <div class="diagram-card"><span class="diagram-badge">c1</span><h4>172.17.0.2</h4><p>可以通过 IP 访问同 bridge 中的其它容器。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">docker0</span><h4>172.17.0.1</h4><p>默认网桥负责二层互通与 NAT，但不提供容器名 DNS。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">c2</span><h4>172.17.0.3</h4><p>能被 IP 访问，但默认不能被容器名解析。</p></div>
+    </div>
+    <div class="docker-compare">
+      <div class="diagram-panel warn"><h4><code>ping c2</code> 失败</h4><p>默认 bridge 没有内置 DNS，容器名无法解析，常见报错为 bad address。</p></div>
+      <div class="diagram-panel good"><h4><code>ping 172.17.0.3</code> 成功</h4><p>直接使用容器 IP 可以通信，但 IP 会随容器重建变化，不适合业务依赖。</p></div>
+    </div>
   </div>
 </div>
 <h4 id="易错点-1">易错点</h4>
@@ -481,7 +492,15 @@ IP 互通。默认 bridge 的最大局限是没有容器名 DNS 解析，只能�
   </div>
 </div>
 <p><strong>none 网络原理</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 4：none 网络模式：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>none 网络模式：</p></div> <div class="diagram-note-card"><p>宿主机</p></div> <div class="diagram-note-card"><p>容器 C</p></div> <div class="diagram-note-card"><p>(none 网络)</p></div> <div class="diagram-note-card"><p>只有 lo ← 仅本地回环 127.0.0.1</p></div> <div class="diagram-note-card"><p>127.0.0.1 ← 无 eth0、无法 ping 通</p></div> <div class="diagram-note-card"><p>宿主机或任何外部地址</p></div> <div class="diagram-note-card"><b>特点</b><p>完全隔离，适合安全沙箱、离线计算、测试场景</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 4：none 网络模式的隔离边界</div>
+  <div class="edu-diagram">
+    <div class="diagram-grid three">
+      <div class="diagram-card warn"><span class="diagram-badge warn">容器 C</span><h4>没有 eth0</h4><p>容器不接入任何 Docker 网络，只有本地回环接口。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">lo</span><h4>127.0.0.1</h4><p>只能访问容器内部本地回环，不能访问宿主机、其它容器或外部网络。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">适用场景</span><h4>完全隔离</h4><p>适合安全沙箱、离线计算、网络无关测试等场景。</p></div>
+    </div>
+    <div class="diagram-callout">none 模式的核心不是“网络慢”，而是“没有网络入口和出口”；它主动放弃网络能力，换取最强隔离。</div>
   </div>
 </div>
 <p><strong>三种网络驱动对比表</strong>：</p>
@@ -662,8 +681,19 @@ bridge 网络，它相对默认 bridge 有两大优势：<strong>容器名 DNS
 bridge 可以按业务创建多个网络（如
 <code>ctts-net</code>、<code>monitor-net</code>），不同网络的容器默认隔离，按需通过
 <code>docker network connect</code> 互通。</p>
-<div class="visual"> <div class="visual-title">图示 7：自定义网络实现业务分组隔离：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>自定义网络实现业务分组隔离：</p></div> <div class="diagram-note-card"><p>ctts-net (业务网络) monitor-net (监控网络)</p></div> <div class="diagram-note-card"><p>frontend backend prometheus</p></div> <div class="diagram-note-card"><p>mysql</p></div> <div class="diagram-note-card"><p>↑ ↑</p></div> <div class="diagram-note-card"><p>默认隔离</p></div> <div class="diagram-note-card"><p>需要 prometheus 监控 backend?</p></div> <div class="diagram-note-card"><p>→ docker network connect ctts-net prometheus</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 7：自定义网络实现业务分组隔离：</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel good"><span class="diagram-badge good">ctts-net</span><h4>业务服务网络</h4><p>frontend、backend、mysql 在同一个自定义 bridge 中，可以通过容器名或服务名互相访问。</p></div>
+<div class="diagram-panel warn"><span class="diagram-badge warn">隔离网络</span><h4>非业务容器不加入</h4><p>未加入 ctts-net 的容器不能直接通过该网络访问 CTTS 服务，降低误连和暴露面。</p></div>
+</div>
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>按项目分组</h4><p>一个项目一张自定义网络。</p></div>
+<div class="diagram-card"><h4>内置 DNS</h4><p>容器名可解析为容器 IP。</p></div>
+<div class="diagram-card"><h4>边界清晰</h4><p>网络隔离比默认 bridge 更适合多服务项目。</p></div>
+</div>
+</div>
 </div>
 <p><strong>自定义 bridge 与默认 bridge 的完整对比</strong>：</p>
 <table>
@@ -808,7 +838,14 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href=
 解析</strong>。</p>
 </blockquote>
 <h4 id="图示-3">图示</h4>
-<div class="visual"> <div class="visual-title">图示 8：自定义 bridge 网络 vs 默认 bridge：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>自定义 bridge 网络 vs 默认 bridge：</p></div> <div class="diagram-note-card"><p>默认 bridge（docker0） 自定义 bridge（ctts-net）</p></div> <div class="diagram-note-card"><b>c1</b><p>172.17.0.2 c1: 172.20.0.2</p></div> <div class="diagram-note-card"><b>c2</b><p>172.17.0.3 c2: 172.20.0.3</p></div> <div class="diagram-note-card"><p>ping c2 ❌ ping c2 ✓</p></div> <div class="diagram-note-card"><p>(无DNS) (内置DNS 127.0.0.11)</p></div> <div class="diagram-note-card"><p>ping 172.17.0.3 ✓ ping 172.20.0.3 ✓</p></div> <div class="diagram-note-card"><b>关键差异</b><p>自定义 bridge 内置 DNS，支持容器名互访</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 8：自定义 bridge 网络 vs 默认 bridge</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel warn"><span class="diagram-badge warn">默认 bridge：docker0</span><h4>能用 IP，不适合服务发现</h4><ul class="diagram-list"><li>c1：172.17.0.2，c2：172.17.0.3。</li><li><code>ping 172.17.0.3</code> 可以成功。</li><li><code>ping c2</code> 失败，因为没有容器名 DNS。</li></ul></div>
+      <div class="diagram-panel good"><span class="diagram-badge good">自定义 bridge：ctts-net</span><h4>支持容器名互访</h4><ul class="diagram-list"><li>c1：172.20.0.2，c2：172.20.0.3。</li><li><code>ping c2</code> 可以通过内置 DNS 解析。</li><li>适合 Compose 和多容器业务网络。</li></ul></div>
+    </div>
+    <div class="diagram-callout">关键差异：自定义 bridge 内置 DNS（127.0.0.11），业务容器可以使用服务名/容器名互相访问。</div>
   </div>
 </div>
 <h4 id="易错点-3">易错点</h4>
@@ -1082,7 +1119,18 @@ MySQL
 </tbody>
 </table>
 <p><strong>CTTS 三服务网络通信方案设计</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 12：CTTS 三服务网络方案（推荐设计）：</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>CTTS 三服务网络方案（推荐设计）：</p></div> <div class="diagram-step"><p>宿主机</p></div> <div class="diagram-step"><p>外部用户 http://宿主机IP:80</p></div> <div class="diagram-step"><p>自定义 bridge: ctts-net</p></div> <div class="diagram-step"><p>(DNS: 127.0.0.11)</p></div> <div class="diagram-step"><p>ctts-frontend ctts-backend mysql</p></div> <div class="diagram-step"><p>Nginx:80 ▶ SpringBoot ▶ MySQL</p></div> <div class="diagram-step"><p>20.0.4 :8080 :3306</p></div> <div class="diagram-step"><p>20.0.3 172.20.0.2</p></div> <div class="diagram-step"><p>p 80:80</p></div> <div class="diagram-step"><p>(仅前端对外暴露)</p></div> <div class="diagram-step"><p>设计原则：</p></div> <div class="diagram-step"><p>三服务接入同一自定义 bridge：ctts-net（DNS 按容器名互访）</p></div> <div class="diagram-step"><p>前端 -p 80:80 对外暴露（用户访问入口）</p></div> <div class="diagram-step"><p>后端不 -p 暴露（仅前端通过 http://ctts-backend:8080 访问）</p></div> <div class="diagram-step"><p>MySQL 不 -p 暴露（仅后端通过 mysql -h ctts-mysql 访问）</p></div> <div class="diagram-step"><p>最小暴露面：只有前端 80 端口对宿主机外可见</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 12：CTTS 三服务推荐网络拓扑</div>
+  <div class="edu-diagram">
+    <div class="diagram-grid three">
+      <div class="diagram-card good"><span class="diagram-badge good">ctts-frontend</span><h4>Nginx :80</h4><p>唯一对外暴露：<code>-p 80:80</code>，用户从浏览器访问前端入口。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">ctts-backend</span><h4>Spring Boot :8080</h4><p>不直接暴露给宿主机，由前端在 <code>ctts-net</code> 内通过容器名访问。</p></div>
+      <div class="diagram-card warn"><span class="diagram-badge warn">ctts-mysql</span><h4>MySQL :3306</h4><p>不对外暴露，仅后端通过 <code>ctts-mysql:3306</code> 访问数据库。</p></div>
+    </div>
+    <div class="diagram-grid two">
+      <div class="diagram-callout">网络：三服务都加入自定义 bridge <code>ctts-net</code>，使用内置 DNS 通过容器名互访。</div>
+      <div class="diagram-callout">原则：最小暴露面。只有前端 80 端口对外，后端和数据库留在内部网络。</div>
+    </div>
   </div>
 </div>
 <p><strong>为什么 MySQL 不对外暴露 3306？</strong>（网络安全思政点）</p>
@@ -1260,7 +1308,16 @@ IP，避免 IP 变化导致连接失败。这套设计兼顾了通信便利性�
 三服务网络通信方案完整落地</h2>
 <p>把前面所有知识点串起来，看 CTTS
 三服务如何在一台宿主机上完成网络通信方案的设计与落地：</p>
-<div class="visual"> <div class="visual-title">图示 14：=== CTTS 三服务网络通信方案完整设计 ===</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>=== CTTS 三服务网络通信方案完整设计 ===</p></div> <div class="diagram-step"><p>需求分析（K9-1）</p></div> <div class="diagram-step"><p>前端（Vue3+Nginx）需要对外暴露 80 端口给用户访问</p></div> <div class="diagram-step"><p>后端（SpringBoot）需要被前端按容器名调用 API</p></div> <div class="diagram-step"><p>MySQL 需要被后端按容器名连接</p></div> <div class="diagram-step"><p>MySQL 不应对外暴露 3306（安全要求）</p></div> <div class="diagram-step"><p>网络驱动选型（K9-2、K9-3）</p></div> <div class="diagram-step"><p>bridge：✅ 适合，默认推荐，隔离+互通</p></div> <div class="diagram-step"><p>host：❌ 失去隔离，端口冲突风险</p></div> <div class="diagram-step"><p>none：❌ 完全无网络，无法满足需求</p></div> <div class="diagram-step"><p>选型：bridge（且用自定义 bridge，K9-4）</p></div> <div class="diagram-step"><p>自定义网络创建（K9-4）</p></div> <div class="diagram-step"><p>命令：docker network create ctts-net</p></div> <div class="diagram-step"><p>优势：容器名 DNS 解析 + 网络隔离</p></div> <div class="diagram-step"><p>容器间通信设计（K9-5）</p></div> <div class="diagram-step"><p>三容器同在 ctts-net 中，通过容器名互访</p></div> <div class="diagram-step"><p>frontend → http://ctts-backend:8080（前端调后端 API）</p></div> <div class="diagram-step"><p>backend → jdbc:mysql://ctts-mysql:3306/ctts（后端连 MySQL）</p></div> <div class="diagram-step"><p>端口映射设计（K9-6）</p></div> <div class="diagram-step"><p>frontend: -p 80:80（对外暴露）</p></div> <div class="diagram-step"><p>backend: 不 -p（仅同网络内访问）</p></div> <div class="diagram-step"><p>mysql: 不 -p（仅同网络内访问）</p></div> <div class="diagram-step"><p>安全设计（思政融入）</p></div> <div class="diagram-step"><p>最小暴露面：仅前端 80 对外</p></div> <div class="diagram-step"><p>MySQL 隔离：不对公网暴露 3306</p></div> <div class="diagram-step"><p>默认隔离、按需放通</p></div> <div class="diagram-step"><p>落地命令（见 K9-6 完整示例）</p></div> <div class="diagram-step"><p>docker network create ctts-net</p></div> <div class="diagram-step"><p>docker run --name ctts-mysql --network ctts-net ...</p></div> <div class="diagram-step"><p>docker run --name ctts-backend --network ctts-net ...</p></div> <div class="diagram-step"><p>docker run --name ctts-frontend --network ctts-net -p 80:80 ...</p></div> <div class="diagram-step"><p>验证</p></div> <div class="diagram-step"><p>docker network inspect ctts-net 看三容器都在</p></div> <div class="diagram-step"><p>docker exec backend ping ctts-mysql 通</p></div> <div class="diagram-step"><p>curl http://localhost:80 看到前端页面</p></div> <div class="diagram-step"><p>curl telnet://localhost:3306 拒绝（符合预期）</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 14：CTTS 三服务网络通信方案完整设计</div>
+  <div class="edu-diagram">
+    <div class="docker-chain five">
+      <div class="diagram-card"><h4>需求</h4><p>前端对外访问，后端供前端调用，MySQL 仅供后端连接。</p></div>
+      <div class="diagram-card good"><h4>网络选型</h4><p>选择自定义 bridge：隔离、互通、支持容器名 DNS。</p></div>
+      <div class="diagram-card"><h4>通信路径</h4><p>frontend → <code>ctts-backend:8080</code>；backend → <code>ctts-mysql:3306</code>。</p></div>
+      <div class="diagram-card warn"><h4>端口暴露</h4><p>frontend 映射 <code>80:80</code>；backend 和 MySQL 不映射到宿主机。</p></div>
+      <div class="diagram-card"><h4>验证</h4><p><code>network inspect</code>、容器内 ping/curl、浏览器访问前端，确认 3306 外部不可达。</p></div>
+    </div>
   </div>
 </div>
 <blockquote>

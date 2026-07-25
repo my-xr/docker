@@ -141,8 +141,15 @@
 <p>Docker
 镜像是<strong>只读的</strong>，容器在镜像之上加一层<strong>可写层</strong>（也叫
 storage layer / ephemeral layer）：</p>
-<div class="visual"> <div class="visual-title">图示 1：可写层（容器专属） ← 容器运行时写入的数据在这里</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer runtime">可写层（容器专属） ← 容器运行时写入的数据在这里</div> <div class="stack-layer">临时、随容器删除而消失</div> <div class="stack-layer app">镜像层 3（你的应用代码） ← 只读</div> <div class="stack-layer runtime">镜像层 2（JRE 17） ← 只读</div> <div class="stack-layer base">镜像层 1（Debian 基础） ← 只读</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 1：可写层（容器专属） ← 容器运行时写入的数据在这里</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel warn"><span class="diagram-badge warn">容器可写层</span><h4>随容器生命周期变化</h4><p>容器运行时写入的数据默认落在可写层；容器删除后，这些数据也随之消失。</p></div>
+<div class="diagram-panel good"><span class="diagram-badge good">Volume</span><h4>独立于容器保存</h4><p>数据写入 Docker 管理的数据卷，容器删除和重建后仍可重新挂载使用。</p></div>
+</div>
+<div class="diagram-callout">持久化的核心问题：不要把数据库数据放在容器可写层里。</div>
+</div>
 </div>
 <p><strong>可写层的问题</strong>：</p>
 <table>
@@ -264,7 +271,13 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="
 K10-2~K10-6 就是解决方案。</p>
 </blockquote>
 <h4 id="图示">图示</h4>
-<div class="visual"> <div class="visual-title">图示 2：没有持久化（数据随容器消失）：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">没有持久化（数据随容器消失）：</div> <div class="stack-layer">写入数据</div> <div class="stack-layer">宿主机 容器可写层</div> <div class="stack-layer">/var/lib/</div> <div class="stack-layer">mysql/ ← 数据在这里</div> <div class="stack-layer runtime">docker rm</div> <div class="stack-layer">▼</div> <div class="stack-layer">数据消失 ← 容器删除，数据丢失</div> <div class="stack-layer">有持久化（数据存卷，独立于容器）：</div> <div class="stack-layer">v 卷挂载</div> <div class="stack-layer">宿主机 ◀ 容器可写层</div> <div class="stack-layer">/var/lib/ /var/lib/</div> <div class="stack-layer runtime">docker/ mysql/</div> <div class="stack-layer">volumes/</div> <div class="stack-layer runtime">mysql_data docker rm</div> <div class="stack-layer">数据 ✓ ▼</div> <div class="stack-layer">容器删除，但数据仍在卷里</div> <div class="stack-layer runtime">docker run -v mysql_data:...</div> <div class="stack-layer">▼</div> <div class="stack-layer">新容器挂载同一卷，数据恢复</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 2：容器可写层与数据卷的持久化差异</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel warn"><span class="diagram-badge warn">没有持久化</span><h4>数据写进容器可写层</h4><p>MySQL 数据位于容器内部 <code>/var/lib/mysql</code>；执行 <code>docker rm</code> 后，可写层被删除，数据随容器消失。</p></div>
+      <div class="diagram-panel good"><span class="diagram-badge good">使用数据卷</span><h4>数据独立于容器</h4><p><code>-v mysql_data:/var/lib/mysql</code> 让数据写入宿主机卷；删除容器后卷仍保留，新容器挂载同一卷即可恢复数据。</p></div>
+    </div>
   </div>
 </div>
 <h4 id="易错点">易错点</h4>
@@ -289,7 +302,14 @@ Docker 引擎管理，存储在宿主机上的特定目录（Linux 默认
 <p>Volume 是 Docker 官方推荐的持久化方式，特别适合生产环境。</p>
 <h4 id="原理-1">原理</h4>
 <p><strong>Volume 的工作机制</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 3：/var/lib/docker/volumes/</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">宿主机</div> <div class="stack-layer runtime">/var/lib/docker/volumes/</div> <div class="stack-layer">mysql_data/_data/ ← 卷数据</div> <div class="stack-layer">nginx_data/_data/</div> <div class="stack-layer">redis_data/_data/</div> <div class="stack-layer runtime">Docker 引擎管理这些卷</div> <div class="stack-layer">▲</div> <div class="stack-layer">v mysql_data:/var/lib/mysql （挂载）</div> <div class="stack-layer">容器</div> <div class="stack-layer">/var/lib/mysql/ ← 容器内路径</div> <div class="stack-layer">（实际指向卷数据，不是可写层）</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 3：Docker Volume 在宿主机与容器中的映射</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel"><span class="diagram-badge">宿主机</span><h4><code>/var/lib/docker/volumes/</code></h4><ul class="diagram-list"><li><code>mysql_data/_data/</code> 保存 MySQL 数据。</li><li><code>nginx_data/_data/</code> 保存 Nginx 数据。</li><li>Docker 引擎负责管理这些卷目录。</li></ul></div>
+      <div class="diagram-panel good"><span class="diagram-badge good">容器</span><h4><code>/var/lib/mysql</code></h4><p>容器看到的是业务路径，但实际读写会落到宿主机卷目录，而不是容器可写层。</p></div>
+    </div>
+    <div class="diagram-callout"><code>-v mysql_data:/var/lib/mysql</code> 的含义：把名为 <code>mysql_data</code> 的卷挂到容器内 <code>/var/lib/mysql</code>。</div>
   </div>
 </div>
 <p><strong>Volume 的关键特性</strong>：</p>
@@ -468,7 +488,16 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="
 这个示例完整演示了"创建卷→挂载→写入→删容器→重建容器→验证数据"的持久化流程，是本节课的核心操作模式。</p>
 </blockquote>
 <h4 id="图示-1">图示</h4>
-<div class="visual"> <div class="visual-title">图示 4：Volume 工作流程：</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>Volume 工作流程：</p></div> <div class="diagram-step"><p>创建卷</p></div> <div class="diagram-step"><p>docker volume create my_data</p></div> <div class="diagram-step"><p>→ /var/lib/docker/volumes/my_data/_data/</p></div> <div class="diagram-step"><p>挂载到容器</p></div> <div class="diagram-step"><p>docker run -v my_data:/app/data ...</p></div> <div class="diagram-step"><p>容器 /app/data/</p></div> <div class="diagram-step"><p>挂载</p></div> <div class="diagram-step"><p>宿主机</p></div> <div class="diagram-step"><p>/var/lib/docker/volumes/</p></div> <div class="diagram-step"><p>my_data/_data/ ← 实际存储</p></div> <div class="diagram-step"><p>删除容器，卷保留</p></div> <div class="diagram-step"><p>docker rm 容器</p></div> <div class="diagram-step"><p>宿主机</p></div> <div class="diagram-step"><p>/var/lib/docker/volumes/</p></div> <div class="diagram-step"><p>my_data/_data/ ✓ 数据仍在</p></div> <div class="diagram-step"><p>新容器挂载同一卷，数据恢复</p></div> <div class="diagram-step"><p>docker run -v my_data:/app/data ...</p></div> <div class="diagram-step"><p>新容器 /app/data/ → 同一卷数据 ✓</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 4：Volume 创建、挂载、复用流程</div>
+  <div class="edu-diagram">
+    <div class="docker-chain five">
+      <div class="diagram-card"><h4>创建卷</h4><p><code>docker volume create my_data</code>，Docker 在宿主机卷目录中创建存储位置。</p></div>
+      <div class="diagram-card"><h4>挂载容器</h4><p><code>docker run -v my_data:/app/data</code>，容器内路径指向卷。</p></div>
+      <div class="diagram-card good"><h4>写入数据</h4><p>应用写 <code>/app/data</code>，实际数据进入 <code>my_data/_data</code>。</p></div>
+      <div class="diagram-card warn"><h4>删除容器</h4><p>容器被删除，但卷不会自动删除，数据仍在宿主机。</p></div>
+      <div class="diagram-card good"><h4>新容器复用</h4><p>新容器再次挂载 <code>my_data</code>，即可看到原数据。</p></div>
+    </div>
   </div>
 </div>
 <h4 id="易错点-1">易错点</h4>
@@ -951,7 +980,15 @@ K10-5：数据卷共享与备份</h3>
 是指把备份的数据还原回卷中，使容器能重新访问这些数据。</p>
 <h4 id="原理-4">原理</h4>
 <p><strong>--volumes-from 共享卷的工作机制</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 8：容器 A（数据提供者）</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">容器 A（数据提供者）</div> <div class="stack-layer">v shared_data:/app/data</div> <div class="stack-layer base">volumes-from A</div> <div class="stack-layer">▼</div> <div class="stack-layer">容器 B（数据消费者）</div> <div class="stack-layer">自动继承 A 的卷挂载配置</div> <div class="stack-layer">/app/data 也指向 shared_data 卷</div> <div class="stack-layer">两个容器的 /app/data 实际指向同一个卷，数据互通</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 8：volumes-from 共享卷关系</div>
+  <div class="edu-diagram">
+    <div class="diagram-grid three">
+      <div class="diagram-card"><span class="diagram-badge">容器 A</span><h4>数据提供者</h4><p>挂载 <code>shared_data:/app/data</code>，定义卷使用方式。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">shared_data</span><h4>真正的数据位置</h4><p>两个容器的 <code>/app/data</code> 都指向同一个 Docker 卷。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">容器 B</span><h4>数据消费者</h4><p>通过 <code>--volumes-from A</code> 自动继承 A 的卷挂载配置。</p></div>
+    </div>
+    <div class="diagram-callout">注意：<code>--volumes-from</code> 共享的是卷挂载关系，不是复制数据；现代 Compose 更常直接声明同一个 named volume。</div>
   </div>
 </div>
 <p><strong>数据卷备份的原理</strong>：</p>

@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -677,7 +677,30 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href=
 <span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a><span class="co"># root         7     1  0 10:00 ?        00:00:00 java -jar /app/app.jar              ← java 是子进程</span></span>
 <span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a><span class="co"># docker stop shell-bad  →  等 10 秒后强杀</span></span></code></pre></div>
 <h4 id="图示-2">图示</h4>
-<div class="visual"> <div class="visual-title">图示 2：CMD exec 形式 vs shell 形式的进程树：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>CMD exec 形式 vs shell 形式的进程树：</p></div> <div class="diagram-note-card"><p>exec 形式 CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;app.jar&quot;]:</p></div> <div class="diagram-note-card"><b>PID 1</b><p>java -jar app.jar ← 直接是 java，能收 SIGTERM ✓</p></div> <div class="diagram-note-card"><p>↓ docker stop</p></div> <div class="diagram-note-card"><p>收到 SIGTERM，优雅退出（&lt;1 秒）</p></div> <div class="diagram-note-card"><p>shell 形式 CMD java -jar app.jar:</p></div> <div class="diagram-note-card"><b>PID 1</b><p>/bin/sh -c &quot;java -jar app.jar&quot; ← sh 不转发信号 ✗</p></div> <div class="diagram-note-card"><p>↓</p></div> <div class="diagram-note-card"><b>PID 7</b><p>java -jar app.jar ← java 收不到 SIGTERM</p></div> <div class="diagram-note-card"><p>↓ docker stop</p></div> <div class="diagram-note-card"><p>等 10 秒超时 → SIGKILL 强杀</p></div> <div class="diagram-note-card"><p>CMD 被 docker run 参数覆盖：</p></div> <div class="diagram-note-card"><b>Dockerfile</b><p>docker run myapp bash</p></div> <div class="diagram-note-card"><p>CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;app.jar&quot;] → 实际执行 bash （CMD 被完全替换）</p></div> <div class="diagram-note-card"><p>→</p></div> <div class="diagram-note-card"><p>docker run myapp</p></div> <div class="diagram-note-card"><p>→ 实际执行 java -jar app.jar （用默认 CMD）</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 2：CMD 两种写法对 PID 1 与信号处理的影响</div>
+  <div class="edu-diagram">
+    <div class="diagram-grid two">
+      <div class="diagram-panel">
+        <span class="diagram-badge good">exec 形式</span>
+        <h4><code>CMD ["java","-jar","app.jar"]</code></h4>
+        <div class="diagram-plain">
+          <div class="diagram-plain-line"><strong>PID 1</strong>：<code>java -jar app.jar</code></div>
+          <div class="diagram-plain-line"><strong>docker stop</strong>：SIGTERM 直接发给 Java 进程</div>
+          <div class="diagram-plain-line"><strong>结果</strong>：应用能收到信号并优雅退出</div>
+        </div>
+      </div>
+      <div class="diagram-panel">
+        <span class="diagram-badge warn">shell 形式</span>
+        <h4><code>CMD java -jar app.jar</code></h4>
+        <div class="diagram-plain">
+          <div class="diagram-plain-line"><strong>PID 1</strong>：<code>/bin/sh -c "java -jar app.jar"</code></div>
+          <div class="diagram-plain-line"><strong>PID 7</strong>：<code>java -jar app.jar</code> 只是子进程</div>
+          <div class="diagram-plain-line"><strong>结果</strong>：shell 不转发信号时，Java 等到超时后被 SIGKILL</div>
+        </div>
+      </div>
+    </div>
+    <div class="diagram-callout">CMD 是容器默认启动命令：<code>docker run myapp</code> 使用默认 CMD；<code>docker run myapp bash</code> 会把 CMD 完全替换成 <code>bash</code>。</div>
   </div>
 </div>
 <h4 id="易错点-2">易错点</h4>
@@ -940,7 +963,20 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href=
 <span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a><span class="co"># 实际执行：curl https://www.baidu.com</span></span>
 <span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt;!DOCTYPE html&gt;...</span></span></code></pre></div>
 <h4 id="图示-3">图示</h4>
-<div class="visual"> <div class="visual-title">图示 3：ENTRYPOINT + CMD 组合模式（生产推荐）：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>ENTRYPOINT + CMD 组合模式（生产推荐）：</p></div> <div class="diagram-note-card"><p>Dockerfile:</p></div> <div class="diagram-note-card"><p>ENTRYPOINT [&quot;java&quot;,&quot;-jar&quot;,&quot;/app/app.jar&quot;] ← 固定入口（不被覆盖）</p></div> <div class="diagram-note-card"><p>CMD [&quot;--spring.profiles.active=prod&quot;] ← 默认参数（可被覆盖）</p></div> <div class="diagram-note-card"><p>docker run myapp</p></div> <div class="diagram-note-card"><b>→ 实际执行</b><p>java -jar /app/app.jar --spring.profiles.active=prod</p></div> <div class="diagram-note-card"><p>[------ ENTRYPOINT -------] [-------- CMD --------]</p></div> <div class="diagram-note-card"><p>docker run myapp --spring.profiles.active=dev</p></div> <div class="diagram-note-card"><b>→ 实际执行</b><p>java -jar /app/app.jar --spring.profiles.active=dev</p></div> <div class="diagram-note-card"><p>[------ ENTRYPOINT -------] [---- 覆盖的 CMD ----]</p></div> <div class="diagram-note-card"><p>docker run myapp --spring.profiles.active=dev --debug</p></div> <div class="diagram-note-card"><b>→ 实际执行</b><p>java -jar /app/app.jar --spring.profiles.active=dev --debug</p></div> <div class="diagram-note-card"><p>[------ ENTRYPOINT -------] [---- 覆盖的 CMD ----]</p></div> <div class="diagram-note-card"><p>docker run --entrypoint bash myapp</p></div> <div class="diagram-note-card"><b>→ 实际执行</b><p>bash（ENTRYPOINT 被覆盖）</p></div> <div class="diagram-note-card"><p>CMD 单独 vs ENTRYPOINT 单独 vs 组合：</p></div> <div class="diagram-note-card"><b>只有 CMD</b><p>docker run myapp bash</p></div> <div class="diagram-note-card"><p>CMD [&quot;java&quot;,...] → 执行 bash (CMD 被完全替换)</p></div> <div class="diagram-note-card"><b>只有 ENTRYPOINT</b><p>docker run myapp bash</p></div> <div class="diagram-note-card"><p>ENTRYPOINT [&quot;java&quot;,...] → 执行 java bash (bash 作为参数追加，会报错！)</p></div> <div class="diagram-note-card"><b>组合模式（推荐）</b><p>docker run myapp --debug</p></div> <div class="diagram-note-card"><p>ENTRYPOINT [&quot;java&quot;,&quot;-jar&quot;,&quot;app.jar&quot;] → 执行 java -jar app.jar --debug</p></div> <div class="diagram-note-card"><p>CMD [&quot;--prod&quot;] (CMD 被替换为 --debug)</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 3：ENTRYPOINT + CMD 组合模式</div>
+  <div class="edu-diagram">
+    <div class="diagram-grid two">
+      <div class="diagram-panel"><span class="diagram-badge">ENTRYPOINT</span><h4>固定入口程序</h4><p><code>["java","-jar","/app/app.jar"]</code> 定义主程序，默认不会被 <code>docker run</code> 后面的普通参数覆盖。</p></div>
+      <div class="diagram-panel good"><span class="diagram-badge good">CMD</span><h4>提供默认参数</h4><p><code>["--spring.profiles.active=prod"]</code> 作为默认参数，可在运行容器时替换。</p></div>
+    </div>
+    <div class="docker-chain four">
+      <div class="diagram-card"><h4><code>docker run myapp</code></h4><p>执行 <code>java -jar /app/app.jar --spring.profiles.active=prod</code>。</p></div>
+      <div class="diagram-card"><h4>传入 dev 参数</h4><p><code>docker run myapp --spring.profiles.active=dev</code>，CMD 默认参数被替换。</p></div>
+      <div class="diagram-card"><h4>追加更多参数</h4><p><code>--debug</code> 等参数继续作为应用参数传入。</p></div>
+      <div class="diagram-card warn"><h4>覆盖入口</h4><p><code>--entrypoint bash</code> 才会替换固定入口。</p></div>
+    </div>
+    <div class="diagram-callout">生产推荐：ENTRYPOINT 固定程序，CMD 留给默认参数；既稳定，又允许部署时按环境覆盖参数。</div>
   </div>
 </div>
 <h4 id="易错点-3">易错点</h4>
@@ -994,7 +1030,13 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb24
 <span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8080</span>
 <span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>,<span class="st">&quot;-jar&quot;</span>,<span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
 <p><strong>为什么多阶段能减小镜像体积</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 4：单阶段构建（传统）：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">单阶段构建（传统）：</div> <div class="stack-layer">最终镜像</div> <div class="stack-layer runtime">Maven 3.8 (~100MB) ← 构建工具，运行时不需要</div> <div class="stack-layer runtime">JDK 17 (~300MB) ← 编译时需要，运行时只需 JRE</div> <div class="stack-layer runtime">源码 (~5MB) ← 运行时不需要</div> <div class="stack-layer runtime">target 旧产物 (~10MB) ← 运行时不需要</div> <div class="stack-layer runtime">JRE 17 (~200MB) ← 运行时需要 ✓</div> <div class="stack-layer runtime">app.jar (~30MB) ← 运行时需要 ✓</div> <div class="stack-layer">总计：约 645MB</div> <div class="stack-layer">多阶段构建：</div> <div class="stack-layer">阶段1: builder (丢弃) 阶段2: 最终镜像 (保留)</div> <div class="stack-layer base">Maven 3.8 JRE 17 alpine (~80MB) ← 精简基础镜像</div> <div class="stack-layer runtime">JDK 17 app.jar (~30MB) ← 只拷贝产物</div> <div class="stack-layer">源码 总计：约 110MB</div> <div class="stack-layer base">target/app.jar → COPY --from=builder</div> <div class="stack-layer">总计：约 645MB (丢弃)</div> <div class="stack-layer">最终镜像体积大幅减小 ✓</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 4：单阶段构建与多阶段构建对比</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel warn"><span class="diagram-badge warn">单阶段构建</span><h4>构建工具被带进最终镜像</h4><ul class="diagram-list"><li>Maven、JDK、源码、target 旧产物都可能留在镜像里。</li><li>运行时真正需要的只是 JRE + app.jar。</li><li>示例体积约 645MB，攻击面也更大。</li></ul></div>
+      <div class="diagram-panel good"><span class="diagram-badge good">多阶段构建</span><h4>只保留运行时产物</h4><ul class="diagram-list"><li>builder 阶段负责编译，最终会被丢弃。</li><li>runtime 阶段只拷贝 <code>app.jar</code>。</li><li>示例体积约 110MB，镜像更小更干净。</li></ul></div>
+    </div>
   </div>
 </div>
 <p><strong>多阶段构建的核心价值</strong>：</p>
@@ -1159,7 +1201,16 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href=
 </tbody>
 </table>
 <h4 id="图示-4">图示</h4>
-<div class="visual"> <div class="visual-title">图示 5：多阶段构建数据流：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">多阶段构建数据流：</div> <div class="stack-layer runtime">阶段 1: builder (maven:3.8-openjdk-17) 阶段 2: runtime (eclipse-temurin:17-jre-alpine)</div> <div class="stack-layer">1. WORKDIR /build 1. WORKDIR /app</div> <div class="stack-layer base">2. COPY pom.xml . 2. COPY --from=builder</div> <div class="stack-layer app">3. RUN mvn dependency:go-offline 只拷贝 jar /build/target/*.jar /app/</div> <div class="stack-layer app">4. COPY src ./src ◀ app.jar</div> <div class="stack-layer">5. RUN mvn clean package 3. ENV / EXPOSE / ENTRYPOINT</div> <div class="stack-layer runtime">含: Maven + JDK17 + 源码 + jar 含: JRE-alpine + app.jar</div> <div class="stack-layer">总计: ~680MB (会被丢弃) 总计: ~180MB (最终保留)</div> <div class="stack-layer">↑</div> <div class="stack-layer runtime">丢弃: Maven, JDK, 源码, 编译中间产物</div> <div class="stack-layer">最终镜像只有 runtime 阶段，体积大幅减小</div> <div class="stack-layer">层缓存优化（先 pom 后 src）：</div> <div class="stack-layer">COPY pom.xml . ← pom 变化少，依赖层稳定缓存</div> <div class="stack-layer">RUN mvn dependency:go-offline ← 缓存命中率高（依赖不变时跳过）</div> <div class="stack-layer">COPY src ./src ← 源码常变，只让这之后失效</div> <div class="stack-layer">RUN mvn clean package ← 源码变才重新编译</div> <div class="stack-layer">改源码时：缓存命中到 dependency:go-offline，只重跑 package</div> <div class="stack-layer">改 pom 时：dependency:go-offline 之后全失效（必要代价）</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 5：多阶段构建数据流</div>
+  <div class="edu-diagram">
+    <div class="docker-chain four">
+      <div class="diagram-card"><span class="diagram-badge">builder</span><h4>准备依赖</h4><p><code>COPY pom.xml</code> 后先执行 <code>mvn dependency:go-offline</code>，提高缓存命中率。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">builder</span><h4>编译打包</h4><p><code>COPY src</code> 后运行 <code>mvn clean package</code>，生成 <code>target/*.jar</code>。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">runtime</span><h4>跨阶段拷贝</h4><p><code>COPY --from=builder /build/target/*.jar /app/</code>，只把产物带入最终镜像。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">final</span><h4>保留运行时</h4><p>最终镜像只包含 JRE-alpine、app.jar 和启动元数据，丢弃 Maven/JDK/源码。</p></div>
+    </div>
+    <div class="diagram-callout">缓存顺序：先复制变化少的 <code>pom.xml</code>，再复制变化频繁的 <code>src</code>；改源码时通常只重跑 package。</div>
   </div>
 </div>
 <h4 id="易错点-4">易错点</h4>
@@ -1577,7 +1628,19 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href=
 </tbody>
 </table>
 <h4 id="图示-5">图示</h4>
-<div class="visual"> <div class="visual-title">图示 6：镜像优化&quot;三板斧&quot;：</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>镜像优化&quot;三板斧&quot;：</p></div> <div class="diagram-step"><p>精简基础镜像：</p></div> <div class="diagram-step"><p>ubuntu (77MB) &gt; debian-slim (74MB) &gt; alpine (7MB)</p></div> <div class="diagram-step"><p>JDK (300MB+) &gt; JRE (200MB) &gt; JRE-alpine (85MB)</p></div> <div class="diagram-step"><p>普通 (glibc) &gt; alpine (musl libc，注意兼容性)</p></div> <div class="diagram-step"><p>多阶段构建：</p></div> <div class="diagram-step"><p>构建阶段 (重型镜像) → COPY --from → 运行阶段 (精简镜像)</p></div> <div class="diagram-step"><p>丢弃 Maven/JDK/源码，只保留 jar</p></div> <div class="diagram-step"><p>合并 RUN + 同层清理：</p></div> <div class="diagram-step"><p>❌ RUN apt install (100MB)</p></div> <div class="diagram-step"><p>RUN rm cache (50MB) ← 实际两层，仍占 100MB</p></div> <div class="diagram-step"><p>✅ RUN apt install &amp;&amp; rm cache ← 一层，占 50MB</p></div> <div class="diagram-step"><p>.dockerignore（前置防线）：</p></div> <div class="diagram-step"><p>排除 .git/node_modules/target/.env 等</p></div> <div class="diagram-step"><p>上下文从几百 MB → 几 MB，构建快、缓存稳</p></div> <div class="diagram-step"><p>镜像体积演进：</p></div> <div class="diagram-step"><p>单阶段 maven+jdk+源码+jar : 680MB</p></div> <div class="diagram-step"><p>↓ 多阶段构建</p></div> <div class="diagram-step"><p>多阶段 jre-alpine + jar : 180MB</p></div> <div class="diagram-step"><p>↓ + 合并 RUN + .dockerignore</p></div> <div class="diagram-step"><p>完整优化版 : 190MB（含 curl/tzdata/健康检查）</p></div> <div class="diagram-step"><p>（多装的 10MB 是工具，可接受）</p></div> <div class="diagram-step"><p>构建上下文演进：</p></div> <div class="diagram-step"><p>无 .dockerignore : ~200MB (.git + node_modules + target)</p></div> <div class="diagram-step"><p>↓ 写 .dockerignore</p></div> <div class="diagram-step"><p>有 .dockerignore : ~2.5MB (只 pom + src)</p></div> <div class="diagram-step"><p>构建速度提升明显，缓存命中率提升</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 6：镜像优化四个抓手</div>
+  <div class="edu-diagram">
+    <div class="diagram-grid four">
+      <div class="diagram-card"><span class="diagram-badge">基础镜像</span><h4>选择更小的运行底座</h4><p>从 ubuntu/debian-slim 到 alpine，Java 从 JDK 到 JRE/JRE-alpine，但要注意 musl libc 兼容性。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">多阶段构建</span><h4>丢弃构建工具</h4><p>builder 阶段包含 Maven/JDK/源码，runtime 阶段只保留 JRE + jar。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">合并 RUN</span><h4>安装与清理同层完成</h4><p><code>apt/apk install &amp;&amp; rm cache</code> 写在同一条 RUN，避免缓存文件留在旧层。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">.dockerignore</span><h4>先减少构建上下文</h4><p>排除 <code>.git</code>、<code>node_modules</code>、<code>target</code>、<code>.env</code>，构建更快，缓存更稳。</p></div>
+    </div>
+    <div class="diagram-grid two">
+      <div class="diagram-callout">镜像体积：单阶段约 680MB → 多阶段约 180MB → 完整优化约 190MB（含健康检查工具）。</div>
+      <div class="diagram-callout">构建上下文：无 .dockerignore 可能数百 MB；写好后可降到几 MB。</div>
+    </div>
   </div>
 </div>
 <h4 id="易错点-5">易错点</h4>
@@ -1610,7 +1673,18 @@ id="三综合示例ctts-后端镜像从-680mb-到-190mb-的完整优化">三、�
 后端镜像从 680MB 到 190MB 的完整优化</h2>
 <p>把前面所有知识点串起来，看 CTTS 后端镜像如何从"未优化的 680MB
 单阶段"逐步优化到"190MB 多阶段 + alpine + 加固版"：</p>
-<div class="visual"> <div class="visual-title">图示 7：CTTS 后端镜像优化全过程</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">CTTS 后端镜像优化全过程</div> <div class="stack-layer">【版本 0：未优化单阶段】（K7-3 反例 + 无优化）</div> <div class="stack-layer base">FROM maven:3.8-openjdk-17</div> <div class="stack-layer">WORKDIR /app</div> <div class="stack-layer">COPY . .</div> <div class="stack-layer">RUN mvn clean package -DskipTests</div> <div class="stack-layer app">CMD java -jar target/app.jar</div> <div class="stack-layer">→ 镜像大小：680MB</div> <div class="stack-layer runtime">→ 问题：① 用了 maven+jdk 镜像（600MB）；② 源码进镜像；</div> <div class="stack-layer runtime">③ CMD shell 形式（信号问题）；④ 无 .dockerignore；</div> <div class="stack-layer">⑤ target 旧产物也进镜像；⑥ 用 root 运行</div> <div class="stack-layer runtime">【版本 1：CMD exec 形式 + .dockerignore】（K7-3 + K7-6）</div> <div class="stack-layer app">+ 改 CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;target/app.jar&quot;]</div> <div class="stack-layer runtime">+ 写 .dockerignore 排除 .git/node_modules/target</div> <div class="stack-layer base">→ 镜像大小：680MB（基础镜像没变，体积不变）</div> <div class="stack-layer">→ 改进：信号问题修复；构建上下文从 200MB → 2.5MB（构建快）</div> <div class="stack-layer">【版本 2：多阶段构建】（K7-5）</div> <div class="stack-layer base">FROM maven:3.8-openjdk-17 AS builder</div> <div class="stack-layer">... mvn clean package ...</div> <div class="stack-layer base">FROM eclipse-temurin:17-jre</div> <div class="stack-layer base">COPY --from=builder /build/target/*.jar /app/app.jar</div> <div class="stack-layer app">CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;/app/app.jar&quot;]</div> <div class="stack-layer">→ 镜像大小：260MB（从 680MB → 260MB，减少 62%）</div> <div class="stack-layer runtime">→ 改进：丢弃 Maven/JDK/源码，只保留 JRE + jar</div> <div class="stack-layer base">【版本 3：用 alpine 精简基础镜像】（K7-6）</div> <div class="stack-layer base">把第二阶段 FROM eclipse-temurin:17-jre 改为 eclipse-temurin:17-jre-alpine</div> <div class="stack-layer">→ 镜像大小：180MB（从 260MB → 180MB，再减少 31%）</div> <div class="stack-layer base">→ 改进：alpine 基础镜像比 debian 小 ~80MB</div> <div class="stack-layer">【版本 4：层缓存优化】（K7-6）</div> <div class="stack-layer">把 COPY pom.xml + mvn dependency:go-offline 放在 COPY src 之前</div> <div class="stack-layer">→ 镜像大小：180MB（不变）</div> <div class="stack-layer">→ 改进：改源码时依赖层缓存命中，构建从 3 分钟 → 30 秒</div> <div class="stack-layer">【版本 5：合并 RUN + 安全加固 + 时区】（K7-4 + K7-6）</div> <div class="stack-layer">+ 合并 RUN（apk add curl tzdata &amp;&amp; cp 时区 &amp;&amp; apk del tzdata）</div> <div class="stack-layer">+ 创建非 root 用户 appuser 运行</div> <div class="stack-layer">+ ENTRYPOINT + CMD 组合（参数化运行）</div> <div class="stack-layer">+ HEALTHCHECK 健康检查</div> <div class="stack-layer">→ 镜像大小：190MB（比 180MB 多 10MB，多在 curl 工具）</div> <div class="stack-layer">→ 改进：安全加固、参数化启动、健康检查自动监控</div> <div class="stack-layer">【最终版本：完整优化版】</div> <div class="stack-layer base">FROM maven:3.8-openjdk-17 AS builder</div> <div class="stack-layer">COPY pom.xml . &amp;&amp; RUN mvn dependency:go-offline</div> <div class="stack-layer">COPY src ./src &amp;&amp; RUN mvn clean package -DskipTests</div> <div class="stack-layer base">FROM eclipse-temurin:17-jre-alpine</div> <div class="stack-layer">RUN apk add --no-cache curl tzdata &amp;&amp; cp 时区 &amp;&amp; apk del tzdata</div> <div class="stack-layer base">COPY --from=builder /build/app.jar /app/app.jar</div> <div class="stack-layer">RUN addgroup/adduser (非 root)</div> <div class="stack-layer">USER appuser</div> <div class="stack-layer">EXPOSE 8080 VOLUME [&quot;/app/logs&quot;]</div> <div class="stack-layer">ENV SPRING_PROFILES_ACTIVE=prod JAVA_OPTS=&quot;-Xms256m -Xmx512m&quot;</div> <div class="stack-layer app">ENTRYPOINT [&quot;sh&quot;,&quot;-c&quot;,&quot;java $JAVA_OPTS -jar /app/app.jar&quot;]</div> <div class="stack-layer">CMD [&quot;--spring.profiles.active=prod&quot;]</div> <div class="stack-layer">HEALTHCHECK ...</div> <div class="stack-layer">→ 镜像大小：190MB（含 curl + tzdata + 健康检查）</div> <div class="stack-layer">→ 优化效果：从 680MB → 190MB，减少 72%</div> <div class="stack-layer">优化效果对比表</div> <div class="stack-layer">版本 镜像大小 优化手段 累计减少</div> <div class="stack-layer">v0 680MB 未优化 —</div> <div class="stack-layer runtime">v1 680MB CMD exec + .dockerignore 0%（体积不变，构建快）</div> <div class="stack-layer">v2 260MB + 多阶段构建 62%</div> <div class="stack-layer base">v3 180MB + alpine 精简基础镜像 74%</div> <div class="stack-layer">v4 180MB + 层缓存优化（构建快） 74%</div> <div class="stack-layer">v5 190MB + 合并RUN + 加固 + 时区 72%（含工具）</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 7：CTTS 后端镜像优化全过程</div>
+  <div class="edu-diagram">
+    <div class="docker-chain six">
+      <div class="diagram-card warn"><span class="diagram-badge warn">v0</span><h4>未优化单阶段</h4><p>Maven + JDK + 源码 + jar 全进镜像，约 680MB。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">v1</span><h4>CMD exec + .dockerignore</h4><p>修复信号问题，构建上下文从约 200MB 降到约 2.5MB。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">v2</span><h4>多阶段构建</h4><p>丢弃 Maven/JDK/源码，只保留 JRE + jar，约 260MB。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">v3</span><h4>JRE Alpine</h4><p>运行基础镜像进一步精简，约 180MB。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">v4</span><h4>层缓存优化</h4><p>先 <code>pom.xml</code> 后 <code>src</code>，改源码时依赖层复用，构建更快。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">v5</span><h4>安全与运维加固</h4><p>合并 RUN、非 root、ENTRYPOINT+CMD、HEALTHCHECK，约 190MB。</p></div>
+    </div>
+    <div class="diagram-callout">最终效果：体积从约 680MB 降到约 190MB，减少约 72%；同时获得更快构建、更小攻击面和更好的运行可维护性。</div>
   </div>
 </div>
 <blockquote>
@@ -1638,7 +1712,20 @@ zstd 压缩、attestation），部分功能在 Docker 24+ 可用。</li>
 <hr />
 <h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
 <h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
-<div class="visual"> <div class="visual-title">图示 8：Dockerfile进阶与多阶段构建</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer runtime">Dockerfile进阶与多阶段构建</div> <div class="stack-layer">ENV 与 ARG</div> <div class="stack-layer runtime">ENV：构建+运行时都生效（持久化到镜像）</div> <div class="stack-layer runtime">ARG：仅构建时生效（docker history 可见）</div> <div class="stack-layer base">区别：作用范围、敏感信息、FROM 前只能 ARG</div> <div class="stack-layer runtime">协作：ARG 接收构建参数 → ENV 固化到运行时</div> <div class="stack-layer">EXPOSE 与 VOLUME</div> <div class="stack-layer">EXPOSE：声明端口（文档化，不自动映射）</div> <div class="stack-layer">配合 -p / -P 真正映射</div> <div class="stack-layer">VOLUME：声明数据卷路径</div> <div class="stack-layer">不写 -v 自动挂匿名卷，推荐具名卷</div> <div class="stack-layer">共性：声明性指令（告知而非操作）</div> <div class="stack-layer">CMD 指令</div> <div class="stack-layer app">exec 形式：CMD [&quot;java&quot;,&quot;-jar&quot;,&quot;app.jar&quot;]（推荐）</div> <div class="stack-layer">PID 1 = java，能收 SIGTERM</div> <div class="stack-layer app">shell 形式：CMD java -jar app.jar（不推荐）</div> <div class="stack-layer">PID 1 = sh，信号不转发</div> <div class="stack-layer runtime">可被 docker run 参数覆盖</div> <div class="stack-layer">ENTRYPOINT 指令</div> <div class="stack-layer runtime">入口点程序，不被 docker run 参数覆盖</div> <div class="stack-layer">参数作为追加参数传入</div> <div class="stack-layer">ENTRYPOINT + CMD 组合（生产推荐）</div> <div class="stack-layer">ENTRYPOINT 固定程序，CMD 给默认参数</div> <div class="stack-layer">entrypoint 可覆盖</div> <div class="stack-layer">多阶段构建</div> <div class="stack-layer base">FROM ... AS 命名阶段</div> <div class="stack-layer base">COPY --from= 跨阶段拷贝</div> <div class="stack-layer">最终镜像只保留最后一个阶段</div> <div class="stack-layer runtime">Java/Maven 示例：builder (maven+JDK) → runtime (JRE-alpine)</div> <div class="stack-layer">体积从 680MB → 180MB（减少 73%）</div> <div class="stack-layer runtime">镜像优化与 .dockerignore</div> <div class="stack-layer base">三板斧：精简基础镜像 + 多阶段 + 合并 RUN</div> <div class="stack-layer base">基础镜像选择：ubuntu &gt; slim &gt; alpine</div> <div class="stack-layer">注意 alpine 用 musl libc（兼容性）</div> <div class="stack-layer">合并 RUN：装 + 清理在同一层（用 &amp;&amp; 连接）</div> <div class="stack-layer">层缓存顺序：少变放前（pom/依赖），多变放后（src）</div> <div class="stack-layer runtime">.dockerignore：排除 .git/node_modules/target/.env 等</div> <div class="stack-layer">加固：非 root 用户、时区、HEALTHCHECK</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 8：Dockerfile 进阶与多阶段构建知识结构图</div>
+  <div class="edu-diagram">
+    <div class="mindmap-grid">
+      <div class="mind-root">Dockerfile 进阶<br />多阶段构建</div>
+      <div class="mind-branch-grid">
+        <div class="diagram-card"><span class="diagram-badge">ENV / ARG</span><h4>构建参数与运行环境</h4><p>ARG 仅构建期生效，ENV 会固化到镜像并影响运行时；敏感信息不要写进历史层。</p></div>
+        <div class="diagram-card"><span class="diagram-badge">EXPOSE / VOLUME</span><h4>声明端口与数据路径</h4><p>EXPOSE 只是文档化声明，真正映射靠 <code>-p</code>；VOLUME 声明持久化路径。</p></div>
+        <div class="diagram-card"><span class="diagram-badge">CMD / ENTRYPOINT</span><h4>启动命令设计</h4><p>CMD 易被覆盖，ENTRYPOINT 固定入口；组合模式适合生产参数化启动。</p></div>
+        <div class="diagram-card good"><span class="diagram-badge good">多阶段构建</span><h4>builder → runtime</h4><p>用 <code>FROM ... AS builder</code> 编译，再用 <code>COPY --from</code> 只拷贝产物。</p></div>
+        <div class="diagram-card"><span class="diagram-badge">镜像优化</span><h4>体积、缓存、安全</h4><p>精简基础镜像、合并 RUN、合理排序层缓存、使用 .dockerignore。</p></div>
+        <div class="diagram-card warn"><span class="diagram-badge warn">生产加固</span><h4>非 root + 健康检查</h4><p>创建普通用户运行应用，补充时区、健康检查和必要工具，兼顾安全与运维。</p></div>
+      </div>
+    </div>
   </div>
 </div>
 <h3 id="一句话总结">一句话总结</h3>

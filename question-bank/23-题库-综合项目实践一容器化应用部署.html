@@ -165,184 +165,137 @@
 </ul>
 <hr />
 <h2 id="一单项选择题30题">一、单项选择题（30题）</h2>
-<h3 id="23-单选-01">23-单选-01（★）</h3>
-<p>在 CTTS 项目部署中，以下哪个 K8s 资源对象用于隔离
-MySQL、Backend、Frontend 资源？ A. Deployment B. Namespace C. Node D.
-Service</p>
+<section class="question-card" id="23-单选-01"><p><strong>23-单选-01（★）</strong> 在 CTTS 项目部署中，以下哪个 K8s 资源对象用于隔离 MySQL、Backend、Frontend 资源？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Deployment</div></li><li><span class="option-label">B</span><div class="option-content">Namespace</div></li><li><span class="option-label">C</span><div class="option-content">Node</div></li><li><span class="option-label">D</span><div class="option-content">Service</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B <strong>解析</strong>：Namespace 是 K8s
 中用于资源隔离的逻辑分组机制。CTTS 项目将所有资源统一放在 ctts
 命名空间下，避免与其他项目资源冲突。Deployment 管理 Pod 副本，Node
 是工作节点，Service 提供网络访问入口。</p>
-<hr />
-<h3 id="23-单选-02">23-单选-02（★）</h3>
-<p>MySQL Secret 中存储密码时，value 必须经过哪种编码？ A. URL 编码 B.
-Hex 编码 C. Base64 编码 D. MD5 加密</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-02"><p><strong>23-单选-02（★）</strong> MySQL Secret 中存储密码时，value 必须经过哪种编码？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">URL 编码</div></li><li><span class="option-label">B</span><div class="option-content">Hex 编码</div></li><li><span class="option-label">C</span><div class="option-content">Base64 编码</div></li><li><span class="option-label">D</span><div class="option-content">MD5 加密</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C <strong>解析</strong>：K8s Secret 的 data
 字段要求值必须是 base64 编码字符串（不是加密）。可通过
 <code>echo -n 'ctts_root_2024' | base64</code> 生成。注意 base64
 是可逆的编码，并非加密，生产环境建议启用 etcs 加密静态 Secret。</p>
-<hr />
-<h3 id="23-单选-03">23-单选-03（★）</h3>
-<p>在 mysql.yaml 中，<code>persistentVolumeReclaimPolicy: Retain</code>
-表示什么？ A. PVC 删除后，PV 自动删除并释放存储 B. PVC 删除后，PV
-保留数据，需手动回收 C. PVC 删除后，PV 数据自动清空 D. PVC 删除后，PV
-立即变为 Available 状态</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-03"><p><strong>23-单选-03（★）</strong> 在 mysql.yaml 中，<code>persistentVolumeReclaimPolicy: Retain</code> 表示什么？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">PVC 删除后，PV 自动删除并释放存储</div></li><li><span class="option-label">B</span><div class="option-content">PVC 删除后，PV 保留数据，需手动回收</div></li><li><span class="option-label">C</span><div class="option-content">PVC 删除后，PV 数据自动清空</div></li><li><span class="option-label">D</span><div class="option-content">PVC 删除后，PV 立即变为 Available 状态</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B <strong>解析</strong>：Retain 策略下，当 PVC
 被删除时，PV 仍然存在且数据保留，状态变为
 Released，需要管理员手动回收（删除 PV
 后数据才会被底层存储清理）。其他策略包括 Delete（自动删除）和
 Recycle（已废弃）。MySQL 是有状态数据，建议使用 Retain 防止误删。</p>
-<hr />
-<h3 id="23-单选-04">23-单选-04（★★）</h3>
-<p>CTTS 项目中 Backend 的 initContainer <code>wait-for-mysql</code>
-的核心作用是？ A. 初始化数据库表结构 B. 等待 MySQL Service 3306
-端口可用后再启动 Backend C. 拉取 MySQL 镜像 D. 创建 MySQL 用户</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-04"><p><strong>23-单选-04（★★）</strong> CTTS 项目中 Backend 的 initContainer <code>wait-for-mysql</code> 的核心作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">初始化数据库表结构</div></li><li><span class="option-label">B</span><div class="option-content">等待 MySQL Service 3306 端口可用后再启动 Backend</div></li><li><span class="option-label">C</span><div class="option-content">拉取 MySQL 镜像</div></li><li><span class="option-label">D</span><div class="option-content">创建 MySQL 用户</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B <strong>解析</strong>：initContainer
 在主容器启动前运行，且必须成功退出主容器才会启动。<code>wait-for-mysql</code>
 通过 <code>nc -z mysql-service 3306</code> 轮询检测 MySQL
 是否就绪，从而解决 Backend
 启动时数据库尚未就绪导致连接失败的问题。数据库初始化由 MySQL 镜像自身的
 MYSQL_DATABASE 机制完成。</p>
-<hr />
-<h3 id="23-单选-05">23-单选-05（★★）</h3>
-<p>Frontend 的 Nginx 配置中
-<code>try_files $uri $uri/ /index.html;</code> 的作用是？ A. 防止
-404，将所有未匹配的请求重定向到首页（支持 Vue Router history 模式） B.
-启用 gzip 压缩 C. 配置反向代理 D. 设置静态资源缓存</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-05"><p><strong>23-单选-05（★★）</strong> Frontend 的 Nginx 配置中 <code>try_files $uri $uri/ /index.html;</code> 的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">防止 404，将所有未匹配的请求重定向到首页（支持 Vue Router history 模式）</div></li><li><span class="option-label">B</span><div class="option-content">启用 gzip 压缩</div></li><li><span class="option-label">C</span><div class="option-content">配置反向代理</div></li><li><span class="option-label">D</span><div class="option-content">设置静态资源缓存</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：A <strong>解析</strong>：Vue Router 的 history
 模式下，用户刷新 <code>/about</code>
 这类前端路由时，浏览器会向服务器请求
 <code>/about</code>，但服务器上并不存在该文件。<code>try_files</code> 让
 Nginx 在找不到文件时回退到 index.html，由前端路由接管，避免 404。</p>
-<hr />
-<h3 id="23-单选-06">23-单选-06（★）</h3>
-<p>以下哪个命令可以查看 ctts 命名空间下所有 Deployment、Service、Pod
-的状态？ A. <code>kubectl get pods -A</code> B.
-<code>kubectl get all -n ctts</code> C.
-<code>kubectl describe ns ctts</code> D.
-<code>kubectl cluster-info</code></p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-06"><p><strong>23-单选-06（★）</strong> 以下哪个命令可以查看 ctts 命名空间下所有 Deployment、Service、Pod 的状态？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>kubectl get pods -A</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>kubectl get all -n ctts</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>kubectl describe ns ctts</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>kubectl cluster-info</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：<code>kubectl get all -n ctts</code>
 会列出指定命名空间下所有常见资源（Pod、Service、Deployment、ReplicaSet
 等）。<code>-A</code> 是所有命名空间，<code>describe ns</code>
 只看命名空间本身，<code>cluster-info</code> 看集群信息。</p>
-<hr />
-<h3 id="23-单选-07">23-单选-07（★★）</h3>
-<p>Ingress 资源中 <code>ingressClassName: nginx</code> 的含义是？ A.
-指定使用 nginx 作为 Ingress Controller B. 指定 Pod 使用 nginx 镜像 C.
-指定 Service 类型为 nginx D. 指定命名空间为 nginx</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-07"><p><strong>23-单选-07（★★）</strong> Ingress 资源中 <code>ingressClassName: nginx</code> 的含义是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">指定使用 nginx 作为 Ingress Controller</div></li><li><span class="option-label">B</span><div class="option-content">指定 Pod 使用 nginx 镜像</div></li><li><span class="option-label">C</span><div class="option-content">指定 Service 类型为 nginx</div></li><li><span class="option-label">D</span><div class="option-content">指定命名空间为 nginx</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：<code>ingressClassName</code> 指定该 Ingress
 资源由哪个 IngressClass 关联的 Ingress Controller 处理。Minikube 启用
 ingress addon 后会创建 nginx IngressClass，对应的 Ingress Controller 是
 ingress-nginx-controller。</p>
-<hr />
-<h3 id="23-单选-08">23-单选-08（★★）</h3>
-<p>Backend Deployment 中 <code>strategy.type: RollingUpdate</code> 配合
-<code>maxUnavailable: 0</code> 的效果是？ A. 一次性更新所有 Pod B.
-滚动升级过程中始终保持所有旧 Pod 可用，零停机 C. 不进行任何升级 D.
-重建所有 Pod</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-08"><p><strong>23-单选-08（★★）</strong> Backend Deployment 中 <code>strategy.type: RollingUpdate</code> 配合 <code>maxUnavailable: 0</code> 的效果是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">一次性更新所有 Pod</div></li><li><span class="option-label">B</span><div class="option-content">滚动升级过程中始终保持所有旧 Pod 可用，零停机</div></li><li><span class="option-label">C</span><div class="option-content">不进行任何升级</div></li><li><span class="option-label">D</span><div class="option-content">重建所有 Pod</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B <strong>解析</strong>：RollingUpdate
 策略下，<code>maxUnavailable: 0</code> 表示升级过程中不允许有任何旧 Pod
 不可用，必须先启动新 Pod 就绪后再删除旧
 Pod，实现零停机部署。<code>maxSurge: 1</code> 允许临时超出副本数 1
 个。</p>
-<hr />
-<h3 id="23-单选-09">23-单选-09（★）</h3>
-<p>以下哪个命令可以实时跟踪 Pod 的状态变化？ A.
-<code>kubectl get pods</code> B. <code>kubectl get pods -w</code> C.
-<code>kubectl describe pod</code> D. <code>kubectl logs -f</code></p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-09"><p><strong>23-单选-09（★）</strong> 以下哪个命令可以实时跟踪 Pod 的状态变化？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>kubectl get pods</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>kubectl get pods -w</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>kubectl describe pod</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>kubectl logs -f</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：<code>-w</code>（watch）参数让 kubectl
 持续监听资源变化并实时输出。<code>-f</code>
 用于跟踪日志，<code>describe</code> 是一次性查看详细信息。</p>
-<hr />
-<h3 id="23-单选-10">23-单选-10（★★）</h3>
-<p>MySQL Deployment 中 <code>strategy.type: Recreate</code> 而非
-<code>RollingUpdate</code> 的原因是？ A. Recreate 性能更好 B. MySQL
-是有状态服务，多个副本同时挂载同一 PVC 会冲突，需先停旧再启新 C.
-Recreate 升级更快 D. RollingUpdate 不支持 MySQL 镜像</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-10"><p><strong>23-单选-10（★★）</strong> MySQL Deployment 中 <code>strategy.type: Recreate</code> 而非 <code>RollingUpdate</code> 的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Recreate 性能更好</div></li><li><span class="option-label">B</span><div class="option-content">MySQL 是有状态服务，多个副本同时挂载同一 PVC 会冲突，需先停旧再启新</div></li><li><span class="option-label">C</span><div class="option-content">Recreate 升级更快</div></li><li><span class="option-label">D</span><div class="option-content">RollingUpdate 不支持 MySQL 镜像</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B <strong>解析</strong>：MySQL 使用 PVC
 持久化数据，PVC 的 accessMode 通常是 ReadWriteOnce（RWO），只能被单个
 Pod 挂载。若用 RollingUpdate，新旧 Pod 会同时尝试挂载 PVC
 导致冲突。Recreate 先删除旧 Pod 释放 PVC，再创建新 Pod。</p>
-<hr />
-<h3 id="23-单选-11">23-单选-11（★★）</h3>
-<p>Backend 通过 Service DNS 访问 MySQL，正确的 Service DNS 格式是？ A.
-<code>mysql-service.ctts</code> B.
-<code>mysql-service.ctts.svc.cluster.local</code> C.
-<code>mysql-service.ctts.namespace.local</code> D.
-<code>mysql.ctts.svc</code></p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-11"><p><strong>23-单选-11（★★）</strong> Backend 通过 Service DNS 访问 MySQL，正确的 Service DNS 格式是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>mysql-service.ctts</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>mysql-service.ctts.svc.cluster.local</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>mysql-service.ctts.namespace.local</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>mysql.ctts.svc</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B <strong>解析</strong>：K8s Service DNS
 标准格式为
 <code>&lt;service-name&gt;.&lt;namespace&gt;.svc.cluster.local</code>。同命名空间内可简写为
 <code>&lt;service-name&gt;</code>。CoreDNS 会自动解析。</p>
-<hr />
-<h3 id="23-单选-12">23-单选-12（★）</h3>
-<p>以下哪个 K8s 资源对象适合存储数据库连接 URL、日志级别等非敏感配置？
-A. Secret B. ConfigMap C. PV D. Service</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-12"><p><strong>23-单选-12（★）</strong> 以下哪个 K8s 资源对象适合存储数据库连接 URL、日志级别等非敏感配置？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Secret</div></li><li><span class="option-label">B</span><div class="option-content">ConfigMap</div></li><li><span class="option-label">C</span><div class="option-content">PV</div></li><li><span class="option-label">D</span><div class="option-content">Service</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B <strong>解析</strong>：ConfigMap
 专门用于存储非敏感的配置数据（键值对或文件）。敏感数据（密码、密钥、证书）应使用
 Secret。CTTS 项目中 backend-config 是 ConfigMap（存
 URL、端口），backend-secret 是 Secret（存密码、JWT）。</p>
-<hr />
-<h3 id="23-单选-13">23-单选-13（★★）</h3>
-<p>Backend Pod 出现 CrashLoopBackOff，以下哪条命令最有助于定位根因？ A.
-<code>kubectl get pods</code> B.
-<code>kubectl logs &lt;pod-name&gt; --previous</code> C.
-<code>kubectl delete pod &lt;pod-name&gt;</code> D.
-<code>kubectl scale deployment backend --replicas=0</code></p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-13"><p><strong>23-单选-13（★★）</strong> Backend Pod 出现 CrashLoopBackOff，以下哪条命令最有助于定位根因？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>kubectl get pods</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>kubectl logs &lt;pod-name&gt; --previous</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>kubectl delete pod &lt;pod-name&gt;</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>kubectl scale deployment backend --replicas=0</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：<code>--previous</code>
 参数查看上一次崩溃前的容器日志，能直接看到应用崩溃时的异常堆栈（如数据库连接失败、配置错误）。<code>get pods</code>
 只看状态，<code>delete/scale</code> 是处理动作而非排查。</p>
-<hr />
-<h3 id="23-单选-14">23-单选-14（★★）</h3>
-<p>在 mysql.yaml 中，MySQL 容器挂载 ConfigMap 的方式是？ A. 通过 envFrom
-整体注入 B. 通过 volumeMounts 挂载为文件 C. 两者都有 D. 通过 image
-内置</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-14"><p><strong>23-单选-14（★★）</strong> 在 mysql.yaml 中，MySQL 容器挂载 ConfigMap 的方式是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">通过 envFrom 整体注入</div></li><li><span class="option-label">B</span><div class="option-content">通过 volumeMounts 挂载为文件</div></li><li><span class="option-label">C</span><div class="option-content">两者都有</div></li><li><span class="option-label">D</span><div class="option-content">通过 image 内置</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C <strong>解析</strong>：mysql.yaml 中 MySQL
 同时使用两种方式：ConfigMap 中的 my.cnf 通过 volumeMounts 挂载到
 <code>/etc/mysql/conf.d/my.cnf</code>；同时通过
 <code>envFrom.configMapRef</code> 注入 ConfigMap
 中的所有键作为环境变量（虽然 mysql-config 中只有 my.cnf
 文件，但这是演示用法）。</p>
-<hr />
-<h3 id="23-单选-15">23-单选-15（★）</h3>
-<p>以下哪个命令可以验证 Ingress 是否分配到外部 IP？ A.
-<code>kubectl get ingress -n ctts</code> B.
-<code>kubectl describe svc -n ctts</code> C.
-<code>kubectl get nodes</code> D. <code>kubectl cluster-info</code></p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-15"><p><strong>23-单选-15（★）</strong> 以下哪个命令可以验证 Ingress 是否分配到外部 IP？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>kubectl get ingress -n ctts</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>kubectl describe svc -n ctts</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>kubectl get nodes</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>kubectl cluster-info</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：<code>kubectl get ingress</code> 输出中的 ADDRESS
 列即 Ingress Controller 分配的访问地址（在 Minikube 下为 Minikube
 IP）。若为空，说明 Ingress Controller 未就绪或 addon 未启用。</p>
-<hr />
-<h3 id="23-单选-16">23-单选-16（★★）</h3>
-<p>CTTS Frontend 镜像构建时，为何采用多阶段构建（multi-stage build）？
-A. 减少最终镜像体积，只保留 Nginx 和 dist 静态文件 B. 加快构建速度 C.
-避免使用 Node.js D. 必须使用</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-16"><p><strong>23-单选-16（★★）</strong> CTTS Frontend 镜像构建时，为何采用多阶段构建（multi-stage build）？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">减少最终镜像体积，只保留 Nginx 和 dist 静态文件</div></li><li><span class="option-label">B</span><div class="option-content">加快构建速度</div></li><li><span class="option-label">C</span><div class="option-content">避免使用 Node.js</div></li><li><span class="option-label">D</span><div class="option-content">必须使用</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：A <strong>解析</strong>：多阶段构建第一阶段用
 node:18 镜像编译 Vue3 项目生成 dist，第二阶段将 dist 复制到 nginx:alpine
 镜像中。最终镜像不包含 node_modules、源码、构建工具，体积从 ~1GB 降到
 ~50MB，更安全更轻量。</p>
-<hr />
-<h3 id="23-单选-17">23-单选-17（★★）</h3>
-<p>Backend 的 startupProbe 中 <code>failureThreshold: 12</code> 配合
-<code>periodSeconds: 10</code> 的含义是？ A. 每 10s
-探测一次，最多允许失败 12 次（即最多等 120s 启动） B. 启动失败 12
-次后立即重启 C. 每 12s 探测一次 D. 启动需要 12s</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-17"><p><strong>23-单选-17（★★）</strong> Backend 的 startupProbe 中 <code>failureThreshold: 12</code> 配合 <code>periodSeconds: 10</code> 的含义是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">每 10s 探测一次，最多允许失败 12 次（即最多等 120s 启动）</div></li><li><span class="option-label">B</span><div class="option-content">启动失败 12 次后立即重启</div></li><li><span class="option-label">C</span><div class="option-content">每 12s 探测一次</div></li><li><span class="option-label">D</span><div class="option-content">启动需要 12s</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：A <strong>解析</strong>：startupProbe
 在容器启动阶段运行，<code>periodSeconds: 10</code> 表示每 10s
 探测一次，<code>failureThreshold: 12</code> 表示最多允许连续失败 12
 次（12×10=120s）。在启动探针成功前，livenessProbe 不会运行，避免 JVM
 预热期被误杀。</p>
-<hr />
-<h3 id="23-单选-18">23-单选-18（★）</h3>
-<p>Minikube 中加载本地构建的镜像到集群内，需要执行哪条命令？ A.
-<code>minikube push</code> B. <code>eval $(minikube docker-env)</code>
-C. <code>minikube image load</code> D.
-<code>kubectl load image</code></p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-18"><p><strong>23-单选-18（★）</strong> Minikube 中加载本地构建的镜像到集群内，需要执行哪条命令？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>minikube push</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>eval $(minikube docker-env)</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>minikube image load</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>kubectl load image</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：<code>eval $(minikube docker-env)</code> 将当前
 shell 的 docker 命令指向 Minikube 节点内的 Docker daemon，之后
@@ -350,502 +303,438 @@ shell 的 docker 命令指向 Minikube 节点内的 Docker daemon，之后
 <code>imagePullPolicy: IfNotPresent</code> 即可使用本地镜像。退出用
 <code>eval $(minikube docker-env -u)</code>。也可以用
 <code>minikube image load &lt;name&gt;</code> 直接加载。</p>
-<hr />
-<h3 id="23-单选-19">23-单选-19（★★）</h3>
-<p>Ingress 注解
-<code>nginx.ingress.kubernetes.io/rewrite-target: /</code> 的作用是？ A.
-将所有请求重定向到根路径 B. 转发到后端时将路径重写为 / C. 禁用 HTTPS D.
-启用 gzip</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-19"><p><strong>23-单选-19（★★）</strong> Ingress 注解 <code>nginx.ingress.kubernetes.io/rewrite-target: /</code> 的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">将所有请求重定向到根路径</div></li><li><span class="option-label">B</span><div class="option-content">转发到后端时将路径重写为 /</div></li><li><span class="option-label">C</span><div class="option-content">禁用 HTTPS</div></li><li><span class="option-label">D</span><div class="option-content">启用 gzip</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B <strong>解析</strong>：rewrite-target
 注解控制 Nginx 转发请求到后端 Service 时的路径重写规则。例如请求
 <code>/api/users</code> 转发时被改写为 <code>/</code>。CTTS 项目中
 frontend 与 backend 都用根路径，因此设置为 /。</p>
-<hr />
-<h3 id="23-单选-20">23-单选-20（★★）</h3>
-<p>以下哪个场景必须使用 Secret 而非 ConfigMap？ A. 数据库连接 URL B.
-日志级别 C. 数据库密码与 JWT 密钥 D. 应用端口</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-20"><p><strong>23-单选-20（★★）</strong> 以下哪个场景必须使用 Secret 而非 ConfigMap？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">数据库连接 URL</div></li><li><span class="option-label">B</span><div class="option-content">日志级别</div></li><li><span class="option-label">C</span><div class="option-content">数据库密码与 JWT 密钥</div></li><li><span class="option-label">D</span><div class="option-content">应用端口</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C
 <strong>解析</strong>：密码、密钥、证书等敏感信息应使用 Secret
 存储，避免明文暴露在 ConfigMap 或镜像中。虽然 Secret 默认只是 base64
 编码（非加密），但配合 RBAC 可以限制访问，且能通过 etcd
 加密静态存储。URL、日志级别、端口属于非敏感配置。</p>
-<hr />
-<h3 id="23-单选-21">23-单选-21（★★）</h3>
-<p>Backend Pod 显示 <code>1/1 Running</code> 但 Service Endpoints
-为空，可能原因是？ A. Service selector 与 Pod labels 不匹配，或
-readinessProbe 未通过 B. Pod 没启动 C. 命名空间错误 D. Service
-类型错误</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-21"><p><strong>23-单选-21（★★）</strong> Backend Pod 显示 <code>1/1 Running</code> 但 Service Endpoints 为空，可能原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Service selector 与 Pod labels 不匹配，或 readinessProbe 未通过</div></li><li><span class="option-label">B</span><div class="option-content">Pod 没启动</div></li><li><span class="option-label">C</span><div class="option-content">命名空间错误</div></li><li><span class="option-label">D</span><div class="option-content">Service 类型错误</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：A <strong>解析</strong>：Service 通过 selector
 选择 Pod 时，只有 readinessProbe 通过的 Pod 才会被加入 Endpoints。即使
 Pod Running，若就绪探针失败，Endpoints 仍为空。需检查 selector
 标签是否一致、探针路径是否正确。</p>
-<hr />
-<h3 id="23-单选-22">23-单选-22（★）</h3>
-<p>CTTS 项目部署顺序应该是？ A. Frontend → Backend → MySQL → Ingress B.
-Ingress → Frontend → Backend → MySQL C. MySQL → Backend → Frontend →
-Ingress D. 任意顺序</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-22"><p><strong>23-单选-22（★）</strong> CTTS 项目部署顺序应该是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Frontend → Backend → MySQL → Ingress</div></li><li><span class="option-label">B</span><div class="option-content">Ingress → Frontend → Backend → MySQL</div></li><li><span class="option-label">C</span><div class="option-content">MySQL → Backend → Frontend → Ingress</div></li><li><span class="option-label">D</span><div class="option-content">任意顺序</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C
 <strong>解析</strong>：依赖关系决定部署顺序：MySQL
 是数据源先启动；Backend 依赖 MySQL 通过 initContainer 等待；Frontend
 依赖 Backend（Nginx 反向代理）；Ingress 依赖前后端 Service
 存在。逆序部署会导致依赖服务不可达。</p>
-<hr />
-<h3 id="23-单选-23">23-单选-23（★★）</h3>
-<p>以下哪个命令可以查看 MySQL Pod 内的实时日志？ A.
-<code>kubectl logs deployment/mysql -n ctts -f</code> B.
-<code>kubectl get logs mysql</code> C.
-<code>kubectl describe logs</code> D.
-<code>kubectl exec mysql logs</code></p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-23"><p><strong>23-单选-23（★★）</strong> 以下哪个命令可以查看 MySQL Pod 内的实时日志？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>kubectl logs deployment/mysql -n ctts -f</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>kubectl get logs mysql</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>kubectl describe logs</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>kubectl exec mysql logs</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：<code>kubectl logs</code>
 是查看日志的标准命令，<code>-f</code>（follow）实时跟踪，<code>deployment/mysql</code>
 表示按 Deployment 选择 Pod。describe 用于查看资源详情，exec
 是进入容器执行命令。</p>
-<hr />
-<h3 id="23-单选-24">23-单选-24（★★）</h3>
-<p>MySQL 的 livenessProbe 使用 <code>mysqladmin ping</code> 而非 HTTP
-探针的原因是？ A. MySQL 不支持 HTTP B. mysqladmin ping 是 MySQL
-官方推荐的存活检测方式，准确反映数据库可用性 C. HTTP 探针性能差 D.
-集群不支持 HTTP 探针</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-24"><p><strong>23-单选-24（★★）</strong> MySQL 的 livenessProbe 使用 <code>mysqladmin ping</code> 而非 HTTP 探针的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">MySQL 不支持 HTTP</div></li><li><span class="option-label">B</span><div class="option-content">mysqladmin ping 是 MySQL 官方推荐的存活检测方式，准确反映数据库可用性</div></li><li><span class="option-label">C</span><div class="option-content">HTTP 探针性能差</div></li><li><span class="option-label">D</span><div class="option-content">集群不支持 HTTP 探针</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B <strong>解析</strong>：MySQL
 是数据库服务，不提供 HTTP 接口。<code>mysqladmin ping</code> 返回 mysqld
 存活状态，比 TCP 探针更准确（TCP 端口可达不代表数据库可服务）。K8s exec
 探针支持任意命令，适合非 HTTP 服务。</p>
-<hr />
-<h3 id="23-单选-25">23-单选-25（★★）</h3>
-<p>Frontend Service 的 <code>type: ClusterIP</code> 表示？ A. Service
-只能集群内部访问 B. Service 暴露到集群外部 C. Service 没有 IP D. Service
-使用负载均衡</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-25"><p><strong>23-单选-25（★★）</strong> Frontend Service 的 <code>type: ClusterIP</code> 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Service 只能集群内部访问</div></li><li><span class="option-label">B</span><div class="option-content">Service 暴露到集群外部</div></li><li><span class="option-label">C</span><div class="option-content">Service 没有 IP</div></li><li><span class="option-label">D</span><div class="option-content">Service 使用负载均衡</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：A <strong>解析</strong>：ClusterIP 是 Service
 默认类型，分配集群内部 IP，只能在集群内访问。CTTS 中 frontend-service 是
 ClusterIP，外部访问通过 Ingress 转发。其他类型：NodePort
 暴露节点端口，LoadBalancer 云厂商负载均衡，ExternalName DNS 跳转。</p>
-<hr />
-<h3 id="23-单选-26">23-单选-26（★★）</h3>
-<p>Backend Pod 出现 <code>OOMKilled</code> 状态，应如何处理？ A. 调大
-resources.limits.memory B. 调小 resources.requests.cpu C. 重启集群 D.
-删除 Pod</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-26"><p><strong>23-单选-26（★★）</strong> Backend Pod 出现 <code>OOMKilled</code> 状态，应如何处理？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">调大 resources.limits.memory</div></li><li><span class="option-label">B</span><div class="option-content">调小 resources.requests.cpu</div></li><li><span class="option-label">C</span><div class="option-content">重启集群</div></li><li><span class="option-label">D</span><div class="option-content">删除 Pod</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：A <strong>解析</strong>：OOMKilled
 表示容器内存使用超过 limits.memory 被 K8s 杀死。需调大
 limits.memory（如从 512Mi 调到
 768Mi），或优化应用内存使用。<code>kubectl describe pod</code> 的 Last
 State 可看到 OOMKilled 原因与退出码 137。</p>
-<hr />
-<h3 id="23-单选-27">23-单选-27（★★）</h3>
-<p>以下哪个命令可以进入 MySQL Pod 执行 SQL 命令？ A.
-<code>kubectl ssh mysql</code> B.
-<code>kubectl exec -n ctts deployment/mysql -it -- mysql -u root -pctts_root_2024</code>
-C. <code>kubectl run mysql --rm -it</code> D.
-<code>kubectl attach mysql</code></p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-27"><p><strong>23-单选-27（★★）</strong> 以下哪个命令可以进入 MySQL Pod 执行 SQL 命令？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>kubectl ssh mysql</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>kubectl exec -n ctts deployment/mysql -it -- mysql -u root -pctts_root_2024</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>kubectl run mysql --rm -it</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>kubectl attach mysql</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：<code>kubectl exec -it</code>
 进入容器执行交互式命令。<code>deployment/mysql</code> 选择
 Pod，<code>--</code> 分隔 kubectl 参数与容器内命令。<code>-it</code>
 分配 TTY 并交互。其他选项均为非标准命令。</p>
-<hr />
-<h3 id="23-单选-28">23-单选-28（★★）</h3>
-<p>Ingress 中 <code>pathType: Prefix</code> 与
-<code>pathType: Exact</code> 的区别是？ A. Prefix 前缀匹配，Exact
-精确匹配 B. Prefix 区分大小写，Exact 不区分 C. Prefix 更快 D. Exact
-只能用于 HTTP</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-28"><p><strong>23-单选-28（★★）</strong> Ingress 中 <code>pathType: Prefix</code> 与 <code>pathType: Exact</code> 的区别是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Prefix 前缀匹配，Exact 精确匹配</div></li><li><span class="option-label">B</span><div class="option-content">Prefix 区分大小写，Exact 不区分</div></li><li><span class="option-label">C</span><div class="option-content">Prefix 更快</div></li><li><span class="option-label">D</span><div class="option-content">Exact 只能用于 HTTP</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：A <strong>解析</strong>：Prefix
 对路径进行前缀匹配（如 <code>/api</code> 匹配
 <code>/api/users</code>、<code>/api/v1</code>），Exact
 要求路径完全一致。CTTS 项目用 Prefix 让 <code>/</code>
 匹配所有前端路由与 <code>/api/*</code> 后端请求。</p>
-<hr />
-<h3 id="23-单选-29">23-单选-29（★★★）</h3>
-<p>Backend Deployment 中同时配置
-readinessProbe、livenessProbe、startupProbe，三者的执行顺序是？ A.
-readiness → liveness → startup B. startup → readiness →
-liveness（startup 成功后，readiness 与 liveness 并行周期运行） C.
-liveness → startup → readiness D. 三者并行</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-29"><p><strong>23-单选-29（★★★）</strong> Backend Deployment 中同时配置 readinessProbe、livenessProbe、startupProbe，三者的执行顺序是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">readiness → liveness → startup</div></li><li><span class="option-label">B</span><div class="option-content">startup → readiness → liveness（startup 成功后，readiness 与 liveness 并行周期运行）</div></li><li><span class="option-label">C</span><div class="option-content">liveness → startup → readiness</div></li><li><span class="option-label">D</span><div class="option-content">三者并行</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B <strong>解析</strong>：startupProbe
 优先运行，直到成功后才会触发 readinessProbe 和 livenessProbe
 周期性运行。readinessProbe 决定是否加入 Endpoints
 接收流量，livenessProbe 决定是否重启容器。startupProbe 解决慢启动应用被
 liveness 误杀的问题。</p>
-<hr />
-<h3 id="23-单选-30">23-单选-30（★★）</h3>
-<p>CTTS 项目中，以下哪个不是 Ingress 相比 NodePort 的优势？ A.
-支持基于域名的路由 B. 支持 TLS 终结 C. 暴露集群所有节点端口 D.
-集中管理外部访问入口</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-单选-30"><p><strong>23-单选-30（★★）</strong> CTTS 项目中，以下哪个不是 Ingress 相比 NodePort 的优势？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">支持基于域名的路由</div></li><li><span class="option-label">B</span><div class="option-content">支持 TLS 终结</div></li><li><span class="option-label">C</span><div class="option-content">暴露集群所有节点端口</div></li><li><span class="option-label">D</span><div class="option-content">集中管理外部访问入口</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C <strong>解析</strong>：Ingress
 提供七层路由（域名/路径）、TLS 终结、统一入口等优势。NodePort
 是在每个节点开放端口（30000-32767），不暴露"所有节点端口"也不支持七层路由。C
 描述的"暴露所有节点端口"是 NodePort 的特征，不是 Ingress 的优势。</p>
-<hr />
-<h2 id="二多项选择题10题">二、多项选择题（10题）</h2>
-<h3 id="23-多选-01">23-多选-01（★★）</h3>
-<p>CTTS 项目中，以下哪些资源对象需要写在 mysql.yaml 中？（多选） A.
-ConfigMap B. Secret C. PV D. PVC E. Deployment F. Service G. Ingress</p>
+</blockquote></section>
+<hr /><h2 id="二多项选择题10题">二、多项选择题（10题）</h2>
+<section class="question-card" id="23-多选-01"><p><strong>23-多选-01（★★）</strong> CTTS 项目中，以下哪些资源对象需要写在 mysql.yaml 中？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">ConfigMap</div></li><li><span class="option-label">B</span><div class="option-content">Secret</div></li><li><span class="option-label">C</span><div class="option-content">PV</div></li><li><span class="option-label">D</span><div class="option-content">PVC</div></li><li><span class="option-label">E</span><div class="option-content">Deployment</div></li><li><span class="option-label">F</span><div class="option-content">Service</div></li><li><span class="option-label">G</span><div class="option-content">Ingress</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCDEF <strong>解析</strong>：mysql.yaml 包含
 MySQL
 部署所需的全部资源：ConfigMap（数据库配置）、Secret（密码）、PV/PVC（持久化存储）、Deployment（Pod
 副本）、Service（访问入口）。Ingress 是全局路由配置，单独写在
 ingress.yaml 中，不属于 MySQL 资源。</p>
-<hr />
-<h3 id="23-多选-02">23-多选-02（★★）</h3>
-<p>Backend Deployment 中配置 initContainer <code>wait-for-mysql</code>
-的目的包括？（多选） A. 解决服务启动顺序依赖 B. 等待 MySQL 3306 端口可用
-C. 避免后端启动时数据库连接失败 D. 初始化数据库表结构 E.
-创建数据库用户</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-多选-02"><p><strong>23-多选-02（★★）</strong> Backend Deployment 中配置 initContainer <code>wait-for-mysql</code> 的目的包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">解决服务启动顺序依赖</div></li><li><span class="option-label">B</span><div class="option-content">等待 MySQL 3306 端口可用</div></li><li><span class="option-label">C</span><div class="option-content">避免后端启动时数据库连接失败</div></li><li><span class="option-label">D</span><div class="option-content">初始化数据库表结构</div></li><li><span class="option-label">E</span><div class="option-content">创建数据库用户</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABC <strong>解析</strong>：initContainer
 的核心目的是等待 MySQL Service 就绪后再启动 Backend
 主容器，解决服务依赖与连接失败问题。数据库表结构与用户由 MySQL
 镜像自身的 MYSQL_DATABASE、MYSQL_USER 环境变量自动初始化，与
 initContainer 无关。</p>
-<hr />
-<h3 id="23-多选-03">23-多选-03（★★）</h3>
-<p>以下哪些场景应该使用 Secret 而非 ConfigMap？（多选） A. MySQL root
-密码 B. 应用 JWT 密钥 C. TLS 私钥 D. 数据库连接 URL E. 第三方 API Token
-F. 日志级别配置</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-多选-03"><p><strong>23-多选-03（★★）</strong> 以下哪些场景应该使用 Secret 而非 ConfigMap？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">MySQL root 密码</div></li><li><span class="option-label">B</span><div class="option-content">应用 JWT 密钥</div></li><li><span class="option-label">C</span><div class="option-content">TLS 私钥</div></li><li><span class="option-label">D</span><div class="option-content">数据库连接 URL</div></li><li><span class="option-label">E</span><div class="option-content">第三方 API Token</div></li><li><span class="option-label">F</span><div class="option-content">日志级别配置</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCE
 <strong>解析</strong>：密码、密钥、证书、Token 等敏感信息应使用
 Secret。数据库连接 URL 与日志级别属于非敏感配置，使用 ConfigMap
 即可。虽然 URL 中可能包含密码，CTTS 实践中将密码单独抽出到 Secret，URL
 中只保留主机端口数据库名。</p>
-<hr />
-<h3 id="23-多选-04">23-多选-04（★★）</h3>
-<p>Pod 出现 CrashLoopBackOff 的可能原因包括？（多选） A.
-应用启动异常（如数据库连接失败） B. 配置错误（ConfigMap 字段拼写错误）
-C. 探针配置不当（initialDelaySeconds 过小） D. 资源限制过小（OOMKilled）
-E. 镜像拉取失败 F. 命令参数错误</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-多选-04"><p><strong>23-多选-04（★★）</strong> Pod 出现 CrashLoopBackOff 的可能原因包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">应用启动异常（如数据库连接失败）</div></li><li><span class="option-label">B</span><div class="option-content">配置错误（ConfigMap 字段拼写错误）</div></li><li><span class="option-label">C</span><div class="option-content">探针配置不当（initialDelaySeconds 过小）</div></li><li><span class="option-label">D</span><div class="option-content">资源限制过小（OOMKilled）</div></li><li><span class="option-label">E</span><div class="option-content">镜像拉取失败</div></li><li><span class="option-label">F</span><div class="option-content">命令参数错误</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCDF <strong>解析</strong>：CrashLoopBackOff
 表示容器启动后崩溃被重启。原因包括应用异常、配置错误、探针误杀、OOM、命令错误等。镜像拉取失败表现为
 ImagePullBackOff 而非 CrashLoopBackOff，E 错误。</p>
-<hr />
-<h3 id="23-多选-05">23-多选-05（★★）</h3>
-<p>K8s Service 的 type 字段支持的类型有？（多选） A. ClusterIP B.
-NodePort C. LoadBalancer D. ExternalName E. Ingress F. Headless</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-多选-05"><p><strong>23-多选-05（★★）</strong> K8s Service 的 type 字段支持的类型有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">ClusterIP</div></li><li><span class="option-label">B</span><div class="option-content">NodePort</div></li><li><span class="option-label">C</span><div class="option-content">LoadBalancer</div></li><li><span class="option-label">D</span><div class="option-content">ExternalName</div></li><li><span class="option-label">E</span><div class="option-content">Ingress</div></li><li><span class="option-label">F</span><div class="option-content">Headless</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCD <strong>解析</strong>：Service
 类型有四种：ClusterIP（默认，集群内部）、NodePort（节点端口）、LoadBalancer（云负载均衡）、ExternalName（DNS
 CNAME 跳转）。Ingress 是独立的资源对象不是 Service 类型。Headless 是
 ClusterIP 设置为 None 的特殊形式，不是独立类型。</p>
-<hr />
-<h3 id="23-多选-06">23-多选-06（★★★）</h3>
-<p>CTTS 项目中 Backend 同时配置了
-readinessProbe、livenessProbe、startupProbe，以下描述正确的有？（多选）
-A. startupProbe 成功前，livenessProbe 不运行 B. readinessProbe 失败会将
-Pod 从 Endpoints 移除 C. livenessProbe 失败会重启容器 D. readinessProbe
-失败会重启容器 E. startupProbe 失败会重启容器 F.
-三者可以同时配置，各有职责</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-多选-06"><p><strong>23-多选-06（★★★）</strong> CTTS 项目中 Backend 同时配置了 readinessProbe、livenessProbe、startupProbe，以下描述正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">startupProbe 成功前，livenessProbe 不运行</div></li><li><span class="option-label">B</span><div class="option-content">readinessProbe 失败会将 Pod 从 Endpoints 移除</div></li><li><span class="option-label">C</span><div class="option-content">livenessProbe 失败会重启容器</div></li><li><span class="option-label">D</span><div class="option-content">readinessProbe 失败会重启容器</div></li><li><span class="option-label">E</span><div class="option-content">startupProbe 失败会重启容器</div></li><li><span class="option-label">F</span><div class="option-content">三者可以同时配置，各有职责</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCEF <strong>解析</strong>：startupProbe
 在启动阶段运行，成功后 liveness/readiness 才周期运行（A
 对）。readinessProbe 失败只影响流量（从 Endpoints 移除，B
 对），不会重启容器（D 错）。livenessProbe 失败重启容器（C
 对）。startupProbe 失败等同于启动失败，会重启容器（E
 对）。三者职责不同可同时配置（F 对）。</p>
-<hr />
-<h3 id="23-多选-07">23-多选-07（★★）</h3>
-<p>以下哪些命令可以用于 K8s 故障排查？（多选） A.
-<code>kubectl describe pod</code> B. <code>kubectl logs</code> C.
-<code>kubectl get events</code> D. <code>kubectl exec</code> E.
-<code>kubectl get endpoints</code> F. <code>kubectl apply</code></p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-多选-07"><p><strong>23-多选-07（★★）</strong> 以下哪些命令可以用于 K8s 故障排查？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>kubectl describe pod</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>kubectl logs</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>kubectl get events</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>kubectl exec</code></div></li><li><span class="option-label">E</span><div class="option-content"><code>kubectl get endpoints</code></div></li><li><span class="option-label">F</span><div class="option-content"><code>kubectl apply</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCDE <strong>解析</strong>：describe 查看 Pod
 详情与 Events；logs 查看容器日志；get events 查看集群事件；exec
 进入容器调试；get endpoints 检查 Service 是否关联 Pod。apply
 是部署命令，不是排查命令。</p>
-<hr />
-<h3 id="23-多选-08">23-多选-08（★★）</h3>
-<p>CTTS 项目部署到 Minikube
-时，以下哪些是正确的本地镜像使用方法？（多选） A.
-<code>eval $(minikube docker-env)</code> 后执行 docker build B. 在
-Deployment 中设置 <code>imagePullPolicy: IfNotPresent</code> C. 使用
-<code>minikube image load &lt;image-name&gt;</code> 加载镜像 D.
-将镜像推送到 Docker Hub E. 使用 <code>kubectl load image</code> 命令</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-多选-08"><p><strong>23-多选-08（★★）</strong> CTTS 项目部署到 Minikube 时，以下哪些是正确的本地镜像使用方法？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>eval $(minikube docker-env)</code> 后执行 docker build</div></li><li><span class="option-label">B</span><div class="option-content">在 Deployment 中设置 <code>imagePullPolicy: IfNotPresent</code></div></li><li><span class="option-label">C</span><div class="option-content">使用 <code>minikube image load &lt;image-name&gt;</code> 加载镜像</div></li><li><span class="option-label">D</span><div class="option-content">将镜像推送到 Docker Hub</div></li><li><span class="option-label">E</span><div class="option-content">使用 <code>kubectl load image</code> 命令</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABC <strong>解析</strong>：A 通过共享 Minikube
 Docker daemon 直接构建镜像到节点内；B 配置优先使用本地镜像；C
 直接将宿主机镜像加载到 Minikube；D 推送 Docker Hub
 也可行但需要网络且公开。E <code>kubectl load image</code>
 不是有效命令。</p>
-<hr />
-<h3 id="23-多选-09">23-多选-09（★★）</h3>
-<p>Ingress Controller（nginx）收到请求 <code>Host: api.ctts.local</code>
-后，路由到 Backend 的过程包括？（多选） A. Ingress Controller 根据 host
-匹配 Ingress 规则 B. 找到对应的 backend-service C. 通过 Service 的
-Endpoints 转发到具体 Pod D. DNS 解析 api.ctts.local E. 直接访问
-MySQL</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-多选-09"><p><strong>23-多选-09（★★）</strong> Ingress Controller（nginx）收到请求 <code>Host: api.ctts.local</code> 后，路由到 Backend 的过程包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Ingress Controller 根据 host 匹配 Ingress 规则</div></li><li><span class="option-label">B</span><div class="option-content">找到对应的 backend-service</div></li><li><span class="option-label">C</span><div class="option-content">通过 Service 的 Endpoints 转发到具体 Pod</div></li><li><span class="option-label">D</span><div class="option-content">DNS 解析 api.ctts.local</div></li><li><span class="option-label">E</span><div class="option-content">直接访问 MySQL</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABC <strong>解析</strong>：Ingress Controller
 接收请求后根据 Host 头匹配 Ingress 规则（A），找到对应
 Service（B），通过 Endpoints 转发到具体 Pod（C）。DNS
 解析由客户端浏览器完成（D 不属于 Controller 内部）。Backend 才会访问
 MySQL，Ingress 不直接访问数据库（E 错）。</p>
-<hr />
-<h3 id="23-多选-10">23-多选-10（★★★）</h3>
-<p>以下哪些是 CTTS 项目采用 Namespace 隔离的好处？（多选） A.
-资源名称在命名空间内唯一即可，避免冲突 B. 便于按项目/环境批量管理资源 C.
-可以配合 RBAC 限制用户访问范围 D. 可以配合 ResourceQuota 限制资源配额 E.
-不同命名空间的 Pod 网络完全隔离 F. 不同命名空间的 Pod 无法互相访问</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-多选-10"><p><strong>23-多选-10（★★★）</strong> 以下哪些是 CTTS 项目采用 Namespace 隔离的好处？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">资源名称在命名空间内唯一即可，避免冲突</div></li><li><span class="option-label">B</span><div class="option-content">便于按项目/环境批量管理资源</div></li><li><span class="option-label">C</span><div class="option-content">可以配合 RBAC 限制用户访问范围</div></li><li><span class="option-label">D</span><div class="option-content">可以配合 ResourceQuota 限制资源配额</div></li><li><span class="option-label">E</span><div class="option-content">不同命名空间的 Pod 网络完全隔离</div></li><li><span class="option-label">F</span><div class="option-content">不同命名空间的 Pod 无法互相访问</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCD <strong>解析</strong>：Namespace
 提供逻辑隔离：资源名唯一性（A）、批量管理（B）、RBAC
 范围（C）、ResourceQuota 配额（D）。但默认情况下 K8s
 网络是扁平的，不同命名空间 Pod 仍可通过 Service DNS 互访（E、F
 错）。网络隔离需要 NetworkPolicy 实现。</p>
-<hr />
-<h2 id="三判断题20题">三、判断题（20题）</h2>
-<h3 id="23-判断-01">23-判断-01（★）</h3>
-<p>K8s 中 Secret 默认是加密存储的，可以直接在 YAML 中明文写密码。</p>
+</blockquote></section>
+<hr /><h2 id="三判断题20题">三、判断题（20题）</h2>
+<section class="question-card" id="23-判断-01"><p><strong>23-判断-01（★）</strong> K8s 中 Secret 默认是加密存储的，可以直接在 YAML 中明文写密码。</p>
+<blockquote>
 <p><strong>答案</strong>：错误 <strong>解析</strong>：Secret 默认只是
 base64 编码（非加密），etcd 中存储的仍是 base64 字符串。生产环境应启用
 etcd 静态加密（EncryptionConfiguration）。YAML 中 data 字段值必须是
 base64 编码字符串。</p>
-<hr />
-<h3 id="23-判断-02">23-判断-02（★）</h3>
-<p>ConfigMap 中的配置修改后，已运行的 Pod 会自动感知并重新加载配置。</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-02"><p><strong>23-判断-02（★）</strong> ConfigMap 中的配置修改后，已运行的 Pod 会自动感知并重新加载配置。</p>
+<blockquote>
 <p><strong>答案</strong>：错误 <strong>解析</strong>：ConfigMap
 修改后，通过 volumeMounts 挂载的文件会在一段时间后（约 1
 分钟）自动更新到容器内，但通过 envFrom
 注入的环境变量不会更新（环境变量在容器启动时固化）。要让环境变量生效，需执行
 <code>kubectl rollout restart</code> 重启 Pod。</p>
-<hr />
-<h3 id="23-判断-03">23-判断-03（★）</h3>
-<p>PV 是集群级资源，不属于任何 Namespace；PVC 是命名空间级资源。</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-03"><p><strong>23-判断-03（★）</strong> PV 是集群级资源，不属于任何 Namespace；PVC 是命名空间级资源。</p>
+<blockquote>
 <p><strong>答案</strong>：正确 <strong>解析</strong>：PV
 是集群全局资源（不属于任何 Namespace），PVC 是命名空间级资源。PVC
 在自己的命名空间内引用 PV，K8s 通过 storageClassName 和 accessModes
 自动匹配绑定。</p>
-<hr />
-<h3 id="23-判断-04">23-判断-04（★★）</h3>
-<p>MySQL Deployment 必须使用 <code>strategy: Recreate</code>，因为 PVC
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-04"><p><strong>23-判断-04（★★）</strong> MySQL Deployment 必须使用 <code>strategy: Recreate</code>，因为 PVC
 是 ReadWriteOnce，不能被多个 Pod 同时挂载。</p>
+<blockquote>
 <p><strong>答案</strong>：正确
 <strong>解析</strong>：ReadWriteOnce（RWO）模式的 PVC
 只能被单个节点上的单个 Pod 挂载。若用 RollingUpdate，新旧 Pod
 会同时存在并尝试挂载同一 PVC，导致冲突失败。Recreate 先删旧 Pod 释放
 PVC，再启新 Pod。</p>
-<hr />
-<h3 id="23-判断-05">23-判断-05（★）</h3>
-<p>K8s Service 的 ClusterIP 默认是固定的，删除重建 Service 后 IP
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-05"><p><strong>23-判断-05（★）</strong> K8s Service 的 ClusterIP 默认是固定的，删除重建 Service 后 IP
 不变。</p>
+<blockquote>
 <p><strong>答案</strong>：错误 <strong>解析</strong>：Service 的
 ClusterIP 在创建时由 K8s 动态分配，删除重建后会得到新的
 IP。因此应用间通信应通过 Service DNS 名称（如 mysql-service）而非
 ClusterIP，DNS 名称是稳定的。</p>
-<hr />
-<h3 id="23-判断-06">23-判断-06（★★）</h3>
-<p>Backend 的 initContainer <code>wait-for-mysql</code>
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-06"><p><strong>23-判断-06（★★）</strong> Backend 的 initContainer <code>wait-for-mysql</code>
 失败后，主容器仍会启动。</p>
+<blockquote>
 <p><strong>答案</strong>：错误 <strong>解析</strong>：initContainer
 必须按顺序成功完成后，主容器才会启动。若 initContainer 失败（退出码非
 0），K8s 会重启 initContainer（受 restartPolicy 控制，默认
 Always），主容器不会启动。</p>
-<hr />
-<h3 id="23-判断-07">23-判断-07（★★）</h3>
-<p>Ingress 只能路由 HTTP/HTTPS 流量，不支持 TCP/UDP。</p>
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-07"><p><strong>23-判断-07（★★）</strong> Ingress 只能路由 HTTP/HTTPS 流量，不支持 TCP/UDP。</p>
+<blockquote>
 <p><strong>答案</strong>：正确 <strong>解析</strong>：标准 Ingress
 资源只支持七层 HTTP/HTTPS 路由。TCP/UDP 四层路由需要使用 Ingress
 Controller 的扩展配置（如 nginx-ingress 的 ConfigMap
 tcp-services）。CTTS 项目中 MySQL 仅集群内访问，不通过 Ingress
 暴露。</p>
-<hr />
-<h3 id="23-判断-08">23-判断-08（★）</h3>
-<p><code>kubectl get all -n ctts</code> 会显示 ctts
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-08"><p><strong>23-判断-08（★）</strong> <code>kubectl get all -n ctts</code> 会显示 ctts
 命名空间下的所有资源对象，包括 Secret 和 ConfigMap。</p>
+<blockquote>
 <p><strong>答案</strong>：错误
 <strong>解析</strong>：<code>kubectl get all</code>
 只显示常见工作负载资源（Pod、Service、Deployment、ReplicaSet、DaemonSet、StatefulSet
 等），不包含 ConfigMap、Secret、PV、PVC、Ingress 等。需分别用
 <code>kubectl get cm</code>、<code>kubectl get secret</code>、<code>kubectl get ingress</code>
 查看。</p>
-<hr />
-<h3 id="23-判断-09">23-判断-09（★★）</h3>
-<p>CTTS 项目中 Frontend 的 Nginx 配置通过 ConfigMap
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-09"><p><strong>23-判断-09（★★）</strong> CTTS 项目中 Frontend 的 Nginx 配置通过 ConfigMap
 注入而非写入镜像，是为了方便修改反代地址而无需重新构建镜像。</p>
+<blockquote>
 <p><strong>答案</strong>：正确 <strong>解析</strong>：将 Nginx
 配置抽离到 ConfigMap，修改 backend-service 地址或路径规则时只需更新
 ConfigMap 并重启
 Pod，无需重新构建前端镜像。这是"配置即基础设施"理念的体现，符合云原生十二要素应用的方法论。</p>
-<hr />
-<h3 id="23-判断-10">23-判断-10（★）</h3>
-<p>Minikube addons enable ingress 命令会安装 nginx ingress controller 到
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-10"><p><strong>23-判断-10（★）</strong> Minikube addons enable ingress 命令会安装 nginx ingress controller 到
 kube-system 命名空间。</p>
+<blockquote>
 <p><strong>答案</strong>：错误 <strong>解析</strong>：Minikube ingress
 addon 默认将 ingress-nginx-controller 安装到 <code>ingress-nginx</code>
 命名空间（不是 kube-system）。可用
 <code>kubectl get pod -n ingress-nginx</code> 查看。</p>
-<hr />
-<h3 id="23-判断-11">23-判断-11（★★）</h3>
-<p>Pod 的 <code>imagePullPolicy: Always</code>
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-11"><p><strong>23-判断-11（★★）</strong> Pod 的 <code>imagePullPolicy: Always</code>
 表示即使本地有同名镜像，也会从远程仓库拉取。</p>
+<blockquote>
 <p><strong>答案</strong>：正确 <strong>解析</strong>：Always
 策略下，每次创建 Pod 都会尝试从远程仓库拉取镜像，即使节点本地已有同名
 tag。对于本地构建的镜像（无远程仓库），应设置为 IfNotPresent
 避免拉取失败。Latest tag 默认是 Always，其他 tag 默认是
 IfNotPresent。</p>
-<hr />
-<h3 id="23-判断-12">23-判断-12（★★）</h3>
-<p>Backend Deployment 中 <code>replicas: 2</code> 表示始终运行 2 个 Pod
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-12"><p><strong>23-判断-12（★★）</strong> Backend Deployment 中 <code>replicas: 2</code> 表示始终运行 2 个 Pod
 副本，K8s 会自动在节点故障时重建。</p>
+<blockquote>
 <p><strong>答案</strong>：正确 <strong>解析</strong>：Deployment
 控制器持续监控 Pod 副本数，若实际副本数与期望不符（如节点故障、Pod
 崩溃），会自动创建或删除 Pod 维持期望副本数。这是 K8s
 自愈能力的体现。</p>
-<hr />
-<h3 id="23-判断-13">23-判断-13（★）</h3>
-<p>K8s 中不同命名空间的 Service 互相访问时，必须使用完整的 FQDN
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-13"><p><strong>23-判断-13（★）</strong> K8s 中不同命名空间的 Service 互相访问时，必须使用完整的 FQDN
 <code>&lt;svc&gt;.&lt;ns&gt;.svc.cluster.local</code>。</p>
+<blockquote>
 <p><strong>答案</strong>：正确 <strong>解析</strong>：同命名空间内可简写
 Service 名称（如 mysql-service），但跨命名空间访问必须使用完整 FQDN（如
 mysql-service.ctts.svc.cluster.local），否则 DNS 解析会找不到目标
 Service。</p>
-<hr />
-<h3 id="23-判断-14">23-判断-14（★★）</h3>
-<p>PV 的 <code>accessModes: ReadWriteOnce</code> 表示该 PV 只能被一个
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-14"><p><strong>23-判断-14（★★）</strong> PV 的 <code>accessModes: ReadWriteOnce</code> 表示该 PV 只能被一个
 Pod 挂载。</p>
+<blockquote>
 <p><strong>答案</strong>：错误（部分正确，但不准确）
 <strong>解析</strong>：ReadWriteOnce（RWO）表示该 PV
 只能被单个节点以读写方式挂载，但同一节点上的多个 Pod
 可以同时挂载。更准确的说法是"只能被一个节点挂载"。对于 MySQL
 等单副本场景，效果等同于一 Pod 挂载。</p>
-<hr />
-<h3 id="23-判断-15">23-判断-15（★★★）</h3>
-<p>Backend 的 readinessProbe 和 livenessProbe 都配置
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-15"><p><strong>23-判断-15（★★★）</strong> Backend 的 readinessProbe 和 livenessProbe 都配置
 <code>/actuator/health</code>，所以它们的语义完全相同。</p>
+<blockquote>
 <p><strong>答案</strong>：错误
 <strong>解析</strong>：虽然路径相同，但语义不同：readinessProbe 失败会将
 Pod 从 Service Endpoints 移除（停止接收新流量，但 Pod
 继续运行）；livenessProbe 失败会重启容器。SpringBoot Actuator 的
 <code>/actuator/health</code> 在依赖组件异常时返回 503，能让 readiness
 自动摘除故障 Pod。</p>
-<hr />
-<h3 id="23-判断-16">23-判断-16（★）</h3>
-<p><code>kubectl delete namespace ctts</code>
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-16"><p><strong>23-判断-16（★）</strong> <code>kubectl delete namespace ctts</code>
 会删除该命名空间下的所有资源。</p>
+<blockquote>
 <p><strong>答案</strong>：正确 <strong>解析</strong>：删除 Namespace
 会级联删除其下所有资源（Pod、Service、Deployment、ConfigMap、Secret、PVC
 等），但不会删除 PV（PV
 是集群级资源）。这是快速清理项目所有资源的方式，但需谨慎使用。</p>
-<hr />
-<h3 id="23-判断-17">23-判断-17（★★）</h3>
-<p>CTTS 项目中 Frontend Nginx 通过
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-17"><p><strong>23-判断-17（★★）</strong> CTTS 项目中 Frontend Nginx 通过
 <code>proxy_pass http://backend-service:8080</code> 反向代理后端，依赖
 K8s Service DNS 解析。</p>
+<blockquote>
 <p><strong>答案</strong>：正确 <strong>解析</strong>：Nginx
 在容器内运行，通过 K8s CoreDNS 解析 <code>backend-service</code>
 域名，获取 Service ClusterIP 并负载分发到后端 Pod。这是 K8s
 集群内服务间通信的标准方式。</p>
-<hr />
-<h3 id="23-判断-18">23-判断-18（★★）</h3>
-<p>Pod 出现 ImagePullBackOff 后，删除该 Pod 让 K8s
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-18"><p><strong>23-判断-18（★★）</strong> Pod 出现 ImagePullBackOff 后，删除该 Pod 让 K8s
 重新创建即可解决所有问题。</p>
+<blockquote>
 <p><strong>答案</strong>：错误 <strong>解析</strong>：ImagePullBackOff
 的根因是镜像拉取失败（镜像不存在、tag
 错误、仓库认证失败、网络问题等）。若根因未解决，新创建的 Pod
 仍会失败。需先排查根因（<code>kubectl describe pod</code> 看
 Events）并修复后再删除 Pod 重建。</p>
-<hr />
-<h3 id="23-判断-19">23-判断-19（★★★）</h3>
-<p>CTTS 项目中若 MySQL Pod 崩溃重启，由于 PVC 持久化了
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-19"><p><strong>23-判断-19（★★★）</strong> CTTS 项目中若 MySQL Pod 崩溃重启，由于 PVC 持久化了
 <code>/var/lib/mysql</code>，数据不会丢失。</p>
+<blockquote>
 <p><strong>答案</strong>：正确 <strong>解析</strong>：PVC 将 MySQL
 数据目录持久化到 PV，Pod 崩溃或重建时数据保留。但需注意：若 MySQL
 在写入过程中崩溃可能存在数据不一致风险（依赖 MySQL 的 binlog 与 InnoDB
 redo log 恢复）。生产环境建议使用 StatefulSet + StorageClass
 提供更强保障。</p>
-<hr />
-<h3 id="23-判断-20">23-判断-20（★★）</h3>
-<p>K8s 中 Deployment 是声明式
+</blockquote></section>
+<hr /><section class="question-card" id="23-判断-20"><p><strong>23-判断-20（★★）</strong> K8s 中 Deployment 是声明式
 API，用户声明期望状态，控制器持续调谐实际状态向期望状态收敛。</p>
+<blockquote>
 <p><strong>答案</strong>：正确 <strong>解析</strong>：K8s
 核心设计是声明式 API + 控制器模式。用户在 Deployment YAML 中声明
 <code>replicas: 2</code> 等期望状态，Deployment
 控制器持续监控并调谐实际状态（如节点故障导致副本数减少时自动创建新
 Pod）向期望状态收敛。这是 K8s 自愈与弹性的基础。</p>
-<hr />
-<h2 id="四填空题10题">四、填空题（10题）</h2>
-<h3 id="23-填空-01">23-填空-01（★）</h3>
-<p>K8s 中用于存储非敏感配置键值对的资源对象是
+</blockquote></section>
+<hr /><h2 id="四填空题10题">四、填空题（10题）</h2>
+<section class="question-card" id="23-填空-01"><p><strong>23-填空-01（★）</strong> K8s 中用于存储非敏感配置键值对的资源对象是
 ________，用于存储密码、密钥等敏感信息的资源对象是 ________。</p>
+<blockquote>
 <p><strong>答案</strong>：ConfigMap；Secret
 <strong>解析</strong>：ConfigMap 存储非敏感配置，Secret 存储 base64
 编码的敏感信息。CTTS 项目中 mysql-config 是
 ConfigMap（my.cnf），mysql-secret 是 Secret（密码）。</p>
-<hr />
-<h3 id="23-填空-02">23-填空-02（★）</h3>
-<p>CTTS 项目中，Backend 通过 Service DNS 名称 ________ 访问 MySQL
+</blockquote></section>
+<hr /><section class="question-card" id="23-填空-02"><p><strong>23-填空-02（★）</strong> CTTS 项目中，Backend 通过 Service DNS 名称 ________ 访问 MySQL
 服务，该名称由 K8s 内置的 ________ 组件负责解析。</p>
+<blockquote>
 <p><strong>答案</strong>：mysql-service（或
 mysql-service.ctts.svc.cluster.local）；CoreDNS
 <strong>解析</strong>：同命名空间内可简写 Service 名称，跨命名空间需用
 FQDN。CoreDNS 是 K8s 默认的集群内 DNS 服务，运行在 kube-system
 命名空间。</p>
-<hr />
-<h3 id="23-填空-03">23-填空-03（★）</h3>
-<p>生成 Secret 中密码字段所需 base64 编码的命令是
+</blockquote></section>
+<hr /><section class="question-card" id="23-填空-03"><p><strong>23-填空-03（★）</strong> 生成 Secret 中密码字段所需 base64 编码的命令是
 <code>echo -n 'ctts_root_2024' | ________</code>。</p>
+<blockquote>
 <p><strong>答案</strong>：base64
 <strong>解析</strong>：<code>echo -n 'xxx' | base64</code>
 将字符串编码为 base64。<code>-n</code> 参数避免 echo
 末尾换行符被一起编码。解码用 <code>echo 'xxx' | base64 -d</code>。</p>
-<hr />
-<h3 id="23-填空-04">23-填空-04（★★）</h3>
-<p>MySQL Deployment 中 strategy.type 设置为 ________，原因是 MySQL 使用
+</blockquote></section>
+<hr /><section class="question-card" id="23-填空-04"><p><strong>23-填空-04（★★）</strong> MySQL Deployment 中 strategy.type 设置为 ________，原因是 MySQL 使用
 PVC（ReadWriteOnce），不能多个 Pod 同时挂载。</p>
+<blockquote>
 <p><strong>答案</strong>：Recreate <strong>解析</strong>：Recreate
 策略下，升级时先删除所有旧 Pod 释放 PVC，再创建新 Pod。RollingUpdate
 会同时存在新旧 Pod 导致 PVC 挂载冲突。无状态服务（Frontend/Backend）才用
 RollingUpdate。</p>
-<hr />
-<h3 id="23-填空-05">23-填空-05（★★）</h3>
-<p>Backend Deployment 中配置 initContainer 等待 MySQL 就绪，使用的命令是
+</blockquote></section>
+<hr /><section class="question-card" id="23-填空-05"><p><strong>23-填空-05（★★）</strong> Backend Deployment 中配置 initContainer 等待 MySQL 就绪，使用的命令是
 <code>________ -z mysql-service 3306</code>。</p>
+<blockquote>
 <p><strong>答案</strong>：nc（或 netcat）
 <strong>解析</strong>：<code>nc -z host port</code>
 检测目标主机端口是否可达，可达返回 0。配合
 <code>until ... do sleep 3; done</code> 循环等待。busybox 镜像内置 nc
 命令。</p>
-<hr />
-<h3 id="23-填空-06">23-填空-06（★★）</h3>
-<p>K8s 故障排查三件套命令是
+</blockquote></section>
+<hr /><section class="question-card" id="23-填空-06"><p><strong>23-填空-06（★★）</strong> K8s 故障排查三件套命令是
 <code>kubectl get pods</code>、<code>kubectl ________ pod</code> 和
 <code>kubectl logs</code>。</p>
+<blockquote>
 <p><strong>答案</strong>：describe
 <strong>解析</strong>：<code>kubectl describe pod &lt;name&gt;</code>
 显示 Pod 详细信息，包括 Events
 部分，能快速定位调度失败、拉取失败、探针失败等问题的根因。配合
 logs（看应用日志）与 get events（看集群事件）形成完整排查链路。</p>
-<hr />
-<h3 id="23-填空-07">23-填空-07（★★）</h3>
-<p>Frontend 的 Nginx
+</blockquote></section>
+<hr /><section class="question-card" id="23-填空-07"><p><strong>23-填空-07（★★）</strong> Frontend 的 Nginx
 配置中，<code>proxy_pass http://________:8080/api/;</code>
 实现对后端接口的反向代理。</p>
+<blockquote>
 <p><strong>答案</strong>：backend-service <strong>解析</strong>：通过
 K8s Service DNS 名称访问后端 Service，Nginx 在容器内通过 CoreDNS
 解析该名称获取 ClusterIP，负载分发到后端 Pod。</p>
-<hr />
-<h3 id="23-填空-08">23-填空-08（★★）</h3>
-<p>Ingress 资源中，通过 <code>________</code> 字段指定使用的 Ingress
+</blockquote></section>
+<hr /><section class="question-card" id="23-填空-08"><p><strong>23-填空-08（★★）</strong> Ingress 资源中，通过 <code>________</code> 字段指定使用的 Ingress
 Controller 类型（如 nginx）。</p>
+<blockquote>
 <p><strong>答案</strong>：ingressClassName
 <strong>解析</strong>：<code>ingressClassName: nginx</code> 表示该
 Ingress 由 nginx IngressClass 关联的 Ingress Controller 处理。老版本 K8s
 用 <code>kubernetes.io/ingress.class</code> 注解，新版本（1.18+）推荐用
 ingressClassName 字段。</p>
-<hr />
-<h3 id="23-填空-09">23-填空-09（★★）</h3>
-<p>Pod 状态 ________ 表示容器启动后崩溃并被 K8s
+</blockquote></section>
+<hr /><section class="question-card" id="23-填空-09"><p><strong>23-填空-09（★★）</strong> Pod 状态 ________ 表示容器启动后崩溃并被 K8s
 重启，常见于应用异常或配置错误；状态 ________ 表示镜像拉取失败。</p>
+<blockquote>
 <p><strong>答案</strong>：CrashLoopBackOff；ImagePullBackOff
 <strong>解析</strong>：CrashLoopBackOff
 是崩溃重启的退避状态（指数退避，间隔越来越长）。ImagePullBackOff
 是镜像拉取失败的退避状态。两者根因与排查方法不同。</p>
-<hr />
-<h3 id="23-填空-10">23-填空-10（★★★）</h3>
-<p>Backend Deployment 同时配置了
+</blockquote></section>
+<hr /><section class="question-card" id="23-填空-10"><p><strong>23-填空-10（★★★）</strong> Backend Deployment 同时配置了
 startupProbe、readinessProbe、livenessProbe。其中 ________
 失败会重启容器，________ 失败会将 Pod 从 Service Endpoints
 移除但不重启。</p>
+<blockquote>
 <p><strong>答案</strong>：livenessProbe；readinessProbe
 <strong>解析</strong>：livenessProbe
 检测容器是否存活，失败则重启容器（kill + 重建）。readinessProbe
 检测容器是否就绪接收流量，失败则从 Endpoints 摘除但 Pod
 继续运行。startupProbe 只在启动阶段运行，成功后触发
 liveness/readiness。</p>
-<hr />
-<h2 id="五论述简答题4题">五、论述简答题（4题）</h2>
-<h3 id="23-论述-01">23-论述-01（★★★）</h3>
-<p><strong>题目</strong>：请论述 CTTS 项目中 MySQL、Backend、Frontend
+</blockquote></section>
+<hr /><h2 id="五论述简答题4题">五、论述简答题（4题）</h2>
+<section class="question-card" id="23-论述-01"><p><strong>23-论述-01（★★★）</strong> <strong>题目</strong>：请论述 CTTS 项目中 MySQL、Backend、Frontend
 三个服务的部署顺序与依赖关系，并说明如何通过 K8s
 机制保证依赖顺序。若颠倒顺序会出现什么问题？</p>
 <p><strong>参考答案</strong>：</p>
@@ -903,10 +792,8 @@ ADDRESS 为空，无法路由。</li>
 分）</li>
 <li>颠倒顺序后果分析到位（4 分）</li>
 <li>生产环境增强建议有深度（2 分）</li>
-</ul>
-<hr />
-<h3 id="23-论述-02">23-论述-02（★★★）</h3>
-<p><strong>题目</strong>：CTTS 项目中 Backend Deployment 同时配置了
+</ul></section>
+<hr /><section class="question-card" id="23-论述-02"><p><strong>23-论述-02（★★★）</strong> <strong>题目</strong>：CTTS 项目中 Backend Deployment 同时配置了
 startupProbe、readinessProbe、livenessProbe 三种探针，路径都是
 <code>/actuator/health</code>。请论述三种探针的区别、执行顺序，以及为什么
 SpringBoot 应用需要 startupProbe。</p>
@@ -984,10 +871,8 @@ initialDelaySeconds 又会延迟故障发现。</li>
 <li>执行顺序描述准确（4 分）</li>
 <li>SpringBoot 慢启动问题与 startupProbe 必要性阐述（5 分）</li>
 <li>协同设计原则有深度（2 分）</li>
-</ul>
-<hr />
-<h3 id="23-论述-03">23-论述-03（★★）</h3>
-<p><strong>题目</strong>：CTTS 项目中 MySQL 数据通过 PV/PVC
+</ul></section>
+<hr /><section class="question-card" id="23-论述-03"><p><strong>23-论述-03（★★）</strong> <strong>题目</strong>：CTTS 项目中 MySQL 数据通过 PV/PVC
 持久化，请论述 PV 与 PVC 的关系、绑定机制、回收策略，以及为什么 MySQL
 部署用 Recreate 而非 RollingUpdate 策略。</p>
 <p><strong>参考答案</strong>：</p>
@@ -1058,10 +943,8 @@ Deployment。</li>
 <li>绑定机制三维度（3 分）</li>
 <li>回收策略对比（3 分）</li>
 <li>Recreate 原因与 StatefulSet 建议（3 分）</li>
-</ul>
-<hr />
-<h3 id="23-论述-04">23-论述-04（★★★）</h3>
-<p><strong>题目</strong>：请论述 CTTS 项目中 Ingress 的工作原理、与
+</ul></section>
+<hr /><section class="question-card" id="23-论述-04"><p><strong>23-论述-04（★★★）</strong> <strong>题目</strong>：请论述 CTTS 项目中 Ingress 的工作原理、与
 Service 的区别，以及 Ingress 实现
 <code>frontend.ctts.local → frontend-service</code> 与
 <code>api.ctts.local → backend-service</code>
@@ -1174,11 +1057,9 @@ HTTPS，简化应用。</li>
 <li>Ingress 工作原理（Controller/Class/资源关系）（3 分）</li>
 <li>完整请求链路图示清晰（6 分）</li>
 <li>Ingress 核心价值与生产增强（3 分）</li>
-</ul>
-<hr />
-<h2 id="六程序阅读补全题2题">六、程序阅读补全题（2题）</h2>
-<h3 id="23-程序阅读-01">23-程序阅读-01（★★★）</h3>
-<p><strong>题目</strong>：阅读以下 mysql.yaml 片段，补全 (1)-(5)
+</ul></section>
+<hr /><h2 id="六程序阅读补全题2题">六、程序阅读补全题（2题）</h2>
+<section class="question-card" id="23-程序阅读-01"><p><strong>23-程序阅读-01（★★★）</strong> <strong>题目</strong>：阅读以下 mysql.yaml 片段，补全 (1)-(5)
 处缺失的字段值。</p>
 <div class="sourceCode" id="cb3"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
@@ -1223,6 +1104,7 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="
 <span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="at">                </span><span class="fu">secretKeyRef</span><span class="kw">:</span></span>
 <span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="at">                  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mysql-secret</span></span>
 <span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="at">                  </span><span class="fu">key</span><span class="kw">:</span><span class="at"> (5)________</span></span></code></pre></div>
+<blockquote>
 <p><strong>答案</strong>：</p>
 <ul>
 <li>(1) <code>Y3R0c19yb290XzIwMjQ=</code></li>
@@ -1242,9 +1124,8 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="
 <li>(5) secretKeyRef 的 key 字段值必须与 Secret data 中的键名一致。</li>
 </ul>
 <p><strong>评分标准</strong>（满分 10 分，每空 2 分）：</p>
-<hr />
-<h3 id="23-程序阅读-02">23-程序阅读-02（★★★）</h3>
-<p><strong>题目</strong>：阅读以下 backend.yaml 中的 Deployment
+</blockquote></section>
+<hr /><section class="question-card" id="23-程序阅读-02"><p><strong>23-程序阅读-02（★★★）</strong> <strong>题目</strong>：阅读以下 backend.yaml 中的 Deployment
 片段，补全 (1)-(5) 处缺失的字段值。</p>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
@@ -1282,6 +1163,7 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="
 <span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">(5)________</span><span class="kw">:</span></span>
 <span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /actuator/health</span></span>
 <span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span></code></pre></div>
+<blockquote>
 <p><strong>答案</strong>：</p>
 <ul>
 <li>(1) <code>backend</code></li>
@@ -1304,10 +1186,9 @@ IfNotPresent，优先使用节点本地镜像，避免拉取远程不存在的�
 三种探测方式。SpringBoot Actuator 提供 HTTP 接口，用 httpGet。</li>
 </ul>
 <p><strong>评分标准</strong>（满分 10 分，每空 2 分）：</p>
-<hr />
-<h2 id="七编程接口设计题2题">七、编程接口设计题（2题）</h2>
-<h3 id="23-编程-01">23-编程-01（★★★）</h3>
-<p><strong>题目</strong>：请为 CTTS 项目编写完整的
+</blockquote></section>
+<hr /><h2 id="七编程接口设计题2题">七、编程接口设计题（2题）</h2>
+<section class="question-card" id="23-编程-01"><p><strong>23-编程-01（★★★）</strong> <strong>题目</strong>：请为 CTTS 项目编写完整的
 frontend.yaml，包含以下三个资源对象：</p>
 <ol type="1">
 <li>ConfigMap（名称：frontend-config）：存储 Nginx 配置文件
@@ -1480,10 +1361,8 @@ try_files（2）、proxy_pass（2）</td>
 <td>缩进错误每个 -1，字段拼写错误每个 -1，最多扣 5 分</td>
 </tr>
 </tbody>
-</table>
-<hr />
-<h3 id="23-编程-02">23-编程-02（★★★）</h3>
-<p><strong>题目</strong>：请为 CTTS 项目编写完整的
+</table></section>
+<hr /><section class="question-card" id="23-编程-02"><p><strong>23-编程-02（★★★）</strong> <strong>题目</strong>：请为 CTTS 项目编写完整的
 ingress.yaml，要求：</p>
 <ol type="1">
 <li>Ingress 名称：ctts-ingress，命名空间：ctts。</li>
@@ -1609,9 +1488,8 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="
 <td>缩进错误每个 -1，字段拼写错误每个 -1，最多扣 5 分</td>
 </tr>
 </tbody>
-</table>
-<hr />
-<h2 id="八统计表">八、统计表</h2>
+</table></section>
+<hr /><h2 id="八统计表">八、统计表</h2>
 <h3 id="题型分布">题型分布</h3>
 <table>
 <thead>

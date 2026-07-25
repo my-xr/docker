@@ -171,8 +171,17 @@ K14-1：集群搭建方案概览</h3>
 </table>
 <h4 id="原理">原理</h4>
 <p>不同方案的本质差异在于"集群跑在哪里"和"谁负责运维控制平面"：</p>
-<div class="visual"> <div class="visual-title">图示 1：方案 集群跑在哪 控制平面谁管</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">方案 集群跑在哪 控制平面谁管</div> <div class="stack-layer">Minikube 本机一台虚拟机/容器内 Minikube 自动管（学习用）</div> <div class="stack-layer">kubeadm 多台真实机器/虚拟机 用户自己搭自己管（生产用）</div> <div class="stack-layer runtime">Kind 本机多个 Docker 容器内 Kind 自动管（CI 用）</div> <div class="stack-layer">云托管 K8s 云厂商的虚拟资源 云厂商托管控制平面，用户只管 Node</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 1：方案 集群跑在哪 控制平面谁管</div>
+<div class="edu-diagram">
+<div class="diagram-grid four">
+<div class="diagram-card good"><h4>Minikube</h4><p>跑在本机一台虚拟机或容器内，控制平面由 Minikube 自动管理，适合学习和个人开发。</p></div>
+<div class="diagram-card"><h4>kubeadm</h4><p>跑在多台真实机器或虚拟机上，由用户自己搭建和维护，适合理解生产集群。</p></div>
+<div class="diagram-card"><h4>Kind</h4><p>跑在本机多个 Docker 容器内，由 Kind 自动创建集群，适合 CI 和快速测试。</p></div>
+<div class="diagram-card"><h4>云托管 K8s</h4><p>跑在云厂商资源上，控制平面由云厂商托管，用户主要管理 Node 与业务资源。</p></div>
+</div>
+<div class="diagram-callout">选型关键看三件事：用途是学习还是生产、是否要自己管理控制平面、是否需要多节点真实环境。</div>
+</div>
 </div>
 <p><strong>四种方案对比</strong>：</p>
 <table>
@@ -292,7 +301,19 @@ PaaS，更值得关注。</li>
 初创公司上云、不想运维控制平面    云托管 K8s     免运维、按量付费
 高校实验室 30 台机器搭教学集群    kubeadm        多节点、学生可体验真实集群</code></pre>
 <h4 id="图示">图示</h4>
-<div class="visual"> <div class="visual-title">图示 2：K8s 集群搭建方案选型决策树：</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">K8s 集群搭建方案选型决策树：</span></li> <li><span class="tree-label">要搭 K8s 集群</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">是学习/开发用？</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">是 否</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Minikube 是生产环境？</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">是 否</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">自建机房？ CI/测试？</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">是 否 Kind</span></li> <li><span class="tree-label">kubeadm 云托管 K8s</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 2：K8s 集群搭建方案选型决策树：</div>
+<div class="edu-diagram">
+<div class="docker-decision">
+<div class="docker-decision-root">要搭一套 K8s 集群</div>
+<div class="diagram-grid four">
+<div class="diagram-card good"><h4>学习 / 本机开发</h4><p>优先 Minikube：启动快、依赖少、每个学生都能独立完成。</p></div>
+<div class="diagram-card"><h4>CI / 自动化测试</h4><p>优先 Kind：用 Docker 容器模拟多节点，适合流水线反复创建和销毁。</p></div>
+<div class="diagram-card"><h4>生产自建</h4><p>选择 kubeadm：自己管理 Master、Worker、CNI、证书和升级。</p></div>
+<div class="diagram-card"><h4>生产托管</h4><p>选择云托管 K8s：控制平面交给云厂商，团队聚焦业务部署。</p></div>
+</div>
+</div>
+</div>
 </div>
 <h4 id="易错点">易错点</h4>
 <ol type="1">
@@ -553,8 +574,17 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="
 </tbody>
 </table>
 <h4 id="图示-1">图示</h4>
-<div class="visual"> <div class="visual-title">图示 4：Minikube 单机集群架构：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">Minikube 单机集群架构：</div> <div class="stack-layer">本机（你的电脑）</div> <div class="stack-layer runtime">Docker ← 容器引擎（前提）</div> <div class="stack-layer">跑一个容器</div> <div class="stack-layer">▼</div> <div class="stack-layer">Minikube 容器（=K8s 集群）</div> <div class="stack-layer">Master 控制平面</div> <div class="stack-layer">API Server</div> <div class="stack-layer">etcd</div> <div class="stack-layer">scheduler</div> <div class="stack-layer">controller-manager</div> <div class="stack-layer">Node 工作节点</div> <div class="stack-layer">kubelet</div> <div class="stack-layer">kube-proxy</div> <div class="stack-layer">container-runtime</div> <div class="stack-layer app">Pods（业务容器）</div> <div class="stack-layer">kubectl ← 通过 kubeconfig 连接</div> <div class="stack-layer">特点：Master 和 Node 在同一台机器/容器内，单点不适用生产</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 4：Minikube 单机集群架构：</div>
+<div class="edu-diagram">
+<div class="diagram-panel"><h4>本机上的一套完整 K8s</h4><p>Minikube 把控制平面和工作节点压缩到同一台机器/容器里，让学习环境具备完整 K8s 体验。</p></div>
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>本机基础</h4><p>Windows/macOS/Linux + Docker 或虚拟化层，负责承载 Minikube 节点。</p></div>
+<div class="diagram-card good"><h4>控制平面</h4><p>API Server、etcd、scheduler、controller-manager 都在 Minikube 内运行。</p></div>
+<div class="diagram-card"><h4>工作节点</h4><p>kubelet、kube-proxy、container-runtime 和业务 Pods 同样运行在这个单机集群中。</p></div>
+</div>
+<div class="diagram-callout">它适合学习，不适合生产：Master 和 Node 在同一环境内，任何本机故障都会影响整套集群。</div>
+</div>
 </div>
 <h4 id="易错点-1">易错点</h4>
 <ol type="1">
@@ -911,8 +941,15 @@ master，再用 join 把 worker 加进来。</strong></p>
 </blockquote>
 <h4 id="原理-3">原理</h4>
 <p><strong>多节点集群架构</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 6：kubeadm 多节点 K8s 集群</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">kubeadm 多节点 K8s 集群</div> <div class="stack-layer">Master 节点（控制平面）</div> <div class="stack-layer">kube-apiserver</div> <div class="stack-layer">etcd</div> <div class="stack-layer">kube-scheduler</div> <div class="stack-layer">kube-controller-manager</div> <div class="stack-layer">kubelet</div> <div class="stack-layer">kube-proxy</div> <div class="stack-layer">container-runtime</div> <div class="stack-layer">▼ ▼ ▼</div> <div class="stack-layer">Worker1 Worker2 Worker3 ← 工作节点</div> <div class="stack-layer app">kubelet kubelet kubelet 跑业务 Pod</div> <div class="stack-layer">kube- kube- kube-</div> <div class="stack-layer">proxy proxy proxy</div> <div class="stack-layer">container container container</div> <div class="stack-layer">runtime -runtime -runtime</div> <div class="stack-layer app">Pods Pods Pods</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 6：kubeadm 多节点 K8s 集群</div>
+<div class="edu-diagram">
+<div class="diagram-grid two">
+<div class="diagram-panel"><span class="diagram-badge">Master / Control Plane</span><h4>集群决策与状态中心</h4><div class="diagram-grid two"><div class="diagram-card"><h4>API Server</h4><p>统一入口。</p></div><div class="diagram-card"><h4>etcd</h4><p>保存状态。</p></div><div class="diagram-card"><h4>scheduler</h4><p>决定 Pod 跑哪。</p></div><div class="diagram-card"><h4>controller-manager</h4><p>维持期望状态。</p></div></div></div>
+<div class="diagram-panel good"><span class="diagram-badge good">Worker Nodes</span><h4>业务 Pod 的运行位置</h4><div class="diagram-grid three"><div class="diagram-card"><h4>kubelet</h4><p>执行 Pod 生命周期。</p></div><div class="diagram-card"><h4>kube-proxy</h4><p>维护 Service 规则。</p></div><div class="diagram-card"><h4>containerd</h4><p>运行容器。</p></div></div><p>Worker1 / Worker2 / Worker3 共同承载业务 Pods。</p></div>
+</div>
+<div class="diagram-callout">kubeadm 负责把这些组件按标准方式初始化和加入集群；Master 管全局，Worker 跑业务。</div>
+</div>
 </div>
 <p><strong>kubeadm 工作流程</strong>：</p>
 <pre><code>阶段 1：所有节点做前置条件配置（关 swap、防火墙、SELinux，装容器运行时和 kubeadm/kubelet/kubectl）
@@ -1233,8 +1270,18 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href=
 </tbody>
 </table>
 <h4 id="图示-3">图示</h4>
-<div class="visual"> <div class="visual-title">图示 7：kubeadm 多节点集群搭建流程：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">kubeadm 多节点集群搭建流程：</div> <div class="stack-layer">阶段1: 前置条件（所有节点）</div> <div class="stack-layer">• 关 swap</div> <div class="stack-layer">• 关防火墙/SELinux</div> <div class="stack-layer base">• 设置主机名 + hosts</div> <div class="stack-layer">• 加载内核模块</div> <div class="stack-layer runtime">• 装 containerd</div> <div class="stack-layer">• 装 kubeadm/kubelet/kubectl</div> <div class="stack-layer">↓</div> <div class="stack-layer">阶段2: kubeadm init（在 master）</div> <div class="stack-layer">• 拉控制平面镜像</div> <div class="stack-layer">• 启 etcd/API Server/scheduler/</div> <div class="stack-layer">controller-manager</div> <div class="stack-layer">• 生成 kubeconfig</div> <div class="stack-layer">• 输出 kubeadm join 命令 ⭐</div> <div class="stack-layer">↓</div> <div class="stack-layer">阶段3: 配置 kubectl（在 master）</div> <div class="stack-layer">mkdir ~/.kube</div> <div class="stack-layer app">cp /etc/kubernetes/admin.conf</div> <div class="stack-layer">~/.kube/config</div> <div class="stack-layer">↓</div> <div class="stack-layer">阶段4: 装 CNI 网络插件（在 master）</div> <div class="stack-layer">kubectl apply -f calico.yaml</div> <div class="stack-layer">→ master 变 Ready</div> <div class="stack-layer">↓</div> <div class="stack-layer">阶段5: kubeadm join（在每台 worker）</div> <div class="stack-layer">用阶段2输出的 join 命令</div> <div class="stack-layer">→ worker 向 master 注册</div> <div class="stack-layer">→ worker 变 Ready</div> <div class="stack-layer">↓</div> <div class="stack-layer">阶段6: 验证</div> <div class="stack-layer">kubectl get nodes 全部 Ready ✓</div> <div class="stack-layer app">kubectl get pods -A 全部 Running</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 7：kubeadm 多节点集群搭建流程：</div>
+<div class="edu-diagram">
+<div class="docker-chain six">
+<div class="diagram-card"><h4>所有节点准备</h4><p>关 swap、防火墙/SELinux，设置主机名与 hosts，加载内核模块，安装 containerd、kubeadm、kubelet、kubectl。</p></div>
+<div class="diagram-card good"><h4>Master 初始化</h4><p>执行 kubeadm init，拉起 etcd、API Server、scheduler、controller-manager，并输出 join 命令。</p></div>
+<div class="diagram-card"><h4>配置 kubectl</h4><p>把 /etc/kubernetes/admin.conf 复制到 ~/.kube/config，让管理员能访问集群。</p></div>
+<div class="diagram-card"><h4>安装 CNI</h4><p>应用 Calico 等网络插件，使 Pod 跨节点通信，Master 进入 Ready。</p></div>
+<div class="diagram-card"><h4>Worker 加入</h4><p>每台 Worker 执行 kubeadm join，向 Master 注册并启动节点组件。</p></div>
+<div class="diagram-card good"><h4>验证集群</h4><p>kubectl get nodes 全部 Ready，kubectl get pods -A 系统 Pod 全部 Running。</p></div>
+</div>
+</div>
 </div>
 <h4 id="易错点-3">易错点</h4>
 <ol type="1">
@@ -1621,8 +1668,23 @@ describe 看 Conditions + journalctl 看 kubelet 日志。Minikube dashboard
 15 次课开始就要把 CTTS 服务部署到本次准备的集群上。</p>
 <h4 id="原理-5">原理</h4>
 <p><strong>CTTS K8s 部署的资源规划</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 8：CTTS 三服务 → K8s 资源映射：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>CTTS 三服务 → K8s 资源映射：</p></div> <div class="diagram-note-card"><p>CTTS 服务 K8s 资源 副本数</p></div> <div class="diagram-note-card"><p>Frontend (Vue3) → Deployment + Service 2 副本</p></div> <div class="diagram-note-card"><p>Backend (Spring) → Deployment + Service 3 副本</p></div> <div class="diagram-note-card"><p>MySQL → StatefulSet + Service 1 副本（有状态）</p></div> <div class="diagram-note-card"><p>通用资源：</p></div> <div class="diagram-note-card"><p>ConfigMap（应用配置）</p></div> <div class="diagram-note-card"><p>Secret（MySQL 密码）</p></div> <div class="diagram-note-card"><p>PVC（MySQL 数据持久化，10Gi）</p></div> <div class="diagram-note-card"><p>Ingress（域名入口，ctts.com）</p></div> <div class="diagram-note-card"><p>Namespace（ctts，资源隔离）</p></div> <div class="diagram-note-card"><p>集群资源估算：</p></div> <div class="diagram-note-card"><p>Frontend 2 副本 &#215; (0.25 核 + 256Mi) = 0.5 核 + 512Mi</p></div> <div class="diagram-note-card"><p>Backend 3 副本 &#215; (0.5 核 + 512Mi) = 1.5 核 + 1.5Gi</p></div> <div class="diagram-note-card"><p>MySQL 1 副本 &#215; (0.5 核 + 1Gi) = 0.5 核 + 1Gi</p></div> <div class="diagram-note-card"><p>系统 Pod（kube-system） ≈ 1 核 + 1Gi</p></div> <div class="diagram-note-card"><b>总计</b><p>约 3.5 核 CPU + 4Gi 内存</p></div> <div class="diagram-note-card"><p>→ Minikube 至少分配 4 核 6G（学习用）</p></div> <div class="diagram-note-card"><p>→ kubeadm 至少 1 master(2C4G) + 2 worker(2C4G)（生产用）</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 8：CTTS 三服务 → K8s 资源映射：</div>
+<div class="edu-diagram">
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>Frontend</h4><p>Vue3 + Nginx 使用 Deployment 管理 2 个副本，通过 Service 暴露集群内入口。</p></div>
+<div class="diagram-card good"><h4>Backend</h4><p>SpringBoot 使用 Deployment 管理 3 个副本，通过 Service 提供 API 访问。</p></div>
+<div class="diagram-card warn"><h4>MySQL</h4><p>有状态服务使用 StatefulSet 或单副本 Deployment，配合 Service 与 PVC 保存数据。</p></div>
+</div>
+<div class="diagram-grid five">
+<div class="diagram-card"><h4>ConfigMap</h4><p>应用配置。</p></div>
+<div class="diagram-card"><h4>Secret</h4><p>数据库密码。</p></div>
+<div class="diagram-card"><h4>PVC</h4><p>MySQL 10Gi 持久化。</p></div>
+<div class="diagram-card"><h4>Ingress</h4><p>ctts.com 域名入口。</p></div>
+<div class="diagram-card"><h4>Namespace</h4><p>ctts 资源隔离。</p></div>
+</div>
+<div class="diagram-callout">资源估算：三服务约 2.5 核 + 3Gi，再加 kube-system 约 1 核 + 1Gi；学习用 Minikube 建议至少 4 核 6G。</div>
+</div>
 </div>
 <p><strong>镜像准备策略</strong>：</p>
 <table>
@@ -1934,8 +1996,21 @@ id="三综合示例从架构到集群--ctts-的-k8s-集群搭建完整逻辑">�
 — CTTS 的 K8s 集群搭建完整逻辑</h2>
 <p>把前面所有知识点串起来，看 CTTS
 项目"为什么要搭集群、怎么搭集群、怎么准备镜像"的完整逻辑：</p>
-<div class="visual"> <div class="visual-title">图示 10：现状回顾（前 13 次课）</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>现状回顾（前 13 次课）</p></div> <div class="diagram-step"><p>前 12 次课：CTTS 三服务已用 Docker + Compose 部署（单机）</p></div> <div class="diagram-step"><p>第 13 次课：建立 K8s 架构认知（Master/Node、Pod/Deployment/Service）</p></div> <div class="diagram-step"><p>现在要动手搭一套可用的 K8s 集群</p></div> <div class="diagram-step"><p>方案选型（K14-1）</p></div> <div class="diagram-step"><p>CTTS 是教学项目，每个学生要在自己机器搭集群：</p></div> <div class="diagram-step"><p>学习环境 → Minikube（单机够用、简单）</p></div> <div class="diagram-step"><p>生产演示 → kubeadm 多节点（讲流程，不强求实操）</p></div> <div class="diagram-step"><p>选定方案：每人搭一套 Minikube 集群</p></div> <div class="diagram-step"><p>集群搭建（K14-2、K14-3）</p></div> <div class="diagram-step"><p>装 Minikube：curl 下载二进制 → install 到 /usr/local/bin</p></div> <div class="diagram-step"><p>启动集群：minikube start --image-mirror-country=cn --driver=docker</p></div> <div class="diagram-step"><p>装 kubectl：curl 下载 → install</p></div> <div class="diagram-step"><p>验证：kubectl get nodes → Ready ✓</p></div> <div class="diagram-step"><p>多节点认知（K14-4）</p></div> <div class="diagram-step"><p>生产环境用 kubeadm 搭多节点集群：</p></div> <div class="diagram-step"><p>前置条件：关 swap/防火墙/SELinux、装 containerd、装 kubeadm</p></div> <div class="diagram-step"><p>master：kubeadm init（生成 join 命令）</p></div> <div class="diagram-step"><p>配置 kubectl（拷贝 admin.conf）</p></div> <div class="diagram-step"><p>装 CNI 网络插件（Calico）</p></div> <div class="diagram-step"><p>worker：kubeadm join（用 master 生成的 token）</p></div> <div class="diagram-step"><p>验证：kubectl get nodes 全部 Ready</p></div> <div class="diagram-step"><p>集群验证（K14-5）</p></div> <div class="diagram-step"><p>kubectl get nodes → 节点 Ready</p></div> <div class="diagram-step"><p>kubectl cluster-info → 控制平面运行</p></div> <div class="diagram-step"><p>kubectl get pods -A → 系统 Pod 全 Running</p></div> <div class="diagram-step"><p>kubectl get svc -A → kubernetes、kube-dns 存在</p></div> <div class="diagram-step"><p>kubectl describe node → Conditions 全 True</p></div> <div class="diagram-step"><p>minikube dashboard → 可视化界面</p></div> <div class="diagram-step"><p>CTTS 集群准备（K14-6）</p></div> <div class="diagram-step"><p>启动 4 核 6G 的 Minikube（资源够跑三服务）</p></div> <div class="diagram-step"><p>创建 ctts namespace（资源隔离）</p></div> <div class="diagram-step"><p>用 Minikube Docker daemon 构建前后端镜像（学习用，免推仓库）</p></div> <div class="diagram-step"><p>拉 mysql:8.0 官方镜像</p></div> <div class="diagram-step"><p>启用 ingress、metrics-server addons（后续课程用）</p></div> <div class="diagram-step"><p>后续衔接（第 15~23 次课）</p></div> <div class="diagram-step"><p>第 15 次：编写 Pod YAML 部署 CTTS 后端</p></div> <div class="diagram-step"><p>第 16 次：编写 Deployment 管理 Pod 副本</p></div> <div class="diagram-step"><p>第 18 次：创建 Service 暴露服务</p></div> <div class="diagram-step"><p>第 19 次：配置 Ingress 域名访问</p></div> <div class="diagram-step"><p>第 21 次：ConfigMap 提取配置、Secret 管理密码</p></div> <div class="diagram-step"><p>第 22 次：PV/PVC 持久化 MySQL 数据</p></div> <div class="diagram-step"><p>第 23 次：综合实践，CTTS 完整 K8s 部署</p></div> <div class="diagram-step"><p>收益</p></div> <div class="diagram-step"><p>亲手搭过集群，理解 K8s 架构不再停留在理论</p></div> <div class="diagram-step"><p>掌握 kubectl 命令，能独立操作集群</p></div> <div class="diagram-step"><p>CTTS 集群环境就绪，后续 9 次课直接部署应用</p></div> <div class="diagram-step"><p>→ 从&quot;会讲架构&quot;到&quot;能搭集群、能部署应用&quot;的质变</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 10：现状回顾（前 13 次课）</div>
+<div class="edu-diagram">
+<div class="docker-route">
+<div class="diagram-panel"><h4><span>1</span> 已有基础</h4><p>前 12 次课完成 CTTS Docker + Compose 单机部署，第 13 次课建立 Master/Node 与核心资源认知。</p></div>
+<div class="diagram-panel good"><h4><span>2</span> 本课任务</h4><p>选择 Minikube 作为学习集群，完成安装、启动、kubectl 配置和基础验证。</p></div>
+<div class="diagram-panel"><h4><span>3</span> 生产认知</h4><p>通过 kubeadm 理解多节点集群的准备、init、CNI、join 和验证流程。</p></div>
+</div>
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>集群验证</h4><p>nodes Ready、cluster-info 正常、系统 Pod Running、Service 存在。</p></div>
+<div class="diagram-card"><h4>CTTS 准备</h4><p>创建 ctts namespace，准备前后端镜像和 mysql:8.0。</p></div>
+<div class="diagram-card"><h4>后续部署</h4><p>Pod、Deployment、Service、Ingress、ConfigMap、Secret、PVC 逐步接入。</p></div>
+<div class="diagram-card good"><h4>能力变化</h4><p>从“会讲架构”进入“能搭集群、能部署应用”。</p></div>
+</div>
+</div>
 </div>
 <blockquote>
 <p>这个逻辑链体现了从"认知"到"实操"的转折：第 13

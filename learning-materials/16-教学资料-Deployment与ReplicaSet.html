@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -198,8 +198,17 @@ Pod，并保留历史版本可回滚</td>
 </tbody>
 </table>
 <p><strong>Deployment 的核心能力</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 1：自愈（Self-healing）</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>自愈（Self-healing）</p></div> <div class="diagram-step"><p>Pod 节点宕机 → Deployment 在其他节点重建 Pod</p></div> <div class="diagram-step"><p>Pod 崩溃退出 → 自动重启（restartPolicy）+ 副本补齐</p></div> <div class="diagram-step"><p>扩缩容（Scaling）</p></div> <div class="diagram-step"><p>kubectl scale deployment xxx --replicas=5</p></div> <div class="diagram-step"><p>修改 YAML 的 replicas 字段</p></div> <div class="diagram-step"><p>支持 HPA 自动扩缩容（拓展）</p></div> <div class="diagram-step"><p>滚动更新（Rolling Update）</p></div> <div class="diagram-step"><p>更新镜像版本 → 新 ReplicaSet 逐步替换旧 ReplicaSet</p></div> <div class="diagram-step"><p>更新期间服务不中断（旧 Pod 还在服务，新 Pod 逐步就绪）</p></div> <div class="diagram-step"><p>回滚（Rollback）</p></div> <div class="diagram-step"><p>kubectl rollout undo 回到上一版本</p></div> <div class="diagram-step"><p>kubectl rollout history 查看版本历史</p></div> <div class="diagram-step"><p>可回滚到任意历史版本</p></div> <div class="diagram-step"><p>声明式管理（Declarative）</p></div> <div class="diagram-step"><p>YAML 描述&quot;期望状态&quot;（3 副本 + 镜像 v1）</p></div> <div class="diagram-step"><p>K8s 让&quot;实际状态&quot;趋近&quot;期望状态&quot;</p></div> <div class="diagram-step"><p>可版本化（YAML 提交 Git）</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 1：自愈（Self-healing）</div>
+<div class="edu-diagram">
+<div class="docker-chain five">
+<div class="diagram-card"><h4>期望状态</h4><p>Deployment 声明 replicas: 3，集群应该始终有 3 个可用 Pod。</p></div>
+<div class="diagram-card warn"><h4>故障发生</h4><p>某个 Pod 崩溃、被删除，或者所在 Node 失联。</p></div>
+<div class="diagram-card"><h4>控制器发现偏差</h4><p>ReplicaSet Controller 观察到实际副本数少于期望副本数。</p></div>
+<div class="diagram-card good"><h4>自动补齐</h4><p>控制器创建新的 Pod，scheduler 决定调度位置，kubelet 启动容器。</p></div>
+<div class="diagram-card"><h4>回到稳定</h4><p>实际状态重新达到 3 个副本，业务继续对外服务。</p></div>
+</div>
+</div>
 </div>
 <p><strong>Deployment vs Pod 对比</strong>：</p>
 <table>
@@ -358,8 +367,15 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="
 selector（选择 Pod）+ template（Pod 模板）。详细字段见 K16-3。</p>
 </blockquote>
 <h4 id="图示">图示</h4>
-<div class="visual"> <div class="visual-title">图示 2：裸 Pod 的痛点 vs Deployment 的解决：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>裸 Pod 的痛点 vs Deployment 的解决：</p></div> <div class="diagram-note-card"><p>裸 Pod：</p></div> <div class="diagram-note-card"><p>Pod 挂了就没了，没人补</p></div> <div class="diagram-note-card"><b>痛点</b><p>不自愈、不能扩缩容、不能滚动更新</p></div> <div class="diagram-note-card"><p>Deployment：</p></div> <div class="diagram-note-card"><p>Deployment</p></div> <div class="diagram-note-card"><b>spec.replicas</b><p>3（期望 3 副本）</p></div> <div class="diagram-note-card"><p>ReplicaSet</p></div> <div class="diagram-note-card"><p>持续监控 Pod 数量</p></div> <div class="diagram-note-card"><p>少了就建，多了就删</p></div> <div class="diagram-note-card"><p>Pod1 Pod2 Pod3</p></div> <div class="diagram-note-card"><p>挂了</p></div> <div class="diagram-note-card"><p>▼ 自动重建</p></div> <div class="diagram-note-card"><p>Pod4 新补的</p></div> <div class="diagram-note-card"><b>能力</b><p>自愈、扩缩容、滚动更新、回滚</p></div> <div class="diagram-note-card"><p>Deployment 五大能力：</p></div> <div class="diagram-note-card"><p>① 自愈 ② 扩缩容 ③ 滚动更新</p></div> <div class="diagram-note-card"><p>④ 回滚 ⑤ 声明式管理</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 2：裸 Pod 的痛点 vs Deployment 的解决：</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel warn"><span class="diagram-badge warn">裸 Pod</span><h4>能运行，但没有控制器兜底</h4><p>Pod 挂了就没了，需要人工重新创建；副本数、升级节奏和回滚都没有统一管理。</p><ul class="docker-mini-list"><li>不自愈</li><li>不能声明式扩缩容</li><li>不能滚动更新与回滚</li></ul></div>
+<div class="diagram-panel good"><span class="diagram-badge good">Deployment</span><h4>声明期望状态，由控制器持续维护</h4><p>Deployment 声明 replicas，ReplicaSet 负责维持 Pod 数量，少了补、多了删。</p><ul class="docker-mini-list"><li>自愈</li><li>扩缩容</li><li>滚动更新与回滚</li></ul></div>
+</div>
+<div class="diagram-flow"><div class="diagram-card"><h4>Deployment</h4><p>replicas: 3</p></div><div class="flow-arrow">→</div><div class="diagram-card good"><h4>ReplicaSet</h4><p>持续监控副本数量。</p></div><div class="flow-arrow">→</div><div class="diagram-card"><h4>Pod1 / Pod2 / Pod3</h4><p>某个 Pod 挂掉后自动补新 Pod。</p></div></div>
+</div>
 </div>
 <h4 id="易错点">易错点</h4>
 <ol type="1">
@@ -418,8 +434,19 @@ Deployment 间接管理。</p>
 关键：ReplicaSet 通过 selector 匹配 Pod，只要标签匹配就纳入管理</code></pre>
 <p><strong>为什么 Deployment 不直接管 Pod，而要多一层
 ReplicaSet？</strong></p>
-<div class="visual"> <div class="visual-title">图示 4：答案：为了滚动更新与回滚</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>答案：为了滚动更新与回滚</p></div> <div class="diagram-step"><p>Deployment 更新镜像版本时：</p></div> <div class="diagram-step"><p>创建一个新的 ReplicaSet（RS-new，镜像 v2）</p></div> <div class="diagram-step"><p>旧 ReplicaSet（RS-old，镜像 v1）保留，但副本数逐步减少</p></div> <div class="diagram-step"><p>RS-new 副本数逐步增加</p></div> <div class="diagram-step"><p>最终 RS-old 副本数=0（但保留 RS 对象，用于回滚）</p></div> <div class="diagram-step"><p>RS-new 副本数=3（期望值）</p></div> <div class="diagram-step"><p>这样 Deployment 保留了所有历史 ReplicaSet，可以随时回滚到任意版本。</p></div> <div class="diagram-step"><p>如果 Deployment 直接管 Pod，就没有&quot;版本&quot;概念，无法回滚。</p></div> <div class="diagram-step"><p>Deployment（管理多个 RS 版本）</p></div> <div class="diagram-step"><p>RS-new (v2) 副本数=3 ← 当前版本</p></div> <div class="diagram-step"><p>Pod1 (v2)</p></div> <div class="diagram-step"><p>Pod2 (v2)</p></div> <div class="diagram-step"><p>Pod3 (v2)</p></div> <div class="diagram-step"><p>RS-old1 (v1) 副本数=0 ← 上一版本（可回滚）</p></div> <div class="diagram-step"><p>(无 Pod，但 RS 对象保留)</p></div> <div class="diagram-step"><p>RS-old2 (v0) 副本数=0 ← 更早版本（可回滚）</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 4：答案：为了滚动更新与回滚</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel warn"><span class="diagram-badge warn">只有 Deployment</span><h4>缺少版本承载对象</h4><p>如果 Deployment 直接管理所有 Pod，更新时难以同时保存旧版本和新版本的副本集合。</p></div>
+<div class="diagram-panel good"><span class="diagram-badge good">Deployment + ReplicaSet</span><h4>每个版本有自己的 ReplicaSet</h4><p>Deployment 负责策略，ReplicaSet 负责某一版 Pod 模板的副本数。</p></div>
+</div>
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>滚动更新</h4><p>逐步增加新 RS 副本，逐步减少旧 RS 副本。</p></div>
+<div class="diagram-card"><h4>暂停/继续</h4><p>更新过程可以观察、暂停和恢复。</p></div>
+<div class="diagram-card good"><h4>回滚</h4><p>保留历史 RS 后，可快速回退到旧模板。</p></div>
+</div>
+</div>
 </div>
 <p><strong>ReplicaSet 的 YAML 结构（了解，通常不直接写）</strong>：</p>
 <div class="sourceCode" id="cb10"><pre
@@ -651,12 +678,28 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href=
 <span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> &lt;value&gt;</span></span>
 <span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> &lt;value&gt;</span></span></code></pre></div>
 <p><strong>核心字段详解</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 6：① apiVersion: apps/v1</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><b>① apiVersion</b><p>apps/v1</p></div> <div class="diagram-note-card"><p>Deployment 属于 apps API 组，版本 v1（稳定版）</p></div> <div class="diagram-note-card"><b>注意</b><p>与 Pod 的 apiVersion=v1 不同！</p></div> <div class="diagram-note-card"><p>常见资源 apiVersion：</p></div> <div class="diagram-note-card"><p>Pod / Service / ConfigMap / Secret → v1</p></div> <div class="diagram-note-card"><p>Deployment / ReplicaSet / DaemonSet / StatefulSet → apps/v1</p></div> <div class="diagram-note-card"><p>Ingress → networking.k8s.io/v1</p></div> <div class="diagram-note-card"><p>Job / CronJob → batch/v1</p></div> <div class="diagram-note-card"><b>② kind</b><p>Deployment</p></div> <div class="diagram-note-card"><p>资源类型，必须写 &quot;Deployment&quot;（首字母大写，不能写 deployment）</p></div> <div class="diagram-note-card"><p>③ metadata（元数据）</p></div> <div class="diagram-note-card"><b>name</b><p>Deployment 名称，namespace 内唯一</p></div> <div class="diagram-note-card"><b>namespace</b><p>所在 namespace</p></div> <div class="diagram-note-card"><b>labels</b><p>Deployment 自己的标签（可选，但建议写）</p></div> <div class="diagram-note-card"><p>④ spec（规格）— 核心三要素</p></div> <div class="diagram-note-card"><b>replicas</b><p>期望副本数（整数，默认 1）</p></div> <div class="diagram-note-card"><b>selector</b><p>标签选择器，定义&quot;我要管理哪些 Pod&quot;</p></div> <div class="diagram-note-card"><b>template</b><p>Pod 模板，定义&quot;如何创建 Pod&quot;</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 6：① apiVersion: apps/v1</div>
+<div class="edu-diagram">
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>apiVersion</h4><p>Deployment 属于 apps API 组，稳定版本写 apps/v1；Pod、Service 等核心资源才写 v1。</p></div>
+<div class="diagram-card good"><h4>kind</h4><p>资源类型必须写 Deployment，大小写要准确，表示这是工作负载控制器。</p></div>
+<div class="diagram-card"><h4>metadata</h4><p>name、namespace、labels 定义 Deployment 自己的身份和归属。</p></div>
+<div class="diagram-card warn"><h4>spec 三要素</h4><p>replicas 声明副本数，selector 选择 Pod，template 定义如何创建 Pod。</p></div>
+</div>
+<div class="diagram-callout">记忆方式：Deployment YAML 不是一份 Pod YAML 外面套壳，而是“控制器身份 + 选择规则 + Pod 模板”。</div>
+</div>
 </div>
 <p><strong>selector 与 template 的匹配关系（重点！）</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 7：spec.selector.matchLabels 必须与 spec.template.metadata.labels 匹配！</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>spec.selector.matchLabels 必须与 spec.template.metadata.labels 匹配！</p></div> <div class="diagram-note-card"><p>原因：</p></div> <div class="diagram-note-card"><p>selector 定义&quot;Deployment 要管理哪些 Pod&quot;</p></div> <div class="diagram-note-card"><p>template.metadata.labels 定义&quot;Deployment 创建的 Pod 带哪些标签&quot;</p></div> <div class="diagram-note-card"><p>二者必须匹配，Deployment 才能找到并管理自己创建的 Pod</p></div> <div class="diagram-note-card"><p>错误示例：</p></div> <div class="diagram-note-card"><p>selector.matchLabels:</p></div> <div class="diagram-note-card"><b>app</b><p>ctts-backend ← 选择 app=ctts-backend 的 Pod</p></div> <div class="diagram-note-card"><p>template.metadata.labels:</p></div> <div class="diagram-note-card"><b>app</b><p>ctts-api ← 但创建的 Pod 标签是 app=ctts-api</p></div> <div class="diagram-note-card"><p>→ Deployment 找不到自己创建的 Pod， replicas 永远无法满足！</p></div> <div class="diagram-note-card"><p>正确示例：</p></div> <div class="diagram-note-card"><p>selector.matchLabels:</p></div> <div class="diagram-note-card"><b>app</b><p>ctts-backend ← 选择 app=ctts-backend 的 Pod</p></div> <div class="diagram-note-card"><p>template.metadata.labels:</p></div> <div class="diagram-note-card"><b>app</b><p>ctts-backend ← 创建的 Pod 标签也是 app=ctts-backend</p></div> <div class="diagram-note-card"><p>→ 匹配，Deployment 正常工作</p></div> <div class="diagram-note-card"><b>规则</b><p>selector.matchLabels 必须是 template.metadata.labels 的子集</p></div> <div class="diagram-note-card"><p>即：template.labels 要包含 selector 里所有的键值对</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 7：spec.selector.matchLabels 必须与 spec.template.metadata.labels 匹配！</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel warn"><span class="diagram-badge warn">错误匹配</span><h4>选择器找不到自己创建的 Pod</h4><p>selector.matchLabels: app=ctts-backend，但 template.metadata.labels: app=ctts-api。</p><ul class="docker-mini-list"><li>Deployment 想管理 backend</li><li>实际创建出来的是 api 标签</li><li>replicas 永远难以满足</li></ul></div>
+<div class="diagram-panel good"><span class="diagram-badge good">正确匹配</span><h4>选择器与模板标签对齐</h4><p>selector.matchLabels 和 template.metadata.labels 都包含 app=ctts-backend。</p><ul class="docker-mini-list"><li>Deployment 能找到自己创建的 Pod</li><li>ReplicaSet 正常维护副本</li><li>Service 后续也能稳定选择 Pod</li></ul></div>
+</div>
+<div class="diagram-callout">规则：selector.matchLabels 必须是 template.metadata.labels 的子集。template 可以有更多标签，但不能缺少 selector 中的键值对。</div>
+</div>
 </div>
 <p><strong>Pod 模板（template）与 Pod YAML 的关系</strong>：</p>
 <pre><code>Deployment 的 template 字段本质就是一份 Pod YAML（去掉 apiVersion/kind）：
@@ -953,8 +996,19 @@ Pod</strong>，保证更新期间服务不中断。</p>
 <div class="visual"> <div class="visual-title">图示 8：Deployment 滚动更新时新旧 ReplicaSet 交替</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">初始状态：Deployment 管理 RS-old（v1），3 个 Pod 都是 v1</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Deployment</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-old (v1) 副本数=3</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod1 (v1)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod2 (v1)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod3 (v1)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-new (v2) 副本数=0（不存在）</span></li> <li><span class="tree-label">执行 kubectl set image deployment/xxx container=xxx:v2</span></li> <li><span class="tree-label">Step 1：Deployment 创建 RS-new（v2），副本数=0</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Deployment</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-old (v1) 副本数=3</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod1 (v1)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod2 (v1)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod3 (v1)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-new (v2) 副本数=0 ← 新 RS 创建</span></li> <li><span class="tree-label">Step 2：RS-new 副本数+1（启动 Pod4 v2），RS-old 副本数-1（终止 Pod1）</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Deployment</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-old (v1) 副本数=2 ← 减 1</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod2 (v1)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod3 (v1) ← Pod1 被终止</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-new (v2) 副本数=1 ← 加 1</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod4 (v2) ← 新 Pod 启动</span></li> <li><span class="tree-label">Step 3：继续替换</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Deployment</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-old (v1) 副本数=1</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod3 (v1) ← Pod2 被终止</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-new (v2) 副本数=2</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod4 (v2)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod5 (v2) ← 新 Pod 启动</span></li> <li><span class="tree-label">Step 4：完成替换</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Deployment</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-old (v1) 副本数=0 ← 保留 RS（用于回滚）</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">RS-new (v2) 副本数=3 ← 当前版本</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod4 (v2)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod5 (v2)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod6 (v2)</span></li> <li><span class="tree-label">关键：旧 RS 保留（副本数=0），用于回滚</span></li> </ul> </div> </div>
 </div>
 <p><strong>RollingUpdate 策略参数详解</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 9：spec.strategy.rollingUpdate:</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>spec.strategy.rollingUpdate:</p></div> <div class="diagram-note-card"><b>maxSurge</b><p>25% # 滚动更新时，最多超出期望副本数的比例</p></div> <div class="diagram-note-card"><b>maxUnavailable</b><p>25% # 滚动更新时，最多低于期望副本数的比例</p></div> <div class="diagram-note-card"><p>含义（以 replicas=3、maxSurge=25%、maxUnavailable=25% 为例）：</p></div> <div class="diagram-note-card"><p>maxSurge=25%：</p></div> <div class="diagram-note-card"><p>滚动更新期间，最多可以有 3 + 3*25% = 3.75 → 向上取整 = 4 个 Pod</p></div> <div class="diagram-note-card"><p>即最多同时存在 4 个 Pod（3 期望 + 1 超出）</p></div> <div class="diagram-note-card"><p>控制新 Pod 启动速率</p></div> <div class="diagram-note-card"><p>maxUnavailable=25%：</p></div> <div class="diagram-note-card"><p>滚动更新期间，最少必须有 3 - 3*25% = 2.25 → 向下取整 = 2 个 Pod</p></div> <div class="diagram-note-card"><p>即最少保持 2 个 Pod 可用（3 期望 - 1 不足）</p></div> <div class="diagram-note-card"><p>控制旧 Pod 终止速率</p></div> <div class="diagram-note-card"><p>所以 3 副本默认滚动更新时：</p></div> <div class="diagram-note-card"><p>最多 4 个 Pod（3+1）</p></div> <div class="diagram-note-card"><p>最少 2 个 Pod（3-1）</p></div> <div class="diagram-note-card"><p>即&quot;先启 1 个新 Pod，再停 1 个旧 Pod&quot;的节奏</p></div> <div class="diagram-note-card"><p>参数可以是百分比（如 25%）或整数（如 1）：</p></div> <div class="diagram-note-card"><b>maxSurge</b><p>1 # 最多超出 1 个</p></div> <div class="diagram-note-card"><b>maxUnavailable</b><p>1 # 最多不足 1 个</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 9：spec.strategy.rollingUpdate:</div>
+<div class="edu-diagram">
+<div class="diagram-grid two">
+<div class="diagram-panel"><span class="diagram-badge">maxSurge</span><h4>最多可以临时多几个 Pod</h4><p>replicas=3、maxSurge=25% 时，3 * 25% = 0.75，向上取整为 1，所以更新期间最多 4 个 Pod。</p></div>
+<div class="diagram-panel warn"><span class="diagram-badge warn">maxUnavailable</span><h4>最多允许少几个可用 Pod</h4><p>replicas=3、maxUnavailable=25% 时，3 * 25% = 0.75，向下取整为 1，所以至少保持 2 个 Pod 可用。</p></div>
+</div>
+<div class="docker-chain three">
+<div class="diagram-card"><h4>先加新</h4><p>启动 1 个 v2 Pod，让总数临时变成 4。</p></div>
+<div class="diagram-card"><h4>再删旧</h4><p>v2 Ready 后终止 1 个 v1，让总数回到 3。</p></div>
+<div class="diagram-card good"><h4>循环推进</h4><p>重复“加新、删旧”，直到全部变为 v2。</p></div>
+</div>
+</div>
 </div>
 <p><strong>maxSurge 与 maxUnavailable 的特殊组合</strong>：</p>
 <table>
@@ -989,8 +1043,19 @@ Pod</strong>，保证更新期间服务不中断。</p>
 </tbody>
 </table>
 <p><strong>回滚原理</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 10：Deployment 保留历史 ReplicaSet（revisionHistoryLimit=10，默认保留 10 个）</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>Deployment 保留历史 ReplicaSet（revisionHistoryLimit=10，默认保留 10 个）</p></div> <div class="diagram-note-card"><p>每次滚动更新创建一个新 RS，版本号 +1：</p></div> <div class="diagram-note-card"><b>revision 1</b><p>RS-1 (v1) ← 初始版本</p></div> <div class="diagram-note-card"><b>revision 2</b><p>RS-2 (v2) ← 第一次更新</p></div> <div class="diagram-note-card"><b>revision 3</b><p>RS-3 (v3) ← 第二次更新</p></div> <div class="diagram-note-card"><p>...</p></div> <div class="diagram-note-card"><p>回滚操作：</p></div> <div class="diagram-note-card"><p>kubectl rollout undo deployment/xxx</p></div> <div class="diagram-note-card"><p>→ 把当前 RS 副本数降到 0，把上一个 RS 副本数升到期望值</p></div> <div class="diagram-note-card"><p>→ 相当于&quot;反向滚动更新&quot;</p></div> <div class="diagram-note-card"><p>kubectl rollout undo deployment/xxx --to-revision=1</p></div> <div class="diagram-note-card"><p>→ 回滚到指定版本（revision 1）</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 10：Deployment 保留历史 ReplicaSet（revisionHistoryLimit=10，默认保留 10 个）</div>
+<div class="edu-diagram">
+<div class="docker-chain three">
+<div class="diagram-card"><h4>revision 1</h4><p>RS-1 保存 v1 Pod 模板，是最初发布版本。</p></div>
+<div class="diagram-card"><h4>revision 2</h4><p>RS-2 保存 v2 Pod 模板，是第一次滚动更新后的版本。</p></div>
+<div class="diagram-card good"><h4>revision 3</h4><p>RS-3 保存 v3 Pod 模板，是当前运行版本。</p></div>
+</div>
+<div class="diagram-grid two">
+<div class="diagram-card"><h4>默认保留历史</h4><p>revisionHistoryLimit 默认 10，旧 ReplicaSet 副本数通常降为 0，但模板仍保留。</p></div>
+<div class="diagram-card warn"><h4>回滚本质</h4><p>rollout undo 会把当前 RS 缩到 0，并把目标历史 RS 扩回期望副本数，相当于反向滚动更新。</p></div>
+</div>
+</div>
 </div>
 <h4 id="问题--场景-3">问题 / 场景</h4>
 <p><strong>问：kubectl set image 后，旧 Pod
@@ -1222,8 +1287,18 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href=
 <span id="cb23-189"><a href="#cb23-189" aria-hidden="true" tabindex="-1"></a><span class="co"># ctts-backend-9c8d7e6f5    3         3         3       5m    ← v2 RS（当前版本）</span></span>
 <span id="cb23-190"><a href="#cb23-190" aria-hidden="true" tabindex="-1"></a><span class="co"># 可以看到旧 RS 保留，用于回滚</span></span></code></pre></div>
 <h4 id="图示-3">图示</h4>
-<div class="visual"> <div class="visual-title">图示 11：滚动更新过程（3 副本，maxSurge=25%, maxUnavailable=25%）：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>滚动更新过程（3 副本，maxSurge=25%, maxUnavailable=25%）：</p></div> <div class="diagram-note-card"><p>时间轴 →</p></div> <div class="diagram-note-card"><b>t0</b><p>初始状态（全 v1）</p></div> <div class="diagram-note-card"><b>RS-v1</b><p>[Pod1 v1] [Pod2 v1] [Pod3 v1] RS-v2: (空)</p></div> <div class="diagram-note-card"><b>副本数</b><p>3 副本数: 0</p></div> <div class="diagram-note-card"><b>t1</b><p>启动新 Pod4（v2）</p></div> <div class="diagram-note-card"><b>RS-v1</b><p>[Pod1 v1] [Pod2 v1] [Pod3 v1] RS-v2: [Pod4 v2(启动中)]</p></div> <div class="diagram-note-card"><b>副本数</b><p>3 副本数: 1</p></div> <div class="diagram-note-card"><p>↑ maxSurge=1 允许超出 1 个（3+1=4）</p></div> <div class="diagram-note-card"><b>t2</b><p>Pod4 就绪，终止 Pod1（v1）</p></div> <div class="diagram-note-card"><b>RS-v1</b><p>[Pod2 v1] [Pod3 v1] RS-v2: [Pod4 v2]</p></div> <div class="diagram-note-card"><b>副本数</b><p>2 副本数: 1</p></div> <div class="diagram-note-card"><p>↑ maxUnavailable=1 允许少于 1 个（3-1=2）</p></div> <div class="diagram-note-card"><b>t3</b><p>启动新 Pod5（v2）</p></div> <div class="diagram-note-card"><b>RS-v1</b><p>[Pod2 v1] [Pod3 v1] RS-v2: [Pod4 v2] [Pod5 v2(启动中)]</p></div> <div class="diagram-note-card"><b>副本数</b><p>2 副本数: 2</p></div> <div class="diagram-note-card"><b>t4</b><p>Pod5 就绪，终止 Pod2（v1）</p></div> <div class="diagram-note-card"><b>RS-v1</b><p>[Pod3 v1] RS-v2: [Pod4 v2] [Pod5 v2]</p></div> <div class="diagram-note-card"><b>副本数</b><p>1 副本数: 2</p></div> <div class="diagram-note-card"><b>t5</b><p>启动新 Pod6（v2），Pod6 就绪，终止 Pod3</p></div> <div class="diagram-note-card"><b>RS-v1</b><p>(空) RS-v2: [Pod4 v2] [Pod5 v2] [Pod6 v2]</p></div> <div class="diagram-note-card"><b>副本数</b><p>0 副本数: 3</p></div> <div class="diagram-note-card"><p>↑ 完成！RS-v1 保留（副本=0），用于回滚</p></div> <div class="diagram-note-card"><p>回滚过程（反向）：</p></div> <div class="diagram-note-card"><p>kubectl rollout undo</p></div> <div class="diagram-note-card"><p>→ RS-v2 副本数逐步降到 0</p></div> <div class="diagram-note-card"><p>→ RS-v1 副本数逐步升到 3</p></div> <div class="diagram-note-card"><p>→ 等于&quot;反向滚动更新&quot;</p></div> <div class="diagram-note-card"><p>maxSurge / maxUnavailable 图解（3 副本，25%/25%）：</p></div> <div class="diagram-note-card"><p>最多 4 个 Pod（3 + 25%*3 ≈ 3.75 → 4）</p></div> <div class="diagram-note-card"><p>上限（maxSurge）</p></div> <div class="diagram-note-card"><p>期望 3 个 Pod</p></div> <div class="diagram-note-card"><p>期望</p></div> <div class="diagram-note-card"><p>最少 2 个 Pod（3 - 25%*3 ≈ 2.25 → 2）</p></div> <div class="diagram-note-card"><p>下限（maxUnavailable）</p></div> <div class="diagram-note-card"><p>滚动更新期间 Pod 数在 [2, 4] 之间波动</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 11：滚动更新过程（3 副本，maxSurge=25%, maxUnavailable=25%）：</div>
+<div class="edu-diagram">
+<div class="docker-chain five">
+<div class="diagram-card"><h4>初始状态</h4><p>旧 ReplicaSet 运行 3 个 v1 Pod。</p></div>
+<div class="diagram-card"><h4>创建新副本</h4><p>maxSurge 允许临时多出 1 个 Pod，新 RS 先创建 1 个 v2。</p></div>
+<div class="diagram-card warn"><h4>缩减旧副本</h4><p>新 Pod Ready 后，旧 RS 删除 1 个 v1，保持可用副本不低于要求。</p></div>
+<div class="diagram-card"><h4>重复替换</h4><p>继续按“加新、删旧”的节奏交替推进。</p></div>
+<div class="diagram-card good"><h4>更新完成</h4><p>新 RS 达到 3 个 v2，旧 RS 缩到 0 并作为历史版本保留。</p></div>
+</div>
+<div class="diagram-callout">滚动更新的核心不是“一次性重启”，而是在可用性约束下逐步把流量从旧版本迁移到新版本。</div>
+</div>
 </div>
 <h4 id="易错点-3">易错点</h4>
 <ol type="1">
@@ -1269,16 +1344,38 @@ Pod。</p>
 </ul>
 <h4 id="原理-4">原理</h4>
 <p><strong>扩缩容的两种方式</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 12：方式 1：kubectl scale 命令（命令式）</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><b>方式 1</b><p>kubectl scale 命令（命令式）</p></div> <div class="diagram-note-card"><p>kubectl scale deployment ctts-backend --replicas=5 -n ctts</p></div> <div class="diagram-note-card"><p>→ 立即把副本数调整为 5</p></div> <div class="diagram-note-card"><b>方式 2</b><p>修改 YAML 后 apply（声明式，生产推荐）</p></div> <div class="diagram-note-card"><b># 把 replicas</b><p>3 改成 replicas: 5</p></div> <div class="diagram-note-card"><p>kubectl apply -f ctts-backend-deployment.yaml -n ctts</p></div> <div class="diagram-note-card"><p>→ 副本数调整为 5</p></div> <div class="diagram-note-card"><p>区别：</p></div> <div class="diagram-note-card"><p>kubectl scale 快速但不可复现（没记录在 YAML 里）</p></div> <div class="diagram-note-card"><p>修改 YAML 可版本化（YAML 提交 Git），可复现</p></div> <div class="diagram-note-card"><p>生产环境推荐修改 YAML 方式</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 12：方式 1：kubectl scale 命令（命令式）</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel"><span class="diagram-badge">命令式</span><h4>kubectl scale 快速调整</h4><p>kubectl scale deployment ctts-backend --replicas=5 -n ctts，适合课堂演示、临时排障和快速验证。</p><ul class="docker-mini-list"><li>立即生效</li><li>不一定回写到 YAML</li><li>可复现性较弱</li></ul></div>
+<div class="diagram-panel good"><span class="diagram-badge good">声明式</span><h4>修改 YAML 后 apply</h4><p>把 replicas: 3 改为 replicas: 5，再 kubectl apply，适合生产和团队协作。</p><ul class="docker-mini-list"><li>配置进入 Git</li><li>环境可复现</li><li>审计和回滚更清晰</li></ul></div>
+</div>
+</div>
 </div>
 <p><strong>扩容流程</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 13：replicas: 3 → 5（扩容 2 个）</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><b>replicas</b><p>3 → 5（扩容 2 个）</p></div> <div class="diagram-note-card"><b>扩容前</b><p>3 个 Pod</p></div> <div class="diagram-note-card"><p>[Pod1] [Pod2] [Pod3]</p></div> <div class="diagram-note-card"><p>ReplicaSet 检测到期望副本数=5，当前=3，少了 2 个</p></div> <div class="diagram-note-card"><p>→ 立即创建 Pod4, Pod5</p></div> <div class="diagram-note-card"><b>扩容后</b><p>5 个 Pod</p></div> <div class="diagram-note-card"><p>[Pod1] [Pod2] [Pod3] [Pod4] [Pod5]</p></div> <div class="diagram-note-card"><b>特点</b><p>扩容是&quot;纯增加&quot;，不会删除现有 Pod，速度较快</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 13：replicas: 3 → 5（扩容 2 个）</div>
+<div class="edu-diagram">
+<div class="docker-chain three">
+<div class="diagram-card"><h4>扩容前</h4><p>期望副本数 3，当前 Pod 为 Pod1、Pod2、Pod3。</p></div>
+<div class="diagram-card good"><h4>ReplicaSet 补差</h4><p>发现期望=5、当前=3，少了 2 个，于是创建 Pod4、Pod5。</p></div>
+<div class="diagram-card"><h4>扩容后</h4><p>5 个 Pod 同时提供能力：Pod1、Pod2、Pod3、Pod4、Pod5。</p></div>
+</div>
+<div class="diagram-callout">扩容是“纯增加”：不会删除现有 Pod，因此通常比滚动更新更直接。</div>
+</div>
 </div>
 <p><strong>缩容流程</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 14：replicas: 5 → 3（缩容 2 个）</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><b>replicas</b><p>5 → 3（缩容 2 个）</p></div> <div class="diagram-note-card"><b>缩容前</b><p>5 个 Pod</p></div> <div class="diagram-note-card"><p>[Pod1] [Pod2] [Pod3] [Pod4] [Pod5]</p></div> <div class="diagram-note-card"><p>ReplicaSet 检测到期望副本数=3，当前=5，多了 2 个</p></div> <div class="diagram-note-card"><p>→ 按&quot;最新创建优先终止&quot;原则选择 2 个 Pod 终止（通常是 Pod4, Pod5）</p></div> <div class="diagram-note-card"><b>缩容后</b><p>3 个 Pod</p></div> <div class="diagram-note-card"><p>[Pod1] [Pod2] [Pod3]</p></div> <div class="diagram-note-card"><b>特点</b><p>缩容会终止多余 Pod，K8s 优先终止较新的 Pod</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 14：replicas: 5 → 3（缩容 2 个）</div>
+<div class="edu-diagram">
+<div class="docker-chain three">
+<div class="diagram-card"><h4>缩容前</h4><p>期望副本数 5，当前运行 Pod1 到 Pod5。</p></div>
+<div class="diagram-card warn"><h4>ReplicaSet 删除多余</h4><p>发现期望=3、当前=5，多了 2 个，选择多余 Pod 进入终止流程。</p></div>
+<div class="diagram-card good"><h4>缩容后</h4><p>最终保留 3 个 Pod，副本数重新符合期望状态。</p></div>
+</div>
+<div class="diagram-callout">缩容会终止 Pod。实际选择会受创建时间、就绪状态、调度分布等因素影响，教学中可先理解为“删掉多出来的副本”。</div>
+</div>
 </div>
 <p><strong>标签（Labels）详解</strong>：</p>
 <pre><code>标签是键值对，附加到 K8s 资源上（如 Pod、Deployment、Service 等）
@@ -1302,8 +1399,15 @@ Pod。</p>
   - 例：labels.app 用于 Service 选择 Pod
   - 例：annotations.kubernetes.io/... 用于记录构建信息、最后更新时间等</code></pre>
 <p><strong>标签选择器（Selectors）的两种写法</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 15：matchLabels（精确匹配，最常用）</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>matchLabels（精确匹配，最常用）</p></div> <div class="diagram-step"><p>selector:</p></div> <div class="diagram-step"><p>matchLabels:</p></div> <div class="diagram-step"><p>app: ctts-backend</p></div> <div class="diagram-step"><p>→ 选择 app=ctts-backend 的 Pod</p></div> <div class="diagram-step"><p>matchExpressions（表达式匹配，更灵活）</p></div> <div class="diagram-step"><p>selector:</p></div> <div class="diagram-step"><p>matchExpressions:</p></div> <div class="diagram-step"><p>key: app</p></div> <div class="diagram-step"><p>operator: In</p></div> <div class="diagram-step"><p>values:</p></div> <div class="diagram-step"><p>ctts-backend</p></div> <div class="diagram-step"><p>ctts-api</p></div> <div class="diagram-step"><p>key: tier</p></div> <div class="diagram-step"><p>operator: NotIn</p></div> <div class="diagram-step"><p>values:</p></div> <div class="diagram-step"><p>frontend</p></div> <div class="diagram-step"><p>→ 选择 app in (ctts-backend, ctts-api) 且 tier not in (frontend) 的 Pod</p></div> <div class="diagram-step"><p>operator 支持：</p></div> <div class="diagram-step"><p>In：值在列表中</p></div> <div class="diagram-step"><p>NotIn：值不在列表中</p></div> <div class="diagram-step"><p>Exists：键存在（不检查值）</p></div> <div class="diagram-step"><p>DoesNotExist：键不存在</p></div> <div class="diagram-step"><p>（matchLabels 是 matchExpressions 的简化形式）</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 15：matchLabels（精确匹配，最常用）</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel good"><span class="diagram-badge good">matchLabels</span><h4>精确匹配，最常用</h4><p>selector.matchLabels: app=ctts-backend，表示选择带有 app=ctts-backend 的 Pod。</p><ul class="docker-mini-list"><li>写法简单</li><li>适合 Deployment 与 Service</li><li>课堂和生产都最常见</li></ul></div>
+<div class="diagram-panel"><span class="diagram-badge">matchExpressions</span><h4>表达式匹配，更灵活</h4><p>支持 In、NotIn、Exists、DoesNotExist，可表达 app in (ctts-backend, ctts-api) 且 tier not in (frontend)。</p><ul class="docker-mini-list"><li>适合复杂筛选</li><li>语义更强但更长</li><li>matchLabels 可视为简化形式</li></ul></div>
+</div>
+<div class="diagram-callout">标签选择器是 K8s 资源之间建立关系的纽带：Deployment 管 Pod、Service 找 Pod，都离不开 labels 与 selector。</div>
+</div>
 </div>
 <p><strong>kubectl label 命令</strong>：</p>
 <div class="sourceCode" id="cb30"><pre
@@ -1568,8 +1672,20 @@ Deployment YAML（3 副本）并部署到第 14 次课搭好的 Minikube
 管理的多副本工作负载"的升级。</p>
 <h4 id="原理-5">原理</h4>
 <p><strong>CTTS 后端 Deployment 部署的完整流程</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 17：准备工作（前 15 次课已完成）</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>准备工作（前 15 次课已完成）</p></div> <div class="diagram-step"><p>Minikube 集群运行中</p></div> <div class="diagram-step"><p>ctts namespace 已创建</p></div> <div class="diagram-step"><p>ctts-backend:v1 镜像已在 Minikube Docker daemon</p></div> <div class="diagram-step"><p>第 15 次课部署的裸 Pod 已删除（或保留待会被 Deployment 替代）</p></div> <div class="diagram-step"><p>编写 Deployment YAML</p></div> <div class="diagram-step"><p>apiVersion: apps/v1, kind: Deployment</p></div> <div class="diagram-step"><p>replicas: 3（3 副本高可用）</p></div> <div class="diagram-step"><p>selector.matchLabels: app=ctts-backend</p></div> <div class="diagram-step"><p>template: Pod 模板（image=ctts-backend:v1, ports=8080, env, resources）</p></div> <div class="diagram-step"><p>imagePullPolicy: Never（本地镜像）</p></div> <div class="diagram-step"><p>部署 Deployment</p></div> <div class="diagram-step"><p>kubectl apply -f ctts-backend-deployment.yaml -n ctts</p></div> <div class="diagram-step"><p>验证高可用</p></div> <div class="diagram-step"><p>kubectl get deployment（READY 3/3）</p></div> <div class="diagram-step"><p>kubectl get pods（3 个 Pod Running）</p></div> <div class="diagram-step"><p>手动删除 1 个 Pod，观察自动重建</p></div> <div class="diagram-step"><p>扩缩容演示</p></div> <div class="diagram-step"><p>kubectl scale --replicas=5（扩到 5）</p></div> <div class="diagram-step"><p>kubectl scale --replicas=3（缩回 3）</p></div> <div class="diagram-step"><p>滚动更新演示</p></div> <div class="diagram-step"><p>构建 v2 镜像</p></div> <div class="diagram-step"><p>kubectl set image（v1 → v2）</p></div> <div class="diagram-step"><p>kubectl rollout status（观察过程）</p></div> <div class="diagram-step"><p>kubectl rollout undo（回滚到 v1）</p></div> <div class="diagram-step"><p>后续衔接</p></div> <div class="diagram-step"><p>第 17 次课：实践 CTTS 三服务工作负载部署</p></div> <div class="diagram-step"><p>第 18 次课：为 Deployment 创建 Service 供访问</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 17：准备工作（前 15 次课已完成）</div>
+<div class="edu-diagram">
+<div class="docker-route">
+<div class="diagram-panel"><h4><span>前</span> 环境就绪</h4><p>Minikube 运行中，ctts namespace 已创建，ctts-backend:v1 已在 Minikube Docker daemon 中。</p></div>
+<div class="diagram-panel good"><h4><span>中</span> 部署 Deployment</h4><p>编写 apps/v1 Deployment：replicas=3，selector 匹配 app=ctts-backend，template 定义镜像、端口、环境变量和资源。</p></div>
+<div class="diagram-panel"><h4><span>后</span> 验证控制能力</h4><p>apply 后检查 READY 3/3，删除 Pod 看自愈，scale 看扩缩容，set image 看滚动更新，undo 看回滚。</p></div>
+</div>
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>高可用</h4><p>3 副本是本课 Deployment 实践的基础。</p></div>
+<div class="diagram-card"><h4>发布能力</h4><p>rollout status / history / undo 观察和控制发布过程。</p></div>
+<div class="diagram-card good"><h4>后续衔接</h4><p>第 17 次课部署三服务，第 18 次课为 Deployment 创建 Service。</p></div>
+</div>
+</div>
 </div>
 <h4 id="问题--场景-5">问题 / 场景</h4>
 <p><strong>问：为什么要部署 3 副本而不是 1 副本？</strong></p>
@@ -1979,8 +2095,21 @@ id="三综合示例从裸-pod-到工作负载--ctts-后端-deployment-部署完�
 Pod 到工作负载 — CTTS 后端 Deployment 部署完整逻辑</h2>
 <p>把前面所有知识点串起来，看 CTTS 后端从"裸 Pod"到"Deployment
 管理的多副本工作负载"的完整升级逻辑：</p>
-<div class="visual"> <div class="visual-title">图示 18：现状回顾（第 15 次课）</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>现状回顾（第 15 次课）</p></div> <div class="diagram-step"><p>第 15 次课部署了 CTTS 后端裸 Pod（ctts-backend）</p></div> <div class="diagram-step"><p>裸 Pod 能跑，但有三大痛点：不自愈、不能扩缩容、不能滚动更新</p></div> <div class="diagram-step"><p>生产环境不能用裸 Pod，需要工作负载管理</p></div> <div class="diagram-step"><p>引入 Deployment（K16-1）</p></div> <div class="diagram-step"><p>Deployment 是 K8s 管理无状态应用的工作负载控制器</p></div> <div class="diagram-step"><p>提供自愈、扩缩容、滚动更新、回滚、声明式管理五大能力</p></div> <div class="diagram-step"><p>解决裸 Pod 的三大痛点</p></div> <div class="diagram-step"><p>理解层级关系（K16-2）</p></div> <div class="diagram-step"><p>Deployment → ReplicaSet → Pod 三层管理</p></div> <div class="diagram-step"><p>Deployment 管理多个 ReplicaSet 版本（用于滚动更新/回滚）</p></div> <div class="diagram-step"><p>ReplicaSet 维持副本数（少了建、多了删）</p></div> <div class="diagram-step"><p>Pod 是实际运行的实例</p></div> <div class="diagram-step"><p>标签（labels）+ 选择器（selector）是三者关联的纽带</p></div> <div class="diagram-step"><p>编写 YAML（K16-3）</p></div> <div class="diagram-step"><p>apiVersion: apps/v1（不是 v1！）</p></div> <div class="diagram-step"><p>kind: Deployment</p></div> <div class="diagram-step"><p>spec.replicas: 3（3 副本高可用）</p></div> <div class="diagram-step"><p>spec.selector.matchLabels: app=ctts-backend（选择 Pod）</p></div> <div class="diagram-step"><p>spec.template: Pod 模板（image=ctts-backend:v1, ports=8080, env, resources）</p></div> <div class="diagram-step"><p>selector 必须与 template.labels 匹配</p></div> <div class="diagram-step"><p>部署与验证（K16-6）</p></div> <div class="diagram-step"><p>kubectl apply -f ctts-backend-deployment.yaml -n ctts</p></div> <div class="diagram-step"><p>kubectl get deployment → READY 3/3</p></div> <div class="diagram-step"><p>kubectl get pods → 3 个 Pod Running</p></div> <div class="diagram-step"><p>手动删 Pod → 自动重建（验证自愈）</p></div> <div class="diagram-step"><p>扩缩容（K16-5）</p></div> <div class="diagram-step"><p>kubectl scale --replicas=5 → 扩到 5 副本</p></div> <div class="diagram-step"><p>kubectl scale --replicas=3 → 缩回 3 副本</p></div> <div class="diagram-step"><p>生产推荐修改 YAML（可版本化）</p></div> <div class="diagram-step"><p>滚动更新与回滚（K16-4）</p></div> <div class="diagram-step"><p>构建 v2 镜像</p></div> <div class="diagram-step"><p>kubectl set image ... backend=ctts-backend:v2</p></div> <div class="diagram-step"><p>kubectl rollout status → 观察滚动更新过程</p></div> <div class="diagram-step"><p>kubectl rollout history → 查看版本历史</p></div> <div class="diagram-step"><p>kubectl rollout undo → 回滚到 v1</p></div> <div class="diagram-step"><p>maxSurge/maxUnavailable 控制滚动更新速率</p></div> <div class="diagram-step"><p>标签管理（K16-5）</p></div> <div class="diagram-step"><p>kubectl label pod xxx env=prod → 打标签</p></div> <div class="diagram-step"><p>kubectl get pods -l app=ctts-backend → 按标签筛选</p></div> <div class="diagram-step"><p>matchLabels（精确匹配）vs matchExpressions（表达式匹配）</p></div> <div class="diagram-step"><p>后续衔接（第 17~24 次课）</p></div> <div class="diagram-step"><p>第 17 次：实践 CTTS 三服务工作负载部署</p></div> <div class="diagram-step"><p>第 18 次：Service 暴露 Deployment 供访问</p></div> <div class="diagram-step"><p>第 19 次：Ingress 域名访问</p></div> <div class="diagram-step"><p>第 21 次：env 里的密码改用 Secret</p></div> <div class="diagram-step"><p>第 23 次：综合实践，CTTS 完整 K8s 部署</p></div> <div class="diagram-step"><p>收益</p></div> <div class="diagram-step"><p>掌握 Deployment YAML 编写，能部署任何无状态应用到 K8s</p></div> <div class="diagram-step"><p>掌握扩缩容、滚动更新、回滚的完整命令链</p></div> <div class="diagram-step"><p>理解声明式管理与自愈机制</p></div> <div class="diagram-step"><p>CTTS 后端从&quot;裸 Pod&quot;升级到&quot;Deployment 管理 3 副本&quot;</p></div> <div class="diagram-step"><p>→ 从&quot;能部署 Pod&quot;到&quot;能管理工作负载&quot;的关键跃迁</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 18：现状回顾（第 15 次课）</div>
+<div class="edu-diagram">
+<div class="docker-route">
+<div class="diagram-panel"><h4><span>1</span> Pod 基础</h4><p>第 15 次课已经能用 Pod YAML 启动 CTTS 后端，并掌握 get、describe、logs、exec。</p></div>
+<div class="diagram-panel warn"><h4><span>2</span> 裸 Pod 痛点</h4><p>Pod 崩溃不自动补、升级不优雅、扩缩容靠手工，不适合生产。</p></div>
+<div class="diagram-panel good"><h4><span>3</span> Deployment 接管</h4><p>Deployment 通过 ReplicaSet 管理副本、自愈、滚动更新、回滚和扩缩容。</p></div>
+</div>
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>声明副本</h4><p>replicas 描述期望数量。</p></div>
+<div class="diagram-card"><h4>选择 Pod</h4><p>selector 和 template labels 必须匹配。</p></div>
+<div class="diagram-card"><h4>滚动策略</h4><p>maxSurge / maxUnavailable 控制更新节奏。</p></div>
+<div class="diagram-card"><h4>发布能力</h4><p>scale、rollout status、history、undo 构成日常操作。</p></div>
+</div>
+</div>
 </div>
 <blockquote>
 <p>这个逻辑链体现了从"应用部署"到"工作负载管理"的跃迁：第 15 次课部署裸

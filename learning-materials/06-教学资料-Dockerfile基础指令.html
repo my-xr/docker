@@ -379,8 +379,17 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb7-
 ubuntu、alpine），要么是某个运行时（如
 openjdk、python），要么是某个服务的官方镜像（如 mysql、nginx）。FROM
 就是告诉 Docker："我这个镜像站在哪个巨人的肩膀上"。</p>
-<div class="visual"> <div class="visual-title">图示 2：你的应用镜像（FROM 之上的层）</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer base">你的应用镜像（FROM 之上的层）</div> <div class="stack-layer base">基础镜像（FROM 指定的镜像）</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 2：你的应用镜像（FROM 之上的层）</div>
+<div class="edu-diagram">
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>FROM</h4><p>选择基础镜像，决定系统和运行时底座。</p></div>
+<div class="diagram-card"><h4>WORKDIR / COPY</h4><p>建立工作目录，把应用文件放进镜像。</p></div>
+<div class="diagram-card good"><h4>RUN</h4><p>安装依赖或构建应用，每条 RUN 通常形成新层。</p></div>
+<div class="diagram-card"><h4>EXPOSE / CMD</h4><p>声明端口和默认启动命令，决定容器运行方式。</p></div>
+</div>
+<div class="diagram-callout">Dockerfile 的本质是在基础镜像之上，一层层叠加你的应用运行所需内容。</div>
+</div>
 </div>
 <p><strong>FROM 的三种典型用法</strong>：</p>
 <div class="sourceCode" id="cb9"><pre
@@ -532,7 +541,18 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb12
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> ctts-backend.jar /app/app.jar</span>
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
 <h4 id="图示-1">图示</h4>
-<div class="visual"> <div class="visual-title">图示 3：基础镜像选择决策树：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer base">基础镜像选择决策树：</div> <div class="stack-layer app">应用类型？</div> <div class="stack-layer runtime">Java 应用 ▶ eclipse-temurin:-jre</div> <div class="stack-layer runtime">(例: eclipse-temurin:17-jre)</div> <div class="stack-layer app">Python 应用 ▶ python:-slim</div> <div class="stack-layer">(例: python:3.11-slim)</div> <div class="stack-layer app">Node.js 应用 ▶ node:-alpine</div> <div class="stack-layer">(例: node:20-alpine)</div> <div class="stack-layer">静态网站 ▶ nginx:alpine</div> <div class="stack-layer base">Go 静态二进制 ▶ FROM scratch</div> <div class="stack-layer base">需要完整 OS ▶ ubuntu:22.04 / debian:bookworm-slim</div> <div class="stack-layer base">镜像分层（FROM 之上叠加）：</div> <div class="stack-layer app">你的应用层（COPY jar） ← 你写的</div> <div class="stack-layer base">JDK 17 运行时层 ← FROM eclipse-temurin:17-jre</div> <div class="stack-layer">Ubuntu 底层系统层 ← eclipse-temurin 的底层</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 3：基础镜像选择决策图</div>
+  <div class="edu-diagram">
+    <div class="docker-decision">
+      <div class="docker-decision-root">先看应用运行时，再看体积、安全和兼容性</div>
+      <div class="diagram-grid three">
+        <div class="diagram-card"><h4>Java 应用</h4><p>运行阶段优先 <code>eclipse-temurin:17-jre</code>；需要更小体积时评估 <code>jre-alpine</code> 兼容性。</p></div>
+        <div class="diagram-card"><h4>Python / Node.js</h4><p>Python 可选 <code>python:3.11-slim</code>，Node.js 可选 <code>node:20-alpine</code> 或 slim。</p></div>
+        <div class="diagram-card"><h4>静态/单二进制</h4><p>静态网站用 <code>nginx:alpine</code>；Go 静态二进制可用 <code>scratch</code>。</p></div>
+      </div>
+      <div class="diagram-callout">分层关系：你的应用层叠加在 <code>FROM</code> 指定的基础镜像之上；基础镜像越合理，最终镜像越小、越安全、越稳定。</div>
+    </div>
   </div>
 </div>
 <h4 id="易错点-1">易错点</h4>
@@ -1019,7 +1039,18 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb35
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> config/ /app/config/</span>
 <span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;java&quot;</span>, <span class="st">&quot;-jar&quot;</span>, <span class="st">&quot;/app/app.jar&quot;</span>]</span></code></pre></div>
 <h4 id="图示-3">图示</h4>
-<div class="visual"> <div class="visual-title">图示 4：COPY vs ADD 功能对比：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>COPY vs ADD 功能对比：</p></div> <div class="diagram-note-card"><b>COPY</b><p>ADD：</p></div> <div class="diagram-note-card"><p>本地文件 复制 ▶ 镜像 本地文件 复制 ▶ 镜像</p></div> <div class="diagram-note-card"><p>tar 包 解压 ▶ 镜像</p></div> <div class="diagram-note-card"><p>URL 下载 ▶ 镜像</p></div> <div class="diagram-note-card"><p>选择决策：</p></div> <div class="diagram-note-card"><p>要复制文件到镜像？</p></div> <div class="diagram-note-card"><p>是 → 是 tar 包需要解压？</p></div> <div class="diagram-note-card"><p>是 → 用 ADD</p></div> <div class="diagram-note-card"><p>否 → 用 COPY（推荐）</p></div> <div class="diagram-note-card"><p>要从 URL 下载？</p></div> <div class="diagram-note-card"><p>用 RUN wget + COPY（不推荐 ADD URL）</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 4：COPY vs ADD 功能对比</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel good"><span class="diagram-badge good">COPY</span><h4>明确复制本地文件</h4><p>只负责把构建上下文中的文件复制进镜像，语义清晰、行为可预期，是生产 Dockerfile 的默认选择。</p></div>
+      <div class="diagram-panel warn"><span class="diagram-badge warn">ADD</span><h4>复制之外还会自动处理</h4><p>支持本地 tar 自动解压，也支持 URL 下载；能力更多，但容易隐藏行为，需谨慎使用。</p></div>
+    </div>
+    <div class="docker-chain three">
+      <div class="diagram-card"><h4>普通文件/目录</h4><p>使用 <code>COPY</code>，保持构建行为直观。</p></div>
+      <div class="diagram-card"><h4>本地 tar 需要解压</h4><p>可使用 <code>ADD</code>，但要让团队知道会自动解压。</p></div>
+      <div class="diagram-card warn"><h4>远程 URL 下载</h4><p>优先 <code>RUN wget/curl</code> 并校验，再复制或安装，不建议依赖 <code>ADD URL</code>。</p></div>
+    </div>
   </div>
 </div>
 <h4 id="易错点-3">易错点</h4>
@@ -1090,7 +1121,13 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb41
 隔离，但仍然是"特权用户"。如果应用有漏洞被攻击，攻击者拿到容器内的
 root，可能通过内核漏洞逃逸到宿主机
 root。<strong>最小权限原则</strong>要求：应用能用普通用户跑就用普通用户跑。</p>
-<div class="visual"> <div class="visual-title">图示 5：以 root 运行容器（危险）：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>以 root 运行容器（危险）：</p></div> <div class="diagram-note-card"><p>容器内 root</p></div> <div class="diagram-note-card"><p>↓ 应用漏洞</p></div> <div class="diagram-note-card"><p>攻击者拿到 root</p></div> <div class="diagram-note-card"><p>↓ 内核逃逸</p></div> <div class="diagram-note-card"><p>宿主机 root ← 灾难！</p></div> <div class="diagram-note-card"><p>以非 root 运行容器（安全）：</p></div> <div class="diagram-note-card"><p>容器内 appuser</p></div> <div class="diagram-note-card"><p>↓ 应用漏洞</p></div> <div class="diagram-note-card"><p>攻击者只拿到 appuser</p></div> <div class="diagram-note-card"><p>↓ 权限有限</p></div> <div class="diagram-note-card"><p>影响范围受限</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 5：root 与非 root 运行容器的安全边界</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel warn"><span class="diagram-badge warn">以 root 运行</span><h4>风险放大</h4><ul class="diagram-list"><li>容器内进程拥有 root 身份。</li><li>应用漏洞可能让攻击者拿到高权限。</li><li>一旦叠加内核逃逸，宿主机风险会被放大。</li></ul></div>
+      <div class="diagram-panel good"><span class="diagram-badge good">以 appuser 运行</span><h4>最小权限</h4><ul class="diagram-list"><li>容器内应用只拥有普通用户权限。</li><li>即使应用被攻破，影响范围也更有限。</li><li>配合只读文件系统和能力裁剪更安全。</li></ul></div>
+    </div>
   </div>
 </div>
 <p><strong>USER 的注意事项</strong>：</p>
@@ -1244,7 +1281,18 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href=
 <span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a><span class="co"># -rw-r--r-- 1 appuser appuser   18 Jul 22 10:00 app.jar</span></span>
 <span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a><span class="co"># → 注意：whoami 输出 appuser（非 root）</span></span></code></pre></div>
 <h4 id="图示-4">图示</h4>
-<div class="visual"> <div class="visual-title">图示 6：WORKDIR 持续生效 vs RUN cd 一次性：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">WORKDIR 持续生效 vs RUN cd 一次性：</div> <div class="stack-layer">WORKDIR（推荐）： RUN cd（不推荐）：</div> <div class="stack-layer">WORKDIR /app RUN cd /app &amp;&amp; do_something</div> <div class="stack-layer">RUN pwd # /app RUN pwd # /</div> <div class="stack-layer">RUN ls # 列出 /app RUN ls # 列出 /</div> <div class="stack-layer">COPY x . # 复制到 /app/x RUN cd /app &amp;&amp; cp /x . # 复杂</div> <div class="stack-layer">CMD [&quot;./x&quot;] # 在 /app 找 x</div> <div class="stack-layer">USER 切换流程：</div> <div class="stack-layer base">FROM ...（root）</div> <div class="stack-layer">RUN 创建用户 + 创建目录 + chown ← root 阶段（有权限）</div> <div class="stack-layer">USER appuser ← 切换</div> <div class="stack-layer">COPY / CMD（以 appuser 执行） ← 非 root 阶段</div> <div class="stack-layer">容器启动时也是 appuser ← 安全！</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 6：WORKDIR、RUN cd 与 USER 切换关系</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel good"><span class="diagram-badge good">WORKDIR 推荐</span><h4>持续影响后续指令</h4><ul class="diagram-list"><li><code>WORKDIR /app</code></li><li>后续 <code>RUN pwd</code> 仍在 <code>/app</code>。</li><li><code>COPY x .</code> 会复制到 <code>/app/x</code>。</li><li><code>CMD ["./x"]</code> 会在 <code>/app</code> 中查找。</li></ul></div>
+      <div class="diagram-panel warn"><span class="diagram-badge warn">RUN cd 不推荐</span><h4>只在当前 RUN 生效</h4><ul class="diagram-list"><li><code>RUN cd /app &amp;&amp; do_something</code></li><li>下一条 <code>RUN pwd</code> 又回到默认目录。</li><li>路径复制和启动命令更容易写复杂。</li></ul></div>
+    </div>
+    <div class="docker-chain three">
+      <div class="diagram-card"><h4>root 阶段</h4><p>创建用户、目录并执行 <code>chown</code>。</p></div>
+      <div class="diagram-card"><h4><code>USER appuser</code></h4><p>切换到普通用户，后续 COPY/CMD 以低权限执行。</p></div>
+      <div class="diagram-card good"><h4>容器启动</h4><p>应用以 <code>appuser</code> 身份运行，安全边界更清晰。</p></div>
+    </div>
   </div>
 </div>
 <h4 id="易错点-4">易错点</h4>

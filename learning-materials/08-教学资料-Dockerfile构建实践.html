@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -174,7 +174,13 @@ Dockerfile 编写</h3>
 jar，最终镜像只包含运行所需内容，体积小、安全。</p>
 <h4 id="原理">原理</h4>
 <p>Java 应用容器化的核心矛盾：</p>
-<div class="visual"> <div class="visual-title">图示 1：矛盾：构建时需要 Maven + JDK（几百 MB 工具链）</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer runtime">矛盾：构建时需要 Maven + JDK（几百 MB 工具链）</div> <div class="stack-layer runtime">运行时只需要 JRE + jar（几十 MB）</div> <div class="stack-layer base">如果用单阶段构建（FROM maven → COPY 源码 → RUN mvn package → CMD java -jar）：</div> <div class="stack-layer runtime">最终镜像包含 Maven + JDK + 源码 + jar → 镜像 800MB+，含构建工具，不安全</div> <div class="stack-layer">用多阶段构建：</div> <div class="stack-layer base">阶段1（builder）：FROM maven → COPY 源码 → RUN mvn package → 产出 jar</div> <div class="stack-layer base">阶段2（runtime）：FROM jre → COPY --from=builder jar → CMD java -jar</div> <div class="stack-layer runtime">最终镜像只含 JRE + jar → 镜像 200MB 左右</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 1：后端镜像构建时与运行时的矛盾</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel warn"><span class="diagram-badge warn">单阶段构建</span><h4>工具链进入最终镜像</h4><ul class="diagram-list"><li>构建需要 Maven + JDK + 源码。</li><li>运行只需要 JRE + jar。</li><li>如果全部留在最终镜像，体积可达 800MB+，且包含不必要工具。</li></ul></div>
+      <div class="diagram-panel good"><span class="diagram-badge good">多阶段构建</span><h4>构建和运行分离</h4><ul class="diagram-list"><li>builder：Maven + JDK 编译产出 jar。</li><li>runtime：JRE + jar 负责启动服务。</li><li>最终镜像约 200MB，只保留运行所需内容。</li></ul></div>
+    </div>
   </div>
 </div>
 <p>多阶段构建的关键指令
@@ -366,7 +372,16 @@ ctts-backend    v1        a1b2c3d4e5f6   30 seconds ago   198MB</code></pre>
 maven）会达到 800MB+。</p>
 </blockquote>
 <h4 id="图示">图示</h4>
-<div class="visual"> <div class="visual-title">图示 3：多阶段构建流程（后端）：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">多阶段构建流程（后端）：</div> <div class="stack-layer">阶段1：构建阶段（builder） 阶段2：运行阶段（runtime）</div> <div class="stack-layer base">FROM maven:3.9-... AS builder FROM eclipse-temurin:17-jre-alpine</div> <div class="stack-layer">WORKDIR /build WORKDIR /app</div> <div class="stack-layer">COPY pom.xml .</div> <div class="stack-layer base">RUN mvn dependency:... COPY --from=builder</div> <div class="stack-layer">COPY src ./src /build/target/</div> <div class="stack-layer app">RUN mvn clean package ctts-backend-1.0.0.jar</div> <div class="stack-layer app">app.jar</div> <div class="stack-layer">产出：ctts-backend-1.0.0 ▶ EXPOSE 8080</div> <div class="stack-layer app">.jar CMD [&quot;java&quot;,&quot;-jar&quot;,...</div> <div class="stack-layer app">&quot;app.jar&quot;]</div> <div class="stack-layer runtime">含 Maven+JDK（800MB）</div> <div class="stack-layer runtime">仅用于构建，不进最终镜像 含 JRE+jar（198MB）</div> <div class="stack-layer">这是最终镜像 ✓</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 3：后端多阶段构建流程</div>
+  <div class="edu-diagram">
+    <div class="docker-chain five">
+      <div class="diagram-card"><span class="diagram-badge">builder</span><h4>FROM maven AS builder</h4><p>进入构建阶段，具备 Maven 与 JDK。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">cache</span><h4>先复制 pom.xml</h4><p>先下载依赖，依赖不变时可命中缓存。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">package</span><h4>复制 src 并打包</h4><p><code>mvn clean package</code> 产出 <code>ctts-backend-1.0.0.jar</code>。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">runtime</span><h4>FROM JRE Alpine</h4><p>进入运行阶段，只准备轻量 JRE 环境。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">final</span><h4>COPY --from=builder</h4><p>只拷贝 jar，暴露 8080，并用 <code>java -jar app.jar</code> 启动。</p></div>
+    </div>
   </div>
 </div>
 <h4 id="易错点">易错点</h4>
@@ -412,7 +427,14 @@ Dockerfile 编写</h3>
 <code>dist</code> 中的静态资源。</p>
 <h4 id="原理-1">原理</h4>
 <p>前端应用容器化的核心矛盾：</p>
-<div class="visual"> <div class="visual-title">图示 4：矛盾：构建时需要 Node + npm + 源码 + node_modules（几百 MB ~ 1GB）</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">矛盾：构建时需要 Node + npm + 源码 + node_modules（几百 MB ~ 1GB）</div> <div class="stack-layer runtime">运行时只需要 Nginx + 静态文件 dist（几十 MB）</div> <div class="stack-layer base">单阶段构建（FROM node → npm install → npm run build → CMD nginx）：</div> <div class="stack-layer">最终镜像含 Node + node_modules + 源码 + dist → 1GB+，且含构建工具</div> <div class="stack-layer">多阶段构建：</div> <div class="stack-layer base">阶段1（builder）：FROM node → npm install → npm run build → 产出 dist</div> <div class="stack-layer base">阶段2（runtime）：FROM nginx → COPY --from=builder dist → html</div> <div class="stack-layer">最终镜像只含 Nginx + dist → 50MB 左右</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 4：前端镜像构建时与运行时的矛盾</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel warn"><span class="diagram-badge warn">构建时</span><h4>Node + npm + 源码 + node_modules</h4><p>需要完整前端工具链执行依赖安装和 <code>npm run build</code>，体积可能达到数百 MB 到 1GB。</p></div>
+      <div class="diagram-panel good"><span class="diagram-badge good">运行时</span><h4>Nginx + dist 静态文件</h4><p>浏览器只需要访问构建后的静态资源，最终镜像只需 Nginx 和 <code>dist</code>，约几十 MB。</p></div>
+    </div>
+    <div class="diagram-callout">多阶段构建把 Node 工具链留在 builder 阶段，只把 <code>dist</code> 拷贝到 Nginx 阶段。</div>
   </div>
 </div>
 <p>Nginx 镜像的静态文件目录是 <code>/usr/share/nginx/html</code>，把
@@ -623,7 +645,16 @@ ctts-frontend    v1        b2c3d4e5f6a7   20 seconds ago   48MB</code></pre>
 ~8MB），如果用单阶段（FROM node）会达到 1GB+。</p>
 </blockquote>
 <h4 id="图示-1">图示</h4>
-<div class="visual"> <div class="visual-title">图示 6：多阶段构建流程（前端）：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">多阶段构建流程（前端）：</div> <div class="stack-layer">阶段1：构建阶段（builder） 阶段2：运行阶段（runtime）</div> <div class="stack-layer base">FROM node:20-alpine AS builder FROM nginx:alpine</div> <div class="stack-layer">WORKDIR /build</div> <div class="stack-layer">COPY package*.json ./</div> <div class="stack-layer base">RUN npm ci COPY --from=builder</div> <div class="stack-layer">COPY . . /build/dist</div> <div class="stack-layer">RUN npm run build /usr/share/nginx/html</div> <div class="stack-layer">产出：dist/（静态文件） ▶ EXPOSE 80</div> <div class="stack-layer">index.html (默认 CMD: nginx -g ...)</div> <div class="stack-layer">assets/</div> <div class="stack-layer">含 Node+npm+node_modules 含 Nginx+dist</div> <div class="stack-layer">（1GB+） （48MB）</div> <div class="stack-layer">仅用于构建，不进最终镜像 这是最终镜像 ✓</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 6：前端多阶段构建流程</div>
+  <div class="edu-diagram">
+    <div class="docker-chain five">
+      <div class="diagram-card"><span class="diagram-badge">builder</span><h4>FROM node:20-alpine</h4><p>进入前端构建阶段，提供 Node 与 npm。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">cache</span><h4>先复制 package*.json</h4><p>执行 <code>npm ci</code>，依赖不变时缓存稳定。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">build</span><h4>复制源码并构建</h4><p><code>npm run build</code> 产出 <code>dist/</code> 静态文件。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">runtime</span><h4>FROM nginx:alpine</h4><p>进入运行阶段，使用轻量 Nginx 托管静态资源。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">final</span><h4>COPY dist 到 html</h4><p>把 <code>/build/dist</code> 拷贝到 <code>/usr/share/nginx/html</code>，最终镜像约 48MB。</p></div>
+    </div>
   </div>
 </div>
 <h4 id="易错点-1">易错点</h4>
@@ -668,8 +699,17 @@ Dockerfile 生成镜像的过程。<strong>标签管理</strong> 是用
 给镜像打标签（如版本号、仓库名），用于标识和分发镜像。</p>
 <h4 id="原理-2">原理</h4>
 <p><code>docker build</code> 命令的工作流程：</p>
-<div class="visual"> <div class="visual-title">图示 7：读取 Dockerfile</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>读取 Dockerfile</p></div> <div class="diagram-step"><p>把构建上下文（build context，即 PATH 或 URL 指定的目录）打包发给守护进程</p></div> <div class="diagram-step"><p>按 Dockerfile 指令顺序，逐条执行：</p></div> <div class="diagram-step"><p>a. 每条指令生成一个新层（layer）</p></div> <div class="diagram-step"><p>b. 检查是否有可缓存的层（指令相同 + 上下文文件未变 → 复用缓存）</p></div> <div class="diagram-step"><p>c. 执行指令（RUN/COPY 等）</p></div> <div class="diagram-step"><p>所有指令执行完，组合成最终镜像</p></div> <div class="diagram-step"><p>打上 -t 指定的标签</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 7：读取 Dockerfile</div>
+<div class="edu-diagram">
+<div class="docker-chain five">
+<div class="diagram-card"><h4>读取 Dockerfile</h4><p>Docker build 按顺序解析每条指令。</p></div>
+<div class="diagram-card"><h4>准备构建上下文</h4><p>把当前目录中未被 .dockerignore 排除的文件发送给构建器。</p></div>
+<div class="diagram-card good"><h4>逐层执行指令</h4><p>FROM、COPY、RUN 等指令依次生成镜像层。</p></div>
+<div class="diagram-card"><h4>命中或失效缓存</h4><p>指令和相关文件没变则复用缓存，变化后从该层往后重建。</p></div>
+<div class="diagram-card"><h4>生成镜像标签</h4><p>最终得到指定 tag 的应用镜像。</p></div>
+</div>
+</div>
 </div>
 <p><strong>标签命名规范</strong>：</p>
 <pre><code>&lt;仓库名&gt;/&lt;镜像名&gt;:&lt;标签&gt;
@@ -1078,8 +1118,16 @@ DNS 解析 <code>ctts-api</code> 失败。✅ 运行时都加
 <p><strong>层缓存机制</strong>：</p>
 <p>Docker 镜像是分层的，每条 Dockerfile 指令生成一层。构建时 Docker
 会检查每层是否能复用缓存：</p>
-<div class="visual"> <div class="visual-title">图示 10：判断缓存命中的规则：</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>判断缓存命中的规则：</p></div> <div class="diagram-step"><p>指令本身没变（如 RUN mvn package 没改成 RUN mvn install）</p></div> <div class="diagram-step"><p>对于 COPY/ADD：被复制的文件内容没变（按文件校验和判断）</p></div> <div class="diagram-step"><p>上面的层都命中缓存</p></div> <div class="diagram-step"><p>命中缓存 → 直接复用旧层（秒级）</p></div> <div class="diagram-step"><p>未命中缓存 → 重新执行该层及后续所有层</p></div> <div class="diagram-step"><p>所以：把变动少的层放前面，变动多的层放后面</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 10：判断缓存命中的规则：</div>
+<div class="edu-diagram">
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>指令文本是否相同</h4><p>Dockerfile 中该行指令变化，会导致该层缓存失效。</p></div>
+<div class="diagram-card good"><h4>输入文件是否相同</h4><p>COPY/ADD 依赖的文件内容变化，会从该层开始重建。</p></div>
+<div class="diagram-card"><h4>前置层是否命中</h4><p>上一层失效后，后续层即使指令没变也要重新执行。</p></div>
+</div>
+<div class="diagram-callout">优化原则：先复制变化少的依赖描述文件，再复制变化频繁的源码。</div>
+</div>
 </div>
 <p><strong><code>.dockerignore</code> 机制</strong>：</p>
 <p>构建上下文中的文件会全部发给 dockerd。<code>.dockerignore</code> 类似
@@ -1274,7 +1322,14 @@ a1b2c3d4e5f6   2 minutes ago  CMD [&quot;java&quot; &quot;-jar&quot; &quot;app.j
 170MB（JRE），总共约 195MB。</p>
 </blockquote>
 <h4 id="图示-4">图示</h4>
-<div class="visual"> <div class="visual-title">图示 11：层缓存机制（修改源码后第二次构建）：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">层缓存机制（修改源码后第二次构建）：</div> <div class="stack-layer">第一次构建（全量）： 第二次构建（部分缓存）：</div> <div class="stack-layer base">[builder 1] FROM maven ↓ [builder 1] FROM maven ↓</div> <div class="stack-layer">[builder 2] WORKDIR ↓ [builder 2] WORKDIR ↓</div> <div class="stack-layer">[builder 3] COPY pom.xml ↓ [builder 3] COPY pom.xml ↓</div> <div class="stack-layer">[builder 4] RUN mvn dep ↓ [builder 4] RUN mvn dep CACHED ✓（pom.xml 没变）</div> <div class="stack-layer">[builder 5] COPY src ↓ [builder 5] COPY src ↓（src 变了，重新 COPY）</div> <div class="stack-layer">[builder 6] RUN mvn pkg ↓ [builder 6] RUN mvn pkg ↓（重新打包）</div> <div class="stack-layer">↓</div> <div class="stack-layer">依赖下载被缓存跳过，省 60 秒！</div> <div class="stack-layer runtime">.dockerignore 作用：</div> <div class="stack-layer">构建上下文（含 node_modules） 构建上下文（排除 node_modules）</div> <div class="stack-layer">node_modules/140MB package.json</div> <div class="stack-layer">package.json src/</div> <div class="stack-layer">src/ 8KB index.html</div> <div class="stack-layer">↓ ↓</div> <div class="stack-layer runtime">传输 150MB 到 dockerd 传输 8KB 到 dockerd</div> <div class="stack-layer">构建慢 构建快 ✓</div> <div class="stack-layer">镜像大小对比：</div> <div class="stack-layer base">单阶段（FROM maven）： ████████████████████████ 820MB</div> <div class="stack-layer base">多阶段（FROM jre）： █████ 198MB ↓76%</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 11：层缓存、dockerignore 与镜像体积优化</div>
+  <div class="edu-diagram">
+    <div class="diagram-grid three">
+      <div class="diagram-card good"><span class="diagram-badge good">层缓存</span><h4>依赖层可复用</h4><p>先 <code>COPY pom.xml</code> 再下载依赖；源码变化时，依赖下载层保持 <code>CACHED</code>，只重跑复制源码和打包。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">.dockerignore</span><h4>减少构建上下文</h4><p>排除 <code>node_modules</code>、<code>target</code>、<code>.git</code> 后，传给 dockerd 的上下文从百 MB 降到 KB/MB 级。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">多阶段</span><h4>缩小最终镜像</h4><p>单阶段 maven 镜像约 820MB；多阶段 JRE 镜像约 198MB，体积下降约 76%。</p></div>
+    </div>
   </div>
 </div>
 <h4 id="易错点-4">易错点</h4>
@@ -1310,7 +1365,16 @@ CTTS 前后端镜像构建中的高频踩坑问题，培养学生"日志 → 定
 修复"的排查思维。</p>
 <h4 id="原理-5">原理</h4>
 <p>构建问题排查的通用流程：</p>
-<div class="visual"> <div class="visual-title">图示 12：docker build 构建失败排查路径</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>看日志：构建失败时 docker build 输出的最后一段就是错误信息</p></div> <div class="diagram-step"><p>找 ERROR 行：定位到具体哪一步失败（如 [builder 5/5]）</p></div> <div class="diagram-step"><p>看错误信息：常见关键词</p></div> <div class="diagram-step"><p>&quot;no such file or directory&quot; → COPY 路径错误</p></div> <div class="diagram-step"><p>&quot;permission denied&quot; → 权限问题</p></div> <div class="diagram-step"><p>&quot;command not found&quot; → 基础镜像没装该命令</p></div> <div class="diagram-step"><p>&quot;failed to solve&quot; → 构建上下文或 Dockerfile 语法问题</p></div> <div class="diagram-step"><p>&quot;Could not resolve&quot; → 网络问题（拉不到依赖）</p></div> <div class="diagram-step"><p>定位 Dockerfile 行：根据错误信息指向的行号修改</p></div> <div class="diagram-step"><p>重新构建验证</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 12：docker build 构建失败排查路径</div>
+  <div class="edu-diagram">
+    <div class="docker-chain five">
+      <div class="diagram-card"><h4>看最后日志</h4><p>构建失败时，最后一段输出通常就是关键错误。</p></div>
+      <div class="diagram-card"><h4>定位步骤</h4><p>找到 <code>ERROR</code> 或失败的 <code>[builder x/y]</code> 步骤。</p></div>
+      <div class="diagram-card"><h4>识别关键词</h4><p><code>no such file</code>、<code>permission denied</code>、<code>command not found</code>、<code>Could not resolve</code>。</p></div>
+      <div class="diagram-card"><h4>回到 Dockerfile</h4><p>根据失败步骤检查 COPY 路径、基础镜像、权限、网络源和语法。</p></div>
+      <div class="diagram-card good"><h4>重新构建验证</h4><p>修正后重新执行 <code>docker build</code>，观察缓存命中和新错误。</p></div>
+    </div>
   </div>
 </div>
 <p>运行问题排查：</p>
@@ -1516,7 +1580,13 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb92-1"><a href=
 target
 dist</code></pre>
 <h4 id="图示-5">图示</h4>
-<div class="visual"> <div class="visual-title">图示 13：构建问题排查决策树：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">构建问题排查决策树：</div> <div class="stack-layer">构建失败</div> <div class="stack-layer">COPY failed: no such file?</div> <div class="stack-layer">检查上下文目录是否有该文件 → 修正路径</div> <div class="stack-layer">Could not transfer / npm ERR! network?</div> <div class="stack-layer">网络问题 → 配置镜像源（阿里云/npmmirror）</div> <div class="stack-layer">manifest not found?</div> <div class="stack-layer base">基础镜像名拼错 → 核对镜像名:标签</div> <div class="stack-layer">command not found?</div> <div class="stack-layer base">基础镜像没装该命令 → 换镜像或 RUN apt install</div> <div class="stack-layer">transferring context 很大?</div> <div class="stack-layer runtime">配置 .dockerignore</div> <div class="stack-layer">运行问题排查决策树：</div> <div class="stack-layer">容器运行异常</div> <div class="stack-layer runtime">docker ps 看不到?</div> <div class="stack-layer runtime">docker ps -a 看 Exited → docker logs 看错误</div> <div class="stack-layer">容器在但访问不通?</div> <div class="stack-layer runtime">docker port 看端口映射</div> <div class="stack-layer runtime">docker exec 进容器 curl 测试</div> <div class="stack-layer">netstat 看宿主机端口</div> <div class="stack-layer">前端调后端跨域?</div> <div class="stack-layer">Nginx 配 /api/ 代理（同源）</div> <div class="stack-layer">前端调后端 DNS 失败?</div> <div class="stack-layer">两容器加 --network 同一网络</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 13：构建与运行问题排查决策树</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel warn"><span class="diagram-badge warn">构建失败</span><h4>先看 build 输出</h4><ul class="diagram-list"><li><code>COPY failed</code>：检查上下文和路径。</li><li><code>network / Could not transfer</code>：配置 Maven/npm 镜像源。</li><li><code>manifest not found</code>：核对基础镜像名和标签。</li><li><code>command not found</code>：换基础镜像或安装命令。</li><li>上下文过大：补 <code>.dockerignore</code>。</li></ul></div>
+      <div class="diagram-panel"><span class="diagram-badge">运行异常</span><h4>先看容器状态</h4><ul class="diagram-list"><li><code>docker ps -a</code> 看是否 Exited。</li><li><code>docker logs</code> 看应用错误。</li><li><code>docker port</code> 看端口映射。</li><li><code>docker exec</code> 进入容器做 curl/文件检查。</li><li>跨域或 DNS：Nginx 代理 + 同一网络。</li></ul></div>
+    </div>
   </div>
 </div>
 <h4 id="易错点-5">易错点</h4>
@@ -1653,7 +1723,20 @@ shell、包管理器，更安全。<code>gcr.io/distroless/java17</code> 适合 
 <hr />
 <h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
 <h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
-<div class="visual"> <div class="visual-title">图示 14：Dockerfile 构建实践</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer runtime">Dockerfile 构建实践</div> <div class="stack-layer runtime">后端 Dockerfile（K8-1）</div> <div class="stack-layer runtime">多阶段：maven 构建 → jre 运行</div> <div class="stack-layer">关键：先 COPY pom.xml 下载依赖（缓存）</div> <div class="stack-layer base">关键：COPY --from=builder jar</div> <div class="stack-layer">镜像大小：~200MB</div> <div class="stack-layer runtime">前端 Dockerfile（K8-2）</div> <div class="stack-layer">多阶段：node 构建 → nginx 部署</div> <div class="stack-layer">关键：先 COPY package.json + npm ci（缓存）</div> <div class="stack-layer">关键：COPY dist 到 /usr/share/nginx/html</div> <div class="stack-layer">Nginx 配置：history 路由 + API 代理</div> <div class="stack-layer">镜像大小：~50MB</div> <div class="stack-layer">构建与标签（K8-3）</div> <div class="stack-layer runtime">docker build -t :</div> <div class="stack-layer">构建日志：Step → CACHED → ERROR</div> <div class="stack-layer runtime">docker tag 打多个标签</div> <div class="stack-layer">命名规范：/:</div> <div class="stack-layer">运行与验证（K8-4）</div> <div class="stack-layer runtime">docker run -d --name --network -p</div> <div class="stack-layer">自定义网络让容器间通信</div> <div class="stack-layer">验证：curl health / 浏览器访问</div> <div class="stack-layer">联调：Nginx 代理 /api/ 到后端容器名</div> <div class="stack-layer">构建优化（K8-5）</div> <div class="stack-layer runtime">.dockerignore 排除 node_modules/target/.git</div> <div class="stack-layer">层缓存：变动少的放前面</div> <div class="stack-layer">多阶段：剔除构建工具链（820MB→200MB）</div> <div class="stack-layer runtime">docker image history 分析每层大小</div> <div class="stack-layer">问题排查（K8-6）</div> <div class="stack-layer">构建失败：看 ERROR 行 + 错误信息</div> <div class="stack-layer">COPY 路径错误：检查上下文</div> <div class="stack-layer">网络问题：配镜像源（阿里云/npmmirror）</div> <div class="stack-layer runtime">容器退出：docker logs 看错误</div> <div class="stack-layer">端口占用：换端口或停进程</div> <div class="stack-layer">跨域/DNS：Nginx 代理 + 同一网络</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 14：Dockerfile 构建实践知识结构图</div>
+  <div class="edu-diagram">
+    <div class="mindmap-grid">
+      <div class="mind-root">Dockerfile<br />构建实践</div>
+      <div class="mind-branch-grid">
+        <div class="diagram-card"><span class="diagram-badge">K8-1</span><h4>后端 Dockerfile</h4><p>maven 构建 → jre 运行；先复制 pom 缓存依赖，再 COPY --from 拷贝 jar。</p></div>
+        <div class="diagram-card"><span class="diagram-badge">K8-2</span><h4>前端 Dockerfile</h4><p>node 构建 → nginx 部署；先 package.json + npm ci，再把 dist 放到 Nginx html 目录。</p></div>
+        <div class="diagram-card"><span class="diagram-badge">K8-3</span><h4>构建与标签</h4><p><code>docker build -t</code>、构建日志、CACHED、ERROR、<code>docker tag</code> 和命名规范。</p></div>
+        <div class="diagram-card"><span class="diagram-badge">K8-4</span><h4>运行与验证</h4><p><code>docker run -d --name --network -p</code>，用 curl、浏览器、健康接口验证。</p></div>
+        <div class="diagram-card good"><span class="diagram-badge good">K8-5</span><h4>构建优化</h4><p>.dockerignore、层缓存、多阶段构建、<code>docker image history</code> 分析每层大小。</p></div>
+        <div class="diagram-card warn"><span class="diagram-badge warn">K8-6</span><h4>问题排查</h4><p>构建失败看 ERROR，运行失败看 logs；端口、跨域、DNS 分别从映射、代理和网络定位。</p></div>
+      </div>
+    </div>
   </div>
 </div>
 <h3 id="一句话总结">一句话总结</h3>

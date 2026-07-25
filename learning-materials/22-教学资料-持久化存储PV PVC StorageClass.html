@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -156,7 +156,7 @@ MySQL数据持久化</a></li>
 <li>理解动态供给与静态供给的差异。</li>
 </ul>
 <h3 id="4-学习路径建议">4. 学习路径建议</h3>
-<div class="visual"> <div class="visual-title">图示 1：读K22-1建立全局观 → 学K22-2 PV → 学K22-3 PVC → 动手做绑定实验</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>读K22-1建立全局观 → 学K22-2 PV → 学K22-3 PVC → 动手做绑定实验</p></div> <div class="diagram-note-card"><p>→ 学K22-4 StorageClass → 学K22-5 Pod使用PVC → 完成CTTS MySQL综合示例</p></div> </div>
+<div class="visual"> <div class="visual-title">图示 1：读K22-1建立全局观 → 学K22-2 PV → 学K22-3 PVC → 动手做绑定实验</div> <div class="edu-diagram"> <div class="diagram-grid three"> <div class="diagram-card"><p>读K22-1建立全局观 → 学K22-2 PV → 学K22-3 PVC → 动手做绑定实验</p></div> <div class="diagram-card"><p>→ 学K22-4 StorageClass → 学K22-5 Pod使用PVC → 完成CTTS MySQL综合示例</p></div> </div>
   </div>
 </div>
 <hr />
@@ -232,7 +232,16 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="
 </tbody>
 </table>
 <h4 id="14-k8s存储体系总览">1.4 K8s存储体系总览</h4>
-<div class="visual"> <div class="visual-title">图示 2：K8s 存储体系四层抽象</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">K8s 存储体系四层抽象</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod ► Volume (Pod级，最底层)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">emptyDir 临时目录</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">hostPath 节点目录</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">configMap/secret 配置注入</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">persistentVolumeClaim ► PVC (用户申请)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">PV (集群资源, 静态)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">StorageClass 动态创建 ► PV (动态)</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 2：K8s 存储体系四层抽象</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>Pod</h4><p>业务容器只声明要挂载哪个 PVC，不关心底层磁盘在哪里。</p></div>
+<div class="diagram-card good"><h4>PVC</h4><p>开发者提出存储申请：容量、访问模式、StorageClass。</p></div>
+<div class="diagram-card"><h4>PV</h4><p>集群中的真实存储资源，可能来自 hostPath、NFS、云盘或 CSI。</p></div>
+<div class="diagram-card"><h4>StorageClass</h4><p>描述动态供给规则，让集群按需创建 PV。</p></div>
+</div>
+</div>
 </div>
 <p><strong>四层关系</strong>：</p>
 <ul>
@@ -382,7 +391,7 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">volumeHandle</span><span class="kw">:</span><span class="at"> disk-xxxxxx</span></span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">fsType</span><span class="kw">:</span><span class="at"> ext4</span></span></code></pre></div>
 <h4 id="24-pv生命周期">2.4 PV生命周期</h4>
-<div class="visual"> <div class="visual-title">图示 3：创建PVC匹配 删除PVC</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>创建PVC匹配 删除PVC</p></div> <div class="diagram-note-card"><p>Available ► Bound ► Released</p></div> <div class="diagram-note-card"><p>(可用) (已绑定) (已释放)</p></div> <div class="diagram-note-card"><p>手动回收（Retain策略）</p></div> <div class="diagram-note-card"><p>Failed</p></div> <div class="diagram-note-card"><p>(失败)</p></div> </div>
+<div class="visual"> <div class="visual-title">图示 3：创建PVC匹配 删除PVC</div> <div class="edu-diagram"> <div class="diagram-grid three"> <div class="diagram-card"><p>创建PVC匹配 删除PVC</p></div> <div class="diagram-card"><p>Available ► Bound ► Released</p></div> <div class="diagram-card"><p>(可用) (已绑定) (已释放)</p></div> <div class="diagram-card"><p>手动回收（Retain策略）</p></div> <div class="diagram-card"><p>Failed</p></div> <div class="diagram-card"><p>(失败)</p></div> </div>
   </div>
 </div>
 <p><strong>四态说明</strong>：</p>
@@ -479,12 +488,20 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href=
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> ctts-mysql</span></span>
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">type</span><span class="kw">:</span><span class="at"> local</span></span></code></pre></div>
 <h4 id="34-pvc生命周期">3.4 PVC生命周期</h4>
-<div class="visual"> <div class="visual-title">图示 4：匹配PV成功 Pod删除PVC仍保留</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>匹配PV成功 Pod删除PVC仍保留</p></div> <div class="diagram-note-card"><p>Pending ► Bound ► 保持Bound</p></div> <div class="diagram-note-card"><p>(待绑定) (已绑定) 直到用户删除PVC</p></div> <div class="diagram-note-card"><p>无匹配PV 删除PVC</p></div> <div class="diagram-note-card"><p>Lost 删除中</p></div> <div class="diagram-note-card"><p>(丢失) → PV Released</p></div> </div>
+<div class="visual"> <div class="visual-title">图示 4：匹配PV成功 Pod删除PVC仍保留</div> <div class="edu-diagram"> <div class="diagram-grid three"> <div class="diagram-card"><p>匹配PV成功 Pod删除PVC仍保留</p></div> <div class="diagram-card"><p>Pending ► Bound ► 保持Bound</p></div> <div class="diagram-card"><p>(待绑定) (已绑定) 直到用户删除PVC</p></div> <div class="diagram-card"><p>无匹配PV 删除PVC</p></div> <div class="diagram-card"><p>Lost 删除中</p></div> <div class="diagram-card"><p>(丢失) → PV Released</p></div> </div>
   </div>
 </div>
 <h4 id="35-图示pvc与pv绑定流程">3.5 图示：PVC与PV绑定流程</h4>
-<div class="visual"> <div class="visual-title">图示 5：用户 K8s控制平面 PV池</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">用户 K8s控制平面 PV池</div> <div class="stack-layer">1.创建PVC(5Gi, RWO, manual)</div> <div class="stack-layer">►</div> <div class="stack-layer">2.遍历Available PV</div> <div class="stack-layer">►</div> <div class="stack-layer base">3.找到匹配PV(pv-hostpath-5gi)</div> <div class="stack-layer">◄</div> <div class="stack-layer">4.绑定PVPVC</div> <div class="stack-layer">5.PVC状态 Bound</div> <div class="stack-layer">◄</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 5：用户 K8s控制平面 PV池</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>用户创建 PVC</h4><p>声明需要多大容量、什么访问模式。</p></div>
+<div class="diagram-card good"><h4>控制平面匹配</h4><p>查找满足条件的 PV，或根据 StorageClass 动态创建。</p></div>
+<div class="diagram-card"><h4>PV 绑定</h4><p>PVC 与 PV 进入 Bound 状态。</p></div>
+<div class="diagram-card"><h4>Pod 挂载 PVC</h4><p>容器把持久化存储挂载到指定目录。</p></div>
+</div>
+</div>
 </div>
 <h4 id="36-易错点">3.6 易错点</h4>
 <ul>
@@ -505,7 +522,7 @@ selector所有键值对。</li>
 <p><strong>StorageClass</strong>
 是K8s动态供给存储的模板，定义了"如何自动创建PV"。当用户创建PVC且指定StorageClass时，若没有匹配的静态PV，provisioner会按StorageClass模板自动创建PV并绑定。</p>
 <h4 id="42-原理动态供给流程">4.2 原理：动态供给流程</h4>
-<div class="visual"> <div class="visual-title">图示 6：用户创建PVC（指定StorageClass）</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>用户创建PVC（指定StorageClass）</p></div> <div class="diagram-note-card"><p>K8s检查是否有匹配的静态PV</p></div> <div class="diagram-note-card"><p>有 ► 直接绑定（静态供给）</p></div> <div class="diagram-note-card"><p>无 ► StorageClass的provisioner介入</p></div> <div class="diagram-note-card"><p>provisioner调用后端存储API</p></div> <div class="diagram-note-card"><p>（如NFS、Ceph、云盘）</p></div> <div class="diagram-note-card"><p>自动创建PV并绑定到PVC</p></div> </div>
+<div class="visual"> <div class="visual-title">图示 6：用户创建PVC（指定StorageClass）</div> <div class="edu-diagram"> <div class="diagram-grid three"> <div class="diagram-card"><p>用户创建PVC（指定StorageClass）</p></div> <div class="diagram-card"><p>K8s检查是否有匹配的静态PV</p></div> <div class="diagram-card"><p>有 ► 直接绑定（静态供给）</p></div> <div class="diagram-card"><p>无 ► StorageClass的provisioner介入</p></div> <div class="diagram-card"><p>provisioner调用后端存储API</p></div> <div class="diagram-card"><p>（如NFS、Ceph、云盘）</p></div> <div class="diagram-card"><p>自动创建PV并绑定到PVC</p></div> </div>
   </div>
 </div>
 <h4 id="43-storageclass核心字段">4.3 StorageClass核心字段</h4>
@@ -634,7 +651,15 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb17-1"><a href=
 </tbody>
 </table>
 <h4 id="46-图示动态供给时序">4.6 图示：动态供给时序</h4>
-<div class="visual"> <div class="visual-title">图示 7：用户 PVC控制器 StorageClass provisioner 后端存储</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>用户 PVC控制器 StorageClass provisioner 后端存储</p></div> <div class="diagram-note-card"><p>1.创建PVC</p></div> <div class="diagram-note-card"><p>(sc=standard)</p></div> <div class="diagram-note-card"><p>►</p></div> <div class="diagram-note-card"><p>2.无匹配静态PV</p></div> <div class="diagram-note-card"><p>►</p></div> <div class="diagram-note-card"><p>3.触发provisioner</p></div> <div class="diagram-note-card"><p>►</p></div> <div class="diagram-note-card"><p>4.创建存储卷</p></div> <div class="diagram-note-card"><p>►</p></div> <div class="diagram-note-card"><p>5.返回卷信息</p></div> <div class="diagram-note-card"><p>◄</p></div> <div class="diagram-note-card"><p>6.创建PV并绑定</p></div> <div class="diagram-note-card"><p>◄</p></div> <div class="diagram-note-card"><p>7.PVC Bound</p></div> <div class="diagram-note-card"><p>◄</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 7：StorageClass 动态供给时序</div>
+  <div class="edu-diagram">
+    <div class="docker-chain">
+      <div class="diagram-card"><span class="diagram-badge">用户</span><h4>创建 PVC</h4><p>声明容量、访问模式和 <code>storageClassName</code>。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">PVC 控制器</span><h4>检查静态 PV</h4><p>如果没有合适 PV，就触发 StorageClass 的 provisioner。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">Provisioner</span><h4>创建后端存储</h4><p>调用 NFS、Ceph、云盘等后端接口创建实际存储卷。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">绑定完成</span><h4>PV + PVC Bound</h4><p>返回卷信息，自动创建 PV，并将 PVC 状态更新为 Bound。</p></div>
+    </div>
   </div>
 </div>
 <h4 id="47-易错点">4.7 易错点</h4>
@@ -661,7 +686,7 @@ provisioner。<code>volumeBindingMode: WaitForFirstConsumer</code>
 字段引用PVC，再通过 <code>volumeMounts</code>
 挂载到容器内路径，实现数据持久化。</p>
 <h4 id="52-原理pod使用pvc的两步">5.2 原理：Pod使用PVC的两步</h4>
-<div class="visual"> <div class="visual-title">图示 8：Pod YAML</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>Pod YAML</p></div> <div class="diagram-note-card"><b>spec.volumes[] ← 第1步</b><p>声明使用哪个PVC</p></div> <div class="diagram-note-card"><p>name:</p></div> <div class="diagram-note-card"><p>persistentVolumeClaim:</p></div> <div class="diagram-note-card"><p>claimName:</p></div> <div class="diagram-note-card"><p>spec.containers[].volumeMounts[] ← 第2步：挂载到容器路径</p></div> <div class="diagram-note-card"><p>name:</p></div> <div class="diagram-note-card"><p>mountPath:</p></div> </div>
+<div class="visual"> <div class="visual-title">图示 8：Pod YAML</div> <div class="edu-diagram"> <div class="diagram-grid three"> <div class="diagram-card"><p>Pod YAML</p></div> <div class="diagram-card"><b>spec.volumes[] ← 第1步</b><p>声明使用哪个PVC</p></div> <div class="diagram-card"><p>name:</p></div> <div class="diagram-card"><p>persistentVolumeClaim:</p></div> <div class="diagram-card"><p>claimName:</p></div> <div class="diagram-card"><p>spec.containers[].volumeMounts[] ← 第2步：挂载到容器路径</p></div> <div class="diagram-card"><p>name:</p></div> <div class="diagram-card"><p>mountPath:</p></div> </div>
   </div>
 </div>
 <h4 id="53-完整示例pod挂载pvc">5.3 完整示例：Pod挂载PVC</h4>
@@ -1256,7 +1281,21 @@ Volume</strong>：本地持久化卷，性能优于网络存储，适合高性�
 </ul>
 <hr />
 <h2 id="五思维导图">五、思维导图</h2>
-<div class="visual"> <div class="visual-title">图示 10：K8s 持久化存储体系</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">K8s 持久化存储体系</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">PV PVC StorageClass</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">集群资源 ◄ 绑定 用户申请 动态供给</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">字段: 字段: 字段:</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- capacity - access -provisioner</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- accessModes Modes -reclaimPolicy</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- reclaimPolicy - resources -volumeBindingMode</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- storageClassName - selector -parameters</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- hostPath/nfs/csi - storage</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ClassName</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">生命周期</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">PV: Available→Bound→Released→Failed</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">PVC: Pending→Bound→Lost</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod使用PVC</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- volumes.persistentVolumeClaim</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- volumeMounts</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- StatefulSet: volumeClaim</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Templates</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">CTTS MySQL 实战</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- PV(hostPath/NFS) + PVC</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- Deployment + Recreate策略</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- StatefulSet + volumeClaim</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Templates（最佳实践）</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">- 数据验证：写入→删除Pod→验证</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 10：K8s 持久化存储体系</div>
+<div class="edu-diagram">
+<div class="mindmap-grid">
+<div class="mind-root">K8s<br>持久化存储</div>
+<div class="mind-branch-grid">
+<div class="diagram-card"><h4>为什么需要</h4><p>Pod 会重建，容器文件系统会丢失，数据库必须使用持久化卷。</p></div>
+<div class="diagram-card"><h4>PV</h4><p>集群管理员或动态供给创建的存储资源。</p></div>
+<div class="diagram-card"><h4>PVC</h4><p>应用对存储的申请，和 PV 绑定后供 Pod 使用。</p></div>
+<div class="diagram-card"><h4>StorageClass</h4><p>定义动态创建 PV 的 provisioner 和参数。</p></div>
+<div class="diagram-card"><h4>Pod 使用</h4><p>volumes 引用 PVC，volumeMounts 挂载到容器目录。</p></div>
+<div class="diagram-card"><h4>CTTS MySQL</h4><p>用 PVC 保存 /var/lib/mysql，验证删除 Pod 后数据仍存在。</p></div>
+</div>
+</div>
+</div>
 </div>
 <hr />
 <h2 id="六复习思考题">六、复习思考题</h2>

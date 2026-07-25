@@ -148,7 +148,19 @@
 <h4 id="原理">原理</h4>
 <p><strong>镜像包含什么</strong>（以 <code>mysql:8.0</code>
 镜像为例）：</p>
-<div class="visual"> <div class="visual-title">图示 1：mysql:8.0 镜像</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">mysql:8.0 镜像</div> <div class="stack-layer app">应用层</div> <div class="stack-layer">MySQL Server 程序（mysqld）</div> <div class="stack-layer">初始化脚本（entrypoint.sh）</div> <div class="stack-layer">默认配置文件（my.cnf）</div> <div class="stack-layer runtime">运行时与依赖层</div> <div class="stack-layer">MySQL 运行依赖库</div> <div class="stack-layer">shell 工具（bash）</div> <div class="stack-layer base">基础系统层</div> <div class="stack-layer base">Debian 11（最小化）</div> <div class="stack-layer">元数据（Metadata）</div> <div class="stack-layer">默认启动命令（CMD）</div> <div class="stack-layer">暴露端口（EXPOSE 3306）</div> <div class="stack-layer">环境变量（ENV MYSQL_MAJOR=8.0）</div> <div class="stack-layer">工作目录（WORKDIR）</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 1：mysql:8.0 镜像的组成结构</div>
+  <div class="edu-diagram">
+    <div class="mindmap-grid">
+      <div class="mind-root">mysql:8.0<br />只读运行模板</div>
+      <div class="mind-branch-grid">
+        <div class="diagram-card"><span class="diagram-badge">应用层</span><h4>MySQL Server</h4><p>包含 <code>mysqld</code> 主程序、初始化脚本 <code>entrypoint.sh</code> 与默认配置文件 <code>my.cnf</code>。</p></div>
+        <div class="diagram-card"><span class="diagram-badge">运行时与依赖</span><h4>让程序能跑起来</h4><p>包含 MySQL 运行依赖库、shell 工具等基础运行环境。</p></div>
+        <div class="diagram-card"><span class="diagram-badge">基础系统层</span><h4>Debian 11 最小化系统</h4><p>提供 Linux 用户态文件系统，是上层程序和依赖的底座。</p></div>
+        <div class="diagram-card good"><span class="diagram-badge good">元数据</span><h4>描述镜像如何启动</h4><p>包含 <code>CMD</code>、<code>EXPOSE 3306</code>、<code>ENV MYSQL_MAJOR=8.0</code>、<code>WORKDIR</code> 等信息。</p></div>
+      </div>
+    </div>
+    <div class="diagram-callout">镜像不是单个可执行文件，而是“文件系统层 + 启动元数据”的组合；这些内容共同决定容器启动后看到什么、执行什么、暴露什么。</div>
   </div>
 </div>
 <p><strong>镜像的不可变（Immutable）特性</strong>：</p>
@@ -255,7 +267,18 @@ hello-world   latest    feb5d9fea6a5   6 months ago   13.3kB</code></pre>
 才是镜像的"身份证号"。</p>
 </blockquote>
 <h4 id="图示">图示</h4>
-<div class="visual"> <div class="visual-title">图示 2：镜像与容器的关系：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">镜像与容器的关系：</div> <div class="stack-layer">镜像（只读模板） 容器（运行实例）</div> <div class="stack-layer app">Layer 3 应用 可写层 ← 容器自己的修改写这里</div> <div class="stack-layer app">Layer 2 依赖 run Layer 3 应用 ← 来自镜像（只读）</div> <div class="stack-layer">▶</div> <div class="stack-layer base">Layer 1 基础 Layer 2 依赖 ← 来自镜像（只读）</div> <div class="stack-layer base">Layer 1 基础 ← 来自镜像（只读）</div> <div class="stack-layer">一份镜像 可启动多个容器</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 2：镜像与容器的关系</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel"><span class="diagram-badge">Image</span><h4>镜像：只读模板</h4><ul class="diagram-list"><li>Layer 3：应用层。</li><li>Layer 2：依赖与运行时。</li><li>Layer 1：基础系统。</li><li>内容不可直接修改，可被多个容器复用。</li></ul></div>
+      <div class="diagram-panel good"><span class="diagram-badge good">Container</span><h4>容器：运行实例</h4><ul class="diagram-list"><li>共享镜像的只读层。</li><li>额外增加一层可写层。</li><li>运行时新增、修改、删除都写入可写层。</li><li>多个容器互不影响。</li></ul></div>
+    </div>
+    <div class="diagram-grid three">
+      <div class="diagram-callout">一份镜像可以启动多个容器。</div>
+      <div class="diagram-callout">容器删除时，可写层会被删除。</div>
+      <div class="diagram-callout">镜像删除需要先处理依赖它的容器。</div>
+    </div>
   </div>
 </div>
 <h4 id="易错点">易错点</h4>
@@ -636,7 +659,16 @@ Dockerfile
 </tbody>
 </table>
 <p><strong>分层原理（UnionFS / OverlayFS）</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 3：镜像层（只读, lowerdir） 容器可写层（upperdir）</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">镜像层（只读, lowerdir） 容器可写层（upperdir）</div> <div class="stack-layer runtime">Layer 3: 应用代码 容器运行时修改</div> <div class="stack-layer">（新建/修改/删除）</div> <div class="stack-layer">Layer 2: 依赖库</div> <div class="stack-layer base">Layer 1: 基础系统 OverlayFS 叠加</div> <div class="stack-layer">▼</div> <div class="stack-layer">统一视图（merged）</div> <div class="stack-layer">/usr /etc /var ...</div> <div class="stack-layer">容器看到的&quot;完整文件系统&quot;</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 3：OverlayFS 如何把镜像层与容器可写层合成统一视图</div>
+  <div class="edu-diagram">
+    <div class="docker-chain">
+      <div class="diagram-card warn"><span class="diagram-badge warn">upperdir</span><h4>容器可写层</h4><p>容器运行时的新建、修改、删除都记录在这里。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">lowerdir</span><h4>镜像只读层</h4><p>应用代码、依赖库、基础系统按层叠加，保持不可变。</p></div>
+      <div class="diagram-card"><span class="diagram-badge">OverlayFS</span><h4>叠加合成</h4><p>内核把可写层与多层只读层合并，形成一个统一文件系统视图。</p></div>
+      <div class="diagram-card good"><span class="diagram-badge good">merged</span><h4>容器看到的完整目录</h4><p>容器里看到 <code>/usr</code>、<code>/etc</code>、<code>/var</code> 等完整文件系统。</p></div>
+    </div>
+    <div class="diagram-callout">写时复制（CoW）：修改下层文件时，Docker 先把文件复制到 upperdir，再在可写层修改，从而保护镜像层不可变。</div>
   </div>
 </div>
 <p><strong>OverlayFS 三个核心概念</strong>（了解）：</p>
@@ -654,7 +686,18 @@ Dockerfile
 <li>这样保证了下层只读层的不可变性。</li>
 </ul>
 <p><strong>为什么分层能共享？</strong></p>
-<div class="visual"> <div class="visual-title">图示 4：镜像 mysql:8.0: 镜像 mysql:5.7:</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">镜像 mysql:8.0: 镜像 mysql:5.7:</div> <div class="stack-layer">Layer C: MySQL 8 程序 Layer D: MySQL 5 程序 ← 不同（MySQL 版本不同）</div> <div class="stack-layer">Layer B: MySQL 通用库 Layer B: MySQL 通用库 ← 共享！同一个 SHA256</div> <div class="stack-layer base">Layer A: Debian 11 Layer A: Debian 11 ← 共享！同一个 SHA256</div> <div class="stack-layer">层通过 SHA256 摘要标识，相同内容的层（相同摘要）只存一份。</div> <div class="stack-layer">所以两个 MySQL 镜像实际磁盘占用 ≈ 600MB，不是 1000MB。</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 4：MySQL 不同版本镜像的层共享</div>
+  <div class="edu-diagram">
+    <div class="docker-compare">
+      <div class="diagram-panel"><span class="diagram-badge">mysql:8.0</span><h4>共享底座 + 版本差异层</h4><ul class="diagram-list"><li>Layer C：MySQL 8 程序。</li><li>Layer B：MySQL 通用库。</li><li>Layer A：Debian 11 基础层。</li></ul></div>
+      <div class="diagram-panel"><span class="diagram-badge">mysql:5.7</span><h4>共享底座 + 版本差异层</h4><ul class="diagram-list"><li>Layer D：MySQL 5.7 程序。</li><li>Layer B：MySQL 通用库。</li><li>Layer A：Debian 11 基础层。</li></ul></div>
+    </div>
+    <div class="diagram-grid three">
+      <div class="diagram-card good"><h4>相同摘要</h4><p>Layer A、Layer B 内容完全一致，SHA256 摘要相同，只保存一份。</p></div>
+      <div class="diagram-card warn"><h4>不同摘要</h4><p>MySQL 程序版本不同，生成不同层，必须分别保存。</p></div>
+      <div class="diagram-card"><h4>磁盘收益</h4><p>两个镜像的实际占用小于 SIZE 逻辑相加，这就是层共享的价值。</p></div>
+    </div>
   </div>
 </div>
 <h4 id="问题--场景-2">问题 / 场景</h4>
@@ -752,8 +795,17 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href=
 层左右。</p>
 </blockquote>
 <h4 id="图示-2">图示</h4>
-<div class="visual"> <div class="visual-title">图示 5：镜像分层结构示意（以 mysql:8.0 为例）：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">镜像分层结构示意（以 mysql:8.0 为例）：</div> <div class="stack-layer">Layer N (最上层): CMD [&quot;mysqld&quot;] 0B ← 元数据指令</div> <div class="stack-layer">Layer N-1: EXPOSE 3306 0B ← 元数据指令</div> <div class="stack-layer runtime">Layer N-2: ENTRYPOINT [&quot;docker-entrypoint.sh&quot;] 0B ← 元数据指令</div> <div class="stack-layer">Layer 5: 下载 MySQL 程序 168MB ← 真正占空间的层</div> <div class="stack-layer">Layer 4: apt-get install 依赖 52MB ← 真正占空间的层</div> <div class="stack-layer">Layer 3: ENV MYSQL_VERSION=8.0.35 0B ← 元数据指令</div> <div class="stack-layer">Layer 2: WORKDIR / 0B ← 元数据指令</div> <div class="stack-layer base">Layer 1 (最底层): ADD debian:11 rootfs 124MB ← 基础系统层</div> <div class="stack-layer">每层通过 SHA256 摘要标识，相同摘要的层在多个镜像间共享</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 5：mysql:8.0 镜像分层结构与 history 视角</div>
+<div class="edu-diagram">
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>基础系统层</h4><p>Linux 发行版基础文件和运行环境。</p></div>
+<div class="diagram-card"><h4>MySQL 软件层</h4><p>安装 mysql server、客户端和必要依赖。</p></div>
+<div class="diagram-card good"><h4>初始化脚本层</h4><p>entrypoint、默认配置和初始化逻辑。</p></div>
+<div class="diagram-card"><h4>元数据层</h4><p>EXPOSE 3306、CMD、环境变量说明等镜像元信息。</p></div>
+</div>
+<div class="diagram-callout">docker history 看到的是镜像构建留下的层次线索，用来理解镜像为什么这么大、哪些层可复用。</div>
+</div>
 </div>
 <h4 id="易错点-2">易错点</h4>
 <ol type="1">
@@ -1637,7 +1689,18 @@ Total reclaimed space: 1.2GB</code></pre>
 是核弹级清理，会删除所有未使用的容器、网络、镜像、构建缓存。仅在确定要彻底清理时使用。</p>
 </blockquote>
 <h4 id="图示-5">图示</h4>
-<div class="visual"> <div class="visual-title">图示 6：镜像删除决策树：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>镜像删除决策树：</p></div> <div class="diagram-note-card"><p>docker rmi 镜像</p></div> <div class="diagram-note-card"><p>有容器依赖？</p></div> <div class="diagram-note-card"><p>是 否</p></div> <div class="diagram-note-card"><p>报错 有多个标签？</p></div> <div class="diagram-note-card"><p>是 否</p></div> <div class="diagram-note-card"><p>Untagged Untagged</p></div> <div class="diagram-note-card"><p>(只删一个 + Deleted</p></div> <div class="diagram-note-card"><p>标签) (删所有层)</p></div> <div class="diagram-note-card"><p>两种选择：</p></div> <div class="diagram-note-card"><p>1. 先删容器</p></div> <div class="diagram-note-card"><p>docker rm</p></div> <div class="diagram-note-card"><p>再 rmi</p></div> <div class="diagram-note-card"><p>2. 强制删除</p></div> <div class="diagram-note-card"><p>docker rmi</p></div> <div class="diagram-note-card"><p>f</p></div> <div class="diagram-note-card"><p>(慎用!)</p></div> </div>
+<div class="visual">
+  <div class="visual-title">图示 6：镜像删除决策树</div>
+  <div class="edu-diagram">
+    <div class="docker-decision">
+      <div class="docker-decision-root">执行 <code>docker rmi 镜像</code> 前，先判断依赖与标签关系</div>
+      <div class="diagram-grid three">
+        <div class="diagram-card warn"><span class="diagram-badge warn">有容器依赖</span><h4>直接删除会报错</h4><p>先用 <code>docker ps -a</code> 找到依赖容器，再选择停止并删除容器，最后重新执行 <code>docker rmi</code>。</p></div>
+        <div class="diagram-card"><span class="diagram-badge">多个标签</span><h4>先 Untagged</h4><p>删除其中一个标签时通常只是解除标签引用；同一镜像 ID 仍可能被其它标签引用。</p></div>
+        <div class="diagram-card good"><span class="diagram-badge good">无依赖且无其它标签</span><h4>删除镜像层</h4><p>镜像引用被移除后，未被其它镜像共享的层才会真正释放磁盘空间。</p></div>
+      </div>
+      <div class="diagram-callout">强制删除 <code>docker rmi -f</code> 只适合确认无业务影响的清理场景；生产环境优先先删容器，再删镜像。</div>
+    </div>
   </div>
 </div>
 <h4 id="易错点-5">易错点</h4>
@@ -1769,7 +1832,20 @@ Notary）可以对镜像签名，确保镜像来源可信。生产环境建议�
 <hr />
 <h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
 <h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
-<div class="visual"> <div class="visual-title">图示 7：镜像管理</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">镜像管理</div> <div class="stack-layer">镜像概念与组成（K3-1）</div> <div class="stack-layer">定义：只读、分层、不可变的容器运行模板</div> <div class="stack-layer runtime">组成：代码+运行时+依赖+配置+元数据</div> <div class="stack-layer">不可变特性：可复现、可回滚、可信任</div> <div class="stack-layer">镜像 vs 容器：模板 vs 实例</div> <div class="stack-layer">镜像拉取与查看（K3-2）</div> <div class="stack-layer runtime">docker pull 镜像:标签（默认 latest）</div> <div class="stack-layer runtime">docker images / docker image ls</div> <div class="stack-layer">五字段：REPOSITORY/TAG/IMAGE ID/CREATED/SIZE</div> <div class="stack-layer">层缓存：第二次拉取很快</div> <div class="stack-layer">镜像分层结构（K3-3）</div> <div class="stack-layer runtime">Layer：每条 Dockerfile 指令一层</div> <div class="stack-layer">UnionFS（OverlayFS）：多层叠加统一视图</div> <div class="stack-layer">价值：层共享+层缓存+增量传输</div> <div class="stack-layer runtime">docker history 查看构建层</div> <div class="stack-layer">写时复制（CoW）</div> <div class="stack-layer">镜像详情查看（K3-4）</div> <div class="stack-layer runtime">docker image inspect（JSON 输出）</div> <div class="stack-layer">关键字段：Id/RepoTags/Config.Cmd/ExposedPorts/Env/RootFS.Layers</div> <div class="stack-layer">Go 模板提取字段：-f &#39;{{.字段}}&#39;</div> <div class="stack-layer">GraphDriver.Name = overlay2</div> <div class="stack-layer">镜像标签管理（K3-5）</div> <div class="stack-layer runtime">docker tag 源:tag 目标:tag（加别名）</div> <div class="stack-layer">一个镜像 ID 可有多个标签</div> <div class="stack-layer">:latest 陷阱：不保证最新最稳定</div> <div class="stack-layer">生产规范：用明确版本号</div> <div class="stack-layer">镜像删除与清理（K3-6）</div> <div class="stack-layer runtime">docker rmi / docker image rm</div> <div class="stack-layer">f 强制删除（慎用）</div> <div class="stack-layer runtime">docker image prune（清理悬空镜像）</div> <div class="stack-layer runtime">docker image prune -a（清理所有未使用）</div> <div class="stack-layer runtime">docker system df / prune（整体磁盘管理）</div> </div>
+<div class="visual">
+  <div class="visual-title">图示 7：镜像管理知识结构图</div>
+  <div class="edu-diagram">
+    <div class="mindmap-grid">
+      <div class="mind-root">镜像管理<br />Image Lifecycle</div>
+      <div class="mind-branch-grid">
+        <div class="diagram-card"><span class="diagram-badge">K3-1</span><h4>镜像概念与组成</h4><p>只读、分层、不可变的容器运行模板；包含代码、运行时、依赖、配置和元数据。</p></div>
+        <div class="diagram-card"><span class="diagram-badge">K3-2</span><h4>拉取与查看</h4><p><code>docker pull</code> 拉取镜像，<code>docker images</code> 查看 REPOSITORY、TAG、IMAGE ID、CREATED、SIZE。</p></div>
+        <div class="diagram-card"><span class="diagram-badge">K3-3</span><h4>分层结构</h4><p>每条 Dockerfile 指令形成层；UnionFS/OverlayFS 叠加为统一视图，带来共享、缓存和增量传输。</p></div>
+        <div class="diagram-card"><span class="diagram-badge">K3-4</span><h4>详情分析</h4><p><code>docker image inspect</code> 查看 Cmd、ExposedPorts、Env、RootFS.Layers、GraphDriver 等字段。</p></div>
+        <div class="diagram-card"><span class="diagram-badge">K3-5</span><h4>标签管理</h4><p><code>docker tag</code> 为同一 IMAGE ID 增加别名；生产环境避免依赖漂移的 <code>:latest</code>。</p></div>
+        <div class="diagram-card warn"><span class="diagram-badge warn">K3-6</span><h4>删除与清理</h4><p><code>docker rmi</code>、<code>image prune</code>、<code>system df/prune</code> 用于回收空间，但要先确认容器依赖。</p></div>
+      </div>
+    </div>
   </div>
 </div>
 <h3 id="一句话总结">一句话总结</h3>

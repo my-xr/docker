@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -91,7 +91,7 @@
 </ul>
 <p>这些问题，都将在本课<strong>K8s网络进阶</strong>中找到答案。本课从"网络模型→DNS→策略→调试→生产"五个层面，构建云原生网络的完整知识体系，并直接服务于CTTS项目"服务间安全通信"任务。</p>
 <h3 id="12-学习路径">1.2 学习路径</h3>
-<div class="visual"> <div class="visual-title">图示 1：网络模型三原则 ► CoreDNS解析 ► NetworkPolicy隔离</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>网络模型三原则 ► CoreDNS解析 ► NetworkPolicy隔离</p></div> <div class="diagram-note-card"><p>网络调试四件套 ◄ 生产网络选型</p></div> </div>
+<div class="visual"> <div class="visual-title">图示 1：网络模型三原则 ► CoreDNS解析 ► NetworkPolicy隔离</div> <div class="edu-diagram"> <div class="diagram-grid three"> <div class="diagram-card"><p>网络模型三原则 ► CoreDNS解析 ► NetworkPolicy隔离</p></div> <div class="diagram-card"><p>网络调试四件套 ◄ 生产网络选型</p></div> </div>
   </div>
 </div>
 <h3 id="13-学习目标">1.3 学习目标</h3>
@@ -151,8 +151,15 @@
 </ol>
 <h4 id="112-原理">1.1.2 原理</h4>
 <p>K8s不实现网络，只定义规范。具体由CNI插件完成：</p>
-<div class="visual"> <div class="visual-title">图示 2：K8s 控制平面</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">K8s 控制平面</div> <div class="stack-layer">(kube-apiserver / kube-scheduler / kube-controller)</div> <div class="stack-layer">调用 CNI 接口</div> <div class="stack-layer">▼ ▼</div> <div class="stack-layer">Node-1 Node-2</div> <div class="stack-layer app">Pod A ◄ ► Pod B</div> <div class="stack-layer">10.244.1.5 跨节点 10.244.2.8</div> <div class="stack-layer">通信</div> <div class="stack-layer">CNI: Calico CNI: Calico</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 2：K8s 控制平面</div>
+<div class="edu-diagram">
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>Service</h4><p>提供稳定虚拟 IP 和名称。</p></div>
+<div class="diagram-card good"><h4>EndpointSlice</h4><p>记录后端 Pod IP，并随 Pod 变化自动更新。</p></div>
+<div class="diagram-card"><h4>kube-proxy / CNI</h4><p>在节点上落实转发规则和跨节点通信。</p></div>
+</div>
+</div>
 </div>
 <p>主流CNI对比：</p>
 <table>
@@ -243,7 +250,16 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 验证Node可直连Pod</span></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 在node-1节点上执行：ping 10.244.2.8</span></span></code></pre></div>
 <h4 id="115-图示k8s网络模型全景">1.1.5 图示：K8s网络模型全景</h4>
-<div class="visual"> <div class="visual-title">图示 3：集群扁平网络</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">集群扁平网络</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Node-1 Pod ◄ 无NAT ► Pod Node-2</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod 10.1.x ◄ 无NAT ► Pod 10.2.x ◄ 无NAT ► Pod 10.3.x</span></li> <li><span class="tree-label">CNI插件(Flannel/Calico/Cilium) 负责实现</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 3：集群扁平网络</div>
+<div class="edu-diagram">
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>Pod 到 Pod</h4><p>任意节点上的 Pod 可以直接访问另一个 Pod IP，不需要 NAT。</p></div>
+<div class="diagram-card good"><h4>Node 到 Pod</h4><p>节点可以直接访问 Pod 网络，便于 kubelet、探针和网络插件协作。</p></div>
+<div class="diagram-card"><h4>Pod 到 Service</h4><p>Pod 通过 Service 虚拟 IP 或 DNS 名称访问一组后端。</p></div>
+</div>
+<div class="diagram-callout">K8s 网络模型追求“每个 Pod 像一台小主机”，跨节点通信由 CNI 插件负责打通。</div>
+</div>
 </div>
 <h4 id="116-易错点">1.1.6 易错点</h4>
 <ul>
@@ -261,7 +277,7 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="
 <p>CoreDNS是K8s集群默认的DNS服务器，以Deployment形式部署在
 <code>kube-system</code> 命名空间，为Service和Pod提供名称解析。</p>
 <h4 id="122-域名格式">1.2.2 域名格式</h4>
-<div class="visual"> <div class="visual-title">图示 4：service.namespace.svc.cluster.local</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>service.namespace.svc.cluster.local</p></div> <div class="diagram-note-card"><p>集群域名（固定后缀）</p></div> <div class="diagram-note-card"><p>Service类型标识</p></div> <div class="diagram-note-card"><p>命名空间</p></div> <div class="diagram-note-card"><p>Service名称</p></div> </div>
+<div class="visual"> <div class="visual-title">图示 4：service.namespace.svc.cluster.local</div> <div class="edu-diagram"> <div class="diagram-grid three"> <div class="diagram-card"><p>service.namespace.svc.cluster.local</p></div> <div class="diagram-card"><p>集群域名（固定后缀）</p></div> <div class="diagram-card"><p>Service类型标识</p></div> <div class="diagram-card"><p>命名空间</p></div> <div class="diagram-card"><p>Service名称</p></div> </div>
   </div>
 </div>
 <p>示例：</p>
@@ -272,7 +288,16 @@ default命名空间的kubernetes服务</li>
 ctts命名空间的user-service</li>
 </ul>
 <h4 id="123-解析流程">1.2.3 解析流程</h4>
-<div class="visual"> <div class="visual-title">图示 5：Pod内 curl http://user-service:8080</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">Pod内 curl http://user-service:8080</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">/etc/resolv.conf nameserver 10.96.0.10 (kube-dns ServiceIP)</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">CoreDNS Pod 查询: user-service.ctts.svc.cluster.local</span></li> <li><span class="tree-label">返回 Service ClusterIP (例如 10.96.123.45)</span></li> <li><span class="tree-label">Pod 用 ClusterIP 发起TCP连接</span></li> <li><span class="tree-label">kube-proxy (iptables/ipvs) 转发到具体Pod</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 5：Pod内 curl http://user-service:8080</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>应用发起请求</h4><p>Pod 内执行 curl http://user-service:8080。</p></div>
+<div class="diagram-card"><h4>CoreDNS 解析</h4><p>user-service 被解析为 Service 的 ClusterIP。</p></div>
+<div class="diagram-card good"><h4>Service 转发</h4><p>kube-proxy / dataplane 根据规则选择一个后端 Pod。</p></div>
+<div class="diagram-card"><h4>目标 Pod 响应</h4><p>请求到达 user-service 对应的 Pod，结果返回调用方。</p></div>
+</div>
+</div>
 </div>
 <h4 id="124-dnspolicy四种取值">1.2.4 dnsPolicy四种取值</h4>
 <table>
@@ -509,7 +534,14 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href=
 <span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co"># wget: download timed out   ← 隔离生效</span></span></code></pre></div>
 <h4 id="136-图示networkpolicy流量示意">1.3.6
 图示：NetworkPolicy流量示意</h4>
-<div class="visual"> <div class="visual-title">图示 6：namespace: ctts-order</div> <div class="edu-diagram"> <div class="diagram-code-tree"> <ul> <li><span class="tree-label">namespace: ctts-order</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">app=order TCP:8080</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod 允许</span></li> <li><span class="tree-label">-</span></li> <li><span class="tree-label">namespace: ctts</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">NetworkPolicy: user-service</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">podSelector: app=user</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">ingress: 仅 ctts-order/order</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">egress: postgres:5432, DNS:53</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">app=user 5432 ► app=postgres</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod Pod</span></li> <li><span class="tree-label">-</span></li> <li><span class="tree-label">namespace: default</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">busybox TCP:8080 ✗ 拒绝</span></li> <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-label">Pod</span></li> <li><span class="tree-label">-</span></li> </ul> </div> </div>
+<div class="visual">
+<div class="visual-title">图示 6：namespace: ctts-order</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel good"><span class="diagram-badge good">允许</span><h4>同命名空间服务互访</h4><p>ctts-order 内 Pod 可以访问本命名空间中被允许的 Service。</p></div>
+<div class="diagram-panel warn"><span class="diagram-badge warn">隔离</span><h4>NetworkPolicy 限制跨域访问</h4><p>未被白名单允许的 namespace、Pod 或端口会被拒绝。</p></div>
+</div>
+</div>
 </div>
 <h4 id="137-易错点">1.3.7 易错点</h4>
 <ul>
@@ -532,8 +564,17 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href=
 是Pod内网络排查的四个核心命令，配合 <code>kubectl exec</code>
 形成完整调试链路。</p>
 <h4 id="142-调试决策树">1.4.2 调试决策树</h4>
-<div class="visual"> <div class="visual-title">图示 7：服务访问失败</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>服务访问失败</p></div> <div class="diagram-step"><p>nslookup ← DNS解析正常？</p></div> <div class="diagram-step"><p>失败 → 检查CoreDNS / dnsPolicy / NetworkPolicy egress</p></div> <div class="diagram-step"><p>成功 → 拿到ClusterIP</p></div> <div class="diagram-step"><p>ping ← 网络层连通？</p></div> <div class="diagram-step"><p>失败 → 检查CNI / NetworkPolicy ingress</p></div> <div class="diagram-step"><p>成功</p></div> <div class="diagram-step"><p>curl -v http://: ← 应用层正常？</p></div> <div class="diagram-step"><p>失败 → 检查Service端口、Pod健康、应用日志</p></div> <div class="diagram-step"><p>成功 → 排查完成</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 7：服务访问失败</div>
+<div class="edu-diagram">
+<div class="docker-chain five">
+<div class="diagram-card"><h4>DNS</h4><p>先查服务名能否解析。</p></div>
+<div class="diagram-card"><h4>Service</h4><p>确认 ClusterIP 和 port 是否正确。</p></div>
+<div class="diagram-card good"><h4>Endpoints</h4><p>确认是否有后端 Pod IP。</p></div>
+<div class="diagram-card warn"><h4>NetworkPolicy</h4><p>检查流量是否被策略拦截。</p></div>
+<div class="diagram-card"><h4>Pod / CNI</h4><p>最后看 Pod 状态和网络插件。</p></div>
+</div>
+</div>
 </div>
 <h4 id="143-命令示例">1.4.3 命令示例</h4>
 <div class="sourceCode" id="cb15"><pre
@@ -668,8 +709,15 @@ Mesh是处理服务间通信的基础设施层，典型实现为Istio、Linkerd�
 <li>可观测性：调用链追踪、指标采集</li>
 </ul>
 <p><strong>架构</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 8：控制平面 (Istiod)</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">控制平面 (Istiod)</div> <div class="stack-layer">配置下发 / 证书签发 / 服务发现</div> <div class="stack-layer">xDS / mTLS证书</div> <div class="stack-layer">▼ ▼</div> <div class="stack-layer app">Pod A Pod B</div> <div class="stack-layer">App App</div> <div class="stack-layer">↕ ↕</div> <div class="stack-layer">Envoy Side ◄ mTLS ► Envoy Side</div> <div class="stack-layer">car (代理) car (代理)</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 8：控制平面 (Istiod)</div>
+<div class="edu-diagram">
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>Istiod</h4><p>Service Mesh 控制平面，下发流量治理和安全配置。</p></div>
+<div class="diagram-card good"><h4>Sidecar Proxy</h4><p>与业务容器同 Pod，接管进出流量。</p></div>
+<div class="diagram-card"><h4>业务服务</h4><p>应用少改代码即可获得熔断、灰度、可观测能力。</p></div>
+</div>
+</div>
 </div>
 <p><strong>与K8s原生网络的关系</strong>：</p>
 <ul>
@@ -941,8 +989,21 @@ href="https://linkerd.io">https://linkerd.io</a></li>
 </ul>
 <hr />
 <h2 id="五思维导图">五、思维导图</h2>
-<div class="visual"> <div class="visual-title">图示 9：K8s网络进阶</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">K8s网络进阶</div> <div class="stack-layer">1. 网络模型 (K20-1)</div> <div class="stack-layer">三原则</div> <div class="stack-layer app">Pod独立IP</div> <div class="stack-layer app">Pod↔Pod 无NAT</div> <div class="stack-layer app">Node↔Pod 无NAT</div> <div class="stack-layer">CNI插件</div> <div class="stack-layer">Flannel (Overlay/VXLAN, 无策略)</div> <div class="stack-layer">Calico (BGP/策略支持)</div> <div class="stack-layer">Cilium (eBPF/高性能)</div> <div class="stack-layer">2. CoreDNS (K20-2)</div> <div class="stack-layer app">域名格式: service.namespace.svc.cluster.local</div> <div class="stack-layer app">解析流程: Pod→resolv.conf→CoreDNS→ClusterIP</div> <div class="stack-layer">dnsPolicy</div> <div class="stack-layer">ClusterFirst (默认)</div> <div class="stack-layer base">ClusterFirstWithHostNet</div> <div class="stack-layer">Default</div> <div class="stack-layer">None</div> <div class="stack-layer">3. NetworkPolicy (K20-3)</div> <div class="stack-layer">默认允许 → 显式禁止 (零信任)</div> <div class="stack-layer">方向: ingress / egress</div> <div class="stack-layer">选择器</div> <div class="stack-layer app">podSelector (同命名空间)</div> <div class="stack-layer">namespaceSelector (跨命名空间)</div> <div class="stack-layer base">语义: 同from内AND / 跨from OR</div> <div class="stack-layer">易错: 开egress必放行DNS</div> <div class="stack-layer">4. 网络调试 (K20-4)</div> <div class="stack-layer">nslookup (DNS层)</div> <div class="stack-layer">dig (DNS详情)</div> <div class="stack-layer">ping (网络层)</div> <div class="stack-layer app">curl (应用层)</div> <div class="stack-layer">5. 生产网络 (K20-5)</div> <div class="stack-layer">CNI选型: Flannel→Calico→Cilium</div> <div class="stack-layer">默认拒绝策略</div> <div class="stack-layer app">Service Mesh (Istio)</div> <div class="stack-layer">Sidecar (Envoy)</div> <div class="stack-layer">mTLS</div> <div class="stack-layer">L7细粒度路由</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 9：K8s网络进阶</div>
+<div class="edu-diagram">
+<div class="mindmap-grid">
+<div class="mind-root">K8s<br>网络进阶</div>
+<div class="mind-branch-grid">
+<div class="diagram-card"><h4>网络模型</h4><p>Pod 扁平互通、Node 可访问 Pod、Service 提供稳定入口。</p></div>
+<div class="diagram-card"><h4>DNS 解析</h4><p>CoreDNS 解析 service、namespace、svc.cluster.local 等名称。</p></div>
+<div class="diagram-card"><h4>Service 流量</h4><p>ClusterIP 到 Endpoints，再到后端 Pod。</p></div>
+<div class="diagram-card"><h4>NetworkPolicy</h4><p>用白名单规则控制命名空间、Pod、端口之间的访问。</p></div>
+<div class="diagram-card"><h4>排查路径</h4><p>DNS、Service、Endpoints、Pod、NetworkPolicy、CNI 逐层定位。</p></div>
+<div class="diagram-card"><h4>Service Mesh</h4><p>Sidecar 接管服务间流量，提供可观测、安全和治理能力。</p></div>
+</div>
+</div>
+</div>
 </div>
 <hr />
 <h2 id="六复习思考题">六、复习思考题</h2>

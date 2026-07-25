@@ -963,8 +963,17 @@ hello-world，验证 Docker 安装是否成功，并理解 docker run 背后的 
 <h4 id="原理-4">原理</h4>
 <p><code>docker run hello-world</code> 的执行流程（对应第 1 次课讲的 C/S
 架构）：</p>
-<div class="visual"> <div class="visual-title">图示 3：用户敲 docker run hello-world</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>用户敲 docker run hello-world</p></div> <div class="diagram-step"><p>docker CLI 通过 REST API 把命令发给 dockerd</p></div> <div class="diagram-step"><p>dockerd 检查本地是否有 hello-world:latest 镜像</p></div> <div class="diagram-step"><p>本地没有 → dockerd 从配置的镜像源（Docker Hub 或加速器）拉取 hello-world:latest</p></div> <div class="diagram-step"><p>拉取成功 → dockerd 基于 hello-world 镜像创建容器</p></div> <div class="diagram-step"><p>容器执行镜像内的程序（hello-world 程序打印一段说明文字）</p></div> <div class="diagram-step"><p>程序执行完毕，容器自动退出</p></div> <div class="diagram-step"><p>输出返回给 docker CLI，显示在终端</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 3：用户敲 docker run hello-world</div>
+<div class="edu-diagram">
+<div class="docker-chain five">
+<div class="diagram-card"><h4>输入命令</h4><p>用户执行 docker run hello-world。</p></div>
+<div class="diagram-card"><h4>查找本地镜像</h4><p>Docker 先检查本机是否已有 hello-world 镜像。</p></div>
+<div class="diagram-card good"><h4>拉取镜像</h4><p>本地没有时，从镜像仓库下载 hello-world。</p></div>
+<div class="diagram-card"><h4>创建并启动容器</h4><p>Docker 用镜像创建容器，执行默认命令。</p></div>
+<div class="diagram-card"><h4>输出结果后退出</h4><p>容器打印 hello 信息，进程结束，容器进入 Exited。</p></div>
+</div>
+</div>
 </div>
 <p><strong>pull 原理关键点</strong>：</p>
 <ul>

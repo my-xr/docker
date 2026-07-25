@@ -189,7 +189,7 @@ localhost 通信</td>
 </tbody>
 </table>
 <p><strong>Pod 内容器共享什么？</strong></p>
-<div class="visual"> <div class="visual-title">图示 1：共享网络命名空间</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>Pod</p></div> <div class="diagram-note-card"><p>共享网络命名空间</p></div> <div class="diagram-note-card"><p>同一个 IP（Pod IP）</p></div> <div class="diagram-note-card"><p>同一个端口空间</p></div> <div class="diagram-note-card"><p>容器间 localhost 通信</p></div> <div class="diagram-note-card"><p>共享存储卷（Volume）</p></div> <div class="diagram-note-card"><p>同一个 Pod 内的容器</p></div> <div class="diagram-note-card"><p>可挂载相同的 Volume</p></div> <div class="diagram-note-card"><p>通过文件系统共享数据</p></div> <div class="diagram-note-card"><p>容器 A 容器 B</p></div> <div class="diagram-note-card"><p>(主容器) (sidecar)</p></div> <div class="diagram-note-card"><p>backend log-agent</p></div> </div>
+<div class="visual"> <div class="visual-title">图示 1：共享网络命名空间</div> <div class="edu-diagram"> <div class="diagram-grid three"> <div class="diagram-card"><p>Pod</p></div> <div class="diagram-card"><p>共享网络命名空间</p></div> <div class="diagram-card"><p>同一个 IP（Pod IP）</p></div> <div class="diagram-card"><p>同一个端口空间</p></div> <div class="diagram-card"><p>容器间 localhost 通信</p></div> <div class="diagram-card"><p>共享存储卷（Volume）</p></div> <div class="diagram-card"><p>同一个 Pod 内的容器</p></div> <div class="diagram-card"><p>可挂载相同的 Volume</p></div> <div class="diagram-card"><p>通过文件系统共享数据</p></div> <div class="diagram-card"><p>容器 A 容器 B</p></div> <div class="diagram-card"><p>(主容器) (sidecar)</p></div> <div class="diagram-card"><p>backend log-agent</p></div> </div>
   </div>
 </div>
 <p><strong>单容器 Pod vs 多容器 Pod</strong>：</p>
@@ -289,8 +289,20 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> log-volume</span></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">emptyDir</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span></code></pre></div>
 <h4 id="图示">图示</h4>
-<div class="visual"> <div class="visual-title">图示 2：Pod 是 K8s 最小调度单元：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer app">Pod 是 K8s 最小调度单元：</div> <div class="stack-layer">K8s 集群</div> <div class="stack-layer app">用户：kubectl apply -f pod.yaml</div> <div class="stack-layer">▼</div> <div class="stack-layer app">API Server K8s 只认识 Pod</div> <div class="stack-layer">不直接操作容器</div> <div class="stack-layer">▼ 调度到 Node1</div> <div class="stack-layer">Node1</div> <div class="stack-layer app">Pod（ctts-backend）</div> <div class="stack-layer">IP: 10.244.1.5</div> <div class="stack-layer">容器：backend</div> <div class="stack-layer">image: ctts-...</div> <div class="stack-layer">port: 8080</div> <div class="stack-layer runtime">关键：K8s 调度 Pod → Pod 落到某节点 → 节点上的运行时启动容器</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 2：Pod 是 K8s 最小调度单元：</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>提交 Pod YAML</h4><p>用户执行 kubectl apply -f pod.yaml，把“我要一个 Pod”的期望状态交给 API Server。</p></div>
+<div class="diagram-card good"><h4>K8s 认识 Pod</h4><p>API Server 保存的是 Pod 对象；scheduler 也是为 Pod 选择运行节点。</p></div>
+<div class="diagram-card"><h4>调度到 Node</h4><p>scheduler 选择 Node1，kubelet 接收任务，在本节点准备运行环境。</p></div>
+<div class="diagram-card warn"><h4>运行容器</h4><p>kubelet 调用 container-runtime 拉镜像并启动 Pod 内的 backend 容器。</p></div>
+</div>
+<div class="diagram-grid two">
+<div class="diagram-panel"><span class="diagram-badge">Pod 边界</span><h4>ctts-backend Pod</h4><p>Pod 有自己的 IP，例如 10.244.1.5；Pod 内容器共享网络命名空间和可挂载的卷。</p><ul class="docker-mini-list"><li>container: backend</li><li>image: ctts-backend:v1</li><li>containerPort: 8080</li></ul></div>
+<div class="diagram-panel good"><span class="diagram-badge good">核心结论</span><h4>K8s 调度 Pod，运行时启动容器</h4><p>容器是 Pod 的组成部分。K8s 的调度、生命周期、网络身份都以 Pod 为单位。</p></div>
+</div>
+</div>
 </div>
 <h4 id="易错点">易错点</h4>
 <ol type="1">
@@ -1678,8 +1690,17 @@ apply。</li>
 Minikube 集群上</strong>，完成 CTTS 项目在 K8s 上的第一次部署。</p>
 <h4 id="原理-5">原理</h4>
 <p><strong>CTTS 后端 Pod 部署的完整流程</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 7：准备工作（第 14 次课已完成）</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>准备工作（第 14 次课已完成）</p></div> <div class="diagram-step"><p>Minikube 集群运行中</p></div> <div class="diagram-step"><p>ctts namespace 已创建</p></div> <div class="diagram-step"><p>ctts-backend:v1 镜像已在 Minikube Docker daemon</p></div> <div class="diagram-step"><p>编写 Pod YAML</p></div> <div class="diagram-step"><p>metadata: name=ctts-backend, namespace=ctts, labels</p></div> <div class="diagram-step"><p>spec.containers: image=ctts-backend:v1, ports=8080, env, resources</p></div> <div class="diagram-step"><p>imagePullPolicy: Never（本地镜像，不去仓库拉）</p></div> <div class="diagram-step"><p>部署 Pod</p></div> <div class="diagram-step"><p>kubectl apply -f ctts-backend-pod.yaml -n ctts</p></div> <div class="diagram-step"><p>验证 Pod</p></div> <div class="diagram-step"><p>kubectl get pods -n ctts（状态 Running）</p></div> <div class="diagram-step"><p>kubectl describe pod（看详情）</p></div> <div class="diagram-step"><p>kubectl logs（看应用启动日志）</p></div> <div class="diagram-step"><p>测试服务</p></div> <div class="diagram-step"><p>kubectl exec 进入容器 curl localhost:8080</p></div> <div class="diagram-step"><p>或从集群内访问 Pod IP</p></div> <div class="diagram-step"><p>故障排查（模拟问题）</p></div> <div class="diagram-step"><p>镜像名错误 → ImagePullBackOff</p></div> <div class="diagram-step"><p>应用崩溃 → CrashLoopBackOff</p></div> <div class="diagram-step"><p>资源不足 → Pending</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 7：准备工作（第 14 次课已完成）</div>
+<div class="edu-diagram">
+<div class="docker-chain five">
+<div class="diagram-card"><h4>集群可用</h4><p>Minikube 已启动，kubectl 能访问 API Server，节点状态 Ready。</p></div>
+<div class="diagram-card"><h4>命名空间</h4><p>ctts namespace 已创建，用于隔离项目资源。</p></div>
+<div class="diagram-card"><h4>镜像准备</h4><p>后端镜像 ctts-backend:v1 已构建并可被 Minikube 使用。</p></div>
+<div class="diagram-card"><h4>配置准备</h4><p>数据库连接、端口、环境变量等 Pod 运行参数已明确。</p></div>
+<div class="diagram-card good"><h4>开始写 YAML</h4><p>本课用 Pod YAML 把后端容器真正交给 K8s 运行。</p></div>
+</div>
+</div>
 </div>
 <h4 id="问题--场景-5">问题 / 场景</h4>
 <p><strong>问：CTTS 后端 Pod 的 imagePullPolicy
@@ -1997,8 +2018,21 @@ port-forward 临时外部访问。本节课完成 CTTS 在 K8s
 id="三综合示例从-yaml-到运行--ctts-后端-pod-部署完整逻辑">三、综合示例：从
 YAML 到运行 — CTTS 后端 Pod 部署完整逻辑</h2>
 <p>把前面所有知识点串起来，看 CTTS 后端 Pod 部署的完整逻辑：</p>
-<div class="visual"> <div class="visual-title">图示 9：现状回顾（前 14 次课）</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>现状回顾（前 14 次课）</p></div> <div class="diagram-step"><p>前 12 次课：CTTS 三服务已用 Docker + Compose 部署（单机）</p></div> <div class="diagram-step"><p>第 13 次课：建立 K8s 架构认知（Pod/Deployment/Service 概念）</p></div> <div class="diagram-step"><p>第 14 次课：搭好 Minikube 集群 + 准备 ctts-backend:v1 镜像</p></div> <div class="diagram-step"><p>现在要把 CTTS 后端部署到 K8s 上</p></div> <div class="diagram-step"><p>理解 Pod（K15-1）</p></div> <div class="diagram-step"><p>K8s 不直接管容器，管 Pod（最小调度单元）</p></div> <div class="diagram-step"><p>Pod 内容器共享网络和存储</p></div> <div class="diagram-step"><p>CTTS 后端单独一个 Pod（单容器 Pod）</p></div> <div class="diagram-step"><p>编写 YAML（K15-2、K15-3）</p></div> <div class="diagram-step"><p>四要素：apiVersion=v1, kind=Pod, metadata(name/namespace/labels), spec</p></div> <div class="diagram-step"><p>容器定义：image=ctts-backend:v1, ports=8080, env(数据库配置), resources</p></div> <div class="diagram-step"><p>imagePullPolicy=Never（本地镜像）</p></div> <div class="diagram-step"><p>restartPolicy=Always（崩溃自动重启）</p></div> <div class="diagram-step"><p>部署 Pod（K15-5、K15-6）</p></div> <div class="diagram-step"><p>kubectl apply -f ctts-backend-pod.yaml -n ctts</p></div> <div class="diagram-step"><p>K8s 流程：API Server → Scheduler → Kubelet → 拉镜像 → 创建容器 → Running</p></div> <div class="diagram-step"><p>验证运行（K15-4、K15-5）</p></div> <div class="diagram-step"><p>kubectl get pods → STATUS=Running</p></div> <div class="diagram-step"><p>kubectl describe pod → 看 Events、资源、环境变量</p></div> <div class="diagram-step"><p>kubectl logs → 看 SpringBoot 启动日志</p></div> <div class="diagram-step"><p>kubectl exec curl localhost:8080/actuator/health → {&quot;status&quot;:&quot;UP&quot;}</p></div> <div class="diagram-step"><p>故障排查（K15-4）</p></div> <div class="diagram-step"><p>Pending → describe 看 Events（资源不足/调度失败）</p></div> <div class="diagram-step"><p>ImagePullBackOff → 检查镜像名和 imagePullPolicy</p></div> <div class="diagram-step"><p>CrashLoopBackOff → logs 看应用日志（配置错/依赖不可达）</p></div> <div class="diagram-step"><p>后续衔接（第 16~23 次课）</p></div> <div class="diagram-step"><p>第 16 次：用 Deployment 管理 Pod 副本（3 副本 + 滚动更新）</p></div> <div class="diagram-step"><p>第 17 次：实践 Deployment 部署 CTTS 三服务</p></div> <div class="diagram-step"><p>第 18 次：Service 暴露 Pod 供集群内外访问</p></div> <div class="diagram-step"><p>第 19 次：Ingress 域名访问</p></div> <div class="diagram-step"><p>第 21 次：env 里的密码改用 Secret</p></div> <div class="diagram-step"><p>第 23 次：综合实践，CTTS 完整 K8s 部署</p></div> <div class="diagram-step"><p>收益</p></div> <div class="diagram-step"><p>掌握 Pod YAML 编写，能部署任何应用到 K8s</p></div> <div class="diagram-step"><p>掌握 kubectl 操作 Pod 的完整命令链</p></div> <div class="diagram-step"><p>理解声明式部署（YAML）与命令式（run）的区别</p></div> <div class="diagram-step"><p>CTTS 后端在 K8s 上跑起来，为后续工作负载管理打基础</p></div> <div class="diagram-step"><p>→ 从&quot;会搭集群&quot;到&quot;能部署应用&quot;的关键一步</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 9：现状回顾（前 14 次课）</div>
+<div class="edu-diagram">
+<div class="docker-route">
+<div class="diagram-panel"><h4><span>1</span> Docker 到集群</h4><p>CTTS 已完成容器化和 Compose 编排，并搭好 Minikube 学习集群。</p></div>
+<div class="diagram-panel good"><h4><span>2</span> 本课聚焦 Pod</h4><p>理解 Pod 是最小调度单元，掌握 YAML 四要素和容器字段。</p></div>
+<div class="diagram-panel"><h4><span>3</span> 部署后端</h4><p>用 Pod YAML 运行 ctts-backend，并通过日志、describe、exec 验证生命周期。</p></div>
+</div>
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>创建</h4><p>kubectl apply 提交 PodSpec。</p></div>
+<div class="diagram-card"><h4>调度</h4><p>scheduler 选择节点。</p></div>
+<div class="diagram-card"><h4>运行</h4><p>kubelet 拉镜像并启动容器。</p></div>
+<div class="diagram-card good"><h4>排查</h4><p>get、describe、logs、exec 形成基础定位闭环。</p></div>
+</div>
+</div>
 </div>
 <blockquote>
 <p>这个逻辑链体现了从"集群搭建"到"应用部署"的转折：第 14

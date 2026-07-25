@@ -155,8 +155,22 @@ CNCF，现在是云原生生态的核心项目。</p>
 <h4 id="原理">原理</h4>
 <p><strong>为什么需要容器编排？</strong></p>
 <p>Docker 把应用装进了"集装箱"，但生产环境远不止一个集装箱：</p>
-<div class="visual"> <div class="visual-title">图示 1：开发/测试环境（前 12 次课）：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>开发/测试环境（前 12 次课）：</p></div> <div class="diagram-note-card"><p>一台机器 + Docker Compose 编排 3~5 个容器 → 够用</p></div> <div class="diagram-note-card"><p>生产环境：</p></div> <div class="diagram-note-card"><p>几十台机器 + 成百上千个容器</p></div> <div class="diagram-note-card"><b>问题1</b><p>哪个容器跑在哪台机器？ → 调度</p></div> <div class="diagram-note-card"><b>问题2</b><p>某台机器挂了，容器怎么办？ → 自愈</p></div> <div class="diagram-note-card"><b>问题3</b><p>流量突增，容器怎么扩容？ → 弹性</p></div> <div class="diagram-note-card"><b>问题4</b><p>版本升级，怎么不停机更新？ → 滚动更新</p></div> <div class="diagram-note-card"><b>问题5</b><p>容器之间怎么互相发现？ → 服务发现</p></div> <div class="diagram-note-card"><b>问题6</b><p>怎么统一管理这么大规模？ → 声明式 API</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 1：开发/测试环境（前 12 次课）：</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel"><span class="diagram-badge">开发/测试</span><h4>一台机器 + Docker Compose</h4><p>前 12 次课中，CTTS 用 mysql、backend、frontend 三到五个容器就能完成本地运行和联调。</p><ul class="docker-mini-list"><li>服务数量少</li><li>部署目标单一</li><li>手动启动和排查仍可接受</li></ul></div>
+<div class="diagram-panel warn"><span class="diagram-badge warn">生产规模</span><h4>多台机器 + 成百上千个容器</h4><p>用户量增长后，问题从“能不能启动”变成“能不能自动调度、恢复和扩容”。</p><ul class="docker-mini-list"><li>容器该跑在哪台机器</li><li>机器宕机后如何自愈</li><li>流量突增时如何弹性扩容</li></ul></div>
+</div>
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>调度</h4><p>根据资源和规则选择合适节点。</p></div>
+<div class="diagram-card"><h4>自愈</h4><p>机器或容器异常时自动重建。</p></div>
+<div class="diagram-card"><h4>弹性</h4><p>根据负载扩缩副本数量。</p></div>
+<div class="diagram-card"><h4>滚动更新</h4><p>升级过程中尽量不中断访问。</p></div>
+<div class="diagram-card"><h4>服务发现</h4><p>服务之间用稳定入口互相访问。</p></div>
+<div class="diagram-card"><h4>声明式 API</h4><p>用 YAML 描述期望状态，让平台持续维护。</p></div>
+</div>
+</div>
 </div>
 <p>这些问题 Docker Compose 解决不了，需要"容器编排系统"——K8s
 就是事实标准。</p>
@@ -462,8 +476,15 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="
 个副本"，集群自动帮你维持。这就是声明式的力量。</p>
 </blockquote>
 <h4 id="图示-1">图示</h4>
-<div class="visual"> <div class="visual-title">图示 3：Compose vs K8s 规模对比：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">Compose vs K8s 规模对比：</div> <div class="stack-layer runtime">Docker Compose（单机）： Kubernetes（集群）：</div> <div class="stack-layer">一台机器 Master Node1 Node2</div> <div class="stack-layer app">控制平面 Pod Pod Pod Pod</div> <div class="stack-layer app">DB BE F Pod Pod Pod</div> <div class="stack-layer">调度</div> <div class="stack-layer">单点故障，不能扩容 ▼ 自动分配</div> <div class="stack-layer">多副本，自愈，弹性</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 3：Compose vs K8s 规模对比：</div>
+<div class="edu-diagram">
+<div class="docker-compare">
+<div class="diagram-panel warn"><span class="diagram-badge warn">Docker Compose</span><h4>单机编排</h4><p>一台机器上启动 DB、Backend、Frontend，适合开发、教学和小规模验证。</p><ul class="docker-mini-list"><li>机器故障就是整体故障</li><li>扩容更多依赖人工复制</li><li>缺少跨节点调度和自愈</li></ul></div>
+<div class="diagram-panel good"><span class="diagram-badge good">Kubernetes</span><h4>集群编排</h4><p>控制平面管理多个 Node，Pod 可被调度到不同机器上运行。</p><ul class="docker-mini-list"><li>多副本分散到多节点</li><li>故障后自动补 Pod</li><li>统一支持弹性、滚动更新和服务发现</li></ul></div>
+</div>
+<div class="diagram-callout">Compose 管的是“这台机器上的几个容器”，K8s 管的是“整个集群中应该保持什么状态”。</div>
+</div>
 </div>
 <h4 id="易错点-1">易错点</h4>
 <ol type="1">
@@ -497,8 +518,18 @@ Node。</li>
 </ul>
 <h4 id="原理-2">原理</h4>
 <p><strong>K8s 集群整体架构图</strong>：</p>
-<div class="visual"> <div class="visual-title">图示 4：Kubernetes 集群</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer app">Kubernetes 集群</div> <div class="stack-layer">Master（控制平面 Control Plane）</div> <div class="stack-layer">API scheduler controller</div> <div class="stack-layer">Server 调度器 -manager</div> <div class="stack-layer">统一入口 控制器</div> <div class="stack-layer">▼ ▼</div> <div class="stack-layer">etcd ← 集群状态存储（键值数据库）</div> <div class="stack-layer">▲</div> <div class="stack-layer">监控/上报</div> <div class="stack-layer">调度/下发</div> <div class="stack-layer">▼</div> <div class="stack-layer">Node1（工作节点 Worker Node）</div> <div class="stack-layer">kubelet kube-proxy container-</div> <div class="stack-layer">节点代理 网络代理 runtime</div> <div class="stack-layer runtime">(containerd)</div> <div class="stack-layer">▼</div> <div class="stack-layer app">Pod Pod Pod</div> <div class="stack-layer">(容器组)</div> <div class="stack-layer">Node2（工作节点 Worker Node）</div> <div class="stack-layer app">kubelet + kube-proxy + container-runtime + Pods</div> <div class="stack-layer">用户通过 kubectl 命令 → API Server → 集群</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 4：Kubernetes 集群</div>
+<div class="edu-diagram">
+<div class="diagram-panel">
+<h4>用户入口</h4>
+<div class="diagram-flow"><div class="diagram-card"><h4>kubectl / YAML</h4><p>提交期望状态。</p></div><div class="flow-arrow">→</div><div class="diagram-card good"><h4>API Server</h4><p>所有操作的统一入口。</p></div></div>
+</div>
+<div class="diagram-grid two">
+<div class="diagram-panel"><span class="diagram-badge">Control Plane</span><h4>Master：决策大脑</h4><div class="diagram-grid two"><div class="diagram-card"><h4>API Server</h4><p>认证、授权、准入、校验。</p></div><div class="diagram-card"><h4>etcd</h4><p>保存集群状态，是事实来源。</p></div><div class="diagram-card"><h4>scheduler</h4><p>决定 Pod 跑到哪个 Node。</p></div><div class="diagram-card"><h4>controller-manager</h4><p>持续调和期望状态和实际状态。</p></div></div></div>
+<div class="diagram-panel"><span class="diagram-badge good">Worker Nodes</span><h4>Node：业务执行</h4><div class="diagram-grid two"><div class="diagram-card"><h4>kubelet</h4><p>管理本节点 Pod 生命周期。</p></div><div class="diagram-card"><h4>kube-proxy</h4><p>维护 Service 转发规则。</p></div><div class="diagram-card"><h4>container-runtime</h4><p>通过 containerd/runC 运行容器。</p></div><div class="diagram-card"><h4>Pods</h4><p>真正承载业务容器。</p></div></div></div>
+</div>
+</div>
 </div>
 <p><strong>核心数据流</strong>（以
 <code>kubectl create deployment</code> 为例）：</p>
@@ -662,8 +693,20 @@ Pod。Master 挂了业务不中断（但无法变更），生产环境用多 Mas
 </table>
 <h4 id="原理-3">原理</h4>
 <p><strong>1. API Server（kube-apiserver）— 集群唯一入口</strong></p>
-<div class="visual"> <div class="visual-title">图示 6：所有操作都经过 API Server：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>所有操作都经过 API Server：</p></div> <div class="diagram-note-card"><p>用户(kubectl) → API Server → etcd</p></div> <div class="diagram-note-card"><p>scheduler → API Server → etcd</p></div> <div class="diagram-note-card"><p>controller → API Server → etcd</p></div> <div class="diagram-note-card"><p>kubelet → API Server → etcd</p></div> <div class="diagram-note-card"><p>API Server 的职责：</p></div> <div class="diagram-note-card"><p>提供 RESTful API（HTTPS）</p></div> <div class="diagram-note-card"><p>认证（你是谁）+ 授权（你能干什么）+ 准入（操作是否合规）</p></div> <div class="diagram-note-card"><p>唯一能直接读写 etcd 的组件</p></div> <div class="diagram-note-card"><p>其他组件都通过它间接读写 etcd</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 6：所有操作都经过 API Server：</div>
+<div class="edu-diagram">
+<div class="diagram-panel">
+<h4>API Server 是集群唯一门面</h4>
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>kubectl</h4><p>用户提交 apply、get、delete 等请求。</p></div>
+<div class="diagram-card"><h4>scheduler</h4><p>监听未调度 Pod，写回绑定结果。</p></div>
+<div class="diagram-card"><h4>controller</h4><p>观察资源变化，发起调和操作。</p></div>
+<div class="diagram-card"><h4>kubelet</h4><p>接收本节点任务，上报 Pod 与 Node 状态。</p></div>
+</div>
+<div class="diagram-flow"><div class="diagram-card good"><h4>API Server</h4><p>RESTful API、认证、授权、准入、校验。</p></div><div class="flow-arrow">→</div><div class="diagram-card"><h4>etcd</h4><p>只有 API Server 直接读写 etcd，其他组件都间接访问。</p></div></div>
+</div>
+</div>
 </div>
 <p><strong>2. etcd — 集群状态存储</strong></p>
 <pre><code>etcd 是什么：
@@ -680,13 +723,37 @@ Pod。Master 挂了业务不中断（但无法变更），生产环境用多 Mas
   - 生产环境部署 3 或 5 节点集群
   - K8s 的&quot;真相之源&quot;（source of truth）</code></pre>
 <p><strong>3. scheduler（kube-scheduler）— 调度器</strong></p>
-<div class="visual"> <div class="visual-title">图示 7：scheduler 的职责：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>scheduler 的职责：</p></div> <div class="diagram-note-card"><p>监听 API Server，发现有&quot;未调度&quot;的 Pod（Pod 没指定 Node）</p></div> <div class="diagram-note-card"><p>根据调度算法选择最合适的 Node</p></div> <div class="diagram-note-card"><p>把&quot;Pod → Node&quot;的绑定信息写回 API Server → etcd</p></div> <div class="diagram-note-card"><p>调度考虑因素：</p></div> <div class="diagram-note-card"><p>资源请求（CPU/内存是否够）</p></div> <div class="diagram-note-card"><p>亲和性/反亲和性（要不要和某 Pod 同节点）</p></div> <div class="diagram-note-card"><p>污点/容忍（Node 是否允许调度）</p></div> <div class="diagram-note-card"><p>节点选择器（指定跑在带某标签的节点）</p></div> <div class="diagram-note-card"><b>注意</b><p>scheduler 只&quot;决定&quot;跑哪，不&quot;执行&quot;启动容器</p></div> <div class="diagram-note-card"><p>真正启动容器的是目标 Node 上的 kubelet</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 7：scheduler 的职责：</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>发现未调度 Pod</h4><p>监听 API Server，找到尚未指定 Node 的 Pod。</p></div>
+<div class="diagram-card"><h4>过滤可用节点</h4><p>检查 CPU、内存、节点标签、污点与容忍等硬性条件。</p></div>
+<div class="diagram-card"><h4>评分选择节点</h4><p>结合亲和性、资源余量和策略，为候选 Node 打分。</p></div>
+<div class="diagram-card good"><h4>写回绑定结果</h4><p>把 Pod → Node 的绑定写回 API Server，再由目标 kubelet 执行启动。</p></div>
+</div>
+<div class="diagram-callout">scheduler 只负责“决定跑哪”；真正拉镜像、启动容器的是目标 Node 上的 kubelet。</div>
+</div>
 </div>
 <p><strong>4. controller-manager（kube-controller-manager）—
 控制器管理器</strong></p>
-<div class="visual"> <div class="visual-title">图示 8：controller-manager 是什么：</div> <div class="edu-diagram"> <div class="diagram-note-grid"> <div class="diagram-note-card"><p>controller-manager 是什么：</p></div> <div class="diagram-note-card"><p>控制器的大集合，内置多种控制器</p></div> <div class="diagram-note-card"><p>每个控制器持续做&quot;调和循环&quot;（reconcile loop）：</p></div> <div class="diagram-note-card"><p>观察&quot;实际状态&quot; → 对比&quot;期望状态&quot; → 不一致就操作让它们一致</p></div> <div class="diagram-note-card"><p>内置控制器举例：</p></div> <div class="diagram-note-card"><b>Deployment Controller</b><p>管理 Deployment，创建/扩缩 ReplicaSet</p></div> <div class="diagram-note-card"><b>ReplicaSet Controller</b><p>维持 Pod 副本数（少了补，多了杀）</p></div> <div class="diagram-note-card"><b>Node Controller</b><p>监控 Node 健康，Node 挂了迁移 Pod</p></div> <div class="diagram-note-card"><b>Endpoint Controller</b><p>维护 Service 与 Pod 的映射</p></div> <div class="diagram-note-card"><p>ServiceAccount Controller：管理服务账号</p></div> <div class="diagram-note-card"><b>举例</b><p>Deployment 期望 3 副本</p></div> <div class="diagram-note-card"><p>ReplicaSet Controller 发现实际只有 2 个 → 创建 1 个新 Pod</p></div> <div class="diagram-note-card"><p>Node Controller 发现 Node2 挂了 → 上面的 Pod 标记失败</p></div> <div class="diagram-note-card"><p>ReplicaSet Controller 发现实物只有 1 个 → 再创建 2 个新 Pod</p></div> <div class="diagram-note-card"><p>→ 最终维持 3 副本</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 8：controller-manager 是什么：</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>观察实际状态</h4><p>例如当前只有 2 个 Pod、某个 Node 失联。</p></div>
+<div class="diagram-card"><h4>读取期望状态</h4><p>例如 Deployment 声明 replicas: 3。</p></div>
+<div class="diagram-card warn"><h4>发现偏差</h4><p>实际状态和期望状态不一致，就生成修复动作。</p></div>
+<div class="diagram-card good"><h4>持续调和</h4><p>创建、删除或更新资源，让集群回到期望状态。</p></div>
+</div>
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>Deployment Controller</h4><p>管理 Deployment 与 ReplicaSet。</p></div>
+<div class="diagram-card"><h4>ReplicaSet Controller</h4><p>维持 Pod 副本数。</p></div>
+<div class="diagram-card"><h4>Node Controller</h4><p>监控节点健康。</p></div>
+<div class="diagram-card"><h4>Endpoint Controller</h4><p>维护 Service 到 Pod 的映射。</p></div>
+</div>
+<div class="diagram-callout">controller-manager 的核心不是一次性执行命令，而是不断循环：观察、比较、修复、再观察。</div>
+</div>
 </div>
 <h4 id="问题--场景-3">问题 / 场景</h4>
 <p><strong>问：为什么所有组件都通过 API Server
@@ -755,8 +822,22 @@ reconcile loop，是 K8s
 副本"，K8s 持续维持这个状态。</p>
 </blockquote>
 <h4 id="图示-3">图示</h4>
-<div class="visual"> <div class="visual-title">图示 9：Master 控制平面组件协作：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">Master 控制平面组件协作：</div> <div class="stack-layer">kubectl apply -f deployment.yaml</div> <div class="stack-layer">▼</div> <div class="stack-layer">API Server ← 唯一入口</div> <div class="stack-layer">(认证/授权/</div> <div class="stack-layer">准入/校验)</div> <div class="stack-layer">▼ ▼ ▼</div> <div class="stack-layer">etcd scheduler controller-mgr</div> <div class="stack-layer">状态存储 调度 Deployment/RS/</div> <div class="stack-layer">Node/Endpoint</div> <div class="stack-layer">▲</div> <div class="stack-layer">都通过 API Server 读写 etcd</div> <div class="stack-layer">四大组件职责速记：</div> <div class="stack-layer">API Server = 前台接待（唯一入口）</div> <div class="stack-layer">etcd = 档案室（存所有状态）</div> <div class="stack-layer app">scheduler = 调度员（决定 Pod 跑哪）</div> <div class="stack-layer">controller = 巡查员（维持期望状态）</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 9：Master 控制平面组件协作：</div>
+<div class="edu-diagram">
+<div class="diagram-flow"><div class="diagram-card"><h4>kubectl apply</h4><p>提交 deployment.yaml。</p></div><div class="flow-arrow">→</div><div class="diagram-card good"><h4>API Server</h4><p>认证、授权、准入、校验。</p></div><div class="flow-arrow">→</div><div class="diagram-card"><h4>etcd</h4><p>保存期望状态。</p></div></div>
+<div class="diagram-grid three">
+<div class="diagram-card"><h4>controller-manager</h4><p>发现需要 3 个副本，创建 ReplicaSet 与 Pod 对象。</p></div>
+<div class="diagram-card"><h4>scheduler</h4><p>发现未绑定 Node 的 Pod，决定分配到 Node1 或 Node2。</p></div>
+<div class="diagram-card"><h4>API Server</h4><p>控制器、调度器都通过它读写状态，不直接操作 etcd。</p></div>
+</div>
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>API Server</h4><p>前台接待，唯一入口。</p></div>
+<div class="diagram-card"><h4>etcd</h4><p>档案室，存全部状态。</p></div>
+<div class="diagram-card"><h4>scheduler</h4><p>调度员，决定 Pod 跑哪。</p></div>
+<div class="diagram-card"><h4>controller</h4><p>巡查员，维持期望状态。</p></div>
+</div>
+</div>
 </div>
 <h4 id="易错点-3">易错点</h4>
 <ol type="1">
@@ -811,16 +892,40 @@ Server 通信，状态存在 etcd，scheduler 决策调度，controller
 </table>
 <h4 id="原理-4">原理</h4>
 <p><strong>1. kubelet — 节点代理</strong></p>
-<div class="visual"> <div class="visual-title">图示 10：kubelet 是什么：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">kubelet 是什么：</div> <div class="stack-layer">跑在每个 Node 上的代理进程</div> <div class="stack-layer">是 Master 在 Node 上的&quot;代表&quot;</div> <div class="stack-layer app">负责 Pod 的生命周期管理</div> <div class="stack-layer">kubelet 的职责：</div> <div class="stack-layer app">监听 API Server，知道自己节点上被分配了哪些 Pod</div> <div class="stack-layer">调用 container-runtime 拉镜像、启停容器</div> <div class="stack-layer app">执行 Pod 的健康检查（livenessProbe/readinessProbe）</div> <div class="stack-layer app">持续向 API Server 上报 Pod 状态与 Node 状态</div> <div class="stack-layer app">Pod 挂了 → 重启；Node 资源不足 → 上报</div> <div class="stack-layer">特点：</div> <div class="stack-layer">每个 Node 一个 kubelet</div> <div class="stack-layer runtime">kubelet 不通过 API Server，直接调用容器运行时（CRI）</div> <div class="stack-layer">是 K8s 与容器之间的&quot;桥梁&quot;</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 10：kubelet 是什么：</div>
+<div class="edu-diagram">
+<div class="diagram-panel">
+<h4>每个 Node 一个 kubelet：Master 在节点上的执行代表</h4>
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>监听任务</h4><p>从 API Server 获取分配到本节点的 Pod。</p></div>
+<div class="diagram-card"><h4>调用运行时</h4><p>通过 CRI 调用 containerd 拉镜像、启停容器。</p></div>
+<div class="diagram-card"><h4>健康检查</h4><p>执行 livenessProbe、readinessProbe 等探针。</p></div>
+<div class="diagram-card good"><h4>上报状态</h4><p>持续向 API Server 汇报 Pod 与 Node 状态。</p></div>
+</div>
+<div class="diagram-callout">kubelet 是 K8s 和容器运行时之间的桥：它接收集群决策，并在本机把 Pod 真正跑起来。</div>
+</div>
+</div>
 </div>
 <p><strong>2. kube-proxy — 网络代理</strong></p>
 <div class="visual"> <div class="visual-title">图示 11：kube-proxy 是什么：</div> <div class="edu-diagram"> <div class="diagram-panel"> <h4>每个 Node 上的 Service 网络代理</h4> <p>kube-proxy 监听 Service 与 Endpoints 的变化，并把“访问 Service VIP”这件事翻译成节点本地的转发规则。</p> <div class="diagram-grid three"> <div class="diagram-card"><h4>监听变化</h4><p>持续观察 Service 和 Endpoints。</p></div> <div class="diagram-card"><h4>写入规则</h4><p>在 Node 上维护 iptables/ipvs。</p></div> <div class="diagram-card"><h4>完成转发</h4><p>把 Service VIP 流量分发到后端 Pod。</p></div> </div> <div class="diagram-flow"> <div class="diagram-card"><h4>访问 10.96.0.10:8080</h4><p>Service ctts-backend 的虚拟入口。</p></div> <div class="flow-arrow">→</div> <div class="diagram-card good"><h4>kube-proxy 规则</h4><p>在每个 Node 上生效，执行负载均衡。</p></div> <div class="flow-arrow">→</div> <div class="diagram-card"><h4>Pod1 / Pod2 / Pod3</h4><p>流量轮询到真实后端。</p></div> </div> </div>
   </div>
 </div>
 <p><strong>3. container-runtime — 容器运行时</strong></p>
-<div class="visual"> <div class="visual-title">图示 12：container-runtime 是什么：</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer">container-runtime 是什么：</div> <div class="stack-layer">真正运行容器的软件</div> <div class="stack-layer">K8s 通过 CRI（Container Runtime Interface）标准接入</div> <div class="stack-layer runtime">支持的运行时：</div> <div class="stack-layer runtime">containerd（推荐，CNCF 毕业项目，Docker 捐赠）</div> <div class="stack-layer">CRI-O（Red Hat 主导，专为 K8s 设计）</div> <div class="stack-layer runtime">Docker（已弃用 dockershim，1.24+ 不再原生支持，但仍可用 containerd 兼容）</div> <div class="stack-layer">工作方式：</div> <div class="stack-layer runtime">kubelet 调用 CRI 接口 → containerd</div> <div class="stack-layer runtime">containerd 调用 runC → 真正创建容器进程</div> <div class="stack-layer runtime">这与 Docker 引擎的运行时层次一致（见第 1 次课 K1-4）</div> <div class="stack-layer runtime">注意：K8s 1.24 起移除了 dockershim，不再直接支持 Docker Engine</div> <div class="stack-layer runtime">但 Docker 构建的镜像仍可在 containerd 上运行（OCI 标准兼容）</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 12：container-runtime 是什么：</div>
+<div class="edu-diagram">
+<div class="docker-chain four">
+<div class="diagram-card"><h4>kubelet</h4><p>根据 PodSpec 发起创建、停止、探测等容器操作。</p></div>
+<div class="diagram-card"><h4>CRI</h4><p>Container Runtime Interface，K8s 连接运行时的标准接口。</p></div>
+<div class="diagram-card good"><h4>containerd</h4><p>负责镜像拉取、容器生命周期管理，是当前常用运行时。</p></div>
+<div class="diagram-card"><h4>runC / 进程</h4><p>最终创建 Linux 容器进程，让业务容器真正运行。</p></div>
+</div>
+<div class="diagram-grid two">
+<div class="diagram-card"><h4>Docker 镜像仍可运行</h4><p>Docker 构建出的镜像符合 OCI 标准，可由 containerd 拉取和运行。</p></div>
+<div class="diagram-card warn"><h4>Docker Engine 不再直连</h4><p>K8s 1.24 起移除 dockershim，不再原生直连 Docker Engine。</p></div>
+</div>
+</div>
 </div>
 <h4 id="问题--场景-4">问题 / 场景</h4>
 <p><strong>问：kubelet 和 docker daemon 什么关系？</strong></p>
@@ -1092,8 +1197,22 @@ Vault）。</li>
 Compose 到 K8s — CTTS 的演进逻辑</h2>
 <p>把前面所有知识点串起来，看 CTTS 项目"为什么要从 Compose 升级到
 K8s、K8s 架构如何支撑这次升级"的完整逻辑（本节只看思路，不写实现）：</p>
-<div class="visual"> <div class="visual-title">图示 15：现状回顾（前 12 次课）</div> <div class="edu-diagram"> <div class="diagram-steps"> <div class="diagram-step"><p>现状回顾（前 12 次课）</p></div> <div class="diagram-step"><p>CTTS 三服务已用 Docker + Compose 部署：</p></div> <div class="diagram-step"><p>docker-compose.yml：mysql + backend + frontend</p></div> <div class="diagram-step"><p>单机运行，3 个容器，启动一次成功</p></div> <div class="diagram-step"><p>痛点出现（K13-1）</p></div> <div class="diagram-step"><p>CTTS 用户量从 100 涨到 10 万：</p></div> <div class="diagram-step"><p>单机扛不住 → 需要多机</p></div> <div class="diagram-step"><p>机器挂了全停 → 需要自愈</p></div> <div class="diagram-step"><p>流量突增扩容难 → 需要弹性</p></div> <div class="diagram-step"><p>更新要停机 → 需要滚动更新</p></div> <div class="diagram-step"><p>→ Compose 解决不了，需要 K8s</p></div> <div class="diagram-step"><p>选型判断（K13-2）</p></div> <div class="diagram-step"><p>Compose vs K8s：</p></div> <div class="diagram-step"><p>本地开发/CI 测试 → 继续 Compose</p></div> <div class="diagram-step"><p>生产环境 → 必须用 K8s</p></div> <div class="diagram-step"><p>CTTS 已上线 → 升级到 K8s</p></div> <div class="diagram-step"><p>K8s 架构支撑（K13-3）</p></div> <div class="diagram-step"><p>搭建 K8s 集群：1 Master + 2 Node</p></div> <div class="diagram-step"><p>Master 管全局（API Server/etcd/scheduler/controller-manager）</p></div> <div class="diagram-step"><p>Node 跑业务（kubelet/kube-proxy/container-runtime）</p></div> <div class="diagram-step"><p>多机协同，单机故障不影响整体</p></div> <div class="diagram-step"><p>Master 控制平面工作（K13-4）</p></div> <div class="diagram-step"><p>kubectl apply → API Server → etcd</p></div> <div class="diagram-step"><p>controller-manager 创建 ReplicaSet → 创建 Pod</p></div> <div class="diagram-step"><p>scheduler 调度 Pod 到 Node1/Node2</p></div> <div class="diagram-step"><p>持续监控维持期望状态（3 副本）</p></div> <div class="diagram-step"><p>Node 工作节点执行（K13-5）</p></div> <div class="diagram-step"><p>kubelet 监听 → 调用 containerd 启容器</p></div> <div class="diagram-step"><p>kube-proxy 写 iptables → Service 流量路由</p></div> <div class="diagram-step"><p>Pod 跑起来，kubelet 持续上报状态</p></div> <div class="diagram-step"><p>核心资源组织（K13-6）</p></div> <div class="diagram-step"><p>CTTS K8s 部署所需资源：</p></div> <div class="diagram-step"><p>3 个 Deployment/StatefulSet（前端 2 副本、后端 3 副本、MySQL 1 副本）</p></div> <div class="diagram-step"><p>3 个 Service（前端、后端、MySQL 集群内访问）</p></div> <div class="diagram-step"><p>1 个 Ingress（域名入口）</p></div> <div class="diagram-step"><p>1 个 ConfigMap（应用配置）</p></div> <div class="diagram-step"><p>1 个 Secret（MySQL 密码）</p></div> <div class="diagram-step"><p>1 个 PVC（MySQL 数据持久化）</p></div> <div class="diagram-step"><p>升级收益</p></div> <div class="diagram-step"><p>高可用：某 Node 挂了，Pod 自动迁移</p></div> <div class="diagram-step"><p>弹性：HPA 根据负载自动扩缩容</p></div> <div class="diagram-step"><p>滚动更新：零停机升级后端</p></div> <div class="diagram-step"><p>统一管理：一套 YAML 描述整个部署</p></div> <div class="diagram-step"><p>→ 从&quot;单机手动&quot;到&quot;集群自动&quot;的质变</p></div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 15：现状回顾（前 12 次课）</div>
+<div class="edu-diagram">
+<div class="docker-route">
+<div class="diagram-panel"><h4><span>1</span> Compose 现状</h4><p>CTTS 已用 mysql、backend、frontend 组成单机部署，能启动、能联调、适合前 12 次课的学习目标。</p></div>
+<div class="diagram-panel warn"><h4><span>2</span> 规模痛点</h4><p>用户量增长后，单机承载、自愈、弹性、滚动更新和服务发现都开始成为生产问题。</p></div>
+<div class="diagram-panel good"><h4><span>3</span> 选型结论</h4><p>开发和 CI 测试继续用 Compose；生产环境需要升级到 Kubernetes。</p></div>
+</div>
+<div class="diagram-grid four">
+<div class="diagram-card"><h4>集群架构</h4><p>1 Master + 多 Node，Master 管全局，Node 跑业务。</p></div>
+<div class="diagram-card"><h4>控制平面</h4><p>API Server、etcd、scheduler、controller-manager 协同维护状态。</p></div>
+<div class="diagram-card"><h4>工作节点</h4><p>kubelet 启动 Pod，kube-proxy 维护 Service 流量，runtime 运行容器。</p></div>
+<div class="diagram-card"><h4>资源组织</h4><p>Deployment/StatefulSet、Service、Ingress、ConfigMap、Secret、PVC 描述完整部署。</p></div>
+</div>
+<div class="diagram-callout">从 Docker Compose 到 K8s，本质是从“单机手动编排”升级为“集群声明式自动维护”。</div>
+</div>
 </div>
 <blockquote>
 <p>这个逻辑链体现了后 12 次课的主线：<strong>Compose → K8s 集群 → Pod →
@@ -1131,8 +1250,21 @@ Docker 的替代品，无守护进程，更安全。但 K8s 生态以 containerd
 <hr />
 <h2 id="五本节小结与知识结构图">五、本节小结与知识结构图</h2>
 <h3 id="知识结构图思维导图">知识结构图（思维导图）</h3>
-<div class="visual"> <div class="visual-title">图示 16：Kubernetes认知与架构</div> <div class="edu-diagram"> <div class="stack-diagram"> <div class="stack-layer app">Kubernetes认知与架构</div> <div class="stack-layer">什么是K8s</div> <div class="stack-layer">容器编排概念（自动化调度/自愈/弹性/滚动更新）</div> <div class="stack-layer">K8s定义（开源容器编排平台，CNCF托管）</div> <div class="stack-layer">起源（Google Borg → 2014开源 → CNCF）</div> <div class="stack-layer">Compose四大局限（单机/无自愈/无弹性/无滚动更新）</div> <div class="stack-layer runtime">K8s vs Docker Compose</div> <div class="stack-layer">单机 vs 集群</div> <div class="stack-layer">手动编排 vs 自动调度</div> <div class="stack-layer">功能对比表（调度/自愈/弹性/滚动/服务发现/...）</div> <div class="stack-layer">选型原则（开发用Compose，生产用K8s）</div> <div class="stack-layer">K8s整体架构（Master-Node）</div> <div class="stack-layer">Master（控制平面）：决策大脑</div> <div class="stack-layer">Node（工作节点）：执行手脚</div> <div class="stack-layer">数据流：kubectl → API Server → etcd → 各组件</div> <div class="stack-layer">高可用：多Master + 多Node</div> <div class="stack-layer">Master控制平面组件</div> <div class="stack-layer">API Server：统一入口，认证授权，唯一读写etcd</div> <div class="stack-layer">etcd：分布式KV存储，集群&quot;真相之源&quot;</div> <div class="stack-layer app">scheduler：调度器，决定Pod跑哪个Node</div> <div class="stack-layer">controller-manager：控制器集合，维持期望状态</div> <div class="stack-layer">Node工作节点组件</div> <div class="stack-layer app">kubelet：节点代理，管Pod生命周期</div> <div class="stack-layer app">kube-proxy：网络代理，管Service流量规则</div> <div class="stack-layer runtime">container-runtime：容器运行时（containerd）</div> <div class="stack-layer">核心概念总览</div> <div class="stack-layer app">Pod（最小调度单元，第15次课）</div> <div class="stack-layer">Deployment（副本管理与滚动更新，第16次课）</div> <div class="stack-layer app">Service（访问入口与负载均衡，第18次课）</div> <div class="stack-layer">Ingress（七层路由，第19次课）</div> <div class="stack-layer">ConfigMap/Secret（配置与密码，第21次课）</div> <div class="stack-layer">PV/PVC/StorageClass（持久化存储，第22次课）</div> <div class="stack-layer">Namespace（资源隔离，贯穿全程）</div> </div>
-  </div>
+<div class="visual">
+<div class="visual-title">图示 16：Kubernetes认知与架构</div>
+<div class="edu-diagram">
+<div class="mindmap-grid">
+<div class="mind-root">Kubernetes<br>认知与架构</div>
+<div class="mind-branch-grid">
+<div class="diagram-card"><h4>为什么需要 K8s</h4><p>容器编排、自动调度、自愈、弹性伸缩、滚动更新。</p></div>
+<div class="diagram-card"><h4>Compose vs K8s</h4><p>Compose 面向单机开发，K8s 面向集群生产；选型核心看规模和可靠性要求。</p></div>
+<div class="diagram-card"><h4>集群架构</h4><p>Master/Control Plane 负责决策，Worker Node 负责运行 Pod。</p></div>
+<div class="diagram-card"><h4>控制平面组件</h4><p>API Server、etcd、scheduler、controller-manager 分别承担入口、存储、调度和调和。</p></div>
+<div class="diagram-card"><h4>工作节点组件</h4><p>kubelet、kube-proxy、container-runtime 支撑 Pod 生命周期和 Service 网络。</p></div>
+<div class="diagram-card"><h4>核心资源概念</h4><p>Pod、Deployment、Service、Ingress、ConfigMap、Secret、PV/PVC、Namespace。</p></div>
+</div>
+</div>
+</div>
 </div>
 <h3 id="一句话总结">一句话总结</h3>
 <blockquote>

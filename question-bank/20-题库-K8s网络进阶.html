@@ -149,413 +149,285 @@
 </blockquote>
 <hr />
 <h2 id="一单项选择题30题">一、单项选择题（30题）</h2>
-<h3 id="20-单选-01-">20-单选-01 ★</h3>
-<p>K8s网络模型中，关于Pod间通信的描述正确的是？ A.
-Pod间通信必须经过NAT转换 B. Pod间通信无需NAT，可直接用PodIP互访 C.
-Pod间通信只能通过Service完成 D. Pod间通信必须经过kube-proxy</p>
+<section class="question-card" id="20-单选-01-"><p><strong>20-单选-01 ★</strong> K8s网络模型中，关于Pod间通信的描述正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Pod间通信必须经过NAT转换</div></li><li><span class="option-label">B</span><div class="option-content">Pod间通信无需NAT，可直接用PodIP互访</div></li><li><span class="option-label">C</span><div class="option-content">Pod间通信只能通过Service完成</div></li><li><span class="option-label">D</span><div class="option-content">Pod间通信必须经过kube-proxy</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 K8s网络模型三原则之一：Pod间无NAT直接通信。kube-proxy只参与Service流量转发，Pod直连不需要它。
 <strong>考点：</strong> K20-1 网络模型三原则</p>
-<h3 id="20-单选-02-">20-单选-02 ★</h3>
-<p>K8s默认的DNS服务组件是？ A. kube-dns（旧版dnsmasq） B. CoreDNS C.
-bind9 D. dnsmasq</p>
+</blockquote></section><section class="question-card" id="20-单选-02-"><p><strong>20-单选-02 ★</strong> K8s默认的DNS服务组件是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">kube-dns（旧版dnsmasq）</div></li><li><span class="option-label">B</span><div class="option-content">CoreDNS</div></li><li><span class="option-label">C</span><div class="option-content">bind9</div></li><li><span class="option-label">D</span><div class="option-content">dnsmasq</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> 自K8s
 1.13起，CoreDNS成为默认DNS服务，替代了旧版kube-dns。
 <strong>考点：</strong> K20-2 CoreDNS</p>
-<h3 id="20-单选-03-">20-单选-03 ★</h3>
-<p>访问default命名空间下名为nginx的Service，完整域名是？ A.
-nginx.default.cluster.local B. nginx.default.svc.cluster.local C.
-nginx.svc.default.cluster.local D. default.nginx.svc.cluster.local</p>
+</blockquote></section><section class="question-card" id="20-单选-03-"><p><strong>20-单选-03 ★</strong> 访问default命名空间下名为nginx的Service，完整域名是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">nginx.default.cluster.local</div></li><li><span class="option-label">B</span><div class="option-content">nginx.default.svc.cluster.local</div></li><li><span class="option-label">C</span><div class="option-content">nginx.svc.default.cluster.local</div></li><li><span class="option-label">D</span><div class="option-content">default.nginx.svc.cluster.local</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> 标准格式为
 <code>service.namespace.svc.cluster.local</code>，固定四段式。
 <strong>考点：</strong> K20-2 域名格式</p>
-<h3 id="20-单选-04-">20-单选-04 ★</h3>
-<p>以下哪个CNI插件<strong>不</strong>支持NetworkPolicy？ A. Calico B.
-Cilium C. Flannel D. Weave Net</p>
+</blockquote></section><section class="question-card" id="20-单选-04-"><p><strong>20-单选-04 ★</strong> 以下哪个CNI插件<strong>不</strong>支持NetworkPolicy？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Calico</div></li><li><span class="option-label">B</span><div class="option-content">Cilium</div></li><li><span class="option-label">C</span><div class="option-content">Flannel</div></li><li><span class="option-label">D</span><div class="option-content">Weave Net</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 Flannel仅提供基础Overlay网络，不支持NetworkPolicy。Calico、Cilium、Weave
 Net均支持。 <strong>考点：</strong> K20-1 CNI插件</p>
-<h3 id="20-单选-05-">20-单选-05 ★</h3>
-<p>NetworkPolicy在没有任何策略选中Pod时，默认行为是？ A. 拒绝所有流量 B.
-允许所有流量 C. 仅允许同命名空间流量 D. 仅允许TCP流量</p>
+</blockquote></section><section class="question-card" id="20-单选-05-"><p><strong>20-单选-05 ★</strong> NetworkPolicy在没有任何策略选中Pod时，默认行为是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">拒绝所有流量</div></li><li><span class="option-label">B</span><div class="option-content">允许所有流量</div></li><li><span class="option-label">C</span><div class="option-content">仅允许同命名空间流量</div></li><li><span class="option-label">D</span><div class="option-content">仅允许TCP流量</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 K8s默认网络是开放的，NetworkPolicy未被任何策略选中的Pod默认允许所有进出流量。
 <strong>考点：</strong> K20-3 默认行为</p>
-<h3 id="20-单选-06-">20-单选-06 ★★</h3>
-<p>Pod的 <code>dnsPolicy</code> 默认取值是？ A. Default B. None C.
-ClusterFirst D. ClusterFirstWithHostNet</p>
+</blockquote></section><section class="question-card" id="20-单选-06-"><p><strong>20-单选-06 ★★</strong> Pod的 <code>dnsPolicy</code> 默认取值是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Default</div></li><li><span class="option-label">B</span><div class="option-content">None</div></li><li><span class="option-label">C</span><div class="option-content">ClusterFirst</div></li><li><span class="option-label">D</span><div class="option-content">ClusterFirstWithHostNet</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 默认为ClusterFirst，集群域名走CoreDNS，其他转发上游DNS。
 <strong>考点：</strong> K20-2 dnsPolicy</p>
-<h3 id="20-单选-07-">20-单选-07 ★★</h3>
-<p>CoreDNS默认部署在哪个命名空间？ A. default B. kube-public C.
-kube-system D. kube-network</p>
+</blockquote></section><section class="question-card" id="20-单选-07-"><p><strong>20-单选-07 ★★</strong> CoreDNS默认部署在哪个命名空间？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">default</div></li><li><span class="option-label">B</span><div class="option-content">kube-public</div></li><li><span class="option-label">C</span><div class="option-content">kube-system</div></li><li><span class="option-label">D</span><div class="option-content">kube-network</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 CoreDNS以Deployment形式部署在kube-system，通过
 <code>kubectl get pods -n kube-system -l k8s-app=kube-dns</code> 查看。
 <strong>考点：</strong> K20-2 CoreDNS部署</p>
-<h3 id="20-单选-08-">20-单选-08 ★★</h3>
-<p>下列命令中，最适合用来详细查看DNS解析过程（含TTL和权威解析）的是？ A.
-nslookup B. dig C. ping D. host</p>
+</blockquote></section><section class="question-card" id="20-单选-08-"><p><strong>20-单选-08 ★★</strong> 下列命令中，最适合用来详细查看DNS解析过程（含TTL和权威解析）的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">nslookup</div></li><li><span class="option-label">B</span><div class="option-content">dig</div></li><li><span class="option-label">C</span><div class="option-content">ping</div></li><li><span class="option-label">D</span><div class="option-content">host</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 dig提供最详细的DNS查询信息，包括TTL、ANSWER SECTION、AUTHORITY
 SECTION等。 <strong>考点：</strong> K20-4 调试命令</p>
-<h3 id="20-单选-09-">20-单选-09 ★★</h3>
-<p>NetworkPolicy的 <code>policyTypes</code>
-字段取值<strong>不</strong>包括？ A. Ingress B. Egress C. IngressEgress
-D. （以上都是合法取值）</p>
+</blockquote></section><section class="question-card" id="20-单选-09-"><p><strong>20-单选-09 ★★</strong> NetworkPolicy的 <code>policyTypes</code> 字段取值<strong>不</strong>包括？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Ingress</div></li><li><span class="option-label">B</span><div class="option-content">Egress</div></li><li><span class="option-label">C</span><div class="option-content">IngressEgress</div></li><li><span class="option-label">D</span><div class="option-content">（以上都是合法取值）</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 policyTypes只有Ingress和Egress两个合法值，可同时写两个，但没有IngressEgress。
 <strong>考点：</strong> K20-3 policyTypes</p>
-<h3 id="20-单选-10-">20-单选-10 ★★</h3>
-<p>以下哪种CNI采用eBPF技术实现高性能网络？ A. Flannel B. Calico C.
-Cilium D. Weave Net</p>
+</blockquote></section><section class="question-card" id="20-单选-10-"><p><strong>20-单选-10 ★★</strong> 以下哪种CNI采用eBPF技术实现高性能网络？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Flannel</div></li><li><span class="option-label">B</span><div class="option-content">Calico</div></li><li><span class="option-label">C</span><div class="option-content">Cilium</div></li><li><span class="option-label">D</span><div class="option-content">Weave Net</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 Cilium基于eBPF，绕过iptables，性能极高，并提供Hubble可观测能力。
 <strong>考点：</strong> K20-5 CNI选型</p>
-<h3 id="20-单选-11-">20-单选-11 ★★</h3>
-<p>跨命名空间访问Service时，正确做法是？ A. 只能使用ClusterIP B.
-必须写完整FQDN（含命名空间段） C. 必须创建ExternalName Service D.
-不可能实现跨命名空间访问</p>
+</blockquote></section><section class="question-card" id="20-单选-11-"><p><strong>20-单选-11 ★★</strong> 跨命名空间访问Service时，正确做法是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">只能使用ClusterIP</div></li><li><span class="option-label">B</span><div class="option-content">必须写完整FQDN（含命名空间段）</div></li><li><span class="option-label">C</span><div class="option-content">必须创建ExternalName Service</div></li><li><span class="option-label">D</span><div class="option-content">不可能实现跨命名空间访问</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> 跨命名空间访问需用
 <code>service.namespace.svc.cluster.local</code>
 完整域名，否则搜索域无法匹配。 <strong>考点：</strong> K20-2
 跨命名空间解析</p>
-<h3 id="20-单选-12-">20-单选-12 ★★</h3>
-<p>NetworkPolicy中 <code>namespaceSelector: {}</code>（空大括号）表示？
-A. 不选择任何命名空间 B. 选择当前命名空间 C. 选择所有命名空间 D.
-语法错误</p>
+</blockquote></section><section class="question-card" id="20-单选-12-"><p><strong>20-单选-12 ★★</strong> NetworkPolicy中 <code>namespaceSelector: {}</code>（空大括号）表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">不选择任何命名空间</div></li><li><span class="option-label">B</span><div class="option-content">选择当前命名空间</div></li><li><span class="option-label">C</span><div class="option-content">选择所有命名空间</div></li><li><span class="option-label">D</span><div class="option-content">语法错误</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 空的namespaceSelector等价于"匹配所有命名空间"，是常见陷阱。
 <strong>考点：</strong> K20-3 selector语义</p>
-<h3 id="20-单选-13-">20-单选-13 ★★</h3>
-<p>Pod的 <code>dnsPolicy: None</code> 表示？ A. 不使用DNS，直接IP访问 B.
-不配置DNS，必须自定义 <code>dnsConfig</code> C. 使用节点DNS D.
-集群DNS优先</p>
+</blockquote></section><section class="question-card" id="20-单选-13-"><p><strong>20-单选-13 ★★</strong> Pod的 <code>dnsPolicy: None</code> 表示？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">不使用DNS，直接IP访问</div></li><li><span class="option-label">B</span><div class="option-content">不配置DNS，必须自定义 <code>dnsConfig</code></div></li><li><span class="option-label">C</span><div class="option-content">使用节点DNS</div></li><li><span class="option-label">D</span><div class="option-content">集群DNS优先</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 None表示不做任何DNS配置，必须在 <code>dnsConfig</code>
 中显式指定nameserver，否则Pod无法解析任何域名。 <strong>考点：</strong>
 K20-2 dnsPolicy</p>
-<h3 id="20-单选-14-">20-单选-14 ★★</h3>
-<p>以下哪个不是Service Mesh的核心能力？ A. 流量管理（细粒度路由） B.
-mTLS双向认证 C. Pod调度 D. 可观测性（调用链追踪）</p>
+</blockquote></section><section class="question-card" id="20-单选-14-"><p><strong>20-单选-14 ★★</strong> 以下哪个不是Service Mesh的核心能力？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">流量管理（细粒度路由）</div></li><li><span class="option-label">B</span><div class="option-content">mTLS双向认证</div></li><li><span class="option-label">C</span><div class="option-content">Pod调度</div></li><li><span class="option-label">D</span><div class="option-content">可观测性（调用链追踪）</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 Pod调度是K8s控制平面的职责，与Service Mesh无关。Service
 Mesh聚焦服务间通信、安全、可观测性。 <strong>考点：</strong> K20-5
 Service Mesh</p>
-<h3 id="20-单选-15-">20-单选-15 ★★</h3>
-<p>Istio的数据平面组件是？ A. Istiod B. Envoy C. Pilot D. Citadel</p>
+</blockquote></section><section class="question-card" id="20-单选-15-"><p><strong>20-单选-15 ★★</strong> Istio的数据平面组件是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Istiod</div></li><li><span class="option-label">B</span><div class="option-content">Envoy</div></li><li><span class="option-label">C</span><div class="option-content">Pilot</div></li><li><span class="option-label">D</span><div class="option-content">Citadel</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> Istio数据平面是Envoy
 Sidecar，控制平面是Istiod（融合了旧版Pilot、Citadel、Galley）。
 <strong>考点：</strong> K20-5 Istio架构</p>
-<h3 id="20-单选-16-">20-单选-16 ★★</h3>
-<p>Calico的BGP模式属于？ A. Overlay网络 B. Underlay网络 C. VXLAN网络 D.
-MACVLAN网络</p>
+</blockquote></section><section class="question-card" id="20-单选-16-"><p><strong>20-单选-16 ★★</strong> Calico的BGP模式属于？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Overlay网络</div></li><li><span class="option-label">B</span><div class="option-content">Underlay网络</div></li><li><span class="option-label">C</span><div class="option-content">VXLAN网络</div></li><li><span class="option-label">D</span><div class="option-content">MACVLAN网络</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> Calico
 BGP模式直接利用底层网络路由，属于Underlay；Calico也支持VXLAN
 Overlay模式。 <strong>考点：</strong> K20-1 Calico模式</p>
-<h3 id="20-单选-17-">20-单选-17 ★★</h3>
-<p>NetworkPolicy中以下哪个字段用于指定本命名空间内被隔离的Pod？ A.
-podSelector B. targetPodSelector C. subjectPodSelector D.
-isolatedPodSelector</p>
+</blockquote></section><section class="question-card" id="20-单选-17-"><p><strong>20-单选-17 ★★</strong> NetworkPolicy中以下哪个字段用于指定本命名空间内被隔离的Pod？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">podSelector</div></li><li><span class="option-label">B</span><div class="option-content">targetPodSelector</div></li><li><span class="option-label">C</span><div class="option-content">subjectPodSelector</div></li><li><span class="option-label">D</span><div class="option-content">isolatedPodSelector</div></li></ul></div>
+<blockquote>
 <p><strong>答案：A</strong> <strong>解析：</strong>
 <code>spec.podSelector</code>
 选择NetworkPolicy作用的Pod（与metadata同命名空间）。
 <strong>考点：</strong> K20-3 字段语义</p>
-<h3 id="20-单选-18-">20-单选-18 ★★</h3>
-<p>以下命令用于查看Service后端Pod实际列表的是？ A. kubectl get svc B.
-kubectl describe svc C. kubectl get endpoints D. kubectl get pods -l
-app=xxx</p>
+</blockquote></section><section class="question-card" id="20-单选-18-"><p><strong>20-单选-18 ★★</strong> 以下命令用于查看Service后端Pod实际列表的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">kubectl get svc</div></li><li><span class="option-label">B</span><div class="option-content">kubectl describe svc</div></li><li><span class="option-label">C</span><div class="option-content">kubectl get endpoints</div></li><li><span class="option-label">D</span><div class="option-content">kubectl get pods -l app=xxx</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 <code>kubectl get endpoints &lt;svc&gt;</code>
 直接显示Service关联的PodIP列表，是排查Service不通的关键命令。
 <strong>考点：</strong> K20-4 调试命令</p>
-<h3 id="20-单选-19-">20-单选-19 ★★</h3>
-<p>Flannel的默认后端模式是？ A. host-gw B. VXLAN C. WireGuard D.
-IPSec</p>
+</blockquote></section><section class="question-card" id="20-单选-19-"><p><strong>20-单选-19 ★★</strong> Flannel的默认后端模式是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">host-gw</div></li><li><span class="option-label">B</span><div class="option-content">VXLAN</div></li><li><span class="option-label">C</span><div class="option-content">WireGuard</div></li><li><span class="option-label">D</span><div class="option-content">IPSec</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> Flannel默认使用VXLAN
 Overlay，跨节点封装UDP包。 <strong>考点：</strong> K20-1 Flannel</p>
-<h3 id="20-单选-20-">20-单选-20 ★★</h3>
-<p>关于CoreDNS与kube-dns的关系，正确的是？ A. kube-dns是CoreDNS的新版本
-B. CoreDNS是kube-dns的替代品 C. 两者完全等价 D.
-CoreDNS仅用于StatefulSet</p>
+</blockquote></section><section class="question-card" id="20-单选-20-"><p><strong>20-单选-20 ★★</strong> 关于CoreDNS与kube-dns的关系，正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">kube-dns是CoreDNS的新版本</div></li><li><span class="option-label">B</span><div class="option-content">CoreDNS是kube-dns的替代品</div></li><li><span class="option-label">C</span><div class="option-content">两者完全等价</div></li><li><span class="option-label">D</span><div class="option-content">CoreDNS仅用于StatefulSet</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong> K8s
 1.13起CoreDNS替代旧版kube-dns（基于dnsmasq+skydns），性能与扩展性更好。
 <strong>考点：</strong> K20-2 CoreDNS</p>
-<h3 id="20-单选-21-">20-单选-21 ★★</h3>
-<p>下列关于Headless Service的DNS解析结果，正确的是？ A. 返回Service
-ClusterIP B. 返回Service ExternalIP C. 返回后端所有Pod的IP D.
-返回NXDOMAIN</p>
+</blockquote></section><section class="question-card" id="20-单选-21-"><p><strong>20-单选-21 ★★</strong> 下列关于Headless Service的DNS解析结果，正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">返回Service ClusterIP</div></li><li><span class="option-label">B</span><div class="option-content">返回Service ExternalIP</div></li><li><span class="option-label">C</span><div class="option-content">返回后端所有Pod的IP</div></li><li><span class="option-label">D</span><div class="option-content">返回NXDOMAIN</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong> Headless
 Service（clusterIP:
 None）不分配ClusterIP，DNS查询直接返回后端PodIP列表，用于StatefulSet。
 <strong>考点：</strong> K20-2 Headless Service</p>
-<h3 id="20-单选-22-">20-单选-22 ★★</h3>
-<p>NetworkPolicy的YAML apiVersion是？ A. v1 B. apps/v1 C.
-networking.k8s.io/v1 D. policy/v1</p>
+</blockquote></section><section class="question-card" id="20-单选-22-"><p><strong>20-单选-22 ★★</strong> NetworkPolicy的YAML apiVersion是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">v1</div></li><li><span class="option-label">B</span><div class="option-content">apps/v1</div></li><li><span class="option-label">C</span><div class="option-content">networking.k8s.io/v1</div></li><li><span class="option-label">D</span><div class="option-content">policy/v1</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 NetworkPolicy属于networking.k8s.io API组，版本v1。
 <strong>考点：</strong> K20-3 apiVersion</p>
-<h3 id="20-单选-23-">20-单选-23 ★★★</h3>
-<p>某NetworkPolicy的ingress.from包含两个from项：第一个为
-<code>{podSelector: {matchLabels: {app: web}}}</code>，第二个为
-<code>{namespaceSelector: {matchLabels: {name: prod}}}</code>。这两个from项的逻辑关系是？
-A. AND（同时满足） B. OR（任一满足） C. 取交集 D. 语法错误</p>
+</blockquote></section><section class="question-card" id="20-单选-23-"><p><strong>20-单选-23 ★★★</strong> 某NetworkPolicy的ingress.from包含两个from项：第一个为 <code>{podSelector: {matchLabels: {app: web}}}</code>，第二个为 <code>{namespaceSelector: {matchLabels: {name: prod}}}</code>。这两个from项的逻辑关系是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">AND（同时满足）</div></li><li><span class="option-label">B</span><div class="option-content">OR（任一满足）</div></li><li><span class="option-label">C</span><div class="option-content">取交集</div></li><li><span class="option-label">D</span><div class="option-content">语法错误</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 同一ingress.from列表下的多项是OR关系；同一from项内的多个selector才是AND。
 <strong>考点：</strong> K20-3 selector联合语义（难点）</p>
-<h3 id="20-单选-24-">20-单选-24 ★★★</h3>
-<p>开启egress NetworkPolicy后，发现服务名解析失败，最可能的原因是？ A.
-CoreDNS故障 B. 未放行到kube-system的UDP 53 C. dnsPolicy配置错误 D.
-Pod未就绪</p>
+</blockquote></section><section class="question-card" id="20-单选-24-"><p><strong>20-单选-24 ★★★</strong> 开启egress NetworkPolicy后，发现服务名解析失败，最可能的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">CoreDNS故障</div></li><li><span class="option-label">B</span><div class="option-content">未放行到kube-system的UDP 53</div></li><li><span class="option-label">C</span><div class="option-content">dnsPolicy配置错误</div></li><li><span class="option-label">D</span><div class="option-content">Pod未就绪</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 egress策略一旦生效，默认拒绝所有出站。忘记放行UDP 53到kube-dns
 Pod会导致DNS查询被拦截。 <strong>考点：</strong> K20-3 易错点</p>
-<h3 id="20-单选-25-">20-单选-25 ★★★</h3>
-<p>关于 <code>podSelector: {}</code> 和
-<code>namespaceSelector: {}</code> 同时出现在同一from项内，正确描述是？
-A. 等价于"所有命名空间的所有Pod"（AND） B.
-等价于"任意命名空间内匹配podSelector的Pod"（OR） C. 语法错误 D.
-等价于"仅当前命名空间"</p>
+</blockquote></section><section class="question-card" id="20-单选-25-"><p><strong>20-单选-25 ★★★</strong> 关于 <code>podSelector: {}</code> 和 <code>namespaceSelector: {}</code> 同时出现在同一from项内，正确描述是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">等价于"所有命名空间的所有Pod"（AND）</div></li><li><span class="option-label">B</span><div class="option-content">等价于"任意命名空间内匹配podSelector的Pod"（OR）</div></li><li><span class="option-label">C</span><div class="option-content">语法错误</div></li><li><span class="option-label">D</span><div class="option-content">等价于"仅当前命名空间"</div></li></ul></div>
+<blockquote>
 <p><strong>答案：A</strong> <strong>解析：</strong>
 同一from项内两者同时出现为AND语义：在所有命名空间中匹配podSelector的Pod，即"所有命名空间的所有Pod"。
 <strong>考点：</strong> K20-3 selector联合语义</p>
-<h3 id="20-单选-26-">20-单选-26 ★★★</h3>
-<p>Istio与K8s
-NetworkPolicy相比，<strong>不</strong>属于Istio独有能力的是？ A.
-基于HTTP路径的细粒度路由 B. mTLS双向认证 C. L3/L4端口级访问控制 D.
-按比例灰度发布</p>
+</blockquote></section><section class="question-card" id="20-单选-26-"><p><strong>20-单选-26 ★★★</strong> Istio与K8s NetworkPolicy相比，<strong>不</strong>属于Istio独有能力的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">基于HTTP路径的细粒度路由</div></li><li><span class="option-label">B</span><div class="option-content">mTLS双向认证</div></li><li><span class="option-label">C</span><div class="option-content">L3/L4端口级访问控制</div></li><li><span class="option-label">D</span><div class="option-content">按比例灰度发布</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 L3/L4端口级访问控制是NetworkPolicy原生能力，Istio的核心增量在L7层。
 <strong>考点：</strong> K20-5 Service Mesh对比</p>
-<h3 id="20-单选-27-">20-单选-27 ★★★</h3>
-<p>关于K8s中PodIP与ClusterIP的描述，正确的是？ A. 两者都是集群内可达 B.
-ClusterIP可跨集群路由，PodIP不行 C. 两者都可跨集群路由 D.
-PodIP仅节点内可达</p>
+</blockquote></section><section class="question-card" id="20-单选-27-"><p><strong>20-单选-27 ★★★</strong> 关于K8s中PodIP与ClusterIP的描述，正确的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">两者都是集群内可达</div></li><li><span class="option-label">B</span><div class="option-content">ClusterIP可跨集群路由，PodIP不行</div></li><li><span class="option-label">C</span><div class="option-content">两者都可跨集群路由</div></li><li><span class="option-label">D</span><div class="option-content">PodIP仅节点内可达</div></li></ul></div>
+<blockquote>
 <p><strong>答案：A</strong> <strong>解析：</strong>
 PodIP与ClusterIP都仅集群内可达，PodIP由CNI分配，ClusterIP由kube-apiserver分配（虚拟IP，由kube-proxy在各节点iptables/ipvs中实现转发）。
 <strong>考点：</strong> K20-1 IP语义</p>
-<h3 id="20-单选-28-">20-单选-28 ★★★</h3>
-<p>某Service名为 <code>api-gateway</code>，命名空间
-<code>prod</code>，下列 <code>nslookup</code> 命令中能正确解析的是？ A.
-<code>nslookup api-gateway.prod.cluster.local</code> B.
-<code>nslookup api-gateway.prod.svc.k8s.local</code> C.
-<code>nslookup api-gateway.prod.svc.cluster.local</code> D.
-<code>nslookup prod.api-gateway.svc.cluster.local</code></p>
+</blockquote></section><section class="question-card" id="20-单选-28-"><p><strong>20-单选-28 ★★★</strong> 某Service名为 <code>api-gateway</code>，命名空间 <code>prod</code>，下列 <code>nslookup</code> 命令中能正确解析的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>nslookup api-gateway.prod.cluster.local</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>nslookup api-gateway.prod.svc.k8s.local</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>nslookup api-gateway.prod.svc.cluster.local</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>nslookup prod.api-gateway.svc.cluster.local</code></div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 标准四段式：<code>service.namespace.svc.cluster.local</code>。
 <strong>考点：</strong> K20-2 域名格式</p>
-<h3 id="20-单选-29-">20-单选-29 ★★★</h3>
-<p>Calico选择BGP而非VXLAN的主要优势是？ A. 配置更简单 B.
-无需底层网络支持 C. 性能更高，无封装开销 D. 跨多云更方便</p>
+</blockquote></section><section class="question-card" id="20-单选-29-"><p><strong>20-单选-29 ★★★</strong> Calico选择BGP而非VXLAN的主要优势是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">配置更简单</div></li><li><span class="option-label">B</span><div class="option-content">无需底层网络支持</div></li><li><span class="option-label">C</span><div class="option-content">性能更高，无封装开销</div></li><li><span class="option-label">D</span><div class="option-content">跨多云更方便</div></li></ul></div>
+<blockquote>
 <p><strong>答案：C</strong> <strong>解析：</strong>
 BGP模式无VXLAN封装/解封装开销，吞吐与延迟更优，但要求底层网络支持路由通告。
 <strong>考点：</strong> K20-1 Calico模式</p>
-<h3 id="20-单选-30-">20-单选-30 ★★★</h3>
-<p>生产集群中，以下NetworkPolicy设计<strong>最</strong>符合"零信任"理念的是？
-A. 默认允许，按需拒绝 B. 默认拒绝所有，按需放行 C. 仅隔离敏感命名空间 D.
-不使用NetworkPolicy，依赖防火墙</p>
+</blockquote></section><section class="question-card" id="20-单选-30-"><p><strong>20-单选-30 ★★★</strong> 生产集群中，以下NetworkPolicy设计<strong>最</strong>符合"零信任"理念的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">默认允许，按需拒绝</div></li><li><span class="option-label">B</span><div class="option-content">默认拒绝所有，按需放行</div></li><li><span class="option-label">C</span><div class="option-content">仅隔离敏感命名空间</div></li><li><span class="option-label">D</span><div class="option-content">不使用NetworkPolicy，依赖防火墙</div></li></ul></div>
+<blockquote>
 <p><strong>答案：B</strong> <strong>解析：</strong>
 零信任核心是"默认拒绝，显式允许"，配合最小权限原则。
 <strong>考点：</strong> K20-3 思政融入点</p>
-<hr />
-<h2 id="二多项选择题10题">二、多项选择题（10题）</h2>
-<h3 id="20-多选-01-">20-多选-01 ★</h3>
-<p>K8s网络模型三原则包括？（多选） A. 每个Pod拥有独立IP B.
-Pod间通信无需NAT C. Node与Pod间通信无需NAT D.
-所有Pod必须通过Service访问</p>
+</blockquote></section>
+<hr /><h2 id="二多项选择题10题">二、多项选择题（10题）</h2>
+<section class="question-card" id="20-多选-01-"><p><strong>20-多选-01 ★</strong> K8s网络模型三原则包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">每个Pod拥有独立IP</div></li><li><span class="option-label">B</span><div class="option-content">Pod间通信无需NAT</div></li><li><span class="option-label">C</span><div class="option-content">Node与Pod间通信无需NAT</div></li><li><span class="option-label">D</span><div class="option-content">所有Pod必须通过Service访问</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABC</strong> <strong>解析：</strong>
 三原则即A/B/C；Pod间可直接用PodIP通信，不强制使用Service。
 <strong>考点：</strong> K20-1 网络模型</p>
-<h3 id="20-多选-02-">20-多选-02 ★</h3>
-<p>以下CNI插件中支持NetworkPolicy的有？（多选） A. Flannel B. Calico C.
-Cilium D. Weave Net</p>
+</blockquote></section><section class="question-card" id="20-多选-02-"><p><strong>20-多选-02 ★</strong> 以下CNI插件中支持NetworkPolicy的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Flannel</div></li><li><span class="option-label">B</span><div class="option-content">Calico</div></li><li><span class="option-label">C</span><div class="option-content">Cilium</div></li><li><span class="option-label">D</span><div class="option-content">Weave Net</div></li></ul></div>
+<blockquote>
 <p><strong>答案：BCD</strong> <strong>解析：</strong>
 Flannel不支持NetworkPolicy，其余三者均支持。 <strong>考点：</strong>
 K20-1 CNI对比</p>
-<h3 id="20-多选-03-">20-多选-03 ★</h3>
-<p>CoreDNS能解析的记录类型有？（多选） A. A B. AAAA C. SRV D. PTR</p>
+</blockquote></section><section class="question-card" id="20-多选-03-"><p><strong>20-多选-03 ★</strong> CoreDNS能解析的记录类型有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">A</div></li><li><span class="option-label">B</span><div class="option-content">AAAA</div></li><li><span class="option-label">C</span><div class="option-content">SRV</div></li><li><span class="option-label">D</span><div class="option-content">PTR</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABCD</strong> <strong>解析：</strong>
 CoreDNS支持A、AAAA、SRV、PTR等记录，SRV用于Service端口发现，PTR用于反向解析。
 <strong>考点：</strong> K20-2 CoreDNS能力</p>
-<h3 id="20-多选-04-">20-多选-04 ★★</h3>
-<p>以下哪些是合法的 <code>dnsPolicy</code> 取值？（多选） A.
-ClusterFirst B. ClusterFirstWithHostNet C. Default D. None E.
-HostNetwork</p>
+</blockquote></section><section class="question-card" id="20-多选-04-"><p><strong>20-多选-04 ★★</strong> 以下哪些是合法的 <code>dnsPolicy</code> 取值？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">ClusterFirst</div></li><li><span class="option-label">B</span><div class="option-content">ClusterFirstWithHostNet</div></li><li><span class="option-label">C</span><div class="option-content">Default</div></li><li><span class="option-label">D</span><div class="option-content">None</div></li><li><span class="option-label">E</span><div class="option-content">HostNetwork</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABCD</strong> <strong>解析：</strong>
 四种合法取值：ClusterFirst、ClusterFirstWithHostNet、Default、None。HostNetwork是Pod的spec字段，非dnsPolicy取值。
 <strong>考点：</strong> K20-2 dnsPolicy</p>
-<h3 id="20-多选-05-">20-多选-05 ★★</h3>
-<p>NetworkPolicy中可以出现的selector类型有？（多选） A. podSelector B.
-namespaceSelector C. nodeSelector D. ipBlock</p>
+</blockquote></section><section class="question-card" id="20-多选-05-"><p><strong>20-多选-05 ★★</strong> NetworkPolicy中可以出现的selector类型有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">podSelector</div></li><li><span class="option-label">B</span><div class="option-content">namespaceSelector</div></li><li><span class="option-label">C</span><div class="option-content">nodeSelector</div></li><li><span class="option-label">D</span><div class="option-content">ipBlock</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABD</strong> <strong>解析：</strong>
 NetworkPolicy支持podSelector、namespaceSelector、ipBlock；nodeSelector用于Pod调度，不用于流量选择。
 <strong>考点：</strong> K20-3 selector类型</p>
-<h3 id="20-多选-06-">20-多选-06 ★★</h3>
-<p>网络调试四件套包括？（多选） A. nslookup B. dig C. ping D. curl E.
-traceroute</p>
+</blockquote></section><section class="question-card" id="20-多选-06-"><p><strong>20-多选-06 ★★</strong> 网络调试四件套包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">nslookup</div></li><li><span class="option-label">B</span><div class="option-content">dig</div></li><li><span class="option-label">C</span><div class="option-content">ping</div></li><li><span class="option-label">D</span><div class="option-content">curl</div></li><li><span class="option-label">E</span><div class="option-content">traceroute</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABCD</strong> <strong>解析：</strong>
 四件套为nslookup/dig/ping/curl，分别覆盖DNS、网络层、应用层；traceroute是补充工具但非四件套之一。
 <strong>考点：</strong> K20-4 调试工具</p>
-<h3 id="20-多选-07-">20-多选-07 ★★</h3>
-<p>Istio的核心组件包括？（多选） A. Istiod（控制平面） B.
-Envoy（数据平面Sidecar） C. Pilot D. Citadel</p>
+</blockquote></section><section class="question-card" id="20-多选-07-"><p><strong>20-多选-07 ★★</strong> Istio的核心组件包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Istiod（控制平面）</div></li><li><span class="option-label">B</span><div class="option-content">Envoy（数据平面Sidecar）</div></li><li><span class="option-label">C</span><div class="option-content">Pilot</div></li><li><span class="option-label">D</span><div class="option-content">Citadel</div></li></ul></div>
+<blockquote>
 <p><strong>答案：AB</strong> <strong>解析：</strong>
 新版Istio将Pilot、Citadel、Galley合并为Istiod；数据平面是Envoy
 Sidecar。C/D是旧版独立组件。 <strong>考点：</strong> K20-5 Istio架构</p>
-<h3 id="20-多选-08-">20-多选-08 ★★</h3>
-<p>下列关于Flannel与Calico的对比，正确的有？（多选） A.
-Flannel配置更简单 B. Calico支持NetworkPolicy，Flannel不支持 C.
-Calico性能通常优于Flannel D. Flannel支持BGP路由</p>
+</blockquote></section><section class="question-card" id="20-多选-08-"><p><strong>20-多选-08 ★★</strong> 下列关于Flannel与Calico的对比，正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Flannel配置更简单</div></li><li><span class="option-label">B</span><div class="option-content">Calico支持NetworkPolicy，Flannel不支持</div></li><li><span class="option-label">C</span><div class="option-content">Calico性能通常优于Flannel</div></li><li><span class="option-label">D</span><div class="option-content">Flannel支持BGP路由</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABC</strong> <strong>解析：</strong>
 A/B/C正确；Flannel默认VXLAN，不实现BGP路由（BGP是Calico的强项）。
 <strong>考点：</strong> K20-1 CNI对比</p>
-<h3 id="20-多选-09-">20-多选-09 ★★★</h3>
-<p>某NetworkPolicy的egress策略只允许出站到postgres:5432和kube-dns:53，下列描述正确的有？（多选）
-A. 该Pod访问外网IP将被拒绝 B. 该Pod访问ClusterIP外的任何目标都将被拒绝
-C. 该Pod仍可解析集群内Service名 D. 该Pod无法ping其他Pod</p>
+</blockquote></section><section class="question-card" id="20-多选-09-"><p><strong>20-多选-09 ★★★</strong> 某NetworkPolicy的egress策略只允许出站到postgres:5432和kube-dns:53，下列描述正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">该Pod访问外网IP将被拒绝</div></li><li><span class="option-label">B</span><div class="option-content">该Pod访问ClusterIP外的任何目标都将被拒绝</div></li><li><span class="option-label">C</span><div class="option-content">该Pod仍可解析集群内Service名</div></li><li><span class="option-label">D</span><div class="option-content">该Pod无法ping其他Pod</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABCD</strong> <strong>解析：</strong>
 egress默认拒绝后只允许显式放行的目标；A/B/C/D均正确。注意ping使用ICMP，未放行则拒绝。
 <strong>考点：</strong> K20-3 egress语义</p>
-<h3 id="20-多选-10-">20-多选-10 ★★★</h3>
-<p>关于K8s网络的"扁平网络模型"，正确的有？（多选） A.
-所有Pod在一个扁平的IP地址空间内 B. Pod间通信路径最短 C.
-简化了服务发现与追踪 D. 必须使用BGP实现</p>
+</blockquote></section><section class="question-card" id="20-多选-10-"><p><strong>20-多选-10 ★★★</strong> 关于K8s网络的"扁平网络模型"，正确的有？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">所有Pod在一个扁平的IP地址空间内</div></li><li><span class="option-label">B</span><div class="option-content">Pod间通信路径最短</div></li><li><span class="option-label">C</span><div class="option-content">简化了服务发现与追踪</div></li><li><span class="option-label">D</span><div class="option-content">必须使用BGP实现</div></li></ul></div>
+<blockquote>
 <p><strong>答案：ABC</strong> <strong>解析：</strong>
 扁平网络指所有Pod在同一可达空间，A/B/C正确；不一定要BGP，VXLAN
 Overlay也可实现扁平网络。 <strong>考点：</strong> K20-1 扁平网络</p>
-<hr />
-<h2 id="三判断题20题">三、判断题（20题）</h2>
-<h3 id="20-判断-01-">20-判断-01 ★</h3>
-<p>K8s网络模型要求Pod间通信必须通过NAT。 <strong>答案：错误</strong>
-<strong>解析：</strong> K8s网络模型三原则之一是Pod间无NAT直接通信。</p>
-<h3 id="20-判断-02-">20-判断-02 ★</h3>
-<p>CoreDNS是K8s默认DNS服务。 <strong>答案：正确</strong>
-<strong>解析：</strong> 自K8s 1.13起CoreDNS为默认DNS。</p>
-<h3 id="20-判断-03-">20-判断-03 ★</h3>
-<p>Flannel支持NetworkPolicy。 <strong>答案：错误</strong>
+</blockquote></section>
+<hr /><h2 id="三判断题20题">三、判断题（20题）</h2>
+<section class="question-card" id="20-判断-01-"><p><strong>20-判断-01 ★</strong> K8s网络模型要求Pod间通信必须通过NAT。 <strong>答案：错误</strong>
+<strong>解析：</strong> K8s网络模型三原则之一是Pod间无NAT直接通信。</p></section><section class="question-card" id="20-判断-02-"><p><strong>20-判断-02 ★</strong> CoreDNS是K8s默认DNS服务。 <strong>答案：正确</strong>
+<strong>解析：</strong> 自K8s 1.13起CoreDNS为默认DNS。</p></section><section class="question-card" id="20-判断-03-"><p><strong>20-判断-03 ★</strong> Flannel支持NetworkPolicy。 <strong>答案：错误</strong>
 <strong>解析：</strong>
-Flannel不支持NetworkPolicy，需用Calico/Cilium。</p>
-<h3 id="20-判断-04-">20-判断-04 ★</h3>
-<p>NetworkPolicy默认允许所有流量。 <strong>答案：正确</strong>
+Flannel不支持NetworkPolicy，需用Calico/Cilium。</p></section><section class="question-card" id="20-判断-04-"><p><strong>20-判断-04 ★</strong> NetworkPolicy默认允许所有流量。 <strong>答案：正确</strong>
 <strong>解析：</strong>
-无NetworkPolicy选中Pod时，默认允许所有进出流量。</p>
-<h3 id="20-判断-05-">20-判断-05 ★</h3>
-<p>K8s自带网络实现，无需安装CNI插件。 <strong>答案：错误</strong>
-<strong>解析：</strong> K8s只定义网络规范，CNI插件负责实现。</p>
-<h3 id="20-判断-06-">20-判断-06 ★★</h3>
-<p><code>dnsPolicy: Default</code> 表示Pod使用集群CoreDNS解析。
+无NetworkPolicy选中Pod时，默认允许所有进出流量。</p></section><section class="question-card" id="20-判断-05-"><p><strong>20-判断-05 ★</strong> K8s自带网络实现，无需安装CNI插件。 <strong>答案：错误</strong>
+<strong>解析：</strong> K8s只定义网络规范，CNI插件负责实现。</p></section><section class="question-card" id="20-判断-06-"><p><strong>20-判断-06 ★★</strong> <code>dnsPolicy: Default</code> 表示Pod使用集群CoreDNS解析。
 <strong>答案：错误</strong> <strong>解析：</strong> Default继承节点的
-<code>/etc/resolv.conf</code>，不走CoreDNS。</p>
-<h3 id="20-判断-07-">20-判断-07 ★★</h3>
-<p>Pod内 <code>/etc/resolv.conf</code> 的nameserver通常指向kube-dns
+<code>/etc/resolv.conf</code>，不走CoreDNS。</p></section><section class="question-card" id="20-判断-07-"><p><strong>20-判断-07 ★★</strong> Pod内 <code>/etc/resolv.conf</code> 的nameserver通常指向kube-dns
 Service的ClusterIP。 <strong>答案：正确</strong> <strong>解析：</strong>
 默认dnsPolicy下，nameserver被设置为kube-dns
-ServiceIP（如10.96.0.10）。</p>
-<h3 id="20-判断-08-">20-判断-08 ★★</h3>
-<p>跨命名空间访问Service必须写完整FQDN。 <strong>答案：正确</strong>
+ServiceIP（如10.96.0.10）。</p></section><section class="question-card" id="20-判断-08-"><p><strong>20-判断-08 ★★</strong> 跨命名空间访问Service必须写完整FQDN。 <strong>答案：正确</strong>
 <strong>解析：</strong> 默认搜索域只覆盖本命名空间，跨命名空间必须用
-<code>service.namespace.svc.cluster.local</code>。</p>
-<h3 id="20-判断-09-">20-判断-09 ★★</h3>
-<p>NetworkPolicy的同一from项内podSelector与namespaceSelector是OR关系。
+<code>service.namespace.svc.cluster.local</code>。</p></section><section class="question-card" id="20-判断-09-"><p><strong>20-判断-09 ★★</strong> NetworkPolicy的同一from项内podSelector与namespaceSelector是OR关系。
 <strong>答案：错误</strong> <strong>解析：</strong>
-同一from项内是AND关系；跨from项才是OR。</p>
-<h3 id="20-判断-10-">20-判断-10 ★★</h3>
-<p>开启egress策略后必须放行DNS流量（UDP 53）才能正常解析服务名。
+同一from项内是AND关系；跨from项才是OR。</p></section><section class="question-card" id="20-判断-10-"><p><strong>20-判断-10 ★★</strong> 开启egress策略后必须放行DNS流量（UDP 53）才能正常解析服务名。
 <strong>答案：正确</strong> <strong>解析：</strong>
-egress默认拒绝所有出站，DNS查询到kube-dns会被拦截，必须显式放行。</p>
-<h3 id="20-判断-11-">20-判断-11 ★★</h3>
-<p>Calico只能使用BGP模式。 <strong>答案：错误</strong>
+egress默认拒绝所有出站，DNS查询到kube-dns会被拦截，必须显式放行。</p></section><section class="question-card" id="20-判断-11-"><p><strong>20-判断-11 ★★</strong> Calico只能使用BGP模式。 <strong>答案：错误</strong>
 <strong>解析：</strong>
-Calico支持BGP（Underlay）和VXLAN（Overlay）两种模式。</p>
-<h3 id="20-判断-12-">20-判断-12 ★★</h3>
-<p>Cilium基于eBPF技术，绕过iptables。 <strong>答案：正确</strong>
+Calico支持BGP（Underlay）和VXLAN（Overlay）两种模式。</p></section><section class="question-card" id="20-判断-12-"><p><strong>20-判断-12 ★★</strong> Cilium基于eBPF技术，绕过iptables。 <strong>答案：正确</strong>
 <strong>解析：</strong>
-Cilium使用eBPF在内核态处理网络，避免iptables开销。</p>
-<h3 id="20-判断-13-">20-判断-13 ★★</h3>
-<p>NetworkPolicy可以指定CIDR范围的IP块（ipBlock）。
+Cilium使用eBPF在内核态处理网络，避免iptables开销。</p></section><section class="question-card" id="20-判断-13-"><p><strong>20-判断-13 ★★</strong> NetworkPolicy可以指定CIDR范围的IP块（ipBlock）。
 <strong>答案：正确</strong> <strong>解析：</strong>
-ipBlock用于选择CIDR范围，常用于放行外部IP段。</p>
-<h3 id="20-判断-14-">20-判断-14 ★★</h3>
-<p>Istio的Sidecar是Envoy代理。 <strong>答案：正确</strong>
+ipBlock用于选择CIDR范围，常用于放行外部IP段。</p></section><section class="question-card" id="20-判断-14-"><p><strong>20-判断-14 ★★</strong> Istio的Sidecar是Envoy代理。 <strong>答案：正确</strong>
 <strong>解析：</strong>
-Istio数据平面基于Envoy，以Sidecar方式注入到业务Pod。</p>
-<h3 id="20-判断-15-">20-判断-15 ★★</h3>
-<p>Headless Service的DNS解析返回ClusterIP。 <strong>答案：错误</strong>
+Istio数据平面基于Envoy，以Sidecar方式注入到业务Pod。</p></section><section class="question-card" id="20-判断-15-"><p><strong>20-判断-15 ★★</strong> Headless Service的DNS解析返回ClusterIP。 <strong>答案：错误</strong>
 <strong>解析：</strong> Headless Service（clusterIP:
-None）不分配ClusterIP，DNS直接返回后端PodIP列表。</p>
-<h3 id="20-判断-16-">20-判断-16 ★★</h3>
-<p><code>kubectl get endpoints &lt;svc&gt;</code>
+None）不分配ClusterIP，DNS直接返回后端PodIP列表。</p></section><section class="question-card" id="20-判断-16-"><p><strong>20-判断-16 ★★</strong> <code>kubectl get endpoints &lt;svc&gt;</code>
 可查看Service关联的PodIP列表。 <strong>答案：正确</strong>
 <strong>解析：</strong>
-endpoints资源记录Service后端PodIP，是排查Service不通的关键。</p>
-<h3 id="20-判断-17-">20-判断-17 ★★★</h3>
-<p>NetworkPolicy中 <code>namespaceSelector</code> 使用
+endpoints资源记录Service后端PodIP，是排查Service不通的关键。</p></section><section class="question-card" id="20-判断-17-"><p><strong>20-判断-17 ★★★</strong> NetworkPolicy中 <code>namespaceSelector</code> 使用
 <code>name:</code> 字段选择命名空间在K8s 1.21+是正确写法。
 <strong>答案：错误</strong> <strong>解析：</strong> K8s 1.21+必须使用
 <code>kubernetes.io/metadata.name:</code> 标签，旧版 <code>name:</code>
-字段已不生效。</p>
-<h3 id="20-判断-18-">20-判断-18 ★★★</h3>
-<p>Pod A的NetworkPolicy只放行Pod B访问，则Pod B访问Pod A时不需要在Pod
+字段已不生效。</p></section><section class="question-card" id="20-判断-18-"><p><strong>20-判断-18 ★★★</strong> Pod A的NetworkPolicy只放行Pod B访问，则Pod B访问Pod A时不需要在Pod
 B上配置egress策略。 <strong>答案：正确</strong> <strong>解析：</strong>
 NetworkPolicy作用在"被访问方"（Pod A的ingress）。但若Pod
-B自身也有egress策略，则仍需在Pod B上放行到Pod A的出站。</p>
-<h3 id="20-判断-19-">20-判断-19 ★★★</h3>
-<p>Service Mesh能完全替代K8s NetworkPolicy。 <strong>答案：错误</strong>
+B自身也有egress策略，则仍需在Pod B上放行到Pod A的出站。</p></section><section class="question-card" id="20-判断-19-"><p><strong>20-判断-19 ★★★</strong> Service Mesh能完全替代K8s NetworkPolicy。 <strong>答案：错误</strong>
 <strong>解析：</strong> 两者层次不同：NetworkPolicy在L3/L4，Service
-Mesh在L7。生产环境通常组合使用。</p>
-<h3 id="20-判断-20-">20-判断-20 ★★★</h3>
-<p>PodIP在集群重启后会保持不变。 <strong>答案：错误</strong>
+Mesh在L7。生产环境通常组合使用。</p></section><section class="question-card" id="20-判断-20-"><p><strong>20-判断-20 ★★★</strong> PodIP在集群重启后会保持不变。 <strong>答案：错误</strong>
 <strong>解析：</strong>
-Pod是易失性资源，重启后IP会重新分配。StatefulSet通过稳定DNS+PVC保证"身份"稳定，但PodIP仍会变化。</p>
-<hr />
-<h2 id="四填空题10题">四、填空题（10题）</h2>
-<h3 id="20-填空-01-">20-填空-01 ★</h3>
-<p>K8s网络模型三原则之一：每个Pod拥有独立的______。
+Pod是易失性资源，重启后IP会重新分配。StatefulSet通过稳定DNS+PVC保证"身份"稳定，但PodIP仍会变化。</p></section>
+<hr /><h2 id="四填空题10题">四、填空题（10题）</h2>
+<section class="question-card" id="20-填空-01-"><p><strong>20-填空-01 ★</strong> K8s网络模型三原则之一：每个Pod拥有独立的______。
 <strong>答案：IP地址</strong> <strong>解析：</strong>
-Pod是K8s最小网络单元，每个Pod有独立IP。</p>
-<h3 id="20-填空-02-">20-填空-02 ★</h3>
-<p>访问 <code>ctts</code> 命名空间下名为 <code>user-service</code>
+Pod是K8s最小网络单元，每个Pod有独立IP。</p></section><section class="question-card" id="20-填空-02-"><p><strong>20-填空-02 ★</strong> 访问 <code>ctts</code> 命名空间下名为 <code>user-service</code>
 的Service的完整域名是
 <code>user-service.______.svc.cluster.local</code>。
 <strong>答案：ctts</strong> <strong>解析：</strong> 域名格式
-<code>service.namespace.svc.cluster.local</code>。</p>
-<h3 id="20-填空-03-">20-填空-03 ★</h3>
-<p>K8s默认DNS服务组件是______。 <strong>答案：CoreDNS</strong>
-<strong>解析：</strong> CoreDNS自K8s 1.13起为默认DNS。</p>
-<h3 id="20-填空-04-">20-填空-04 ★</h3>
-<p>NetworkPolicy有两种方向：ingress和______。
+<code>service.namespace.svc.cluster.local</code>。</p></section><section class="question-card" id="20-填空-03-"><p><strong>20-填空-03 ★</strong> K8s默认DNS服务组件是______。 <strong>答案：CoreDNS</strong>
+<strong>解析：</strong> CoreDNS自K8s 1.13起为默认DNS。</p></section><section class="question-card" id="20-填空-04-"><p><strong>20-填空-04 ★</strong> NetworkPolicy有两种方向：ingress和______。
 <strong>答案：egress</strong> <strong>解析：</strong>
-ingress管入站，egress管出站。</p>
-<h3 id="20-填空-05-">20-填空-05 ★★</h3>
-<p>Pod的 <code>dnsPolicy</code> 字段默认值是______。
+ingress管入站，egress管出站。</p></section><section class="question-card" id="20-填空-05-"><p><strong>20-填空-05 ★★</strong> Pod的 <code>dnsPolicy</code> 字段默认值是______。
 <strong>答案：ClusterFirst</strong> <strong>解析：</strong>
-默认ClusterFirst，集群域名走CoreDNS。</p>
-<h3 id="20-填空-06-">20-填空-06 ★★</h3>
-<p>CoreDNS默认部署在______命名空间。 <strong>答案：kube-system</strong>
+默认ClusterFirst，集群域名走CoreDNS。</p></section><section class="question-card" id="20-填空-06-"><p><strong>20-填空-06 ★★</strong> CoreDNS默认部署在______命名空间。 <strong>答案：kube-system</strong>
 <strong>解析：</strong> 以Deployment形式部署在kube-system，通过kube-dns
-Service暴露。</p>
-<h3 id="20-填空-07-">20-填空-07 ★★</h3>
-<p>网络调试四件套是 nslookup、______、ping、curl。
+Service暴露。</p></section><section class="question-card" id="20-填空-07-"><p><strong>20-填空-07 ★★</strong> 网络调试四件套是 nslookup、______、ping、curl。
 <strong>答案：dig</strong> <strong>解析：</strong>
-dig用于详细DNS查询。</p>
-<h3 id="20-填空-08-">20-填空-08 ★★</h3>
-<p>NetworkPolicy中用于选择CIDR范围IP的字段是______。
+dig用于详细DNS查询。</p></section><section class="question-card" id="20-填空-08-"><p><strong>20-填空-08 ★★</strong> NetworkPolicy中用于选择CIDR范围IP的字段是______。
 <strong>答案：ipBlock</strong> <strong>解析：</strong>
-ipBlock可指定CIDR，如 <code>10.0.0.0/8</code>。</p>
-<h3 id="20-填空-09-">20-填空-09 ★★★</h3>
-<p>K8s 1.21+版本中，namespaceSelector选择命名空间必须使用标签______。
+ipBlock可指定CIDR，如 <code>10.0.0.0/8</code>。</p></section><section class="question-card" id="20-填空-09-"><p><strong>20-填空-09 ★★★</strong> K8s 1.21+版本中，namespaceSelector选择命名空间必须使用标签______。
 <strong>答案：kubernetes.io/metadata.name</strong>
 <strong>解析：</strong> 旧版 <code>name:</code>
-字段已废弃，必须使用自动添加的metadata.name标签。</p>
-<h3 id="20-填空-10-">20-填空-10 ★★★</h3>
-<p>Istio数据平面以______方式注入业务Pod，其代理组件是______。
+字段已废弃，必须使用自动添加的metadata.name标签。</p></section><section class="question-card" id="20-填空-10-"><p><strong>20-填空-10 ★★★</strong> Istio数据平面以______方式注入业务Pod，其代理组件是______。
 <strong>答案：Sidecar；Envoy</strong> <strong>解析：</strong>
-Istio通过Sidecar模式注入Envoy代理，拦截所有进出Pod的流量。</p>
-<hr />
-<h2 id="五论述简答题4题">五、论述简答题（4题）</h2>
-<h3 id="20-论述-01-">20-论述-01 ★★</h3>
-<p>简述K8s网络模型三原则及其设计意义。</p>
+Istio通过Sidecar模式注入Envoy代理，拦截所有进出Pod的流量。</p></section>
+<hr /><h2 id="五论述简答题4题">五、论述简答题（4题）</h2>
+<section class="question-card" id="20-论述-01-"><p><strong>20-论述-01 ★★</strong> 简述K8s网络模型三原则及其设计意义。</p>
 <p><strong>参考答案：</strong> K8s网络模型三原则：</p>
 <ol type="1">
 <li><strong>每个Pod拥有独立IP</strong>：Pod是K8s最小网络单元，容器共享Pod网络命名空间。</li>
@@ -575,10 +447,8 @@ Istio通过Sidecar模式注入Envoy代理，拦截所有进出Pod的流量。</p
 <li>设计意义至少答出3点（4分）</li>
 <li>表述清晰、有条理（额外加分不超过1分）</li>
 </ul>
-<p><strong>考点：</strong> K20-1</p>
-<hr />
-<h3 id="20-论述-02-">20-论述-02 ★★</h3>
-<p>某开发人员在 <code>default</code> 命名空间Pod内执行
+<p><strong>考点：</strong> K20-1</p></section>
+<hr /><section class="question-card" id="20-论述-02-"><p><strong>20-论述-02 ★★</strong> 某开发人员在 <code>default</code> 命名空间Pod内执行
 <code>curl http://user-service:8080</code> 想访问 <code>ctts</code>
 命名空间的 user-service，但解析失败。请说明原因并给出正确做法。</p>
 <p><strong>参考答案：</strong> <strong>原因：</strong> K8s默认在Pod的
@@ -605,10 +475,8 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="
 <li>给出正确FQDN写法（2分）</li>
 <li>给出验证命令（2分）</li>
 </ul>
-<p><strong>考点：</strong> K20-2</p>
-<hr />
-<h3 id="20-论述-03-">20-论述-03 ★★★</h3>
-<p>请为以下场景设计NetworkPolicy并解释设计思路：<code>ctts</code>
+<p><strong>考点：</strong> K20-2</p></section>
+<hr /><section class="question-card" id="20-论述-03-"><p><strong>20-论述-03 ★★★</strong> 请为以下场景设计NetworkPolicy并解释设计思路：<code>ctts</code>
 命名空间下有 <code>app=user</code> 的Pod，要求只允许 <code>ctts</code>
 命名空间的 <code>app=order</code> Pod访问其8080端口，并允许其出站访问
 <code>app=postgres</code> Pod的5432端口和CoreDNS的53端口。</p>
@@ -672,10 +540,8 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="
 <li>egress规则正确（含两条放行）（4分）</li>
 <li>明确放行DNS（关键点）（2分）</li>
 </ul>
-<p><strong>考点：</strong> K20-3</p>
-<hr />
-<h3 id="20-论述-04-">20-论述-04 ★★★</h3>
-<p>对比K8s NetworkPolicy与Istio
+<p><strong>考点：</strong> K20-3</p></section>
+<hr /><section class="question-card" id="20-论述-04-"><p><strong>20-论述-04 ★★★</strong> 对比K8s NetworkPolicy与Istio
 AuthorizationPolicy在能力、层次、适用场景上的差异，并说明生产环境如何选择。</p>
 <p><strong>参考答案：</strong></p>
 <table>
@@ -741,11 +607,9 @@ Mesh的Sidecar会增加2-5ms延迟与内存开销。</li>
 <li>给出至少2种生产场景选择方案（3分）</li>
 <li>提及分层防御思想（2分）</li>
 </ul>
-<p><strong>考点：</strong> K20-5</p>
-<hr />
-<h2 id="六程序阅读补全题2题">六、程序阅读补全题（2题）</h2>
-<h3 id="20-阅读-01-">20-阅读-01 ★★</h3>
-<p>阅读以下NetworkPolicy YAML，补全第（1）处和第（2）处缺失字段。</p>
+<p><strong>考点：</strong> K20-5</p></section>
+<hr /><h2 id="六程序阅读补全题2题">六、程序阅读补全题（2题）</h2>
+<section class="question-card" id="20-阅读-01-"><p><strong>20-阅读-01 ★★</strong> 阅读以下NetworkPolicy YAML，补全第（1）处和第（2）处缺失字段。</p>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> NetworkPolicy</span></span>
@@ -794,10 +658,8 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="
 <li>（1）正确（5分）</li>
 <li>（2）正确（5分）</li>
 </ul>
-<p><strong>考点：</strong> K20-3</p>
-<hr />
-<h3 id="20-阅读-02-">20-阅读-02 ★★★</h3>
-<p>阅读以下Pod定义与调试命令，回答问题。</p>
+<p><strong>考点：</strong> K20-3</p></section>
+<hr /><section class="question-card" id="20-阅读-02-"><p><strong>20-阅读-02 ★★★</strong> 阅读以下Pod定义与调试命令，回答问题。</p>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Pod</span></span>
@@ -848,11 +710,9 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="
 <li>准确指出可能原因（5分，至少2种）</li>
 <li>给出有效排查命令（6分，至少2条且合理）</li>
 </ul>
-<p><strong>考点：</strong> K20-2 + K20-4</p>
-<hr />
-<h2 id="七编程接口设计题2题">七、编程接口设计题（2题）</h2>
-<h3 id="20-编程-01-">20-编程-01 ★★</h3>
-<p><strong>任务</strong>：编写一个完整的NetworkPolicy
+<p><strong>考点：</strong> K20-2 + K20-4</p></section>
+<hr /><h2 id="七编程接口设计题2题">七、编程接口设计题（2题）</h2>
+<section class="question-card" id="20-编程-01-"><p><strong>20-编程-01 ★★</strong> <strong>任务</strong>：编写一个完整的NetworkPolicy
 YAML，满足以下需求：</p>
 <ul>
 <li>命名空间：<code>ctts</code></li>
@@ -908,10 +768,8 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="
 <code>app In [user, order]</code>，也可行但本答案更直观。</li>
 <li>错误写法：把两个podSelector放在两个from项（语法OR）——本题两个podSelector在同一from项内多项也是OR，效果相同。</li>
 </ul>
-<p><strong>考点：</strong> K20-3</p>
-<hr />
-<h3 id="20-编程-02-">20-编程-02 ★★★</h3>
-<p><strong>任务</strong>：设计一个完整的K8s网络方案，包括Namespace、Service、Deployment、NetworkPolicy，满足：</p>
+<p><strong>考点：</strong> K20-3</p></section>
+<hr /><section class="question-card" id="20-编程-02-"><p><strong>20-编程-02 ★★★</strong> <strong>任务</strong>：设计一个完整的K8s网络方案，包括Namespace、Service、Deployment、NetworkPolicy，满足：</p>
 <ol type="1">
 <li>创建 <code>prod</code> 命名空间（带
 <code>kubernetes.io/metadata.name</code> 标签）</li>
@@ -1099,9 +957,8 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href=
 Pod开启egress后必须放行DNS，否则连"frontend.prod.svc.cluster.local"都解析不了。</li>
 <li>frontend的egress也必须放行到api:8080，否则即使能解析也连不通。</li>
 </ul>
-<p><strong>考点：</strong> K20-2 + K20-3 + K20-4 综合应用</p>
-<hr />
-<h2 id="八统计表">八、统计表</h2>
+<p><strong>考点：</strong> K20-2 + K20-3 + K20-4 综合应用</p></section>
+<hr /><h2 id="八统计表">八、统计表</h2>
 <h3 id="81-题型分布">8.1 题型分布</h3>
 <table>
 <thead>

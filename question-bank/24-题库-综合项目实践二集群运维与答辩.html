@@ -150,468 +150,402 @@
 </blockquote>
 <hr />
 <h2 id="一单项选择题30题">一、单项选择题（30题）</h2>
-<h3 id="24-单选-01-">24-单选-01 ★</h3>
-<p><strong>题目</strong>：Docker容器的核心技术基础是？ A. 虚拟机技术 B.
-Linux内核的命名空间（Namespace）和控制组（cgroups） C. Java虚拟机 D.
-操作系统快照</p>
+<section class="question-card" id="24-单选-01-"><p><strong>24-单选-01 ★</strong> <strong>题目</strong>：Docker容器的核心技术基础是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">虚拟机技术</div></li><li><span class="option-label">B</span><div class="option-content">Linux内核的命名空间（Namespace）和控制组（cgroups）</div></li><li><span class="option-label">C</span><div class="option-content">Java虚拟机</div></li><li><span class="option-label">D</span><div class="option-content">操作系统快照</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：Docker容器不是虚拟机，而是基于Linux内核的Namespace（实现资源隔离）和cgroups（实现资源限制）技术。Namespace提供PID、网络、挂载、UTS、IPC、用户等隔离，cgroups提供CPU、内存、IO等资源限制。</p>
-<hr />
-<h3 id="24-单选-02-">24-单选-02 ★</h3>
-<p><strong>题目</strong>：以下哪个命令用于查看本地所有Docker镜像？ A.
-docker ps B. docker images C. docker list D. docker show</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-02-"><p><strong>24-单选-02 ★</strong> <strong>题目</strong>：以下哪个命令用于查看本地所有Docker镜像？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">docker ps</div></li><li><span class="option-label">B</span><div class="option-content">docker images</div></li><li><span class="option-label">C</span><div class="option-content">docker list</div></li><li><span class="option-label">D</span><div class="option-content">docker show</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：<code>docker images</code>（或<code>docker image ls</code>）用于列出本地所有镜像。<code>docker ps</code>查看运行中的容器，<code>docker ps -a</code>查看所有容器（含停止）。</p>
-<hr />
-<h3 id="24-单选-03-">24-单选-03 ★</h3>
-<p><strong>题目</strong>：Dockerfile中，哪个指令用于设置容器的工作目录？
-A. RUN B. CMD C. WORKDIR D. ENV</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-03-"><p><strong>24-单选-03 ★</strong> <strong>题目</strong>：Dockerfile中，哪个指令用于设置容器的工作目录？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">RUN</div></li><li><span class="option-label">B</span><div class="option-content">CMD</div></li><li><span class="option-label">C</span><div class="option-content">WORKDIR</div></li><li><span class="option-label">D</span><div class="option-content">ENV</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C
 <strong>解析</strong>：<code>WORKDIR</code>指令用于设置工作目录，后续的RUN、CMD、ENTRYPOINT、COPY、ADD等指令都会在该目录下执行。如果目录不存在会自动创建。</p>
-<hr />
-<h3 id="24-单选-04-">24-单选-04 ★★</h3>
-<p><strong>题目</strong>：以下Dockerfile指令中，哪个会使镜像层数增加？
-A. FROM B. WORKDIR C. RUN apt-get update &amp;&amp; apt-get install -y
-nginx D. ENV</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-04-"><p><strong>24-单选-04 ★★</strong> <strong>题目</strong>：以下Dockerfile指令中，哪个会使镜像层数增加？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">FROM</div></li><li><span class="option-label">B</span><div class="option-content">WORKDIR</div></li><li><span class="option-label">C</span><div class="option-content">RUN apt-get update &amp;&amp; apt-get install -y nginx</div></li><li><span class="option-label">D</span><div class="option-content">ENV</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C
 <strong>解析</strong>：<code>RUN</code>、<code>COPY</code>、<code>ADD</code>指令会创建新的镜像层。<code>WORKDIR</code>、<code>ENV</code>、<code>LABEL</code>等指令只修改镜像的元数据，不会创建新层。合并多个RUN命令可减少层数。</p>
-<hr />
-<h3 id="24-单选-05-">24-单选-05 ★★</h3>
-<p><strong>题目</strong>：多阶段构建的主要优势是？ A. 加快构建速度 B.
-减小最终镜像体积 C. 支持并行构建 D. 自动优化镜像层</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-05-"><p><strong>24-单选-05 ★★</strong> <strong>题目</strong>：多阶段构建的主要优势是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">加快构建速度</div></li><li><span class="option-label">B</span><div class="option-content">减小最终镜像体积</div></li><li><span class="option-label">C</span><div class="option-content">支持并行构建</div></li><li><span class="option-label">D</span><div class="option-content">自动优化镜像层</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：多阶段构建通过<code>FROM ... AS stage</code>定义多个构建阶段，最终镜像只包含最后阶段的内容，编译工具和中间产物不会进入最终镜像，从而大幅减小镜像体积。</p>
-<hr />
-<h3 id="24-单选-06-">24-单选-06 ★</h3>
-<p><strong>题目</strong>：Docker Compose的配置文件默认名称是？ A.
-compose.yaml B. docker-compose.yml C. compose.yml D.
-docker-compose.yaml</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-06-"><p><strong>24-单选-06 ★</strong> <strong>题目</strong>：Docker Compose的配置文件默认名称是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">compose.yaml</div></li><li><span class="option-label">B</span><div class="option-content">docker-compose.yml</div></li><li><span class="option-label">C</span><div class="option-content">compose.yml</div></li><li><span class="option-label">D</span><div class="option-content">docker-compose.yaml</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B <strong>解析</strong>：Docker
 Compose默认读取<code>docker-compose.yml</code>或<code>docker-compose.yaml</code>。也支持<code>compose.yaml</code>/<code>compose.yml</code>（Compose
 Specification新规范）。</p>
-<hr />
-<h3 id="24-单选-07-">24-单选-07 ★★</h3>
-<p><strong>题目</strong>：以下哪个K8s资源对象是最小的调度单元？ A.
-Deployment B. Service C. Pod D. Container</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-07-"><p><strong>24-单选-07 ★★</strong> <strong>题目</strong>：以下哪个K8s资源对象是最小的调度单元？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Deployment</div></li><li><span class="option-label">B</span><div class="option-content">Service</div></li><li><span class="option-label">C</span><div class="option-content">Pod</div></li><li><span class="option-label">D</span><div class="option-content">Container</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C
 <strong>解析</strong>：Pod是K8s中最小的调度和部署单元，一个Pod可以包含一个或多个容器（通常一个主容器，可加sidecar容器）。容器不能直接被调度，必须封装在Pod中。</p>
-<hr />
-<h3 id="24-单选-08-">24-单选-08 ★</h3>
-<p><strong>题目</strong>：kubectl命令中，用于查看Pod日志的命令是？ A.
-kubectl describe pod B. kubectl logs C. kubectl get pod D. kubectl
-exec</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-08-"><p><strong>24-单选-08 ★</strong> <strong>题目</strong>：kubectl命令中，用于查看Pod日志的命令是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">kubectl describe pod</div></li><li><span class="option-label">B</span><div class="option-content">kubectl logs</div></li><li><span class="option-label">C</span><div class="option-content">kubectl get pod</div></li><li><span class="option-label">D</span><div class="option-content">kubectl exec</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：<code>kubectl logs &lt;pod-name&gt;</code>查看Pod日志；<code>kubectl logs -f &lt;pod-name&gt;</code>实时跟踪日志；<code>kubectl logs --previous &lt;pod-name&gt;</code>查看上一个容器（崩溃前）的日志。</p>
-<hr />
-<h3 id="24-单选-09-">24-单选-09 ★★</h3>
-<p><strong>题目</strong>：Service类型为ClusterIP的Service，其访问范围是？
-A. 集群外部 B. 仅集群内部 C. 仅同一命名空间 D. 全互联网</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-09-"><p><strong>24-单选-09 ★★</strong> <strong>题目</strong>：Service类型为ClusterIP的Service，其访问范围是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">集群外部</div></li><li><span class="option-label">B</span><div class="option-content">仅集群内部</div></li><li><span class="option-label">C</span><div class="option-content">仅同一命名空间</div></li><li><span class="option-label">D</span><div class="option-content">全互联网</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：ClusterIP类型的Service分配一个集群内部虚拟IP（ClusterIP），只能在集群内部访问。如需外部访问，需使用NodePort、LoadBalancer或Ingress。</p>
-<hr />
-<h3 id="24-单选-10-">24-单选-10 ★</h3>
-<p><strong>题目</strong>：K8s中用于存储敏感信息（如密码、密钥）的资源对象是？
-A. ConfigMap B. Secret C. Volume D. PVC</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-10-"><p><strong>24-单选-10 ★</strong> <strong>题目</strong>：K8s中用于存储敏感信息（如密码、密钥）的资源对象是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">ConfigMap</div></li><li><span class="option-label">B</span><div class="option-content">Secret</div></li><li><span class="option-label">C</span><div class="option-content">Volume</div></li><li><span class="option-label">D</span><div class="option-content">PVC</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：Secret专门用于存储敏感信息，数据以Base64编码存储。ConfigMap用于存储非敏感的配置信息（明文）。</p>
-<hr />
-<h3 id="24-单选-11-">24-单选-11 ★★</h3>
-<p><strong>题目</strong>：Pod状态显示<code>CrashLoopBackOff</code>，以下哪个命令最适合查看崩溃前的日志？
-A. kubectl logs <pod> B. kubectl logs <pod> --previous C. kubectl
-describe pod <pod> D. kubectl get events</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-11-"><p><strong>24-单选-11 ★★</strong> <strong>题目</strong>：Pod状态显示<code>CrashLoopBackOff</code>，以下哪个命令最适合查看崩溃前的日志？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">kubectl logs <pod></div></li><li><span class="option-label">B</span><div class="option-content">kubectl logs <pod> --previous</div></li><li><span class="option-label">C</span><div class="option-content">kubectl describe pod <pod></div></li><li><span class="option-label">D</span><div class="option-content">kubectl get events</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：<code>--previous</code>（简写<code>-p</code>）参数查看上一个容器实例的日志，对于排查CrashLoopBackOff至关重要。<code>kubectl describe</code>查看事件，但日志需要用logs命令。</p>
-<hr />
-<h3 id="24-单选-12-">24-单选-12 ★★</h3>
-<p><strong>题目</strong>：Deployment滚动更新时，默认的maxSurge和maxUnavailable值是？
-A. 0和0 B. 1和1 C. 25%和25% D. 50%和50%</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-12-"><p><strong>24-单选-12 ★★</strong> <strong>题目</strong>：Deployment滚动更新时，默认的maxSurge和maxUnavailable值是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">0和0</div></li><li><span class="option-label">B</span><div class="option-content">1和1</div></li><li><span class="option-label">C</span><div class="option-content">25%和25%</div></li><li><span class="option-label">D</span><div class="option-content">50%和50%</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C
 <strong>解析</strong>：Deployment默认滚动更新策略为<code>maxSurge: 25%</code>和<code>maxUnavailable: 25%</code>，即更新过程中最多超出期望副本数25%，最多不可用25%。</p>
-<hr />
-<h3 id="24-单选-13-">24-单选-13 ★★</h3>
-<p><strong>题目</strong>：以下哪个命令用于回滚Deployment到上一个版本？
-A. kubectl rollout undo deployment/<name> B. kubectl rollback
-deployment/<name> C. kubectl undo deployment/<name> D. kubectl rollout
-revert deployment/<name></p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-13-"><p><strong>24-单选-13 ★★</strong> <strong>题目</strong>：以下哪个命令用于回滚Deployment到上一个版本？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">kubectl rollout undo deployment/<name></div></li><li><span class="option-label">B</span><div class="option-content">kubectl rollback deployment/<name></div></li><li><span class="option-label">C</span><div class="option-content">kubectl undo deployment/<name></div></li><li><span class="option-label">D</span><div class="option-content">kubectl rollout revert deployment/<name></div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：<code>kubectl rollout undo deployment/&lt;name&gt;</code>回滚到上一版本；<code>--to-revision=N</code>可回滚到指定版本。K8s没有rollback或revert命令。</p>
-<hr />
-<h3 id="24-单选-14-">24-单选-14 ★★</h3>
-<p><strong>题目</strong>：HPA（水平Pod自动伸缩）默认基于哪个指标进行扩缩容？
-A. 磁盘IO B. 网络流量 C. CPU使用率 D. Pod数量</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-14-"><p><strong>24-单选-14 ★★</strong> <strong>题目</strong>：HPA（水平Pod自动伸缩）默认基于哪个指标进行扩缩容？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">磁盘IO</div></li><li><span class="option-label">B</span><div class="option-content">网络流量</div></li><li><span class="option-label">C</span><div class="option-content">CPU使用率</div></li><li><span class="option-label">D</span><div class="option-content">Pod数量</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C
 <strong>解析</strong>：HPA默认基于CPU使用率（也可配置内存、自定义指标）自动调整Pod副本数。前提是集群安装了metrics-server，且Deployment配置了resources.requests.cpu。</p>
-<hr />
-<h3 id="24-单选-15-">24-单选-15 ★★</h3>
-<p><strong>题目</strong>：Pod状态显示<code>ImagePullBackOff</code>，最可能的原因是？
-A. 容器启动命令错误 B. 镜像拉取失败 C. 资源不足 D. 节点NotReady</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-15-"><p><strong>24-单选-15 ★★</strong> <strong>题目</strong>：Pod状态显示<code>ImagePullBackOff</code>，最可能的原因是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">容器启动命令错误</div></li><li><span class="option-label">B</span><div class="option-content">镜像拉取失败</div></li><li><span class="option-label">C</span><div class="option-content">资源不足</div></li><li><span class="option-label">D</span><div class="option-content">节点NotReady</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：<code>ImagePullBackOff</code>表示镜像拉取失败并退避重试。常见原因：镜像名错误、镜像不存在、私有仓库未配置认证、网络问题。</p>
-<hr />
-<h3 id="24-单选-16-">24-单选-16 ★★★</h3>
-<p><strong>题目</strong>：Pod被OOMKilled，退出码是？ A. 0 B. 1 C. 137 D.
-255</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-16-"><p><strong>24-单选-16 ★★★</strong> <strong>题目</strong>：Pod被OOMKilled，退出码是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">0</div></li><li><span class="option-label">B</span><div class="option-content">1</div></li><li><span class="option-label">C</span><div class="option-content">137</div></li><li><span class="option-label">D</span><div class="option-content">255</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C
 <strong>解析</strong>：OOMKilled时内核发送SIGKILL（信号9）终止进程，退出码为128+9=137。这是判断OOMKilled的关键依据。</p>
-<hr />
-<h3 id="24-单选-17-">24-单选-17 ★★</h3>
-<p><strong>题目</strong>：以下哪个资源对象用于有状态应用（如数据库）？
-A. Deployment B. ReplicaSet C. StatefulSet D. DaemonSet</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-17-"><p><strong>24-单选-17 ★★</strong> <strong>题目</strong>：以下哪个资源对象用于有状态应用（如数据库）？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Deployment</div></li><li><span class="option-label">B</span><div class="option-content">ReplicaSet</div></li><li><span class="option-label">C</span><div class="option-content">StatefulSet</div></li><li><span class="option-label">D</span><div class="option-content">DaemonSet</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C
 <strong>解析</strong>：StatefulSet用于管理有状态应用，提供稳定的网络标识（pod-name-0,
 pod-name-1）、稳定的持久化存储、有序的部署和扩缩容。适合数据库、消息队列等。</p>
-<hr />
-<h3 id="24-单选-18-">24-单选-18 ★★</h3>
-<p><strong>题目</strong>：以下哪个资源对象确保每个节点运行一个Pod副本？
-A. Deployment B. StatefulSet C. DaemonSet D. Job</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-18-"><p><strong>24-单选-18 ★★</strong> <strong>题目</strong>：以下哪个资源对象确保每个节点运行一个Pod副本？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Deployment</div></li><li><span class="option-label">B</span><div class="option-content">StatefulSet</div></li><li><span class="option-label">C</span><div class="option-content">DaemonSet</div></li><li><span class="option-label">D</span><div class="option-content">Job</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C
 <strong>解析</strong>：DaemonSet确保在每个（或指定）节点上运行一个Pod副本，常用于日志收集（Fluentd）、监控代理（Node
 Exporter）、网络插件（Calico）等。</p>
-<hr />
-<h3 id="24-单选-19-">24-单选-19 ★★</h3>
-<p><strong>题目</strong>：Ingress资源主要提供什么功能？ A. L4负载均衡 B.
-L7（HTTP/HTTPS）路由 C. 服务发现 D. 流量加密</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-19-"><p><strong>24-单选-19 ★★</strong> <strong>题目</strong>：Ingress资源主要提供什么功能？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">L4负载均衡</div></li><li><span class="option-label">B</span><div class="option-content">L7（HTTP/HTTPS）路由</div></li><li><span class="option-label">C</span><div class="option-content">服务发现</div></li><li><span class="option-label">D</span><div class="option-content">流量加密</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：Ingress提供L7层（HTTP/HTTPS）负载均衡和路由，支持基于域名、路径的路由规则，支持TLS终止。Service提供L4层负载均衡。</p>
-<hr />
-<h3 id="24-单选-20-">24-单选-20 ★★</h3>
-<p><strong>题目</strong>：以下哪个命令可以查看Service的端点（Endpoints）？
-A. kubectl get svc B. kubectl get endpoints C. kubectl describe
-deployment D. kubectl get pods</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-20-"><p><strong>24-单选-20 ★★</strong> <strong>题目</strong>：以下哪个命令可以查看Service的端点（Endpoints）？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">kubectl get svc</div></li><li><span class="option-label">B</span><div class="option-content">kubectl get endpoints</div></li><li><span class="option-label">C</span><div class="option-content">kubectl describe deployment</div></li><li><span class="option-label">D</span><div class="option-content">kubectl get pods</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：<code>kubectl get endpoints &lt;svc-name&gt;</code>（简写<code>kubectl get ep</code>）查看Service关联的Pod端点。如果ENDPOINTS为<code>&lt;none&gt;</code>，说明Service没有关联到任何Pod（常见于selector不匹配）。</p>
-<hr />
-<h3 id="24-单选-21-">24-单选-21 ★★</h3>
-<p><strong>题目</strong>：Helm是什么工具？ A. 容器编排工具 B.
-K8s包管理工具 C. 镜像构建工具 D. 监控工具</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-21-"><p><strong>24-单选-21 ★★</strong> <strong>题目</strong>：Helm是什么工具？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">容器编排工具</div></li><li><span class="option-label">B</span><div class="option-content">K8s包管理工具</div></li><li><span class="option-label">C</span><div class="option-content">镜像构建工具</div></li><li><span class="option-label">D</span><div class="option-content">监控工具</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：Helm是K8s的包管理工具，类似Linux的yum/apt。通过Chart（预定义的K8s资源模板包）简化应用部署，支持版本管理和仓库。</p>
-<hr />
-<h3 id="24-单选-22-">24-单选-22 ★★</h3>
-<p><strong>题目</strong>：PV和PVC的关系是？ A. PV消费PVC B. PVC消费PV C.
-两者独立 D. PV创建PVC</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-22-"><p><strong>24-单选-22 ★★</strong> <strong>题目</strong>：PV和PVC的关系是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">PV消费PVC</div></li><li><span class="option-label">B</span><div class="option-content">PVC消费PV</div></li><li><span class="option-label">C</span><div class="option-content">两者独立</div></li><li><span class="option-label">D</span><div class="option-content">PV创建PVC</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：PV（PersistentVolume）是集群管理员声明的存储资源，PVC（PersistentVolumeClaim）是用户对存储的申请。PVC消费PV，K8s根据PVC的请求自动绑定匹配的PV。</p>
-<hr />
-<h3 id="24-单选-23-">24-单选-23 ★★</h3>
-<p><strong>题目</strong>：以下哪个探针用于判断容器是否处于正常运行状态（失败会重启）？
-A. readinessProbe B. livenessProbe C. startupProbe D. lifecycle</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-23-"><p><strong>24-单选-23 ★★</strong> <strong>题目</strong>：以下哪个探针用于判断容器是否处于正常运行状态（失败会重启）？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">readinessProbe</div></li><li><span class="option-label">B</span><div class="option-content">livenessProbe</div></li><li><span class="option-label">C</span><div class="option-content">startupProbe</div></li><li><span class="option-label">D</span><div class="option-content">lifecycle</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：livenessProbe（存活探针）判断容器是否健康运行，失败会重启容器。readinessProbe（就绪探针）判断容器是否
 ready
 接收流量，失败会从Service端点移除但不重启。startupProbe（启动探针）判断容器是否启动完成。</p>
-<hr />
-<h3 id="24-单选-24-">24-单选-24 ★★</h3>
-<p><strong>题目</strong>：以下哪个命令用于查看节点资源使用情况（CPU/内存）？
-A. kubectl describe node B. kubectl get nodes C. kubectl top nodes D.
-kubectl node info</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-24-"><p><strong>24-单选-24 ★★</strong> <strong>题目</strong>：以下哪个命令用于查看节点资源使用情况（CPU/内存）？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">kubectl describe node</div></li><li><span class="option-label">B</span><div class="option-content">kubectl get nodes</div></li><li><span class="option-label">C</span><div class="option-content">kubectl top nodes</div></li><li><span class="option-label">D</span><div class="option-content">kubectl node info</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：C
 <strong>解析</strong>：<code>kubectl top nodes</code>（<code>kubectl top node</code>）查看节点实时CPU/内存使用情况，需要集群安装metrics-server。<code>kubectl describe node</code>查看节点详情但不含实时使用率。</p>
-<hr />
-<h3 id="24-单选-25-">24-单选-25 ★★</h3>
-<p><strong>题目</strong>：RBAC中，Role和ClusterRole的区别是？ A.
-Role是集群级，ClusterRole是命名空间级 B.
-Role是命名空间级，ClusterRole是集群级 C. 两者完全相同 D.
-Role用于读，ClusterRole用于写</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-25-"><p><strong>24-单选-25 ★★</strong> <strong>题目</strong>：RBAC中，Role和ClusterRole的区别是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Role是集群级，ClusterRole是命名空间级</div></li><li><span class="option-label">B</span><div class="option-content">Role是命名空间级，ClusterRole是集群级</div></li><li><span class="option-label">C</span><div class="option-content">两者完全相同</div></li><li><span class="option-label">D</span><div class="option-content">Role用于读，ClusterRole用于写</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：Role是命名空间级别的角色，权限只在某个namespace内有效；ClusterRole是集群级别的角色，权限可跨namespace，常用于集群级资源（nodes、PV等）。</p>
-<hr />
-<h3 id="24-单选-26-">24-单选-26 ★★</h3>
-<p><strong>题目</strong>：以下哪个命令用于手动扩缩容Deployment副本数？
-A. kubectl resize deployment <name> --replicas=3 B. kubectl scale
-deployment <name> --replicas=3 C. kubectl expand deployment <name>
---replicas=3 D. kubectl set deployment <name> --replicas=3</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-26-"><p><strong>24-单选-26 ★★</strong> <strong>题目</strong>：以下哪个命令用于手动扩缩容Deployment副本数？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">kubectl resize deployment <name> --replicas=3</div></li><li><span class="option-label">B</span><div class="option-content">kubectl scale deployment <name> --replicas=3</div></li><li><span class="option-label">C</span><div class="option-content">kubectl expand deployment <name> --replicas=3</div></li><li><span class="option-label">D</span><div class="option-content">kubectl set deployment <name> --replicas=3</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：<code>kubectl scale deployment/&lt;name&gt; --replicas=N</code>手动调整副本数。这是K8s运维最常用的扩缩容命令。</p>
-<hr />
-<h3 id="24-单选-27-">24-单选-27 ★★</h3>
-<p><strong>题目</strong>：以下哪个是K8s集群的持久化存储后端？ A. etcd B.
-MySQL C. Redis D. SQLite</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-27-"><p><strong>24-单选-27 ★★</strong> <strong>题目</strong>：以下哪个是K8s集群的持久化存储后端？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">etcd</div></li><li><span class="option-label">B</span><div class="option-content">MySQL</div></li><li><span class="option-label">C</span><div class="option-content">Redis</div></li><li><span class="option-label">D</span><div class="option-content">SQLite</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：etcd是K8s集群的分布式键值存储数据库，保存集群所有状态数据（Pod、Service、ConfigMap等）。etcd的一致性直接影响集群稳定性。</p>
-<hr />
-<h3 id="24-单选-28-">24-单选-28 ★★</h3>
-<p><strong>题目</strong>：NetworkPolicy的作用是？ A. 提供网络服务 B.
-控制Pod间网络流量 C. 分配IP地址 D. DNS解析</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-28-"><p><strong>24-单选-28 ★★</strong> <strong>题目</strong>：NetworkPolicy的作用是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">提供网络服务</div></li><li><span class="option-label">B</span><div class="option-content">控制Pod间网络流量</div></li><li><span class="option-label">C</span><div class="option-content">分配IP地址</div></li><li><span class="option-label">D</span><div class="option-content">DNS解析</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：NetworkPolicy用于控制Pod之间的网络流量，实现网络隔离。可以定义哪些Pod可以访问哪些Pod的哪些端口，类似云平台的安全组。</p>
-<hr />
-<h3 id="24-单选-29-">24-单选-29 ★★★</h3>
-<p><strong>题目</strong>：一个Service的selector为<code>app: web</code>，但Pod标签为<code>app: web-api</code>，会出现什么现象？
-A. Pod正常访问 B. Service的Endpoints为空 C. Pod自动重启 D.
-Service自动删除</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-29-"><p><strong>24-单选-29 ★★★</strong> <strong>题目</strong>：一个Service的selector为<code>app: web</code>，但Pod标签为<code>app: web-api</code>，会出现什么现象？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Pod正常访问</div></li><li><span class="option-label">B</span><div class="option-content">Service的Endpoints为空</div></li><li><span class="option-label">C</span><div class="option-content">Pod自动重启</div></li><li><span class="option-label">D</span><div class="option-content">Service自动删除</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：Service通过selector匹配Pod标签，标签不匹配则Service没有关联到任何Pod，Endpoints为空（<code>&lt;none&gt;</code>），访问Service无响应。需修正selector或Pod标签使其一致。</p>
-<hr />
-<h3 id="24-单选-30-">24-单选-30 ★★★</h3>
-<p><strong>题目</strong>：以下哪种情况会导致Pod一直处于<code>Pending</code>状态？
-A. 容器启动失败 B. 节点资源不足，无法调度 C. 镜像拉取失败 D.
-应用抛出异常</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-单选-30-"><p><strong>24-单选-30 ★★★</strong> <strong>题目</strong>：以下哪种情况会导致Pod一直处于<code>Pending</code>状态？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">容器启动失败</div></li><li><span class="option-label">B</span><div class="option-content">节点资源不足，无法调度</div></li><li><span class="option-label">C</span><div class="option-content">镜像拉取失败</div></li><li><span class="option-label">D</span><div class="option-content">应用抛出异常</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：Pending状态表示Pod尚未被调度到节点。常见原因：节点资源不足（CPU/内存不满足requests）、节点污点不匹配、节点选择器不匹配、亲和性约束无法满足。容器启动失败、镜像拉取失败是Pod已调度后的状态（ImagePullBackOff/CrashLoopBackOff）。</p>
-<hr />
-<h2 id="二多项选择题10题">二、多项选择题（10题）</h2>
-<h3 id="24-多选-01-">24-多选-01 ★</h3>
-<p><strong>题目</strong>：以下哪些是Docker的核心组件？（多选） A. Docker
-Daemon B. Docker Client C. Docker Registry D. Docker Hub E.
-Kubernetes</p>
+</blockquote></section>
+<hr /><h2 id="二多项选择题10题">二、多项选择题（10题）</h2>
+<section class="question-card" id="24-多选-01-"><p><strong>24-多选-01 ★</strong> <strong>题目</strong>：以下哪些是Docker的核心组件？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Docker Daemon</div></li><li><span class="option-label">B</span><div class="option-content">Docker Client</div></li><li><span class="option-label">C</span><div class="option-content">Docker Registry</div></li><li><span class="option-label">D</span><div class="option-content">Docker Hub</div></li><li><span class="option-label">E</span><div class="option-content">Kubernetes</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCD
 <strong>解析</strong>：Docker核心组件包括Docker
 Daemon（守护进程）、Docker Client（客户端）、Docker
 Registry（镜像仓库）。Docker
 Hub是公共镜像仓库的实例。Kubernetes是独立的容器编排系统，不属于Docker组件。</p>
-<hr />
-<h3 id="24-多选-02-">24-多选-02 ★★</h3>
-<p><strong>题目</strong>：以下哪些Dockerfile指令会创建新的镜像层？（多选）
-A. FROM B. RUN C. COPY D. ADD E. ENV F. WORKDIR</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-多选-02-"><p><strong>24-多选-02 ★★</strong> <strong>题目</strong>：以下哪些Dockerfile指令会创建新的镜像层？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">FROM</div></li><li><span class="option-label">B</span><div class="option-content">RUN</div></li><li><span class="option-label">C</span><div class="option-content">COPY</div></li><li><span class="option-label">D</span><div class="option-content">ADD</div></li><li><span class="option-label">E</span><div class="option-content">ENV</div></li><li><span class="option-label">F</span><div class="option-content">WORKDIR</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：BCD
 <strong>解析</strong>：<code>RUN</code>、<code>COPY</code>、<code>ADD</code>会创建新的镜像层。<code>FROM</code>是基础镜像，<code>ENV</code>、<code>WORKDIR</code>、<code>LABEL</code>等只修改镜像元数据，不创建新层。合并RUN命令可减少层数。</p>
-<hr />
-<h3 id="24-多选-03-">24-多选-03 ★★</h3>
-<p><strong>题目</strong>：K8s中，以下哪些资源对象属于工作负载（Workload）？（多选）
-A. Pod B. Deployment C. Service D. StatefulSet E. DaemonSet F.
-ConfigMap</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-多选-03-"><p><strong>24-多选-03 ★★</strong> <strong>题目</strong>：K8s中，以下哪些资源对象属于工作负载（Workload）？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Pod</div></li><li><span class="option-label">B</span><div class="option-content">Deployment</div></li><li><span class="option-label">C</span><div class="option-content">Service</div></li><li><span class="option-label">D</span><div class="option-content">StatefulSet</div></li><li><span class="option-label">E</span><div class="option-content">DaemonSet</div></li><li><span class="option-label">F</span><div class="option-content">ConfigMap</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABDE
 <strong>解析</strong>：工作负载资源包括Pod、Deployment、StatefulSet、DaemonSet、Job、CronJob、ReplicaSet等，用于管理应用的运行。Service属于网络资源，ConfigMap属于配置资源。</p>
-<hr />
-<h3 id="24-多选-04-">24-多选-04 ★★</h3>
-<p><strong>题目</strong>：以下哪些是K8s Service的类型？（多选） A.
-ClusterIP B. NodePort C. LoadBalancer D. ExternalName E. Ingress</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-多选-04-"><p><strong>24-多选-04 ★★</strong> <strong>题目</strong>：以下哪些是K8s Service的类型？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">ClusterIP</div></li><li><span class="option-label">B</span><div class="option-content">NodePort</div></li><li><span class="option-label">C</span><div class="option-content">LoadBalancer</div></li><li><span class="option-label">D</span><div class="option-content">ExternalName</div></li><li><span class="option-label">E</span><div class="option-content">Ingress</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCD
 <strong>解析</strong>：Service的四种类型：ClusterIP（集群内访问）、NodePort（节点端口暴露）、LoadBalancer（云负载均衡）、ExternalName（CNAME别名）。Ingress是独立的资源对象，不属于Service类型。</p>
-<hr />
-<h3 id="24-多选-05-">24-多选-05 ★★</h3>
-<p><strong>题目</strong>：Pod出现CrashLoopBackOff，可能的原因有哪些？（多选）
-A. 容器启动命令错误 B. 应用配置错误导致启动失败 C. 依赖服务未就绪 D.
-存活探针配置过严 E. 节点NotReady F. 镜像名称拼写错误</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-多选-05-"><p><strong>24-多选-05 ★★</strong> <strong>题目</strong>：Pod出现CrashLoopBackOff，可能的原因有哪些？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">容器启动命令错误</div></li><li><span class="option-label">B</span><div class="option-content">应用配置错误导致启动失败</div></li><li><span class="option-label">C</span><div class="option-content">依赖服务未就绪</div></li><li><span class="option-label">D</span><div class="option-content">存活探针配置过严</div></li><li><span class="option-label">E</span><div class="option-content">节点NotReady</div></li><li><span class="option-label">F</span><div class="option-content">镜像名称拼写错误</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCD
 <strong>解析</strong>：CrashLoopBackOff是容器反复崩溃重启。ABCD都会导致容器启动后崩溃。E（节点NotReady）会导致Pod被驱逐或Pending，不是CrashLoopBackOff。F（镜像名错误）会导致ImagePullBackOff。</p>
-<hr />
-<h3 id="24-多选-06-">24-多选-06 ★★</h3>
-<p><strong>题目</strong>：以下哪些命令可用于K8s故障排查？（多选） A.
-kubectl describe pod B. kubectl logs C. kubectl get events D. kubectl
-exec E. kubectl top F. kubectl apply</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-多选-06-"><p><strong>24-多选-06 ★★</strong> <strong>题目</strong>：以下哪些命令可用于K8s故障排查？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">kubectl describe pod</div></li><li><span class="option-label">B</span><div class="option-content">kubectl logs</div></li><li><span class="option-label">C</span><div class="option-content">kubectl get events</div></li><li><span class="option-label">D</span><div class="option-content">kubectl exec</div></li><li><span class="option-label">E</span><div class="option-content">kubectl top</div></li><li><span class="option-label">F</span><div class="option-content">kubectl apply</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCDE
 <strong>解析</strong>：ABCD都是常用排障命令（查看详情/日志/事件/进入容器）。E用于查看资源使用情况。F（kubectl
 apply）是部署命令，不是排障命令。</p>
-<hr />
-<h3 id="24-多选-07-">24-多选-07 ★★</h3>
-<p><strong>题目</strong>：实现K8s应用零停机更新的机制包括？（多选） A.
-滚动更新策略 B. readinessProbe就绪探针 C. maxSurge配置 D.
-maxUnavailable配置 E. 强制删除所有旧Pod</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-多选-07-"><p><strong>24-多选-07 ★★</strong> <strong>题目</strong>：实现K8s应用零停机更新的机制包括？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">滚动更新策略</div></li><li><span class="option-label">B</span><div class="option-content">readinessProbe就绪探针</div></li><li><span class="option-label">C</span><div class="option-content">maxSurge配置</div></li><li><span class="option-label">D</span><div class="option-content">maxUnavailable配置</div></li><li><span class="option-label">E</span><div class="option-content">强制删除所有旧Pod</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCD
 <strong>解析</strong>：滚动更新策略配合readinessProbe（确保新Pod
 Ready后才删旧Pod）、maxSurge（控制超出副本数）、maxUnavailable（控制不可用副本数）实现零停机。E会停机，错误。</p>
-<hr />
-<h3 id="24-多选-08-">24-多选-08 ★★</h3>
-<p><strong>题目</strong>：以下哪些是ConfigMap的常见使用方式？（多选） A.
-环境变量注入 B. 命令行参数 C. 卷挂载为文件 D. 数据库密码存储 E.
-应用配置文件</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-多选-08-"><p><strong>24-多选-08 ★★</strong> <strong>题目</strong>：以下哪些是ConfigMap的常见使用方式？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">环境变量注入</div></li><li><span class="option-label">B</span><div class="option-content">命令行参数</div></li><li><span class="option-label">C</span><div class="option-content">卷挂载为文件</div></li><li><span class="option-label">D</span><div class="option-content">数据库密码存储</div></li><li><span class="option-label">E</span><div class="option-content">应用配置文件</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCE
 <strong>解析</strong>：ConfigMap可通过env/envFrom注入环境变量、作为命令行参数、以Volume形式挂载为文件。用于存储非敏感配置。D（密码）应使用Secret，不应存ConfigMap。</p>
-<hr />
-<h3 id="24-多选-09-">24-多选-09 ★★★</h3>
-<p><strong>题目</strong>：以下哪些情况会导致Service的Endpoints为空？（多选）
-A. Service的selector与Pod标签不匹配 B.
-Pod未Ready（readinessProbe未通过） C.
-Service的targetPort与容器端口不一致 D. Service与Pod不在同一namespace E.
-Service的类型是ClusterIP</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-多选-09-"><p><strong>24-多选-09 ★★★</strong> <strong>题目</strong>：以下哪些情况会导致Service的Endpoints为空？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">Service的selector与Pod标签不匹配</div></li><li><span class="option-label">B</span><div class="option-content">Pod未Ready（readinessProbe未通过）</div></li><li><span class="option-label">C</span><div class="option-content">Service的targetPort与容器端口不一致</div></li><li><span class="option-label">D</span><div class="option-content">Service与Pod不在同一namespace</div></li><li><span class="option-label">E</span><div class="option-content">Service的类型是ClusterIP</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCD
 <strong>解析</strong>：ABCD都会导致Service没有可用端点。A标签不匹配无法关联Pod；B
 Pod未Ready不会加入Endpoints；C端口不一致；D命名空间隔离。E是Service的正常类型，不影响Endpoints。</p>
-<hr />
-<h3 id="24-多选-10-">24-多选-10 ★★</h3>
-<p><strong>题目</strong>：以下哪些是K8s集群运维的日常工作？（多选） A.
-监控集群资源使用 B. 查看Pod日志排查问题 C. 滚动更新与回滚 D.
-扩缩容应对负载变化 E. 定期备份etcd F. 手动登录容器修改配置文件</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-多选-10-"><p><strong>24-多选-10 ★★</strong> <strong>题目</strong>：以下哪些是K8s集群运维的日常工作？（多选）</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content">监控集群资源使用</div></li><li><span class="option-label">B</span><div class="option-content">查看Pod日志排查问题</div></li><li><span class="option-label">C</span><div class="option-content">滚动更新与回滚</div></li><li><span class="option-label">D</span><div class="option-content">扩缩容应对负载变化</div></li><li><span class="option-label">E</span><div class="option-content">定期备份etcd</div></li><li><span class="option-label">F</span><div class="option-content">手动登录容器修改配置文件</div></li></ul></div>
+<blockquote>
 <p><strong>答案</strong>：ABCDE
 <strong>解析</strong>：ABCDE都是标准运维工作。F错误——不应手动进入容器修改配置文件，应通过ConfigMap/Secret+滚动更新管理配置，保证配置可追溯、可复现。</p>
-<hr />
-<h2 id="三判断题20题">三、判断题（20题）</h2>
-<h3 id="24-判断-01-">24-判断-01 ★</h3>
-<p><strong>题目</strong>：Docker容器启动比虚拟机快，因为容器共享宿主机内核，不需要启动完整的操作系统。
+</blockquote></section>
+<hr /><h2 id="三判断题20题">三、判断题（20题）</h2>
+<section class="question-card" id="24-判断-01-"><p><strong>24-判断-01 ★</strong> <strong>题目</strong>：Docker容器启动比虚拟机快，因为容器共享宿主机内核，不需要启动完整的操作系统。
 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：Docker容器基于Linux内核的Namespace和cgroups实现隔离，共享宿主机内核，不需要像虚拟机那样启动完整的操作系统，因此启动速度可达毫秒级。</p>
-<hr />
-<h3 id="24-判断-02-">24-判断-02 ★</h3>
-<p><strong>题目</strong>：Dockerfile中可以有多个CMD指令，只有最后一个生效。
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-02-"><p><strong>24-判断-02 ★</strong> <strong>题目</strong>：Dockerfile中可以有多个CMD指令，只有最后一个生效。
 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：Dockerfile中只能有一个CMD指令，如果有多个，只有最后一个生效。CMD提供容器启动默认命令，可被docker
 run参数覆盖。同理ENTRYPOINT也只生效最后一个。</p>
-<hr />
-<h3 id="24-判断-03-">24-判断-03 ★★</h3>
-<p><strong>题目</strong>：Docker镜像的每一层都是只读的，容器运行时的修改会写入可写层。
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-03-"><p><strong>24-判断-03 ★★</strong> <strong>题目</strong>：Docker镜像的每一层都是只读的，容器运行时的修改会写入可写层。
 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：Docker镜像采用分层存储，每层只读。容器启动时在镜像顶部添加一个可写层（容器层），所有修改写入可写层。删除容器后可写层丢失，这也是数据持久化需要Volume的原因。</p>
-<hr />
-<h3 id="24-判断-04-">24-判断-04 ★</h3>
-<p><strong>题目</strong>：K8s中一个Pod只能包含一个容器。 A. 正确 B.
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-04-"><p><strong>24-判断-04 ★</strong> <strong>题目</strong>：K8s中一个Pod只能包含一个容器。 A. 正确 B.
 错误</p>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：一个Pod可以包含一个或多个容器。多容器Pod常用于sidecar模式（如主容器+日志收集容器）、适配器模式、大使模式。但通常一个Pod只运行一个主容器。</p>
-<hr />
-<h3 id="24-判断-05-">24-判断-05 ★★</h3>
-<p><strong>题目</strong>：Deployment滚动更新时，默认策略是先删旧Pod再建新Pod。
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-05-"><p><strong>24-判断-05 ★★</strong> <strong>题目</strong>：Deployment滚动更新时，默认策略是先删旧Pod再建新Pod。
 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：Deployment默认RollingUpdate策略是先建新Pod（受maxSurge控制），新Pod
 Ready后再删旧Pod（受maxUnavailable控制），实现零停机。Recreate策略才是先删后建。</p>
-<hr />
-<h3 id="24-判断-06-">24-判断-06 ★★</h3>
-<p><strong>题目</strong>：kubectl rollout undo可以回滚到任意历史版本。
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-06-"><p><strong>24-判断-06 ★★</strong> <strong>题目</strong>：kubectl rollout undo可以回滚到任意历史版本。
 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：<code>kubectl rollout undo deployment/&lt;name&gt; --to-revision=N</code>可回滚到指定revision版本。默认revision保留10个（可通过revisionHistoryLimit调整）。</p>
-<hr />
-<h3 id="24-判断-07-">24-判断-07 ★★</h3>
-<p><strong>题目</strong>：HPA自动扩缩容不需要任何前置条件，开箱即用。 A.
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-07-"><p><strong>24-判断-07 ★★</strong> <strong>题目</strong>：HPA自动扩缩容不需要任何前置条件，开箱即用。 A.
 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：HPA基于CPU/内存使用率自动伸缩，前提是集群安装metrics-server提供指标数据，且Deployment配置了resources.requests（HPA基于requests计算使用率）。</p>
-<hr />
-<h3 id="24-判断-08-">24-判断-08 ★★</h3>
-<p><strong>题目</strong>：Secret中的数据是加密存储的，安全性等同于明文配置。
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-08-"><p><strong>24-判断-08 ★★</strong> <strong>题目</strong>：Secret中的数据是加密存储的，安全性等同于明文配置。
 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：Secret的数据是Base64编码（不是加密），base64可逆解码。生产环境建议开启etcd加密静态Secret，或使用外部密钥管理（Vault、云KMS）。</p>
-<hr />
-<h3 id="24-判断-09-">24-判断-09 ★★</h3>
-<p><strong>题目</strong>：StatefulSet适合部署无状态应用，Deployment适合部署有状态应用。
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-09-"><p><strong>24-判断-09 ★★</strong> <strong>题目</strong>：StatefulSet适合部署无状态应用，Deployment适合部署有状态应用。
 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：反了。StatefulSet适合有状态应用（数据库等，提供稳定网络标识和存储）；Deployment适合无状态应用（Web服务、API服务等）。</p>
-<hr />
-<h3 id="24-判断-10-">24-判断-10 ★★</h3>
-<p><strong>题目</strong>：Ingress
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-10-"><p><strong>24-判断-10 ★★</strong> <strong>题目</strong>：Ingress
 Controller需要单独安装，K8s集群默认不包含。 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：Ingress资源本身是K8s内置API，但Ingress
 Controller（如nginx-ingress、traefik）需要单独安装部署。没有Controller，Ingress规则不生效。</p>
-<hr />
-<h3 id="24-判断-11-">24-判断-11 ★★</h3>
-<p><strong>题目</strong>：Pod的readinessProbe失败会导致Pod被重启。 A.
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-11-"><p><strong>24-判断-11 ★★</strong> <strong>题目</strong>：Pod的readinessProbe失败会导致Pod被重启。 A.
 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：readinessProbe失败只会将Pod从Service的Endpoints中移除（不接收流量），不会重启Pod。livenessProbe失败才会重启Pod。</p>
-<hr />
-<h3 id="24-判断-12-">24-判断-12 ★★</h3>
-<p><strong>题目</strong>：kubectl
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-12-"><p><strong>24-判断-12 ★★</strong> <strong>题目</strong>：kubectl
 scale命令可以立即改变Deployment的副本数。 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：<code>kubectl scale deployment/&lt;name&gt; --replicas=N</code>会立即修改Deployment的replicas字段，Controller会立即创建或删除Pod以达到目标副本数。</p>
-<hr />
-<h3 id="24-判断-13-">24-判断-13 ★★</h3>
-<p><strong>题目</strong>：所有K8s资源对象都可以通过kubectl
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-13-"><p><strong>24-判断-13 ★★</strong> <strong>题目</strong>：所有K8s资源对象都可以通过kubectl
 apply创建和更新。 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：A <strong>解析</strong>：kubectl
 apply是声明式管理，支持所有K8s资源对象的创建和更新。apply会记录上次配置（last-applied-configuration注解），便于diff和精确管理。</p>
-<hr />
-<h3 id="24-判断-14-">24-判断-14 ★★</h3>
-<p><strong>题目</strong>：PVC和PV是手动绑定的，管理员需要为每个PVC手动创建PV。
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-14-"><p><strong>24-判断-14 ★★</strong> <strong>题目</strong>：PVC和PV是手动绑定的，管理员需要为每个PVC手动创建PV。
 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：B
 <strong>解析</strong>：PV和PVC可以手动绑定（静态供给），也可以通过StorageClass自动动态供给。动态供给时，PVC创建后StorageClass会自动创建PV并绑定。</p>
-<hr />
-<h3 id="24-判断-15-">24-判断-15 ★★</h3>
-<p><strong>题目</strong>：NetworkPolicy默认允许所有Pod间通信，需要显式配置才拒绝。
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-15-"><p><strong>24-判断-15 ★★</strong> <strong>题目</strong>：NetworkPolicy默认允许所有Pod间通信，需要显式配置才拒绝。
 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：K8s默认网络模型是全开放（所有Pod可互通）。NetworkPolicy是白名单机制，只有配置了NetworkPolicy且匹配的流量才被允许，其余默认拒绝。</p>
-<hr />
-<h3 id="24-判断-16-">24-判断-16 ★★★</h3>
-<p><strong>题目</strong>：Docker
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-16-"><p><strong>24-判断-16 ★★★</strong> <strong>题目</strong>：Docker
 Compose的volumes和K8s的PersistentVolume概念完全相同。 A. 正确 B.
 错误</p>
+<blockquote>
 <p><strong>答案</strong>：B <strong>解析</strong>：Docker
 Compose的volumes是简单的卷管理，K8s的PV/PVC是更完善的存储抽象体系，支持动态供给、StorageClass、回收策略、访问模式等。概念类似但实现和功能不同。</p>
-<hr />
-<h3 id="24-判断-17-">24-判断-17 ★★</h3>
-<p><strong>题目</strong>：Pod退出码137表示进程被SIGKILL终止，常见于OOMKilled。
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-17-"><p><strong>24-判断-17 ★★</strong> <strong>题目</strong>：Pod退出码137表示进程被SIGKILL终止，常见于OOMKilled。
 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：A <strong>解析</strong>：退出码137 = 128 +
 9（SIGKILL信号编号）。OOMKilled时内核发送SIGKILL，退出码137。这是排查OOM的关键依据。</p>
-<hr />
-<h3 id="24-判断-18-">24-判断-18 ★★</h3>
-<p><strong>题目</strong>：Helm
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-18-"><p><strong>24-判断-18 ★★</strong> <strong>题目</strong>：Helm
 Chart可以用于多环境部署，通过values.yaml覆盖配置。 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：Helm通过values.yaml管理配置，<code>helm install --values=prod.yaml</code>或<code>--set key=value</code>覆盖默认配置，实现一份Chart多环境部署。</p>
-<hr />
-<h3 id="24-判断-19-">24-判断-19 ★★</h3>
-<p><strong>题目</strong>：生产环境可以直接使用kubectl delete
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-19-"><p><strong>24-判断-19 ★★</strong> <strong>题目</strong>：生产环境可以直接使用kubectl delete
 pod删除Pod来重启服务，没有风险。 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：B <strong>解析</strong>：直接delete
 pod会被Deployment立即重建新Pod，但可能导致瞬时服务中断。生产环境应使用kubectl
 rollout restart或滚动更新，确保零停机。</p>
-<hr />
-<h3 id="24-判断-20-">24-判断-20 ★★★</h3>
-<p><strong>题目</strong>：一个Pod的QoS（服务质量）等级为Guaranteed，意味着其requests和limits的CPU/内存必须完全相等。
+</blockquote></section>
+<hr /><section class="question-card" id="24-判断-20-"><p><strong>24-判断-20 ★★★</strong> <strong>题目</strong>：一个Pod的QoS（服务质量）等级为Guaranteed，意味着其requests和limits的CPU/内存必须完全相等。
 A. 正确 B. 错误</p>
+<blockquote>
 <p><strong>答案</strong>：A
 <strong>解析</strong>：QoS等级Guaranteed要求每个容器的CPU和内存的requests与limits完全相等。Burstable是requests
 &lt;
 limits（至少一个有requests）。BestEffort是没有设置requests和limits。Guaranteed优先级最高，最后被驱逐。</p>
-<hr />
-<h2 id="四填空题10题">四、填空题（10题）</h2>
-<h3 id="24-填空-01-">24-填空-01 ★</h3>
-<p><strong>题目</strong>：Docker容器是基于Linux内核的______和______技术实现的。</p>
+</blockquote></section>
+<hr /><h2 id="四填空题10题">四、填空题（10题）</h2>
+<section class="question-card" id="24-填空-01-"><p><strong>24-填空-01 ★</strong> <strong>题目</strong>：Docker容器是基于Linux内核的______和______技术实现的。</p>
+<blockquote>
 <p><strong>答案</strong>：Namespace；cgroups
 <strong>解析</strong>：Namespace实现资源隔离（PID、网络、挂载等），cgroups实现资源限制（CPU、内存、IO等）。</p>
-<hr />
-<h3 id="24-填空-02-">24-填空-02 ★</h3>
-<p><strong>题目</strong>：Dockerfile中用于指定基础镜像的指令是______。</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-填空-02-"><p><strong>24-填空-02 ★</strong> <strong>题目</strong>：Dockerfile中用于指定基础镜像的指令是______。</p>
+<blockquote>
 <p><strong>答案</strong>：FROM
 <strong>解析</strong>：FROM指令指定基础镜像，必须是Dockerfile的第一条非注释指令。</p>
-<hr />
-<h3 id="24-填空-03-">24-填空-03 ★★</h3>
-<p><strong>题目</strong>：K8s集群中，最小的调度和部署单元是______。</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-填空-03-"><p><strong>24-填空-03 ★★</strong> <strong>题目</strong>：K8s集群中，最小的调度和部署单元是______。</p>
+<blockquote>
 <p><strong>答案</strong>：Pod
 <strong>解析</strong>：Pod是K8s最小调度单元，封装一个或多个容器，共享网络和存储命名空间。</p>
-<hr />
-<h3 id="24-填空-04-">24-填空-04 ★★</h3>
-<p><strong>题目</strong>：kubectl查看Pod崩溃前日志的命令参数是______。</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-填空-04-"><p><strong>24-填空-04 ★★</strong> <strong>题目</strong>：kubectl查看Pod崩溃前日志的命令参数是______。</p>
+<blockquote>
 <p><strong>答案</strong>：--previous（或-p）
 <strong>解析</strong>：<code>kubectl logs &lt;pod&gt; --previous</code>查看上一个容器实例的日志，对排查CrashLoopBackOff至关重要。</p>
-<hr />
-<h3 id="24-填空-05-">24-填空-05 ★★</h3>
-<p><strong>题目</strong>：K8s
+</blockquote></section>
+<hr /><section class="question-card" id="24-填空-05-"><p><strong>24-填空-05 ★★</strong> <strong>题目</strong>：K8s
 Service的四种类型是ClusterIP、NodePort、______和ExternalName。</p>
+<blockquote>
 <p><strong>答案</strong>：LoadBalancer
 <strong>解析</strong>：LoadBalancer类型在NodePort基础上自动调用云平台创建负载均衡器，常用于云上对外暴露服务。</p>
-<hr />
-<h3 id="24-填空-06-">24-填空-06 ★★</h3>
-<p><strong>题目</strong>：K8s中用于存储敏感信息的资源对象是______，存储非敏感配置的是______。</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-填空-06-"><p><strong>24-填空-06 ★★</strong> <strong>题目</strong>：K8s中用于存储敏感信息的资源对象是______，存储非敏感配置的是______。</p>
+<blockquote>
 <p><strong>答案</strong>：Secret；ConfigMap
 <strong>解析</strong>：Secret存敏感信息（密码、密钥、证书），Base64编码；ConfigMap存非敏感配置（配置文件、环境变量），明文存储。</p>
-<hr />
-<h3 id="24-填空-07-">24-填空-07 ★★</h3>
-<p><strong>题目</strong>：HPA基于______指标自动调整Pod副本数，前提是集群安装了______。</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-填空-07-"><p><strong>24-填空-07 ★★</strong> <strong>题目</strong>：HPA基于______指标自动调整Pod副本数，前提是集群安装了______。</p>
+<blockquote>
 <p><strong>答案</strong>：CPU使用率；metrics-server
 <strong>解析</strong>：HPA默认基于CPU使用率（也可配置内存、自定义指标），需要metrics-server提供指标数据。</p>
-<hr />
-<h3 id="24-填空-08-">24-填空-08 ★★</h3>
-<p><strong>题目</strong>：Pod被OOMKilled的退出码是______。</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-填空-08-"><p><strong>24-填空-08 ★★</strong> <strong>题目</strong>：Pod被OOMKilled的退出码是______。</p>
+<blockquote>
 <p><strong>答案</strong>：137 <strong>解析</strong>：137 = 128 +
 9，SIGKILL（信号9）终止进程。OOMKilled时内核发送SIGKILL。</p>
-<hr />
-<h3 id="24-填空-09-">24-填空-09 ★★</h3>
-<p><strong>题目</strong>：K8s回滚Deployment到指定版本的命令是kubectl
+</blockquote></section>
+<hr /><section class="question-card" id="24-填空-09-"><p><strong>24-填空-09 ★★</strong> <strong>题目</strong>：K8s回滚Deployment到指定版本的命令是kubectl
 rollout undo deployment/<name> --to-revision=______。</p>
+<blockquote>
 <p><strong>答案</strong>：N（或版本号，如2）
 <strong>解析</strong>：<code>--to-revision=N</code>指定回滚到revision
 N。可通过<code>kubectl rollout history</code>查看历史版本号。</p>
-<hr />
-<h3 id="24-填空-10-">24-填空-10 ★★★</h3>
-<p><strong>题目</strong>：K8s集群的数据持久化存储后端是______，它是一个分布式的______存储。</p>
+</blockquote></section>
+<hr /><section class="question-card" id="24-填空-10-"><p><strong>24-填空-10 ★★★</strong> <strong>题目</strong>：K8s集群的数据持久化存储后端是______，它是一个分布式的______存储。</p>
+<blockquote>
 <p><strong>答案</strong>：etcd；键值（key-value）
 <strong>解析</strong>：etcd是K8s集群的状态存储后端，分布式键值数据库，保存集群所有资源对象的状态数据。</p>
-<hr />
-<h2 id="五论述简答题4题">五、论述简答题（4题）</h2>
-<h3 id="24-论述-01-">24-论述-01 ★★</h3>
-<p><strong>题目</strong>：请论述Docker容器与虚拟机的区别，并说明各自适用场景。</p>
+</blockquote></section>
+<hr /><h2 id="五论述简答题4题">五、论述简答题（4题）</h2>
+<section class="question-card" id="24-论述-01-"><p><strong>24-论述-01 ★★</strong> <strong>题目</strong>：请论述Docker容器与虚拟机的区别，并说明各自适用场景。</p>
 <p><strong>参考答案</strong>：</p>
 <p><strong>一、区别对比</strong></p>
 <table>
@@ -684,10 +618,8 @@ N。可通过<code>kubectl rollout history</code>查看历史版本号。</p>
 <li>容器场景合理（3分）：至少3个典型场景</li>
 <li>虚拟机场景合理（2分）：至少3个典型场景</li>
 <li>总结升华（1分）</li>
-</ul>
-<hr />
-<h3 id="24-论述-02-">24-论述-02 ★★★</h3>
-<p><strong>题目</strong>：请论述K8s
+</ul></section>
+<hr /><section class="question-card" id="24-论述-02-"><p><strong>24-论述-02 ★★★</strong> <strong>题目</strong>：请论述K8s
 Deployment滚动更新的原理，并说明如何实现零停机更新。</p>
 <p><strong>参考答案</strong>：</p>
 <p><strong>一、滚动更新原理</strong></p>
@@ -761,10 +693,8 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="
 <li>关键参数说明（2分）：maxSurge+maxUnavailable</li>
 <li>零停机要素（4分）：readinessProbe+maxUnavailable=0+优雅终止+Service端点更新</li>
 <li>验证方法（1分）</li>
-</ul>
-<hr />
-<h3 id="24-论述-03-">24-论述-03 ★★★</h3>
-<p><strong>题目</strong>：CTTS项目部署到K8s后，某Pod出现CrashLoopBackOff状态。请详细描述排查思路和解决步骤。</p>
+</ul></section>
+<hr /><section class="question-card" id="24-论述-03-"><p><strong>24-论述-03 ★★★</strong> <strong>题目</strong>：CTTS项目部署到K8s后，某Pod出现CrashLoopBackOff状态。请详细描述排查思路和解决步骤。</p>
 <p><strong>参考答案</strong>：</p>
 <p><strong>一、现象识别</strong></p>
 <div class="sourceCode" id="cb6"><pre
@@ -874,10 +804,8 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href=
 <li>命令使用正确（3分）：describe/logs --previous/events/exec</li>
 <li>根因分析全面（3分）：至少列举4个常见根因及方案</li>
 <li>验证方法（1分）</li>
-</ul>
-<hr />
-<h3 id="24-论述-04-">24-论述-04 ★★★</h3>
-<p><strong>题目</strong>：请论述"能部署、能运维、能排障才是合格交付"的工程理念，结合CTTS项目说明完整交付应包含哪些要素。</p>
+</ul></section>
+<hr /><section class="question-card" id="24-论述-04-"><p><strong>24-论述-04 ★★★</strong> <strong>题目</strong>：请论述"能部署、能运维、能排障才是合格交付"的工程理念，结合CTTS项目说明完整交付应包含哪些要素。</p>
 <p><strong>参考答案</strong>：</p>
 <p><strong>一、工程理念解读</strong></p>
 <p>"能部署、能运维、能排障才是合格交付"体现了云原生工程的<strong>闭环思维</strong>：</p>
@@ -965,11 +893,9 @@ Grafana监控指标与告警规则</li>
 <li>交付要素全面（4分）：可部署/可运维/可排障/工程化四类交付物</li>
 <li>工程意义（1分）</li>
 <li>思政升华（2分）：责任/工匠/系统思维/终身学习</li>
-</ul>
-<hr />
-<h2 id="六程序阅读补全题2题">六、程序阅读补全题（2题）</h2>
-<h3 id="24-程序阅读-01-">24-程序阅读-01 ★★</h3>
-<p><strong>题目</strong>：阅读以下Dockerfile，补全缺失部分并回答问题。</p>
+</ul></section>
+<hr /><h2 id="六程序阅读补全题2题">六、程序阅读补全题（2题）</h2>
+<section class="question-card" id="24-程序阅读-01-"><p><strong>24-程序阅读-01 ★★</strong> <strong>题目</strong>：阅读以下Dockerfile，补全缺失部分并回答问题。</p>
 <div class="sourceCode" id="cb18"><pre
 class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 基础阶段：构建应用</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> maven:3.8-openjdk-11 <span class="kw">AS</span> (1)______</span>
@@ -1022,10 +948,8 @@ jar），不含Maven、源代码、编译产物</li>
 <li>补全正确（3分）：每空1分</li>
 <li>构建方式与优势（4分）：名称1分+优势3分</li>
 <li>镜像内容说明（3分）：不含Maven/源码2分+原因1分</li>
-</ul>
-<hr />
-<h3 id="24-程序阅读-02-">24-程序阅读-02 ★★★</h3>
-<p><strong>题目</strong>：阅读以下K8s Deployment
+</ul></section>
+<hr /><section class="question-card" id="24-程序阅读-02-"><p><strong>24-程序阅读-02 ★★★</strong> <strong>题目</strong>：阅读以下K8s Deployment
 YAML，补全缺失部分并回答问题。</p>
 <div class="sourceCode" id="cb19"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
@@ -1123,11 +1047,9 @@ limits</li>
 <li>探针说明（2分）：名称+作用</li>
 <li>失败后果（2分）：重启容器+RESTARTS增加</li>
 <li>QoS等级与原因（2分）：Burstable+requests&lt;limits</li>
-</ul>
-<hr />
-<h2 id="七编程接口设计题2题">七、编程接口设计题（2题）</h2>
-<h3 id="24-编程-01-">24-编程-01 ★★</h3>
-<p><strong>题目</strong>：为CTTS项目的Web服务编写完整的K8s资源清单YAML，要求：</p>
+</ul></section>
+<hr /><h2 id="七编程接口设计题2题">七、编程接口设计题（2题）</h2>
+<section class="question-card" id="24-编程-01-"><p><strong>24-编程-01 ★★</strong> <strong>题目</strong>：为CTTS项目的Web服务编写完整的K8s资源清单YAML，要求：</p>
 <ol type="1">
 <li>Deployment：3副本，资源限制，存活与就绪探针，滚动更新策略</li>
 <li>Service：ClusterIP类型，暴露8080端口</li>
@@ -1272,10 +1194,8 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb20-1"><a href=
 <li>滚动更新策略（2分）：maxSurge+maxUnavailable=0（零停机）</li>
 <li>Service配置（2分）：type+selector+ports</li>
 <li>规范性（2分）：命名规范+注释+volume挂载+生命周期钩子</li>
-</ul>
-<hr />
-<h3 id="24-编程-02-">24-编程-02 ★★★</h3>
-<p><strong>题目</strong>：为CTTS项目设计完整的K8s部署方案，编写以下资源清单：</p>
+</ul></section>
+<hr /><section class="question-card" id="24-编程-02-"><p><strong>24-编程-02 ★★★</strong> <strong>题目</strong>：为CTTS项目设计完整的K8s部署方案，编写以下资源清单：</p>
 <ol type="1">
 <li>MySQL StatefulSet（含PVC、Service、ConfigMap）</li>
 <li>CTTS-api Deployment（连接MySQL）</li>
@@ -1608,9 +1528,8 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb21-1"><a href=
 <li>HPA配置（3分）：指标+minReplicas/maxReplicas+behavior</li>
 <li>Ingress配置（2分）：路由规则+TLS</li>
 <li>最佳实践（1分）：命名规范+注释+Java容器感知等</li>
-</ul>
-<hr />
-<h2 id="附题库统计表">附：题库统计表</h2>
+</ul></section>
+<hr /><h2 id="附题库统计表">附：题库统计表</h2>
 <h3 id="题型统计">题型统计</h3>
 <table>
 <thead>

@@ -137,40 +137,21 @@ container_name</span></li><li><span class="option-label">B</span><span>不指定
 <code>--scale</code> 扩缩容（多容器会重名冲突）。建议用小写字母。</p>
 </blockquote></section>
 <hr />
-<section class="question-card"><p><strong>11-选择-009</strong>（★ 知识点：K11-3 environment） 下列
-<code>environment</code> 写法中，<strong>错误</strong>的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><span></p>
-<div class="sourceCode" id="cb1"><pre
+<section class="question-card"><p><strong>11-选择-009</strong>（★ 知识点：K11-3 environment） 下列 <code>environment</code> 写法中，<strong>错误</strong>的是？</p><div class="option-list option-list-code"><ul><li><span class="option-label">A</span><div class="option-content"><div class="sourceCode" id="cb1"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_ROOT_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;123456&quot;</span></span></code></pre></div>
-<p>B.</p>
-<div class="sourceCode" id="cb2"><pre
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_ROOT_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;123456&quot;</span></span></code></pre></div></div></li><li><span class="option-label">B</span><div class="option-content"><div class="sourceCode" id="cb2"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> MYSQL_ROOT_PASSWORD=123456</span></span></code></pre></div>
-<p>C.</p>
-<div class="sourceCode" id="cb3"><pre
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> MYSQL_ROOT_PASSWORD=123456</span></span></code></pre></div></div></li><li><span class="option-label">C</span><div class="option-content"><div class="sourceCode" id="cb3"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_ROOT_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="dv">123456</span></span></code></pre></div>
-<p>D.</p>
-<div class="sourceCode" id="cb4"><pre
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_ROOT_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="dv">123456</span></span></code></pre></div></div></li><li><span class="option-label">D</span><div class="option-content"><div class="sourceCode" id="cb4"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;p@ssw0rd&quot;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_USER</span><span class="kw">:</span><span class="at"> ctts</span></span></code></pre></div>
-<blockquote>
-<p><strong>答案：C</strong> <strong>解析</strong>：纯数字
-<code>123456</code> 不加引号会被 YAML
-解析为整数而非字符串，可能导致程序读到的不是预期值。密码建议统一加引号。A、B、D
-写法都正确（A 字典、B 列表、D 含特殊字符加引号）。</p>
-</blockquote>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_USER</span><span class="kw">:</span><span class="at"> ctts</span></span></code></pre></div></div></li></ul></div><blockquote>
+<p><strong>答案：C</strong> <strong>解析</strong>：纯数字 <code>123456</code> 不加引号会被 YAML 解析为整数而非字符串，可能导致程序读到的不是预期值。密码建议统一加引号。A、B、D 写法都正确（A 字典、B 列表、D 含特殊字符加引号）。</p>
+</blockquote></section>
 <hr />
-<p><strong>11-选择-010</strong>（★ 知识点：K11-3 restart） 下列
-<code>restart</code> 策略中，"除非手动 stop，否则总是重启"的是？ A.
-<code>no</code></span></li><li><span class="option-label">B</span><span><code>always</code></span></li><li><span class="option-label">C</span><span><code>on-failure</code></span></li><li><span class="option-label">D</span><span><code>unless-stopped</code></span></li></ul></div><blockquote>
-<p><strong>答案：D</strong>
-<strong>解析</strong>：<code>unless-stopped</code>
-表示除非手动停止，否则容器退出就自动重启，是生产推荐的策略。<code>always</code>
-是总是重启（即使手动 stop 也会在 Docker
-重启时拉起）；<code>on-failure</code>
-只在非零退出码时重启；<code>no</code> 不重启。</p>
+<section class="question-card"><p><strong>11-选择-010</strong>（★ 知识点：K11-3 restart） 下列 <code>restart</code> 策略中，"除非手动 stop，否则总是重启"的是？</p><div class="option-list"><ul><li><span class="option-label">A</span><div class="option-content"><code>no</code></div></li><li><span class="option-label">B</span><div class="option-content"><code>always</code></div></li><li><span class="option-label">C</span><div class="option-content"><code>on-failure</code></div></li><li><span class="option-label">D</span><div class="option-content"><code>unless-stopped</code></div></li></ul></div><blockquote>
+<p><strong>答案：D</strong> <strong>解析</strong>：<code>unless-stopped</code> 表示除非手动停止，否则容器退出就自动重启，是生产推荐的策略。<code>always</code> 是总是重启（即使手动 stop 也会在 Docker 重启时拉起）；<code>on-failure</code> 只在非零退出码时重启；<code>no</code> 不重启。</p>
 </blockquote></section>
 <hr />
 <section class="question-card"><p><strong>11-选择-011</strong>（★ 知识点：K11-4 具名卷） 关于 Compose
@@ -432,34 +413,19 @@ mysql-data 持久化</span></li></ul></div><blockquote>
 <code>service_healthy</code>。</p>
 </blockquote></section>
 <hr />
-<p><strong>11-选择-040</strong>（★★ 知识点：K11-3 environment 写法）
-下列 <code>environment</code>
-配置写法中，<strong>正确</strong>的有？（多选） A.</p>
-<div class="sourceCode" id="cb5"><pre
+<section class="question-card"><p><strong>11-选择-040</strong>（★★ 知识点：K11-3 environment 写法） 下列 <code>environment</code> 配置写法中，<strong>正确</strong>的有？（多选）</p><div class="option-list option-list-code"><ul><li><span class="option-label">A</span><div class="option-content"><div class="sourceCode" id="cb5"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;123456&quot;</span></span></code></pre></div>
-<p>B.</p>
-<div class="sourceCode" id="cb6"><pre
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;123456&quot;</span></span></code></pre></div></div></li><li><span class="option-label">B</span><div class="option-content"><div class="sourceCode" id="cb6"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> MYSQL_PASSWORD=123456</span></span></code></pre></div>
-<p>C.</p>
-<div class="sourceCode" id="cb7"><pre
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> MYSQL_PASSWORD=123456</span></span></code></pre></div></div></li><li><span class="option-label">C</span><div class="option-content"><div class="sourceCode" id="cb7"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> p@ssw0rd</span></span></code></pre></div>
-<p>D.</p>
-<div class="sourceCode" id="cb8"><pre
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> p@ssw0rd</span></span></code></pre></div></div></li><li><span class="option-label">D</span><div class="option-content"><div class="sourceCode" id="cb8"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;p@ssw0rd&quot;</span></span></code></pre></div>
-<p>E.</p>
-<div class="sourceCode" id="cb9"><pre
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">MYSQL_PASSWORD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;p@ssw0rd&quot;</span></span></code></pre></div></div></li><li><span class="option-label">E</span><div class="option-content"><div class="sourceCode" id="cb9"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> MYSQL_PASSWORD</span></span></code></pre></div>
-<blockquote>
-<p><strong>答案：A、B、D</strong> <strong>解析</strong>：A 字典写法、B
-列表写法都正确。C 错，含 <code>@</code> 等特殊字符的值必须加引号；D
-正确（加引号）。E 错，列表写法必须是 <code>KEY=VALUE</code> 形式，单独
-KEY 不行（除非从 shell 环境继承，但 Compose 中不支持这种用法）。</p>
-</blockquote>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> MYSQL_PASSWORD</span></span></code></pre></div></div></li></ul></div><blockquote>
+<p><strong>答案：A、B、D</strong> <strong>解析</strong>：A 字典写法、B 列表写法都正确。C 错，含 <code>@</code> 等特殊字符的值必须加引号；D 正确（加引号）。E 错，列表写法必须是 <code>KEY=VALUE</code> 形式，单独 KEY 不行（除非从 shell 环境继承，但 Compose 中不支持这种用法）。</p>
+</blockquote></section>
 <hr />
 <h2 id="二判断题共-20-题每题-1-分">二、判断题（共 20 题，每题 1
 分）</h2>

@@ -1149,7 +1149,7 @@ body{background:linear-gradient(180deg,#eaf1ff 0,#f7f9fc 360px,#f7f9fc 100%)}
 .edu-diagram{display:grid;gap:18px}
 .diagram-subtitle{margin:-6px 0 2px;color:#475569;font-size:.94rem;line-height:1.65}
 .diagram-grid{display:grid;grid-template-columns:repeat(var(--cols,3),minmax(0,1fr));gap:14px;align-items:stretch}
-.diagram-grid.two{--cols:2}.diagram-grid.three{--cols:3}.diagram-grid.four{--cols:4}
+.diagram-grid.two{--cols:2}.diagram-grid.three{--cols:3}.diagram-grid.four{--cols:4}.diagram-grid.five{--cols:5}
 .diagram-card,.diagram-panel,.diagram-layer,.diagram-step,.diagram-note-card{
   background:#fff;border:1px solid #dbeafe;border-radius:16px;padding:15px 16px;
   box-shadow:0 8px 20px rgba(15,23,42,.045);min-width:0
@@ -1214,12 +1214,12 @@ body{background:linear-gradient(180deg,#eaf1ff 0,#f7f9fc 360px,#f7f9fc 100%)}
 .diagram-plain{display:grid;gap:8px}
 .diagram-plain-line{padding:10px 12px;border-radius:12px;background:#fff;border:1px solid #e2e8f0;color:#475569;line-height:1.55}
 @media (max-width:980px){
-  .diagram-grid,.diagram-grid.two,.diagram-grid.three,.diagram-grid.four,.machine-row,.edu-diagram .timeline,.phase-grid,.mind-branch-grid{grid-template-columns:1fr 1fr}
+  .diagram-grid,.diagram-grid.two,.diagram-grid.three,.diagram-grid.four,.diagram-grid.five,.machine-row,.edu-diagram .timeline,.phase-grid,.mind-branch-grid{grid-template-columns:1fr 1fr}
   .relation-triad,.registry-loop,.course-roadmap,.mindmap-grid{grid-template-columns:1fr}
   .flow-arrow{transform:rotate(90deg);margin:auto}
 }
 @media (max-width:640px){
-  .diagram-grid,.diagram-grid.two,.diagram-grid.three,.diagram-grid.four,.machine-row,.edu-diagram .timeline,.phase-grid,.mind-branch-grid,.env-row,.delivery-flow.two-step,.delivery-flow.three-step,.diagram-note-grid{grid-template-columns:1fr}
+  .diagram-grid,.diagram-grid.two,.diagram-grid.three,.diagram-grid.four,.diagram-grid.five,.machine-row,.edu-diagram .timeline,.phase-grid,.mind-branch-grid,.env-row,.delivery-flow.two-step,.delivery-flow.three-step,.diagram-note-grid{grid-template-columns:1fr}
   .delivery-flow .flow-arrow{transform:rotate(90deg);margin:auto}
   .visual{padding:15px}
 }
@@ -1227,3 +1227,23 @@ body{background:linear-gradient(180deg,#eaf1ff 0,#f7f9fc 360px,#f7f9fc 100%)}
   .edu-diagram,.diagram-card,.diagram-panel,.diagram-layer,.diagram-step,.diagram-note-card{break-inside:avoid;box-shadow:none}
 }
 /* ===== END Course semantic diagram system ===== */
+
+/* ===== Docker diagram refinement helpers ===== */
+.docker-chain{display:grid;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr));gap:12px;align-items:stretch;counter-reset:dockerChain}
+.docker-chain.three{--cols:3}.docker-chain.five{--cols:5}.docker-chain.six{--cols:6}
+.docker-chain .diagram-card{position:relative;display:flex;flex-direction:column;gap:8px}
+.docker-chain .diagram-card:before{counter-increment:dockerChain;content:counter(dockerChain);display:grid;place-items:center;width:28px;height:28px;border-radius:10px;background:linear-gradient(135deg,#2563eb,#0f766e);color:#fff;font-weight:900;font-family:"Cascadia Code",Consolas,monospace;font-size:.86rem}
+.docker-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch}
+.docker-compare .diagram-panel{background:#fff}
+.docker-compare .diagram-panel.good{border-color:#bbf7d0;background:#f0fdf4}
+.docker-compare .diagram-panel.warn{border-color:#fed7aa;background:#fff7ed}
+.docker-decision{display:grid;gap:12px}
+.docker-decision-root{padding:15px 16px;border-radius:16px;background:linear-gradient(135deg,#2563eb,#0f766e);color:#fff;font-weight:900;text-align:center}
+.docker-route{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:stretch}
+.docker-route .diagram-panel{background:#fff}
+.docker-route .diagram-panel h4{display:flex;align-items:center;gap:8px}
+.docker-route .diagram-panel h4 span{display:grid;place-items:center;width:28px;height:28px;border-radius:10px;background:#2563eb;color:#fff;font-size:.82rem;font-family:"Cascadia Code",Consolas,monospace}
+.docker-mini-list{margin:8px 0 0;padding:0;list-style:none;display:grid;gap:7px}
+.docker-mini-list li{padding:7px 9px;border-radius:10px;background:#f8fbff;border:1px solid #e2e8f0;color:#475569;font-size:.9rem;line-height:1.45}
+@media (max-width:980px){.docker-chain,.docker-chain.three,.docker-chain.five,.docker-chain.six,.docker-route{grid-template-columns:repeat(2,minmax(0,1fr))}.docker-compare{grid-template-columns:1fr}}
+@media (max-width:640px){.docker-chain,.docker-chain.three,.docker-chain.five,.docker-chain.six,.docker-route{grid-template-columns:1fr}}
